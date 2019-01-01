@@ -1,0 +1,199 @@
+<template>
+  <div class="navbar">
+    <!-- <breadcrumb class="breadcrumb-container"/> -->
+    <div class="nav-menu">
+      <hamburger
+        :toggle-click="toggleSideBar"
+        :is-active="sidebar.opened"
+        class="hamburger-container"
+      />
+      <nav-menu/>
+    </div>
+    <div class="right-menu">
+      <span class="right-menu-item">
+        <i class="icon iconfont icon-sousuo1"></i>
+      </span>
+      <span class="right-menu-item message-item">
+        <i class="icon iconfont icon-xiaoxi"></i>
+        <span class="count">99</span>
+      </span>
+      <span class="right-menu-item">
+        <i class="icon iconfont icon-shouji"></i>
+      </span>
+      <span class="right-menu-item" @click="handleScreenfull">
+        <i class="icon iconfont icon-quanping"></i>
+      </span>
+      <template v-if="device!=='mobile'">
+        <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom"></el-tooltip>
+
+        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom"></el-tooltip>
+        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom"></el-tooltip>
+      </template>
+
+      <el-dropdown class="avatar-container right-menu-item" trigger="click">
+        <div class="avatar-wrapper">
+          <img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" class="user-avatar">
+          <!-- <span class="user-name">林夏</span> -->
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click.native="toggleStatus">{{status==2?'前端用户中心':'后端应用中心'}}</el-dropdown-item>
+          <router-link to="/">
+            <el-dropdown-item>{{ $t('navbar.dashboard') }}</el-dropdown-item>
+          </router-link>
+          <el-dropdown-item divided>
+            <span style="display:block;" @click="logout">登录</span>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapState } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import NavMenu from "./NavMenu";
+import screenfull from "screenfull";
+
+export default {
+  components: {
+    Breadcrumb,
+    Hamburger,
+    NavMenu
+  },
+  computed: {
+    ...mapGetters(["sidebar", "name", "device"]),
+    ...mapState({
+      status: state => state.app.status
+    })
+  },
+  methods: {
+    handleScreenfull() {
+      screenfull.toggle();
+    },
+    toggleSideBar() {
+      this.$store.dispatch("toggleSideBar");
+    },
+    toggleStatus() {
+      this.$store.commit("toggleStatus");
+    },
+    logout() {
+      this.$router.push("/account/login");
+      this.$store.dispatch("user/LogOut").then(() => {
+        location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
+      });
+    }
+  }
+};
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.nav-menu {
+  display: flex;
+}
+.navbar {
+  height: 60px;
+  line-height: 60px;
+  border-radius: 0px !important;
+  @include themify($themes) {
+    background: themed("primary");
+    .el-menu {
+      background: themed("primary");
+    }
+    .el-menu.el-menu--horizontal {
+      border-bottom: none;
+    }
+  }
+
+  // background: $primary-color;
+  // border-left: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  .hamburger-container {
+    line-height: 60px;
+    height: 60px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+  }
+  .breadcrumb-container {
+    float: left;
+  }
+  .errLog-container {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .right-menu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    &:focus {
+      outline: none;
+    }
+
+    .right-menu-item {
+      display: inline-block;
+      margin: 0 8px;
+      color: #fff;
+      .iconfont {
+        cursor: pointer;
+      }
+    }
+    .message-item {
+      position: relative;
+      margin-right: 18px;
+      .count {
+        display: inline-block;
+        background: #fc316c;
+        height: 13px;
+        line-height: 15px;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        border-radius: 20px;
+        padding: 0 5px;
+      }
+    }
+    .screenfull {
+      height: 20px;
+    }
+    .international {
+      vertical-align: top;
+    }
+    .theme-switch {
+      vertical-align: 15px;
+    }
+    .avatar-container {
+      height: 36px;
+      padding: 0 16px;
+      border-left: 1px solid #fff;
+      // margin-right: 30px;
+      display: flex;
+      align-items: center;
+      .avatar-wrapper {
+        position: relative;
+        .user-avatar {
+          cursor: pointer;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          vertical-align: middle;
+        }
+        .user-name {
+          color: #fff;
+          padding-left: 10px;
+          cursor: pointer;
+        }
+        .el-icon-caret-bottom {
+          cursor: pointer;
+          position: absolute;
+          right: -20px;
+          top: 25px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+</style>

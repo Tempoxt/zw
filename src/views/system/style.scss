@@ -1,0 +1,126 @@
+.block-title {
+    padding: 20px 20px;
+    font-weight: 700;
+    color: #526069;
+    cursor: default;
+}
+.border-r {
+    border-right: 1px solid #e8e8e8;
+}
+.menu-list {
+    border-right: 1px solid #e4eaec;
+
+    /deep/ .el-menu {
+        border: none;
+    }
+
+    /deep/ .menu-item {
+        display: flex;
+        align-items: center;
+
+        .actions {
+            display: none;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            color: #76838f;
+        }
+
+        &:hover {
+            .actions {
+                display: block;
+            }
+        }
+    }
+}
+
+.menu-form {
+    /deep/ .el-form-item__label {
+        padding: 0
+    }
+
+    /deep/ .el-form-item {
+        margin-bottom: 0;
+    }
+}
+
+.fa-icon {
+    margin-right: 20px;
+    transition: color .01s linear;
+}
+
+.start-menu-end {
+    font-size: 14px;
+
+    margin: 10px 0;
+
+    a {
+        display: block;
+        color: #76838f;
+        padding: 12px;
+        transition: all .4s;
+
+        &:hover {
+            background: #ecf5ff;
+        }
+    }
+
+    i {
+        margin-right: 20px;
+        
+    }
+}
+
+.end-start {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 10px 0;
+    align-items: center;
+
+    .actions {
+        i {
+            color: #e8e8e8;
+        }
+    }
+}
+
+
+.actions-submit {
+    border-top: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+    height: 100px;
+    justify-content: flex-end;
+    /deep/ button {
+        margin-right: 20px;
+    }
+}
+
+
+
+// table-layout
+
+
+.table-layout {
+    height: 100%;
+    .start-topBar {
+        padding:20px;
+        padding-bottom: 0;
+        display: flex;
+        .title {
+            font-size: 16px;
+            color: #333333;
+            font-weight: bold;
+        }
+        .actions {
+            padding-left: 10px;
+        }
+    }
+    .start-tree {
+        padding:17px 20px 20px 20px;
+    }
+}
