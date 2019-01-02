@@ -23,7 +23,11 @@ export default {
       dialogStatus: 'insert',
       table_modal: false,
       dialogFormVisible: false,
-      table_queryFormVisible: false
+      table_queryFormVisible: false,
+      table_query:{
+        type:1,
+        query:[]
+      }
     }
   },
   computed: {
@@ -34,6 +38,10 @@ export default {
   methods: {
     query() {
       this.$refs.table.table_queryFormVisible = true
+    },
+    querySubmit(query){
+      this.fetchTableData()
+      
     },
     handleAction(action) {
       if (this[action]) {

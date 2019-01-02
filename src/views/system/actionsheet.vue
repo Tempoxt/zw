@@ -50,13 +50,13 @@
                     v-for="column in table_field"
                     :key="column.id"
                 >
-                    <template slot-scope="scope">
-                        <template v-if="column.name==='icon'">
-                            <i :class="scope.row[column.name]"></i>
-                        </template>
-                        <template v-else>
+                <template slot-scope="scope">
+                    <template v-if="column.name==='icon'">
+                        <i :class="scope.row[column.name]"></i>
+                    </template>
+                    <template v-else>
                         {{ scope.row[column.name] }}
-                        </template>
+                    </template>
                 </template>
                 </el-table-column>
             </el-table>

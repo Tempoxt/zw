@@ -1,5 +1,9 @@
   <template>
-  <ui-table ref="table" >
+  <ui-table ref="table" 
+  :table_column="table_field" 
+  :table_query.sync="table_query"
+  @query="querySubmit"
+  >
     <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
@@ -47,6 +51,7 @@
     <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
+      :table_column="table_field.slice(1,table_field.length)"
       @action="handleAction"
     ></table-header>
     <tree-table
@@ -60,6 +65,7 @@
         :label="column.showname"
         v-for="(column,index) in table_field.slice(1,table_field.length)"
         :key="column.id"
+        v-if="!column.isvisiable"
       >
         <template slot-scope="scope">
           <template v-if="column.name==='menutype'">
@@ -120,8 +126,11 @@ export default {
     },
     async fetchTableData() {
      this.loading = true;
-      this.table_data = await api_resource.get();
+      this.table_data = await api_resource.get(this.table_query);
       this.$refs.treeTable.clearSelectedRows();
+      setTimeout(()=>{
+        this.$refs.treeTable.showAll()
+      },0)
       setTimeout(() => {
         this.loading = false;
       }, 300);
@@ -145,6 +154,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.fetchTableData();
+    console.log(field,'field')
   }
 };
 </script>

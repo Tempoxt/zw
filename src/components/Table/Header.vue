@@ -61,10 +61,23 @@
             @click="handleAction('fetchTableData')"
           ></el-button>
         </el-tooltip>
+        <el-popover
+            placement="bottom"
+            trigger="click"
+            transition="el-zoom-in-top"
+          >
+          <el-checkbox-group v-model="checkList" @change="handleChange" text-color="#606266" class="checkbox-group">
+              <div v-for="column in table_column" :key="column.id" class="column-item" >
+                 <el-checkbox :label="column.id" >{{column.showname}}</el-checkbox>
+              </div>
+          </el-checkbox-group>
+          <el-button icon="icon iconfont icon-lie" size="small"  slot="reference"></el-button>
+        </el-popover>
 
-        <el-tooltip class="item" effect="dark" content="设置列" placement="bottom">
+
+        <!-- <el-tooltip class="item" effect="dark" content="设置列" placement="bottom">
           <el-button icon="icon iconfont icon-lie" size="small"></el-button>
-        </el-tooltip>
+        </el-tooltip> -->
       </el-button-group>
     </div>
   </div>
@@ -73,7 +86,8 @@
 export default {
   props: {
     table_actions: Array,
-    table_selectedRows: Array
+    table_selectedRows: Array,
+    table_column: Array
   },
   computed: {
     isDisabled() {
@@ -89,16 +103,37 @@ export default {
       };
     }
   },
+  watch:{
+    table_column:{
+      deep:true,
+      handler(){
+        this.checkList = this.table_column.filter(item=>(!item.isvisiable)).map(item=>item.id)
+      }
+    }
+  },
   data() {
     return {
       table_actions_morelen: 4,
-      form: {}
+      form: {},
+      checkList:[]
     };
   },
   methods: {
     handleAction(action) {
       this.$emit("action", action);
+    },
+    handleChange(val){
+      this.table_column.forEach(item=>{
+          if(this.checkList.indexOf(item.id)===-1){
+            item.isvisiable = true
+          }else{
+            item.isvisiable = false
+          }
+      })
     }
+  },
+  created(){
+  
   }
 };
 </script>
@@ -125,6 +160,14 @@ export default {
         border-radius: 20px;
       }
     }
+  }
+}
+.column-item {
+  margin:10px 0;
+}
+.checkbox-group {
+  /deep/ .el-checkbox__label {
+    color: #606266;
   }
 }
 </style>

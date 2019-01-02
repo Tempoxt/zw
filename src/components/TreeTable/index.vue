@@ -4,6 +4,7 @@
     :row-style="showRow"
     v-bind="$attrs"
     :header-cell-style="{background:'#F5FAFB',color:'#37474F',height:'50px'}"
+    
   >
     <el-table-column width="50">
       <template slot="header" slot-scope="slot">
@@ -173,6 +174,18 @@ export default {
         ? "animation:treeTableShow 1s;-webkit-animation:treeTableShow 1s;"
         : "display:none;";
     },
+    showAll(){
+  
+       (function f(data) {
+          data.forEach((row,i) => {
+            if (row.subs && row.subs.length) {
+              row._expanded = true
+              f(row.subs);
+            }
+          });
+        })(this.data);
+       
+    },
     // 切换下级是否展开
     toggleExpanded: function(trIndex) {
       const record = this.formatData[trIndex];
@@ -218,7 +231,7 @@ export default {
       // } else {
       //   this.removeChecked(row.subs);
       // }
-    }
+    },
   }
 };
 </script>

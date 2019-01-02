@@ -1,7 +1,12 @@
 <template>
   <fullscreen v-model="table_modal">
     <div class="ui-table">
-      <query :table_queryFormVisible.sync="table_queryFormVisible"/>
+      <query 
+      :table_queryFormVisible.sync="table_queryFormVisible" 
+      :table_column="table_column" 
+      :table_query="table_query"
+      @query="$emit('query',table_query)"
+      />
       <slot/>
     </div>
   </fullscreen>
@@ -14,10 +19,14 @@ export default {
     fullscreen,
     Query
   },
+  props:{
+    table_column: Array,
+    table_query: Object
+  },
   data() {
     return {
       table_modal: false,
-      table_queryFormVisible:true
+      table_queryFormVisible:false
     };
   },
   methods: {
