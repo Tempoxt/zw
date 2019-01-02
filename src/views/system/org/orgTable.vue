@@ -1,6 +1,6 @@
   <template>
-  <ui-table ref="table">
-      <el-dialog
+  <ui-table ref="table" >
+    <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
@@ -87,7 +87,8 @@ export default {
       form:{},
       api_resource,
       orgCategory:[],
-      defaultForm
+      defaultForm,
+      queryDialogFormVisible:true
     };
   },
   watch:{
@@ -147,3 +148,5 @@ export default {
   }
 };
 </script>
+
+

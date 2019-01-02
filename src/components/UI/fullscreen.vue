@@ -22,6 +22,7 @@ export default {
   top: 0;
   height: 100%;
   background: #fff;
+  z-index: 2;
 }
 .full {
   height: 100%;

@@ -1,19 +1,23 @@
 <template>
   <fullscreen v-model="table_modal">
     <div class="ui-table">
+      <query :table_queryFormVisible.sync="table_queryFormVisible"/>
       <slot/>
     </div>
   </fullscreen>
 </template>
 <script>
 import fullscreen from "@c/UI/fullscreen";
+import Query from './Query'
 export default {
   components: {
-    fullscreen
+    fullscreen,
+    Query
   },
   data() {
     return {
-      table_modal: false
+      table_modal: false,
+      table_queryFormVisible:true
     };
   },
   methods: {

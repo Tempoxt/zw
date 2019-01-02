@@ -12,7 +12,7 @@ export default {
     tableHeader,
     tablePagination
   },
-  data () {
+  data() {
     return {
       table_field: [],
       table_actions: [],
@@ -22,16 +22,20 @@ export default {
       table_selectedRowsInfo: [],
       dialogStatus: 'insert',
       table_modal: false,
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      table_queryFormVisible: false
     }
   },
   computed: {
-    isInsert () {
+    isInsert() {
       return this.dialogStatus === 'insert'
     }
   },
   methods: {
-    handleAction (action) {
+    query() {
+      this.$refs.table.table_queryFormVisible = true
+    },
+    handleAction(action) {
       if (this[action]) {
         if (action === 'add') {
           this.dialogStatus = 'insert'
@@ -47,15 +51,15 @@ export default {
         console.error(action)
       }
     },
-    handleChangeSelection (val) {
+    handleChangeSelection(val) {
       this.table_selectedRowsInfo = val
       this.table_selectedRows = val.map(item => item.id)
     },
-    toggleModal () {
+    toggleModal() {
       // this.table_modal = !this.table_modal
       this.$refs.table.toggleModal()
     },
-    async delete () {
+    async delete() {
       let rows = this.table_selectedRows
       this.$confirm('此操作将删除选中行, 是否继续?', '提示', {
         confirmButtonText: '确定',

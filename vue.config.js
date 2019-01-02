@@ -18,6 +18,7 @@ class HelloWorldPlugin {
 }
 
 module.exports = {
+  lintOnSave:false,
   css: {
     loaderOptions: {
       sass: {
