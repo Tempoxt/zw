@@ -121,12 +121,11 @@ export default {
       }
       let row = this.$refs.treeTable.findRowById(rows[0]);
       this.form = Object.assign({}, row);
-      console.log(this.form,'aaa')
       this.dialogFormVisible = true;
     },
     async fetchTableData() {
      this.loading = true;
-      this.table_data = await api_resource.get(this.table_query);
+      this.table_data = await api_resource.get({query:this.table_format_query});
       this.$refs.treeTable.clearSelectedRows();
       setTimeout(()=>{
         this.$refs.treeTable.showAll()

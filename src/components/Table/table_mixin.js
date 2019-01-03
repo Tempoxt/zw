@@ -33,6 +33,14 @@ export default {
   computed: {
     isInsert() {
       return this.dialogStatus === 'insert'
+    },
+    table_format_query(){
+      return {
+        type:this.table_query.type,
+        query:this.table_query.query.map(item=>{
+          return [item.column,item.mode,item.value]
+        })
+      }
     }
   },
   methods: {
