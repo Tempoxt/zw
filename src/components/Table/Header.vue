@@ -41,10 +41,14 @@
       <div class="right-aciton-item">
         <el-input
           placeholder="快速查找"
-          suffix-icon="el-icon-search"
-          v-model="form.x"
+          v-model="table_form.keyword"
           class="actions-input"
-        ></el-input>
+          @keyup.enter.native="handleAction('fetchTableData')"
+          clearable
+          @clear="handleAction('fetchTableData')"
+        >
+        <!-- <i slot="suffix" class="el-icon-search " @click="handleAction('fetchTableData')"></i> -->
+        </el-input>
       </div>
       <el-button-group class="right-aciton-item">
         <el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
@@ -87,7 +91,8 @@ export default {
   props: {
     table_actions: Array,
     table_selectedRows: Array,
-    table_column: Array
+    table_column: Array,
+    table_form:Object
   },
   computed: {
     isDisabled() {
@@ -155,6 +160,11 @@ export default {
       cursor: pointer;
       margin-left: 20px;
     }
+    // /deep/ .el-input__suffix {
+    //     right: 10px;
+    //     top: 6px;
+    // }
+
     .actions-input {
       /deep/ input {
         border-radius: 20px;

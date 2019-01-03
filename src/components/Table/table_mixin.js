@@ -27,7 +27,8 @@ export default {
       table_query:{
         type:1,
         query:[]
-      }
+      },
+      table_form:{}
     }
   },
   computed: {
@@ -49,7 +50,7 @@ export default {
     },
     querySubmit(query){
       this.fetchTableData()
-      
+
     },
     handleAction(action) {
       if (this[action]) {

@@ -3,6 +3,7 @@
   :table_column="table_field" 
   :table_query.sync="table_query"
   @query="querySubmit"
+  
   >
     <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
@@ -25,7 +26,7 @@
               <form-render
                 :type="`radio`"
                 :field="{name:'状态',options:[{'label':'启用','value':1},{'label':'禁用','value':0}]}"
-                v-model="form.mark_status"
+                v-model="form.estate"
               />
             </el-col>
             <el-col :span="12">
@@ -53,6 +54,7 @@
       :table_selectedRows="table_selectedRows"
       :table_column="table_field.slice(1,table_field.length)"
       @action="handleAction"
+      :table_form.sync="table_form"
     ></table-header>
     <tree-table
       :data="table_data"
@@ -72,7 +74,7 @@
             <el-tag v-if="scope.row['menutype']===1" size="mini">目录</el-tag>
             <el-tag type="success" v-else size="mini">菜单</el-tag>
           </template>
-          <template v-else-if="column.name==='mark_status'">{{scope.row['mark_status']===1?'启用':'禁用'}}</template>
+          <template v-else-if="column.name==='estate'">{{scope.row['estate']===1?'启用':'禁用'}}</template>
           <template v-else>{{scope.row[column.name]}}</template>
         </template>
       </el-table-column>
@@ -84,7 +86,7 @@ import * as api_common from "@/api/common";
 import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("org");
-const defaultForm = ()=>({order:1,mark_status:1})
+const defaultForm = ()=>({order:1,estate:1})
 export default {
   mixins: [table_mixin],
   data() {
@@ -121,11 +123,12 @@ export default {
       }
       let row = this.$refs.treeTable.findRowById(rows[0]);
       this.form = Object.assign({}, row);
+      console.log(this.form,'aaa')
       this.dialogFormVisible = true;
     },
     async fetchTableData() {
      this.loading = true;
-      this.table_data = await api_resource.get({query:this.table_format_query});
+      this.table_data = await api_resource.get({...this.table_form,...this.table_query});
       this.$refs.treeTable.clearSelectedRows();
       setTimeout(()=>{
         this.$refs.treeTable.showAll()

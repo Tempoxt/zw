@@ -77,6 +77,7 @@
               :table_actions="table_actions"
               :table_selectedRows="table_selectedRows"
               @action="handleAction"
+              :table_form.sync="table_form"
             ></table-header>
             <tree-table
               :data="table_data"
@@ -121,7 +122,8 @@ const defaultForm = function() {
     iconName: {},
     menutype: 2,
     parentid: 0,
-    connect: "1"
+    connect: "1",
+    
   };
 };
 export default {
@@ -227,7 +229,8 @@ export default {
       dialogStatus: "insert",
       dialogFormVisible: false,
       form: defaultForm(),
-      loading: true
+      loading: true,
+      table_form:{}
     };
   }
 };

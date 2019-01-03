@@ -1,5 +1,5 @@
 <template>
-    <ui-table ref="table">
+    <ui-table ref="table" :table_query.sync="table_query">
          <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
@@ -35,15 +35,30 @@
             <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
+            :table_form.sync="table_form"
             @action="handleAction"
+           
             ></table-header>
             <el-table 
                 @selection-change="handleChangeSelection"
                 :data="table_data"
                 border 
                 style="width: 100%"
+                :row-class-name="ccc"
                 v-loading="table_loading">
-                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column 
+                type="selection" 
+                width="55" 
+                :selectable="aa"
+                class-name="xxx"
+                
+                
+                >
+                <template>
+                    <div>123123123</div>
+                </template>
+                </el-table-column>
+                <!-- class-name -->
                 <el-table-column
                     :prop="column.name"
                     :label="column.showname"
@@ -80,6 +95,22 @@ const defaultForm = function(){
 export default {
     mixins: [table_mixin],
     methods:{
+        aa(row){
+            if(row.id<4){
+                return false
+            }else{
+                return true
+            }
+            console.log(row,'row')
+            // return parseInt(Math.random()*10)>5?true:false
+        },
+        bbbccc(row, column, cellValue, index){
+                console.log(row,'row')
+        },
+        ccc({row, column, rowIndex, columnIndex}){
+            console.log(row,'row')
+            return 'xxxxx'
+        },
         add(){
             this.dialogFormVisible = true
         },

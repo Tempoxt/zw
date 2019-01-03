@@ -21,6 +21,7 @@
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
             @action="handleAction"
+            :table_form.sync="table_form"
             ></table-header>
             <el-table 
                 @selection-change="handleChangeSelection"
