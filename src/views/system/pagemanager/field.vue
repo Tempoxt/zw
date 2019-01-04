@@ -1,5 +1,8 @@
 <template>
-  <ui-table ref="table">
+  <ui-table ref="table"   
+  :table_column="table_field" 
+  :table_query.sync="table_query"
+  @query="querySubmit">
     <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
@@ -55,6 +58,7 @@
       :table_selectedRows="table_selectedRows"
       @action="handleAction"
       :table_form.sync="table_form"
+      :table_column="table_field"
     ></table-header>
     <el-table
       @selection-change="handleChangeSelection"
@@ -62,12 +66,13 @@
       border
       style="width: 100%"
       v-loading="table_loading"
+      :header-cell-style="headerCellStyle"
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column
         :prop="column.name"
         :label="column.showname"
-        v-for="column in table_field"
+        v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
         :key="column.id"
       >
         <template slot-scope="scope">

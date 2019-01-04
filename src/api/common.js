@@ -39,6 +39,15 @@ export function resource (url) {
           ids
         }
       })
+    },
+    action(action,ids){
+      return request.put(`/${url}/bluk`, {
+        action
+      },{
+        params:{
+          ids
+        },
+      })
     }
   }
 }

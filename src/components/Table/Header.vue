@@ -112,7 +112,7 @@ export default {
     table_column:{
       deep:true,
       handler(){
-        this.checkList = this.table_column.filter(item=>(!item.isvisiable)).map(item=>item.id)
+        this.checkList = this.table_column.filter(item=>(!item.fed_isvisiable)).map(item=>item.id)
       }
     }
   },
@@ -130,9 +130,11 @@ export default {
     handleChange(val){
       this.table_column.forEach(item=>{
           if(this.checkList.indexOf(item.id)===-1){
-            item.isvisiable = true
+            this.$set(item,'fed_isvisiable',true)
+ 
           }else{
-            item.isvisiable = false
+            this.$set(item,'fed_isvisiable',false)
+            
           }
       })
     }

@@ -1,5 +1,9 @@
   <template>
-  <ui-table ref="table">
+  <ui-table ref="table"
+  :table_column="table_field" 
+  :table_query.sync="table_query"
+  @query="querySubmit"
+  >
       <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
@@ -33,7 +37,7 @@
                             <form-render
                                 :type="`radio`"
                                 :field="{name:'状态',options:[{'label':'启用','value':1},{'label':'禁用','value':0}]}"
-                                v-model="form.mark_status"
+                                v-model="form.estate"
                             />
                         </el-col>
                         <el-col :span="12">
@@ -145,17 +149,20 @@
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
       @action="handleAction"
+      :table_column="table_field.slice(1,table_field.length)"
+      :table_form.sync="table_form"
     ></table-header>
     <tree-table
       :data="table_data"
       v-loading="loading"
       ref="treeTable"
+      :table_actions="table_actions"
       :selectedRows.sync="table_selectedRows"
       :label="table_field[0] && table_field[0].showname"
     >
       <el-table-column
         :label="column.showname"
-        v-for="(column,index) in table_field.slice(1,table_field.length)"
+        v-for="(column,index) in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
         :key="column.id"
       >
         <template slot-scope="scope">
@@ -165,7 +172,7 @@
           <template v-else-if="column.name==='user_role'">
               <span v-for="item in scope.row[column.name]" :key="item.roleid">{{item.rolemodels_name}}</span>
           </template>
-          <template v-else-if="column.name==='mark_status'">{{scope.row['mark_status']===1?'启用':'禁用'}}</template>
+          <template v-else-if="column.name==='estate'">{{scope.row['estate']===1?'启用':'禁用'}}</template>
           <template v-else>{{scope.row[column.name]}}</template>
         </template>
       </el-table-column>
@@ -183,7 +190,7 @@ import * as api_common from "@/api/common";
 import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("user");
-const defaultForm = ()=>({ldap_check:0,mark_status:1,role:[]})
+const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
 const defaultTableForm = () =>({
            pagesize:10,
            currentpage:1
@@ -235,11 +242,7 @@ export default {
       this.dialogFormVisible = true;
     },
     edit(){
-      let rows = this.$refs.treeTable.getSelectedRows();
-      if (rows.length !== 1) {
-        return;
-      }
-      let row = this.$refs.treeTable.findRowById(rows[0]);
+      let row = this.table_selectedRows[0]
       this.form = Object.assign({}, row);
       this.form.role = this.form.user_role.map(item=>item.roleid)
     

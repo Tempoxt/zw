@@ -4,41 +4,17 @@
     :row-style="showRow"
     v-bind="$attrs"
     :header-cell-style="{background:'#F5FAFB',color:'#37474F',height:'50px'}"
-    
+     :row-class-name="table_state_className"
+     @selection-change="handleSelectionChange"
   >
-    <el-table-column width="50">
-      <template slot="header" slot-scope="slot">
-        <el-checkbox
-          :indeterminate="isIndeterminate"
-          v-model="checkAll"
-          @change="handleCheckAllChange"
-        />
-      </template>
-      <template slot-scope="scope">
-        <el-checkbox-group
-          v-model="checkedRows"
-          @change="handleCheckedRowsChange"
-        >
-          <el-checkbox
-            :label="scope.row.id"
-            @change="handleCheckedItem(scope.row,...arguments)"
-          >&nbsp;</el-checkbox>
-        </el-checkbox-group>
-
-<!--         
-        <el-checkbox-group
-          v-model="checkedRows"
-          v-if="scope.row.estate"
-          @change="handleCheckedRowsChange"
-        >
-          <el-checkbox
-            :label="scope.row.id"
-            @change="handleCheckedItem(scope.row,...arguments)"
-          >&nbsp;</el-checkbox>
-        </el-checkbox-group>
-        <i class="icon iconfont icon-suoding" v-else></i> -->
-      </template>
-    </el-table-column>
+  <el-table-column 
+      type="selection" 
+      width="60" 
+      class-name="table-column-disabled"
+      :selectable="table_disable_selected"
+      
+      >
+      </el-table-column>
 
     <el-table-column v-if="columns.length===0" :label="label">
       <template slot-scope="scope">
@@ -110,7 +86,8 @@ export default {
       type: Boolean,
       default: false
     },
-    selectedRows: Array
+    selectedRows: Array,
+    table_actions:Array
   },
   watch: {
     checkedRows: {
@@ -144,6 +121,12 @@ export default {
     };
   },
   methods: {
+    table_disable_selected(row){
+      return !(row.lockstate&&!this.table_actions.find(action=>action.code==='unlock'))
+    },
+    table_state_className({row, column, rowIndex, columnIndex}){
+      return row.lockstate?'row-state-class':''
+    },
     getSelectedRows() {
       return this.checkedRows;
     },
@@ -196,8 +179,12 @@ export default {
       return index === 0 && record.subs && record.subs.length > 0;
     },
     handleCheckAllChange(val) {
+      
       this.checkedRows = val ? this.data.map(item => item.id) : [];
       // this.isIndeterminate = false;
+    },
+    handleSelectionChange(val){
+      this.checkedRows = val
     },
     handleCheckedRowsChange(value) {
       let checkedCount = value.length;

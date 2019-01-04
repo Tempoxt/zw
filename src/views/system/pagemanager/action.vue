@@ -1,5 +1,10 @@
 <template>
-    <ui-table ref="table">
+    <ui-table 
+    ref="table"
+    :table_column="table_field" 
+    :table_query.sync="table_query"
+    @query="querySubmit"
+    >
          <el-dialog
             title="添加功能"
             :visible.sync="dialogFormVisible"
@@ -22,18 +27,20 @@
             :table_selectedRows="table_selectedRows"
             @action="handleAction"
             :table_form.sync="table_form"
+            :table_column="table_field"
             ></table-header>
             <el-table 
                 @selection-change="handleChangeSelection"
                 :data="table_data"
                 border 
                 style="width: 100%"
+                :header-cell-style="headerCellStyle"
                 v-loading="table_loading">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column
                     :prop="column.name"
                     :label="column.showname"
-                    v-for="column in table_field"
+                    v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
                     :key="column.id"
                 >
                     <template slot-scope="scope">
@@ -49,10 +56,6 @@
            
     </ui-table>
 </template>
-<style lang="scss" scoped>
-@import "../table.scss";
-</style>
-
 <script>
 import * as api_common from "@/api/common";
 import * as api_actionsheet from "@/api/actionsheet";

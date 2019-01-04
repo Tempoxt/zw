@@ -62,19 +62,23 @@
       ref="treeTable"
       :selectedRows.sync="table_selectedRows"
       :label="table_field[0] && table_field[0].showname"
+      :table_actions="table_actions"
+      
     >
       <el-table-column
         :label="column.showname"
-        v-for="(column,index) in table_field.slice(1,table_field.length)"
+        v-for="(column) in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
         :key="column.id"
-        v-if="!column.isvisiable"
       >
         <template slot-scope="scope">
           <template v-if="column.name==='menutype'">
             <el-tag v-if="scope.row['menutype']===1" size="mini">目录</el-tag>
             <el-tag type="success" v-else size="mini">菜单</el-tag>
           </template>
-          <template v-else-if="column.name==='estate'">{{scope.row['estate']===1?'启用':'禁用'}}</template>
+          <template v-else-if="column.name==='estate'">
+            <span v-if="scope.row['estate']===1">启用</span>
+            <span v-else class="text-danger">禁用</span>
+          </template>
           <template v-else>{{scope.row[column.name]}}</template>
         </template>
       </el-table-column>
@@ -117,18 +121,13 @@ export default {
       this.dialogFormVisible = true;
     },
     edit(){
-      let rows = this.$refs.treeTable.getSelectedRows();
-      if (rows.length !== 1) {
-        return;
-      }
-      let row = this.$refs.treeTable.findRowById(rows[0]);
+      let row = this.table_selectedRows[0]
       this.form = Object.assign({}, row);
-      console.log(this.form,'aaa')
       this.dialogFormVisible = true;
     },
     async fetchTableData() {
      this.loading = true;
-      this.table_data = await api_resource.get({...this.table_form,...this.table_query});
+      this.table_data = await api_resource.get({...this.table_form,query:this.table_format_query});
       this.$refs.treeTable.clearSelectedRows();
       setTimeout(()=>{
         this.$refs.treeTable.showAll()
@@ -156,7 +155,6 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.fetchTableData();
-    console.log(field,'field')
   }
 };
 </script>

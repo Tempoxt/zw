@@ -1,5 +1,14 @@
 <template>
-  <div class="table-layout">
+
+<ui-table ref="table" 
+  :table_column="table_field" 
+  :table_query.sync="table_query"
+  @query="querySubmit"
+  
+  >
+
+
+
     <el-dialog
       :title="dialogStatus==='insert'?'添加菜单':'编辑菜单'"
       :visible.sync="dialogFormVisible"
@@ -69,71 +78,67 @@
       </div>
     </el-dialog>
 
-    <el-row class="h-full">
-      <el-col :span="24" class="h-full">
-        <fullscreen v-model="table_modal">
-          <div class="ui-table">
-            <table-header
-              :table_actions="table_actions"
-              :table_selectedRows="table_selectedRows"
-              @action="handleAction"
-              :table_form.sync="table_form"
-            ></table-header>
-            <tree-table
-              :data="table_data"
-              v-loading="loading"
-              ref="treeTable"
-              :selectedRows.sync="table_selectedRows"
-              :label="table_field[0] && table_field[0].showname"
-            >
-              <el-table-column
-                :label="column.showname"
-                v-for="(column,index) in table_field.slice(1,table_field.length).filter(field=>field.isvisiable)"
-                :key="column.id"
-              >
-                <template slot-scope="scope">
-                  <template v-if="column.name==='menutype'">
-                    <el-tag v-if="scope.row['menutype']===1" size="mini">目录</el-tag>
-                    <el-tag type="success" v-else size="mini">菜单</el-tag>
-                  </template>
-                  <template v-else-if="column.name==='estate'">{{scope.row['estate']===1?'启用':'禁用'}}</template>
-                  <template v-else>{{scope.row[column.name]}}</template>
-                </template>
-              </el-table-column>
-            </tree-table>
-          </div>
-        </fullscreen>
-      </el-col>
-    </el-row>
-  </div>
+
+
+
+    <table-header
+      :table_actions="table_actions"
+      :table_selectedRows="table_selectedRows"
+      :table_column="table_field.slice(1,table_field.length)"
+      @action="handleAction"
+      :table_form.sync="table_form"
+      :header-cell-style="headerCellStyle"
+    ></table-header>
+
+
+    <tree-table
+      :data="table_data"
+      v-loading="loading"
+      ref="treeTable"
+      :selectedRows.sync="table_selectedRows"
+      :label="table_field[0] && table_field[0].showname"
+      :table_actions="table_actions"
+    >
+      <el-table-column
+        :label="column.showname"
+        v-for="(column) in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
+        :key="column.id"
+      >
+        <template slot-scope="scope">
+          <template v-if="column.name==='menutype'">
+            <el-tag v-if="scope.row['menutype']===1" size="mini">目录</el-tag>
+            <el-tag type="success" v-else size="mini">菜单</el-tag>
+          </template>
+          <template v-else-if="column.name==='estate'">
+            <span v-if="scope.row['estate']===1">启用</span>
+            <span v-else class="text-danger">禁用</span>
+          </template>
+          <template v-else>{{scope.row[column.name]}}</template>
+        </template>
+      </el-table-column>
+    </tree-table>
+  </ui-table>
+
 </template>
 
 
 
 <script>
-import fullscreen from "@c/UI/fullscreen";
-import treeTable from "@/components/TreeTable";
-import FormRender from "@c/Form/render";
-import tableHeader from "@c/Table/Header";
-import * as api_menusheet from "@/api/menusheet";
+
+
 import * as api_common from "@/api/common";
+import table_mixin from "@c/Table/table_mixin";
+const api_resource = api_common.resource("menusheet");
 const defaultForm = function() {
   return {
     iconName: {},
     menutype: 2,
     parentid: 0,
     connect: "1",
-    
   };
 };
 export default {
-  components: {
-    fullscreen,
-    treeTable,
-    FormRender,
-    tableHeader
-  },
-  computed: {},
+  mixins: [table_mixin],
   methods: {
     async handleFormSubmit() {
       let form = Object.assign(
@@ -145,76 +150,42 @@ export default {
       form.name = form.iconName.name;
       form.icon = form.iconName.icon;
       if (this.dialogStatus === "insert") {
-        await api_menusheet.create(form);
+        await api_resource.create(form);
       } else {
-        await api_menusheet.update(form.id, form);
+        await api_resource.update(form.id, form);
       }
-      this.$refs.treeTable.clearSelectedRows();
       this.dialogFormVisible = false;
       this.fetchTableData();
     },
-    query() {},
     add() {
       this.form = defaultForm();
       this.dialogStatus = "insert";
       this.dialogFormVisible = true;
     },
     async edit() {
-      let rows = this.$refs.treeTable.getSelectedRows();
-      if (rows.length !== 1) {
-        return;
-      }
-      let row = this.$refs.treeTable.findRowById(rows[0]);
-      this.dialogStatus = "update";
+      let row = this.table_selectedRows[0]
       this.form = Object.assign({}, row);
       const { icon, name } = this.form;
       this.form.iconName = { icon, name };
       this.dialogFormVisible = true;
     },
-    delete() {
-      let rows = this.$refs.treeTable.getSelectedRows();
-      if (!rows.length) {
-        return;
-      }
-      this.$confirm("此操作将删除选中行, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          return api_menusheet.remove(rows.join(","));
-        })
-        .then(() => {
-          this.fetchTableData();
-        });
-    },
-    handleAction(action) {
-      if (this[action]) {
-        this[action](action);
-      } else {
-        console.error(action);
-      }
-    },
-    toggleModal() {
-      this.table_modal = !this.table_modal;
-    },
     async fetchTableData() {
       this.loading = true;
-      const { field, action } = await api_common.menuInit(
-        "menusheet",
-        this.$route.query.position
-      );
-      this.table_field = field;
-      this.table_actions = action;
-      const { menu } = await api_menusheet.get(this.$route.query.position);
+      const { menu } = await api_resource.get({position:this.$route.query.position,query:this.table_format_query});
       this.table_data = menu;
-      // this.table_data[1].estate = 0;
       setTimeout(() => {
         this.loading = false;
       }, 300);
     }
   },
   async created() {
+
+    const { field, action } = await api_common.menuInit(
+      "menusheet",
+      this.$route.query.position
+    );
+    this.table_field = field;
+    this.table_actions = action;
     this.fetchTableData();
   },
   data() {
@@ -230,11 +201,9 @@ export default {
       dialogFormVisible: false,
       form: defaultForm(),
       loading: true,
-      table_form:{}
+      table_form:{},
+      api_resource
     };
   }
 };
 </script>
-<style lang="scss" scoped>
-@import "./table.scss";
-</style>

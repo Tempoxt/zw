@@ -83,6 +83,30 @@ export default new Router({
             title: '角色权限管理'
           },
           component: () => import('@/views/system/roles')
+        },
+        {
+          path: 'operatelog',
+          name: 'operatelog',
+          meta: {
+            title: '操作日志'
+          },
+          component: () => import('@/views/Null')
+        },
+        {
+          path: 'loginlog',
+          name: 'loginlog',
+          meta: {
+            title: '登录日志'
+          },
+          component: () => import('@/views/Null')
+        },
+        {
+          path: 'loginlist',
+          name: 'loginlist',
+          meta: {
+            title: '登陆黑白名单'
+          },
+          component: () => import('@/views/Null')
         }
       ]
     },
