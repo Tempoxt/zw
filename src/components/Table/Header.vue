@@ -175,11 +175,12 @@ export default {
   }
 }
 .column-item {
-  margin:10px 0;
+  margin:6px 0;
 }
 .checkbox-group {
   /deep/ .el-checkbox__label {
     color: #606266;
+    font-weight: normal;
   }
 }
 </style>

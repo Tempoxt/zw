@@ -54,7 +54,7 @@
 
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="queryDialogFormVisible = false">取 消</el-button>
+        <el-button @click="clear">清 除</el-button>
         <el-button type="primary" @click="query">确 定</el-button>
       </div>
     </el-dialog>
@@ -119,6 +119,11 @@ export default {
       query(){
         this.$emit('query',this.table_query)
         this.queryDialogFormVisible = false
+      },
+      clear(){
+        this.table_query.query = []
+        this.queryDialogFormVisible = false
+        this.$emit('query',this.table_query)
       }
     }
 }

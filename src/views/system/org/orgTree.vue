@@ -19,7 +19,8 @@ export default {
             var $ul = $('<ul id="org" style="display:none"></ul>');
             (function f(data,$ul){
                 data.forEach((item)=>{
-                    var $li  = $(`<li>${item.name}</li>`)
+                    var $li  = $(`<li></li>`)
+                    $li.append(`<span style='user-select:none;'>${item.name}</span>`)
                     $ul.append($li)
                     if(item.subs&&item.subs.length){
                         var $sub_ul = $("<ul></ul>")

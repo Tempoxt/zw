@@ -4,6 +4,7 @@ import treeTable from '@/components/TreeTable'
 import FormRender from '@c/Form/render'
 import tableHeader from '@c/Table/Header'
 import tablePagination from '@c/Table/Pagination'
+
 export default {
   components: {
     uiTable,
@@ -116,6 +117,65 @@ export default {
         .then(() => {
           this.fetchTableData()
         })
+    },
+    async export(){
+      const formatJson = function(filterVal, jsonData){
+          var result = [];
+          (function f(jsonData){
+            jsonData.forEach((v)=>{
+              result.push(filterVal.map((j)=>{
+                if (j === 'timestamp') {
+                  return parseTime(v[j])
+                } else {
+                  return v[j]
+                }
+              }))
+              if(v.subs&&v.subs.length){
+                f(v.subs)
+              }
+            })
+          })(jsonData)
+          return result
+      }
+      let header = this.table_field.filter(field=>!field.fed_isvisiable)
+      let data = []
+      if(this.table_selectedRows.length){
+        data = Object.assign({},this.table_selectedRows)
+        delete data.subs
+      }else{
+        data = this.table_data
+      }
+      const export_file = async (type)=>{
+        this.$msgbox.close()
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        if(type!=='pdf'){
+          const excel = await import('@/vendor/Export2Excel')
+          excel.export_json_to_excel({
+              header:  header.map(field=>field.showname),
+              data:formatJson(header.map(field=>field.name),data),
+              filename: (this.$route.meta && this.$route.meta.title)||'导出文件',
+              bookType: type
+          })
+        }
+        
+        loading.close();
+      }
+      this.$alert(
+        <el-button-group>
+          <el-button type="primary" icon="el-icon-tickets" onClick={()=>{export_file('pdf')}}>PDF</el-button>
+          <el-button type="primary" icon="el-icon-share" onClick={()=>{export_file('xlsx')}}>XLSX</el-button>
+          <el-button type="primary" icon="el-icon-document" onClick={()=>{export_file('txt')}}>TXT</el-button>
+          <el-button type="primary" icon="el-icon-document" onClick={()=>{export_file('csv')}}>CSV</el-button>
+        </el-button-group>
+        , '选择导出格式', {
+        showConfirmButton:false,
+        center:true
+      });
     }
   }
 }
