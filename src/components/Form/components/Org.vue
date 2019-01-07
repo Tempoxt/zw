@@ -1,6 +1,11 @@
 <template>
      <el-form-item :label="field.name">
         <el-popover ref="popover" placement="bottom" width="200" trigger="click" v-model="visible" transition="el-zoom-in-top">
+        <el-input
+          placeholder="搜索部门"
+          class="input"
+          v-model="filterText">
+        </el-input>
         <el-tree
             class="filter-tree"
             :data="data2"
@@ -9,9 +14,12 @@
             :expand-on-click-node="false"
             ref="tree2"
             @node-click="nodeSelect"
+            :filter-node-method="filterNode"
         >
             <span slot-scope="{ node, data }">
-            <span :class="data.icon"></span>&nbsp;
+            <span
+                  :class="`icon iconfont ${(node.isLeaf&&data.name)?'icon-zuzhi2':'icon-wenjian'}`"
+                ></span>&nbsp;
             <span>{{ node.label }}</span>
             </span>
         </el-tree>
@@ -38,6 +46,10 @@ export default {
     value: {}
   },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.name.indexOf(value) !== -1;
+    },
     aaa(e) {
       e.stopPropagation();
       return false;
@@ -79,6 +91,9 @@ export default {
       handler(val) {
         this.data = this.value;
       }
+    },
+    filterText(val) {
+      this.$refs.tree2.filter(val);
     }
   },
   data() {
@@ -113,5 +128,12 @@ export default {
   /deep/ .el-select-dropdown {
     display: none;
   }
+}
+.input {
+  margin-bottom: 10px;
+  /deep/ .el-input__inner {
+    border-radius: 14px;
+  }
+   
 }
 </style>

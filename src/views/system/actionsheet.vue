@@ -1,7 +1,7 @@
 <template>
     <ui-table 
     ref="table" 
-    :table_query.sync="table_query"
+    :table_query.sync="table_form.query"
      :table_column="table_field" 
     @query="querySubmit"
     
@@ -115,7 +115,7 @@ export default {
         },
         async fetchTableData() {
             this.table_loading = true
-            const {rows,total}  =  await api_resource.get({...this.table_form,query:this.table_format_query});
+            const {rows,total}  =  await api_resource.get(this.table_form);
             this.table_data = rows
            
             this.table_form.total = total

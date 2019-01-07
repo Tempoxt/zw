@@ -21,7 +21,7 @@
       <div class="filter-wrap">
         <el-row :gutter="10" class="row" v-for="(query,i) in table_query.query" :key="i">
           <el-col :span="6">
-            <el-select v-model="table_query.query[i].column" placeholder="请选择">
+            <el-select v-model="table_query.query[i][0]" placeholder="请选择">
                 <el-option
                   v-for="column in table_column"
                   :key="column.id"
@@ -31,7 +31,7 @@
               </el-select>
           </el-col>
           <el-col :span="6">
-             <el-select v-model="table_query.query[i].mode" placeholder="请选择">
+             <el-select v-model="table_query.query[i][1]" placeholder="请选择">
                 <el-option
                   v-for="(item,i) in mode"
                   :key="i"
@@ -41,7 +41,7 @@
               </el-select>
           </el-col>
           <el-col :span="10">
-             <el-input v-model="table_query.query[i].value" placeholder="请输入内容"></el-input>
+             <el-input v-model="table_query.query[i][2]" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="2">
               <el-button icon="el-icon-minus" circle @click="removeQuery(i)"></el-button>
@@ -84,9 +84,21 @@ export default {
                 name:'大于等于',
                 flag:">="
               },
-               {
+              {
                 name:'小于等于',
                 flag:"<="
+              },
+              {
+                name:'不等于',
+                flag:"!="
+              },
+               {
+                name:'包含',
+                flag:"c"
+              },
+               {
+                name:'不包含',
+                flag:"nc"
               }
             ]
         }
@@ -108,10 +120,11 @@ export default {
     },
     methods:{
       addQuery(){
-        this.table_query.query.push({
-          column:this.table_column[0].name,
-          mode:this.mode[0].flag
-        })
+        this.table_query.query.push([this.table_column[0].name,this.mode[0].flag])
+        // this.table_query.query.push({
+        //   column:this.table_column[0].name,
+        //   mode:this.mode[0].flag
+        // })
       },
       removeQuery(i){
         this.table_query.query.splice(i,1)
@@ -122,7 +135,7 @@ export default {
       },
       clear(){
         this.table_query.query = []
-        this.queryDialogFormVisible = false
+        // this.queryDialogFormVisible = false
         this.$emit('query',this.table_query)
       }
     }

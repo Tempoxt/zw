@@ -5,6 +5,8 @@ import FormRender from '@c/Form/render'
 import tableHeader from '@c/Table/Header'
 import tablePagination from '@c/Table/Pagination'
 
+
+
 export default {
   components: {
     uiTable,
@@ -26,11 +28,12 @@ export default {
       table_modal: false,
       dialogFormVisible: false,
       table_queryFormVisible: false,
-      table_query:{
-        type:1,
-        query:[]
-      },
-      table_form:{}
+      table_form:{
+        query:{
+          type:1,
+          query:[]
+        }
+      }
     }
   },
   computed: {
@@ -120,6 +123,7 @@ export default {
     },
     async export(){
       const formatJson = function(filterVal, jsonData){
+       
           var result = [];
           (function f(jsonData){
             jsonData.forEach((v)=>{
@@ -140,8 +144,11 @@ export default {
       let header = this.table_field.filter(field=>!field.fed_isvisiable)
       let data = []
       if(this.table_selectedRows.length){
-        data = Object.assign({},this.table_selectedRows)
-        delete data.subs
+        data = [...this.table_selectedRows]
+        data.forEach((item)=>{
+          delete item.subs
+        })
+        
       }else{
         data = this.table_data
       }
@@ -153,7 +160,23 @@ export default {
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-        if(type!=='pdf'){
+        if(type==='pdf'){
+          var pdf = new jsPDF('p', 'pt', 'letter');
+            pdf.html(document.querySelector('.el-table'), {callback: function(pdf) {
+              pdf.save('two-by-four.pdf')
+                        // console.log(pdf)
+                        // var iframe = document.createElement('iframe');
+                        // iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+                        // document.body.appendChild(iframe);
+                        // iframe.src = pdf.output('datauristring');
+                    }
+              }
+        );
+
+          console.log(this.$refs.table)
+          // doPrint(this.$refs.table.$el.innerHTML)
+          // window.print()
+        }else{
           const excel = await import('@/vendor/Export2Excel')
           excel.export_json_to_excel({
               header:  header.map(field=>field.showname),
@@ -167,7 +190,7 @@ export default {
       }
       this.$alert(
         <el-button-group>
-          <el-button type="primary" icon="el-icon-tickets" onClick={()=>{export_file('pdf')}}>PDF</el-button>
+          {/* <el-button type="primary" icon="el-icon-tickets" onClick={()=>{export_file('pdf')}}>PDF</el-button> */}
           <el-button type="primary" icon="el-icon-share" onClick={()=>{export_file('xlsx')}}>XLSX</el-button>
           <el-button type="primary" icon="el-icon-document" onClick={()=>{export_file('txt')}}>TXT</el-button>
           <el-button type="primary" icon="el-icon-document" onClick={()=>{export_file('csv')}}>CSV</el-button>

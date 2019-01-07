@@ -1,7 +1,7 @@
   <template>
   <ui-table ref="table" 
   :table_column="table_field" 
-  :table_query.sync="table_query"
+  :table_query.sync="table_form.query"
   @query="querySubmit"
   
   >
@@ -119,6 +119,9 @@ export default {
   methods: {
     add(){
       this.dialogFormVisible = true;
+      const { id } = this.table_selectedRows[0]||{id:0}
+      this.form.parent_org =id
+       
     },
     edit(){
       let row = this.table_selectedRows[0]
@@ -127,7 +130,7 @@ export default {
     },
     async fetchTableData() {
      this.loading = true;
-      this.table_data = await api_resource.get({...this.table_form,query:this.table_format_query});
+      this.table_data = await api_resource.get(this.table_form);
       this.$refs.treeTable.clearSelectedRows();
       setTimeout(()=>{
         this.$refs.treeTable.showAll()

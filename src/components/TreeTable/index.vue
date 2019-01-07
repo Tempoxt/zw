@@ -6,6 +6,7 @@
     :header-cell-style="{background:'#F5FAFB',color:'#37474F',height:'50px'}"
      :row-class-name="table_state_className"
      @selection-change="handleSelectionChange"
+     :height="table_height"
   >
   <el-table-column 
       type="selection" 
@@ -117,7 +118,8 @@ export default {
     return {
       isIndeterminate: false,
       checkAll: [],
-      checkedRows: this.selectedRows
+      checkedRows: this.selectedRows,
+      table_height:window.innerHeight-300,
     };
   },
   methods: {

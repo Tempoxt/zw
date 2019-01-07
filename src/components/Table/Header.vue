@@ -3,12 +3,13 @@
     <div class="actions">
       <el-button-group>
         <el-button
-          type="default"
+          :type="(action.code=='query'&&table_form.query.query.length>0)?'primary':'default'"
           v-for="action in table_actions.slice(0,table_actions_morelen)"
           :icon="action.icon || 'icon iconfont icon-tianjia'"
           :key="action.id"
           @click="handleAction(action.code,action)"
           :disabled="!isDisabled(action.code)"
+
         >
           <span style="margin-left:4px">{{action.name}}</span>
         </el-button>

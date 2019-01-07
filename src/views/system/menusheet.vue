@@ -2,7 +2,7 @@
 
 <ui-table ref="table" 
   :table_column="table_field" 
-  :table_query.sync="table_query"
+  :table_query.sync="table_form.query"
   @query="querySubmit"
   
   >
@@ -171,7 +171,7 @@ export default {
     },
     async fetchTableData() {
       this.loading = true;
-      const { menu } = await api_resource.get({position:this.$route.query.position,query:this.table_format_query});
+      const { menu } = await api_resource.get({position:this.$route.query.position,...this.table_form});
       this.table_data = menu;
       setTimeout(() => {
         this.loading = false;
