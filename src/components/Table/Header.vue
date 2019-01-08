@@ -22,7 +22,7 @@
         >
           <el-button type="default" style="border-left: 0;">
             <span style="font-size: 12px;">更多</span>
-            <i class="el-icon-arrow-down el-icon--right" style="font-size: 16px"></i>
+            <i class="el-icon-arrow-down el-icon--right" style="font-size: 14px"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" :split-button="true">
             <el-dropdown-item

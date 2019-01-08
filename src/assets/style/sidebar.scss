@@ -111,7 +111,10 @@
   .el-menu--collapse .el-menu .el-submenu {
     min-width: 180px !important;
   }
-
+  .sidebar-container .el-menu-item.is-active {
+    color:#fff !important;
+    background: #263238 !important;
+  }
   //适配移动端
   .mobile {
     .main-container {
