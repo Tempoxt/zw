@@ -48,6 +48,12 @@ export function resource (url) {
           ids
         },
       })
-    }
+    },
+    find(id,params){
+      return request.get(`/${url}/${id}`, {
+        params
+      })
+    },
+
   }
 }

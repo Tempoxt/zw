@@ -5,7 +5,7 @@
       :table_queryFormVisible.sync="table_queryFormVisible" 
       :table_column="table_column" 
       :table_query="table_query"
-      @query="$emit('query',table_query)"
+      @query="querySubmit"
       />
       <slot/>
     </div>
@@ -32,6 +32,9 @@ export default {
   methods: {
     toggleModal() {
       this.table_modal = !this.table_modal;
+    },
+    querySubmit(query){
+      this.$emit('query',query)
     }
   }
 };

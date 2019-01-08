@@ -73,10 +73,10 @@
         var sourceUl = sourceLi.parent('ul')
 
         if (targetUl.length > 0) {
-  		    targetUl.append(sourceLi)
+          targetUl.append(sourceLi)
         } else {
-  		    targetLi.append('<ul></ul>')
-  		    targetLi.children('ul').append(sourceLi)
+          targetLi.append('<ul></ul>')
+          targetLi.children('ul').append(sourceLi)
         }
 
         // Removes any empty lists
@@ -98,7 +98,6 @@
   var nodeCount = 0
   // Method that recursively builds the tree
   function buildNode ($node, $appendTo, level, opts) {
-    console.log(level,'level')
     var $table = $("<table cellpadding='0' cellspacing='0' border='0'/>")
     var $tbody = $('<tbody/>')
 
@@ -108,7 +107,7 @@
     var $childNodes = $node.children('ul:first').children('li')
     var $nodeDiv
 
-    if ($childNodes.length > 1 && level<=1) {
+    if ($childNodes.length > 1) {
       $nodeCell.attr('colspan', $childNodes.length * 2)
     }
     // Draw the node
@@ -120,14 +119,14 @@
       .html()
 
     // Increaments the node count which is used to link the source list and the org chart
-  	nodeCount++
-  	$node.data('tree-node', nodeCount)
-  	$nodeDiv = $('<div>').addClass('node')
+    nodeCount++
+    $node.data('tree-node', nodeCount)
+    $nodeDiv = $('<div>').addClass('node')
       .data('tree-node', nodeCount)
       .append($nodeContent)
 
     // Expand and contract nodes
-    if ($childNodes.length > 0 && level<=1) {
+    if ($childNodes.length > 0) {
       $nodeDiv.click(function () {
         var $this = $(this)
         var $tr = $this.closest('tr')
@@ -158,7 +157,7 @@
     $nodeRow.append($nodeCell)
     $tbody.append($nodeRow)
 
-    if ($childNodes.length > 0 && level<=1) {
+    if ($childNodes.length > 0) {
       // if it can be expanded then change the cursor
       $nodeDiv.css('cursor', 'n-resize')
       $nodeDiv.attr('cursor', 'n-resize')
@@ -202,23 +201,7 @@
       }
       $tbody.append($childNodesRow)
     }
-    if($childNodes.length > 0 && level>1){
-        // Draw the horizontal lines
-        var $linesRow = $('<tr/>')
-        $childNodes.each(function () {
-          var $left = $('<td>&nbsp;</td>').addClass('line left top')
-          var $right = $('<td>&nbsp;</td>').addClass('line right top')
-          $linesRow.append($left).append($right)
-        })
-        var $childNodesRow = $('<div/>')
-        $childNodes.each(function () {
-          var $td = $("<div class='node-container' style='margin-top:4px'/>")
-          buildNode($(this), $td, level + 1, opts)
-          $childNodesRow.append($td)
-        })
-      
-      $tbody.append($childNodesRow)
-    }
+
     // any classes on the LI element get copied to the relevant node in the tree
     // apart from the special 'collapsed' class, which collapses the sub-tree at this point
     if ($node.attr('class') != undefined) {

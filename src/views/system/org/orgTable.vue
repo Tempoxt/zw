@@ -111,9 +111,6 @@ export default {
                   value: item.id,
                   label: item.name
               }
-          }).concat({
-            value:0,
-            label:'部门'
           })
 
         //   this.form.org_type = orgCategory[0].id

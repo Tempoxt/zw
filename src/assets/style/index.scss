@@ -116,7 +116,13 @@ a {
 }
 
 
+// .el-tree
 
+.el-tree {
+  .icon {
+    color: #757E82;
+  }
+}
 
 .public-dialog {
   /deep/ .el-dialog__header {
@@ -193,15 +199,15 @@ a {
 }
 .table-column-disabled {
   .el-checkbox.is-disabled {
-      .el-checkbox__inner {
-          display: none;
-      }
+      // .el-checkbox__inner {
+      //     display: none;
+      // }
       font-family: "iconfont" !important;
       font-size: 16px;
       &::after{
               content: "\E62C";
               color:#CCD5DB;
-              margin-left: 0px;
+              margin-left: 9px;
       }
   }
 }

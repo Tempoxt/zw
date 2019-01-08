@@ -18,19 +18,25 @@ export default {
             var data = await api_resource.get();
             // console.log(data,'data')
             var $ul = $('<ul id="org" style="display:none"></ul>');
-            (function f(data,$ul,idx){
+            var level = 0;
+            (function f(data,$ul,level){
                 data.forEach((item,idx)=>{
                     var $li  = $(`<li></li>`)
-                    $li.append(`<span style='user-select:none;'>${item.name}</span>`)
+                    if(level>2){
+                        $li.append(`<div style='user-select:none;' class='sub-node'>${item.name.split('').map(t=>('<div>'+t+'</div>')).join('')}</div>`)
+                    }else{
+                        $li.append(`<span style='user-select:none;'>${item.name}</span>`)
+                    }
+                    
                     $ul.append($li)
-                    // console.log(idx,'idx')
+                    console.log(level,'level')
                     if(item.subs&&item.subs.length){
                         var $sub_ul = $("<ul></ul>")
                         $li.append($sub_ul)
-                        f(item.subs,$sub_ul)
+                        f(item.subs,$sub_ul,level+1)
                     }
                 })
-            })(data,$ul,0)
+            })(data,$ul,level)
     
             setTimeout(()=>{
                 $ul.jOrgChart({

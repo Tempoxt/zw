@@ -95,8 +95,29 @@
         </el-row>
 </template>
 <script>
+import api_common from '@/api/common'
+const api_menu = api_common.resource('roles/rolepermissionmenu')
 const cityOptions = ['上海', '北京', '广州', '深圳'];
   export default {
+    props:['roleid'],
+    watch:{
+        roleid:{
+            handler(id){
+               this.roleid = id
+               this.fetchData()
+            },
+            immediate:true
+        }
+    },
+    methods:{
+        async getMenu(){
+            await api_menu.find(this.roleid)
+            return 
+        },
+        async fetchData(){
+            await getMenu()
+        }
+    },
     data() {
       return {
           checkAll: false,

@@ -64,7 +64,7 @@
             :data="data2"
             :props="{children: 'group_role', label: 'groupname' }"
             default-expand-all
-            node-key="id"
+            node-key="roleid"
             :filter-node-method="filterNode"
             ref="tree2"
             :highlight-current="true"
@@ -99,7 +99,7 @@
           <member/>
         </el-tab-pane>
         <el-tab-pane label="功能权限设置" name="second" style="height:100%;">
-          <roles/>
+          <roles :roleid="currentMenuid"/>
         </el-tab-pane>
       </el-tabs>
     </el-col>
@@ -137,8 +137,8 @@ export default {
       return data.name.indexOf(value) !== -1;
     },
     handleChangeNode(data) {
-      if (data.menutype === 2) {
-        this.currentMenuid = data.id;
+      if (data.roleid) {
+        this.currentMenuid = data.roleid;
       }
     },
     addCategory() {
@@ -238,17 +238,17 @@ export default {
     let defaultMenuid;
     (function f(data) {
       data.some(item => {
-        if (item.menutype === 2) {
-          defaultMenuid = item.id;
+        if (item.roleid) {
+          defaultMenuid = item.roleid;
           return true;
         }
-        if (item.subs && item.subs.length) {
-          f(item.subs);
+        if (item.group_role && item.group_role.length) {
+          f(item.group_role);
         }
       });
     })(this.data2);
-    // this.$refs.tree2.setCurrentKey(defaultMenuid);
-    // this.currentMenuid = defaultMenuid;
+    this.$refs.tree2.setCurrentKey(defaultMenuid);
+    this.currentMenuid = defaultMenuid;
   }
 };
 </script>
