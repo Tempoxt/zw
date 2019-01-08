@@ -13,7 +13,7 @@
         @contextmenu.prevent.native="openMenu(tag,$event)"
       >
         {{ tag.title }}
-        <span class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
+        <span class="icon iconfont icon-guanbi1" @click.prevent.stop="closeSelectedTag(tag)"/>
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
@@ -164,7 +164,7 @@ export default {
       color: #495060;
       background: #fff;
       padding: 0 30px 0 25px;
-      font-size: 12px;
+      font-size: 14px;
       // margin-left: 5px;
       // margin-top: 4px;
       &:first-of-type {
@@ -178,7 +178,9 @@ export default {
         // color: #fff;
         // border-color: #42b983;
         background: #f1f8f7;
-
+        .icon {
+          color:#757E82 !important
+        }
         // &::before {
         //   content: "";
         //   background: #fff;
@@ -220,25 +222,28 @@ export default {
 //reset element css of el-icon-close
 .tags-view-wrapper {
   .tags-view-item {
-    .el-icon-close {
+    .icon {
       position: absolute;
       right: 5px;
       top: 12px;
-      width: 16px;
-      height: 16px;
+      width: 4px;
+      height: 4px;
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;
       transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
-      background-color: #b4bccc;
+      // background-color: #b4bccc;
       color: #fff;
       font-size: 16px;
       text-align: center;
       display: flex;
+      padding: 7px;
       justify-content: center;
       align-items: center;
-      background-color: #5d5d5d;
+      // background-color: #76838F;
+    font-size:20px;
+    color:#bdc9ce !important;
       &:before {
         transform: scale(0.6);
         display: inline-block;

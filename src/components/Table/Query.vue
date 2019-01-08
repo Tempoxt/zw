@@ -136,7 +136,7 @@ export default {
       clear(){
         this.table_query.query = []
         // this.queryDialogFormVisible = false
-        this.$emit('query',this.table_query)
+        // this.$emit('query',this.table_query)
       }
     }
 }

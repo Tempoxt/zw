@@ -15,6 +15,7 @@
         text-color="#bfcbd9"
         active-text-color="#409EFF"
         :router="true"
+        :unique-opened="true"
       >
         <span>人事</span>
         <sidebar-item

@@ -6,7 +6,7 @@
     :header-cell-style="{background:'#F5FAFB',color:'#37474F',height:'50px'}"
      :row-class-name="table_state_className"
      @selection-change="handleSelectionChange"
-     :height="table_height"
+     :max-height="table_height"
   >
   <el-table-column 
       type="selection" 
@@ -119,8 +119,11 @@ export default {
       isIndeterminate: false,
       checkAll: [],
       checkedRows: this.selectedRows,
-      table_height:window.innerHeight-300,
+      table_height:window.innerHeight-223,
     };
+  },
+  mounted(){
+    
   },
   methods: {
     table_disable_selected(row){

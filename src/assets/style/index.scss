@@ -99,6 +99,23 @@ a {
 .h-full {
   height: 100%;
 }
+// table 
+
+.el-table--small th, .el-table--small td {
+  padding: 12px 0;
+  font-size: 14px;
+}
+.el-table th.is-leaf, .el-table td {
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.sidebar-container {
+  .el-menu-item i,.el-menu-item span,.el-submenu__title i,.el-submenu__title span {
+    color: #BABFC1;
+    }
+}
+
+
 
 
 .public-dialog {
@@ -183,7 +200,7 @@ a {
       font-size: 16px;
       &::after{
               content: "\E62C";
-              color:#606266;
+              color:#CCD5DB;
               margin-left: 0px;
       }
   }

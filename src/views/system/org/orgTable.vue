@@ -10,7 +10,7 @@
       :visible.sync="dialogFormVisible"
       class="public-dialog"
     >
-      <div>
+      <div v-if="dialogFormVisible">
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
           <el-row :gutter="20">
             <el-col :span="12">
@@ -111,7 +111,11 @@ export default {
                   value: item.id,
                   label: item.name
               }
+          }).concat({
+            value:0,
+            label:'部门'
           })
+
         //   this.form.org_type = orgCategory[0].id
          
       }

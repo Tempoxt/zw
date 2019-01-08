@@ -23,7 +23,7 @@
           >
             <span slot-scope="{ node, data }">
               <span v-if="node.isLeaf" class="icon iconfont icon-zuzhi2"></span>
-              <span v-else class="icon iconfont icon-gongneng"></span>&nbsp;
+              <span v-else class="icon iconfont icon-zuzhi1"></span>&nbsp;
               <span>{{ node.label }}</span>
             </span>
           </el-tree>

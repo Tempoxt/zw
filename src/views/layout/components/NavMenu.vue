@@ -34,7 +34,7 @@
   >
     <el-menu-item :index="item.url" v-for="item in menuList" :key="item.id">
       <i :class="item.icon"></i>
-      {{item.name}}
+      <span>{{item.name}}</span>
     </el-menu-item>
     <!-- <el-menu-item index="3">
       <i class="fa fa-home fa-lg"></i>流程

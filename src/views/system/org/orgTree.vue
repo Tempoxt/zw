@@ -16,19 +16,21 @@ export default {
        async fetchData(){
            $('#box').html('')
             var data = await api_resource.get();
+            // console.log(data,'data')
             var $ul = $('<ul id="org" style="display:none"></ul>');
-            (function f(data,$ul){
-                data.forEach((item)=>{
+            (function f(data,$ul,idx){
+                data.forEach((item,idx)=>{
                     var $li  = $(`<li></li>`)
                     $li.append(`<span style='user-select:none;'>${item.name}</span>`)
                     $ul.append($li)
+                    // console.log(idx,'idx')
                     if(item.subs&&item.subs.length){
                         var $sub_ul = $("<ul></ul>")
                         $li.append($sub_ul)
                         f(item.subs,$sub_ul)
                     }
                 })
-            })(data,$ul)
+            })(data,$ul,0)
     
             setTimeout(()=>{
                 $ul.jOrgChart({

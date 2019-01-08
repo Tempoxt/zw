@@ -1,11 +1,15 @@
 <template>
      <el-form-item :label="field.name">
-        <el-popover ref="popover" placement="bottom" width="200" trigger="click" v-model="visible" transition="el-zoom-in-top">
+        <el-popover ref="popover" placement="bottom" width="300" trigger="click" v-model="visible" transition="el-zoom-in-top">
         <el-input
           placeholder="搜索部门"
           class="input"
           v-model="filterText">
         </el-input>
+          <el-scrollbar
+      ref="scrollContainer"
+      class="scroll-container"
+     >
         <el-tree
             class="filter-tree"
             :data="data2"
@@ -23,6 +27,7 @@
             <span>{{ node.label }}</span>
             </span>
         </el-tree>
+        </el-scrollbar>
         </el-popover>
         <el-select
         v-model="input5"
@@ -135,5 +140,11 @@ export default {
     border-radius: 14px;
   }
    
+}
+.scroll-container {
+  height: 300px;
+  /deep/ .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
 }
 </style>
