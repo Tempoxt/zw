@@ -27,9 +27,7 @@ export default {
                     }else{
                         $li.append(`<span style='user-select:none;'>${item.name}</span>`)
                     }
-                    
                     $ul.append($li)
-                    console.log(level,'level')
                     if(item.subs&&item.subs.length){
                         var $sub_ul = $("<ul></ul>")
                         $li.append($sub_ul)

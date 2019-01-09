@@ -132,7 +132,7 @@ export default {
     };
   },
   async created() {
-    const { menu } = await api_common.getMenu(2);
+    const { menu } = await api_common.getMenu(this.field.position);
     this.data2 = [
       {
         id: 0,

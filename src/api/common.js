@@ -53,7 +53,7 @@ export function resource (url) {
       return request.get(`/${url}/${id}`, {
         params
       })
-    },
+    }
 
   }
 }

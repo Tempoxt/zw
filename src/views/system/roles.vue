@@ -94,12 +94,12 @@
       </div>
     </el-col>
     <el-col :span="19" style="height:calc(100% - 40px)">
-      <el-tabs v-model="activeName" class="table-tabs">
+      <el-tabs v-model="activeName" class="table-tabs" >
         <el-tab-pane label="角色成员分配" name="first">
           <member/>
         </el-tab-pane>
-        <el-tab-pane label="功能权限设置" name="second" style="height:100%;">
-          <roles :roleid="currentMenuid"/>
+        <el-tab-pane label="功能权限设置" name="second" style="height:100%;" >
+          <roles :roleid="currentMenuid" v-if="activeName==='second'"/>
         </el-tab-pane>
       </el-tabs>
     </el-col>
@@ -238,13 +238,15 @@ export default {
     let defaultMenuid;
     (function f(data) {
       data.some(item => {
-        if (item.roleid) {
+        if (item.roleid!==undefined) {
           defaultMenuid = item.roleid;
           return true;
+        }else{
+           if (item.group_role && item.group_role.length) {
+              f(item.group_role);
+            }
         }
-        if (item.group_role && item.group_role.length) {
-          f(item.group_role);
-        }
+       
       });
     })(this.data2);
     this.$refs.tree2.setCurrentKey(defaultMenuid);

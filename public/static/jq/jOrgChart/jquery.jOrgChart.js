@@ -192,7 +192,13 @@
         $tbody.append($linesRow)
         var $childNodesRow = $('<tr/>')
         $childNodes.each(function () {
-          var $td = $("<td class='node-container'/>")
+          if(level<=1){
+            var $td = $("<td class='node-container node-pd'/>")
+          }else{
+            var $td = $("<td class='node-container'/>")
+          }
+          
+          
           $td.attr('colspan', 2)
           // recurse through children lists and items
           buildNode($(this), $td, level + 1, opts)

@@ -1,9 +1,9 @@
 <template>
   <el-tabs v-model="activeName" class="table-tabs" @tab-click="tabClick">
-    <el-tab-pane label="组织架构管理" name="first">
+    <el-tab-pane label="组织资料" name="first">
       <org-table />
     </el-tab-pane>
-    <el-tab-pane label="组织架构图" name="second">
+    <el-tab-pane label="组织关系图" name="second">
       <org-tree ref="tree"/>
     </el-tab-pane>
   </el-tabs>
