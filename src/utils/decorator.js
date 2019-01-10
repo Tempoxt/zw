@@ -11,3 +11,4 @@ export function promisify(target, property, descriptor){
     });
     return descriptor;
 }
+

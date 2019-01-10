@@ -91,6 +91,7 @@ const api_roles_menu = api_common.resource('roles/rolepermissionmenu')
 const api_menu = api_common.resource('menusheet')
 const api_roles_auth = api_common.resource('roles/rolepermisson')
 const cityOptions = ['上海', '北京', '广州', '深圳'];
+import { throttle } from 'core-decorators';
   export default {
     props:['roleid'],
     watch:{
@@ -191,6 +192,7 @@ const cityOptions = ['上海', '北京', '广州', '深圳'];
              this.checkedActions = this.actions.map(item=>item.id)
              this.update()
         },
+        @throttle(1000, {leading: false})
         update(){
             api_roles_auth.update(this.roleid,{
                 data:this.data,

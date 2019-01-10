@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios-rest-client": "^0.1.10",
+    "core-decorators": "^0.20.0",
     "element-ui": "^2.4.11",
     "file-saver": "^2.0.0",
     "iview": "^3.1.5",
