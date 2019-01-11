@@ -1,5 +1,5 @@
 <template>
-    <el-row :gutter="20" class="row">
+    <el-row :gutter="40" class="row">
         <el-col :span="6" class="col">
             <div class="label">
                 菜单权限
@@ -19,7 +19,7 @@
                 </el-tree>
             </div>
         </el-col>
-        <el-col :span="6"  class="col">
+        <el-col :span="4"  class="col bg-gray">
             <div class="label">
                 操作权限
             </div>
@@ -30,12 +30,12 @@
                 </div>
                 <el-checkbox-group v-model="checkedActions" @change="update">
                     <div v-for="action in actions" :key="action.id" class="cell">
-                        <el-checkbox  :label="action.id" > <span :class="action.icon"></span>{{action.name}}</el-checkbox>
+                        <el-checkbox  :label="action.id" > <span :class="action.icon"></span> &nbsp;{{action.name}}</el-checkbox>
                     </div>
                 </el-checkbox-group>
             </div>
         </el-col>
-        <el-col :span="6"  class="col">
+        <el-col :span="8"  class="col bg-gray">
              <div class="label">
                 字段权限
             </div>
@@ -58,7 +58,7 @@
             <div>
                 <el-row  class="cell" v-for="field in fields" :key="field.id">
                     <el-col :span="9">
-                        <span>{{field.showname}}</span>
+                        <el-radio v-model="radio" label="1">{{field.showname}}</el-radio>
                     </el-col>
                     <el-col :span="5">
                         <el-radio v-model="field.haspermission" :label="2" @change="update">读写</el-radio>
@@ -72,12 +72,15 @@
                 </el-row>
             </div>
         </el-col>
-        <el-col :span="6"  class="col">
+        <el-col :span="6"  class="col bg-gray-2">
 
             <div class="label">
                 数据范围
             </div>
-             <el-radio-group v-model="data" @change="update">
+             <div class="action-top">
+                  <el-radio :label="0">全部</el-radio>
+             </div>
+             <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
                  <div v-for="i in [{label:'本人相关',value:1},{label:'本部门',value:2},{label:'本部门及下属部门',value:3},{label:'全部',value:4}]" :key="i.value"  class="cell">
                      <el-radio :label="i.value">{{i.label}}</el-radio>
                  </div>
@@ -210,7 +213,6 @@ import { throttle } from 'core-decorators';
     },
     data() {
       return {
-    
         checkedActions: [],
         cities: cityOptions,
         isIndeterminate: true,
@@ -241,18 +243,25 @@ import { throttle } from 'core-decorators';
     .col {
         border-right: 1px solid #e8e8ee;
         height: 100%;
+
         &:first-child{
-            padding-left: 20px !important;
+            padding-left: 40px !important;
         }
         
     }
 }
 .cell {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 .action-top {
     border-bottom: 1px solid #e8e8e8;
     padding:10px 0;
     margin-bottom: 10px;
+}
+.bg-gray {
+    background: #EBF6F8
+}
+.bg-gray-2 {
+    background: #DDECEF
 }
 </style>

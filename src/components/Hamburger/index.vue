@@ -1,7 +1,7 @@
 <template>
   <div>
     <i
-      :class="`el-icon-tickets white hamburger ${isActive?'is-active':''}`"
+      :class="`el-icon-tickets icon iconfont icon-caidanqiehuan white hamburger ${isActive?'is-active':''}`"
       @click="toggleClick"
     ></i>
     <!-- <svg

@@ -1,7 +1,7 @@
 <template>
   <ui-table ref="table"   
   :table_column="table_field" 
-  :table_query.sync="table_query"
+  :table_query.sync="table_form.query"
   @query="querySubmit">
     <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"

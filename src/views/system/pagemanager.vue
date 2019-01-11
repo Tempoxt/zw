@@ -63,7 +63,7 @@ export default {
       return data.name.indexOf(value) !== -1;
     },
     handleChangeNode(data) {
-      if (data.menutype === 2) {
+      if (data.menutype === 2 || data.menutype === 3) {
         this.currentMenuid = data.id;
       }
     }

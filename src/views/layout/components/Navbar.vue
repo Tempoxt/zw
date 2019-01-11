@@ -11,17 +11,25 @@
     </div>
     <div class="right-menu">
       <span class="right-menu-item">
-        <i class="icon iconfont icon-sousuo1"></i>
+         <el-tooltip class="item" effect="dark" content="搜索" placement="bottom">
+              <i class="icon iconfont icon-sousuo1"></i>
+        </el-tooltip>
       </span>
       <span class="right-menu-item message-item">
-        <i class="icon iconfont icon-xiaoxi"></i>
-        <span class="count">99</span>
+          <el-tooltip class="item" effect="dark" content="消息" placement="bottom">
+                  <i class="icon iconfont icon-xiaoxi"></i>
+                <span class="count">99</span>
+          </el-tooltip>
       </span>
       <span class="right-menu-item">
-        <i class="icon iconfont icon-shouji"></i>
+        <el-tooltip class="item" effect="dark" content="手机" placement="bottom">
+              <i class="icon iconfont icon-shouji"></i>
+        </el-tooltip>
       </span>
       <span class="right-menu-item" @click="handleScreenfull">
-        <i class="icon iconfont icon-quanping"></i>
+        <el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
+             <i class="icon iconfont icon-quanping"></i>
+        </el-tooltip>
       </span>
       <template v-if="device!=='mobile'">
         <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom"></el-tooltip>

@@ -38,6 +38,9 @@
                 },{
                   value: 2,
                   label: '菜单'
+                },{
+                  value: 3,
+                  label: '页签'
                 }]}"
                 v-model="form.menutype"
               />
@@ -107,7 +110,8 @@
         <template slot-scope="scope">
           <template v-if="column.name==='menutype'">
             <el-tag v-if="scope.row['menutype']===1" size="mini">目录</el-tag>
-            <el-tag type="success" v-else size="mini">菜单</el-tag>
+            <el-tag v-else-if="scope.row['menutype']===2" size="mini"  type="success">菜单</el-tag>
+            <el-tag type="info" v-else size="mini">页签</el-tag>
           </template>
           <template v-else-if="column.name==='estate'">
             <span v-if="scope.row['estate']===1">启用</span>

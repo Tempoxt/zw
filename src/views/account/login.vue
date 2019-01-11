@@ -23,7 +23,6 @@
           placeholder="用户名"
           name="username"
           type="text"
-          auto-complete="on"
           size="large"
           class="form-input"
         />
@@ -38,7 +37,6 @@
           v-model="loginForm.password"
           placeholder="密码"
           name="password"
-          auto-complete="on"
           @keyup.enter.native="handleLogin"
           size="large"
           class="form-input"

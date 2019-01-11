@@ -1,7 +1,7 @@
   <template>
   <ui-table ref="table"
   :table_column="table_field" 
-  :table_query.sync="table_query"
+  :table_query.sync="table_form.query"
   @query="querySubmit"
   >
       <el-dialog
@@ -192,6 +192,7 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("user");
 const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
 const defaultTableForm = () =>({
+           
            pagesize:10,
            currentpage:1
       })
@@ -226,14 +227,17 @@ export default {
               ]
           }
       ],
-      table_form:defaultTableForm()
+    //   table_form:defaultTableForm()
     };
   },
   watch:{
       async currentMenuid(id){
-         this.table_form = defaultTableForm()
+        //  this.table_form = defaultTableForm()
          this.table_form.menuid = id 
+         this.table_form.pagesize=10,
+         this.table_form.currentpage=1
          this.fetchTableData();
+         
       }
   },
   methods: {
