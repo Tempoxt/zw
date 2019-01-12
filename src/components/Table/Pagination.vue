@@ -30,7 +30,9 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
+      
       this.$emit("update:pagesize", val);
+      this.$emit("update:currentpage", 1);
       this.$emit("change");
     },
     handleCurrentChange(val) {

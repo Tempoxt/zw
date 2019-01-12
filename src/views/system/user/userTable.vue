@@ -152,7 +152,39 @@
       :table_column="table_field.slice(1,table_field.length)"
       :table_form.sync="table_form"
     ></table-header>
-    <tree-table
+
+
+    <el-table
+      @selection-change="handleChangeSelection"
+      :data="table_data"
+      border
+      style="width: 100%"
+      v-loading="table_loading"
+      :header-cell-style="headerCellStyle"
+      :height="table_height"
+      @header-dragend="table_dragend"
+    >
+      <el-table-column
+        :label="column.showname"
+        v-for="(column) in table_field.filter(column=>!column.fed_isvisiable)"
+        :key="column.id"
+        :width="column.width||'auto'"
+      >
+         <template slot-scope="scope">
+          <template v-if="column.name==='department'">
+           {{scope.row[column.name].name}}
+          </template>
+          <template v-else-if="column.name==='user_role'">
+              <span v-for="item in scope.row[column.name]" :key="item.roleid">{{item.rolemodels_name}}</span>
+          </template>
+          <template v-else-if="column.name==='estate'">{{scope.row['estate']===1?'启用':'禁用'}}</template>
+          <template v-else>{{scope.row[column.name]}}</template>
+        </template>
+      </el-table-column>
+    </el-table>
+
+
+    <!-- <tree-table
       :data="table_data"
       v-loading="loading"
       ref="treeTable"
@@ -176,7 +208,10 @@
           <template v-else>{{scope.row[column.name]}}</template>
         </template>
       </el-table-column>
-    </tree-table>
+    </tree-table> -->
+
+
+
      <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -255,13 +290,13 @@ export default {
     filterNode(){},
     handleChangeNode(){},
     async fetchTableData() {
-     this.loading = true;
+     this.table_loading = true;
      const {rows,total} =  await api_resource.get(this.table_form);
      this.table_data =rows
      this.table_form.total = total
-      this.$refs.treeTable.clearSelectedRows();
+    //   this.$refs.treeTable.clearSelectedRows();
       setTimeout(() => {
-        this.loading = false;
+        this.table_loading = false;
       }, 300);
     },
     async handleFormSubmit(){

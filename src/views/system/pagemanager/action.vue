@@ -35,6 +35,7 @@
                 border 
                 style="width: 100%"
                 :header-cell-style="headerCellStyle"
+                @header-dragend="table_dragend"
                 v-loading="table_loading">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column
@@ -42,6 +43,7 @@
                     :label="column.showname"
                     v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
                     :key="column.id"
+                    :width="column.width||'auto'"
                 >
                     <template slot-scope="scope">
                     <template v-if="column.name==='icon'">

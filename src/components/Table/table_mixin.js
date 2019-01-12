@@ -5,8 +5,8 @@ import FormRender from '@c/Form/render'
 import tableHeader from '@c/Table/Header'
 import tablePagination from '@c/Table/Pagination'
 
-
-
+import * as api_common from "@/api/common";
+const api_pagemanager = api_common.resource('pagemanager/field')
 export default {
   components: {
     uiTable,
@@ -28,6 +28,7 @@ export default {
       table_modal: false,
       dialogFormVisible: false,
       table_queryFormVisible: false,
+      table_height:window.innerHeight-236,
       table_form:{
         query:{
           type:1,
@@ -55,6 +56,13 @@ export default {
     },
     table_state_className({row, column, rowIndex, columnIndex}){
       return row.lockstate?'row-state-class':''
+    },
+    
+    table_dragend(newWidth, oldWidth, column, event,b){
+      let row = this.table_field.find(field=>field.showname===column.label)
+      row.width = newWidth
+      row.menuid = row.menuid_id
+      api_pagemanager.update(row.id,row)
     },
     query() {
       this.$refs.table.table_queryFormVisible = true

@@ -28,7 +28,7 @@
         </span>
         <i :class="scope.row.icon" v-if="iconShow(0,scope.row)"></i>
         <i :class="scope.row.icon" v-else></i>
-        {{ scope.row.name }}
+        <span v-html="scope.row.name"></span>
       </template>
     </el-table-column>
     <el-table-column

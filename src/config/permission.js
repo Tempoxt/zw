@@ -28,6 +28,9 @@ router.beforeEach(async (to, from, next) => {
             // 生成路由hash
             createdRouterHash(router)
         }
+        if (store.state.user.userInfo === null) {
+           await store.dispatch('user/getUserInfo')
+        }
         // 比对 to 和 hash 
 
     }

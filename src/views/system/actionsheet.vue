@@ -53,6 +53,8 @@
                 style="width: 100%"
                 :row-class-name="table_state_className"
                 :header-cell-style="headerCellStyle"
+                :height="table_height"
+                @header-dragend="table_dragend"
                 v-loading="table_loading">
                 <el-table-column 
                 type="selection" 
@@ -68,6 +70,7 @@
                     :label="column.showname"
                     v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
                     :key="column.id"
+                    :width="column.width||'auto'"
                     
                 >
                 <template slot-scope="scope">

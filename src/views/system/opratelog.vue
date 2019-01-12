@@ -5,28 +5,28 @@
   @query="querySubmit"
   
   >
-
-
     <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
-      :table_column="table_field.slice(1,table_field.length)"
       @action="handleAction"
       :table_form.sync="table_form"
+      :table_column="table_field"
     ></table-header>
-    <tree-table
+    <el-table
+      @selection-change="handleChangeSelection"
       :data="table_data"
-      v-loading="loading"
-      ref="treeTable"
-      :selectedRows.sync="table_selectedRows"
-      :label="table_field[0] && table_field[0].showname"
-      :table_actions="table_actions"
-      
+      border
+      style="width: 100%"
+      v-loading="table_loading"
+      :header-cell-style="headerCellStyle"
+      :height="table_height"
+      @header-dragend="table_dragend"
     >
       <el-table-column
         :label="column.showname"
-        v-for="(column) in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
+        v-for="(column) in table_field.filter(column=>!column.fed_isvisiable)"
         :key="column.id"
+        :width="column.width||'auto'"
       >
         <template slot-scope="scope">
           <template v-if="column.name==='menutype'">
@@ -40,7 +40,7 @@
           <template v-else>{{scope.row[column.name]}}</template>
         </template>
       </el-table-column>
-    </tree-table>
+    </el-table>
      <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -52,7 +52,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("log/opratelog");
+const api_resource = api_common.resource("log/operatelog");
 export default {
   mixins: [table_mixin],
   data() {
@@ -61,7 +61,8 @@ export default {
       form:{},
       api_resource,
       orgCategory:[],
-      queryDialogFormVisible:true
+      queryDialogFormVisible:true,
+      table_height:window.innerHeight-236,
     };
   },
   watch:{
@@ -69,17 +70,17 @@ export default {
   },
   methods: {
     async fetchTableData() {
-     this.loading = true;
+     this.table_loading = true;
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
       setTimeout(() => {
-        this.loading = false;
+        this.table_loading = false;
       }, 300);
     },
   },
   async created() {
-    const { field, action } = await api_common.menuInit("log/opratelog");
+    const { field, action } = await api_common.menuInit("log/operatelog");
     this.table_field = field;
     this.table_actions = action;
     this.fetchTableData();

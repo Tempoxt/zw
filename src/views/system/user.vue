@@ -2,13 +2,18 @@
    <el-row class="h-full">
     <el-col :span="5" class="h-full">
       <div class="page-side h-full">
+        
         <span class="page-title">用户管理</span>
+         <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
         <div>
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>
+
+         
+
           <el-tree
             class="tree"
             :data="data2"
@@ -27,8 +32,11 @@
               <span>{{ node.label }}</span>
             </span>
           </el-tree>
+         
         </div>
+         </el-scrollbar>
       </div>
+
     </el-col>
     <el-col :span="19">
         <user-table :currentMenuid="currentMenuid"/>
@@ -64,3 +72,14 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+
+.scroll {
+  height: calc(100% - 30px);
+  width: 100%;
+ /deep/ .scrollbar-wrapper {
+    overflow-x: hidden;
+  }
+}
+</style>
+

@@ -58,7 +58,7 @@
             <div>
                 <el-row  class="cell" v-for="field in fields" :key="field.id">
                     <el-col :span="9">
-                        <el-radio v-model="radio" label="1">{{field.showname}}</el-radio>
+                        <el-radio @change="update" v-model="filterfield" :label="field.id">{{field.showname}}</el-radio>
                     </el-col>
                     <el-col :span="5">
                         <el-radio v-model="field.haspermission" :label="2" @change="update">读写</el-radio>
@@ -78,10 +78,10 @@
                 数据范围
             </div>
              <div class="action-top">
-                  <el-radio :label="0">全部</el-radio>
+                  <el-radio :label="1">全部</el-radio>
              </div>
              <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
-                 <div v-for="i in [{label:'本人相关',value:1},{label:'本部门',value:2},{label:'本部门及下属部门',value:3},{label:'全部',value:4}]" :key="i.value"  class="cell">
+                 <div v-for="i in [{label:'本人相关',value:2},{label:'本部门',value:3},{label:'本部门及下属部门',value:4},{label:'全部',value:4}]" :key="i.value"  class="cell">
                      <el-radio :label="i.value">{{i.label}}</el-radio>
                  </div>
             </el-radio-group>
@@ -145,13 +145,14 @@ import { throttle } from 'core-decorators';
         async nodeClick({id}){
 
             this.currentMenuId = id
-            const { fields,actions,data }  = await api_roles_auth.find(this.roleid,{
+            const { fields,actions,data,filterfield }  = await api_roles_auth.find(this.roleid,{
                 menuid:id
             })
             this.fields = fields
             this.actions = actions
             this.checkedActions = this.actions.filter(item=>item.haspermission).map(item=>item.id)
             this.data = data
+            this.filterfield = filterfield
             return
         },
         treeNodeCheck(data,{checkedKeys}){
@@ -201,7 +202,8 @@ import { throttle } from 'core-decorators';
                 data:this.data,
                 menuid:this.currentMenuId,
                 actions:this.checkedActions,
-                fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`))
+                fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`)),
+                filterfield:this.filterfield
             })
         },
         all(state){
@@ -227,7 +229,8 @@ import { throttle } from 'core-decorators';
         roles_menu_checked_default:[],
         fields:[],
         actions:[],
-        data:0
+        data:0,
+        filterfield:''
       };
     }
   };

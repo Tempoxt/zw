@@ -67,8 +67,8 @@ const debugForm =
   process.env.NODE_ENV === "production"
     ? {}
     : {
-        username: 1739,
-        password: 123456
+        username: 'zhaowei',
+        password: 'hgw@2018'
       };
 export default {
   name: "Login",

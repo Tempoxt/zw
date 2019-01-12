@@ -44,12 +44,13 @@
           <!-- <span class="user-name">林夏</span> -->
         </div>
         <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>{{userInfo.real_name||'暂无名称'}}</el-dropdown-item>
           <el-dropdown-item @click.native="toggleStatus">{{status==2?'前端用户中心':'后端应用中心'}}</el-dropdown-item>
-          <router-link to="/">
+          <!-- <router-link to="/">
             <el-dropdown-item>{{ $t('navbar.dashboard') }}</el-dropdown-item>
-          </router-link>
+          </router-link> -->
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">登录</span>
+            <span style="display:block;" @click="logout">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -73,7 +74,8 @@ export default {
   computed: {
     ...mapGetters(["sidebar", "name", "device"]),
     ...mapState({
-      status: state => state.app.status
+      status: state => state.app.status,
+      userInfo:state=>state.user.userInfo
     })
   },
   methods: {
@@ -87,7 +89,7 @@ export default {
       this.$store.commit("toggleStatus");
     },
     logout() {
-      this.$router.push("/account/login");
+      // this.$router.push("/account/login");
       this.$store.dispatch("user/LogOut").then(() => {
         location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
       });
