@@ -217,6 +217,7 @@
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
         @change="fetchTableData"
+        ref="table_pagination"
         />
   </ui-table>
 </template>
@@ -226,11 +227,7 @@ import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("user");
 const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
-const defaultTableForm = () =>({
-           
-           pagesize:10,
-           currentpage:1
-      })
+
 const cityOptions = ['上海', '北京', '广州', '深圳'];
 
 export default {
@@ -269,8 +266,7 @@ export default {
       async currentMenuid(id){
         //  this.table_form = defaultTableForm()
          this.table_form.menuid = id 
-         this.table_form.pagesize=10,
-         this.table_form.currentpage=1
+         this.$refs.table_pagination.reset()
          this.fetchTableData();
          
       }

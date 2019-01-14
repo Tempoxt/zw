@@ -30,6 +30,7 @@ export default {
       table_queryFormVisible: false,
       table_height:window.innerHeight-236,
       table_form:{
+        pagesize:100,
         query:{
           type:1,
           query:[]

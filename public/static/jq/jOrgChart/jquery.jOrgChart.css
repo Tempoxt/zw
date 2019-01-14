@@ -7,7 +7,7 @@
   padding:0 10px;
 }
 .jOrgChart .active::before{
-  content: "-";
+  /* content: "-";
   width: 22px;
   height: 21px;
   background: #9463F7;
@@ -18,13 +18,26 @@
   line-height: 22px;
   border-radius: 50%;
   color: #fff;
+  cursor: pointer; */
+  content: "-";
+  width: 22px;
+  height: 21px;
+  background: #9463F7;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-top: 4px;
+  margin-left: -10px;
+  line-height: 22px;
+  border-radius: 50%;
+  color: #fff;
   cursor: pointer;
 }
 .jOrgChart .active[cursor='s-resize']::before {
   content: "+";
 }
 .jOrgChart .line {
-  height                : 50px;
+  height                : 40px;
   width                 : 1px;
 }
 

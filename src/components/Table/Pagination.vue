@@ -2,7 +2,7 @@
   <div class="pagination">
     <el-pagination
       background
-      :page-sizes="[10, 20, 30, 40]"
+      :page-sizes="[50, 100, 200, 500,1000]"
       :page-size="pagesize"
       layout="total, sizes"
       :total="total"
@@ -12,7 +12,7 @@
 
     <el-pagination
       background
-      :page-sizes="[10, 20, 30, 40]"
+      :page-sizes="[50, 100, 200, 500,1000]"
       :page-size="pagesize"
       layout="prev, pager, next"
       :total="total"
@@ -29,6 +29,10 @@ export default {
     currentpage: Number
   },
   methods: {
+    reset(){
+      this.$emit("update:pagesize", 100);
+      this.$emit("update:currentpage", 1);
+    },
     handleSizeChange(val) {
       
       this.$emit("update:pagesize", val);

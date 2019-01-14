@@ -1,6 +1,6 @@
 <template>
      <el-form-item :label="field.name">
-        <el-popover ref="popover" placement="bottom" width="200" trigger="click" v-model="visible" transition="el-zoom-in-top">
+        <el-popover ref="popover" placement="bottom" width="300" trigger="click" v-model="visible" transition="el-zoom-in-top">
         <el-tree
             class="filter-tree"
             :props="defaultProps"

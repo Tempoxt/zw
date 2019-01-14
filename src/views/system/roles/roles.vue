@@ -78,10 +78,10 @@
                 数据范围
             </div>
              <div class="action-top">
-                  <el-radio :label="1">全部</el-radio>
+                  <el-radio :label="1" v-model="data" @change="update">全部</el-radio>
              </div>
              <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
-                 <div v-for="i in [{label:'本人相关',value:2},{label:'本部门',value:3},{label:'本部门及下属部门',value:4},{label:'全部',value:4}]" :key="i.value"  class="cell">
+                 <div v-for="i in [{label:'本人相关',value:2},{label:'本部门',value:3},{label:'本部门及下属部门',value:4}]" :key="i.value"  class="cell">
                      <el-radio :label="i.value">{{i.label}}</el-radio>
                  </div>
             </el-radio-group>

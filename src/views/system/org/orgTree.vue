@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div id="box">
+         <el-button @click="exportCanvas" style="position: absolute; right: 34px;top: 3px;"><i data-v-0845e584="" class="icon iconfont icon-daochu" style="padding-right: 10px; margin-right: -10px;"></i> 导出</el-button>
+        <div id="box" :class="state==='export'?'export':''">
         
         </div>
 
@@ -11,7 +12,14 @@ require('@public/static/jq/jOrgChart/jquery.jOrgChart.js')
 import '@public/static/jq/jOrgChart/jquery.jOrgChart.css'
 import * as api_common from "@/api/common";
 const api_resource = api_common.resource("org");
+import html2canvas from 'html2canvas';
+const download = require('downloadjs')
 export default {
+    data(){
+        return {
+            state:'',
+        }
+    },
    methods:{
        async fetchData(){
            $('#box').html('').css({
@@ -47,11 +55,46 @@ export default {
                 chartElement:'#box'
             });
             },0)
+       },
+       exportCanvas(){
+           const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
+            
+           setTimeout(()=>{
+                $('#box').css({
+                    height:'100%',
+                })
+                this.state = 'export'
+                html2canvas(document.getElementById('box')).then((canvas)=>{
+                    // document.getElementById('box').appendChild(canvas);
+                    download(canvas.toDataURL("image/png"), "组织架构图.png", "image/png");
+                    $('#box').css({
+                        height:window.innerHeight-165,
+                    })
+                    this.state = ''
+                    loading.close();
+                });
+
+           },100)
        }
    },
    async mounted(){
-     
+    
    
     }
 }
 </script>
+<style lang="scss" scoped>
+#box {
+   /deep/ &.export {
+        .jOrgChart .active::before {
+            display: none;
+        }
+    }
+    
+}
+</style>
