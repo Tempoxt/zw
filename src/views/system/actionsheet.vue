@@ -142,10 +142,7 @@ export default {
     },
     data(){
         return {
-            table_form:{
-                pagesize:10,
-                currentpage:1
-            },
+           
             form:defaultForm(),
             defaultForm,
             api_resource

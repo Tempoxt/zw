@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Element from 'element-ui'
+import elDragDialog from '@/directive/el-dragDialog'
 import {
   sync
 } from 'vuex-router-sync'
@@ -24,7 +25,7 @@ import 'iview/dist/styles/iview.css'
 // import '@assets/style/theme/test/index.css'
 sync(store, router)
 Vue.use(iView)
-
+Vue.directive("elDragDialog",elDragDialog)
 Vue.config.productionTip = false
 Vue.mixin({
   methods: {

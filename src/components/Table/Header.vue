@@ -99,6 +99,9 @@ export default {
     isDisabled() {
       let len = this.table_selectedRows.length;
       return function(code) {
+        if (code === "add") {
+          return len <= 1;
+        }
         if (code === "edit") {
           return len === 1;
         }

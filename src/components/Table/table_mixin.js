@@ -31,6 +31,7 @@ export default {
       table_height:window.innerHeight-236,
       table_form:{
         pagesize:100,
+        currentpage:1,
         query:{
           type:1,
           query:[]

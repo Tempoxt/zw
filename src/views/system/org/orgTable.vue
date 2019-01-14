@@ -9,6 +9,7 @@
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
+      v-el-drag-dialog
     >
       <div v-if="dialogFormVisible">
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
