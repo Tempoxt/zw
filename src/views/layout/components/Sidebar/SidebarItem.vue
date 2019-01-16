@@ -1,9 +1,9 @@
 <template>
   <div v-if="!item.hidden" class="menu-wrapper">
     <template
-      v-if="hasOneShowingChild(item.subs,item) && (!onlyOneChild.subs||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
+      v-if="hasOneShowingChild(item.subs,item) && (item.tabs||!onlyOneChild.subs||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
     >
-      <el-menu-item :index="resolvePath(item.url)" :class="{'submenu-title-noDropdown':!isNest}">
+      <el-menu-item :index="resolvePath(item.url)+(item.isTabs?`?menuid=${item.id}`:'')" :class="{'submenu-title-noDropdown':!isNest}">
         <i :class="onlyOneChild.icon" style="margin-right:10px"></i>
         <span slot="title">{{onlyOneChild.name}}</span>
         <!-- <item v-if="onlyOneChild" :icon="onlyOneChild.icon||item.icon" :title="onlyOneChild.name"/> -->
@@ -69,7 +69,13 @@ export default {
   created() {},
   methods: {
     hasOneShowingChild(children = [], parent) {
+      if(parent.subs.some(item=>item.menutype===3)){
+        this.onlyOneChild = { ...parent, path: "", noShowingChildren: true };
+        parent.isTabs = true
+        return true
+      }
       const showingChildren = children.filter(item => {
+
         if (item.hidden) {
           return false;
         } else {

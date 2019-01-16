@@ -66,6 +66,9 @@ export default {
       row.menuid = row.menuid_id
       api_pagemanager.update(row.id,row)
     },
+    table_sort_change({ column, prop, order }){
+      console.log(column,'column')
+    },
     query() {
       this.$refs.table.table_queryFormVisible = true
     },

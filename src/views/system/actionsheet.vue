@@ -55,6 +55,7 @@
                 :header-cell-style="headerCellStyle"
                 :height="table_height"
                 @header-dragend="table_dragend"
+                @sort-change="table_sort_change"
                 v-loading="table_loading">
                 <el-table-column 
                 type="selection" 
@@ -71,6 +72,7 @@
                     v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
                     :key="column.id"
                     :width="column.width||'auto'"
+                    :sortable="!column.issort?'custom':false"
                     
                 >
                 <template slot-scope="scope">

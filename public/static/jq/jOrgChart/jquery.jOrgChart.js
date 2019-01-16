@@ -12,6 +12,100 @@
  *
  */
 (function ($) {
+  var pan = {
+    _closest(el, fn) {
+      return el && ((fn(el) && el !== this.chart) ? el : this._closest(el.parentNode, fn));
+    },
+    _onPanStart:function(event) {
+        var chart = event.currentTarget;
+        if (this._closest(event.target, (el) => el.classList && el.classList.contains('node')) ||
+          (event.touches && event.touches.length > 1)) {
+          chart.dataset.panning = false;
+          return;
+        }
+        chart.style.cursor = 'move';
+        chart.dataset.panning = true;
+
+        var lastX = 0,
+          lastY = 0,
+          lastTf = window.getComputedStyle(chart).transform;
+
+        if (lastTf !== 'none') {
+          var temp = lastTf.split(',');
+
+          if (!lastTf.includes('3d')) {
+            lastX = Number.parseInt(temp[4], 10);
+            lastY = Number.parseInt(temp[5], 10);
+          } else {
+            lastX = Number.parseInt(temp[12], 10);
+            lastY = Number.parseInt(temp[13], 10);
+          }
+        }
+        var startX = 0,
+          startY = 0;
+
+        if (!event.targetTouches) { // pan on desktop
+          startX = event.pageX - lastX;
+          startY = event.pageY - lastY;
+        } else if (event.targetTouches.length === 1) { // pan on mobile device
+          startX = event.targetTouches[0].pageX - lastX;
+          startY = event.targetTouches[0].pageY - lastY;
+        } else if (event.targetTouches.length > 1) {
+          return;
+        }
+        chart.dataset.panStart = JSON.stringify({ 'startX': startX, 'startY': startY });
+        chart.addEventListener('mousemove', this._onPanning.bind(this));
+        chart.addEventListener('touchmove', this._onPanning.bind(this));
+  },
+  _onPanning:function(event) {
+      var chart = event.currentTarget;
+      if (chart.dataset.panning === 'false') {
+        return;
+      }
+      var newX = 0,
+        newY = 0,
+        panStart = JSON.parse(chart.dataset.panStart),
+        startX = panStart.startX,
+        startY = panStart.startY;
+
+      if (!event.targetTouches) { // pand on desktop
+        newX = event.pageX - startX;
+        newY = event.pageY - startY;
+      } else if (event.targetTouches.length === 1) { // pan on mobile device
+        newX = event.targetTouches[0].pageX - startX;
+        newY = event.targetTouches[0].pageY - startY;
+      } else if (event.targetTouches.length > 1) {
+        return;
+      }
+      var lastTf = window.getComputedStyle(chart).transform;
+
+      if (lastTf === 'none') {
+        if (!lastTf.includes('3d')) {
+          chart.style.transform = 'matrix(1, 0, 0, 1, ' + newX + ', ' + newY + ')';
+        } else {
+          chart.style.transform = 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + newX + ', ' + newY + ', 0, 1)';
+        }
+      } else {
+        var matrix = lastTf.split(',');
+
+        if (!lastTf.includes('3d')) {
+          matrix[4] = newX;
+          matrix[5] = newY + ')';
+        } else {
+          matrix[12] = newX;
+          matrix[13] = newY;
+        }
+        chart.style.transform = matrix.join(',');
+      }
+  },
+  _onPanEnd:function(event) {
+      var chart = this.chart[0];
+      chart.dataset.panning = false;
+      chart.style.cursor = 'default';
+      document.body.removeEventListener('mousemove', this._onPanning);
+      document.body.removeEventListener('touchmove', this._onPanning);
+  }
+}
   $.fn.jOrgChart = function (options) {
     var opts = $.extend({}, $.fn.jOrgChart.defaults, options)
     var $appendTo = $(opts.chartElement)
@@ -25,6 +119,15 @@
       buildNode($this, $container, 0, opts)
     }
     $appendTo.append($container)
+    // add pan
+    pan.chart = $container;
+    pan.dataset = {};
+    pan.chart.dataset = {};
+    $container[0].addEventListener('mousedown', pan._onPanStart.bind(pan));
+    $container[0].addEventListener('touchstart', pan._onPanStart.bind(pan));
+    document.body.addEventListener('mouseup', pan._onPanEnd.bind(pan));
+    document.body.addEventListener('touchend', pan._onPanEnd.bind(pan));
+
 
     // add drag and drop if enabled
     if (opts.dragAndDrop) {

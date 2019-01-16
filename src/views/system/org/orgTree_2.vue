@@ -1,10 +1,8 @@
 <template>
-    <div @wheel="zoomWheelHandler">
+    <div>
         <el-button @click="exportCanvas" style="position: absolute; right: 34px;top: 3px;"><i data-v-0845e584="" class="icon iconfont icon-daochu" style="padding-right: 10px; margin-right: -10px;"></i> 导出</el-button>
-        <div >
-            <div id="box" :class="state==='export'?'export':''" :style="{ transform: transformVal }">
-
-            </div>
+        <div id="box" :class="state==='export'?'export':''" >
+        
         </div>
 
     </div>
@@ -16,23 +14,18 @@ import * as api_common from "@/api/common";
 const api_resource = api_common.resource("org");
 import html2canvas from 'html2canvas';
 const download = require('downloadjs')
-import { scale, rotate, translate, transform, toCSS, fromString } from 'transformation-matrix'
 export default {
     data(){
         return {
             state:'',
-            transformVal: 'matrix(1, 0, 0, 1, 0, 0)',
-            zoomoutLimit:0.5,
-            zoominLimit:7
         }
     },
    methods:{
        async fetchData(){
-           $('#box').html('')
-        //    $('#box').html('').css({
-        //        height:window.innerHeight-165,
-        //        'overflow-y':'scroll'
-        //    })
+           $('#box').html('').css({
+               height:window.innerHeight-165,
+               'overflow-y':'scroll'
+           })
             var data = await api_resource.get();
             // console.log(data,'data')
             var $ul = $('<ul id="org" style="display:none"></ul>');
@@ -92,14 +85,7 @@ export default {
                 });
 
            },100)
-       },
-       zoomWheelHandler (event) {
-            var newScale  = 1 + (event.deltaY > 0 ? -0.1 : 0.1)
-            let targetScale = fromString(this.transformVal).a * newScale
-            if (targetScale > this.zoomoutLimit && targetScale < this.zoominLimit) {
-                this.transformVal = toCSS(transform(fromString(this.transformVal), scale(newScale, newScale)))
-            }
-        }
+       }
    },
    async mounted(){
     

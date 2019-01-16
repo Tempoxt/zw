@@ -9,6 +9,9 @@ export function menuInit (type, parameter, catolog) {
     }
   })
 }
+export function getTabs(pk){
+  return request.get('/menusheet/menutree/' + pk)
+}
 export function getMenu (position, pk = 0) {
   return request.get('/menusheet/menutree/' + pk, {
     params: {
