@@ -4,16 +4,21 @@ import treeTable from '@/components/TreeTable'
 import FormRender from '@c/Form/render'
 import tableHeader from '@c/Table/Header'
 import tablePagination from '@c/Table/Pagination'
-
 import * as api_common from "@/api/common";
 const api_pagemanager = api_common.resource('pagemanager/field')
+import treeToArray from "./eval";
+import tableColumn from '@c/publicTable/tableColumn'
 export default {
+  props:{
+    resource:String
+  },
   components: {
     uiTable,
     treeTable,
     FormRender,
     tableHeader,
-    tablePagination
+    tablePagination,
+    tableColumn
   },
   data() {
     return {
@@ -50,6 +55,20 @@ export default {
           return [item.column,item.mode,item.value]
         })
       }
+    },
+     // 格式化数据源
+    table_tree_formatData: function() {
+      let tmp;
+      if (!Array.isArray(this.table_data)) {
+        tmp = [this.table_data];
+      } else {
+        tmp = this.table_data;
+      }
+      const func = this.evalFunc || treeToArray;
+      const args = this.evalArgs
+        ? Array.concat([tmp, this.expandAll], this.evalArgs)
+        : [tmp, this.expandAll];
+      return func.apply(null, args);
     }
   },
   methods: {
@@ -77,20 +96,7 @@ export default {
       this.fetchTableData()
     },
     handleAction(action) {
-      if (this[action]) {
-        if (action === 'add') {
-          this.dialogStatus = 'insert'
-          if (this.defaultForm && this.form) {
-            this.form = this.defaultForm()
-          }
-        }
-        if (action === 'edit') {
-          this.dialogStatus = 'update'
-        }
-        this[action](action)
-      } else {
-        console.error(action)
-      }
+      this.$emit('action',action)
     },
     handleChangeSelection(val) {
       this.table_selectedRowsInfo = val
@@ -213,6 +219,35 @@ export default {
         showConfirmButton:false,
         center:true
       });
+    },
+    // tree table.......---------------------
+    table_tree_showRow: function(row) {
+      const show = row.row.parent
+        ? row.row.parent._expanded && row.row.parent._show
+        : true;
+      row.row._show = show;
+      return show
+        ? "animation:treeTableShow 1s;-webkit-animation:treeTableShow 1s;"
+        : "display:none;";
+    },
+    table_tree_showAll(){
+       (function f(data) {
+          data.forEach((row,i) => {
+            if (row.subs && row.subs.length) {
+              row._expanded = true
+              f(row.subs);
+            }
+          });
+        })(this.table_data);
+    },
+    // 切换下级是否展开
+    table_tree_toggleExpanded: function(trIndex) {
+      const record = this.table_tree_formatData[trIndex];
+      record._expanded = !record._expanded;
+    },
+    // 图标显示
+    table_tree_iconShow(index, record) {
+      return index === 0 && record.subs && record.subs.length > 0;
     }
   }
 }

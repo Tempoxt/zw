@@ -1,6 +1,5 @@
 <template>
-  <el-tabs v-model="view_activeName" class="table-tabs" >
-    <!-- <el-tab-pane :label="item.name" :name="item.name" v-for="item in view_menu" :key="item.id"></el-tab-pane> -->
+    <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs">
       <el-tab-pane :label="getViewData('1').name" :name="getViewData('1').url" v-if="getViewData('1')" lazy>
         <menusheet position="1"/>
       </el-tab-pane>
@@ -12,9 +11,10 @@
 <script>
 import menusheet from './menusheet/index'
 import { getTabs } from '@/api/common'
+
 export default {
   components:{
-    menusheet
+    menusheet,
   },
   data(){
     return {
@@ -23,14 +23,15 @@ export default {
     }
   },
   methods:{
-    getViewData(url){
-      return this.view_menu.find(view=>view.url==url)
-    }
+      getViewData(url){
+        return this.view_menu.find(view=>view.url==url)
+      }
   },
   async created(){
     const { menu } = await getTabs(this.$route.query.menuid)
     this.view_menu = menu
     this.view_activeName = menu[0].url
+ 
   }
 }
 </script>

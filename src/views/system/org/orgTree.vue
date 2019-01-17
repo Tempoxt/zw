@@ -1,6 +1,6 @@
 <template>
     <div @wheel="zoomWheelHandler">
-        <el-button @click="exportCanvas" style="position: absolute; right: 34px;top: 3px;"><i data-v-0845e584="" class="icon iconfont icon-daochu" style="padding-right: 10px; margin-right: -10px;"></i> 导出</el-button>
+        <el-button @click="exportCanvas" style="position: absolute; right: 34px;top: 3px;z-index:3"><i data-v-0845e584="" class="icon iconfont icon-daochu" style="padding-right: 10px; margin-right: -10px;"></i> 导出</el-button>
         <div >
             <div id="box" :class="state==='export'?'export':''" :style="{ transform: transformVal }">
 
@@ -28,11 +28,11 @@ export default {
     },
    methods:{
        async fetchData(){
-           $('#box').html('')
-        //    $('#box').html('').css({
-        //        height:window.innerHeight-165,
-        //        'overflow-y':'scroll'
-        //    })
+        //    $('#box').html('')
+           $('#box').html('').css({
+               height:window.innerHeight-165,
+            //    'overflow-y':'scroll'
+           })
             var data = await api_resource.get();
             // console.log(data,'data')
             var $ul = $('<ul id="org" style="display:none"></ul>');
@@ -77,18 +77,24 @@ export default {
            setTimeout(()=>{
                 $('#box').css({
                     height:'100%',
-                    width:document.getElementById('box').scrollWidth
+                    width:document.getElementById('box').scrollWidth+'px'
                 })
                 this.state = 'export'
+                var transform = $('#box .jOrgChart').css('transform')
+                $('#box .jOrgChart').css({
+                    'transform':'none'
+                })
                 html2canvas(document.getElementById('box')).then((canvas)=>{
                     // document.getElementById('box').appendChild(canvas);
                     download(canvas.toDataURL("image/png"), "组织架构图.png", "image/png");
                     $('#box').css({
                         height:window.innerHeight-165,
                         width:'auto'
-                    })
+                    }).find('.jOrgChart').css('transform',transform)
+
                     this.state = ''
                     loading.close();
+
                 });
 
            },100)

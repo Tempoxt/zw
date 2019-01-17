@@ -3,21 +3,22 @@
     :data="formatData"
     :row-style="showRow"
     v-bind="$attrs"
+    border
     :header-cell-style="{background:'#F5FAFB',color:'#37474F',height:'50px'}"
      :row-class-name="table_state_className"
      @selection-change="handleSelectionChange"
      :max-height="table_height"
+     @header-dragend="table_dragend"
   >
   <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      
-      >
-      </el-table-column>
+    type="selection" 
+    width="60" 
+    class-name="table-column-disabled"
+    :selectable="table_disable_selected"
+    >
+    </el-table-column>
 
-    <el-table-column v-if="columns.length===0" :label="label">
+    <el-table-column :label="label">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
         <span v-if="iconShow(0,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope.$index)">
@@ -31,33 +32,7 @@
         <span v-html="scope.row.name"></span>
       </template>
     </el-table-column>
-    <el-table-column
-      v-for="(column, index) in columns"
-      v-else
-      :key="column.id"
-      :label="column.showname"
-      :width="column.width"
-    >
-      <template slot-scope="scope">
-        <!-- Todo -->
-        <!-- eslint-disable-next-line vue/no-confusing-v-for-v-if -->
-        <span
-          v-for="space in scope.row._level"
-          v-if="index === 0"
-          :key="space"
-          class="ms-tree-space"
-        />
-        <span
-          v-if="iconShow(index,scope.row)"
-          class="tree-ctrl"
-          @click="toggleExpanded(scope.$index)"
-        >
-          <i v-if="!scope.row._expanded" class="el-icon-plus"/>
-          <i v-else class="el-icon-minus"/>
-        </span>
-        {{ scope.row[column.value] }}
-      </template>
-    </el-table-column>
+
     <slot/>
   </el-table>
 </template>
@@ -116,14 +91,9 @@ export default {
   },
   data() {
     return {
-      isIndeterminate: false,
-      checkAll: [],
       checkedRows: this.selectedRows,
       table_height:window.innerHeight-223,
     };
-  },
-  mounted(){
-    
   },
   methods: {
     table_disable_selected(row){
@@ -132,27 +102,10 @@ export default {
     table_state_className({row, column, rowIndex, columnIndex}){
       return row.lockstate?'row-state-class':''
     },
-    getSelectedRows() {
-      return this.checkedRows;
-    },
     clearSelectedRows() {
       this.checkedRows = [];
     },
-    findRowById(id) {
-      let rowInfo;
-      (function f(data) {
-        data.some(row => {
-          if (row.id == id) {
-            rowInfo = row;
-            return true;
-          }
-          if (row.subs && row.subs.length) {
-            f(row.subs);
-          }
-        });
-      })(this.data);
-      return rowInfo;
-    },
+
     showRow: function(row) {
       const show = row.row.parent
         ? row.row.parent._expanded && row.row.parent._show
@@ -183,46 +136,8 @@ export default {
     iconShow(index, record) {
       return index === 0 && record.subs && record.subs.length > 0;
     },
-    handleCheckAllChange(val) {
-      
-      this.checkedRows = val ? this.data.map(item => item.id) : [];
-      // this.isIndeterminate = false;
-    },
     handleSelectionChange(val){
       this.checkedRows = val
-    },
-    handleCheckedRowsChange(value) {
-      let checkedCount = value.length;
-      let dataLen = this.data.filter(row => row.estate).length;
-      let checkedRowsLen = this.checkedRows.length;
-      this.checkAll = checkedCount === dataLen;
-      // this.isIndeterminate = checkedCount > 0 && checkedCount < dataLen;
-    },
-    insertChecked(rows) {
-      rows.forEach(row => {
-        this.checkedRows.push(row.id);
-        if (row.subs) {
-          this.insertChecked(row.subs);
-        }
-      });
-    },
-    removeChecked(rows) {
-      rows.forEach(row => {
-        this.checkedRows = this.checkedRows.filter(id => row.id !== id);
-        if (row.subs) {
-          this.removeChecked(row.subs);
-        }
-      });
-    },
-    handleCheckedItem(row, value, e) {
-      // if (!row.subs) {
-      //   return;
-      // }
-      // if (value) {
-      //   this.insertChecked(row.subs);
-      // } else {
-      //   this.removeChecked(row.subs);
-      // }
     },
   }
 };

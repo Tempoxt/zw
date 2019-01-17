@@ -38,7 +38,9 @@
             <span v-if="scope.row['estate']===1">启用</span>
             <span v-else class="text-danger">禁用</span>
           </template>
-          <template v-else>{{scope.row[column.name]}}</template>
+          <template v-else>
+              <div v-html="scope.row[column.name]"></div>
+          </template>
         </template>
       </el-table-column>
     </el-table>
