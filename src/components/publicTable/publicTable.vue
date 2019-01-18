@@ -4,6 +4,7 @@
     :table_query.sync="table_form.query"
     @query="querySubmit"
   >
+    <slot />
     <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
@@ -70,10 +71,7 @@ export default {
     }
   },
   async created() {
-    const { field, action } = await api_common.menuInit(this.resource);
-    this.table_field = field;
-    this.table_actions = action;
-    this.fetchTableData();
+   this.initTable()
   }
 };
 </script>

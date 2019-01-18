@@ -29,6 +29,7 @@
               v-for="action in table_actions.slice(table_actions_morelen,table_actions.length)"
               :key="action.id"
               @click.native="handleAction(action.code,action)"
+              :disabled="!isDisabled(action.code)"
             >
               <i :class="action.icon" style="padding-right:10px;margin-right:-10px"></i>
               {{action.name}}
@@ -97,6 +98,7 @@ export default {
   },
   computed: {
     isDisabled() {
+      
       let len = this.table_selectedRows.length;
       return function(code) {
         if (code === "add") {
@@ -106,6 +108,9 @@ export default {
           return len === 1;
         }
         if (code === "delete") {
+          return len >= 1;
+        }
+        if (['forbid','lock','unlock','enable'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;

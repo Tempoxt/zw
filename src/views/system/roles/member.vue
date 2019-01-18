@@ -72,7 +72,7 @@
                     v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
                     :key="column.id"
                     :width="column.width||'auto'"
-                    :sortable="!column.issort?'custom':false"
+                    :sortable="column.issort?'custom':false"
                     
                 >
                 <template slot-scope="scope">

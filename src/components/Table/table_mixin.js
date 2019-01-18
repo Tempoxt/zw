@@ -8,9 +8,12 @@ import * as api_common from "@/api/common";
 const api_pagemanager = api_common.resource('pagemanager/field')
 import treeToArray from "./eval";
 import tableColumn from '@c/publicTable/tableColumn'
+import eachTableColumn from '@c/publicTable/eachTableColumn'
 export default {
   props:{
-    resource:String
+    resource:String,
+    _fetchTableData:Function,
+    _initTable:Function
   },
   components: {
     uiTable,
@@ -18,7 +21,8 @@ export default {
     FormRender,
     tableHeader,
     tablePagination,
-    tableColumn
+    tableColumn,
+    eachTableColumn
   },
   data() {
     return {
@@ -41,7 +45,8 @@ export default {
           type:1,
           query:[]
         }
-      }
+      },
+      table_sort:{}
     }
   },
   computed: {
@@ -81,12 +86,30 @@ export default {
     
     table_dragend(newWidth, oldWidth, column, event,b){
       let row = this.table_field.find(field=>field.showname===column.label)
+      var isEnd = false
+      this.table_field.forEach((item,i)=>{
+        if(item==row&&i==this.table_field.length-2){
+          isEnd = true
+        }
+      })
+      if(isEnd){
+        var lastRow = this.table_field[this.table_field.length-1]
+        lastRow.width = 'auto'
+        lastRow.menuid = lastRow.menuid_id
+        api_pagemanager.update(lastRow.id,lastRow)
+      }
       row.width = newWidth
+      
       row.menuid = row.menuid_id
       api_pagemanager.update(row.id,row)
     },
     table_sort_change({ column, prop, order }){
-      console.log(column,'column')
+      if(order){
+        this.table_sort[prop] = {'ascending':'asc','descending':'desc'}[order]
+      }
+      this.table_form.sortname = Object.keys(this.table_sort).join(',')
+      this.table_form.sorttype = Object.values(this.table_sort).join(',')
+      this.fetchTableData()
     },
     query() {
       this.$refs.table.table_queryFormVisible = true
@@ -96,11 +119,31 @@ export default {
       this.fetchTableData()
     },
     handleAction(action) {
-      this.$emit('action',action)
+      // if(['toggleModal','export'].indexOf(action)!==-1){
+      //   this[action]()
+      // }else{
+      //   this.$emit('action',action)
+      // }
+      if (this[action]) {
+        if (action === 'add') {
+          this.dialogStatus = 'insert'
+          if (this.defaultForm && this.form) {
+            this.form = this.defaultForm()
+          }
+        }
+        if (action === 'edit') {
+          this.dialogStatus = 'update'
+        }
+        this[action](action)
+      } else {
+        console.error(action)
+      }
+      
     },
     handleChangeSelection(val) {
       this.table_selectedRowsInfo = val
       this.table_selectedRows = val
+      this.$emit("update:table_selectedRows",val)
     },
     toggleModal() {
       this.$refs.table.toggleModal()
@@ -143,7 +186,6 @@ export default {
     },
     async export(){
       const formatJson = function(filterVal, jsonData){
-       
           var result = [];
           (function f(jsonData){
             jsonData.forEach((v)=>{

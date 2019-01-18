@@ -73,9 +73,26 @@ export default {
     };
   },
   methods: {
+    async initTable(){
+      if(this._initTable){
+         const { field, action } = await this._initTable(this.resource);
+          this.table_field = field;
+          this.table_actions = action;
+      }else{
+         const { field, action } = await api_common.menuInit(this.resource);
+          this.table_field = field;
+          this.table_actions = action;
+      }
+     
+      this.fetchTableData();
+    },
     async fetchTableData() {
     this.table_loading = true;
-    this.table_data = await this.api_resource.get(this.table_form);
+    if(this._fetchTableData){
+     this.table_data = await this._fetchTableData(this.table_form)
+    }else{
+      this.table_data = await this.api_resource.get(this.table_form);
+    }
     this.$emit('load')
       setTimeout(() => {
         this.table_loading = false;
@@ -83,10 +100,9 @@ export default {
     }
   },
   async created() {
-    const { field, action } = await api_common.menuInit(this.resource);
-    this.table_field = field;
-    this.table_actions = action;
-    this.fetchTableData();
+    if(this.initTable){
+       this.initTable();
+    }
   }
 };
 </script>

@@ -32,6 +32,13 @@
               />
             </el-col>
             <el-col :span="12">
+              <form-render
+                :type="`radio`"
+                :field="{name:'是否排序',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.issort"
+              />
+            </el-col>
+            <el-col :span="12">
               <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
             </el-col>
             <el-col :span="12">

@@ -1,10 +1,9 @@
-<template>
-  <public-tree-table 
-  resource="org" 
-  @load="load" 
-  @action="handleAction"
-  ref="table">
-
+  <template>
+  <ui-table ref="table" 
+  :table_column="table_field" 
+  :table_query.sync="table_form.query"
+  @query="querySubmit"
+  >
     <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
@@ -50,17 +49,79 @@
     </el-dialog>
 
 
-  </public-tree-table>
+    <table-header
+      :table_actions="table_actions"
+      :table_selectedRows="table_selectedRows"
+      :table_column="table_field.slice(1,table_field.length)"
+      @action="handleAction"
+      :table_form.sync="table_form"
+    ></table-header>
+    <el-table
+      :data="table_tree_formatData"
+      :row-style="table_tree_showRow"
+      :row-class-name="table_state_className"
+      @selection-change="handleChangeSelection"
+      border
+      style="width: 100%"
+      v-loading="table_loading"
+      :header-cell-style="headerCellStyle"
+      :height="table_height"
+      @header-dragend="table_dragend"
+      
+      @sort-change="table_sort_change"
+    >
+    <el-table-column 
+      type="selection" 
+      width="60" 
+      class-name="table-column-disabled"
+      :selectable="table_disable_selected"
+      >
+      </el-table-column>
+
+    <el-table-column 
+      :label="table_field[0] && table_field[0].showname" 
+      :width="table_field[0]&&table_field[0].width||'auto'"
+      
+      >
+      <template slot-scope="scope">
+        <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
+        <span v-if="table_tree_iconShow(0,scope.row)" class="tree-ctrl" @click="table_tree_toggleExpanded(scope.$index)">
+          <i
+            :class="['el-icon-caret-right',{'sub-open':scope.row._expanded}]"
+            style="color:#666;font-size:16px;margin-right: 6px;"
+          ></i>
+        </span>
+        <i :class="scope.row.icon" v-if="table_tree_iconShow(0,scope.row)"></i>
+        <i :class="scope.row.icon" v-else></i>
+        <span v-html="scope.row.name"></span>
+      </template>
+    </el-table-column>
+    <!-- <el-table-column
+          :prop="column.name"
+          :label="column.showname"
+          v-for="column in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
+          :key="column.id"
+          :width="column.width||'auto'"
+          :sortable="column.issort?'custom':false"
+      >
+      <template slot-scope="scope">
+            <table-column :row="scope.row" :elColumn="scope.column" :column="column"/>
+      </template>
+  </el-table-column> -->
+
+
+    <each-table-column :table_field="table_field.slice(1,table_field.length)"/>
+  </el-table>
+  </ui-table>
 </template>
-
 <script>
-
-import publicTableMixin from '@c/publicTable/publicTableMixin'
 import * as api_common from "@/api/common";
+import * as api_org from "@/api/org";
+import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("org");
 const defaultForm = ()=>({order:1,estate:1})
 export default {
-  mixins:[publicTableMixin],
+  mixins: [table_mixin],
   data() {
     return {
       loading: true,
@@ -82,14 +143,7 @@ export default {
           })         
       }
   },
-
-  methods:{
-    fetchTableData(){
-      this.$refs.table.fetchTableData()
-    },
-    load(){
-      this.$refs.table.table_tree_showAll()
-    },
+  methods: {
     add(){
       this.dialogFormVisible = true;
       const { id } = this.table_selectedRows[0]||{id:0}
@@ -100,7 +154,17 @@ export default {
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
     },
-     async handleFormSubmit(){
+    async fetchTableData() {
+     this.table_loading = true;
+      this.table_data = await api_resource.get(this.table_form);
+      setTimeout(()=>{
+        this.table_tree_showAll()
+      },0)
+      setTimeout(() => {
+        this.table_loading = false;
+      }, 300);
+    },
+    async handleFormSubmit(){
       let form = Object.assign({},this.form)
       delete form.parent;
       delete form.subs;
@@ -112,10 +176,13 @@ export default {
       this.dialogFormVisible = false
       this.fetchTableData()
     },
-
   },
-  created(){
-
+  async created() {
+    const { field, action } = await api_common.menuInit("org");
+    this.table_field = field;
+    this.table_actions = action;
+    this.fetchTableData();
   }
-}
+};
 </script>
+

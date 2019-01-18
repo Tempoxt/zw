@@ -21,7 +21,8 @@ import './config/permission'
 
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
-
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
 // import '@assets/style/theme/test/index.css'
 sync(store, router)
 Vue.use(iView)
