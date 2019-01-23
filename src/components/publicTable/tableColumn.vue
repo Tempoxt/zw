@@ -17,8 +17,10 @@ export default {
         'menutype'(){
             if(this.row.menutype===1){
                 return  <el-tag size="mini">目录</el-tag>
-            }else{
+            }else if(this.row.menutype===2){
                 return  <el-tag type="success" size="mini">菜单</el-tag>
+            }else{
+                return  <el-tag type="info" size="mini">页签</el-tag>
             }
         },
         'estate'(){

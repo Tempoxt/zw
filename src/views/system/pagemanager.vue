@@ -2,7 +2,15 @@
   <el-row class="h-full">
     <el-col :span="5" class="h-full">
       <div class="page-side h-full">
-        <span class="page-title">{{$route.query.postion==1?'前台':'后台'}}</span>
+
+       
+        <span class="page-title">
+          <!-- {{$route.query.postion==1?'前台':'后台'}} -->
+          <el-radio-group v-model="position">
+            <el-radio-button :label="item.position" v-for="item in positionField" :key="item">{{item.showname}}</el-radio-button>
+          </el-radio-group>
+
+        </span>
         <div>
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
@@ -73,7 +81,9 @@ export default {
       activeName: "first",
       filterText: "",
       data2: [],
-      currentMenuid: 0
+      currentMenuid: 0,
+      position:1,
+      positionField:[]
     };
   },
   async created() {
@@ -102,6 +112,12 @@ export default {
     })(this.data2);
     this.$refs.tree2.setCurrentKey(defaultMenuid);
     this.currentMenuid = defaultMenuid;
+
+
+    const { field:positionField } = await api_common.menuInit("pagemanager")
+    this.positionField = positionField
+    this.positionField[0].position = 1
+    this.positionField[1].position = 2
   }
 };
 </script>
