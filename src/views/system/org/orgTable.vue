@@ -30,7 +30,7 @@
               />
             </el-col>
             <el-col :span="12">
-              <form-render :type="`select`" :field="{name:'组织分类',options:orgCategory}" v-model="form.org_type"/>
+              <form-render :type="`select`" :field="{name:'组织分类',options:orgCategory}" :disabled="dialogStatus==='update'" v-model="form.org_type"/>
             </el-col>
             <el-col :span="12">
               <form-render :type="`number`" :field="{name:'排序'}" v-model="form.order"/>
@@ -67,7 +67,7 @@
       :header-cell-style="headerCellStyle"
       :height="table_height"
       @header-dragend="table_dragend"
-      
+      ref="elTable"
       @sort-change="table_sort_change"
     >
     <el-table-column 
@@ -96,20 +96,6 @@
         <span v-html="scope.row.name"></span>
       </template>
     </el-table-column>
-    <!-- <el-table-column
-          :prop="column.name"
-          :label="column.showname"
-          v-for="column in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
-          :key="column.id"
-          :width="column.width||'auto'"
-          :sortable="column.issort?'custom':false"
-      >
-      <template slot-scope="scope">
-            <table-column :row="scope.row" :elColumn="scope.column" :column="column"/>
-      </template>
-  </el-table-column> -->
-
-
     <each-table-column :table_field="table_field.slice(1,table_field.length)"/>
   </el-table>
   </ui-table>
@@ -162,6 +148,7 @@ export default {
       },0)
       setTimeout(() => {
         this.table_loading = false;
+        this.$refs.elTable.doLayout()
       }, 300);
     },
     async handleFormSubmit(){

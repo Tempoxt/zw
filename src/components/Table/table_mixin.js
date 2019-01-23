@@ -104,12 +104,14 @@ export default {
       api_pagemanager.update(row.id,row)
     },
     table_sort_change({ column, prop, order }){
+      this.table_sort = {}
+      // this.table_sort[prop] = {}
       if(order){
         this.table_sort[prop] = {'ascending':'asc','descending':'desc'}[order]
+        this.table_form.sortname = Object.keys(this.table_sort).join(',')
+        this.table_form.sorttype = Object.values(this.table_sort).join(',')
       }
-      this.table_form.sortname = Object.keys(this.table_sort).join(',')
-      this.table_form.sorttype = Object.values(this.table_sort).join(',')
-      this.fetchTableData()
+      this.fetchTableData()      
     },
     query() {
       this.$refs.table.table_queryFormVisible = true
@@ -252,7 +254,6 @@ export default {
       }
       this.$alert(
         <el-button-group>
-          {/* <el-button type="primary" icon="el-icon-tickets" onClick={()=>{export_file('pdf')}}>PDF</el-button> */}
           <el-button type="primary" icon="el-icon-share" onClick={()=>{export_file('xlsx')}}>XLSX</el-button>
           <el-button type="primary" icon="el-icon-document" onClick={()=>{export_file('txt')}}>TXT</el-button>
           <el-button type="primary" icon="el-icon-document" onClick={()=>{export_file('csv')}}>CSV</el-button>
@@ -261,6 +262,7 @@ export default {
         showConfirmButton:false,
         center:true
       });
+      return false
     },
     // tree table.......---------------------
     table_tree_showRow: function(row) {
@@ -268,6 +270,11 @@ export default {
         ? row.row.parent._expanded && row.row.parent._show
         : true;
       row.row._show = show;
+      this.$nextTick(()=>{
+        if(this.$refs.elTable){
+          this.$refs.elTable.doLayout()
+        }
+      })
       return show
         ? "animation:treeTableShow 1s;-webkit-animation:treeTableShow 1s;"
         : "display:none;";

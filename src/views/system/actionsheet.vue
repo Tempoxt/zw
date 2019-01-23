@@ -10,12 +10,29 @@
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
+      v-el-drag-dialog
     >
       <div>
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
           <el-row :gutter="20">
             <el-col :span="12">
               <form-render :type="`icon`" :field="{name:'图标/名称'}" v-model="form.iconName"/>
+            </el-col>
+            <el-col :span="12">
+              <form-render
+                :type="`select`"
+                :field="{name:'选取记录',options:[{
+                  value: 0,
+                  label: '否'
+                },{
+                  value: 1,
+                  label: '单选'
+                },{
+                  value: 2,
+                  label: '多选'
+                }]}"
+                v-model="form.selectable"
+              />
             </el-col>
             <el-col :span="12">
               <form-render :type="`input`" :field="{name:'功能代码'}" v-model="form.code"/>
@@ -77,6 +94,7 @@ const api_resource = api_common.resource('actionsheet')
 import table_mixin from "@c/Table/table_mixin";
 const defaultForm = function(){
     return {
+        selectable:0,
         iconName:{}
     }
 }

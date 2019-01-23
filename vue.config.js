@@ -1,6 +1,8 @@
 
 const webpack = require('webpack')
 const path = require('path')
+var Client = require('scp2')
+
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -11,7 +13,19 @@ class HelloWorldPlugin {
   apply (compiler) {
     compiler.hooks.done.tap('done', () => {
       if (process.env.NODE_ENV === 'production') {
-        console.log('Hello World!')
+        Client.scp('dist/', {
+            host: '192.168.0.192',
+            port: 22,
+            username: 'zhaowei',
+            password: 'hgw@2018',
+            path:'/home/zhaowei/erp_test/frontend/'
+        }, function(err) {
+            if(err){
+              console.log(err)
+            }else{
+              console.log('已上传到测试服务器')
+            }
+        })
       }
     })
   }

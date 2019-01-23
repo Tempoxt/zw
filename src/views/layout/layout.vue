@@ -79,6 +79,7 @@ export default {
 }
 .main {
   overflow-y: scroll;
+  // overflow-y: hidden;
   height: calc(100% - 100px);
 }
 </style>

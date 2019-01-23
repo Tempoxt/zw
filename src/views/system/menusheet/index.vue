@@ -10,6 +10,7 @@
       :title="dialogStatus==='insert'?'添加菜单':'编辑菜单'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
+      v-el-drag-dialog
     >
       <div>
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
@@ -81,43 +82,56 @@
 
 
 
-    <table-header
+   <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
       :table_column="table_field.slice(1,table_field.length)"
       @action="handleAction"
       :table_form.sync="table_form"
-      :header-cell-style="headerCellStyle"
     ></table-header>
-
-
-    <tree-table
-      :data="table_data"
-      v-loading="loading"
-      ref="treeTable"
-      :selectedRows.sync="table_selectedRows"
-      :label="table_field[0] && table_field[0].showname"
-      :table_actions="table_actions"
+    <el-table
+      :data="table_tree_formatData"
+      :row-style="table_tree_showRow"
+      :row-class-name="table_state_className"
+      @selection-change="handleChangeSelection"
+      border
+      style="width: 100%"
+      v-loading="table_loading"
+      :header-cell-style="headerCellStyle"
+      :height="table_height"
+      @header-dragend="table_dragend"
+      ref="elTable"
+      @sort-change="table_sort_change"
     >
-      <el-table-column
-        :label="column.showname"
-        v-for="(column) in table_field.slice(1,table_field.length).filter(column=>!column.fed_isvisiable)"
-        :key="column.id"
+    <el-table-column 
+      type="selection" 
+      width="60" 
+      class-name="table-column-disabled"
+      :selectable="table_disable_selected"
       >
-        <template slot-scope="scope">
-          <template v-if="column.name==='menutype'">
-            <el-tag v-if="scope.row['menutype']===1" size="mini">目录</el-tag>
-            <el-tag v-else-if="scope.row['menutype']===2" size="mini"  type="success">菜单</el-tag>
-            <el-tag type="info" v-else size="mini">页签</el-tag>
-          </template>
-          <template v-else-if="column.name==='estate'">
-            <span v-if="scope.row['estate']===1">启用</span>
-            <span v-else class="text-danger">禁用</span>
-          </template>
-          <template v-else>{{scope.row[column.name]}}</template>
-        </template>
       </el-table-column>
-    </tree-table>
+
+    <el-table-column 
+      :label="table_field[0] && table_field[0].showname" 
+      :width="table_field[0]&&table_field[0].width||'auto'"
+      
+      >
+      <template slot-scope="scope">
+        <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
+        <span v-if="table_tree_iconShow(0,scope.row)" class="tree-ctrl" @click="table_tree_toggleExpanded(scope.$index)">
+          <i
+            :class="['el-icon-caret-right',{'sub-open':scope.row._expanded}]"
+            style="color:#666;font-size:16px;margin-right: 6px;"
+          ></i>
+        </span>
+        <i :class="scope.row.icon" v-if="table_tree_iconShow(0,scope.row)"></i>
+        <i :class="scope.row.icon" v-else></i>
+        <span v-html="scope.row.name"></span>
+      </template>
+    </el-table-column>
+    <each-table-column :table_field="table_field.slice(1,table_field.length)"/>
+  </el-table>
+
   </ui-table>
 
 </template>
@@ -172,12 +186,13 @@ export default {
       this.dialogFormVisible = true;
     },
     async fetchTableData() {
-      this.loading = true;
+      this.table_loading = true;
       const position = this.position
       const { menu } = await api_resource.get({position,...this.table_form});
       this.table_data = menu;
       setTimeout(() => {
-        this.loading = false;
+        this.table_loading = false;
+        
       }, 300);
     }
   },

@@ -10,26 +10,11 @@
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
+      v-el-drag-dialog
     >
-      <div>
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <form-render :type="`icon`" :field="{name:'图标/名称'}" v-model="form.iconName"/>
-            </el-col>
-            <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'功能代码'}" v-model="form.code"/>
-            </el-col>
-            <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'功能描述'}" v-model="form.remark"/>
-            </el-col>
-            <el-col :span="12">
-              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
-            </el-col>
-
-          </el-row>
+                <member-checkbox />
         </el-form>
-      </div>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -97,12 +82,16 @@
 import * as api_common from "@/api/common";
 const api_resource = api_common.resource('roles/member')
 import table_mixin from "@c/Table/table_mixin";
+import MemberCheckbox from './MemberCheckbox'
 const defaultForm = function(){
     return {
         iconName:{}
     }
 }
 export default {
+    components:{
+        MemberCheckbox
+    },
     props:['roleid'],
     watch:{
         roleid(){
@@ -126,6 +115,7 @@ export default {
         },
         async fetchTableData() {
             this.table_loading = true
+            this.table_form.roleid = this.roleid
             const {rows,total}  =  await api_resource.get(this.table_form);
             this.table_data = rows
            

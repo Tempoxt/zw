@@ -8,6 +8,7 @@
             ref="tree2"
             :load="loadNode1"
             lazy
+            show-checkbox
             @node-click="nodeSelect"
         >
             <span slot-scope="{ node, data }">
@@ -33,7 +34,7 @@
 import * as api_common from "@/api/common";
 import * as api_user from "@/api/user";
 export default {
-  name: "form-member",
+  name: "form-member-checkbox",
   props: {
     field: Object,
     value: {}

@@ -3,6 +3,7 @@
       title="高级查询"
       :visible.sync="queryDialogFormVisible"
       class="public-dialog"
+      v-el-drag-dialog
       >    
       <div>
         <el-select v-model="tableQuery.type" placeholder="请选择">
@@ -31,7 +32,7 @@
               </el-select>
           </el-col>
           <el-col :span="6">
-             <el-select v-model="tableQuery.query[i][1]" placeholder="请选择">
+             <el-select v-model="tableQuery.query[i][1]" placeholder="请选择" @change="changeFlag(i)">
                 <el-option
                   v-for="(item,i) in mode"
                   :key="i"
@@ -41,7 +42,76 @@
               </el-select>
           </el-col>
           <el-col :span="10">
-             <el-input v-model="tableQuery.query[i][2]" :placeholder="placeholder[query[1]]||'请输入内容'"></el-input>
+            <template v-if="inputType(i,'text')" >
+              <el-input 
+                v-model="tableQuery.query[i][2]" :placeholder="placeholder[query[1]]||'请输入内容'"
+                v-if="['=','>','<','>=','<=','!=','c','nc'].indexOf(tableQuery.query[i][1])!==-1 "
+              ></el-input>
+              <div
+              v-if="['in','nin','b','nb'].indexOf(tableQuery.query[i][1])!==-1 && Array.isArray(tableQuery.query[i][2])"
+              class="number-range"
+              >
+                <el-input-number v-model="tableQuery.query[i][2][0]" controls-position="right"></el-input-number>
+                <span>至</span>
+                <el-input-number v-model="tableQuery.query[i][2][1]" controls-position="right"></el-input-number>
+              </div>
+            </template>
+            <template v-if="inputType(i,'number')" >
+              <el-input 
+                v-model="tableQuery.query[i][2]" :placeholder="placeholder[query[1]]||'请输入内容'"
+                v-if="['=','>','<','>=','<=','!=','c','nc'].indexOf(tableQuery.query[i][1])!==-1 "
+              ></el-input>
+              <div
+              v-if="['in','nin','b','nb'].indexOf(tableQuery.query[i][1])!==-1 && Array.isArray(tableQuery.query[i][2])"
+              class="number-range"
+              >
+                <el-input-number v-model="tableQuery.query[i][2][0]" controls-position="right"></el-input-number>
+                <span>至</span>
+                <el-input-number v-model="tableQuery.query[i][2][1]" controls-position="right"></el-input-number>
+              </div>
+            </template>
+            <template v-if="inputType(i,'datetime')" >
+              <el-date-picker
+                v-model="tableQuery.query[i][2]"
+                type="date"
+                placeholder="选择日期"
+                value-format="yyyy-MM-dd"
+                v-if="['=','>','<','>=','<=','!=','c','nc'].indexOf(tableQuery.query[i][1])!==-1 "
+                >
+              </el-date-picker>
+
+               <el-date-picker
+                v-if="['in','nin','b','nb'].indexOf(tableQuery.query[i][1])!==-1"
+                v-model="tableQuery.query[i][2]"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                class="date-daterange"
+                value-format="yyyy-MM-dd"
+                end-placeholder="结束日期">
+              </el-date-picker>
+            </template>
+             <template v-if="inputType(i,'select')" >
+               <el-select v-model="tableQuery.query[i][2]" placeholder="请选择"
+               v-if="['=','>','<','>=','<=','!=','c','nc'].indexOf(tableQuery.query[i][1])!==-1 "
+               >
+                  <el-option
+                    v-for="item in column_item(i).sourcefrom.choice"
+                    :key="item[0]"
+                    :label="item[1]"
+                    :value="item[0]">
+                  </el-option>
+                </el-select>
+                  <div
+                  v-if="['in','nin','b','nb'].indexOf(tableQuery.query[i][1])!==-1 && Array.isArray(tableQuery.query[i][2])"
+                  class="number-range"
+                  >
+                    <el-input-number v-model="tableQuery.query[i][2][0]" controls-position="right"></el-input-number>
+                    <span>至</span>
+                    <el-input-number v-model="tableQuery.query[i][2][1]" controls-position="right"></el-input-number>
+                  </div>
+            </template>
+            
           </el-col>
           <el-col :span="2">
               <el-button icon="el-icon-minus" circle @click="removeQuery(i)"></el-button>
@@ -142,6 +212,7 @@ export default {
       }
     },
     computed:{
+     
       queryType(i){
         return ()=>{
           this.table_column.find(item=>item.name==this.table_query.query[i].column).fieldtype
@@ -149,6 +220,15 @@ export default {
       }
     },
     methods:{
+      column_item(i){
+        return this.table_column.find(item=>item.name==this.tableQuery.query[i][0])
+      },
+      inputType(i,name){
+         return  this.table_column.find(item=>item.name==this.tableQuery.query[i][0]).fieldtype === name
+      },
+      flagType(i,type){
+        return this.tableQuery.query[i][1]
+      },
       addQuery(){
         this.tableQuery.query.push([this.table_column[0].name,this.mode[0].flag])
       },
@@ -161,6 +241,17 @@ export default {
       },
       clear(){
         this.tableQuery.query = []
+      },
+      isArrayType(i){
+        return ['=','>','<','>=','<=','!=','c','nc'].indexOf(tableQuery.query[i][1])!==-1
+      },
+      changeFlag(i){
+        if(['in','nin','b','nb'].indexOf(this.tableQuery.query[i][1]!==-1)){
+          this.tableQuery.query[i][2] = []
+        }else{
+          this.tableQuery.query[i][2] = ''
+        }
+        
       }
     }
 }
@@ -170,5 +261,25 @@ export default {
   .row {
     margin-top: 10px;
   }
+}
+.number-range {
+  display: flex;
+  align-items: center;
+  // border:1px solid #dcdfe6;
+  box-shadow: 0px 0px 0px 1px #dcdfe6;
+  border-radius: 4px;
+  /deep/ .el-input__inner ,/deep/ .el-input-number__decrease,/deep/ .el-input-number__increase{
+    border:none;
+  }
+  /deep/ .el-input-number__decrease,/deep/ .el-input-number__increase{
+    display: none;
+  }
+}
+.date-daterange {
+  width: 260px;
+  /deep/ .el-range-separator {
+    width:23px;
+  }
+
 }
 </style>

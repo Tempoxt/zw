@@ -7,6 +7,7 @@
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
+      v-el-drag-dialog
     >
       <div>
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
@@ -34,8 +35,45 @@
             <el-col :span="12">
               <form-render
                 :type="`radio`"
+                :field="{name:'快速查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.isquicksearch"
+              />
+            </el-col>
+            <el-col :span="12">
+              <form-render
+                :type="`radio`"
                 :field="{name:'是否排序',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
                 v-model="form.issort"
+              />
+            </el-col>
+            <el-col :span="12">
+              <form-render
+                :type="`radio`"
+                :field="{name:'是否可查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.issearch"
+              />
+            </el-col>
+             <el-col :span="12">
+              <form-render
+                :type="`select`"
+                :field="{name:'查询分类',options:[{
+                  value: 'number',
+                  label: '数字'
+                },{
+                  value: 'auto_select',
+                  label: '非固定选项'
+                },{
+                  value: 'date',
+                  label: '日期'
+                },{
+                  value: 'select',
+                  label: '固定选项'
+                },{
+                  value: 'text',
+                  label: '文本'
+                }]}"
+                :disabled="!form.issearch"
+                v-model="form.fieldtype"
               />
             </el-col>
             <el-col :span="12">
@@ -77,20 +115,7 @@
       @header-dragend="table_dragend"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column
-        :prop="column.name"
-        :label="column.showname"
-        v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
-        :key="column.id"
-        :width="column.width||'auto'"
-      >
-        <template slot-scope="scope">
-          <template v-if="column.name==='icon'">
-            <i :class="scope.row[column.name]"></i>
-          </template>
-          <template v-else>{{ scope.row[column.name] }}</template>
-        </template>
-      </el-table-column>
+      <each-table-column :table_field="table_field"/>
     </el-table>
   </ui-table>
 </template>
@@ -100,6 +125,7 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("pagemanager/field");
 let defaultForm = function() {
   return {
+    issearch:true,
     isblank: true,
     isvisiable: false,
     iseditable: false

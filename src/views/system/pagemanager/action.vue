@@ -9,6 +9,7 @@
             title="添加功能"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
+            v-el-drag-dialog
             >
             <div  v-loading="dialog_loading">
             <el-checkbox-group v-model="actionsModel">
