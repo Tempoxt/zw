@@ -37,6 +37,7 @@
                 style="width: 100%"
                 :header-cell-style="headerCellStyle"
                 @header-dragend="table_dragend"
+                :height="table_height"
                 v-loading="table_loading">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column
@@ -70,9 +71,13 @@ export default {
       currentMenuid:Number
   },
   watch:{
-      currentMenuid(){
-          this.fetchTableData()
-      }
+     currentMenuid:{
+      handler(){
+        this.fetchTableData();
+      },
+      immediate:true
+    }
+
   },
   methods: {
     async add(){
@@ -118,9 +123,7 @@ export default {
   async created() {
     const { postion } = this.$route.query;
     const { field, action } = await api_common.menuInit(
-      "pagemanager",
-      postion,
-      "action"
+      "menuaction"
     );
     this.table_field = field;
     this.table_actions = action;
