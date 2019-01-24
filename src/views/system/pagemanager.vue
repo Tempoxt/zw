@@ -28,6 +28,7 @@
             :highlight-current="true"
             :check-on-click-node="true"
             @node-click="handleChangeNode"
+            :expand-on-click-node="false"
           >
             <span slot-scope="{ node, data }">
               <span :class="data.icon"></span>&nbsp;
@@ -45,6 +46,9 @@
          <pagemanager-field :currentMenuid="currentMenuid"/>
       </el-tab-pane>
       <el-tab-pane :label="getViewData('menuaction').name" :name="getViewData('menuaction').url" v-if="getViewData('menuaction')" lazy>
+        <pagemanager-action :currentMenuid="currentMenuid"/>
+      </el-tab-pane>
+       <el-tab-pane :label="getViewData('tableinitconfig').name" :name="getViewData('tableinitconfig').url" v-if="getViewData('tableinitconfig')" lazy>
         <pagemanager-action :currentMenuid="currentMenuid"/>
       </el-tab-pane>
     </el-tabs>
@@ -67,6 +71,7 @@
 import * as api_common from "@/api/common";
 import pagemanagerAction from "./pagemanager/action";
 import pagemanagerField from "./pagemanager/field";
+import pagemanagerConfig from "./pagemanager/config";
 import view_init from '@/mixins/view_init'
 export default {
   mixins:[view_init],

@@ -24,7 +24,7 @@
           <el-col :span="6">
             <el-select v-model="tableQuery.query[i][0]" placeholder="请选择">
                 <el-option
-                  v-for="column in table_column"
+                  v-for="column in table_column.filter(item=>item.issearch)"
                   :key="column.id"
                   :label="column.showname"
                   :value="column.name">
@@ -34,7 +34,7 @@
           <el-col :span="6">
              <el-select v-model="tableQuery.query[i][1]" placeholder="请选择" @change="changeFlag(i)">
                 <el-option
-                  v-for="(item,i) in mode"
+                  v-for="(item,i) in computeMode(i)"
                   :key="i"
                   :label="item.name"
                   :value="item.flag">
@@ -70,7 +70,7 @@
                 <el-input-number v-model="tableQuery.query[i][2][1]" controls-position="right"></el-input-number>
               </div>
             </template>
-            <template v-if="inputType(i,'datetime')" >
+            <template v-if="inputType(i,'date')" >
               <el-date-picker
                 v-model="tableQuery.query[i][2]"
                 type="date"
@@ -212,7 +212,19 @@ export default {
       }
     },
     computed:{
-     
+      computeMode(){
+        return (i)=>{
+          var mode = {
+            text:['=','>','<','>=','<=','!=','c','nc'],
+            date:['=','>','<','>=','<=','!=','c','nc','b','nb'],
+            number:['=','>','<','>=','<=','!=','c','nc','in','nin','b','nb'],
+            select:['=','!=']
+          }
+          if(mode[this.column_item(i).fieldtype]){
+             return this.mode.filter(item=>(mode[this.column_item(i).fieldtype].indexOf(item.flag)!==-1))
+          }
+        }
+      },
       queryType(i){
         return ()=>{
           this.table_column.find(item=>item.name==this.table_query.query[i].column).fieldtype
@@ -220,6 +232,7 @@ export default {
       }
     },
     methods:{
+
       column_item(i){
         return this.table_column.find(item=>item.name==this.tableQuery.query[i][0])
       },

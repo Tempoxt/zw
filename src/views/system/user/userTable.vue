@@ -164,24 +164,9 @@
       :header-cell-style="headerCellStyle"
       :height="table_height"
       @header-dragend="table_dragend"
-    >
-      <el-table-column
-        :label="column.showname"
-        v-for="(column) in table_field.filter(column=>!column.fed_isvisiable)"
-        :key="column.id"
-        :width="column.width||'auto'"
-      >
-         <template slot-scope="scope">
-          <template v-if="column.name==='department'">
-           {{scope.row[column.name].name}}
-          </template>
-          <template v-else-if="column.name==='user_role'">
-              <span v-for="item in scope.row[column.name]" :key="item.roleid">{{item.rolemodels_name}}</span>
-          </template>
-          <template v-else-if="column.name==='estate'">{{scope.row['estate']===1?'启用':'禁用'}}</template>
-          <template v-else>{{scope.row[column.name]}}</template>
-        </template>
-      </el-table-column>
+    > 
+    <el-table-column type="index" :index="indexMethod" />
+    <each-table-column :table_field="table_field"/>
     </el-table>
 
 

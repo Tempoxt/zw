@@ -114,9 +114,10 @@
       :height="table_height"
       :header-cell-style="headerCellStyle"
       @header-dragend="table_dragend"
-      
+      @sort-change="table_sort_change"
     >
       <el-table-column type="selection" width="55"></el-table-column>
+       <el-table-column type="index" :index="indexMethod" />
       <each-table-column :table_field="table_field"/>
     </el-table>
   </ui-table>
@@ -169,9 +170,9 @@ export default {
     },
     async fetchTableData(menuid) {
       this.table_loading = true;
-      this.table_data = await api_resource.get({
-        menuid: this.currentMenuid
-      });
+      this.table_form.menuid = this.currentMenuid
+      const { rows }  = await api_resource.get(this.table_form);
+      this.table_data = rows
       setTimeout(() => {
         this.table_loading = false;
       }, 300);

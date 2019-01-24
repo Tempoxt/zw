@@ -22,6 +22,7 @@
       :height="table_height"
       @header-dragend="table_dragend"
     >
+    <el-table-column type="index" :index="indexMethod" />
       <el-table-column
         :label="column.showname"
         v-for="(column) in table_field.filter(column=>!column.fed_isvisiable)"

@@ -51,7 +51,7 @@
 import * as api_common from "@/api/common";
 import * as api_actionsheet from "@/api/actionsheet";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource('pagemanager/menuaction')
+const api_resource = api_common.resource('pagemanager/tableinitconfig')
 export default {
   mixins: [table_mixin],
   props:{
@@ -111,7 +111,7 @@ export default {
   async created() {
     const { postion } = this.$route.query;
     const { field, action } = await api_common.menuInit(
-      "menuaction"
+      "tableinitconfig"
     );
     this.table_field = field;
     this.table_actions = action;

@@ -77,6 +77,9 @@ export default {
     }
   },
   methods: {
+    indexMethod(i){
+      return (i+1)+(this.table_form.currentpage-1)*this.table_form.pagesize
+    },
     table_disable_selected(row){
       return !(row.lockstate&&!this.table_actions.find(action=>action.code==='unlock'))
     },
@@ -175,6 +178,20 @@ export default {
     async delete() {
       let rows = this.table_selectedRows.map(row=>row.id)
       this.$confirm('此操作将删除选中行, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          return this.api_resource.remove(rows.join(','))
+        })
+        .then(() => {
+          this.fetchTableData()
+        })
+    },
+    remove(){
+      let rows = this.table_selectedRows.map(row=>row.id)
+      this.$confirm('此操作将移除选中行, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

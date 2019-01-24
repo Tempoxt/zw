@@ -78,6 +78,7 @@
                 class-name="table-column-disabled"
                 :selectable="table_disable_selected"
                 ></el-table-column>
+                <el-table-column type="index" :index="indexMethod" />
                 <each-table-column :table_field="table_field"/>
             </el-table>
            <table-pagination 

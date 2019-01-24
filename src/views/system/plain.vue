@@ -23,7 +23,8 @@
       @header-dragend="table_dragend"
       
     >
-    <el-table-column type="index" :index="indexMethod" />
+    <el-table-column type="selection" width="55"></el-table-column>
+     <el-table-column type="index" :index="indexMethod" />
     <each-table-column :table_field="table_field"/>
     </el-table>
      <table-pagination 
@@ -37,14 +38,13 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("log/loginlog");
 export default {
   mixins: [table_mixin],
   data() {
     return {
       loading: true,
       form:{},
-      api_resource,
+      api_resource:api_common.resource(this.$route.query.module),
       orgCategory:[],
       queryDialogFormVisible:true,
       table_height:window.innerHeight-236,
@@ -56,7 +56,7 @@ export default {
   methods: {
     async fetchTableData() {
      this.table_loading = true;
-     const {rows , total }= await api_resource.get(this.table_form);
+     const {rows , total }= await this.api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
       setTimeout(() => {
@@ -65,7 +65,7 @@ export default {
     },
   },
   async created() {
-    const { field, action } = await api_common.menuInit("log/loginlog");
+    const { field, action } = await api_common.menuInit(this.$route.query.module);
     this.table_field = field;
     this.table_actions = action;
     this.fetchTableData();

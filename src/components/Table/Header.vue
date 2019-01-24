@@ -48,8 +48,8 @@
           @keyup.enter.native="handleAction('fetchTableData')"
           clearable
           @clear="handleAction('fetchTableData')"
+          v-if="table_column.some(item=>item.isquicksearch)"
         >
-        <!-- <i slot="suffix" class="el-icon-search " @click="handleAction('fetchTableData')"></i> -->
         </el-input>
       </div>
       <el-button-group class="right-aciton-item">
@@ -110,7 +110,7 @@ export default {
         if (code === "delete") {
           return len >= 1;
         }
-        if (['forbid','lock','unlock','enable'].indexOf(code)!==-1) {
+        if (['forbid','lock','unlock','enable','remove'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;

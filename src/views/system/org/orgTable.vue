@@ -75,9 +75,8 @@
       width="60" 
       class-name="table-column-disabled"
       :selectable="table_disable_selected"
-      >
-      </el-table-column>
-
+      ></el-table-column>
+    <el-table-column type="index" :index="indexMethod" />
     <el-table-column 
       :label="table_field[0] && table_field[0].showname" 
       :width="table_field[0]&&table_field[0].width||'auto'"

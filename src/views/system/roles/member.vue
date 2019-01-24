@@ -49,7 +49,7 @@
                 :selectable="table_disable_selected"
                 >
                 </el-table-column>
-      
+                 <el-table-column type="index" :index="indexMethod" />
                 <el-table-column
                    
                     :prop="column.name"

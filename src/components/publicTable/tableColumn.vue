@@ -14,6 +14,9 @@ export default {
         'selectable'(){
             return <span>{['否','单选','多选'][this.row.selectable]}</span>
         },
+        'issort'(){
+              return <span>{this.row.iseditable?'是':'否'}</span>
+        },
         'menutype'(){
             if(this.row.menutype===1){
                 return  <el-tag size="mini">目录</el-tag>
@@ -22,6 +25,12 @@ export default {
             }else{
                 return  <el-tag type="info" size="mini">页签</el-tag>
             }
+        },
+        'isquicksearch'(){
+            return <span>{this.row.isquicksearch?'是':'否'}</span>
+        },
+        'issearch'(){
+            return <span>{this.row.isquicksearch?'是':'否'}</span>
         },
         'estate'(){
             if(this.row.estate===1){

@@ -1,5 +1,13 @@
 export default [
     {
+      path: 'plain',
+      name: 'plain',
+      meta: {
+        title: 'plain'
+      },
+      component: () => import('@/views/system/plain')
+    },
+    {
       path: 'menusheet',
       name: 'menusheet',
       meta: {
