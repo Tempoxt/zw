@@ -41,15 +41,14 @@
     <el-col :span="20">
 
       <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs">
-      
+       <el-tab-pane :label="getViewData('menuaction').name" :name="getViewData('menuaction').url" v-if="getViewData('menuaction')" lazy>
+        <pagemanager-action :currentMenuid="currentMenuid"/>
+      </el-tab-pane>
       <el-tab-pane :label="getViewData('fields').name" :name="getViewData('fields').url" v-if="getViewData('fields')" lazy>
          <pagemanager-field :currentMenuid="currentMenuid"/>
       </el-tab-pane>
-      <el-tab-pane :label="getViewData('menuaction').name" :name="getViewData('menuaction').url" v-if="getViewData('menuaction')" lazy>
-        <pagemanager-action :currentMenuid="currentMenuid"/>
-      </el-tab-pane>
-       <el-tab-pane :label="getViewData('tableinitconfig').name" :name="getViewData('tableinitconfig').url" v-if="getViewData('tableinitconfig')" lazy>
-        <pagemanager-action :currentMenuid="currentMenuid"/>
+       <el-tab-pane :label="getViewData('tableconfig').name" :name="getViewData('tableconfig').url" v-if="getViewData('tableconfig')" lazy>
+        <pagemanager-config :currentMenuid="currentMenuid"/>
       </el-tab-pane>
     </el-tabs>
 
@@ -88,7 +87,8 @@ export default {
   },
   components: {
     pagemanagerAction,
-    pagemanagerField
+    pagemanagerField,
+    pagemanagerConfig
   },
   methods: {
     filterNode(value, data) {
