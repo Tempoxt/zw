@@ -14,7 +14,7 @@
             <div  v-loading="dialog_loading">
             <el-checkbox-group v-model="actionsModel">
               <el-row :gutter="10">
-              <el-col :md="4" v-for="action in actionsList" :key="action.id">
+              <el-col :md="4" v-for="action in actionsList" :key="action.id" style="margin-bottom:10px;">
                    <el-checkbox :label="action.id" >
                     <i :class="action.icon"></i>
                     {{action.name}}</el-checkbox>

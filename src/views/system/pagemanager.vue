@@ -101,6 +101,10 @@ export default {
       console.log(data,'data')
       if (data.subs?data.subs.length===0:true && (data.menutype === 2 || data.menutype === 3)) {
         this.currentMenuid = data.id;
+      }else{
+        setTimeout(()=>{
+          this.$refs.tree2.setCurrentKey(this.currentMenuid);
+        },0)
       }
     },
     async initPage(){
