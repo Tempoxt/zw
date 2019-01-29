@@ -17,24 +17,26 @@
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>
-          <el-tree
-            class="tree"
-            :data="data2"
-            :props="{children: 'subs', label: 'name' }"
-            default-expand-all
-            node-key="id"
-            :filter-node-method="filterNode"
-            ref="tree2"
-            :highlight-current="true"
-            :check-on-click-node="true"
-            @node-click="handleChangeNode"
-            :expand-on-click-node="false"
-          >
-            <span slot-scope="{ node, data }">
-              <span :class="data.icon"></span>&nbsp;
-              <span>{{ node.label }}</span>
-            </span>
-          </el-tree>
+
+          
+            <el-tree
+              class="tree"
+              :data="data2"
+              :props="{children: 'subs', label: 'name' }"
+              default-expand-all
+              node-key="id"
+              :filter-node-method="filterNode"
+              ref="tree2"
+              :highlight-current="true"
+              :check-on-click-node="true"
+              @node-click="handleChangeNode"
+              :expand-on-click-node="false"
+            >
+              <span slot-scope="{ node, data }">
+                <span :class="`icon iconfont ${['icon-zuzhi1','icon-zuzhi2','icon-rizhi'][data.menutype-1]}`"></span>&nbsp;
+                <span>{{ node.label }}</span>
+              </span>
+            </el-tree>
         </div>
       </div>
     </el-col>
@@ -96,7 +98,8 @@ export default {
       return data.name.indexOf(value) !== -1;
     },
     handleChangeNode(data) {
-      if (data.menutype === 2 || data.menutype === 3) {
+      console.log(data,'data')
+      if (data.subs?data.subs.length===0:true && (data.menutype === 2 || data.menutype === 3)) {
         this.currentMenuid = data.id;
       }
     },

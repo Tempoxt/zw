@@ -6,23 +6,72 @@
     @query="querySubmit"
     >
          <el-dialog
-            title="添加功能"
+            title="修改参数"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
             >
-            <div  v-loading="dialog_loading">
-            <el-checkbox-group v-model="actionsModel">
-                <el-checkbox :label="action.id" v-for="action in actionsList" :key="action.id">
-                    <i :class="action.icon"></i>
-                    {{action.name}}</el-checkbox>
-                </el-checkbox-group>
-            </div>
+            <dialog-scroll>
+              <div style="width:500px;margin:0 auto" v-loading="dialog_loading">
+                <el-form ref="form" :model="form" label-width="150px">
+                    <el-form-item label="页默认显示数">
+                      <el-input v-model="form.rowNum"></el-input>
+                    </el-form-item>
+                    <el-form-item label="页记录数选项">
+                      <el-input v-model="form.rowList"></el-input>
+                    </el-form-item>
+                    <el-form-item label="隔行样式">
+                      <el-input v-model="form.altClass"></el-input>
+                    </el-form-item>
+                    <el-form-item label="求和列">
+                      <el-select v-model="form.sumCol" placeholder="求和列">
+                        <el-option :label="item.showname" :value="item.name" v-for="item in col" :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="默认排序列">
+                      <el-select v-model="form.sortName" placeholder="默认排序列">
+                        <el-option :label="item.showname" :value="item.name" v-for="item in col" :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="排序方式">
+                      <el-radio v-model="form.sortOrder" label="asc">顺序</el-radio>
+                      <el-radio v-model="form.sortOrder" label="desc">倒序</el-radio>
+                    </el-form-item>
+                    <el-form-item label="允许设置列宽">
+                      <el-radio v-model="form.isSetWidth" :label="true">是</el-radio>
+                      <el-radio v-model="form.isSetWidth" :label="false">否</el-radio>
+                    </el-form-item>
+                    <el-form-item label="动态表格">
+                      <el-radio v-model="form.isScorll" :label="true">是</el-radio>
+                      <el-radio v-model="form.isScorll" :label="false">否</el-radio>
+                    </el-form-item>
+                    <el-form-item label="显示序号列">
+                      <el-radio v-model="form.isShowNum" :label="true">是</el-radio>
+                      <el-radio v-model="form.isShowNum" :label="false">否</el-radio>
+                    </el-form-item>
+                    <el-form-item label="显示多选列">
+                      <el-radio v-model="form.isMultiBoxOnly" :label="true">是</el-radio>
+                      <el-radio v-model="form.isMultiBoxOnly" :label="false">否</el-radio>
+                    </el-form-item>
+                    <el-form-item label="显示统计行">
+                      <el-radio v-model="form.isShowFooter" :label="true">是</el-radio>
+                      <el-radio v-model="form.isShowFooter" :label="false">否</el-radio>
+                    </el-form-item>
+                    <!-- <el-form-item label="树形控件选择设置">
+                      <el-radio v-model="form.radio" label="1">是</el-radio>
+                      <el-radio v-model="form.radio" label="2">否</el-radio>
+                    </el-form-item> -->
+                  </el-form>
+                
+              </div>
+           </dialog-scroll>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
             </div>
             </el-dialog>
+
+
             <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -40,9 +89,10 @@
                 :height="table_height"
                 @sort-change="table_sort_change"
                 v-loading="table_loading">
-                <el-table-column type="selection" width="55"></el-table-column>
-                 <el-table-column type="index" :index="indexMethod" />
-               <each-table-column :table_field="table_field"/>
+                <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+                 <!-- <el-table-column type="index" :index="indexMethod" /> -->
+               <!-- <each-table-column :table_field="table_field"/> -->
+               <each-table-column :table_field="table_field" />
             </el-table>
            
     </ui-table>
@@ -52,7 +102,11 @@ import * as api_common from "@/api/common";
 import * as api_actionsheet from "@/api/actionsheet";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource('pagemanager/tableconfig')
+import dialogScroll from '@c/Dialog/dialogScroll'
 export default {
+  components:{
+    dialogScroll
+  },
   mixins: [table_mixin],
   props:{
       currentMenuid:Number
@@ -67,6 +121,21 @@ export default {
 
   },
   methods: {
+    template(row,column){
+      return {
+        
+      }
+    },
+    async customEdit(){
+        this.form = Object.assign({},this.ccc)
+        this.dialog_loading = true
+        this.dialogFormVisible = true
+        this.col = await api_common.resource("pagemanager/field").get({menuid:this.currentMenuid})
+        setTimeout(()=>{
+          this.dialog_loading = false
+        },300)
+        
+    },
     async add(){
       this.dialogFormVisible = true
       this.dialog_loading = true
@@ -79,11 +148,7 @@ export default {
     },
 
     async handleFormSubmit(){
-      await api_resource.create({
-        action:this.actionsModel,
-        catolog:'action',
-        menu:this.currentMenuid
-      })
+      await api_resource.update(this.currentMenuid,this.form)
       this.dialogFormVisible = false
       this.fetchTableData()
     },
@@ -92,10 +157,59 @@ export default {
       this.table_form.menuid = this.currentMenuid
       // const { rows }  = await api_resource.get(this.table_form);
       // this.table_data = rows
-      this.table_data  = await api_resource.get(this.table_form);
+      if(!this.table_data.length){
+        await this.getField()
+      }
+     const data =  await api_resource.find(this.currentMenuid);
+      this.table_data.forEach(item=>{
+        this.$set(item,'ccc',data[item.name])
+      }) 
+      this.ccc = data
       setTimeout(()=>{
         this.table_loading = false
       },300)
+    },
+    async getField(){
+      const { postion } = this.$route.query;
+      const { field, action } = await api_common.menuInit(
+        "tableconfig"
+      );
+      this.table_field = [
+        {
+              "id": 121,
+              "name": "showname",
+              "icon": "",
+              "showname": "表格设置",
+              "isblank": true,
+              "isvisiable": false,
+              "sort": 1,
+              "isquicksearch": false,
+              "issearch": false,
+              "iseditable": true,
+              "fieldtype": "text",
+              "validation": "",
+              "width": "450px"
+        },
+        {
+              "id": 122,
+              "name": "ccc",
+              "icon": "",
+              "showname": "",
+              "isblank": true,
+              "isvisiable": false,
+              "sort": 1,
+              "isquicksearch": false,
+              "issearch": false,
+              "iseditable": true,
+              "fieldtype": "text",
+              "validation": "",
+              "width": "auto"
+        },
+        
+      ];
+      this.table_data = field
+      this.table_actions = action;
+      this.table_actions[0].code = 'customEdit'
     }
   },
 
@@ -105,17 +219,19 @@ export default {
       actionsList:[],
       actionsModel:[],
       dialog_loading:true,
-      api_resource
+      api_resource,
+      form:{},
+      col:[],
+      dialog_loading:true
     };
   },
   async created() {
-    const { postion } = this.$route.query;
-    const { field, action } = await api_common.menuInit(
-      "tableconfig"
-    );
-    this.table_field = field;
-    this.table_actions = action;
+    
+    console.log(this.table_data,'field')
   }
 };
 </script>
+<style lang="scss" scoped>
+
+</style>
 

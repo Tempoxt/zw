@@ -13,9 +13,13 @@
             >
             <div  v-loading="dialog_loading">
             <el-checkbox-group v-model="actionsModel">
-                <el-checkbox :label="action.id" v-for="action in actionsList" :key="action.id">
+              <el-row :gutter="10">
+              <el-col :md="4" v-for="action in actionsList" :key="action.id">
+                   <el-checkbox :label="action.id" >
                     <i :class="action.icon"></i>
                     {{action.name}}</el-checkbox>
+              </el-col>
+            </el-row>
                 </el-checkbox-group>
             </div>
             <div slot="footer" class="dialog-footer">
@@ -71,8 +75,8 @@ export default {
       this.dialogFormVisible = true
       this.dialog_loading = true
       this.actionsModel = []
-      const actionsList = await api_actionsheet.get()
-      this.actionsList = actionsList.filter(action=>!this.table_data.find(item=>item.actionid===action.id))
+      this.actionsList = await api_actionsheet.get()
+      this.actionsModel = this.table_data.map(item=>(+item.action__id))
       setTimeout(()=>{
         this.dialog_loading = false
       },300)
@@ -90,9 +94,10 @@ export default {
     async fetchTableData(menuid) {
       this.table_loading = true
       this.table_form.menuid = this.currentMenuid
-      // const { rows }  = await api_resource.get(this.table_form);
-      // this.table_data = rows
-      this.table_data  = await api_resource.get(this.table_form);
+      const { rows }  = await api_resource.get(this.table_form);
+      this.table_data = rows
+      
+      // this.table_data  = await api_resource.get(this.table_form);
       setTimeout(()=>{
         this.table_loading = false
       },300)
@@ -111,7 +116,7 @@ export default {
   async created() {
     const { postion } = this.$route.query;
     const { field, action } = await api_common.menuInit(
-      "menuaction"
+      "pagemanager/menuaction"
     );
     this.table_field = field;
     this.table_actions = action;

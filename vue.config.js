@@ -2,7 +2,8 @@
 const webpack = require('webpack')
 const path = require('path')
 var Client = require('scp2')
-
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = ['js', 'css']
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -33,6 +34,7 @@ class HelloWorldPlugin {
 
 module.exports = {
   lintOnSave:false,
+  productionSourceMap:false,
   css: {
     loaderOptions: {
       sass: {
@@ -50,7 +52,7 @@ module.exports = {
       })
   },
   configureWebpack: config => {
-    return {
+    let conf = {
       resolve: {
         alias: {
           '@assets': '@/assets',
@@ -68,5 +70,17 @@ module.exports = {
         new HelloWorldPlugin({ setting: true })
       ]
     }
+    if (process.env.NODE_ENV === 'production') {
+      conf.plugins.push(
+        new CompressionWebpackPlugin({
+                filename: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                threshold: 10240,
+                minRatio: 0.8
+            })
+        );
+    }
+    return conf
   }
 }

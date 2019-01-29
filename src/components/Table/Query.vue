@@ -24,7 +24,7 @@
           <el-col :span="6">
             <el-select v-model="tableQuery.query[i][0]" placeholder="请选择">
                 <el-option
-                  v-for="column in table_column.filter(item=>item.issearch)"
+                  v-for="column in enable_table_column"
                   :key="column.id"
                   :label="column.showname"
                   :value="column.name">
@@ -212,6 +212,9 @@ export default {
       }
     },
     computed:{
+      enable_table_column(){
+        return this.table_column.filter(item=>item.issearch)
+      },
       computeMode(){
         return (i)=>{
           var mode = {
@@ -227,23 +230,30 @@ export default {
       },
       queryType(i){
         return ()=>{
-          this.table_column.find(item=>item.name==this.table_query.query[i].column).fieldtype
+          this.enable_table_column.find(item=>item.name==this.table_query.query[i].column).fieldtype
         }
       }
     },
     methods:{
 
       column_item(i){
-        return this.table_column.find(item=>item.name==this.tableQuery.query[i][0])
+        return this.enable_table_column.find(item=>item.name==this.tableQuery.query[i][0])
       },
       inputType(i,name){
-         return  this.table_column.find(item=>item.name==this.tableQuery.query[i][0]).fieldtype === name
+         return  this.enable_table_column.find(item=>item.name==this.tableQuery.query[i][0]).fieldtype === name
       },
       flagType(i,type){
         return this.tableQuery.query[i][1]
       },
       addQuery(){
-        this.tableQuery.query.push([this.table_column[0].name,this.mode[0].flag])
+        if(!this.enable_table_column.length){
+          this.$message({
+            message: '暂未设置高级查询的列',
+            type: 'warning'
+          });
+          return
+        }
+        this.tableQuery.query.push([this.enable_table_column[0].name,this.mode[0].flag])
       },
       removeQuery(i){
         this.tableQuery.query.splice(i,1)

@@ -12,6 +12,9 @@
       <div>
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
           <el-row :gutter="20">
+            <!-- <el-col :span="12" v-for="field in ccc" :key="field.name">
+              <form-render :type="`${field.type}`" :field="field" v-model="form[field.model]"/>
+            </el-col> -->
             <el-col :span="12">
               <form-render :type="`input`" :field="{name:'字段名称'}" v-model="form.name"/>
             </el-col>
@@ -24,6 +27,9 @@
             </el-col>
             <el-col :span="12">
               <form-render :type="`input`" :field="{name:'字段显示名'}" v-model="form.showname"/>
+            </el-col>
+            <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'字段列宽'}" v-model="form.width"/>
             </el-col>
             <el-col :span="12">
               <form-render
@@ -42,15 +48,40 @@
             <el-col :span="12">
               <form-render
                 :type="`radio`"
-                :field="{name:'是否排序',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                :field="{name:'允许排序',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
                 v-model="form.issort"
               />
             </el-col>
             <el-col :span="12">
               <form-render
                 :type="`radio`"
-                :field="{name:'是否可查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                :field="{name:'高级查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
                 v-model="form.issearch"
+              />
+            </el-col>
+            <el-col :span="12">
+              <form-render
+                :type="`select`"
+                :field="{name:'字段类型',options:[{
+                  value: 'number',
+                  label: '数字'
+                },{
+                  value: 'auto_select',
+                  label: '非固定选项'
+                },{
+                  value: 'date',
+                  label: '日期'
+                },{
+                  value: 'select',
+                  label: '固定选项'
+                },{
+                  value: 'text',
+                  label: '文本'
+                },{
+                  value: 'choice',
+                  label: '单选'
+                }]}"
+                v-model="form.fieldtype"
               />
             </el-col>
              <el-col :span="12">
@@ -82,7 +113,7 @@
             <el-col :span="12">
               <form-render
                 :type="`radio`"
-                :field="{name:'用户可设置',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                :field="{name:'允许修改',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
                 v-model="form.iseditable"
               />
             </el-col>
@@ -131,7 +162,10 @@ let defaultForm = function() {
     issearch:true,
     isblank: true,
     isvisiable: false,
-    iseditable: false
+    iseditable: false,
+    issort:true,
+    isquicksearch:false,
+    fieldtype:'text'
   };
 };
 export default {
@@ -154,7 +188,7 @@ export default {
       this.dialog_loading = true;
     },
     async edit() {
-      this.form = Object.assign({}, this.table_selectedRowsInfo[0]);
+      this.form = await api_resource.find(this.table_selectedRowsInfo[0].id)
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
     },
@@ -178,7 +212,24 @@ export default {
       }, 300);
     }
   },
-
+  computed:{
+    ccc(){
+      const types = {
+        'text':'input',
+        'number':'number',
+        'textarea':'textarea',
+        'choice':'radio'
+      }
+      return this.table_field.filter(field=>field.iseditable).map((field)=>{
+        return {
+          name:field.showname,
+          type:types[field.fieldtype],
+          model:field.name,
+          options:[]
+        }
+      })
+    }
+  },
   data() {
     return {
       actionsList: [],
@@ -192,10 +243,30 @@ export default {
   async created() {
     const { postion } = this.$route.query;
     const { field, action } = await api_common.menuInit(
-      "fields"
+      "pagemanager/field"
     );
     this.table_field = field;
     this.table_actions = action;
+
+
+
+    const types = {
+      'text':'input',
+      'number':'number',
+      'textarea':'textarea'
+    }
+    this.table_field.forEach(field=>{
+      field._field = {
+        name:field.showname,
+        type:types[field.fieldtype],
+        model:field.name,
+        options:[]
+      }
+    })
+    setTimeout(()=>{
+      console.log(this.table_field,'table_field')
+      console.log(this.ccc,'cccccccccccc')
+    },2000)
   }
 };
 </script>

@@ -25,7 +25,13 @@
               <form-render :type="`menu`" :field="{name:'上级菜单',position:position}" v-model="form.parentid"/>
             </el-col>
             <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'授权标识'}" v-model="form.code"/>
+              <form-render :type="`input`" :field="{name:'菜单代码'}" v-model="form.code"/>
+            </el-col>
+             <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'菜单参数'}" v-model="form.paramter"/>
+            </el-col>
+              <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'后端标记'}" v-model="form.backend"/>
             </el-col>
             <el-col :span="12">
               <form-render
@@ -85,7 +91,7 @@
    <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
-      :table_column="table_field.slice(1,table_field.length)"
+      :table_column="table_field"
       @action="handleAction"
       :table_form.sync="table_form"
     ></table-header>
@@ -114,7 +120,6 @@
     <el-table-column 
       :label="table_field[0] && table_field[0].showname" 
       :width="table_field[0]&&table_field[0].width||'auto'"
-      
       >
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
@@ -129,7 +134,7 @@
         <span v-html="scope.row.name"></span>
       </template>
     </el-table-column>
-    <each-table-column :table_field="table_field.slice(1,table_field.length)"/>
+    <each-table-column :table_field="table_field.slice(1,table_field.length)" :template="template"/>
   </el-table>
 
   </ui-table>
@@ -156,6 +161,7 @@ export default {
   props:['position'],
   mixins: [table_mixin],
   methods: {
+    
     async handleFormSubmit() {
       let form = Object.assign(
         { position: this.position },
@@ -222,7 +228,12 @@ export default {
       form: defaultForm(),
       loading: true,
       table_form:{},
-      api_resource
+      api_resource,
+      template:{
+        connect(column,row){
+          return <span>{['当前创窗口','新窗口/新标签','弹出窗口','弹出浏览器窗口'][row.connect-1]}</span>
+        }
+      },
     };
   }
 };

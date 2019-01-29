@@ -9,7 +9,7 @@
                 :sortable="column.issort?'custom':false"
             >
             <template slot-scope="scope">
-                 <table-column :row="scope.row" :elColumn="scope.column" :column="column"/>
+                 <table-column :row="scope.row" :elColumn="scope.column" :column="column" :template="template"/>
             </template>
         </el-table-column>
     </fragment>
@@ -18,7 +18,7 @@
 <script>
 import tableColumn from '@c/publicTable/tableColumn'
 export default {
-    props:['table_field'],
+    props:['table_field','template'],
     components:{
         tableColumn
     }

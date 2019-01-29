@@ -1,12 +1,22 @@
 <template>
-    <div @wheel="zoomWheelHandler">
-        <el-button @click="exportCanvas" style="position: absolute; right: 34px;top: 3px;z-index:3"><i data-v-0845e584="" class="icon iconfont icon-daochu" style="padding-right: 10px; margin-right: -10px;"></i> 导出</el-button>
+    <div @wheel="zoomWheelHandler"  style="position: relative;">
+    <fullscreen v-model="full">
+        <div style="display: flex;width: 100%;justify-content: space-between;padding: 10px 20px;position: absolute;z-index:3;">
+                
+    <!-- position: absolute; right: 34px;top: 3px;z-index:3;display:flex; -->
+            <el-button @click="exportCanvas" ><i data-v-0845e584="" class="icon iconfont icon-daochu" style="padding-right: 10px; margin-right: -10px;"></i> 导出</el-button>
+            <el-button-group>
+                <el-button @click="full=!full" ><i data-v-0845e584="" class="icon iconfont icon-xingzhuang" ></i></el-button>
+                <el-button @click="fetchData" ><i data-v-0845e584="" class="icon iconfont icon-shuaxin" ></i></el-button>
+            </el-button-group>
+        </div>
+       
         <div >
             <div id="box" :class="state==='export'?'export':''" :style="{ transform: transformVal }">
 
             </div>
         </div>
-
+        </fullscreen>
     </div>
 </template>
 <script>
@@ -17,13 +27,18 @@ const api_resource = api_common.resource("org");
 import html2canvas from 'html2canvas';
 const download = require('downloadjs')
 import { scale, rotate, translate, transform, toCSS, fromString } from 'transformation-matrix'
+import fullscreen from '@c/UI/fullscreen'
 export default {
+    components:{
+        fullscreen
+    },
     data(){
         return {
             state:'',
             transformVal: 'matrix(1, 0, 0, 1, 0, 0)',
             zoomoutLimit:0.5,
-            zoominLimit:7
+            zoominLimit:7,
+            full:false
         }
     },
    methods:{

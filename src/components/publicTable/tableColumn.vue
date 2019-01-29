@@ -1,6 +1,6 @@
 <script>
 export default {
-    props:['row','column'],
+    props:['row','column','template'],
     methods:{
         'isblank'(){
              return <span>{this.row.isblank?'是':'否'}</span>
@@ -14,8 +14,11 @@ export default {
         'selectable'(){
             return <span>{['否','单选','多选'][this.row.selectable]}</span>
         },
+        'action__icon'(){
+             return <i class={this.row[this.column.name]}></i>
+        },
         'issort'(){
-              return <span>{this.row.iseditable?'是':'否'}</span>
+              return <span>{this.row.issort?'是':'否'}</span>
         },
         'menutype'(){
             if(this.row.menutype===1){
@@ -30,7 +33,7 @@ export default {
             return <span>{this.row.isquicksearch?'是':'否'}</span>
         },
         'issearch'(){
-            return <span>{this.row.isquicksearch?'是':'否'}</span>
+            return <span>{this.row.issearch?'是':'否'}</span>
         },
         'estate'(){
             if(this.row.estate===1){
@@ -44,8 +47,12 @@ export default {
         }
     },
     render(){
+        
         if(this[this.column.name]){
-            return this[this.column.name]()
+            return this[this.column.name](this.column,this.row)
+        }
+        if(this.template&&this.template[this.column.name]){
+            return this.template[this.column.name].call(this,this.column,this.row)
         }
         return <div domPropsInnerHTML={this.row[this.column.name]}></div>
     }
