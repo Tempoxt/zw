@@ -2,8 +2,8 @@
   <div class="pagination">
     <el-pagination
       background
-      :page-sizes="[50, 100, 200, 500,1000]"
-      :page-size="pagesize"
+      :page-sizes="rowList"
+      :page-size.sync="pagesize"
       layout="total, sizes"
       :total="total"
       @size-change="handleSizeChange"
@@ -12,8 +12,8 @@
 
     <el-pagination
       background
-      :page-sizes="[50, 100, 200, 500,1000]"
-      :page-size="pagesize"
+      :page-sizes="rowList"
+      :page-size.sync="pagesize"
       layout="prev, pager, next"
       :total="total"
       @size-change="handleSizeChange"
@@ -26,7 +26,13 @@ export default {
   props: {
     total: Number,
     pagesize: Number,
-    currentpage: Number
+    currentpage: Number,
+    table_config:Object
+  },
+  computed:{
+    rowList(){
+      return (this.table_config && this.table_config.rowList) ?this.table_config.rowList.split(',').map(Number):[50,100,300,500,1000]
+    }
   },
   methods: {
     reset(){

@@ -92,7 +92,7 @@
                 <!-- <el-table-column type="selection" width="55"></el-table-column> -->
                  <!-- <el-table-column type="index" :index="indexMethod" /> -->
                <!-- <each-table-column :table_field="table_field"/> -->
-               <each-table-column :table_field="table_field" />
+               <each-table-column :table_field="table_field" :template="template"/>
             </el-table>
            
     </ui-table>
@@ -121,11 +121,6 @@ export default {
 
   },
   methods: {
-    template(row,column){
-      return {
-        
-      }
-    },
     async customEdit(){
         this.form = Object.assign({},this.ccc)
         this.dialog_loading = true
@@ -165,6 +160,8 @@ export default {
         this.$set(item,'ccc',data[item.name])
       }) 
       this.ccc = data
+
+      console.log(this.ccc,'this.ccc')
       setTimeout(()=>{
         this.table_loading = false
       },300)
@@ -214,6 +211,7 @@ export default {
   },
 
   data() {
+    var self = this
     return {
       table_loading:true,
       actionsList:[],
@@ -222,12 +220,54 @@ export default {
       api_resource,
       form:{},
       col:[],
-      dialog_loading:true
+      dialog_loading:true,
+      ccc:{},
+      template:{
+        ccc(column,row){
+          // console.log(column,'col')
+          // console.log(row,'row')
+
+          // console.log(,'this.cccData[row.name]')
+          const f = {
+            sortOrder(val){
+              return val==='asc'?'顺序':'倒序'
+            },
+            isSetWidth(val){
+              return val?'是':'否'
+            },
+            isShowNum(val){
+              return val?'是':'否'
+            },
+            isMultiSelect(val){
+               return val?'是':'否'
+            },
+            isShowFooter(val){
+              return val?'是':'否'
+            },
+            isMultiBoxOnly(val){
+              return val?'是':'否'
+            },
+            isScorll(val){
+              return val?'是':'否'
+            }
+          }
+          if(f[row.name]){
+            return  <span>{f[row.name](self.ccc[row.name])}</span>
+          }else{
+              console.log(row,'row.name')
+             return <span>{self.ccc[row.name]}</span>
+          }
+         
+        }
+      }
     };
   },
   async created() {
+    setTimeout(()=>{
+      console.log(this.table_field,'table_field')
+      console.log(this.table_data,'field')
+    },2000)
     
-    console.log(this.table_data,'field')
   }
 };
 </script>

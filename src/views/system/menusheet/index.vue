@@ -14,26 +14,20 @@
     >
       <div>
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
-          <el-row :gutter="20">
-            <el-col :span="12">
+          <el-row :gutter="60">
+            <div class="line-box">
+              <el-col :span="12">
               <form-render :type="`icon`" :field="{name:'图标/名称'}" v-model="form.iconName"/>
-            </el-col>
-            <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'请求地址'}" v-model="form.urlname"/>
             </el-col>
             <el-col :span="12">
               <form-render :type="`menu`" :field="{name:'上级菜单',position:position}" v-model="form.parentid"/>
             </el-col>
+
             <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'菜单代码'}" v-model="form.code"/>
+              <form-render :type="`input`" :field="{name:'请求地址'}" v-model="form.urlname" placeholder="请输入"/>
             </el-col>
+
              <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'菜单参数'}" v-model="form.paramter"/>
-            </el-col>
-              <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'后端标记'}" v-model="form.backend"/>
-            </el-col>
-            <el-col :span="12">
               <form-render
                 :type="`select`"
                 :field="{name:'菜单类型',options:[{
@@ -49,31 +43,44 @@
                 v-model="form.menutype"
               />
             </el-col>
+
+             <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'请求参数'}" v-model="form.paramter" placeholder="请输入"/>
+            </el-col>
             <el-col :span="12">
               <form-render
                 :type="`select`"
                 :field="{name:'链接目标',options:[{
-                  value: '1',
+                  value: 1,
                   label: '当前创窗口'
                 },{
-                  value: '2',
+                  value: 2,
                   label: '新窗口/新标签'
                 },{
-                  value: '3',
+                  value: 3,
                   label: '弹出窗口'
                 },{
-                  value: '4',
+                  value: 4,
                   label: '弹出浏览器窗口'
                 }]}"
                 v-model="form.connect"
               />
             </el-col>
+
+            <el-col :span="12">
+              <form-render
+                :type="`radio`"
+                :field="{name:'状态',options:[{'label':'启用','value':1},{'label':'禁用','value':0}]}"
+                v-model="form.estate"
+              />
+            </el-col>
             <el-col :span="12">
               <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
             </el-col>
+            </div>
 
             <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark"/>
+              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
             </el-col>
           </el-row>
         </el-form>
@@ -129,9 +136,11 @@
             style="color:#666;font-size:16px;margin-right: 6px;"
           ></i>
         </span>
-        <i :class="scope.row.icon" v-if="table_tree_iconShow(0,scope.row)"></i>
-        <i :class="scope.row.icon" v-else></i>
-        <span v-html="scope.row.name"></span>
+        <table-column :row="scope.row" :elColumn="table_field[0]" :column="table_field[0]" :template="template"/>
+        <!-- <i :class="scope.row.icon" v-if="table_tree_iconShow(0,scope.row)"></i>
+        <i :class="scope.row.icon" v-else></i> -->
+        <!-- <span v-html="scope.row.name"></span> -->
+        
       </template>
     </el-table-column>
     <each-table-column :table_field="table_field.slice(1,table_field.length)" :template="template"/>
@@ -154,7 +163,10 @@ const defaultForm = function() {
     iconName: {},
     menutype: 2,
     parentid: 0,
-    connect: "1",
+    connect: 1,
+    estate:1,
+    sort:1
+
   };
 };
 export default {
@@ -186,7 +198,8 @@ export default {
     },
     async edit() {
       let row = this.table_selectedRows[0]
-      this.form = Object.assign({}, row);
+      // this.form = Object.assign({}, row);
+      this.form = await api_resource.find(row.id)
       const { icon, name } = this.form;
       this.form.iconName = { icon, name };
       this.dialogFormVisible = true;
@@ -232,9 +245,15 @@ export default {
       template:{
         connect(column,row){
           return <span>{['当前创窗口','新窗口/新标签','弹出窗口','弹出浏览器窗口'][row.connect-1]}</span>
+        },
+        name(column,row){
+            return <span><i class={row.icon} ></i> {row.name}</span>
         }
       },
     };
   }
 };
 </script>
+<style lang="scss" scoped>
+
+</style>

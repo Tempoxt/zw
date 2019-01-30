@@ -11,12 +11,10 @@
     >
       <div>
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
-          <el-row :gutter="20">
-            <!-- <el-col :span="12" v-for="field in ccc" :key="field.name">
-              <form-render :type="`${field.type}`" :field="field" v-model="form[field.model]"/>
-            </el-col> -->
+          <el-row :gutter="60">
+            <div class="line-box">
             <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'字段名称'}" v-model="form.name"/>
+              <form-render :type="`input`" :field="{name:'字段名称'}" v-model="form.name" placeholder="请输入内容"/>
             </el-col>
             <el-col :span="12">
               <form-render
@@ -25,66 +23,70 @@
                 v-model="form.isblank"
               />
             </el-col>
+
             <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'字段显示名'}" v-model="form.showname"/>
+              <form-render :type="`input`" :field="{name:'字段显示名'}" v-model="form.showname" placeholder="请输入内容"/>
             </el-col>
-            <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'字段列宽'}" v-model="form.width"/>
-            </el-col>
-            <el-col :span="12">
+
+             <el-col :span="12">
               <form-render
                 :type="`radio`"
                 :field="{name:'是否隐藏',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
                 v-model="form.isvisiable"
               />
             </el-col>
+
+
             <el-col :span="12">
-              <form-render
-                :type="`radio`"
-                :field="{name:'快速查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
-                v-model="form.isquicksearch"
-              />
+              <form-render :type="`input`" :field="{name:'字段列宽'}" v-model="form.width" placeholder="请输入内容"/>
             </el-col>
-            <el-col :span="12">
+           <el-col :span="12">
               <form-render
                 :type="`radio`"
                 :field="{name:'允许排序',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
                 v-model="form.issort"
               />
             </el-col>
-            <el-col :span="12">
-              <form-render
-                :type="`radio`"
-                :field="{name:'高级查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
-                v-model="form.issearch"
-              />
-            </el-col>
-            <el-col :span="12">
+          <el-col :span="12">
               <form-render
                 :type="`select`"
-                :field="{name:'字段类型',options:[{
-                  value: 'number',
-                  label: '数字'
+                :field="{name:'编辑分类',options:[{
+                  value: 'text',
+                  label: '单行文本'
                 },{
-                  value: 'auto_select',
-                  label: '非固定选项'
+                  value: 'textarea',
+                  label: '多行文本'
                 },{
-                  value: 'date',
-                  label: '日期'
+                  value: 'password',
+                  label: '密码框'
                 },{
                   value: 'select',
-                  label: '固定选项'
+                  label: '选择项'
                 },{
-                  value: 'text',
-                  label: '文本'
+                  value: 'checkbox',
+                  label: '多选项'
                 },{
-                  value: 'choice',
-                  label: '单选'
+                  value: 'radio',
+                  label: '单选项'
+                },{
+                  value: 'image',
+                  label: '图片'
+                },{
+                  value: 'file',
+                  label: '文件'
                 }]}"
                 v-model="form.fieldtype"
               />
             </el-col>
-             <el-col :span="12">
+          <el-col :span="12">
+              <form-render
+                :type="`radio`"
+                :field="{name:'允许修改',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.iseditable"
+              />
+            </el-col>
+
+            <el-col :span="12">
               <form-render
                 :type="`select`"
                 :field="{name:'查询分类',options:[{
@@ -107,18 +109,31 @@
                 v-model="form.fieldtype"
               />
             </el-col>
-            <el-col :span="12">
-              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
-            </el-col>
+
             <el-col :span="12">
               <form-render
                 :type="`radio`"
-                :field="{name:'允许修改',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
-                v-model="form.iseditable"
+                :field="{name:'快速查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.isquicksearch"
               />
             </el-col>
+              <el-col :span="12">
+              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
+            </el-col>
+            
+            <el-col :span="12">
+              <form-render
+                :type="`radio`"
+                :field="{name:'高级查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.issearch"
+              />
+            </el-col>
+            
+             
+          
+            </div>
             <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark"/>
+              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入内容"/>
             </el-col>
           </el-row>
         </el-form>
@@ -165,7 +180,10 @@ let defaultForm = function() {
     iseditable: false,
     issort:true,
     isquicksearch:false,
-    fieldtype:'text'
+    fieldtype:'text',
+    sort:1,
+    issort:false,
+    issearch:false
   };
 };
 export default {
@@ -263,10 +281,7 @@ export default {
         options:[]
       }
     })
-    setTimeout(()=>{
-      console.log(this.table_field,'table_field')
-      console.log(this.ccc,'cccccccccccc')
-    },2000)
+  
   }
 };
 </script>

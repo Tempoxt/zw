@@ -18,7 +18,7 @@
             </el-input>
           </div>
 
-          
+            <!--  -->
             <el-tree
               class="tree"
               :data="data2"
@@ -31,9 +31,10 @@
               :check-on-click-node="true"
               @node-click="handleChangeNode"
               :expand-on-click-node="false"
+              accordion
             >
               <span slot-scope="{ node, data }">
-                <span :class="`icon iconfont ${['icon-zuzhi1','icon-zuzhi2','icon-rizhi'][data.menutype-1]}`"></span>&nbsp;
+                <span :class="`icon iconfont ${['icon-zuzhi1','icon-zuzhi2','icon-yeqian'][data.menutype-1]}`"></span>&nbsp;
                 <span>{{ node.label }}</span>
               </span>
             </el-tree>

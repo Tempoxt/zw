@@ -273,3 +273,25 @@ $space-width: 18px;
   transform: rotate(45deg);
 }
 
+// tree
+
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: #E4EAEC;
+}
+
+
+
+// 
+.line-box {
+  overflow: hidden;
+  position: relative;
+  &::after {
+    content:"";
+    width: 0px;
+    height: 94%;
+    border-right: 1px dashed #e8e8e8;
+    position: absolute;
+    left: 50%;
+    top: 0%;
+  }
+}

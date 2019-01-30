@@ -18,6 +18,9 @@ export default {
 <style lang="scss" scoped>
 .scrollbar {
     overflow-x: hidden;
+    /deep/ .scrollbar-wrapper {
+        overflow-x: hidden;
+    }
 }
 </style>
 

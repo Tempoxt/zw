@@ -24,12 +24,22 @@ export default {
     tableColumn,
     eachTableColumn
   },
+  watch:{
+    table_config(){
+      this.table_form.pagesize = this.table_config.rowNum
+      if(this.table_config.sortName){
+        this.table_form.sortname = this.table_config.sortName
+      }
+      this.table_form.sorttype = this.table_config.sortOrder
+    }
+  },
   data() {
     return {
       headerCellStyle:{background:'#F5FAFB',color:'#37474F',height:'50px'},
       table_field: [],
       table_actions: [],
       table_data: [],
+      table_config:{},
       table_loading: true,
       table_selectedRows: [],
       table_selectedRowsInfo: [],

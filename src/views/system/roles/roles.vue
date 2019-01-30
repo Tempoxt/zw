@@ -15,6 +15,7 @@
                 :default-checked-keys="roles_menu_checked"
                 @check="treeNodeCheck"
                 :highlight-current="true"
+                accordion
                 :props="defaultProps">
                 </el-tree>
             </div>

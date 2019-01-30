@@ -70,6 +70,7 @@
             :highlight-current="true"
             :check-on-click-node="true"
             @node-click="handleChangeNode"
+            :expand-on-click-node="false"
           >
             <span slot-scope="{ node, data }" class="node-actions">
               <div>
@@ -118,6 +119,7 @@ import member from "./roles/member";
 export default {
   watch: {
     filterText(val) {
+      console.log(val,'val')
       this.$refs.tree2.filter(val);
     }
   },
@@ -134,7 +136,8 @@ export default {
   methods: {
     filterNode(value, data) {
       if (!value) return true;
-      return data.name.indexOf(value) !== -1;
+      
+      return (data.groupname?data.groupname:data.name)['indexOf'](value) !== -1;
     },
     handleChangeNode(data) {
       if (data.roleid) {

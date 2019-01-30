@@ -6,7 +6,7 @@
     @query="querySubmit"
     
     >
-         <el-dialog
+    <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
@@ -86,6 +86,7 @@
            :pagesize.sync="table_form.pagesize"
            :currentpage.sync="table_form.currentpage"
            @change="fetchTableData"
+           :table_config="table_config"
            />
     </ui-table>
 </template>
@@ -102,7 +103,6 @@ const defaultForm = function(){
 export default {
     mixins: [table_mixin],
     methods:{
-   
         add(){
             this.dialogFormVisible = true
         },
@@ -148,11 +148,13 @@ export default {
         }
     },
     async created() {
-        const { field, action } = await api_common.menuInit(
+        const { field, action,table } = await api_common.menuInit(
             "actionsheet",
         );
         this.table_field = field;
         this.table_actions = action;
+        this.table_config = table
+
         this.fetchTableData()
     }
 }

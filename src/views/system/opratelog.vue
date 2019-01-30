@@ -21,6 +21,7 @@
       :header-cell-style="headerCellStyle"
       :height="table_height"
       @header-dragend="table_dragend"
+      @sort-change="table_sort_change"
     >
     <el-table-column type="index" :index="indexMethod" />
       <el-table-column
@@ -49,6 +50,7 @@
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
         @change="fetchTableData"
+        :table_config="table_config"
     />
   </ui-table>
 </template>
@@ -83,9 +85,10 @@ export default {
     },
   },
   async created() {
-    const { field, action } = await api_common.menuInit("log/operatelog");
+    const { field, action,table } = await api_common.menuInit("log/operatelog");
     this.table_field = field;
     this.table_actions = action;
+    this.table_config = table
     this.fetchTableData();
   }
 };

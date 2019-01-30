@@ -70,11 +70,12 @@
                 </template>
                 </el-table-column>
             </el-table>
-           <table-pagination 
+          <table-pagination 
            :total="table_form.total" 
            :pagesize.sync="table_form.pagesize"
            :currentpage.sync="table_form.currentpage"
            @change="fetchTableData"
+           :table_config="table_config"
            />
     </ui-table>
 </template>
@@ -140,18 +141,19 @@ export default {
     },
     data(){
         return {
-           
+            table_height:window.innerHeight-300,
             form:defaultForm(),
             defaultForm,
             api_resource
         }
     },
     async created() {
-        const { field, action } = await api_common.menuInit(
+        const { field, action,table} = await api_common.menuInit(
             "roles/member",
         );
         this.table_field = field;
         this.table_actions = action;
+        this.table_config = table;
         this.fetchTableData()
     }
 }
