@@ -36,10 +36,11 @@ export function resource (url) {
     update (pk, data) {
       return request.put(`/${url}/` + pk, data)
     },
-    remove (ids) {
+    remove (ids,parmas) {
       return request.delete(`/${url}/bluk`, {
         params: {
-          ids
+          ids,
+          ...parmas
         }
       })
     },

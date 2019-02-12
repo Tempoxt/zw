@@ -101,7 +101,20 @@ export default {
     },
     mixins: [table_mixin],
     methods:{
-   
+         async delete() {
+        let rows = this.table_selectedRows.map(row=>row.id)
+        this.$confirm('此操作将删除选中行, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        })
+            .then(() => {
+            return this.api_resource.remove(rows.join(','),{roleid:this.roleid})
+            })
+            .then(() => {
+            this.fetchTableData()
+            })
+        },
         add(){
             this.dialogFormVisible = true
         },
