@@ -46,6 +46,12 @@ service.interceptors.response.use(response => {
         window.location.href = '/account/login'
         return Promise.reject(response)
     }
+    if(response.config.method==='put' && response.status===200){
+        Message({
+            type: 'success',
+            message: '修改成功'
+        })
+    }
     return data
 }, error => {
     Message({

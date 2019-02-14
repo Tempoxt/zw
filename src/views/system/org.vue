@@ -66,7 +66,7 @@
             </template>
             <template v-if="currentType===3">
               <el-tab-pane :label="'部门信息'" name="c1" lazy  >
-                  <org-info-t1 :currentMenuid="currentMenuid" url="org/department" initurl="org/department"></org-info-t1>
+                  <org-info-t3 :currentMenuid="currentMenuid" url="org/department" initurl="org/department"></org-info-t3>
               </el-tab-pane>
         
               <el-tab-pane label="下级部门" name="c2" lazy >
@@ -94,6 +94,7 @@ import userTable from './user/userTable'
 import orgInfo from './org/orgInfo'
 import orgInfoT1 from './org/orgInfoT1'
 import orgInfoT2 from './org/orgInfoT2'
+import orgInfoT3 from './org/orgInfoT3'
 import orgList from './org/orgList'
 import orgListT2 from './org/orgListT2'
 import orgJob from './org/orgJob'
@@ -105,6 +106,7 @@ export default {
       orgTree,
       orgInfoT1,
       orgInfoT2,
+      orgInfoT3,
       orgList,
       orgListT2,
       orgJob

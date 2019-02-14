@@ -28,29 +28,40 @@
     </el-table>
 
 
+     
+
      <el-dialog
       :title="'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
     >
-      <div>
+      <div v-if="dialogFormVisible">
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
-          <el-row :gutter="20">
-              <el-col :span="12">
-                <form-render :type="`input`" :field="{name:'简称'}" v-model="form.companyAbbreviation"/>
-              </el-col>
-              <el-col :span="12">
-                <form-render :type="`input`" :field="{name:'全称'}" v-model="form.name"/>
-              </el-col>
-              <el-col :span="12">
-                <form-render :type="`input`" :field="{name:'公司网站'}" v-model="form.web"/>
-              </el-col>
-              <!-- <el-col :span="12" v-for="field in table_data.filter(item=>item.iseditable)" :key="field.id">
-                <form-render :type="`input`" :field="{name:field.showname}" v-model="form[field.name]"/>
-              </el-col> -->
-            </el-row>
-
+              <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
+                <el-col :span="24">
+                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.id"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render
+                    :type="`radio`"
+                    :field="{name:'状态',options:[{'label':'启用','value':1},{'label':'禁用','value':0}]}"
+                    v-model="form.estate"
+                  />
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
+                </el-col>
+              </el-row>
         </el-form>
       </div>
 
@@ -59,6 +70,7 @@
         <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
       </div>
     </el-dialog>
+
 
 
 

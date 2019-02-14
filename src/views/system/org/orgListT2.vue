@@ -52,16 +52,26 @@
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
               <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.name"/>
+                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.id"/>
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`org`" :field="{name:'部⻔名称'}" v-model="form.parent_org"/>
+                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'分部⽹站'}" v-model="form.web"/>
+                  <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render
+                    :type="`radio`"
+                    :field="{name:'状态',options:[{'label':'启用','value':1},{'label':'禁用','value':0}]}"
+                    v-model="form.estate"
+                  />
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
                 </el-col>
               </el-row>
         </el-form>
