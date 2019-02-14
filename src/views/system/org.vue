@@ -41,6 +41,8 @@
 
     </el-col>
     <el-col :span="19">
+
+
        <div v-if="tabActive===1">
           <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
 
@@ -162,6 +164,9 @@ export default {
       filterNode(value, data) {
         if (!value) return true;
         return data.name && data.name.indexOf(value) !== -1;
+      },
+      aaa(){
+        alert(123)
       },
       handleClick(tab, event){
        

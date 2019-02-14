@@ -175,10 +175,11 @@ export default {
   methods: {
     async fetchTableData() {
      this.table_loading = true;
-    //  const {rows,total} =  await this.api_resource.find(this.currentMenuid,this.table_form);
+    //  const {rows,total} =  await api_common.resource(this.url).find(this.currentMenuid,this.table_form);
     //  this.table_data =rows
     //  this.table_form.total = total
-    this.table_data =  await this.api_resource.find(this.currentMenuid,this.table_form);
+    
+    this.table_data =  await api_common.resource(this.url).find(this.currentMenuid,this.table_form);
    
      setTimeout(() => {
         this.table_loading = false;
@@ -187,9 +188,9 @@ export default {
     async handleFormSubmit(){
       let form = Object.assign({},this.form)
         if(this.isInsert){
-            await this.api_resource.create(form)
+            await api_common.resource(this.url).create(form)
         }else{
-            await this.api_resource.update(form.id,form)
+            await api_common.resource(this.url).update(form.id,form)
         }
         this.dialogFormVisible = false
         this.fetchTableData()
