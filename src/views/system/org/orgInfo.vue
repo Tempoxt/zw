@@ -14,51 +14,18 @@
       :table_form.sync="table_form"
     ></table-header>
 
-    <el-table
-    :data="[{a:'简称',b:'哈哈哈'}]"
-     border
-    :header-cell-style="headerCellStyle"> 
-        <el-table-column
-            prop="a"
-            label="aaaa">
-        </el-table-column>
-        <el-table-column
-            prop="b">
-        </el-table-column>
-    </el-table>
      <el-table
-    :data="[{a:'简称',b:'哈哈哈'}]"
+    :data="[{a:'简称',b:'哈哈哈'},{a:'简称',b:'哈哈哈'}]"
      border
     :header-cell-style="headerCellStyle"> 
         <el-table-column
             prop="a"
-            label="aaaa">
+            label="基本信息">
         </el-table-column>
         <el-table-column
             prop="b">
         </el-table-column>
     </el-table>
-    <!-- <el-table
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-    > 
-    <el-table-column type="index" :index="indexMethod" />
-    <each-table-column :table_field="table_field"/>
-    </el-table>
-
-     <table-pagination 
-        :total="table_form.total" 
-        :pagesize.sync="table_form.pagesize"
-        :currentpage.sync="table_form.currentpage"
-        @change="fetchTableData"
-        ref="table_pagination"
-        /> -->
   </ui-table>
 </template>
 <script>
@@ -122,6 +89,7 @@ export default {
     const { field, action } = await api_common.menuInit("user");
     this.table_field = field;
     this.table_actions = action;
+    
   }
 };
 </script>

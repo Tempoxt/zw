@@ -6,7 +6,7 @@
       v-bind="$parent.$attrs"
       v-on="$parent.$listeners"
       format="yyyy-MM-dd"
-      value-format="yyyy-MM-dd hh:mm:ss"
+      value-format="yyyy-MM-dd"
       placeholder="选择日期">
     </el-date-picker>
   </el-form-item>

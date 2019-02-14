@@ -1,6 +1,6 @@
 <template>
-  <el-form-item :label="field.name">
-    <el-input v-model="data" v-bind="$parent.$attrs" v-on="$parent.$listeners"></el-input>
+  <el-form-item :label="field.name" >
+    <el-input v-model="data" v-bind="$parent.$attrs" v-on="$parent.$listeners" :placeholder="placeholder"></el-input>
   </el-form-item>
 </template>
 <script>
@@ -8,7 +8,10 @@ export default {
   name: "form-input",
   props: {
     field: Object,
-    value: {}
+    value: {},
+    placeholder:{
+      default:'请输入'
+    }
   },
   data() {
     return {

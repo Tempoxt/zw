@@ -279,7 +279,9 @@ $space-width: 18px;
   background-color: #E4EAEC;
 }
 
-
+.el-tree-node__content {
+  height: 36px;
+}
 
 // 
 .line-box {

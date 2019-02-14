@@ -4,6 +4,7 @@ const user = {
     namespaced: true,
     state: {
         userInfo: null,
+        token:auth.getToken()
     },
     mutations: {
         login(state, token) {

@@ -28,6 +28,7 @@ sync(store, router)
 Vue.use(iView)
 Vue.directive("elDragDialog",elDragDialog)
 Vue.config.productionTip = false
+Vue.prototype.$bus = new Vue()
 Vue.mixin({
   methods: {
     $t (s) {

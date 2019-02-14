@@ -99,7 +99,6 @@ export default {
       return data.name.indexOf(value) !== -1;
     },
     handleChangeNode(data) {
-      console.log(data,'data')
       if (data.subs?data.subs.length===0:true && (data.menutype === 2 || data.menutype === 3)) {
         this.currentMenuid = data.id;
       }else{

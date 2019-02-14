@@ -63,18 +63,19 @@ export default {
       console.log(data);
     },
     nodeSelect(data) {
-      this.data = data.id;
+      console.log(data,'data')
+      this.data = data.orgid;
       this.visible = false;
     },
     findDataName() {
       if (this.data === undefined) {
         return;
       }
-      let id = this.data;
+      let orgid = this.data;
       let info = {};
       (function f(data) {
         data.some(row => {
-          if (row.id == id) {
+          if (row.orgid == orgid) {
             info = row;
             return true;
           }

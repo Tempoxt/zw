@@ -263,10 +263,7 @@ export default {
     };
   },
   async created() {
-    setTimeout(()=>{
-      console.log(this.table_field,'table_field')
-      console.log(this.table_data,'field')
-    },2000)
+  
     
   }
 };
