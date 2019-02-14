@@ -81,7 +81,7 @@
 import * as api_common from "@/api/common";
 import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("org/subcompany/department");
+const api_resource = api_common.resource("org/departments");
 const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
 
 
@@ -140,7 +140,7 @@ export default {
     }
   },
   async created() {
-    const { field, action,config } = await api_common.menuInit("org/subcompany/department");
+    const { field, action,config } = await api_common.menuInit("org/departments");
     this.table_field = field;
     this.table_actions = action;
     // this.table_config = config

@@ -66,7 +66,7 @@
             </template>
             <template v-if="currentType===3">
               <el-tab-pane :label="'部门信息'" name="c1" lazy  >
-                  <org-info-t1 :currentMenuid="currentMenuid" url="org/departments" initurl="org/department"></org-info-t1>
+                  <org-info-t1 :currentMenuid="currentMenuid" url="org/department" initurl="org/department"></org-info-t1>
               </el-tab-pane>
         
               <el-tab-pane label="下级部门" name="c2" lazy >
