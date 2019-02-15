@@ -179,7 +179,10 @@ export default {
     //  this.table_data =rows
     //  this.table_form.total = total
     
-    this.table_data =  await api_common.resource(this.url).find(this.currentMenuid,this.table_form);
+    this.table_data =  await api_common.resource(this.url).get({
+      id:this.currentMenuid,
+      ...this.table_form
+    });
    
      setTimeout(() => {
         this.table_loading = false;
@@ -200,9 +203,9 @@ export default {
     },
     async edit(){
       let row = this.table_selectedRows[0]
-      // this.form = await api_resource.find(row.id)
+      this.form = await this.api_resource.find(row.id)
 
-      this.form = Object.assign({},row)
+      // this.form = Object.assign({},row)
       
        this.dialogFormVisible = true
     }

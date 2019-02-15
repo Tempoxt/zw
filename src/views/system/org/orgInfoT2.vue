@@ -22,8 +22,13 @@
             prop="showname"
             label="基本信息">
         </el-table-column>
+        
         <el-table-column
             prop="b">
+            <template slot-scope="scope">
+              <span v-if="scope.row.name === 'subCompanyLogo'"><img :src="scope.row.b" width="50"/></span>
+              <span v-else>{{scope.row.b}}</span>
+        </template>
         </el-table-column>
     </el-table>
 
@@ -231,11 +236,17 @@ export default {
 
   },
   methods: {
+    log(scope){
+      console.log(scope,'scope')
+    },
     filterNode(){},
     handleChangeNode(){},
     async fetchTableData() {
      this.table_loading = true;
-     const data =  await api_resource.find(this.currentMenuid,this.table_form);
+     const data =  await this.api_resource.get({
+       id:this.currentMenuid,
+       ...this.table_form
+     });
      this._table_data = data
      if(!this.table_data.length){
        await this.initTable()
@@ -243,8 +254,7 @@ export default {
       this.table_data.forEach(item=>{
           this.$set(item,'b',data[item.name])
       })
-      console.log(this.table_data,'this.table_data')
-      
+    
     },
     customEdit(){
       this.dialogFormVisible = true

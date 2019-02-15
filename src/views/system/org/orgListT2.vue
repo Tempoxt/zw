@@ -124,7 +124,10 @@ export default {
     //  const {rows,total} =  await api_resource.find(this.currentMenuid,this.table_form);
     //  this.table_data =rows
     //  this.table_form.total = total
-    this.table_data =  await api_resource.find(this.currentMenuid,this.table_form);
+    this.table_data =  await this.api_resource.get({
+      id:this.currentMenuid,
+      ...this.table_form
+    });
    
      setTimeout(() => {
         this.table_loading = false;

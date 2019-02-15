@@ -116,7 +116,9 @@ export default {
     watch:{
       tabActive(val){
         if(val===2){
-          this.$refs.tree.fetchData()
+         this.$nextTick(()=>{
+            this.$refs.tree.fetchData()
+         })
         }
       },
       filterText(val) {
