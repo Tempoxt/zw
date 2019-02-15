@@ -83,6 +83,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.fetchTableData()
+        this.$bus.$emit('updateData')
     }
   },
   async created() {

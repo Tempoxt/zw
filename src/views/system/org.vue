@@ -20,7 +20,7 @@
             :data="data2"
             :props="{children: 'subs', label: 'name' }"
             default-expand-all
-            node-key="id"
+            node-key="orgid"
             :filter-node-method="filterNode"
             ref="tree2"
             :highlight-current="true"
@@ -151,10 +151,12 @@ export default {
         }
     },
     methods:{
-      handleChangeNode(val){
-        
+      handleChangeNode(val,node){
+          this.currentNode = node
           this.currentMenuid = val.id
           this.currentType = val.org_type
+          this.orgid = val.orgid
+         
 
           if(this.currentType===1){
             this.view_activeName = 'a1'
@@ -181,15 +183,22 @@ export default {
     async created(){
         this.data2 = await api_common.getOrg();
         let defaultMenuid = this.data2[0].id
-        console.log(defaultMenuid,'defaultMenuid')
+        this.$nextTick(()=>{
+          this.$refs.tree2.setCurrentKey(this.data2[0].orgid)
+        })
+        let that = this
        this.$nextTick(()=>{
-          // this.$refs.tree2.setCurrentNode(defaultMenuid);
+   
           this.currentMenuid = defaultMenuid;
           this.handleChangeNode({id:defaultMenuid,org_type:1})
        })
         
         this.$bus.$on('updateData', async target => {  
-           this.data2 =  await api_common.getOrg();
+          this.data2 =  await api_common.getOrg();
+          this.$nextTick(()=>{
+            that.$refs.tree2.setCurrentKey(that.orgid)
+          })
+           
         });  
     }
 }

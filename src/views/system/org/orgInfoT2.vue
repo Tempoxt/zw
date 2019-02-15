@@ -266,6 +266,7 @@ export default {
       await api_resource.update(form.id,form)
       this.dialogFormVisible = false
       this.fetchTableData()
+      this.$bus.$emit('updateData')
     },
     async initTable(){
       const { field, action } = await api_common.menuInit("org/subcompany");

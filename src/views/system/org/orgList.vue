@@ -197,6 +197,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.fetchTableData()
+        this.$bus.$emit('updateData')
     },
     add(){
       this.dialogFormVisible = true

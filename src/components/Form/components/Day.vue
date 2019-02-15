@@ -19,6 +19,18 @@ export default {
     field: Object,
     value: {}
   },
+   watch: {
+    data () {
+      this.$emit('input', this.data)
+    },
+    value: {
+      immediate: true,
+      handler (val) {
+        this.data = this.value
+    
+      }
+    }
+  },
   data() {
     return {
       data: ""
