@@ -139,6 +139,11 @@ export default {
     add(){
       this.dialogFormVisible = true
     },
+    async edit(){
+      let row = this.table_selectedRows[0]
+      this.form = await api_common.resource(this.url).find(row.id)
+      this.dialogFormVisible = true
+    },
     async handleFormSubmit(){
       let form = Object.assign({},this.form)
       delete form.parent;
