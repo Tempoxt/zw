@@ -54,7 +54,7 @@
                     <org-info-t1 :currentMenuid="currentMenuid" ></org-info-t1>
                 </el-tab-pane>
                <el-tab-pane label="下级分部" name="a2" lazy >
-                  <org-list  :currentMenuid="currentMenuid" url="org/headcompanys"/>
+                  <org-list  :currentMenuid="currentMenuid" url="org/headcompanys"  :orgid="orgid" :org_type="currentType"/>
                 </el-tab-pane>
             </template>
 
@@ -63,10 +63,10 @@
                   <org-info-t2 :currentMenuid="currentMenuid" ></org-info-t2>
               </el-tab-pane>
               <el-tab-pane label="下级分部" name="b2" lazy >
-                <org-list  :currentMenuid="currentMenuid" url="org/subcompanys"/>
+                <org-list  :currentMenuid="currentMenuid" url="org/subcompanys"  :orgid="orgid" :org_type="currentType"/>
               </el-tab-pane>
               <el-tab-pane label="下级部门" name="b3" lazy >
-                <org-list-t2  :currentMenuid="currentMenuid"/>
+                <org-list-t2  :currentMenuid="currentMenuid" :orgid="orgid"/>
               </el-tab-pane>
             </template>
             <template v-if="currentType===3">
@@ -75,7 +75,7 @@
               </el-tab-pane>
         
               <el-tab-pane label="下级部门" name="c2" lazy >
-                <org-list-t2  :currentMenuid="currentMenuid" url="org/subdepartments"/>
+                <org-list-t2  :currentMenuid="currentMenuid" :orgid="orgid" url="org/subdepartments"/>
               </el-tab-pane>
               
               <!-- <el-tab-pane :label="'人力资源'" name="c4" lazy  >
@@ -134,6 +134,7 @@ export default {
             data2:[],
             currentMenuid:0,
             currentType:0,
+            orgid:'',
             tabs:[
               {
                 showname:'组织架构管理',

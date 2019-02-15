@@ -58,7 +58,7 @@
                   <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org"/>
+                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
@@ -100,7 +100,8 @@ export default {
         currentMenuid:Number,
         url:{
           default:'org/departments'
-        }
+        },
+        orgid:{}
     },
     mixins: [table_mixin],
   data() {
@@ -137,7 +138,10 @@ export default {
       }, 300);
     },
     add(){
+      this.form.parent_org = this.orgid
+
       this.dialogFormVisible = true
+      
     },
     async edit(){
       let row = this.table_selectedRows[0]

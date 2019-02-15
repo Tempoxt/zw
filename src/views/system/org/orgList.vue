@@ -70,9 +70,9 @@
                         <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部简称'}" v-model="form.subCompanyAbbreviation"/>
                       </el-col>
-                      <!-- <el-col :span="24">
+                      <el-col :span="24" v-if="org_type!==1">
                         <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org"/>
-                      </el-col> -->
+                      </el-col>
                       <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部⽹站'}" v-model="form.web"/>
                       </el-col>
@@ -153,7 +153,9 @@ const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
 export default {
     props:{
         currentMenuid:Number,
-        url:''
+        url:'',
+        org_type:{},
+        orgid:{}
     },
     mixins: [table_mixin],
   data() {
@@ -204,6 +206,8 @@ export default {
     },
     add(){
       this.dialogFormVisible = true
+    
+      this.form.parent_org = this.orgid
       
     },
     async edit(){
