@@ -119,10 +119,7 @@ export default {
     handleChangeNode(){},
     async fetchTableData() {
      this.table_loading = true;
-     const data =  await this.api_resource.get({
-       id:this.currentMenuid,
-       ...this.table_form
-     });
+     const data =  await this.api_resource.find(this.currentMenuid);
      this._table_data = data
      if(!this.table_data.length){
        await this.initTable()

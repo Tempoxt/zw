@@ -97,7 +97,10 @@ const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
 
 export default {
     props:{
-        currentMenuid:Number
+        currentMenuid:Number,
+        url:{
+          default:'org/departments'
+        }
     },
     mixins: [table_mixin],
   data() {
@@ -124,7 +127,7 @@ export default {
     //  const {rows,total} =  await api_resource.find(this.currentMenuid,this.table_form);
     //  this.table_data =rows
     //  this.table_form.total = total
-    this.table_data =  await this.api_resource.get({
+    this.table_data =  await api_common.resource(this.url).get({
       id:this.currentMenuid,
       ...this.table_form
     });
@@ -144,9 +147,9 @@ export default {
       form.user_role = form.role 
       delete form.role;
         if(this.isInsert){
-            await api_resource.create(form)
+            await api_common.resource(this.url).create(form)
         }else{
-            await api_resource.update(form.id,form)
+            await api_common.resource(this.url).update(form.id,form)
         }
         this.dialogFormVisible = false
         this.fetchTableData()

@@ -29,8 +29,11 @@
             :expand-on-click-node="false"
           >
             <span slot-scope="{ node, data }">
-              <span v-if="node.isLeaf" class="icon iconfont icon-zuzhi2"></span>
-              <span v-else class="icon iconfont icon-zuzhi1"></span>&nbsp;
+
+              <span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
+              <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+              <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
+              &nbsp;
               <span>{{ node.label }}</span>
             </span>
           </el-tree>
@@ -72,7 +75,7 @@
               </el-tab-pane>
         
               <el-tab-pane label="下级部门" name="c2" lazy >
-                <org-list-t2  :currentMenuid="currentMenuid"/>
+                <org-list-t2  :currentMenuid="currentMenuid" url="org/subdepartments"/>
               </el-tab-pane>
               
               <!-- <el-tab-pane :label="'人力资源'" name="c4" lazy  >
