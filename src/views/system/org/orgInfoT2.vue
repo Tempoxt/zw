@@ -73,6 +73,9 @@
                       <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部名称'}" v-model="form.name"/>
                       </el-col>
+                       <el-col :span="24">
+                        <form-render :type="`input`" :field="{name:'分部简称'}" v-model="form.subCompanyAbbreviation"/>
+                      </el-col>
                       <el-col :span="24">
                         <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org"/>
                       </el-col>

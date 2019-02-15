@@ -67,9 +67,12 @@
                       <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部名称'}" v-model="form.name"/>
                       </el-col>
-                      <el-col :span="24">
-                        <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org"/>
+                        <el-col :span="24">
+                        <form-render :type="`input`" :field="{name:'分部简称'}" v-model="form.subCompanyAbbreviation"/>
                       </el-col>
+                      <!-- <el-col :span="24">
+                        <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org"/>
+                      </el-col> -->
                       <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部⽹站'}" v-model="form.web"/>
                       </el-col>
@@ -201,11 +204,12 @@ export default {
     },
     add(){
       this.dialogFormVisible = true
+      
     },
     async edit(){
       let row = this.table_selectedRows[0]
       this.form = await this.api_resource.find(row.id)
-
+  
       // this.form = Object.assign({},row)
       
        this.dialogFormVisible = true

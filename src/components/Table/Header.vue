@@ -77,7 +77,7 @@
                  <el-checkbox :label="column.id" >{{column.showname}}</el-checkbox>
               </div>
           </el-checkbox-group>
-          <el-button icon="icon iconfont icon-lie" size="small"  slot="reference"></el-button>
+          <el-button icon="icon iconfont icon-lie" size="small"  slot="reference" v-if="table_column.length"></el-button>
         </el-popover>
 
 
