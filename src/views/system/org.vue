@@ -184,14 +184,15 @@ export default {
     async created(){
         this.data2 = await api_common.getOrg();
         let defaultMenuid = this.data2[0].id
+        
         this.$nextTick(()=>{
           this.$refs.tree2.setCurrentKey(this.data2[0].orgid)
         })
         let that = this
        this.$nextTick(()=>{
-   
+        
           this.currentMenuid = defaultMenuid;
-          this.handleChangeNode({id:defaultMenuid,org_type:1})
+          this.handleChangeNode({id:defaultMenuid,org_type:1,orgid:this.data2[0].orgid})
        })
         
         this.$bus.$on('updateData', async target => {  

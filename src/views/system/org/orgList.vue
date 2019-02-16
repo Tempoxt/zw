@@ -175,6 +175,7 @@ export default {
       },
       immediate:true
     },
+   
     
   },
   methods: {
@@ -206,7 +207,6 @@ export default {
     },
     add(){
       this.dialogFormVisible = true
-    
       this.form.parent_org = this.orgid
       
     },
