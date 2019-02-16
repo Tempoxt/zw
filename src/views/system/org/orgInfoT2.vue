@@ -10,8 +10,9 @@
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
       @action="handleAction"
-      :table_column="table_field.slice(1,table_field.length)"
+      :table_column="table_field"
       :table_form.sync="table_form"
+      :showColumnfilter="false"
     ></table-header>
 <el-scrollbar
   ref="scrollContainer"
@@ -70,12 +71,12 @@
       v-el-drag-dialog
     >
       <div v-if="dialogFormVisible">
-        <el-form ref="form" :model="form" label-width="90px" label-position="left">
+        <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="rules">
            <el-tabs v-model="activeName" class="tabs">
               <el-tab-pane label="基本信息" name="first">
                   <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
                       <el-col :span="24">
-                        <form-render :type="`input`" :field="{name:'分部名称'}" v-model="form.name"/>
+                        <form-render :type="`input`" :field="{name:'分部名称'}" v-model="form.name" prop="name" />
                       </el-col>
                        <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部简称'}" v-model="form.subCompanyAbbreviation"/>
@@ -231,6 +232,11 @@ export default {
       defaultForm,
       activeName:'first',
       height:window.innerHeight-230+'px',
+      rules:{
+        name: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+      }
     };
   },
   watch:{

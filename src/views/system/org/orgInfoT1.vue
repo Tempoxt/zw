@@ -10,8 +10,9 @@
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
       @action="handleAction"
-      :table_column="table_field.slice(1,table_field.length)"
+      :table_column="table_field"
       :table_form.sync="table_form"
+      :showColumnfilter="false"
     ></table-header>
 
      <el-table

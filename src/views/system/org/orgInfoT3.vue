@@ -10,8 +10,9 @@
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
       @action="handleAction"
-      :table_column="table_field.slice(1,table_field.length)"
+      :table_column="table_field"
       :table_form.sync="table_form"
+      :showColumnfilter="false"
     ></table-header>
 
      <el-table
@@ -38,12 +39,12 @@
     >
       <div v-if="dialogFormVisible">
         <el-form ref="form" :model="form" label-width="90px" label-position="left">
-              <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
+              <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;" :rules="rules">
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.id"/>
+                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.id" prop="name"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
+                  <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name" prop="name"/>
                 </el-col>
                 <!-- <el-col :span="24">
                   <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org"/>
@@ -102,7 +103,12 @@ export default {
       api_resource:api_common.resource(this.url),
       orgCategory:[],
       defaultForm,
-      activeName:''
+      activeName:'',
+      rules:{
+        name: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+      }
     };
   },
   watch:{

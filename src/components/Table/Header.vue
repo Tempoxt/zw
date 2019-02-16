@@ -77,7 +77,7 @@
                  <el-checkbox :label="column.id" >{{column.showname}}</el-checkbox>
               </div>
           </el-checkbox-group>
-          <el-button icon="icon iconfont icon-lie" size="small"  slot="reference" v-if="table_column.length"></el-button>
+          <el-button icon="icon iconfont icon-lie" size="small"  slot="reference"   :disabled="!(showColumnfilter && table_column && table_column.length)"></el-button>
         </el-popover>
 
 
@@ -94,7 +94,10 @@ export default {
     table_actions: Array,
     table_selectedRows: Array,
     table_column: Array,
-    table_form:Object
+    table_form:Object,
+    showColumnfilter:{
+      default:true
+    }
   },
   computed: {
     isDisabled() {
@@ -149,7 +152,9 @@ export default {
     }
   },
   created(){
-  
+   setTimeout(()=>{
+      console.log(this.table_column,'table_column')
+   },2000)
   }
 };
 </script>

@@ -49,13 +49,13 @@
       v-el-drag-dialog
     >
       <div v-if="dialogFormVisible">
-        <el-form ref="form" :model="form" label-width="90px" label-position="left">
+        <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="rules">
               <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.id"/>
+                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.deptcode" prop="name"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
+                  <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"  prop="name"/>
                 </el-col>
                 <el-col :span="24" v-if="url!=='org/departments'">
                   <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
@@ -111,7 +111,12 @@ export default {
       api_resource,
       orgCategory:[],
       defaultForm,
-      activeName:''
+      activeName:'',
+      rules:{
+        name: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+      }
     };
   },
   watch:{
