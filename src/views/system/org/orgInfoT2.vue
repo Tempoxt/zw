@@ -31,8 +31,8 @@
         <el-table-column
             prop="_name">
             <template slot-scope="scope">
-              <span v-if="scope.row.name === 'subCompanyLogo'"><img :src="scope.row.b" width="50"/></span>
-              <span v-else>{{scope.row.b}}</span>
+              <span v-if="scope.row.name === 'subCompanyLogo'"><img :src="scope.row._name" width="50"/></span>
+              <span v-else>{{scope.row._name}}</span>
         </template>
         </el-table-column>
     </el-table>
@@ -71,7 +71,7 @@
       v-el-drag-dialog
     >
       <div v-if="dialogFormVisible">
-        <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="rules">
+        <el-form ref="form" :model="form" label-width="90px"  :rules="rules">
            <el-tabs v-model="activeName" class="tabs">
               <el-tab-pane label="基本信息" name="first">
                   <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">

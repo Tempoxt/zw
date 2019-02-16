@@ -36,7 +36,7 @@
       v-el-drag-dialog
     >
       <div>
-        <el-form ref="form" :model="form" label-width="90px" label-position="left">
+        <el-form ref="form" :model="form" label-width="90px" >
           <el-row :gutter="20">
               <el-col :span="12">
                 <form-render :type="`input`" :field="{name:'简称'}" v-model="form.companyAbbreviation"/>

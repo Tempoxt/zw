@@ -49,7 +49,7 @@
       v-el-drag-dialog
     >
       <div v-if="dialogFormVisible">
-        <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="rules">
+        <el-form ref="form" :model="form" label-width="90px"  :rules="rules">
               <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.deptcode" prop="name"/>

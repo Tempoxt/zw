@@ -60,7 +60,7 @@
       v-el-drag-dialog
     >
       <div v-if="dialogFormVisible">
-        <el-form ref="form" :model="form" label-width="90px" label-position="left" :rules="rules">
+        <el-form ref="form" :model="form" label-width="90px"  :rules="rules">
            <el-tabs v-model="activeName" class="tabs">
               <el-tab-pane label="基本信息" name="first">
                   <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
