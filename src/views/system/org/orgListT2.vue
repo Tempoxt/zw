@@ -57,7 +57,7 @@
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
                 </el-col>
-                <el-col :span="24">
+                <el-col :span="24" v-if="url!=='org/departments'">
                   <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
                 </el-col>
                 <el-col :span="24">

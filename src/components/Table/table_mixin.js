@@ -239,7 +239,6 @@ export default {
         data.forEach((item)=>{
           delete item.subs
         })
-        
       }else{
         data = this.table_data
       }
@@ -269,9 +268,12 @@ export default {
           // window.print()
         }else{
           const excel = await import('@/vendor/Export2Excel')
+          // console.log(data,'data')
+          // console.log(header,'header')
+          // console.log(formatJson(header.map(field=>field.name),data),'formatJson')
           excel.export_json_to_excel({
               header:  header.map(field=>field.showname),
-              data:formatJson(header.map(field=>field.name),data),
+              data:this._export_kv?[data.map(item=>item._name)]:formatJson(header.map(field=>field.name),data),
               filename: (this.$route.meta && this.$route.meta.title)||'导出文件',
               bookType: type
           })

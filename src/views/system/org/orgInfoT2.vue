@@ -13,7 +13,11 @@
       :table_column="table_field.slice(1,table_field.length)"
       :table_form.sync="table_form"
     ></table-header>
-
+<el-scrollbar
+  ref="scrollContainer"
+  class="scroll-container"
+  :style="`height:${height}`"
+  >
      <el-table
     :data="table_data.filter(data=>['subCompanyAbbreviation','name','subCompanyLogo','web','number'].includes(data.name))"
      border
@@ -24,7 +28,7 @@
         </el-table-column>
         
         <el-table-column
-            prop="b">
+            prop="_name">
             <template slot-scope="scope">
               <span v-if="scope.row.name === 'subCompanyLogo'"><img :src="scope.row.b" width="50"/></span>
               <span v-else>{{scope.row.b}}</span>
@@ -41,7 +45,7 @@
             label="注册信息">
         </el-table-column>
         <el-table-column
-            prop="b">
+            prop="_name">
         </el-table-column>
     </el-table>
 
@@ -54,10 +58,10 @@
             label="发票信息">
         </el-table-column>
         <el-table-column
-            prop="b">
+            prop="_name">
         </el-table-column>
     </el-table>
-
+</el-scrollbar>
 
 <el-dialog
       :title="'编辑'"
@@ -76,9 +80,9 @@
                        <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部简称'}" v-model="form.subCompanyAbbreviation"/>
                       </el-col>
-                      <el-col :span="24">
+                      <!-- <el-col :span="24">
                         <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org"/>
-                      </el-col>
+                      </el-col> -->
                       <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部⽹站'}" v-model="form.web"/>
                       </el-col>
@@ -226,6 +230,7 @@ export default {
       orgCategory:[],
       defaultForm,
       activeName:'first',
+      height:window.innerHeight-230+'px',
     };
   },
   watch:{
@@ -252,7 +257,7 @@ export default {
        await this.initTable()
      }
       this.table_data.forEach(item=>{
-          this.$set(item,'b',data[item.name])
+          this.$set(item,'_name',data[item.name])
       })
     
     },
@@ -275,6 +280,10 @@ export default {
       const { field, action } = await api_common.menuInit("org/subcompany");
       this.table_data = field
       this.table_actions = action;
+
+      this.table_field = field
+      this._export_kv = true
+
       if(this.table_actions.find(a=>a.code === 'edit')){
         this.table_actions.find(a=>a.code === 'edit').code = 'customEdit'
       }
@@ -283,3 +292,10 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.scroll-container {
+  /deep/ .el-scrollbar__wrap {
+        overflow-x: hidden;
+  }
+}
+</style>

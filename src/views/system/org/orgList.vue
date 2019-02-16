@@ -71,7 +71,7 @@
                         <form-render :type="`input`" :field="{name:'分部简称'}" v-model="form.subCompanyAbbreviation"/>
                       </el-col>
                       <el-col :span="24" v-if="org_type!==1">
-                        <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org"/>
+                        <form-render :type="`org`" :field="{name:'上级分部'}" v-model="form.parent_org" :disabled="true"/>
                       </el-col>
                       <el-col :span="24">
                         <form-render :type="`input`" :field="{name:'分部⽹站'}" v-model="form.web"/>

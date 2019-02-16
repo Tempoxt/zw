@@ -48,7 +48,10 @@ export default {
   name: "form-org",
   props: {
     field: Object,
-    value: {}
+    value: {},
+    field_key:{
+      default:'orgid'
+    }
   },
   methods: {
     filterNode(value, data) {
@@ -64,7 +67,7 @@ export default {
     },
     nodeSelect(data) {
       console.log(data,'data')
-      this.data = data.orgid;
+      this.data = data[this.field.field_key || 'orgid'];
       this.visible = false;
     },
     findDataName() {
@@ -73,9 +76,11 @@ export default {
       }
       let orgid = this.data;
       let info = {};
+      let that = this;
       (function f(data) {
         data.some(row => {
-          if (row.orgid == orgid) {
+          
+          if (row[that.field.field_key || 'orgid'] == orgid) {
             info = row;
             return true;
           }
@@ -116,6 +121,7 @@ export default {
     };
   },
   async created() {
+   
     this.data2 = await api_common.getOrg();
     this.data2 = [
       {

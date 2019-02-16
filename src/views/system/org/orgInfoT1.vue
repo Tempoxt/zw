@@ -23,7 +23,7 @@
             label="基本信息">
         </el-table-column>
         <el-table-column
-            prop="b">
+            prop="_name">
         </el-table-column>
     </el-table>
 
@@ -113,8 +113,9 @@ export default {
        await this.initTable()
      }
       this.table_data.forEach(item=>{
-          this.$set(item,'b',data[item.name])
+          this.$set(item,'_name',data[item.name])
       })
+      console.log(this.table_data,'this.table_data')
     },
     customEdit(){
       this.dialogFormVisible = true
@@ -132,6 +133,8 @@ export default {
       const { field, action } = await api_common.menuInit(this.initurl);
       this.table_data = field
       this.table_actions = action;
+      this.table_field = field
+      this._export_kv = true
       if(this.table_actions.find(a=>a.code === 'edit')){
         this.table_actions.find(a=>a.code === 'edit').code = 'customEdit'
       }

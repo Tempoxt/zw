@@ -23,7 +23,7 @@
             label="基本信息">
         </el-table-column>
         <el-table-column
-            prop="b">
+            prop="_name">
         </el-table-column>
     </el-table>
 
@@ -45,9 +45,9 @@
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"/>
                 </el-col>
-                <el-col :span="24">
+                <!-- <el-col :span="24">
                   <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org"/>
-                </el-col>
+                </el-col> -->
                 <el-col :span="24">
                   <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
                 </el-col>
@@ -125,7 +125,7 @@ export default {
        await this.initTable()
      }
       this.table_data.forEach(item=>{
-          this.$set(item,'b',data[item.name])
+          this.$set(item,'_name',data[item.name])
       })
     },
     customEdit(){
@@ -144,6 +144,9 @@ export default {
       const { field, action } = await api_common.menuInit(this.initurl);
       this.table_data = field
       this.table_actions = action;
+
+      this.table_field = field
+      this._export_kv = true
       if(this.table_actions.find(a=>a.code === 'edit')){
         this.table_actions.find(a=>a.code === 'edit').code = 'customEdit'
       }
