@@ -13,6 +13,7 @@
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
+            <el-button icon="el-icon-refresh" circle @click="refresh"></el-button>
           </div>
 
           <el-tree
@@ -178,6 +179,12 @@ export default {
       },
       handleClick(tab, event){
        
+      },
+      async refresh(){
+          this.data2 =  await api_common.getOrg();
+          this.$nextTick(()=>{
+            this.$refs.tree2.setCurrentKey(this.orgid)
+          })
       }
 
     },

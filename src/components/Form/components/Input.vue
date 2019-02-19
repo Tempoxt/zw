@@ -1,6 +1,6 @@
 <template>
   <el-form-item :label="field.name" v-bind="$parent.$attrs">
-    <el-input v-model="data" v-bind="$parent.$attrs" v-on="$parent.$listeners" :placeholder="placeholder"></el-input>
+    <el-input v-model="data" :placeholder="$parent.$attrs.placeholder||'请输入'" v-bind="$parent.$attrs" v-on="$parent.$listeners" ></el-input>
   </el-form-item>
 </template>
 <script>
@@ -37,7 +37,9 @@ export default {
     }
   },
   methods: {},
-  created() {}
+  created() {
+    
+  }
 };
 </script>
 

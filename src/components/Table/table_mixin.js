@@ -133,6 +133,14 @@ export default {
       this.table_form.query = query
       this.fetchTableData()
     },
+    form_math_sort(){
+      var _data = this.table_data.map(o=>o.sort)
+      if(_data.length){
+        this.form.sort = Math.max.apply(Math,_data)+1
+      }else{
+        this.form.sort = 1
+      }
+    },
     handleAction(action) {
       // if(['toggleModal','export'].indexOf(action)!==-1){
       //   this[action]()
@@ -196,7 +204,7 @@ export default {
           return this.api_resource.remove(rows.join(','))
         })
         .then(() => {
-          this.fetchTableData()
+          this.fetchTableData({target:'delete'})
         })
     },
     remove(){

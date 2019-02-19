@@ -5,6 +5,7 @@
       ref="scrollContainer"
       class="scroll-container"
      >
+     <el-input placeholder="搜索菜单" suffix-icon="el-icon-search" v-model="filterText"></el-input>
      <el-tree
         class="filter-tree"
         :data="data2"
@@ -13,6 +14,7 @@
         :expand-on-click-node="false"
         ref="tree2"
         @node-click="nodeSelect"
+        :filter-node-method="filterNode"
       >
         <span slot-scope="{ node, data }">
           <span :class="data.icon"></span>&nbsp;
@@ -59,6 +61,10 @@ export default {
     value: {}
   },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.name.indexOf(value) !== -1;
+    },
     aaa(e) {
       e.stopPropagation();
       return false;
@@ -101,6 +107,9 @@ export default {
       handler(val) {
         this.data = this.value;
       }
+    },
+    filterText(val) {
+      this.$refs.tree2.filter(val);
     }
   },
   data() {
@@ -109,6 +118,7 @@ export default {
       filterText: "",
       input5: "",
       data: "",
+      input2:'',
       data2: [
         {
           id: 2,
@@ -136,8 +146,8 @@ export default {
     this.data2 = [
       {
         id: 0,
-        icon: "icon iconfont icon-renshiguanli",
-        name: "顶级菜单"
+        icon: "icon",
+        name: "无"
       }
     ].concat(menu);
     this.findDataName();

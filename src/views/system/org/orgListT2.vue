@@ -52,7 +52,7 @@
         <el-form ref="form" :model="form" label-width="90px"  :rules="rules">
               <el-row :gutter="20" style="width:500px;margin:0 auto;padding-top:20px;">
                 <el-col :span="24">
-                  <form-render :type="`input`" :field="{name:'部⻔编号'}" v-model="form.deptcode" prop="name"/>
+                  <form-render :type="`input`" placeholder="自动" :field="{name:'部⻔编号'}" v-model="form.deptcode" prop="deptcode" :disabled="true" />
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'部⻔名称'}" v-model="form.name"  prop="name"/>
@@ -61,7 +61,7 @@
                   <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
+                  <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort" placeholder=""/>
                 </el-col>
                 <el-col :span="24">
                   <form-render
@@ -128,7 +128,11 @@ export default {
     }
   },
   methods: {
-    async fetchTableData() {
+    async fetchTableData(config = {}) {
+      const { target } = config
+      if(target==='delete'){
+        this.$bus.$emit('updateData')
+      }
      this.table_loading = true;
     //  const {rows,total} =  await api_resource.find(this.currentMenuid,this.table_form);
     //  this.table_data =rows
@@ -144,7 +148,8 @@ export default {
     },
     add(){
       this.form.parent_org = this.orgid
-
+      this.form_math_sort()
+      
       this.dialogFormVisible = true
       
     },

@@ -181,11 +181,17 @@ export default {
       },
       immediate:true
     },
-   
+   'url'(){
+     this.fetchTableData()
+   }
     
   },
   methods: {
-    async fetchTableData() {
+    async fetchTableData(config = {}) {
+     const { target } = config
+      if(target==='delete'){
+        this.$bus.$emit('updateData')
+      }
      this.table_loading = true;
     //  const {rows,total} =  await api_common.resource(this.url).find(this.currentMenuid,this.table_form);
     //  this.table_data =rows
@@ -213,6 +219,7 @@ export default {
     },
     add(){
       this.dialogFormVisible = true
+      this.form_math_sort()
       this.form.parent_org = this.orgid
       
     },
