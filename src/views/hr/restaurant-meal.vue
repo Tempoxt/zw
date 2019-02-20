@@ -12,43 +12,32 @@
       class="public-dialog"
       v-el-drag-dialog
     >
-      <div style="width:500px;margin:0 auto">
+      <div >
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
-           
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'餐厅名称'}" v-model="form.restaurantname"/>
+           <div class="line-box">
+            <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'餐次名称'}" v-model="form.mealname"/>
             </el-col>
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'实际座位数'}" v-model="form.seatnumber"/>
+             <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'默认费用'}" v-model="form.mealpay"/>
             </el-col>
-            <el-col :span="24">
-              <form-render
-                :type="`select`"
-                :field="{name:'餐厅类型',options:[{
-                  value: 0,
-                  label: '内部'
-                },{
-                  value: 1,
-                  label: '外包'
-                },{
-                  value: 2,
-                  label: '临时'
-                }]}"
-                v-model="form.restauranttype"
-              />
+             <el-col :span="12">
+              <form-render :type="`number`" :field="{name:'餐次顺序'}" v-model="form.mealqueue"/>
             </el-col>
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'最大就餐人数'}" v-model="form.maxnumber"/>
+            <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'默认个人支付'}" v-model="form.mealpay"/>
             </el-col>
-            <el-col :span="24">
-              <form-render
-                :type="`select`"
-                :field="{name:'所属厂区',options:officeaddress}"
-                v-model="form.officeaddressid"
-              />
+             <el-col :span="12">
+              <form-render :type="`time`" :field="{name:'开始时间'}" v-model="form.mealstart"/>
             </el-col>
-            <el-col :span="24">
+           <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'默认公司支付'}" v-model="form.mealsubsidy"/>
+            </el-col>
+             <el-col :span="12">
+              <form-render :type="`time`" :field="{name:'结束时间'}" v-model="form.mealend"/>
+            </el-col>
+            <el-col :span="12">
               <form-render
                 :type="`radio`"
                 :field="{name:'记录状态',options:[{
@@ -61,9 +50,11 @@
                 v-model="form.estate"
               />
             </el-col>
+            </div>
             <el-col :span="24">
               <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
             </el-col>
+            
           </el-row>
         </el-form>
       </div>
@@ -111,12 +102,12 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("restaurant");
+const api_resource = api_common.resource("restaurant/meal");
 const defaultForm = function() {
   return {
-    restauranttype: 0,
+
     estate:1,
-    maxnumber:100
+
   };
 };
 export default {
@@ -148,23 +139,14 @@ export default {
         this.fetchTableData()
    },
     async add(){
-        await this.formInitData()
-        this.form.officeaddressid = this.officeaddress[0].value
         this.dialogFormVisible = true
     },
-    async formInitData(){
-        this.officeaddress = (await api_common.resource("officeaddress").get()).map(item=>{
-            return {
-                value:item.id,
-                label:item.officeaddressname
-            }
-        })
-    },
+
    async edit(){
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
-      this.formInitData()
+
     },
     async fetchTableData() {
      this.table_loading = true;
@@ -177,7 +159,7 @@ export default {
     },
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("restaurant");
+    const { field, action,table } = await api_common.menuInit("restaurant/meal");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table

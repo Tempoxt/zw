@@ -20,19 +20,27 @@ const router = {
       }
     },
     {
-      path:'mealtype',
+      path:'restaurant-meallevel',
       name: 'mealtype',
-      component: () => import('@/views/hr/mealtype'),
+      component: () => import('@/views/hr/restaurant-meallevel'),
       meta:{
         title:'餐次类型'
       }
     },
     {
-      path:'mealsetting',
+      path:'restaurant-meal',
       name: 'mealsetting',
-      component: () => import('@/views/hr/mealsetting'),
+      component: () => import('@/views/hr/restaurant-meal'),
       meta:{
         title:'餐次设置'
+      }
+    },
+    {
+      path:'restaurant-restaurantmeal',
+      name: 'mealsetting',
+      component: () => import('@/views/hr/restaurant-restaurantmeal'),
+      meta:{
+        title:'餐厅餐次设置'
       }
     }
   ]
