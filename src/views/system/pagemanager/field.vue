@@ -98,6 +98,10 @@
                 },{
                   value: 'date',
                   label: '日期'
+                },
+                {
+                  value: 'time',
+                  label: '时间'
                 },{
                   value: 'select',
                   label: '固定选项'

@@ -1,5 +1,9 @@
 <template>
-  <el-form-item :label="field.name">
+  <el-form-item 
+  :label="field.name"
+   v-bind="$parent.$attrs"
+   v-on="$parent.$listeners"
+  >
    <el-date-picker
       v-model="data"
       type="date"

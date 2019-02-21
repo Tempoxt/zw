@@ -13,14 +13,14 @@
       v-el-drag-dialog
     >
       <div style="width:500px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="100px" :rules="rules">
           <el-row :gutter="20">
            
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'类型名称'}" v-model="form.levelname"/>
+              <form-render :type="`input`" :field="{name:'类型名称'}" v-model="form.levelname" prop="levelname"/>
             </el-col>
              <el-col :span="24">
-              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.levelqueue"/>
+              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.levelqueue" />
             </el-col>
             <el-col :span="24">
               <form-render
@@ -104,7 +104,12 @@ export default {
       queryDialogFormVisible:true,
       table_height:window.innerHeight-236,
       defaultForm,
-      officeaddress:[]
+      officeaddress:[],
+      rules:{
+        levelname: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+      }
     };
   },
   watch:{

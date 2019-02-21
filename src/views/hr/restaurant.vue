@@ -13,14 +13,14 @@
       v-el-drag-dialog
     >
       <div style="width:500px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="110px" :rules="rules">
           <el-row :gutter="20">
            
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'餐厅名称'}" v-model="form.restaurantname"/>
+              <form-render :type="`input`" :field="{name:'餐厅名称'}" v-model="form.restaurantname" prop="restaurantname"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'实际座位数'}" v-model="form.seatnumber"/>
+              <form-render :type="`input`" :field="{name:'实际座位数'}" v-model="form.seatnumber"  prop="seatnumber"/>
             </el-col>
             <el-col :span="24">
               <form-render
@@ -39,7 +39,7 @@
               />
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'最大就餐人数'}" v-model="form.maxnumber"/>
+              <form-render :type="`input`" :field="{name:'最大就餐人数'}" v-model="form.maxnumber" prop="maxnumber"/>
             </el-col>
             <el-col :span="24">
               <form-render
@@ -130,7 +130,18 @@ export default {
       queryDialogFormVisible:true,
       table_height:window.innerHeight-236,
       defaultForm,
-      officeaddress:[]
+      officeaddress:[],
+      rules:{
+        restaurantname: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+        seatnumber: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+        maxnumber: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ]
+      }
     };
   },
   watch:{

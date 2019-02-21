@@ -26,7 +26,7 @@
               <form-render :type="`select`" :field="{name:'餐次名称',options:mealname}" v-model="form.mealid" @change="changeMealname"/>
             </el-col>
              <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'默认费用'}" v-model="form.mealpay"/>
+              <form-render :type="`input`" :field="{name:'默认费用'}" v-model="form.mealprice"/>
             </el-col>
              <el-col :span="12">
               <form-render :type="`number`" :field="{name:'餐次顺序'}" v-model="form.mealqueue"/>
@@ -168,7 +168,7 @@ export default {
         this.fetchTableData()
    },
     async add(){
-        this.mealname_val = await api_common.resource("restaurant/meal").get()
+        this.mealname_val = await api_common.resource("restaurant/meal/enable").get()
         this.mealname = this.mealname_val.map(item=>{
             return {
                 label:item.mealname,

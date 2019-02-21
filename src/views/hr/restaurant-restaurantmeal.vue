@@ -87,7 +87,7 @@ export default {
 
     },
     async created(){
-        this.data2 = await api_restaurant.get();
+        this.data2 = await api_common.resource('restaurant/enable').get();
         let defaultMenuid = this.data2[0].id
         
         this.$nextTick(()=>{

@@ -56,6 +56,23 @@
                 <el-input-number v-model="tableQuery.query[i][2][1]" controls-position="right"></el-input-number>
               </div>
             </template>
+            <template v-if="inputType(i,'time')" >
+              <el-time-select
+              v-model="tableQuery.query[i][2]"
+              v-if="['=','>','<','>=','<=','!=','c','nc'].indexOf(tableQuery.query[i][1])!==-1 "
+              placeholder="选择时间">
+            </el-time-select>
+            <el-time-picker
+              is-range
+              v-if="['in','nin','b','nb'].indexOf(tableQuery.query[i][1])!==-1"
+              v-model="tableQuery.query[i][2]"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              placeholder="选择时间范围">
+            </el-time-picker>
+            </template>
+
             <template v-if="inputType(i,'number')" >
               <el-input 
                 v-model="tableQuery.query[i][2]" :placeholder="placeholder[query[1]]||'请输入内容'"
@@ -221,7 +238,8 @@ export default {
             text:['=','>','<','>=','<=','!=','c','nc'],
             date:['=','>','<','>=','<=','!=','c','nc','b','nb'],
             number:['=','>','<','>=','<=','!=','c','nc','in','nin','b','nb'],
-            select:['=','!=']
+            select:['=','!='],
+            time:['=','>','<','>=','<=','!=','c','nc','b','nb'],
           }
           if(mode[this.column_item(i).fieldtype]){
              return this.mode.filter(item=>(mode[this.column_item(i).fieldtype].indexOf(item.flag)!==-1))
