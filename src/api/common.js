@@ -57,6 +57,12 @@ export function resource (url) {
       return request.get(`/${url}/${id}`, {
         params
       })
+    },
+    getSelect(parmas = {}){
+      return request.get(`/${url}/select`, {
+        params: parmas
+      })
+      
     }
 
   }
