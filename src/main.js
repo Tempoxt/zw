@@ -22,11 +22,23 @@ import './config/permission'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import Fragment from 'vue-fragment'
+import VueAMap from 'vue-amap';
 Vue.use(Fragment.Plugin)
 // import '@assets/style/theme/test/index.css'
 sync(store, router)
 Vue.use(iView)
 Vue.directive("elDragDialog",elDragDialog)
+
+Vue.use(VueAMap);
+VueAMap.initAMapApiLoader({
+  key: '160cab8ad6c50752175d76e61ef92c50',
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView','AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'Geocoder'],
+  // 默认高德 sdk 版本为 1.4.4
+  v: '1.4.4'
+});
+
+
+
 Vue.config.productionTip = false
 Vue.prototype.$bus = new Vue()
 Vue.mixin({

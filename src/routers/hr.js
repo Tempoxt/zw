@@ -42,6 +42,14 @@ const router = {
       meta:{
         title:'餐厅餐次设置'
       }
+    },
+    {
+      path:'officeaddress',
+      name: 'mealsetting',
+      component: () => import('@/views/hr/officeaddress'),
+      meta:{
+        title:'办公地点'
+      }
     }
   ]
 }
