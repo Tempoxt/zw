@@ -1,5 +1,6 @@
 <template>
-  <el-form-item :label="field.name">
+  <el-form-item :label="field.name"  v-bind="$parent.$attrs"
+      v-on="$parent.$listeners">
     <el-select
       v-model="data"
       placeholder="请选择"

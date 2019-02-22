@@ -126,7 +126,7 @@ export default {
         })
     },
     async handleFormSubmit(){
-
+        await this.form_validate()
         let form = Object.assign({},this.form)
         if(this.isInsert){
             await api_resource.create(form)

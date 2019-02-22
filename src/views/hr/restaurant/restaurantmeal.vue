@@ -19,29 +19,29 @@
       v-el-drag-dialog
     >
       <div >
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="110px" :rules="rules">
           <el-row :gutter="20">
            <div class="line-box">
             <el-col :span="12">
-              <form-render :type="`select`" :field="{name:'餐次名称',options:mealname}" v-model="form.mealid" @change="changeMealname"/>
+              <form-render :type="`select`" :field="{name:'餐次名称',options:mealname}" v-model="form.mealid" @change="changeMealname"  prop="mealid"/>
             </el-col>
              <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'默认费用'}" v-model="form.mealprice"/>
+              <form-render :type="`input`" :field="{name:'默认费用'}" v-model="form.mealprice" prop="mealprice" />
             </el-col>
              <el-col :span="12">
-              <form-render :type="`number`" :field="{name:'餐次顺序'}" v-model="form.mealqueue"/>
+              <form-render :type="`number`" :field="{name:'餐次顺序'}" v-model="form.mealqueue"  prop="mealqueue" />
             </el-col>
             <el-col :span="12">
-              <form-render :type="`input`" :field="{name:'默认个人支付'}" v-model="form.mealpay"/>
+              <form-render :type="`input`" :field="{name:'默认个人支付'}" v-model="form.mealpay" prop="mealpay"/>
             </el-col>
              <el-col :span="12">
-              <form-render :type="`time`" :field="{name:'开始时间'}" v-model="form.mealstart"/>
+              <form-render :type="`time`" :field="{name:'开始时间'}" v-model="form.mealstart" prop="mealstart" />
             </el-col>
            <el-col :span="12">
               <form-render :type="`input`" :field="{name:'默认公司支付'}" v-model="form.mealsubsidy"/>
             </el-col>
              <el-col :span="12">
-              <form-render :type="`time`" :field="{name:'结束时间'}" v-model="form.mealend"/>
+              <form-render :type="`time`" :field="{name:'结束时间'}" v-model="form.mealend" prop="mealend"/>
             </el-col>
             <el-col :span="12">
               <form-render
@@ -134,7 +134,27 @@ export default {
       table_tabs_options:[],
       table_tabs_key:'',
       view_activeName:'',
-      mealname:[]
+      mealname:[],
+      rules:{
+        mealid: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+        mealprice: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+         mealqueue: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+        mealpay: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+        mealstart: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+        mealend: [
+          { required: true, message: '请输入', trigger: 'blur' },
+        ],
+      }
     };
   },
   watch:{
@@ -157,6 +177,7 @@ export default {
         this.fetchTableData()
       },
     async handleFormSubmit(){
+        await this.form_validate()
         let form = Object.assign({},this.form)
         form.restaurantid = this.id
         form.meallevelid = this.table_form.param[this.table_tabs_key]

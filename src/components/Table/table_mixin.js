@@ -134,6 +134,18 @@ export default {
       this.table_form.query = query
       this.fetchTableData()
     },
+    form_validate(){
+      return new Promise((resolve,reject)=>{
+          this.$refs.form.validate((valid) => {
+          if(valid){
+            resolve()
+          }else{
+            reject()
+            return false
+          }
+        })
+      })
+    },
     form_math_sort(){
       var _data = this.table_data.map(o=>o.sort)
       if(_data.length){
@@ -153,6 +165,9 @@ export default {
           this.dialogStatus = 'insert'
           if (this.defaultForm && this.form) {
             this.form = this.defaultForm()
+          }
+          if(this.$refs.form){
+            this.$refs.form.resetFields();
           }
         }
         if (action === 'edit') {

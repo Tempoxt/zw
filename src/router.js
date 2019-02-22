@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Layout from '@/views/layout/layout'
 import hr from './routers/hr'
+import hrfront from './routers/hrfront'
 import system from './routers/system'
 Vue.use(Router)
 export default new Router({
@@ -28,6 +29,7 @@ export default new Router({
       ]
     },
     hr,
+    hrfront,
     {
       component: Layout,
       path: '/system',
