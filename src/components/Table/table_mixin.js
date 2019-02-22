@@ -91,6 +91,7 @@ export default {
       return (i+1)+(this.table_form.currentpage-1)*this.table_form.pagesize
     },
     table_disable_selected(row){
+      
       return !(row.lockstate&&!this.table_actions.find(action=>action.code==='unlock'))
     },
     table_state_className({row, column, rowIndex, columnIndex}){

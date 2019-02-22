@@ -65,6 +65,7 @@
     ></table-header>
     <el-table
       @selection-change="handleChangeSelection"
+      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"

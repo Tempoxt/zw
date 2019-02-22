@@ -80,6 +80,7 @@
     ></table-header>
     <el-table
       @selection-change="handleChangeSelection"
+      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -168,7 +169,10 @@ export default {
         this.fetchTableData()
    },
     async add(){
-        this.mealname_val = await api_common.resource("restaurant/meal/enable").get()
+        this.mealname_val = await api_common.resource("restaurant/meal/enable").get({
+          restaurantid:this.id,
+          meallevelid:this.table_form.param[this.table_tabs_key]
+        })
         this.mealname = this.mealname_val.map(item=>{
             return {
                 label:item.mealname,
