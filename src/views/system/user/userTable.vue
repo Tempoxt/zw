@@ -165,6 +165,13 @@
       :height="table_height"
       @header-dragend="table_dragend"
     > 
+     <el-table-column 
+                type="selection" 
+                width="60" 
+                class-name="table-column-disabled"
+                :selectable="table_disable_selected"
+                >
+                </el-table-column>
     <el-table-column type="index" :index="indexMethod" />
     <each-table-column :table_field="table_field"/>
     </el-table>
@@ -262,9 +269,9 @@ export default {
      
       this.dialogFormVisible = true;
     },
-    edit(){
+    async edit(){
       let row = this.table_selectedRows[0]
-      this.form = Object.assign({}, row);
+      this.form = await api_resource.find(row.id);
       this.form.role = this.form.user_role.map(item=>item.roleid)
     
       this.dialogFormVisible = true;
