@@ -78,6 +78,9 @@
               <el-tab-pane label="下级部门" name="c2" lazy >
                 <org-list-t2  :currentMenuid="currentMenuid" :orgid="orgid" url="org/subdepartments"/>
               </el-tab-pane>
+              <el-tab-pane label="下级小组" name="c3" lazy >
+                <org-group-t3  :currentMenuid="currentMenuid" :orgid="orgid"/>
+              </el-tab-pane>
               
               <!-- <el-tab-pane :label="'人力资源'" name="c4" lazy  >
                   <org-job :currentMenuid="currentMenuid" ></org-job>
@@ -104,6 +107,7 @@ import orgInfoT3 from './org/orgInfoT3'
 import orgList from './org/orgList'
 import orgListT2 from './org/orgListT2'
 import orgJob from './org/orgJob'
+import orgGroupT3 from './org/orgGroupT3'
 import orgTree from './org/orgTree'
 export default {
     components:{
@@ -115,7 +119,8 @@ export default {
       orgInfoT3,
       orgList,
       orgListT2,
-      orgJob
+      orgJob,
+      orgGroupT3
     },
     watch:{
       tabActive(val){

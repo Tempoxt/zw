@@ -6,9 +6,9 @@ const router = {
   path: '/hrfront',
   children: [
     {
-      path:'personnelmanagement',
-      name: 'personnelmanagement',
-      component: () => import('@/views/hrfront/personnelmanagement'),
+      path:'personnelmanagement-employee',
+      name: 'personnelmanagement-employee',
+      component: () => import('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
       meta:{
         title:'人事管理'
       }
