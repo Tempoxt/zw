@@ -2,10 +2,14 @@ import axios from 'axios'
 import qs from 'qs'
 import auth from '@/utils/auth'
 import { Message, MessageBox } from 'element-ui'
+const getTag = () =>{
+    return +window.location.port === 8999 ? 'labor' :'erp'
+}
+
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASEAPI,
     timeout: 15000, // 请求超时时间
-    withCredentials: true,
+    withCredentials: false,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -20,6 +24,7 @@ const service = axios.create({
 service.interceptors.request.use(config => {
     // 'Authorization': 
     config.headers['Authorization'] = auth.getToken()
+    config.headers['proxytag'] = getTag()
     return config
 })
 

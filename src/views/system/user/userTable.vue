@@ -16,10 +16,10 @@
                 <el-tab-pane label="用户信息" name="first">
                     <el-row :gutter="20">
                         <el-col :span="12">
-                        <form-render :type="`member`" :field="{name:'员工姓名 '}" v-model="form.user_num"/>
+                        <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID" />
                         </el-col>
                         <el-col :span="12">
-                            <form-render :type="`input`" :field="{name:'登录密码'}" v-model="form.password" :disabled="form.ldap_check===1"/>
+                            <form-render :type="`input`" :field="{name:'登录密码',type:'password'}" v-model="form.password" :disabled="form.ldap_check===1"/>
                         </el-col>
                         <el-col :span="12">
                         <form-render :type="`roleGroup`" :field="{name:'所属角色',options:[]}" v-model="form.role"/>
@@ -41,15 +41,15 @@
                                 v-model="form.estate"
                             />
                         </el-col>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <form-render :type="`input`" :field="{name:'登录名'}" v-model="form.username" placeholder="默认员工号"/>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="24">
                             <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.msg_txt" />
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="权限设置" name="second">
+                <!-- <el-tab-pane label="权限设置" name="second">
                     <el-row type="flex" class="row-bg">
                     <el-col :span="8">
                           <el-tree
@@ -132,7 +132,7 @@
                     </el-col>
    
                     </el-row>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
 
 
@@ -164,6 +164,7 @@
       :header-cell-style="headerCellStyle"
       :height="table_height"
       @header-dragend="table_dragend"
+      @sort-change="table_sort_change"
     > 
      <el-table-column 
                 type="selection" 
@@ -258,7 +259,7 @@ export default {
   watch:{
       async currentMenuid(id){
         //  this.table_form = defaultTableForm()
-         this.table_form.menuid = id 
+         this.table_form.orgid = id 
          this.$refs.table_pagination.reset()
          this.fetchTableData();
          
@@ -272,7 +273,8 @@ export default {
     async edit(){
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id);
-      this.form.role = this.form.user_role.map(item=>item.roleid)
+      this.form.role = this.form.user_roleid
+      // .map(item=>item.roleid)
     
       this.dialogFormVisible = true;
     },

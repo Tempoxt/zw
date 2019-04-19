@@ -12,6 +12,14 @@ const router = {
   children: [
     ...personnel,
     {
+      path:'dormitory/dorm',
+      name: 'dormitory/dorm',
+      component: () => import('@/views/hr/dormitory/dorm'),
+      meta:{
+        title:'宿舍管理'
+      }
+    },
+    {
       path:'restaurant',
       name: 'restaurant',
       component: () => import('@/views/hr/restaurant'),

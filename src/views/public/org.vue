@@ -44,7 +44,7 @@ export default {
     },
     methods:{
       handleChangeNode(val,node){
-            
+          this.$emit('change',val.orgid)
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -55,10 +55,17 @@ export default {
         return {
             data2:[],
             filterText:'',
+           
         }
     },
     async created(){
          this.data2 = await api_common.getOrg();
+         let defaultId = this.data2[0].orgid
+         this.$emit('change',defaultId)
+        this.$nextTick(()=>{
+           this.$refs.tree2.setCurrentKey(defaultId)
+        })
+      
     }
 }
 </script>

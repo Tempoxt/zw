@@ -56,7 +56,8 @@ export default {
           query:[]
         }
       },
-      table_sort:{}
+      table_sort:{},
+      form_multiple:false
     }
   },
   computed: {

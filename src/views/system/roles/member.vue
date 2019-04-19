@@ -13,7 +13,11 @@
       v-el-drag-dialog
     >
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
-                <member-checkbox />
+            <el-col :span="12">
+                <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID" />
+            </el-col>
+            <br />
+             <br /> <br />
         </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -139,10 +143,18 @@ export default {
             },300)
         },
         async handleFormSubmit(){
+        //    let form = Object.assign({},this.form)
+        //    const {icon,name} = form.iconName
+        //    form.name = name
+        //    form.icon = icon
            let form = Object.assign({},this.form)
-           const {icon,name} = form.iconName
-           form.name = name
-           form.icon = icon
+           form.ids = [form.emID]
+           form.roleid = this.roleid
+
+            this.$request.post('roles/member',form,{
+                params:form
+            })
+
             if(this.isInsert){
                 await api_resource.create(form)
             }else{

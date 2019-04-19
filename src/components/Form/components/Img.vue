@@ -64,7 +64,7 @@ export default {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
-       
+        console.log(file,'file')
         if (!isLt2M) {
           this.$message.error('上传图片大小不能超过 2MB!');
         }

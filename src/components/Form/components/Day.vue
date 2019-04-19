@@ -11,6 +11,7 @@
       v-on="$parent.$listeners"
       format="yyyy-MM-dd"
       value-format="yyyy-MM-dd"
+      style="width:100%"
       placeholder="选择日期">
     </el-date-picker>
   </el-form-item>

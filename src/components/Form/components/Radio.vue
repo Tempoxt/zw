@@ -1,5 +1,6 @@
 <template>
-  <el-form-item :label="field.name" style="height:33px">
+  <el-form-item :label="field.name" style="height:33px"  v-bind="$parent.$attrs"
+        v-on="$parent.$listeners">
       <el-radio-group 
         v-model="data"   
         v-bind="$parent.$attrs"

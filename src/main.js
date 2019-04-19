@@ -29,6 +29,9 @@ sync(store, router)
 Vue.use(iView)
 Vue.directive("elDragDialog",elDragDialog)
 
+import request from '@/plugins/request'
+Vue.$request = Vue.prototype.$request = request
+
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: '160cab8ad6c50752175d76e61ef92c50',
@@ -46,7 +49,8 @@ Vue.mixin({
     $t (s) {
       return s
     }
-  }
+  },
+  
 })
 Vue.use(Element, {
   size: 'small' // set element-ui default size

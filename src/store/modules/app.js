@@ -13,6 +13,9 @@ const app = {
         }
       }
       return subs
+    },
+    appName(state){
+      return state.appType==='labor'?'劳务工管理系统':'管理系统'
     }
   },
   state: {
@@ -25,7 +28,8 @@ const app = {
     theme: +Cookies.get('status') === 2 ? '9463F7' : '0BB2D4',
     status: +Cookies.get('status') || 1,
     menuList: null,
-    currentMenuKey: ''
+    currentMenuKey: '',
+    appType:+window.location.port === 8999 ? 'labor' :'erp'
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {

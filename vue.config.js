@@ -14,12 +14,13 @@ class HelloWorldPlugin {
   apply (compiler) {
     compiler.hooks.done.tap('done', () => {
       if (process.env.NODE_ENV === 'production') {
+        console.log(process.env,'process.env')
         Client.scp('dist/', {
             host: '192.168.0.192',
             port: 22,
             username: 'zhaowei',
             password: 'hgw@2018',
-            path:'/home/zhaowei/erp_test/frontend/'
+            path:process.env.VUE_APP_SERVER_DIR||'/home/zhaowei/erp_test/frontend/'
         }, function(err) {
             if(err){
               console.log(err)

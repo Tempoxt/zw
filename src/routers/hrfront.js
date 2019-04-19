@@ -6,11 +6,27 @@ const router = {
   path: '/hrfront',
   children: [
     {
+      path:'dormitory/checkinout',
+      name: 'dormitory/checkinout',
+      component: () => import('@/views/hrfront/dormitory/checkinout'),
+      meta:{
+        title:'入住管理'
+      }
+    },
+    {
       path:'personnelmanagement-employee',
       name: 'personnelmanagement-employee',
       component: () => import('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
       meta:{
         title:'人事管理'
+      }
+    },
+    {
+      path:'personnelmanagement/personnelmanagement',
+      name: 'personnelmanagement-employee',
+      component: () => import('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
+      meta:{
+        title:'档案管理'
       }
     },
     {
@@ -44,7 +60,41 @@ const router = {
         meta:{
             title:'工资基础'
         }
-    }
+    },
+    {
+      path:'restaurant/restaurantmember',
+      name: 'restaurant/restaurantmember',
+      component: () => import('@/views/hrfront/restaurant/restaurant'),
+      meta:{
+          title:'就餐员工设置'
+      }
+    },
+    {
+      path:'restaurant/bookmeal',
+      name: 'restaurant/bookmeal',
+      component: () => import('@/views/hrfront/restaurant/bookmeal'),
+      meta:{
+          title:'员工报餐管理'
+      }
+    },
+    {
+      path:'restaurant/consumedata',
+      name: 'restaurant/consumedata',
+      component: () => import('@/views/hrfront/restaurant/consumedata'),
+      meta:{
+          title:'员工报餐统计'
+      }
+    },
+    {
+      path:'recruitment/recruitment',
+      name: 'recruitment/recruitment',
+      component: () => import('@/views/hrfront/recruitment/recruitment'),
+      meta:{
+          title:'招聘档案'
+      }
+    },
+    
+    
   ]
 }
 export default router

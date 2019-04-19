@@ -4,6 +4,11 @@
             <div class="label">
                 菜单权限
             </div>
+             <el-radio-group v-model="menuType">
+                <el-radio-button label="1">前台</el-radio-button>
+                <el-radio-button label="2">后台</el-radio-button>
+
+                </el-radio-group>
             <div>
                 <el-tree
                 :data="menu"
@@ -105,12 +110,15 @@ import { throttle } from 'core-decorators';
                this.fetchData()
             },
             immediate:true
+        },
+        menuType(){
+            this.getMenu()
         }
     },
     methods:{
         async getMenu(){
 
-            const { menu } =  await api_menu.get({position:2})
+            const { menu } =  await api_menu.get({position:this.menuType})
             this.menu = menu
             const [ {},{subs:roles_menu} ] = await api_roles_menu.find(this.roleid)
             this.roles_menu_checked = []
@@ -173,12 +181,12 @@ import { throttle } from 'core-decorators';
             })
         },
         async fetchData(){
-             const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
+            //  const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
            
-            });
+            // });
             try {
                  await this.getMenu();
                 
@@ -186,7 +194,7 @@ import { throttle } from 'core-decorators';
                 
             }finally{
                 setTimeout(()=>{
-                    loading.close();
+                    // loading.close();
                 },300)
             }
            
@@ -221,6 +229,7 @@ import { throttle } from 'core-decorators';
         isIndeterminate: true,
         radio:'',
         radio2:'',
+        menuType:'1',
         menu:[],
         defaultProps: {
           children: 'subs',

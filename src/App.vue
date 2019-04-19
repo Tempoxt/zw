@@ -5,6 +5,7 @@
       <el-radio label="F2353C">红色</el-radio>
       <el-radio label="DC5D03">橙色</el-radio>
     </el-radio-group>-->
+    
     <router-view/>
   </div>
 </template>

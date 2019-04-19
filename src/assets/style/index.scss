@@ -140,6 +140,13 @@ a {
     border-top: 1px solid #e4eaec;
     padding: 10px 20px;
   }
+  /deep/  .el-dialog__body {
+    padding: 10px 20px;
+  }
+  .dialog-multiple-footer {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .page-side {

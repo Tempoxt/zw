@@ -59,14 +59,14 @@ export default {
     },
     methods:{
         handleChangeNode(val){
-             this.currentMenuid = val.id
+             this.currentMenuid = val.orgid
         },
         filterNode(){},
 
     },
     async created(){
         this.data2 = await api_common.getOrg();
-        let defaultMenuid = this.data2[0].id
+        let defaultMenuid = this.data2[0].orgid
         this.$refs.tree2.setCurrentKey(defaultMenuid);
         this.currentMenuid = defaultMenuid;
     }

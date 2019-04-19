@@ -1,7 +1,23 @@
 <template>
      <el-form-item :label="field.name">
         <el-popover ref="popover" placement="bottom" width="auto" trigger="click" v-model="visible" transition="el-zoom-in-top">
+         <el-input
+          placeholder="搜索姓名"
+          class="input"
+          @input="fetchUser"
+          v-model="filterText">
+        </el-input>
+     <el-scrollbar
+     
+      ref="scrollContainer"
+      class="scroll-container"
+     >
+        <ul class="el-select-dropdown__list" v-if="filterText" >
+            <li class="el-select-dropdown__item" v-for="item in user" :key="item.id" @click="select(item)">{{item.chineseName}} - {{item.employeeCode}}</li>
+        </ul>
+      
         <el-tree
+            v-else
             class="filter-tree"
             :props="defaultProps"
             :expand-on-click-node="true"
@@ -15,7 +31,9 @@
             <span>{{ node.label }}</span>
             </span>
         </el-tree>
+         </el-scrollbar>
         </el-popover>
+        
         <el-select
         v-model="input5"
         placeholder="请选择"
@@ -36,15 +54,29 @@ export default {
   name: "form-member",
   props: {
     field: Object,
-    value: {}
+    value: {},
+    
   },
   methods: {
+    async fetchUser(){
+      this.user = await api_common.resource('hrm/partstaff').get({
+        keyword:this.filterText,
+        pagesize:10
+      })
+    },
     aaa(e) {
       e.stopPropagation();
       return false;
     },
     aa(data) {
       console.log(data);
+    },
+    select(data){
+        console.log(data,'da222ta')
+        this.visible = false;
+        this.data = data.id;
+        this.input5 = data.chineseName
+      
     },
     nodeSelect(data) {
       if(data.leaf){
@@ -85,6 +117,9 @@ export default {
     }
   },
   watch: {
+    filterText(){
+
+    },
     data(val) {
     //   this.input5 = ''
     //   this.findDataName();
@@ -96,7 +131,11 @@ export default {
     value: {
       immediate: true,
       handler(val) {
+        if(!val){
+          this.input5 = this.field.real_name
+        }
         this.data = this.value;
+        // this.input5 = this.field.real_name
       }
     }
   },
@@ -110,9 +149,13 @@ export default {
       defaultProps: {
         label: "name",
         isLeaf: 'leaf'
-      }
+      },
+      user:[]
     };
   },
+  created(){
+    
+  }
 //   async created() {
 //     this.data2 = await api_common.api_org();
 //     this.findDataName();
@@ -125,6 +168,12 @@ export default {
   width: 100%;
   /deep/ .el-select-dropdown {
     display: none;
+  }
+}
+.scroll-container {
+  height: 300px;
+  /deep/ .el-scrollbar__wrap {
+    overflow-x: hidden;
   }
 }
 </style>
