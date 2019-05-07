@@ -32,7 +32,7 @@
                 <span>{{ node.label }} </span>
             
               </div>
-               <span style="padding-right:10px">({{data.roomLen}})</span>
+               <span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}})</span>
              </template>
               <template v-else>
                    <div>

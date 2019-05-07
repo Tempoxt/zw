@@ -113,6 +113,12 @@ export default {
     }
   },
   created() {
+ 
+    if(this.$store.state.app.status == 2){
+  
+      this.$store.commit("toggleStatus",1);
+    }
+     
     // window.addEventListener('hashchange', this.afterQRScan)
   },
   destroyed() {

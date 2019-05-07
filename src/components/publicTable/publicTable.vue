@@ -34,7 +34,7 @@
 
     <el-table-column
         :label="column.showname"
-        v-for="(column) in  table_field.filter(column=>!column.fed_isvisiable)"
+        v-for="(column) in  table_field.filter(column=>(!column.fed_isvisiable))"
         :key="column.id"
         :width="column.width||'auto'"
       >

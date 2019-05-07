@@ -113,12 +113,13 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("dormitory/bed");
 const defaultForm = () => {
     return {
-        estate:1
+        estate:0,
+        bedType:1,
     }
 }
 export default {
   mixins: [table_mixin],
-  props:['id'],
+  props:['id','row'],
   data() {
     return {
       loading: true,
@@ -150,13 +151,14 @@ export default {
       }, 300);
     },
     async add(){
-        this.roomList = (await api_common.resource('dormitory/room').find(this.id)).rows.map(o=>{
+        this.roomList = (await api_common.resource('dormitory/room').get()).rows.map(o=>{
             return {
-                label:o.dormName,
+                label:o.roomName,
                 value:o.id
             }
         })
-        this.form.dorm = this.id
+
+        this.form.room = this.id
         this.dialogFormVisible = true
     },
     async handleFormSubmit(){
@@ -170,12 +172,13 @@ export default {
         this.fetchTableData()
     },
     async edit(){
-      this.roomList = (await api_common.resource('dormitory/room').find(this.id)).rows.map(o=>{
+      this.roomList = (await api_common.resource('dormitory/room').get()).rows.map(o=>{
             return {
-                label:o.dormName,
+                label:o.roomName,
                 value:o.id
             }
       })
+      
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;

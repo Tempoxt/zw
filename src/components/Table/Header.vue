@@ -37,6 +37,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-button-group>
+      <slot />
     </div>
 
     <div class="right-actions">
@@ -113,7 +114,8 @@ export default {
         if (code === "delete") {
           return len >= 1;
         }
-        if (['forbid','lock','unlock','enable','remove'].indexOf(code)!==-1) {
+        
+        if (['forbid','lock','unlock','enable','remove','checkout'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;

@@ -3,14 +3,9 @@
     <el-col :span="5" class="h-full">
       <div class="page-side h-full">
         
-        <span class="page-title">员工用餐记录</span>
+        <!-- <span class="page-title">员工用餐记录</span>
          <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
         <div>
-          <div class="side-header">
-            <el-input placeholder="快速查找" v-model="filterText" class="input">
-              <i slot="suffix" class="el-input__icon el-icon-search"></i>
-            </el-input>
-          </div>
           <el-tree
             class="tree"
             :data="data2"
@@ -36,6 +31,10 @@
          
         </div>
          </el-scrollbar>
+
+ -->
+
+          <org @change="changeOrg" />
       </div>
 
     </el-col>
@@ -47,6 +46,7 @@
 <script>
 import * as api_common from "@/api/common";
 import consumedata from './restaurant/consumedata'
+import org from '@/views/public/org.vue'
 export default {
     data(){
         return {
@@ -56,13 +56,18 @@ export default {
         }
     },
     components:{
-        consumedata
+        consumedata,
+        org
     },
     methods:{
         handleChangeNode(val){
              this.currentMenuid = val.orgid
         },
         filterNode(){},
+        changeOrg(id){
+            this.currentMenuid = id
+       
+        }
 
     },
     async created(){

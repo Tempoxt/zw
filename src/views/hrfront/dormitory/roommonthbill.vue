@@ -29,10 +29,10 @@
               <div >
                   <span class="icon iconfont icon-zonggongsi"></span>
                 &nbsp;
-                <span>{{ node.label }} ({{data.adminName}})</span>
-              
+                <span>{{ node.label }} </span>
+            
               </div>
-               <span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}})</span>
+               <span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}} )</span>
              </template>
               <template v-else>
                    <div>
@@ -41,7 +41,13 @@
                       &nbsp;
                       <span>{{ data.roomName }} </span>
                   </div>
-                  <span style="padding-right:10px">{{data.totalBeds}}- {{data.count_used_beds}}</span>
+                  <span style="padding-right:10px" v-if="data.totalBeds">
+                    ( {{data.totalBeds+' - '}}
+                    <span style="color:red" v-if="data.totalBeds-data.count_used_beds">{{data.count_used_beds}}</span>
+                    <span style="color:rgba(0, 187, 69, 1)" v-else>住满</span>
+                    )
+
+                  </span>
               </template>
              
             </span>
@@ -54,9 +60,11 @@
     </el-col>
     <el-col :span="19">
        <div style="overflow: hidden;">
-         <dormInner :id="current_id" v-if="current_type==='start'"/>
-         <dormDorm :id="current_id" v-if="current_type==='dorm'"/>
-         <dormRoom :id="current_id" v-if="current_type==='room'" :row="current_row"/>
+           <div>
+              <roommonthbillInner :id="current_id" :data="current_data" v-if="current_type==='start'" :rows="rows"/>
+              <roommonthbillDorm :id="current_id" :data="current_data" v-if="current_type==='dorm'"  :rows="rows"/>
+              <roommonthbillRoom :id="current_id" :data="current_data" v-if="current_type==='room'"   :rows="rows"/>
+           </div>
        </div>
     </el-col>
   </el-row>
@@ -65,13 +73,22 @@
 import * as api_common from "@/api/common";
 const api_restaurant = api_common.resource('restaurant')
 import dormInner from './dormInner'
-import dormRoom from './dormRoom'
+import roommonthbillRoom from './roommonthbill-dormRoom'
+import roommonthbillDorm from './roommonthbill-dorm'
+import roommonthbillInner from './roommonthbill-inner'
 import dormDorm from './dormDorm'
 export default {
+    provide(){
+      return {
+        elParent: this
+      }
+    },
     components:{
-        dormInner,
-        dormDorm,
-        dormRoom
+       dormInner,
+       roommonthbillRoom,
+       roommonthbillDorm,
+       roommonthbillInner,
+       dormDorm
     },
     watch:{
       tabActive(val){
@@ -88,7 +105,8 @@ export default {
             currentMenuid:0,
             current_id:'',
             current_type:'start',
-            current_row:{}
+            current_data:{},
+            rows:[]
         }
     },
     methods:{
@@ -101,7 +119,7 @@ export default {
           const { id } = data
           this.current_id = id
           this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
-          this.current_row = data
+          this.current_data = data
           if(!data.roomName){
               const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
               this.$set(data,'subs',rows)
@@ -120,6 +138,7 @@ export default {
     },
     async created(){
         const { rows } = await api_common.resource('dormitory/dorm').get();
+        this.rows = rows
         this.data2 = [
           {
             start:true,
@@ -127,17 +146,6 @@ export default {
             subs:rows,
           }
         ]
-    //     let defaultMenuid = this.data2[0].id
-        
-    //     this.$nextTick(()=>{
-    //       this.$refs.tree2.setCurrentKey(this.data2[0].id)
-    //     })
-    //     let that = this
-    //    this.$nextTick(()=>{
-    //       this.current_id = defaultMenuid;
-    //       this.handleChangeNode({id:this.data2[0].id})
-    //    })
-        
     }
 }
 </script>

@@ -14,6 +14,22 @@ const router = {
       }
     },
     {
+      path:'dormitory/dormmonthbill',
+      name: 'dormitory/dormmonthbill',
+      component: () => import('@/views/hrfront/dormitory/roommonthbill'),
+      meta:{
+        title:'宿舍费用管理'
+      }
+    },
+    {
+      path:'dormitory/empmonthbill',
+      name: 'dormitory/empmonthbill',
+      component: () => import('@/views/hrfront/dormitory/empmonthbill'),
+      meta:{
+        title:'个人分摊费用'
+      }
+    },
+    {
       path:'personnelmanagement-employee',
       name: 'personnelmanagement-employee',
       component: () => import('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),

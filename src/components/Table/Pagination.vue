@@ -31,7 +31,9 @@ export default {
   },
   computed:{
     rowList(){
-      return (this.table_config && this.table_config.rowList) ?this.table_config.rowList.split(',').map(Number):[50,100,300,500,1000]
+      let p = ((this.table_config && this.table_config.rowList) ?this.table_config.rowList.split(',').map(Number).filter(o=>!isNaN(o)):[50,100,300,500,1000])
+
+       return (this.total&&this.total>0)?p.concat(this.total):p
     }
   },
   methods: {

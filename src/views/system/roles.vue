@@ -97,7 +97,7 @@
     <el-col :span="19" style="height:calc(100% - 40px)">
       <el-tabs v-model="activeName" class="table-tabs" >
         <el-tab-pane label="角色成员分配" name="first">
-          <member :roleid="currentMenuid"/>
+          <member :roleid="currentMenuid" :roleList="data2"/>
         </el-tab-pane>
         <el-tab-pane label="功能权限设置" name="second" style="height:100%;" >
           <roles :roleid="currentMenuid" v-if="activeName==='second'"/>
@@ -206,6 +206,7 @@ export default {
       this.data2 = data.map(item => {
         item.group_role.forEach(sub => {
           sub.groupid = item.id;
+ 
         });
         return item;
       });

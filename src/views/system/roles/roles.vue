@@ -97,7 +97,7 @@
 <script>
 import * as api_common from '@/api/common'
 const api_roles_menu = api_common.resource('roles/rolepermissionmenu')
-const api_menu = api_common.resource('menusheet')
+const api_menu = api_common.resource('menusheet/menutree/0')
 const api_roles_auth = api_common.resource('roles/rolepermisson')
 const cityOptions = ['上海', '北京', '广州', '深圳'];
 import { throttle } from 'core-decorators';
@@ -118,20 +118,31 @@ import { throttle } from 'core-decorators';
     methods:{
         async getMenu(){
 
-            const { menu } =  await api_menu.get({position:this.menuType})
+            const { menu } =  await api_menu.get({position:this.menuType,power:0})
             this.menu = menu
-            const [ {},{subs:roles_menu} ] = await api_roles_menu.find(this.roleid)
+            // const [ {},{subs:roles_menu} ] = await api_roles_menu.find(this.roleid)
             this.roles_menu_checked = []
+            // ;(function f(roles_menu_checked,roles_menu){
+            //     roles_menu.forEach((item)=>{
+            //         if(item.haspermission){
+            //              roles_menu_checked.push(item.id)
+            //         }
+            //         if(item.subs&&item.subs.length){
+            //             f(roles_menu_checked,item.subs)
+            //         }
+            //     })
+            // })(this.roles_menu_checked,roles_menu)
             ;(function f(roles_menu_checked,roles_menu){
-                roles_menu.forEach((item)=>{
-                    if(item.haspermission){
+                 roles_menu.forEach((item)=>{
+                    if(item.hasPower){
                          roles_menu_checked.push(item.id)
                     }
                     if(item.subs&&item.subs.length){
                         f(roles_menu_checked,item.subs)
                     }
                 })
-            })(this.roles_menu_checked,roles_menu)
+            })(this.roles_menu_checked,menu)
+            console.log(this.roles_menu_checked,'roles_menu_checked')
             let currentKey = ''
             ;(function f(data){
                 data.some(item=>{

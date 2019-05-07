@@ -18,9 +18,9 @@
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
            
-            <el-col :span="24">
+            <!-- <el-col :span="24">
               <form-render :type="`input`" :field="{name:'宿舍编号'}" v-model="form.dormCode"/>
-            </el-col>
+            </el-col> -->
              <el-col :span="24">
               <form-render :type="`input`" :field="{name:'宿舍名称'}" v-model="form.dormName" />
             </el-col>
@@ -29,6 +29,12 @@
             </el-col>
              <el-col :span="24">
               <form-render :type="`input`" :field="{name:'水费价格'}" v-model="form.waterPrice"/>
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
+            </el-col>
+             <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"/>
             </el-col>
 
             <el-col :span="24">
@@ -40,6 +46,7 @@
             <el-col :span="24">
               <form-render :type="`select`" :field="{name:'管理员',options:adminList}" v-model="form.admin"/>
             </el-col>
+            
 
 
             
@@ -98,7 +105,7 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" />
+    <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
      <table-pagination 
@@ -147,10 +154,10 @@ export default {
       }, 300);
     },
     async add(){
-        this.adminList = (await api_common.resource('dormitory/dorm/dormadmin/').get()).rows.map(o=>{
+        this.adminList = (await api_common.resource('dormitory/dorm/dormadmin').get()).rows.map(o=>{
             return {
                 label:o.chineseName,
-                value:o.employeeID
+                value:o.id
             }
         })
         this.dialogFormVisible = true
@@ -166,10 +173,10 @@ export default {
         this.fetchTableData()
     },
     async edit(){
-        this.adminList = (await api_common.resource('dormitory/dorm/dormadmin/').get()).rows.map(o=>{
+        this.adminList = (await api_common.resource('dormitory/dorm/dormadmin').get()).rows.map(o=>{
             return {
                 label:o.chineseName,
-                value:o.employeeID
+                value:o.id
             }
         })
       let row = this.table_selectedRows[0]

@@ -4,7 +4,56 @@
   :table_query.sync="table_form.query"
   @query="querySubmit"
   >
-      <el-dialog
+   <el-dialog
+      title="餐费详情"
+      :visible.sync="dialogPayVisible"
+      class="public-dialog"
+      v-el-drag-dialog
+    >
+    <el-table
+      v-loading="payloading"
+      :data="payData"
+      border
+      show-summary
+      height="500"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="week"
+        label="星期"
+        width="180">
+      <template slot-scope="scope">
+          {{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
+      </template>
+      </el-table-column>
+    
+       <el-table-column
+        prop="lunch"
+        label="午餐(元)">
+      </el-table-column>
+        <el-table-column
+        prop="dinner"
+        label="晚餐(元)">
+      </el-table-column>
+       <el-table-column
+        prop="nightingale"
+        label="夜宵(元)">
+      </el-table-column>
+      <el-table-column
+        prop="total"
+        label="小计">
+      </el-table-column>
+    </el-table>
+    
+  
+    </el-dialog>
+
+
+    <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
@@ -91,10 +140,17 @@
         :selectable="table_disable_selected"
         >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" />
+    <el-table-column type="index" :index="indexMethod" width="70"/>
 
+
+      <!-- :width="table_field.find(o=>o.name==='month').width||'auto'"
+      :sortable="table_field.find(o=>o.name==='month').issort?'custom':false" -->
     <el-table-column
-      align="left">
+      align="left"
+      v-if="table_field.length"
+      width="150"
+    
+    >
       <template slot="header" slot-scope="scope">
         <div class="month-select">
             <span>{{table_form.month|monthFilter}} <span class="el-icon-caret-bottom" style="color:#c0c4cc"></span></span>
@@ -114,7 +170,7 @@
     </el-table-column>
 
 
-    <each-table-column :table_field="table_field.filter(f=>f.name!=='month')"/>
+    <each-table-column :table_field="table_field.filter(f=>f.name!=='month')" :template="template"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -122,6 +178,7 @@
         :currentpage.sync="table_form.currentpage"
         @change="fetchTableData"
         ref="table_pagination"
+        :table_config="table_config"
         />
   </ui-table>
 </template>
@@ -138,6 +195,7 @@ export default {
     },
     mixins: [table_mixin],
   data() {
+    const vm = this
     return {
       loading: true,
       form:defaultForm(),
@@ -150,15 +208,17 @@ export default {
       radio:'',
       checkAll:[],
       isIndeterminate:'',
+      payloading:false,
       table_form:{
         month:'',
-        pagesize:100,
+        // pagesize:100,
         currentpage:1,
         query:{
           type:1,
           query:[]
         }
       },
+      dialogPayVisible:false,
       data2:[
           {
               name:123,
@@ -169,6 +229,12 @@ export default {
               ]
           }
       ],
+      template:{
+        pay(column,row){
+          return <el-button type="text"  onClick={vm.showPayInfo.bind(vm,row)}>{row.pay}</el-button>
+        }
+      },
+      payData:[]
     //   table_form:defaultTableForm()
     };
   },
@@ -178,18 +244,34 @@ export default {
       }
   },
   watch:{
-      'table_form.month'(){
+      async 'table_form.month'(){
+        await this.table_init_status
           this.fetchTableData()
       },
       async currentMenuid(id){
         //  this.table_form = defaultTableForm()
          this.table_form.orgid = id 
          this.$refs.table_pagination.reset()
+         await this.table_init_status
          this.fetchTableData();
          
       }
   },
   methods: {
+    async showPayInfo(row){
+
+      this.payloading = true
+      this.dialogPayVisible = true
+      let { rows } = await this.$request.get('restaurant/consumedata/detail',{
+        params:{
+          workcode:row.userid,
+          month:this.table_form.month
+        }
+      })
+      this.payData =  rows
+      this.payloading = false
+  
+    },
     add(){
      
       this.dialogFormVisible = true;
@@ -231,10 +313,13 @@ export default {
     }
   },
   async created() {
-    this.table_form.month = '2019-03'
-    const { field, action } = await api_common.menuInit("restaurant/consumedata");
-    this.table_field = field;
-    this.table_actions = action;
+    this.table_form.month = dayjs().format('YYYY-MM')
+    this.table_init("restaurant/consumedata")
+    // const { field, action,table } = await api_common.menuInit("restaurant/consumedata");
+    // this.table_field = field;
+    // this.table_actions = action;
+    // this.table_config = table
+    // this.table_form.pagesize = table.pagesize
   }
 };
 </script>

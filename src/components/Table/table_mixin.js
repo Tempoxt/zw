@@ -57,7 +57,8 @@ export default {
         }
       },
       table_sort:{},
-      form_multiple:false
+      form_multiple:false,
+      
     }
   },
   computed: {
@@ -134,6 +135,17 @@ export default {
     querySubmit(query){
       this.table_form.query = query
       this.fetchTableData()
+    },
+    async table_init(url){
+      this.table_init_status = new Promise(async (resolve)=>{
+        const { field, action,table } = await api_common.menuInit(url);
+        this.table_field = field;
+        this.table_actions = action;
+        this.table_config = table
+        this.table_form.pagesize = this.table_config.rowNum
+        resolve()
+      })
+     
     },
     form_validate(){
       return new Promise((resolve,reject)=>{

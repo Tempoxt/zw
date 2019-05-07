@@ -3,7 +3,7 @@
          <el-table-column
                 :prop="column.name"
                 :label="column.showname"
-                v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
+                v-for="column in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
                 :key="column.id"
                 :width="column.width||'auto'"
                 :sortable="column.issort?'custom':false"

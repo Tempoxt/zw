@@ -95,7 +95,7 @@
                 :selectable="table_disable_selected"
                 >
                 </el-table-column>
-    <el-table-column type="index" :index="indexMethod" />
+    <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
 
@@ -105,6 +105,7 @@
         :currentpage.sync="table_form.currentpage"
         @change="fetchTableData"
         ref="table_pagination"
+        :table_config="table_config"
         />
   </ui-table>
 </template>
@@ -237,9 +238,10 @@ export default {
     }
   },
   async created() {
-    const { field, action } = await api_common.menuInit("restaurant/bookmeal");
+    const { field, action ,table} = await api_common.menuInit("restaurant/bookmeal");
     this.table_field = field;
     this.table_actions = action;
+    this.table_config = table
 
     
   }

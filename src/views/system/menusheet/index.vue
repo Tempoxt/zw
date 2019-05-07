@@ -221,7 +221,8 @@ export default {
     }
     const { field, action } = await api_common.menuInit(
       "menusheet",
-    this.position
+    this.position,
+    
     );
     this.table_field = field;
     this.table_actions = action;
@@ -247,7 +248,7 @@ export default {
           return <span>{['当前创窗口','新窗口/新标签','弹出窗口','弹出浏览器窗口'][row.connect-1]}</span>
         },
         name(column,row){
-            return <span><i class={row.icon} ></i> {row.name}</span>
+            return <span ><i class={row.icon} ></i><span domPropsInnerHTML={row.name}></span></span>
         }
       },
     };

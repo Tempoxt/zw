@@ -6,18 +6,75 @@
     @query="querySubmit"
     
     >
-         <el-dialog
+    <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
     >
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
-            <el-col :span="12">
-                <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID" />
-            </el-col>
+          <!-- <el-tree
+            :data="roleList[0].group_role"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            ref="tree"
+            highlight-current
+            :props="{
+                children: 'subs',
+                label: 'name'
+            }">
+
+
+            </el-tree> -->
+
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              
+                <el-tab-pane label="同部门" name="first">
+                    <br />
+                      <el-input v-model="input" placeholder="搜索"></el-input>
+                     <el-table
+                    ref="multipleTable"
+                    :data="tableData.filter(data=>!input || data.real_name.includes(input)||(data.user_num+'').includes(input))"
+                    tooltip-effect="dark"
+                    style="width: 100%"
+                    @selection-change="handleSelectionChange"
+                  >
+                    <el-table-column
+                    type="selection"
+                    width="55">
+                    </el-table-column>
+                    <el-table-column
+                    label="工号"
+                    prop="user_num"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    prop="real_name"
+                    label="姓名"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    prop="principalship"
+                    label="职位"
+                    show-overflow-tooltip>
+                    </el-table-column>
+                </el-table>
+
+
+                </el-tab-pane>
+                <el-tab-pane label="组织结构" name="second">
+                    <br />
+                 
+                    <org :roleid="roleid" ref="org"/>
+                </el-tab-pane>
+            </el-tabs>
+
+
+
             <br />
-             <br /> <br />
+             <br /> 
+             <br />
         </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -88,6 +145,7 @@ import * as api_common from "@/api/common";
 const api_resource = api_common.resource('roles/member')
 import table_mixin from "@c/Table/table_mixin";
 import MemberCheckbox from './MemberCheckbox'
+import org from './org'
 const defaultForm = function(){
     return {
         iconName:{}
@@ -95,9 +153,10 @@ const defaultForm = function(){
 }
 export default {
     components:{
-        MemberCheckbox
+        MemberCheckbox,
+        org
     },
-    props:['roleid'],
+    props:['roleid','roleList'],
     watch:{
         roleid(){
             this.fetchTableData()
@@ -119,8 +178,46 @@ export default {
             this.fetchTableData()
             })
         },
-        add(){
+        handleSelectionChange(val){
+            this.multipleSelection = val;
+        },
+        async add(){
+            // this.roleList[0].group_role.forEach(async (item)=>{
+            //     this.$set(item,'subs',(await this.$request.get('/usernew/roleuser',{params:{roleid:item.roleid}})).map(o=>{
+            //        o.name = o.real_name
+            //        return o
+            //    }))
+            // })
+
+            this.tableData = await this.$request.get('user/roledept',{
+                roleid:this.roleid,
+                // keyword:this.input
+            })
+            
+            // this.tableData = [
+            //     {
+            //         "id": 9,
+            //         "user_num": 111,
+            //         "real_name": "邓亚峰",
+            //         "principalship": "经理"
+            //     },
+            //     {
+            //         "id": 2,
+            //         "user_num": 222,
+            //         "real_name": "邓亚峰",
+            //         "principalship": "经理"
+            //     },
+            //     {
+            //         "id": 3,
+            //         "user_num": 333,
+            //         "real_name": "邓亚峰",
+            //         "principalship": "经理"
+            //     }
+            // ]
             this.dialogFormVisible = true
+        },
+        handleClick(){
+            
         },
         edit(){
             this.form =Object.assign({}, this.table_selectedRowsInfo[0])
@@ -147,29 +244,105 @@ export default {
         //    const {icon,name} = form.iconName
         //    form.name = name
         //    form.icon = icon
-           let form = Object.assign({},this.form)
-           form.ids = [form.emID]
-           form.roleid = this.roleid
+        //    let form = Object.assign({},this.form)
+        //    form.ids = [form.emID]
+        //    form.roleid = this.roleid
 
-            this.$request.post('roles/member',form,{
-                params:form
-            })
+        //     this.$request.post('roles/member',form,{
+        //         params:form
+        //     })
 
-            if(this.isInsert){
-                await api_resource.create(form)
-            }else{
-                await api_resource.update(form.id,form)
-            }
-            this.dialogFormVisible = false
-            this.fetchTableData()
+        //     if(this.isInsert){
+        //         await api_resource.create(form)
+        //     }else{
+        //         await api_resource.update(form.id,form)
+        //     }
+        //     this.dialogFormVisible = false
+        //     this.fetchTableData()
+        // let ids = this.$refs.tree.getCheckedNodes()
+        // let res = [];
+        // let f = (ids) => {
+        //     ids.forEach(o=>{
+        //         console.log(o)
+        //         if(o.real_name){
+        //             res.push(o.id)
+        //         }
+        //         if(o.subs && o.subs.length){
+        //             f(o.subs)
+        //         }
+        //     })
+        // }
+        // f(ids)
+        // await this.$request.post('roles/member',{
+        //     ids:res,
+        //     roleid:this.roleid,
+        // },{
+        //     params:{
+        //         roleid:this.roleid,
+        //         ids:res,
+        //     }
+        // })
+        // this.dialogFormVisible = false
+        // this.fetchTableData()
+        let ids = []
+        if(this.activeName==='first'){
+            ids = this.multipleSelection.map(o=>o.id)
+        }else{
+            ids = this.$refs.org.getChecked()
         }
+        await this.$request.post('roles/member',{
+            ids,
+            roleid:this.roleid,
+        },{
+            params:{
+                roleid:this.roleid,
+                ids,
+            }
+        })
+        this.dialogFormVisible = false
+        this.fetchTableData()
+     
+       
+     }
     },
     data(){
         return {
             table_height:window.innerHeight-300,
             form:defaultForm(),
             defaultForm,
-            api_resource
+            api_resource,
+            activeName:'first',
+            tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }],
+        input:'',
+        multipleSelection:[]
         }
     },
     async created() {
@@ -180,6 +353,8 @@ export default {
         this.table_actions = action;
         this.table_config = table;
         this.fetchTableData()
+
+       
     }
 }
 </script>

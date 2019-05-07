@@ -113,7 +113,7 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" />
+    <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
      <table-pagination 
@@ -147,7 +147,8 @@ export default {
       table_height:window.innerHeight-236,
       adminList:[],
       defaultForm,
-      roomAdminList:[]
+      roomAdminList:[],
+      dormList:[]
     };
   },
   watch:{
@@ -158,7 +159,8 @@ export default {
   methods: {
     async fetchTableData() {
      this.table_loading = true;
-     const {rows , total }= await api_resource.find(this.id,this.table_form);
+     this.table_form.dorm = this.id
+     const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
       setTimeout(() => {

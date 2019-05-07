@@ -60,7 +60,7 @@
                 :selectable="table_disable_selected"
                 >
                 </el-table-column>
-    <el-table-column type="index" :index="indexMethod" />
+    <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
 
@@ -84,7 +84,9 @@ const cityOptions = ['上海', '北京', '广州', '深圳'];
 
 export default {
     props:{
-        currentMenuid:Number
+        currentMenuid:{},
+        restaurantid_id:{},
+        parent_nodeid:{}
     },
     mixins: [table_mixin],
   data() {
@@ -118,11 +120,32 @@ export default {
   watch:{
       async currentMenuid(id){
         //  this.table_form = defaultTableForm()
-
-        this.table_form.restaurantmealid = this.currentMenuid
-         this.$refs.table_pagination.reset()
-         this.fetchTableData();
-         
+        if(id){
+          delete this.table_form.restaurantid_id
+           this.table_form.meallevelid = this.currentMenuid
+           this.table_form.restaurantid_id = this.parent_nodeid
+            this.$refs.table_pagination.reset()
+            this.fetchTableData();
+        }
+        
+       
+      },
+     restaurantid_id(id){
+        if(id){
+            delete this.table_form.meallevelid
+            this.table_form.restaurantid_id = id==='all'?0:id
+            this.$refs.table_pagination.reset()
+            this.fetchTableData();
+        }
+      },
+      parent_nodeid(id){
+         if(id){
+          delete this.table_form.restaurantid_id
+           this.table_form.meallevelid = this.currentMenuid
+           this.table_form.restaurantid_id = this.parent_nodeid
+            this.$refs.table_pagination.reset()
+            this.fetchTableData();
+        }
       }
   },
   methods: {

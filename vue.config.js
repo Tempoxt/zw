@@ -14,7 +14,7 @@ class HelloWorldPlugin {
   apply (compiler) {
     compiler.hooks.done.tap('done', () => {
       if (process.env.NODE_ENV === 'production') {
-        console.log(process.env,'process.env')
+  
         Client.scp('dist/', {
             host: '192.168.0.192',
             port: 22,
@@ -83,5 +83,8 @@ module.exports = {
         );
     }
     return conf
-  }
+  },
+  devServer: { 
+    port:8081
+ },
 }

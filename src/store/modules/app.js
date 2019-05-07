@@ -60,7 +60,9 @@ const app = {
       state.currentMenuKey = key
     },
     toggleStatus(state, status) {
-      const _status = status || state.status == 1 ? 2 : 1
+ 
+      const _status = status?status : (state.status == 1 ? 2 : 1)
+
       Cookies.set('status', _status)
       window.location.href = '/'
     }

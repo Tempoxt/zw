@@ -23,7 +23,7 @@
           <el-row :gutter="20">
            <div class="line-box">
             <el-col :span="12">
-              <form-render :type="`select`" :field="{name:'餐次名称',options:mealname}" v-model="form.mealid" @change="changeMealname"  prop="mealid"/>
+              <form-render :type="`select`" :disabled="dialogFormStatus==='update'" :field="{name:'餐次名称',options:mealname}" v-model="form.mealid" @change="changeMealname"  prop="mealid"/>
             </el-col>
              <el-col :span="12">
               <form-render :type="`input`" :field="{name:'默认费用'}" v-model="form.mealprice" prop="mealprice" />
@@ -125,6 +125,7 @@ export default {
     return {
       loading: true,
       form:{},
+      dialogFormStatus:'',
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
@@ -190,6 +191,7 @@ export default {
         this.fetchTableData()
    },
     async add(){
+       this.dialogFormStatus = 'insert'
         this.mealname_val = await api_common.resource("restaurant/meal/enable").get({
           restaurantid:this.id,
           meallevelid:this.table_form.param[this.table_tabs_key]
@@ -204,7 +206,18 @@ export default {
     },
 
    async edit(){
+     this.dialogFormStatus = 'update'
       let row = this.table_selectedRows[0]
+      this.mealname_val = await api_common.resource("restaurant/meal").get({
+        restaurantid:this.id,
+        meallevelid:this.table_form.param[this.table_tabs_key]
+      })
+      this.mealname = this.mealname_val.map(item=>{
+          return {
+              label:item.mealname,
+              value:item.id
+          }
+      })
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
 

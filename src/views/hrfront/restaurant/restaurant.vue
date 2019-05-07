@@ -42,7 +42,7 @@
     <el-col :span="5" class="h-full">
       <div class="page-side h-full">
         <span class="page-title">就餐员工设置</span>
-        <div>
+        <!-- <div>
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
@@ -58,13 +58,13 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-          </div>
+          </div> -->
           <el-tree
             class="tree"
-            :data="data2"
+            :data="data22"
             :props="{children: 'mealevel', label: 'groupname' }"
             default-expand-all
-            node-key="roleid"
+            node-key="id"
             :filter-node-method="filterNode"
             ref="tree2"
             :highlight-current="true"
@@ -95,7 +95,7 @@
       </div>
     </el-col>
     <el-col :span="19" style="height:calc(100% - 40px)">
-        <restaurantmember :currentMenuid="currentMenuid"/>
+        <restaurantmember :currentMenuid="currentMenuid" :restaurantid_id="restaurantid_id" :parent_nodeid="parent_nodeid"/>
     </el-col>
   </el-row>
 </template>
@@ -128,10 +128,17 @@ export default {
       
       return (data.groupname?data.groupname:data.name)['indexOf'](value) !== -1;
     },
-    handleChangeNode(data) {
-      if (data.id) {
-        this.currentMenuid = data.id;
+    handleChangeNode(data,node) {
+ 
+      if (data.id && data.meallevelid) {
+        this.currentMenuid = data.meallevelid;
+        this.restaurantid_id = null
+        this.parent_nodeid = node.parent.data.restaurantid_id
+      }else{
+        this.currentMenuid = null
+        this.restaurantid_id = data.restaurantid_id
       }
+      
     },
     addCategory() {
       this.categoryForm = {};
@@ -192,7 +199,16 @@ export default {
     },
     async fetchCategory() {
       let { restlevelmenu } = await api_resource.get();
+      
+    
       this.data2 = restlevelmenu
+      this.data22 = [{
+        mealevel:restlevelmenu,
+        restaurantname:'兆威食堂',
+        levelname:'',
+        restaurantid_id:'all',
+        id:0
+      }]
     //   .map(item => {
     //     item.group_role.forEach(sub => {
     //       sub.groupid = item.id;
@@ -217,12 +233,15 @@ export default {
       activeName: "first",
       filterText: "",
       data2: [],
+      data22:[],
       currentMenuid: 0,
       dialogFormVisible: false,
       form: {},
       categoryForm: {},
       roleFormVisible: false,
-      roleForm: {}
+      roleForm: {},
+      restaurantid_id:'',
+      parent_nodeid:''
     };
   },
   async created() {
@@ -242,8 +261,8 @@ export default {
        
       });
     })(this.data2);
-    this.$refs.tree2.setCurrentKey(defaultMenuid);
-    this.currentMenuid = defaultMenuid;
+    this.$refs.tree2.setCurrentKey(0);
+    this.restaurantid_id = 'all';
   }
 };
 </script>
@@ -273,4 +292,5 @@ export default {
     height: 100%;
   }
 }
+
 </style>

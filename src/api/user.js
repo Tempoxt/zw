@@ -6,5 +6,5 @@ export function getUserInfo (org_id) {
   return request.get('/user/user_detail')
 }
 export function logout () {
-  return request.post('/user/logout')
+  return request.post('/user/logout',{zero:0})
 }
