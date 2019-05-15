@@ -5,7 +5,9 @@ import { Message, MessageBox } from 'element-ui'
 const getTag = () =>{
     return +window.location.port === 8999 ? 'labor' :'erp'
 }
-
+let isFormData = (v) => {
+    return Object.prototype.toString.call(v) === '[object FormData]';
+}
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASEAPI,
     timeout: 15000, // 请求超时时间
@@ -14,6 +16,7 @@ const service = axios.create({
         'Content-Type': 'application/x-www-form-urlencoded',
     },
     transformRequest: [function (data) {
+        if(isFormData(data))return data
         return qs.stringify(data,{arrayFormat: 'brackets'})
     }],
     validateStatus: function (status) {

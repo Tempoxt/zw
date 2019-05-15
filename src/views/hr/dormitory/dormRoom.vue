@@ -21,6 +21,7 @@
               <form-render
               :type="`select`" :field="{name:'房屋编号',options:roomList}"
                 v-model="form.room"
+                :disabled="dialogStatus!=='insert'"
               />
             </el-col>
             
@@ -42,7 +43,7 @@
                 v-model="form.bedType"
               />
             </el-col>
-            <el-col :span="24">
+            <!-- <el-col :span="24">
               <form-render
                 :type="`radio`"
                 :field="{name:'状态',options:[{
@@ -54,7 +55,7 @@
                 }]}"
                 v-model="form.estate"
               />
-            </el-col>
+            </el-col> -->
 
           </el-row>
         </el-form>
@@ -78,6 +79,7 @@
     ></table-header>
     <el-table
       @selection-change="handleChangeSelection"
+      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -120,6 +122,7 @@ const defaultForm = () => {
 export default {
   mixins: [table_mixin],
   props:['id','row'],
+  inject: ['$side'],
   data() {
     return {
       loading: true,
@@ -141,6 +144,7 @@ export default {
   },
   methods: {
     async fetchTableData() {
+    //  this.$side.getTree()
      this.table_loading = true;
      this.table_form.room = this.id
      const {rows , total }= await api_resource.get(this.table_form);

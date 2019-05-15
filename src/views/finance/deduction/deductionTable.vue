@@ -93,10 +93,21 @@
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
-    ></table-header>
+    >
+      <div style="padding-left:10px">
+        <el-date-picker
+          v-model="table_form.month"
+          type="month"
+          size="medium"
+          @change="fetchTableData"
+          format="yyyy年MM月"
+          value-format="yyyy-MM"
+          placeholder="选择月份">
+        </el-date-picker>
+    </div>
+    </table-header>
     <el-table
       @selection-change="handleChangeSelection"
-      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -107,8 +118,13 @@
       @sort-change="table_sort_change"
       
     >
-    <el-table-column  type="selection" width="60" class-name="table-column-disabled" :selectable="table_disable_selected">
-    </el-table-column>
+    <el-table-column 
+      type="selection" 
+      width="60" 
+      class-name="table-column-disabled"
+      :selectable="table_disable_selected"
+      >
+      </el-table-column>
     <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
@@ -124,7 +140,8 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("dormitory/room");
+const api_resource = api_common.resource("deduction");
+import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
         estate:1,
@@ -134,7 +151,6 @@ const defaultForm = () => {
 export default {
   mixins: [table_mixin],
   props:['id'],
-  inject: ['$side'],
   data() {
     return {
       loading: true,
@@ -142,7 +158,7 @@ export default {
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_height:window.innerHeight-236,
+      table_height:window.innerHeight-300,
       adminList:[],
       defaultForm,
       roomAdminList:[],
@@ -156,9 +172,11 @@ export default {
   },
   methods: {
     async fetchTableData() {
-    //  this.$side.getTree()
+     if(!this.id){
+       return
+     }
      this.table_loading = true;
-     this.table_form.dorm = this.id
+     this.table_form.orgid = this.id
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
@@ -211,10 +229,12 @@ export default {
     }
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("dormitory/room");
+    const { field, action,table } = await api_common.menuInit("deduction");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
+    this.$set(this.table_form,'month',dayjs().format('YYYY-MM'))
+
     this.fetchTableData();
   }
 };

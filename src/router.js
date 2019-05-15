@@ -5,6 +5,9 @@ import Layout from '@/views/layout/layout'
 import hr from './routers/hr'
 import hrfront from './routers/hrfront'
 import system from './routers/system'
+import salary from './routers/salary'
+import financial from './routers/financial'
+import setting from './routers/setting'
 Vue.use(Router)
 export default new Router({
   mode: 'history',
@@ -30,6 +33,9 @@ export default new Router({
     },
     hr,
     hrfront,
+    salary,
+    financial,
+    setting,
     {
       component: Layout,
       path: '/system',

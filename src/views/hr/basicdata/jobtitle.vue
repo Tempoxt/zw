@@ -18,46 +18,9 @@
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
            <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'宿舍',options:dormList}" v-model="form.dorm"/>
+              <form-render :type="`input`" :field="{name:'职位名称'}" v-model="form.name"/>
             </el-col>
            
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房屋编码'}" v-model="form.houseNumber" />
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房屋编号'}" v-model="form.roomName"/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'床位数'}" v-model="form.totalBeds"/>
-            </el-col>
-
-         
-             <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'室长',options:roomAdminList}" v-model="form.roomAdmin"/>
-            </el-col> 
-          <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房租'}" v-model="form.rent"/>
-            </el-col>
-           <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render
-                :type="`radio`"
-                :field="{name:'类别',options:[{
-                  value: 1,
-                  label: '男生宿舍'
-                },{
-                  value: 0,
-                  label: '女生宿舍'
-                }]}"
-                v-model="form.dormType"
-              />
-            </el-col>
-            
             <el-col :span="24">
               <form-render
                 :type="`radio`"
@@ -71,9 +34,7 @@
                 v-model="form.estate"
               />
             </el-col>
-            <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
-            </el-col>
+           
           </el-row>
         </el-form>
       </div>
@@ -96,7 +57,6 @@
     ></table-header>
     <el-table
       @selection-change="handleChangeSelection"
-      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -107,8 +67,13 @@
       @sort-change="table_sort_change"
       
     >
-    <el-table-column  type="selection" width="60" class-name="table-column-disabled" :selectable="table_disable_selected">
-    </el-table-column>
+    <el-table-column 
+      type="selection" 
+      width="60" 
+      class-name="table-column-disabled"
+      :selectable="table_disable_selected"
+      >
+      </el-table-column>
     <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
@@ -124,17 +89,15 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("dormitory/room");
+const api_resource = api_common.resource("basicdata/jobtitle");
 const defaultForm = () => {
     return {
         estate:1,
-        roomAdmin:''
     }
 }
 export default {
   mixins: [table_mixin],
   props:['id'],
-  inject: ['$side'],
   data() {
     return {
       loading: true,
@@ -150,15 +113,13 @@ export default {
     };
   },
   watch:{
-    id(){
-      this.fetchTableData()
-    }
+    
   },
   methods: {
     async fetchTableData() {
-    //  this.$side.getTree()
+    
      this.table_loading = true;
-     this.table_form.dorm = this.id
+
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
@@ -167,19 +128,7 @@ export default {
       }, 300);
     },
     async add(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
-            return {
-                label:o.dormName,
-                value:o.id
-            }
-        })
-        this.roomAdminList = (await api_common.resource('dormitory/dorm/dormadmin').get({roomId:this.id})).rows.map(o=>{
-            return {
-                label:o.chineseName,
-                value:o.id
-            }
-        })
-        this.form.dorm = this.id
+      
         this.dialogFormVisible = true
     },
     async handleFormSubmit(){
@@ -193,25 +142,13 @@ export default {
         this.fetchTableData()
     },
     async edit(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
-            return {
-                label:o.dormName,
-                value:o.id
-            }
-        })
-         this.roomAdminList = (await api_common.resource('dormitory/dorm/dormadmin').get({roomId:this.id})).rows.map(o=>{
-            return {
-                label:o.chineseName,
-                value:o.employeeID
-            }
-        })
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
     }
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("dormitory/room");
+    const { field, action,table } = await api_common.menuInit("basicdata/jobtitle");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table

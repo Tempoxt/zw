@@ -78,7 +78,7 @@
       v-el-drag-dialog
       width="500px"
     >
-     <el-form ref="form" :model="form" label-width="100px">
+     <el-form ref="form" :model="form" label-width="100px" v-loading="dialogLoading2">
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item label="宿舍">
@@ -97,8 +97,12 @@
             </el-col>
            
             <el-col :span="24">
-              <form-render
+              <!-- <form-render
               :type="`member`" :field="{name:'入住员工'}"
+                v-model="distribution_form.empId"
+              /> -->
+              <form-render
+              :type="`select`" :field="{name:'入住员工',options:memberList}"
                 v-model="distribution_form.empId"
               />
             </el-col>
@@ -158,6 +162,7 @@
     ></table-header>
     <el-table
       @selection-change="handleChangeSelection"
+      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -187,14 +192,14 @@
       
         </template>
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
         fixed="right"
         label="入住记录"
         width="100">
         <template slot-scope="scope">
             <el-button  type="text" size="small">查看</el-button>
         </template>
-    </el-table-column>
+    </el-table-column> -->
 
     </el-table>
      <table-pagination 
@@ -216,6 +221,7 @@ const defaultForm = () => {
     }
 }
 export default {
+  inject: ['$side'],
   mixins: [table_mixin],
   props:['id','data'],
   data() {
@@ -250,6 +256,7 @@ export default {
       checkinout_form:{},
       checkinoutRows:[],
       dialogLoading:false,
+      dialogLoading2:false,
       distributionRow:{},
       distribution_form:{},
       template:{
@@ -259,6 +266,7 @@ export default {
           },
 
       },
+      memberList:[],
       rows2:[]
     };
   },
@@ -272,6 +280,7 @@ export default {
         console.log(data,'data')
     },
     async fetchTableData() {
+    //  this.$side.getTree()
      this.table_loading = true;
      this.table_form.roomId = this.id||6
      const {rows , total }= await api_resource.get(this.table_form);
@@ -281,10 +290,26 @@ export default {
         this.table_loading = false;
       }, 300);
     },
-    distribution(row){
+    async distribution(row){
+
+        this.dialogLoading2 = true
         this.distribution_form = {}
         this.distributionRow = row
         this.dialogFormVisible2 = true
+
+        const { rows } = await this.$request.get('/dormitory/checkinemp',{
+          params:{
+            dormType:this.data.dormType
+          }
+        })
+        this.memberList = rows.map(o=>{
+          return {
+            label:o.employeeCode +"-" + o.chineseName,
+            value:o.id
+          }
+        })
+        this.dialogLoading2 = false
+        this.fetchTableData()
     },
     checkout(){
       this.checkinout(this.table_selectedRows)
@@ -299,11 +324,12 @@ export default {
  
         await this.$request.post('dormitory/checkinout',form)
         this.dialogFormVisible2 = false
+        this.fetchTableData()
         // console.log(,'distribution_form')
     },
     handleFormSubmit3(){
      
-      this.$request.patch('/dormitory/checkinout/apply_out',this.checkinout_form,{
+      this.$request.put('/dormitory/checkinout/apply_out',this.checkinout_form,{
          params:{ids:this.checkinoutRows.map(o=>o.id).join(',')},
       })
       this.dialogFormVisible3 = false

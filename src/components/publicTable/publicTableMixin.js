@@ -88,6 +88,6 @@ export default {
         },
         add(){
             this.dialogFormVisible = true
-        },
+        }
     }
 }

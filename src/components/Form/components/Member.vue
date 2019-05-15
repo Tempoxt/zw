@@ -2,7 +2,7 @@
      <el-form-item :label="field.name">
         <el-popover ref="popover" placement="bottom" width="auto" trigger="click" v-model="visible" transition="el-zoom-in-top">
          <el-input
-          placeholder="搜索姓名"
+          placeholder="搜索姓名或工号"
           class="input"
           @input="fetchUser"
           v-model="filterText">
@@ -28,7 +28,7 @@
         >
             <span slot-scope="{ node, data }">
             <span :class="data.icon"></span>&nbsp;
-            <span>{{ node.label }}</span>
+            <span>{{ node.label }} <span v-if="data.employeeCode"> - {{data.employeeCode}}</span> </span>
             </span>
         </el-tree>
          </el-scrollbar>

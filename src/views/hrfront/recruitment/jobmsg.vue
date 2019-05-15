@@ -30,6 +30,7 @@
                                  <el-col :span="24">
                                     <form-render
                                         :type="`select`"
+                                        filterable
                                         :field="{name:'招聘岗位',options:principalshipData}"
                                         v-model="form.principalship"
                                     /> 
@@ -404,7 +405,7 @@ export default {
             contractTimeData:[
                 {
                     value: 1,
-                    label: '一年'
+                    label: '一年半'
                 },{
                     value: 2,
                     label: '两年'

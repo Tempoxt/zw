@@ -313,7 +313,8 @@ export default {
     }
   },
   async created() {
-    this.table_form.month = dayjs().format('YYYY-MM')
+    
+    this.$set(this.table_form,'month',dayjs().format('YYYY-MM'))
     this.table_init("restaurant/consumedata")
     // const { field, action,table } = await api_common.menuInit("restaurant/consumedata");
     // this.table_field = field;

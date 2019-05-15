@@ -133,6 +133,7 @@
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
+      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -249,6 +250,7 @@ export default {
         console.log(data,'data')
     },
     async fetchTableData() {
+    //  this.$side.getTree()
      this.table_loading = true;
      this.table_form.room = this.id||6
      const {rows , total }= await api_resource.get(this.table_form);
@@ -276,7 +278,7 @@ export default {
     },
     handleFormSubmit3(){
      
-      this.$request.patch('/dormitory/checkinout/apply_out',this.checkinout_form,{
+      this.$request.put('/dormitory/checkinout/apply_out',this.checkinout_form,{
          params:{ids:this.checkinoutRows.map(o=>o.id).join(',')},
       })
       this.dialogFormVisible3 = false

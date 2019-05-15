@@ -29,7 +29,7 @@
               <div >
                   <span class="icon iconfont icon-zonggongsi"></span>
                 &nbsp;
-                <span>{{ node.label }} </span>
+                <span>{{ node.label||data.name }} </span>
             
               </div>
                <span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}})</span>
@@ -39,11 +39,11 @@
                       <span class="icon iconfont icon-nv" v-if="data.dormType===0" style="color:rgba(255, 52, 160, 1)"></span>
                       <span class="icon iconfont icon-nan" v-if="data.dormType===1" style="color:rgba(11, 178, 212, 1)"></span>
                       &nbsp;
-                      <span>{{ data.roomName }} </span>
+                      <span>{{ data.roomName||data.name }} </span>
                   </div>
                   <span style="padding-right:10px" v-if="data.totalBeds">
                     ( {{data.totalBeds+' - '}}
-                    <span style="color:red" v-if="data.totalBeds-data.count_used_beds">{{data.count_used_beds}}</span>
+                    <span style="color:red" v-if="data.totalBeds-data.usedBeds">{{data.usedBeds}}</span>
                     <span style="color:rgba(0, 187, 69, 1)" v-else>住满</span>
                     )
 
@@ -76,6 +76,11 @@ import dormInner from './dormInner'
 import dormRoom from './dormRoom'
 import dormDorm from './dormDorm'
 export default {
+    provide () {
+      return {
+        $side:this
+      }
+    },
     components:{
        dormInner,
        dormRoom,
@@ -95,7 +100,7 @@ export default {
             data2:[],
             currentMenuid:0,
             current_id:'',
-            current_type:'start',
+            current_type:'room',
             current_data:{}
         }
     },
@@ -103,23 +108,36 @@ export default {
 
       filterNode(value, data) {
         if (!value) return true;
-        return data.restaurantname && data.restaurantname.indexOf(value) !== -1;
+        return (data.dormName && data.dormName.indexOf(value) !== -1) || (data.roomName && data.roomName.indexOf(value) !== -1)
       },
       async handleChangeNode(data,node){
-          const { id } = data
-          this.current_id = id
-          this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
+
+          const { roomId,dormId } = data
+          this.current_id = roomId||dormId
+          // this.current_type =  data.name?'start':(data.roomName?'room':'dorm')
+          this.current_type = 'room'
           this.current_data = data
-          if(!data.roomName){
-              const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
-              this.$set(data,'subs',rows)
-          }
+          
+
+          // if(!data.roomName){
+          //     const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
+          //     this.$set(data,'subs',rows)
+          // }
          
           // data.subs = rows
           
       },
       async refresh(){
+  
           this.data2 =  await api_common.resource('restaurant/enable').get();
+          this.$nextTick(()=>{
+            this.$refs.tree2.setCurrentKey(this.orgid)
+          })
+
+         
+      },
+      async getTree(){
+          this.data2 =  [await api_common.resource('dormitory/dormtree').get()];
           this.$nextTick(()=>{
             this.$refs.tree2.setCurrentKey(this.orgid)
           })
@@ -127,14 +145,7 @@ export default {
 
     },
     async created(){
-        const { rows } = await api_common.resource('dormitory/dorm').get();
-        this.data2 = [
-          {
-            start:true,
-            roomName:'兆威宿舍列表',
-            subs:rows,
-          }
-        ]
+        this.getTree()
  
         
     }

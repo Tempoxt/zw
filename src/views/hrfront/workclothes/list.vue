@@ -13,60 +13,42 @@
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
+      width="540px"
     >
       <div style="width:500px;margin:0 auto">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-row :gutter="20">
-           
-            <!-- <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'宿舍编号'}" v-model="form.dormCode"/>
-            </el-col> -->
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'宿舍名称'}" v-model="form.dormName" />
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电费价格'}" v-model="form.electricPrice"/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水费价格'}" v-model="form.waterPrice"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"/>
-            </el-col>
-
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'宿舍地址'}" v-model="form.dormAddress"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`map`" :field="{name:'宿舍坐标'}" v-model="form.dormLocation"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'管理员',options:adminList}" v-model="form.admin"/>
-            </el-col>
+             <el-tabs v-model="activeName" >
+                <el-tab-pane label="物品资料" name="first">
+                    <el-row :gutter="20">
             
-
-
+                        <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'物品名称'}" v-model="form.bedName"/>
+                        </el-col>
+                    
             
-            <el-col :span="24">
-              <form-render
-                :type="`radio`"
-                :field="{name:'记录状态',options:[{
-                  value: 1,
-                  label: '启用'
-                },{
-                  value: 0,
-                  label: '禁用'
-                }]}"
-                v-model="form.estate"
-              />
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
-            </el-col>
-          </el-row>
+                        <el-col :span="24">
+                        <form-render
+                            :type="`radio`"
+                            :field="{name:'床的类型',options:[{
+                            value: 1,
+                            label: '双层'
+                            },{
+                            value: 0,
+                            label: '单层'
+                            }]}"
+                            v-model="form.bedType"
+                        />
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane label="SKU" name="second">
+                    
+                </el-tab-pane>
+
+            </el-tabs>
+
+
+          
         </el-form>
       </div>
 
@@ -106,7 +88,7 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
+    <el-table-column type="index" :index="indexMethod" />
     <each-table-column :table_field="table_field"/>
     </el-table>
      <table-pagination 
@@ -121,14 +103,16 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("dormitory/dorm");
+const api_resource = api_common.resource("workclothes/list");
 const defaultForm = () => {
     return {
-        estate:1
+        estate:0,
+        bedType:1,
     }
 }
 export default {
   mixins: [table_mixin],
+
   inject: ['$side'],
   data() {
     return {
@@ -139,16 +123,22 @@ export default {
       queryDialogFormVisible:true,
       table_height:window.innerHeight-236,
       adminList:[],
-      defaultForm
+      defaultForm,
+      roomAdminList:[],
+      roomList:[],
+      activeName:'first'
     };
   },
   watch:{
-
+    id(){
+      this.fetchTableData()
+    }
   },
   methods: {
     async fetchTableData() {
     //  this.$side.getTree()
      this.table_loading = true;
+
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
@@ -157,12 +147,8 @@ export default {
       }, 300);
     },
     async add(){
-        this.adminList = (await api_common.resource('dormitory/dorm/dormadmin').get()).rows.map(o=>{
-            return {
-                label:o.chineseName,
-                value:o.id
-            }
-        })
+        
+        this.form.room = this.id
         this.dialogFormVisible = true
     },
     async handleFormSubmit(){
@@ -176,19 +162,14 @@ export default {
         this.fetchTableData()
     },
     async edit(){
-        this.adminList = (await api_common.resource('dormitory/dorm/dormadmin').get()).rows.map(o=>{
-            return {
-                label:o.chineseName,
-                value:o.id
-            }
-        })
+  
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
     }
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("dormitory/dorm");
+    const { field, action,table } = await api_common.menuInit("workclothes/list");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table

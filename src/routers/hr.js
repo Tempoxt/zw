@@ -58,6 +58,14 @@ const router = {
       meta:{
         title:'办公地点'
       }
+    },
+    {
+      path:'basicdata/jobtitle',
+      name: 'basicdata/jobtitle',
+      component: () => import('@/views/hr/basicdata/jobtitle'),
+      meta:{
+        title:'职位管理'
+      }
     }
   ]
 }

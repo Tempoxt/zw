@@ -101,6 +101,7 @@
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
+      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -285,7 +286,8 @@ export default {
     }
   },
   async created() {
-    this.table_form.month = dayjs().format('YYYY-MM')
+    this.$set(this.table_form,'month',dayjs().format('YYYY-MM'))
+
     const { field, action,table } = await api_common.menuInit("dormitory/dormmonthbill");
     this.table_field = field;
     this.table_actions = action;

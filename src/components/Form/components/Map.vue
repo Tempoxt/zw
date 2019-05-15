@@ -15,7 +15,7 @@
                  <el-amap-marker 
                  vid="component-marker" 
                  :position="position" 
-                 animation="AMAP_ANIMATION_BOUNCE"
+         
                  >
                  </el-amap-marker>
             </el-amap>

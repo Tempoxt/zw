@@ -9,6 +9,9 @@ const api_pagemanager = api_common.resource('pagemanager/field')
 import treeToArray from "./eval";
 import tableColumn from '@c/publicTable/tableColumn'
 import eachTableColumn from '@c/publicTable/eachTableColumn'
+import request from '@/plugins/request'
+import { MessageBox } from 'element-ui';
+
 export default {
   props:{
     resource:String,
@@ -329,6 +332,46 @@ export default {
         center:true
       });
       return false
+    },
+    async handleImportChange(ev){
+      const files = ev.target.files;
+      if (!files) return;
+      var form = new FormData();
+      form.append('the_file',files[0])
+      this.importLoading = true
+      try {
+        await request.post(this.importUploadUrl,form)
+        this.$message({
+          message: '导入成功',
+          type: 'success'
+        });
+        this.fetchTableData()
+      } catch (error) {
+        
+      }finally{
+        this.importLoading = false
+        MessageBox.close()
+        this.$nextTick(()=>{
+          this.$refs.importInput.value = null
+          ev.target.value = null
+        })
+      }
+      
+    },
+    import(){
+      const {
+        handleImportChange
+      } = this
+
+      MessageBox.alert(
+          <el-button-group class="table-import-upload" v-loading={this.importLoading}>
+            <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+            <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+          </el-button-group>
+          , '选择文件导入', {
+          showConfirmButton:false,
+          center:true
+        });
     },
     // tree table.......---------------------
     table_tree_showRow: function(row) {

@@ -29,7 +29,7 @@
               <div >
                   <span class="icon iconfont icon-zonggongsi"></span>
                 &nbsp;
-                <span>{{ node.label }} ({{data.adminName}})</span>
+                <span>{{ node.label||data.name }} ({{data.adminName}})</span>
               
               </div>
                <span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}})</span>
@@ -41,7 +41,7 @@
                       &nbsp;
                       <span>{{ data.roomName }} </span>
                   </div>
-                  <span style="padding-right:10px">{{data.totalBeds}}- {{data.count_used_beds}}</span>
+                  <span style="padding-right:10px"  v-if="data.totalBeds">{{data.totalBeds}}- {{data.usedBeds}}</span>
               </template>
              
             </span>
@@ -68,6 +68,11 @@ import dormInner from './dormInner'
 import dormRoom from './dormRoom'
 import dormDorm from './dormDorm'
 export default {
+    provide () {
+      return {
+        $side:this
+      }
+    },
     components:{
         dormInner,
         dormDorm,
@@ -95,19 +100,22 @@ export default {
 
       filterNode(value, data) {
         if (!value) return true;
-        return data.restaurantname && data.restaurantname.indexOf(value) !== -1;
+        return (data.dormName && data.dormName.indexOf(value) !== -1) || (data.roomName && data.roomName.indexOf(value) !== -1)
       },
       async handleChangeNode(data,node){
-          const { id } = data
-          this.current_id = id
-          this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
-          this.current_row = data
-          if(!data.roomName){
-              const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
-              this.$set(data,'subs',rows)
-          }
+          // const { id } = data
+          // this.current_id = id
+          // this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
+          // this.current_row = data
+          // if(!data.roomName){
+          //     const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
+          //     this.$set(data,'subs',rows)
+          // }
          
-          // data.subs = rows
+          const { roomId,dormId } = data
+          this.current_id = roomId||dormId
+          this.current_type =  data.name?'start':(data.roomName?'room':'dorm')
+          this.current_data = data
           
       },
       async refresh(){
@@ -115,18 +123,17 @@ export default {
           this.$nextTick(()=>{
             this.$refs.tree2.setCurrentKey(this.orgid)
           })
+      },
+      async getTree(){
+        this.data2 =  [await api_common.resource('dormitory/dormtree').get()];
+        this.$nextTick(()=>{
+            this.$refs.tree2.setCurrentKey(this.orgid)
+        })
       }
 
     },
     async created(){
-        const { rows } = await api_common.resource('dormitory/dorm').get();
-        this.data2 = [
-          {
-            start:true,
-            roomName:'兆威宿舍列表',
-            subs:rows,
-          }
-        ]
+         this.getTree()
     //     let defaultMenuid = this.data2[0].id
         
     //     this.$nextTick(()=>{

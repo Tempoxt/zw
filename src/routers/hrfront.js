@@ -6,6 +6,22 @@ const router = {
   path: '/hrfront',
   children: [
     {
+      path:'workclothes/list',
+      name: 'workclothes/list',
+      component: () => import('@/views/hrfront/workclothes/list'),
+      meta:{
+        title:'工衣清单'
+      }
+    },
+    {
+      path:'workclothes/retrieval',
+      name: 'workclothes/retrieval',
+      component: () => import('@/views/hrfront/workclothes/retrieval'),
+      meta:{
+        title:'工衣领用'
+      }
+    },
+    {
       path:'dormitory/checkinout',
       name: 'dormitory/checkinout',
       component: () => import('@/views/hrfront/dormitory/checkinout'),

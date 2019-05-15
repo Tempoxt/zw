@@ -218,7 +218,7 @@
                                         :type="`select`"
                                         :field="{name:'合同年限',options:[{
                                         value: 1,
-                                        label: '一年'
+                                        label: '一年半'
                                         },{
                                         value: 2,
                                         label: '两年'
