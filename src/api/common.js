@@ -24,6 +24,17 @@ export function getOrg () {
   return request.get('/org')
 }
 
+export function  getTag(tag){
+    return new Promise(async (resolve)=>{
+      let data =  await request.get('/basicdata/dtl?tag='+tag)
+        resolve(data.map(o=>{
+          return {
+            label:o.title,
+            value:o.id
+          }
+      }))
+  })
+}
 export function resource (url) {
   return {
     get (params) {

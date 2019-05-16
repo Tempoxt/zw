@@ -76,6 +76,22 @@
       </div>
     </el-dialog>
 
+<el-dialog
+      title="地址"
+      :visible.sync="dialogMapsVisible"
+      class="public-dialog"
+      v-el-drag-dialog
+    >
+      <el-amap class="amap-box" :vid="'amap-vue'" :center="position" style="height:500px">
+               
+                <el-amap-marker 
+                vid="component-marker" 
+                :position="position" 
+        
+                >
+                </el-amap-marker>
+      </el-amap>
+    </el-dialog>
 
 
 
@@ -107,7 +123,7 @@
       >
       </el-table-column>
     <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+    <each-table-column :table_field="table_field" :template="template"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -131,6 +147,7 @@ export default {
   mixins: [table_mixin],
   inject: ['$side'],
   data() {
+    let vm = this
     return {
       loading: true,
       form:{},
@@ -139,13 +156,27 @@ export default {
       queryDialogFormVisible:true,
       table_height:window.innerHeight-236,
       adminList:[],
-      defaultForm
+      defaultForm,
+      position:[],
+      dialogMapsVisible:false,
+       template:{
+          dormLocation(column,row){
+              const { showMaps } = vm
+              return <el-button type="text" onClick={()=>{showMaps(row.dormLocation)}}>{row.dormLocation}</el-button>
+
+          },
+
+      }
     };
   },
   watch:{
 
   },
   methods: {
+    showMaps(pos){
+      this.position = pos.split(',').map(Number)
+      this.dialogMapsVisible = true
+    },
     async fetchTableData() {
     //  this.$side.getTree()
      this.table_loading = true;
@@ -160,7 +191,7 @@ export default {
         this.adminList = (await api_common.resource('dormitory/dorm/dormadmin').get()).rows.map(o=>{
             return {
                 label:o.chineseName,
-                value:o.id
+                value:o.employeeCode
             }
         })
         this.dialogFormVisible = true

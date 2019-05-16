@@ -30,6 +30,7 @@
                     </el-form-item>
                     <el-form-item label="默认排序列">
                       <el-select v-model="form.sortName" placeholder="默认排序列">
+                        <el-option label="后端排序" value=""></el-option>
                         <el-option :label="item.showname" :value="item.name" v-for="item in col" :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>

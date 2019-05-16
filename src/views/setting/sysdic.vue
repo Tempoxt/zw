@@ -12,7 +12,9 @@
             <div>
                 <el-form ref="form" :model="form" label-width="80px" label-position="left" >
                      <el-row :gutter="40">
-                          
+                                 <el-col :span="24">
+                                  <form-render :type="`input`" :field="{name:'标识'}" v-model="form.tag" />
+                                </el-col>
                                 <el-col :span="24">
                                     <form-render
                                         :type="`input`"
@@ -59,7 +61,7 @@
               <div >
                   <span class="icon iconfont icon-zonggongsi"></span>
                     &nbsp;
-                <span>{{ node.label||data.title }}</span>
+                <span>{{ node.label||data.title }} <span v-if="data.tag"> ({{data.tag}})</span></span>
             
               </div>
            <div class="actions">

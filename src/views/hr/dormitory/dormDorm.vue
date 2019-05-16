@@ -110,7 +110,7 @@
     <el-table-column  type="selection" width="60" class-name="table-column-disabled" :selectable="table_disable_selected">
     </el-table-column>
     <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+    <each-table-column :table_field="table_field" />
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -146,7 +146,8 @@ export default {
       adminList:[],
       defaultForm,
       roomAdminList:[],
-      dormList:[]
+      dormList:[],
+     
     };
   },
   watch:{
@@ -176,7 +177,7 @@ export default {
         this.roomAdminList = (await api_common.resource('dormitory/dorm/dormadmin').get({roomId:this.id})).rows.map(o=>{
             return {
                 label:o.chineseName,
-                value:o.id
+                value:o.employeeCode
             }
         })
         this.form.dorm = this.id

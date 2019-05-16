@@ -223,7 +223,7 @@ const defaultForm = () => {
 export default {
   inject: ['$side'],
   mixins: [table_mixin],
-  props:['id','data'],
+  props:['id','data','type'],
   data() {
       const generateData = _ => {
         const data = [];
@@ -282,7 +282,19 @@ export default {
     async fetchTableData() {
     //  this.$side.getTree()
      this.table_loading = true;
-     this.table_form.roomId = this.id||6
+     
+     if(this.type == 'room'){
+       this.table_form.roomId = this.id||6
+       delete this.table_form.dormId
+     }else{
+       this.table_form.dormId = this.id||6
+       delete this.table_form.roomId
+     }
+     if(this.type == 'start'){
+       delete this.table_form.dormId
+       delete this.table_form.roomId
+     }
+
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total

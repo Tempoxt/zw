@@ -63,7 +63,7 @@
            <div>
               <dormInner :id="current_id" :data="current_data" v-if="current_type==='start'" />
               <dormDorm :id="current_id" :data="current_data" v-if="current_type==='dorm'" />
-              <dormRoom :id="current_id" :data="current_data" v-if="current_type==='room'" />
+              <dormRoom :id="current_id" :data="current_data" v-if="current_type==='room'" :type="_current_type"/>
            </div>
        </div>
     </el-col>
@@ -101,6 +101,7 @@ export default {
             currentMenuid:0,
             current_id:'',
             current_type:'room',
+            _current_type:"",
             current_data:{}
         }
     },
@@ -115,6 +116,7 @@ export default {
           const { roomId,dormId } = data
           this.current_id = roomId||dormId
           // this.current_type =  data.name?'start':(data.roomName?'room':'dorm')
+          this._current_type =  data.name?'start':(data.roomName?'room':'dorm')
           this.current_type = 'room'
           this.current_data = data
           

@@ -20,29 +20,72 @@
              <el-tabs v-model="activeName" >
                 <el-tab-pane label="物品资料" name="first">
                     <el-row :gutter="20">
-            
                         <el-col :span="24">
-                            <form-render :type="`input`" :field="{name:'物品名称'}" v-model="form.bedName"/>
+                            <form-render :type="`input`" :field="{name:'物品名称'}" v-model="form.name"/>
                         </el-col>
-                    
-            
+                        <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'物品价格'}" v-model="form.price"/>
+                        </el-col>
                         <el-col :span="24">
                         <form-render
-                            :type="`radio`"
-                            :field="{name:'床的类型',options:[{
-                            value: 1,
-                            label: '双层'
-                            },{
-                            value: 0,
-                            label: '单层'
-                            }]}"
-                            v-model="form.bedType"
+                            :type="`select`"
+                            :field="{name:'物品分类',options:clothesSeasonData}"
+                            v-model="form.type"
                         />
+                        </el-col>
+                        <el-col :span="24">
+                        <form-render
+                            :type="`select`"
+                            :field="{name:'适用部门',options:clothesDepData}"
+                            v-model="form.depart"
+                            
+                        />
+                        </el-col>
+                        <el-col :span="24">
+                        <form-render
+                            :type="`select`"
+                            :field="{name:'适用职位',options:clothesJobData}"
+                            v-model="form.job"
+                            
+                        />
+                        </el-col>
+                        <el-col :span="24">
+                            <form-render
+                                :type="`select`"
+                                :field="{name:'物品款式',options:clothesSexData}"
+                                v-model="form.gender"
+                            />
+                        </el-col>
+                        <el-col :span="24">
+                             <form-render
+                                :type="`img`"
+                                :field="{name:'图片',}"
+                                v-model="form.image"
+                            />
                         </el-col>
                     </el-row>
                 </el-tab-pane>
                 <el-tab-pane label="SKU" name="second">
-                    
+                     <el-row :gutter="20">
+                        <el-col :span="24" v-for="item in clothesModelData" :key="item.label">
+                            <form-render :type="`input`" :field="{name:item.label}" v-model="form[item.label]"/>
+                        </el-col>
+                        <!-- <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'M'}" v-model="form.M"/>
+                        </el-col>
+                        <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'L'}" v-model="form.L"/>
+                        </el-col>
+                        <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'XL'}" v-model="form.XL"/>
+                        </el-col>
+                        <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'XXL'}" v-model="form.XXL"/>
+                        </el-col>
+                         <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'XXXL'}" v-model="form.XXXL"/>
+                        </el-col> -->
+                    </el-row>
                 </el-tab-pane>
 
             </el-tabs>
@@ -107,7 +150,7 @@ const api_resource = api_common.resource("workclothes/list");
 const defaultForm = () => {
     return {
         estate:0,
-        bedType:1,
+ 
     }
 }
 export default {
@@ -126,7 +169,12 @@ export default {
       defaultForm,
       roomAdminList:[],
       roomList:[],
-      activeName:'first'
+      activeName:'first',
+      clothesSeasonData:[],
+      clothesDepData:[],
+      clothesSexData:[],
+      clothesJobData:[],
+      clothesModelData:[]
     };
   },
   watch:{
@@ -146,8 +194,16 @@ export default {
         this.table_loading = false;
       }, 300);
     },
+    async initForm(){
+        this.clothesSeasonData = await api_common.getTag('clothesSeason')
+        this.clothesDepData = await api_common.getTag('clothesDep')
+        this.clothesSexData = await api_common.getTag('clothesSex')
+        this.clothesJobData = await api_common.getTag('clothesJob')
+        this.clothesModelData = await api_common.getTag('clothesModel')
+
+    },
     async add(){
-        
+        await this.initForm()
         this.form.room = this.id
         this.dialogFormVisible = true
     },
