@@ -10,13 +10,14 @@
     :show-file-list="false"
     :on-success="handleAvatarSuccess"
     :before-upload="beforeAvatarUpload">
-    <img v-if="data" :src="data" class="avatar">
+    <img v-if="data" :src="baseUrl+''+data" class="avatar">
     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
   </el-upload>
     <!-- <el-input v-model="data" v-bind="$parent.$attrs" v-on="$parent.$listeners" :placeholder="placeholder"></el-input> -->
   </el-form-item>
 </template>
 <script>
+let baseUrl = process.env.VUE_APP_STATIC
 export default {
   name: "form-img",
   props: {
@@ -30,7 +31,8 @@ export default {
   data() {
     return {
       data: "",
-      url:process.env.VUE_APP_BASEAPI
+      url:process.env.VUE_APP_BASEAPI,
+      baseUrl
     };
   },
   watch: {
@@ -57,7 +59,7 @@ export default {
   methods: {
     handleAvatarSuccess(res, file) {
         // this.data = URL.createObjectURL(file.raw);
-        this.data = process.env.VUE_APP_BASEAPI+'/'+res.path
+        this.data = res.path
      
     },
     beforeAvatarUpload(file) {

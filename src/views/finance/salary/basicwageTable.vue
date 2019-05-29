@@ -136,7 +136,7 @@
       :table_column="table_field"
     >
           <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+            <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
           </div>
     </table-header>
     <el-table
@@ -173,7 +173,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hot/record");
+const api_resource = api_common.resource("basicwage");
 import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
 const defaultForm = () => {
@@ -213,7 +213,6 @@ export default {
     }
   },
   methods: {
-   
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true
@@ -259,15 +258,15 @@ export default {
         }
         this.dialogFormVisible = false
         this.fetchTableData()
+        
     },
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("hot/record");
+    const { field, action,table } = await api_common.menuInit("basicwage");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
     this.fetchTableData();
-    this.table_form.dateLap = dayjs().format('YYYY-MM')
   }
 };
 </script>

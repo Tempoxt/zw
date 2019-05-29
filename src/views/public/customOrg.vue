@@ -20,7 +20,8 @@
             @node-click="handleChangeNode"
             :expand-on-click-node="false"
             :load="loadNode1"
-            lazy
+            default-expand-all
+           
           >
             <span slot-scope="{ node, data }">
 
@@ -38,7 +39,7 @@
 <script>
 import * as api_common from "@/api/common";
 export default {
-    props:['value'],
+    props:['value','url'],
     watch:{
        filterText(val) {
         this.$refs.tree2.filter(val);
@@ -46,8 +47,8 @@ export default {
     },
     methods:{
       handleChangeNode(val,node){
-          this.$emit('input',val.id)
-          this.$emit('change',val.id)
+          this.$emit('input',val.orgid)
+          this.$emit('change',val.orgid)
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -56,9 +57,9 @@ export default {
       async loadNode1(node, resolve) {
           const  { data }  = node
           if(data.subs){
-             let res = await this.$request.get('org/hotselect',{
+             let res = await this.$request.get(this.url,{
                  params:{
-                     org_id:data.id
+                     org_id:data.orgid
                  }
              })
              res.forEach(o=>{
@@ -79,7 +80,7 @@ export default {
     },
     async created(){
          this.data2 = await this.$request.get('org/hotselect')
-         let defaultId = this.data2[0].id
+         let defaultId = this.data2[0].orgid
          this.$emit('change',defaultId)
         this.$nextTick(()=>{
            this.$refs.tree2.setCurrentKey(defaultId)

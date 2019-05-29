@@ -102,7 +102,8 @@
                 v-model="distribution_form.empId"
               /> -->
               <form-render
-              :type="`select`" :field="{name:'入住员工',options:memberList}"
+                :type="`select`" :field="{name:'入住员工',options:memberList}"
+                filterable 
                 v-model="distribution_form.empId"
               />
             </el-col>
@@ -261,8 +262,7 @@ export default {
       distribution_form:{},
       template:{
           checkState(column,row){
-              console.log(row,'row')
-              return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
+              return <div class={['text-danger','','text-danger',''][row.checkState]}>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
           },
 
       },
@@ -284,10 +284,10 @@ export default {
      this.table_loading = true;
      
      if(this.type == 'room'){
-       this.table_form.roomId = this.id||6
+       this.table_form.roomId = this.id
        delete this.table_form.dormId
      }else{
-       this.table_form.dormId = this.id||6
+       this.table_form.dormId = this.id
        delete this.table_form.roomId
      }
      if(this.type == 'start'){
@@ -359,6 +359,10 @@ export default {
         //     }
         // })
         // this.form.dorm = this.id
+        if(this.data.dormType===undefined){
+          this.$message('请先选择房间')
+          return 
+        }
         this.dialogLoading = true
         this.dialogFormVisible = true
         let { rows } = await this.$request.get('dormitory/checkinemp',{params:{dormType:this.data.dormType}})
@@ -411,6 +415,8 @@ export default {
     this.table_actions = action;
     this.table_config = table
     this.fetchTableData();
+   
+    console.log(this.table_actions,'this.table_actions')
   }
 };
 </script>

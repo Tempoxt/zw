@@ -111,7 +111,11 @@
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
-    ></table-header>
+    >
+     <div style="padding-left:10px">
+       <dateLap v-model="table_form.dateLap" @change="fetchTableData" type="3"/>
+     </div>
+    </table-header>
     <el-table
       @selection-change="handleChangeSelection"
       :row-class-name="table_state_className"
@@ -147,7 +151,9 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("workclothes/list");
+const api_resource = api_common.resource("workclothes/retrievalist");
+import dateLap from '@/components/Table/DateLap'
+import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
         estate:0,
@@ -156,8 +162,9 @@ const defaultForm = () => {
 }
 export default {
   mixins: [table_mixin],
-
-  inject: ['$side'],
+  components:{
+    dateLap
+  },
   data() {
     return {
       loading: true,
@@ -178,11 +185,7 @@ export default {
       clothesModelData:[]
     };
   },
-  watch:{
-    id(){
-      this.fetchTableData()
-    }
-  },
+
   methods: {
     async fetchTableData() {
     //  this.$side.getTree()
@@ -226,11 +229,13 @@ export default {
     }
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("workclothes/list");
+    const { field, action,table } = await api_common.menuInit("workclothes/retrievalist");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
+    this.table_form.dateLap = dayjs().format('YYYY')
     this.fetchTableData();
+
   }
 };
 </script>

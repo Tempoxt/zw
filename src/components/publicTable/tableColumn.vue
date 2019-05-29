@@ -1,4 +1,5 @@
 <script>
+let baseUrl = process.env.VUE_APP_STATIC
 export default {
     props:['row','column','template'],
     methods:{
@@ -44,6 +45,9 @@ export default {
         },
         'icon'(){
             return <i class={this.row[this.column.name]}></i>
+        },
+        'image'(){
+            return <img src={baseUrl+this.row.image} width="50" height="50"></img>
         }
     },
     render(){

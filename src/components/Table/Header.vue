@@ -115,7 +115,7 @@ export default {
           return len >= 1;
         }
         
-        if (['forbid','lock','unlock','enable','remove','checkout'].indexOf(code)!==-1) {
+        if (['forbid','lock','unlock','enable','remove','checkout','audit','change','confirm'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;
@@ -155,7 +155,7 @@ export default {
   },
   created(){
    setTimeout(()=>{
-      console.log(this.table_column,'table_column')
+      // console.log(this.table_column,'table_column')
    },2000)
   }
 };

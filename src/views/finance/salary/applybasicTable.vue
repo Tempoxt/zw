@@ -7,34 +7,38 @@
   >
 
 <el-dialog
-      title="加入"
+      title="调整"
       :visible.sync="dialogForm3Visible"
       class="public-dialog"
       v-el-drag-dialog
       width="800px"
     >
 
-    <el-form ref="form" :model="form" label-width="100px" :inline="true">
-        <el-form-item label="有效起始日期">
-          <el-date-picker
-              v-model="form3.stayStart"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-         <el-form-item label="有效结束日期">
-          <el-date-picker
-              v-model="form3.stayEnd"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-
+    <el-form ref="form" :model="form" label-width="100px" >
+        <form-render :type="`member`" :field="{name:'员工'}" v-model="form3.staff" />
+        <form-render :type="`day`" :field="{name:'变动日期'}" v-model="form3.changedate" />
+        <form-render :type="`input`" :field="{name:'调薪原因'}" v-model="form3.remark" />
+        <el-row :gutter="20">
+                <el-col :span="4">
+                   <span> &nbsp;</span>
+                </el-col>
+                <el-col :span="10">
+                    调整前
+                </el-col>
+                <el-col :span="10">
+                    调整后
+                </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">基本工资</el-col><el-col :span="10"> <el-input v-model="formData.basicWage" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.basicWage"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">加班津贴</el-col><el-col :span="10"> <el-input v-model="formData.overtime" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.overtime"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">休息日加班</el-col><el-col :span="10"> <el-input v-model="formData.weekendWelfare" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.weekendWelfare"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">福利/津贴</el-col><el-col :span="10"> <el-input v-model="formData.welfare" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.welfare"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">全勤奖</el-col><el-col :span="10"> <el-input v-model="formData.fullAtt" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.fullAtt"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">保底绩效</el-col><el-col :span="10"> <el-input v-model="formData.minPerformance" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.minPerformance"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">考核绩效</el-col><el-col :span="10"> <el-input v-model="formData.performance" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.performance"></el-input> </el-col></el-row>
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">小计</el-col><el-col :span="10"> <el-input v-model="count1" disabled></el-input></el-col><el-col :span="10"><el-input v-model="count2" disabled></el-input> </el-col></el-row>
     </el-form>
 
-      <OrgSelect v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogForm3Visible = false">取 消</el-button>
@@ -136,7 +140,7 @@
       :table_column="table_field"
     >
           <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+            <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
           </div>
     </table-header>
     <el-table
@@ -173,7 +177,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hot/record");
+const api_resource = api_common.resource("basicwage/applysheet");
 import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
 const defaultForm = () => {
@@ -188,6 +192,18 @@ export default {
   components:{
       dateLap,
       OrgSelect
+  },
+  computed:{
+    count1(){
+      return ['basicWage','overtime','weekendWelfare','welfare','fullAtt','minPerformance','performance'].map(o=>+this.formData[o]).reduce((total,num)=>(
+        total+=num
+      ))||0
+    },
+    count2(){
+      return ['basicWage','overtime','weekendWelfare','welfare','fullAtt','minPerformance','performance'].map(o=>+this.form3[o]).reduce((total,num)=>(
+        total+=num
+      ))||0
+    },
   },
   data() {
     return {
@@ -204,16 +220,21 @@ export default {
       dialogForm2Visible:false,
       dialogForm3Visible:false,
       form2:{},
-      form3:{}
+      form3:{},
+      formData:[]
     };
   },
   watch:{
     id(){
       this.fetchTableData()
+    },
+    async 'form3.staff'(staff){
+        const result = await this.$request.get('/basicwage',{params:{staff}})
+        this.formData = result[0]
+        this.form3 = Object.assign({},this.formData)
     }
   },
   methods: {
-   
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true
@@ -223,12 +244,19 @@ export default {
         this.dialogForm2Visible = false
     },
     async handleForm3Submit(){
-      this.form3.ids = this.$refs.OrgSelect.getIdsResult()
-      await this.$request.post('/hot/record',this.form3)
+
+    
+      await this.$request.post('basicwage/applysheet',this.form3,{
+        params:{
+          sheetType:1
+        }
+      })
+    
       this.dialogForm3Visible = false
     },
     add(){
         this.form3 = {}
+        this.formData = {}
         this.dialogForm3Visible = true
     },
     async edit(){
@@ -242,6 +270,7 @@ export default {
      }
      this.table_loading = true;
      this.table_form.org_id = this.id
+     this.table_form.sheetType = 2
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
@@ -259,15 +288,15 @@ export default {
         }
         this.dialogFormVisible = false
         this.fetchTableData()
+        
     },
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("hot/record");
+    const { field, action,table } = await api_common.menuInit("applybasic");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
     this.fetchTableData();
-    this.table_form.dateLap = dayjs().format('YYYY-MM')
   }
 };
 </script>

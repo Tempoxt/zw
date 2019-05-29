@@ -126,6 +126,8 @@ export default {
       this.table_sort = {}
       // this.table_sort[prop] = {}
       if(order){
+        // console.log(arguments,'column')
+        // console.log(this.table_field.find(o=>o.name==prop),'this.table_field')
         this.table_sort[prop] = {'ascending':'asc','descending':'desc'}[order]
         this.table_form.sortname = Object.keys(this.table_sort).join(',')
         this.table_form.sorttype = Object.values(this.table_sort).join(',')

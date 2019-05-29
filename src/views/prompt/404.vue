@@ -11,6 +11,7 @@
         </div>
         <div class="notfound-btn-container">
             <a class="notfound-btn" href="/">返回首页</a>
+            <button class="notfound-btn" href="/" @click="$router.go(-1)">后退</button>
         </div>
     </div>
 

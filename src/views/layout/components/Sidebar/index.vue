@@ -44,7 +44,7 @@ export default {
     ...mapState({})
   },
   created() {
-    console.log(this.$route, "router");
+    console.log(this.sideBarMenu, "router");
   },
   data() {
     return {};

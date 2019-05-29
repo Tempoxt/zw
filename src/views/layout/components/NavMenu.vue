@@ -79,6 +79,12 @@ export default {
       menuList: state => state.app.menuList.menu
     })
   },
+  watch:{
+    $route(){
+      this.activeIndex = this.$route["matched"][0].path;
+      this.handleSelect(this.activeIndex);
+    }
+  },
   methods: {
     handleSelect(key, keyPath) {
       const { id } = this.menuList.find(item => item.url == key) || {};

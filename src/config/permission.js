@@ -1,4 +1,4 @@
-import router from '../router'
+import { router,generateRoutes } from '../router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import auth from '@/utils/auth'
@@ -8,6 +8,7 @@ const createdRouterHash = (router) => {
 
 }
 router.beforeEach(async (to, from, next) => {
+    
     NProgress.start()
     if (!auth.getToken() && to.path !== '/account/login') {
         next({
@@ -23,19 +24,22 @@ router.beforeEach(async (to, from, next) => {
             })
             return
         }
-        if (store.state.app.menuList === null) {
-            const router = await store.dispatch('getMenuList')
-            // 生成路由hash
-            createdRouterHash(router)
-        }
         if (store.state.user.userInfo === null) {
            await store.dispatch('user/getUserInfo')
+        }
+        if (store.state.app.menuList === null) {
+            const { menu } = await store.dispatch('getMenuList')
+            console.log(menu)
+            console.log(generateRoutes(menu),'generateRoutes')
+            router.addRoutes(generateRoutes(menu))
+            router.addRoutes([{ path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } }}])
+            // 生成路由hash
+            createdRouterHash(menu)
+            next({ ...to, replace: true })
         }
         // 比对 to 和 hash 
 
     }
-
-
     next()
 
 

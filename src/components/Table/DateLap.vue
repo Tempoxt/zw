@@ -40,7 +40,10 @@
 import dayjs from 'dayjs'
 export default {
     props:{
-        value:{}
+        value:{},
+        type:{
+            default:'2'
+        }
     },
     computed:{
         value2:{
@@ -73,7 +76,7 @@ export default {
                 value:'3',
                 label:'年'
             }],
-            type:'2'
+            // type:'2'
         }
     }
 }

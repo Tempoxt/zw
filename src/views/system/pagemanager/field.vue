@@ -40,6 +40,9 @@
             <el-col :span="12">
               <form-render :type="`input`" :field="{name:'字段列宽'}" v-model="form.width" placeholder="请输入内容"/>
             </el-col>
+            <!-- <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'排序字段'}" v-model="form.width" placeholder="默认为字段名"/>
+            </el-col> -->
            <el-col :span="12">
               <form-render
                 :type="`radio`"

@@ -4,13 +4,31 @@ import Layout from '@/views/layout/layout'
 const router = {
   component: Layout,
   path: '/hrfront',
+  // redirect:'/hrfront/dashboard',
   children: [
     {
-      path:'hot/hot',
-      name: 'hot/hot',
-      component: () => import('@/views/hrfront/hot/hot'),
+      path:'/hrfront/dashboard',
+      name: 'hrfront/dashboard',
+      component: () => import('@/views/hrfront/dashboard'),
       meta:{
-        title:'高温津贴管理'
+        title:'人力资源'
+      }
+    },
+    {
+      path:'attendance/recordlist',
+      name: 'attendance/recordlist',
+      component: () => import('@/views/hrfront/attendance/recordlist'),
+      meta:{
+        title:'考勤明细'
+      }
+    },
+   
+    {
+      path:'attendance/countlist',
+      name: 'attendance/countlist',
+      component: () => import('@/views/hrfront/attendance/countlist'),
+      meta:{
+        title:'考勤总汇'
       }
     },
     {
@@ -22,9 +40,9 @@ const router = {
       }
     },
     {
-      path:'workclothes/retrieval',
-      name: 'workclothes/retrieval',
-      component: () => import('@/views/hrfront/workclothes/retrieval'),
+      path:'workclothes/retrievalist',
+      name: 'workclothes/retrievalist',
+      component: () => import('@/views/hrfront/workclothes/retrievalist'),
       meta:{
         title:'工衣领用'
       }
@@ -46,11 +64,35 @@ const router = {
       }
     },
     {
+      path:'dormitory/checkoutauditlist',
+      name: 'dormitory/checkoutauditlist',
+      component: () => import('@/views/hrfront/dormitory/checkoutauditlist'),
+      meta:{
+        title:'搬离审核'
+      }
+    },
+    {
       path:'dormitory/empmonthbill',
       name: 'dormitory/empmonthbill',
       component: () => import('@/views/hrfront/dormitory/empmonthbill'),
       meta:{
         title:'个人分摊费用'
+      }
+    },
+    {
+      path:'livecancel/dormitory/liveregister',
+      name: 'livecancel/dormitory/liveregister',
+      component: () => import('@/views/hrfront/dormitory/liveregister'),
+      meta:{
+        title:'居住登记'
+      }
+    },
+    {
+      path:'livecancel/dormitory/cancelregister',
+      name: 'livecancel/dormitory/cancelregister',
+      component: () => import('@/views/hrfront/dormitory/cancelregister'),
+      meta:{
+        title:'注销登记'
       }
     },
     {

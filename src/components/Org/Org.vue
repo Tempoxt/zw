@@ -44,12 +44,8 @@ export default {
       }
     },
     methods:{
+
       handleChangeNode(data,node){
-        //   if(data.disabled){
-
-        //   }else{
-
-        //   }
           this.$emit('change',data)
       },
       filterNode(value, data) {
@@ -82,7 +78,7 @@ export default {
     },
     async created(){
          this.data2 = await this.$request.get('/org/select');
-         this.data2[0].disabled = true
+        //  this.data2[0].disabled = true
         //  let defaultId = this.data2[0].orgid
         //  this.$emit('change',defaultId)
         // this.$nextTick(()=>{

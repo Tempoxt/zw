@@ -6,13 +6,46 @@ const router = {
   path: '/cw',
   children: [
     {
-      path:'lovefoundation/member',
+      path:'basicwage',
+      name: 'basicwage',
+      component: () => import('@/views/finance/salary/basicwage'),
+      meta:{
+        title:'薪资基础资料'
+      }
+    },
+    {
+      path:'basicwage/applysheet/2',
+      name: 'basicwage/applysheet/2',
+      component: () => import('@/views/finance/salary/basicwageApplysheet'),
+      meta:{
+        title:'薪资调整记录'
+      }
+    },
+    {
+      path:'basicwage/applysheet/1',
+      name: 'basicwage/applysheet/1',
+      component: () => import('@/views/finance/salary/applybasic'),
+      meta:{
+        title:'工薪确认记录'
+      }
+    },
+    {
+      path:'lovefoundation/lovefoundation',
       name: 'lovefoundation/member',
       component: () => import('@/views/finance/lovefoundation/member'),
       meta:{
         title:'会员管理'
       }
     },
+    {
+      path:'lovefoundation-foundin/lovefoundation-foundin',
+      name: 'lovefoundation/foundin/lovefoundation/foundin',
+      component: () => import('@/views/finance/lovefoundation/foundin'),
+      meta:{
+        title:'会员管理'
+      }
+    },
+    
     {
         path:'lovefoundation/feecollecting',
         name: 'lovefoundation/feecollecting',

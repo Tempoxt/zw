@@ -173,9 +173,10 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hot/record");
+const api_resource = api_common.resource("hot/history");
 import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
+import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
         estate:1,
@@ -213,7 +214,9 @@ export default {
     }
   },
   methods: {
-   
+    reset(){
+      this.$request.get('hot/historyreset',{params:{dateLap:this.table_form.dateLap}})
+    },
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true
@@ -262,7 +265,7 @@ export default {
     },
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("hot/record");
+    const { field, action,table } = await api_common.menuInit("hot/history");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table

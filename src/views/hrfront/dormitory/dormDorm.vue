@@ -397,6 +397,7 @@ export default {
     this.table_actions = action;
     this.table_config = table
     this.fetchTableData();
+    
   }
 };
 </script>

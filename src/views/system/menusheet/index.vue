@@ -22,6 +22,9 @@
             <el-col :span="12">
               <form-render :type="`menu`" :field="{name:'上级菜单',position:position}" v-model="form.parentid"/>
             </el-col>
+             <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'唯一名称'}" v-model="form.uniueCode"/>
+            </el-col>
 
             <el-col :span="12">
               <form-render :type="`input`" :field="{name:'请求地址'}" v-model="form.urlname" placeholder="请输入"/>

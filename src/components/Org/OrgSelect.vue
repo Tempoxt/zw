@@ -16,10 +16,10 @@
                         <div class="control">
                             <div class="control-btns">
                                 <div>
-                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''"></el-button>
+                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
                                 </div>
                                 <div>
-                                   <el-button icon="el-icon-arrow-left" circle></el-button>
+                                   <el-button icon="el-icon-arrow-left" circle  :type="reusltSelect.id?'primary':''" @click="remove"></el-button>
                                 </div>
                                 <div>
                                     <el-button icon="el-icon-refresh" circle></el-button>
@@ -28,7 +28,7 @@
                         </div>
                     </el-col>
                     <el-col :span="10">
-                            <OrgResult  style="height:400px" :data="result"/>
+                            <OrgResult  style="height:400px" :data="result" @change="changeResult"/>
                     </el-col>
                 </el-row>
 
@@ -42,6 +42,9 @@
 import Org from './Org.vue'
 import OrgResult from './OrgResult'
 export default {
+    props:{
+       
+    },
     components:{
         Org,
         OrgResult
@@ -52,20 +55,40 @@ export default {
             select:{
                 disabled:true
             },
+            reusltSelect:{
+                
+            },
             result:[
-                {
-                    employeeCode: 0,
-                    id: "c1",
-                    name: "兆威机电",
-                    principalship: "",
-                    subs: 1
-                }
+               
             ]
         }
     },
     methods:{
+        getIdsResult(){
+            return this.result.map(o=>o.id).join(',')
+        },
         changeOrg(data){
             this.select = data
+        },
+        changeResult(data){
+           
+            this.reusltSelect= data
+        },
+        add(){
+            if(this.select && !this.select.disabled){
+                this.result.push(this.select)
+                this.$set(this.select,'disabled',true)
+                this.select.disabled = true
+            }
+        },
+        remove(){
+            this.$set(this.reusltSelect,'disabled',false)
+            this.result.forEach((o,i)=>{
+                if(o.id===this.reusltSelect.id){
+                    this.result.splice(i,1)
+                }
+            })
+            this.reusltSelect = {}
         }
     }
 }

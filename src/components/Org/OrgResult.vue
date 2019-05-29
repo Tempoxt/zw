@@ -11,8 +11,8 @@
 
         
             <div style="margin-top:4px;">
-                <div v-for="(item,i) in data" :key="i">
-                   <span v-if="item.subs === 1" class="icon iconfont icon-zonggongsi"></span> <span> &nbsp;&nbsp;{{item.name}}</span>
+                <div v-for="(item,i) in data" :key="i" class="select-item" @click="handleClick(item)" :class="`${select===item?'active':''}`">
+                   <span :style="`${item.subs === 1?'opacity: 1;':'opacity: 0;'}`" class="icon iconfont icon-zonggongsi"></span> <span> &nbsp;&nbsp;{{item.name}}</span>
                 </div>
             </div>
         </div>
@@ -24,9 +24,20 @@ export default {
     props:['data'],
     data(){
         return{
-            filterText:''
+            filterText:'',
+            select:{}
         }
-    }
+    },
+    methods:{
+        handleClick(item){
+            if(this.select === item){
+                this.select = {}
+            }else{
+                this.select = item
+            }
+            this.$emit('change',this.select)
+        }
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -36,5 +47,13 @@ export default {
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
+}
+.select-item {
+    cursor: pointer;
+   line-height: 34px;
+    padding-left: 10px;
+}
+.active {
+    background-color: #ebf9fc;
 }
 </style>

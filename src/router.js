@@ -8,8 +8,19 @@ import system from './routers/system'
 import salary from './routers/salary'
 import financial from './routers/financial'
 import setting from './routers/setting'
+import adminManagement from './routers/adminManagement'
 Vue.use(Router)
-export default new Router({
+
+
+
+
+
+let asyncRoutes = [
+  ...hr,
+  ...system
+]
+
+let router =  new Router({
   mode: 'history',
   routes: [
     {
@@ -31,33 +42,65 @@ export default new Router({
         }
       ]
     },
-    hr,
+  
     hrfront,
     salary,
     financial,
     setting,
-    {
-      component: Layout,
-      path: '/system',
-      children: system
-    },
+    adminManagement,
+    // {
+    //   component: Layout,
+    //   path: '/system',
+    //   children: system
+    // },
     {
       component: () => import('@/views/account/login'),
       path: '/account/login'
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
       path: '/404',
       component: () => import('@/views/prompt/404'),
       hidden: true
     },
-    { path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } } }
+    // { path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } } }
   ]
 })
+
+
+const generateRoutes = (menu,base)=>{
+  let res = []
+  if(!base){
+    for(let router of menu){
+      let r = {
+        component: Layout,
+        path: router.url,
+        children: []
+      }
+      if(router.subs && router.subs.length){
+        r.children = generateRoutes(router.subs,router.url)
+      }
+      res.push(r)
+    }
+  }else{
+    for(let router of menu){
+      var c = asyncRoutes.find(o=>o.name===router.unieCode)
+      if(!c){
+        console.error('找不到路由'+router.name+''+router.unieCode)
+      }
+      let r = {
+        meta:{},
+       ...c,
+       path:router.url?base+'/'+router.url:Math.random()+'',
+      }
+      r.meta.title = router.name
+      if(router.subs && router.subs.length){
+        r.children = generateRoutes(router.subs,base)
+      }
+      res.push(r)
+    }
+  }
+  return res
+}
+
+export default router
+export { router,generateRoutes }
