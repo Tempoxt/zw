@@ -16,15 +16,23 @@
       </template>
 
       <template v-for="child in item.subs" v-if="!child.hidden&&item.subs">
-        <sidebar-item
+        <!-- <sidebar-item
           v-if="child.subs&&child.subs.length>0"
           :is-nest="true"
           :item="child"
           :key="child.url"
           :base-path="resolvePath(child.url)"
           class="nest-menu"
+        /> -->
+        <sidebar-item
+          v-if="child.subs&&child.subs.length>0"
+          :is-nest="true"
+          :item="child"
+          :key="child.url"
+          :base-path="$route['matched'][0].path"
+          class="nest-menu"
+          :parentRoute="!!$route"
         />
-
         <app-link v-else :to="resolvePath(child.url)" :key="child.name">
           <el-menu-item :index="resolvePath(child.url)">
             <item v-if="child" :icon="child.icon" :title="child.name"/>
@@ -107,7 +115,7 @@ export default {
       if (this.isExternalLink(routePath)) {
         return routePath;
       }
-      // console.log(this.basePath,this.parentRoute,'this.basePath')
+      console.log(this.basePath,this.parentRoute,routePath,'this.basePath')
       return this.parentRoute?path.resolve(this.basePath || "/", routePath):this.basePath
     },
     isExternalLink(routePath) {
