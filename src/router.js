@@ -16,8 +16,10 @@ Vue.use(Router)
 
 
 let asyncRoutes = [
+  ...system,
   ...hr,
-  ...system
+  ...hrfront,
+  ...setting
 ]
 
 let router =  new Router({
@@ -42,17 +44,10 @@ let router =  new Router({
         }
       ]
     },
-  
-    hrfront,
-    salary,
-    financial,
-    setting,
-    adminManagement,
-    // {
-    //   component: Layout,
-    //   path: '/system',
-    //   children: system
-    // },
+    // salary,
+    // financial,
+    // setting,
+    // adminManagement,
     {
       component: () => import('@/views/account/login'),
       path: '/account/login'
@@ -94,7 +89,8 @@ const generateRoutes = (menu,base)=>{
       }
       r.meta.title = router.name
       if(router.subs && router.subs.length){
-        r.children = generateRoutes(router.subs,base)
+        res.push(...generateRoutes(router.subs,base))
+        // r.children = generateRoutes(router.subs,base)
       }
       res.push(r)
     }

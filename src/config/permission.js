@@ -31,7 +31,9 @@ router.beforeEach(async (to, from, next) => {
             const { menu } = await store.dispatch('getMenuList')
             console.log(menu)
             console.log(generateRoutes(menu),'generateRoutes')
-            router.addRoutes(generateRoutes(menu))
+            let menus = generateRoutes(menu)
+            router.addRoutes([menus[0]])
+            router.addRoutes([menus[1]])
             router.addRoutes([{ path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } }}])
             // 生成路由hash
             createdRouterHash(menu)

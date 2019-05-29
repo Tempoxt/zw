@@ -22,9 +22,10 @@
           v-for="route in sideBarMenu"
           :key="route.url"
           :item="route"
-          :index="$route['matched'][0].path+'/'+route.url"
           :base-path="$route['matched'][0].path"
+          :parentRoute="!!$route"
         />
+        <!-- :index="$route['matched'][0].path+'/'+route.url" -->
       </el-menu>
     </el-scrollbar>
   </div>
@@ -44,7 +45,7 @@ export default {
     ...mapState({})
   },
   created() {
-    console.log(this.sideBarMenu, "router");
+    console.log(this.$route, "router");
   },
   data() {
     return {};

@@ -7,7 +7,7 @@ export default [
       component: () => import('@/views/system/menusheet')
     },
     {
-      name: 'pagemanager',
+      name: 'pageManager',
       meta: {
         title: '页面管理'
       },

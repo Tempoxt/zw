@@ -4,7 +4,7 @@
       v-if="hasOneShowingChild(item.subs,item) && (item.tabs||!onlyOneChild.subs||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
     >
       <el-menu-item :index="resolvePath(item.url)+(item.isTabs?`?menuid=${item.id}`:'')" :class="{'submenu-title-noDropdown':!isNest}">
-        <i :class="onlyOneChild.icon" style="margin-right:10px"></i>
+        <i :class="onlyOneChild.icon" style="margin-right:10px" :title="resolvePath(item.url)"></i>
         <span slot="title">{{onlyOneChild.name}}</span>
         <!-- <item v-if="onlyOneChild" :icon="onlyOneChild.icon||item.icon" :title="onlyOneChild.name"/> -->
       </el-menu-item>
@@ -59,14 +59,17 @@ export default {
     basePath: {
       type: String,
       default: ""
-    }
+    },
+    parentRoute:{}
   },
   data() {
     return {
       onlyOneChild: null
     };
   },
-  created() {},
+  created() {
+    
+  },
   methods: {
     hasOneShowingChild(children = [], parent) {
       if(parent.subs.some(item=>item.menutype===3)){
@@ -104,7 +107,8 @@ export default {
       if (this.isExternalLink(routePath)) {
         return routePath;
       }
-      return path.resolve(this.basePath || "/", routePath);
+      // console.log(this.basePath,this.parentRoute,'this.basePath')
+      return this.parentRoute?path.resolve(this.basePath || "/", routePath):this.basePath
     },
     isExternalLink(routePath) {
       return isExternal(routePath);

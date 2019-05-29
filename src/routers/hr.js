@@ -1,5 +1,5 @@
-const router = [
 
+export default [
   {
     name: 'dormitory/dorm',
     component: () => import('@/views/hr/dormitory/dorm'),
@@ -13,7 +13,7 @@ const router = [
     component: () => import('@/views/hr/personnel-information')
   },
   {
-    path:'restaurant',
+    
     name: 'restaurant',
     component: () => import('@/views/hr/restaurant'),
     meta:{
@@ -21,8 +21,8 @@ const router = [
     }
   },
   {
-    path:'restaurant-meallevel',
-    name: 'mealtype',
+
+    name: 'mealType',
     component: () => import('@/views/hr/restaurant-meallevel'),
     meta:{
       title:'餐次类型'
@@ -63,4 +63,3 @@ const router = [
 
 
 ]
-export default router
