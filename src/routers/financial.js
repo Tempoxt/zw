@@ -23,7 +23,7 @@ export default [{
         }
     },
     {
-        name: 'lovefoundation/member',
+        name: 'lfMemberManager',
         component: () =>
             import ('@/views/finance/lovefoundation/member'),
         meta: {
@@ -31,11 +31,11 @@ export default [{
         }
     },
     {
-        name: 'lfMemberManager',
+        name: 'lfManager',
         component: () =>
             import ('@/views/finance/lovefoundation/foundin'),
         meta: {
-            title: '会员管理'
+            title: '基金管理'
         }
     },
     {
