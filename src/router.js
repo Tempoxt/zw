@@ -11,92 +11,88 @@ import setting from './routers/setting'
 import adminManagement from './routers/adminManagement'
 Vue.use(Router)
 
-
-
-
-
 let asyncRoutes = [
-  ...system,
-  ...hr,
-  ...hrfront,
-  ...setting
+    ...system,
+    ...hr,
+    ...hrfront,
+    ...setting,
+    ...financial,
 ]
 
-let router =  new Router({
-  mode: 'history',
-  routes: [
-    {
-      component: Layout,
-      path: '/',
-      meta: {
-        requiresAuth: true,
-        title: '面板'
-      },
-      children: [
+let router = new Router({
+    mode: 'history',
+    routes: [{
+            component: Layout,
+            path: '/',
+            meta: {
+                requiresAuth: true,
+                title: '面板'
+            },
+            children: [{
+                path: '',
+                name: 'home',
+                component: Home,
+                meta: {
+                    requiresAuth: true,
+                    title: '面板'
+                }
+            }]
+        },
+        // salary,
+        // financial,
+        // setting,
+        // adminManagement,
         {
-          path: '',
-          name: 'home',
-          component: Home,
-          meta: {
-            requiresAuth: true,
-            title: '面板'
-          }
-        }
-      ]
-    },
-    // salary,
-    // financial,
-    // setting,
-    // adminManagement,
-    {
-      component: () => import('@/views/account/login'),
-      path: '/account/login'
-    },
-    {
-      path: '/404',
-      component: () => import('@/views/prompt/404'),
-      hidden: true
-    },
-    // { path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } } }
-  ]
+            component: () =>
+                import ('@/views/account/login'),
+            path: '/account/login'
+        },
+        {
+            path: '/404',
+            component: () =>
+                import ('@/views/prompt/404'),
+            hidden: true
+        },
+        // { path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } } }
+    ]
 })
 
 
-const generateRoutes = (menu,base)=>{
-  let res = []
-  if(!base){
-    for(let router of menu){
-      let r = {
-        component: Layout,
-        path: router.url,
-        children: []
-      }
-      if(router.subs && router.subs.length){
-        r.children = generateRoutes(router.subs,router.url)
-      }
-      res.push(r)
+const generateRoutes = (menu, base) => {
+    let res = []
+    if (!base) {
+        for (let router of menu) {
+            let r = {
+                component: Layout,
+                path: router.url,
+                children: []
+            }
+            if (router.subs && router.subs.length) {
+                r.children = generateRoutes(router.subs, router.url)
+            }
+            res.push(r)
+        }
+    } else {
+        for (let router of menu) {
+            var c = asyncRoutes.find(o => o.name === router.unieCode)
+            if (!c) {
+                console.error('找不到路由' + router.name + '' + router.unieCode)
+            }
+            let r = {
+                meta: {},
+                ...c,
+                path: router.url ? base + '/' + router.url : Math.random() + '',
+            }
+            r.meta.title = router.name
+            if (router.subs && router.subs.length) {
+                res.push(...generateRoutes(router.subs, base))
+                    // r.children = generateRoutes(router.subs,base)
+            }
+            res.push(r)
+        }
     }
-  }else{
-    for(let router of menu){
-      var c = asyncRoutes.find(o=>o.name===router.unieCode)
-      if(!c){
-        console.error('找不到路由'+router.name+''+router.unieCode)
-      }
-      let r = {
-        meta:{},
-       ...c,
-       path:router.url?base+'/'+router.url:Math.random()+'',
-      }
-      r.meta.title = router.name
-      if(router.subs && router.subs.length){
-        res.push(...generateRoutes(router.subs,base))
-        // r.children = generateRoutes(router.subs,base)
-      }
-      res.push(r)
-    }
-  }
-  return res
+    return res
 }
 
 export default router
-export { router,generateRoutes }
+export { router, generateRoutes }
