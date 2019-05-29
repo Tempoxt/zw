@@ -115,7 +115,6 @@ export default {
       if (this.isExternalLink(routePath)) {
         return routePath;
       }
-      console.log(this.basePath,this.parentRoute,routePath,'this.basePath')
       return this.parentRoute?path.resolve(this.basePath || "/", routePath):this.basePath
     },
     isExternalLink(routePath) {

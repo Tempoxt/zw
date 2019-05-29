@@ -151,7 +151,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("workclothes/retrievalist");
+const api_resource = api_common.resource("workclothes/record");
 import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 const defaultForm = () => {
@@ -229,7 +229,7 @@ export default {
     }
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("workclothes/retrievalist");
+    const { field, action,table } = await api_common.menuInit("workclothes/record");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
