@@ -63,7 +63,6 @@ const generateRoutes = (menu, base) => {
     let res = []
     if (!base) {
         for (let router of menu) {
-            console.log(router,'router222')
             let r = {
                 component: Layout,
                 path: router.url,
@@ -72,7 +71,6 @@ const generateRoutes = (menu, base) => {
             if (router.subs && router.subs.length) {
                 r.children = generateRoutes(router.subs, router.url)
             }
-            console.log(r,'r')
             res.push(r)
         }
     } else {
