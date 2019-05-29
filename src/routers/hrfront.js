@@ -39,7 +39,7 @@ export default [{
         }
     },
     {
-        name: 'clothesManager',
+        name: 'clothesList',
         component: () =>
             import ('@/views/hrfront/workclothes/list'),
         meta: {

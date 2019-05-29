@@ -1,7 +1,7 @@
 export default [{
-    name: 'hot/hot',
+    name: 'hot',
     component: () =>
-        import ('@/views/hrfront/hot/hot'),
+        import ('@/views/adminManagement/hot/record'),
     meta: {
         title: '高温津贴管理'
     }

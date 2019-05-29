@@ -1,5 +1,5 @@
 export default [{
-        name: 'basicwage',
+        name: 'basicwageList',
         component: () =>
             import ('@/views/finance/salary/basicwage'),
         meta: {
@@ -7,7 +7,7 @@ export default [{
         }
     },
     {
-        name: 'basicwage/applysheet/2',
+        name: 'applywageList',
         component: () =>
             import ('@/views/finance/salary/basicwageApplysheet'),
         meta: {
@@ -15,7 +15,7 @@ export default [{
         }
     },
     {
-        name: 'basicwage/applysheet/1',
+        name: 'applybasic',
         component: () =>
             import ('@/views/finance/salary/applybasic'),
         meta: {
@@ -31,7 +31,7 @@ export default [{
         }
     },
     {
-        name: 'lovefoundation/foundin/lovefoundation/foundin',
+        name: 'lfMemberManager',
         component: () =>
             import ('@/views/finance/lovefoundation/foundin'),
         meta: {
@@ -39,7 +39,7 @@ export default [{
         }
     },
     {
-        name: 'lovefoundation/feecollecting',
+        name: 'feecollecting',
         component: () =>
             import ('@/views/finance/lovefoundation/feecollecting'),
         meta: {
@@ -47,7 +47,7 @@ export default [{
         }
     },
     {
-        name: 'securityandfund/securityandfund',
+        name: 'securityandfund',
         component: () =>
             import ('@/views/finance/securityandfund/securityandfund'),
         meta: {
@@ -55,7 +55,7 @@ export default [{
         }
     },
     {
-        name: 'security/deductionlist',
+        name: 'deductionlist',
         component: () =>
             import ('@/views/finance/security/deductionlist'),
         meta: {

@@ -17,6 +17,7 @@ let asyncRoutes = [
     ...hrfront,
     ...setting,
     ...financial,
+    ...adminManagement,
 ]
 
 let router = new Router({
