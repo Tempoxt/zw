@@ -270,7 +270,7 @@ export default {
      }
      this.table_loading = true;
      this.table_form.org_id = this.id
-     this.table_form.sheetType = 2
+     this.table_form.sheetType = 1
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
