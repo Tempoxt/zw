@@ -18,6 +18,7 @@
         <form-render :type="`member`" :field="{name:'员工'}" v-model="form3.staff" />
         <form-render :type="`day`" :field="{name:'变动日期'}" v-model="form3.changedate" />
         <form-render :type="`input`" :field="{name:'调薪原因'}" v-model="form3.remark" />
+        <form-render :type="`input`" :field="{name:'休息日'}" v-model="form3.otWeekday" />
         <el-row :gutter="20">
                 <el-col :span="4">
                    <span> &nbsp;</span>
@@ -29,6 +30,10 @@
                     调整后
                 </el-col>
         </el-row>
+       
+        <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">合计</el-col><el-col :span="10"> &nbsp;</el-col><el-col :span="10"><el-input v-model="form3.total"></el-input> </el-col></el-row> 
+
+
         <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">基本工资</el-col><el-col :span="10"> <el-input v-model="formData.basicWage" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.basicWage"></el-input> </el-col></el-row>
         <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">加班津贴</el-col><el-col :span="10"> <el-input v-model="formData.overtime" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.overtime"></el-input> </el-col></el-row>
         <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">休息日加班</el-col><el-col :span="10"> <el-input v-model="formData.weekendWelfare" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.weekendWelfare"></el-input> </el-col></el-row>
@@ -220,7 +225,9 @@ export default {
       dialogForm2Visible:false,
       dialogForm3Visible:false,
       form2:{},
-      form3:{},
+      form3:{
+        otWeekday:2
+      },
       formData:[]
     };
   },
@@ -231,7 +238,20 @@ export default {
     async 'form3.staff'(staff){
         const result = await this.$request.get('/basicwage',{params:{staff}})
         this.formData = result[0]
-        this.form3 = Object.assign({},this.formData)
+        this.form3 = Object.assign({},this.formData,this.form3)
+    },
+    async 'form3.total'(val){
+      if(val>2000){
+         const res = await this.$request.get('basicwage/cal',{
+            params:{
+              wage:val,
+              otWeekday:this.form3.otWeekday
+            }
+          })
+         this.form3 =  Object.assign(this.form3,res)
+         console.log(this.form3)
+      }
+     
     }
   },
   methods: {
@@ -255,7 +275,9 @@ export default {
       this.dialogForm3Visible = false
     },
     add(){
-        this.form3 = {}
+        this.form3 = {
+          otWeekday:2
+        }
         this.formData = {}
         this.dialogForm3Visible = true
     },

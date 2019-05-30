@@ -29,6 +29,9 @@
                     调整后
                 </el-col>
         </el-row>
+
+
+
         <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">基本工资</el-col><el-col :span="10"> <el-input v-model="formData.basicWage" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.basicWage"></el-input> </el-col></el-row>
         <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">加班津贴</el-col><el-col :span="10"> <el-input v-model="formData.overtime" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.overtime"></el-input> </el-col></el-row>
         <el-row :gutter="20" style="margin-bottom:10px"> <el-col :span="4">休息日加班</el-col><el-col :span="10"> <el-input v-model="formData.weekendWelfare" disabled></el-input></el-col><el-col :span="10"><el-input v-model="form3.weekendWelfare"></el-input> </el-col></el-row>
