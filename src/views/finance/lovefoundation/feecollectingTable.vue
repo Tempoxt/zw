@@ -219,7 +219,7 @@ export default {
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
-    }
+    },
   },
   async created() {
     const { field, action,table } = await api_common.menuInit("lovefoundation/feecollecting");

@@ -7,12 +7,20 @@
 
     </el-col>
     <el-col :span="19">
-        <feecollectingTable :id="currentMenuid"/>
+        <el-tabs v-model="activeName" class="table-tabs">
+                <el-tab-pane label="会员管理" name="first">
+                    <memberTable :id="currentMenuid"/>
+                </el-tab-pane>
+                <el-tab-pane label="会员缴费" name="second">
+                    <feecollectingTable :id="currentMenuid"/>
+                </el-tab-pane>
+        </el-tabs>
     </el-col>
   </el-row>
 </template>
 <script>
 import * as api_common from "@/api/common";
+import memberTable from './memberTable'
 import feecollectingTable from './feecollectingTable'
 import org from '@/views/public/org.vue'
 export default {
@@ -20,10 +28,12 @@ export default {
         return {
             filterText:'',
             data2:[],
-            currentMenuid:0
+            currentMenuid:0,
+            activeName:'first'
         }
     },
     components:{
+        memberTable,
         feecollectingTable,
         org
     },

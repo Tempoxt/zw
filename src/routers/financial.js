@@ -33,17 +33,25 @@ export default [{
     {
         name: 'lfManager',
         component: () =>
-            import ('@/views/finance/lovefoundation/foundin'),
+            import ('@/views/finance/lovefoundation/debitcredit'),
         meta: {
             title: '基金管理'
         }
     },
+    // {
+    //     name: 'feecollecting',
+    //     component: () =>
+    //         import ('@/views/finance/lovefoundation/feecollecting'),
+    //     meta: {
+    //         title: '会员缴费'
+    //     }
+    // },
     {
-        name: 'feecollecting',
+        name: 'lfStatistic',
         component: () =>
-            import ('@/views/finance/lovefoundation/feecollecting'),
+            import ('@/views/finance/countsheet/countsheet'),
         meta: {
-            title: '会员缴费'
+            title: '统计报表'
         }
     },
     {
