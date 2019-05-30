@@ -1,15 +1,8 @@
-export default [{
-        path: '/hrfront',
-        component: () =>
-            import ('@/views/hrfront/dashboard'),
-        meta: {
-            title: '人力资源'
-        }
-    },
+export default [
     {
-        name: 'hrfront/dashboard',
-        component: () =>
-            import ('@/views/hrfront/dashboard'),
+        path:'',
+        name: '/hrfront',
+        component: () => import ('@/views/hrfront/dashboard'),
         meta: {
             title: '人力资源'
         }
@@ -36,6 +29,13 @@ export default [{
             import ('@/views/hrfront/personnelmanagement/personnelmanagement'),
         meta: {
             title: '员工档案'
+        }
+    },
+    {
+        name: 'transfer/record',
+        component: () => import ('@/views/hrfront/personnelmanagement/transfer'),
+        meta: {
+            title: '人员调动'
         }
     },
     {
