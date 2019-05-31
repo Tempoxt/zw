@@ -16,9 +16,6 @@
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
-      show-summary
-      :span-method="arraySpanMethod"
-      :summary-method="getSummaries"
       style="width: 100%"
       v-loading="table_loading"
       :header-cell-style="headerCellStyle"
@@ -68,8 +65,8 @@ export default {
       table_height:window.innerHeight-236,
       adminList:[],
       defaultForm,
-      form_inItem:[],
-      form_inMethod:[]
+      itemData:[],
+      totalData:[]
     };
   },
   watch:{
@@ -77,86 +74,46 @@ export default {
   },
   methods: {
     async fetchTableData() {
-   
      this.table_loading = true;
      this.table_form.orgid = this.id
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-      this.table_form.total = total
+     const tableData = await api_resource.get(this.table_form);
+     this.itemData = tableData.item;
+     this.totalData = tableData.total;
+     console.log(tableData,'tableData snndsjassosskdsd')
+    //  const {rows , total }= await api_resource.get(this.table_form);
+      // this.table_data  = rows
+      // this.table_form.total = total
+      // console.log( rows,' this.table_data  kxkcxjkcxjcxjcxkj')
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
     },
     async initForm(){
         const {inItem,inMethod} = await this.$request.get('/lovefoundation/inexpendshow')
-        this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
-        this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
+        console.log(inItem,'inItem lallalalalalalalalaal............')
+        // this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
+        // this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
     },
-    async add(){
-        this.initForm()
-        this.dialogFormVisible = true
-    },
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-    },
-    async edit(){
-      this.initForm()
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
-    },
-       getSummaries(param) {
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 1) {
-            sums[index] = '基金余款';
-            return;
-          }
-          const values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[index] += ' 元';
-          } else {
-            sums[index] = '';
-          }
-        });
-        return sums;
-    },
-    rowspan(){
-      this.table_data.forEach((item,index) => {
-        if(index===0){
-          this.spanarr.push(1);
-          this.position = 0;
-        }else{
-          this.spanArr.push(1);
-          this.position = index;
-        }
-      })
-    },
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-        if (rowIndex % 2 === 0) {
-          if (columnIndex === 0) {
-            return [1, 2];
-          } else if (columnIndex === 1) {
-            return [0, 0];
-          }
-        }
-    },
+    // async add(){
+    //     this.initForm()
+    //     this.dialogFormVisible = true
+    // },
+    // async handleFormSubmit(){
+    //     let form = Object.assign({},this.form)
+    //     if(this.isInsert){
+    //         await api_resource.create(form)
+    //     }else{
+    //         await api_resource.update(form.id,form)
+    //     }
+    //     this.dialogFormVisible = false
+    //     this.fetchTableData()
+    // },
+    // async edit(){
+    //   this.initForm()
+    //   let row = this.table_selectedRows[0]
+    //   this.form = await api_resource.find(row.id)
+    //   this.dialogFormVisible = true;
+    // },
   },
   async created() {
     const { field, action,table } = await api_common.menuInit("lovefoundation/inexpendshow");

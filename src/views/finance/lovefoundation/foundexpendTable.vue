@@ -6,8 +6,6 @@
   
   >
 
-
-  
   <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
@@ -18,16 +16,19 @@
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
            <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'收入项目',options:form_inItem}" v-model="form.item"/>
+              <form-render :type="`select`" :field="{name:'借方科目',options:formSelect1}" v-model="form.debit"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'收入方式',options:form_inMethod}" v-model="form.paymentMethod"/>
+              <form-render :type="`input`" :field="{name:'摘要'}" v-model="form.summar"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'收入金额'}" v-model="form.paymentAmount" />
+              <form-render :type="`select`" :field="{name:'贷方科目',options:formSelect2}" v-model="form.credit" />
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'备注'}" v-model="form.remar" />
+              <form-render :type="`input`" :field="{name:'金额'}" v-model="form.amount" />
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'备注'}" v-model="form.remark" />
             </el-col>
            
           </el-row>
@@ -39,8 +40,6 @@
         <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
       </div>
     </el-dialog>
-
-
 
 
     <table-header
@@ -104,8 +103,9 @@ export default {
       table_height:window.innerHeight-236,
       adminList:[],
       defaultForm,
-      form_inItem:[],
-      form_inMethod:[]
+      selectData:[],
+      formSelect1:[],
+      formSelect2:[]
     };
   },
   watch:{
@@ -125,14 +125,17 @@ export default {
     },
     async allocation(){
         let row = this.table_selectedRows[0]
-        await this.$request.put('/lovefoundation/debitcredit/'+row.id)
+        // await this.$request.put('/lovefoundation/debitcredit/'+row.id)
+        
+        await this.$request.put('/lovefoundation/debitcredit?ids=5')
         this.fetchTableData()
         // api_resource.update(row.id)
     },
     async initForm(){
-        const {inItem,inMethod} = await this.$request.get('/lovefoundation/debitcredit')
-        this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
-        this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
+        const jieData = await this.$request.get('/lovefoundation/debitcreditfields?type=0');
+        const daiData = await this.$request.get('/lovefoundation/debitcreditfields?type=1');
+        this.formSelect1 = jieData.map(o=>({label:o.name,value:o.id}))
+        this.formSelect2 = jieData.map(o=>({label:o.name,value:o.id}))
     },
     async add(){
         this.initForm()
@@ -156,7 +159,7 @@ export default {
     }
   },
   async created() {
-    const { field, action,table } = await api_common.menuInit("lovefoundation/inexpendsheet");
+    const { field, action,table } = await api_common.menuInit("lovefoundation/debitcredit");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table

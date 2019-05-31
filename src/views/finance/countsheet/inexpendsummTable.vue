@@ -17,7 +17,6 @@
       :data="table_data"
       border
       show-summary
-      :span-method="arraySpanMethod"
       :summary-method="getSummaries"
       style="width: 100%"
       v-loading="table_loading"
@@ -69,7 +68,9 @@ export default {
       adminList:[],
       defaultForm,
       form_inItem:[],
-      form_inMethod:[]
+      form_inMethod:[],
+      itemlength:{},
+      tableData:[]
     };
   },
   watch:{
@@ -80,17 +81,36 @@ export default {
    
      this.table_loading = true;
      this.table_form.orgid = this.id
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-      this.table_form.total = total
+    //  const {rows , total }= await api_resource.get(this.table_form);
+     
+      let arrhuobi = []
+      const tableData = await api_resource.get(this.table_form);
+      this.tableData = tableData
+      // console.log('tableData summary dese',tableData)
+      const iye = tableData.map((o,i) => o.projectName)
+      console.log(iye)
+      const kit = iye.map((k,i) => {
+        console.log(k,i)
+        if(k==='货币资金'){
+          arrhuobi.push(k)
+        }
+      });
+      
+      console.log(arrhuobi)
+      this.itemlength.one = arrhuobi.length
+      console.log(this.itemlength.one)
+  
+      // this.table_data  = rows
+      // this.table_form.total = total
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
     },
     async initForm(){
-        const {inItem,inMethod} = await this.$request.get('/lovefoundation/inexpendsummary')
-        this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
-        this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
+      console.log(this.tableData,'this is in initform table datat')
+        // const tableData = await this.$request.get('/lovefoundation/inexpendsummary')
+        // this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
+        // this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
     },
     async add(){
         this.initForm()
@@ -112,14 +132,14 @@ export default {
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
     },
-       getSummaries(param) {
+    getSummaries(param) {
         const { columns, data } = param;
         const sums = [];
         columns.forEach((column, index) => {
-          if (index === 1) {
-            sums[index] = '基金余款';
-            return;
-          }
+          // if (index === 2) {
+          //   sums[index] = '基金余款';
+          //   return;
+          // }
           const values = data.map(item => Number(item[column.property]));
           if (!values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
@@ -130,33 +150,29 @@ export default {
                 return prev;
               }
             }, 0);
-            sums[index] += ' 元';
+            sums[index] += '';
           } else {
             sums[index] = '';
           }
         });
         return sums;
     },
-    rowspan(){
-      this.table_data.forEach((item,index) => {
-        if(index===0){
-          this.spanarr.push(1);
-          this.position = 0;
-        }else{
-          this.spanArr.push(1);
-          this.position = index;
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      // console.log('rowIndex='+rowIndex, 'columnIndex='+columnIndex, 'rowIndex % 2='+rowIndex % 2)
+      if (columnIndex === 0) { //第一列
+        if (rowIndex % 3 === 0) { //第几行 向下合并多少？ % ？
+          return {
+            rowspan: 3,
+            colspan: 1
+          };
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          };
         }
-      })
-    },
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-        if (rowIndex % 2 === 0) {
-          if (columnIndex === 0) {
-            return [1, 2];
-          } else if (columnIndex === 1) {
-            return [0, 0];
-          }
-        }
-    },
+      }
+    }
   },
   async created() {
     const { field, action,table } = await api_common.menuInit("lovefoundation/inexpendsummary");
