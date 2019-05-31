@@ -18,6 +18,9 @@
         :unique-opened="true"
       >
         <span>人事</span>
+        <div>
+          {{$route['matched'][0].path}}
+        </div>
         <sidebar-item
           v-for="route in sideBarMenu"
           :key="route.url"

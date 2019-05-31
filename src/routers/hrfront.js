@@ -1,12 +1,13 @@
 export default [
     {
-        path:'1',
+        path:'/hrfront/',
         name: '/hrfront',
         component: () => import ('@/views/hrfront/dashboard'),
         meta: {
             title: '人力资源'
         }
     },
+    
     {
         name: 'attendanceDetail',
         component: () =>
