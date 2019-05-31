@@ -1,6 +1,7 @@
 <template>
     <fragment>
          <el-table-column
+                :render-header="renderHeader"
                 :prop="column.name"
                 :label="column.showname"
                 v-for="column in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
@@ -21,6 +22,11 @@ export default {
     props:['table_field','template'],
     components:{
         tableColumn
+    },
+    methods:{
+        renderHeader(h, { column, $index }){
+            return <span domPropsInnerHTML={column.label}></span>
+        }
     }
 }
 </script>
