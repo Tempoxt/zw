@@ -162,32 +162,35 @@ export default {
             this.dialogFormVisible = true;
         },
         getSummaries(param) {
-            const { columns, data } = param;
-            const sums = [];
-            columns.forEach((column, index) => {
-                if (index === 1) {
-                    sums[index] = '基金余款';
-                    return;
+          console.log(param)
+          const { columns, data } = param;
+          const sums = [];
+          columns.forEach((column, index) => {
+          if (index === 1) {
+            sums[index] = '基金余款';
+            return;
+          }
+          if(index === 6){
+            console.log(data)
+            console.log(column.property,'column.propertyvvvvvvvvvvvvvvv')
+            const values = data.map(item => Number(item[column.property]));
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
                 }
-                if(index === 6) {
-                    const amount = data.map(item => Number(item.amount))
-                    if (!amount.every(amount => isNaN(amount))) {
-                        sums[index] = amount.reduce((prev, curr) => {
-                        const amount = Number(curr);
-                        if (!isNaN(amount)) {
-                            return prev + curr;
-                        } else {
-                            return prev;
-                        }
-                        }, 0);
-                        sums[index] += '';
-                    } else {
-                        sums[index] = '';
-                    }
-                }
-            });
-            return sums;
-        },
+              }, 0);
+              sums[index] = sums[index].toFixed(2);
+            } else {
+              sums[index] = '';
+            }
+          }
+        });
+        return sums;
+      }
     },
     async created() {
         const { field, action,table } = await api_common.menuInit("lovefoundation/debitcredit");
