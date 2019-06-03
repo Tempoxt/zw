@@ -226,7 +226,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
-    this.$set(this.table_form,'month',dayjs().subtract(1,'month').format('YYYY-MM'))
+    this.$set(this.table_form,'month',dayjs().format('YYYY-MM'))
     this.fetchTableData();
   }
 };
