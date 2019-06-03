@@ -30,7 +30,7 @@ export default [
   },
   {
     path:'restaurant-meal',
-    name: 'mealsetting',
+    name: 'meal',
     component: () => import('@/views/hr/restaurant-meal'),
     meta:{
       title:'餐次设置'
@@ -38,7 +38,7 @@ export default [
   },
   {
     path:'restaurant-restaurantmeal',
-    name: 'mealsetting',
+    name: 'restaurantmeal',
     component: () => import('@/views/hr/restaurant-restaurantmeal'),
     meta:{
       title:'餐厅餐次设置'
