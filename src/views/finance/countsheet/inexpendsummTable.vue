@@ -4,7 +4,6 @@
     :table_query.sync="table_form.query"
     @query="querySubmit"
     >
-
     <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
@@ -12,12 +11,13 @@
       :table_form.sync="table_form"
       :table_column="table_field"
     ></table-header>
+    
+    <p style="font-size:18px;text-align:center;font-weight:bold;padding-bottom:20px;">爱心基金汇总</p>
     <el-table
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
-      show-summary
-      :summary-method="getSummaries"
+      :span-method="objectSpanMethod"
       style="width: 100%"
       v-loading="table_loading"
       :header-cell-style="headerCellStyle"
@@ -25,23 +25,8 @@
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
     >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
-      </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
-     <table-pagination 
-        :total="table_form.total" 
-        :pagesize.sync="table_form.pagesize"
-        :currentpage.sync="table_form.currentpage"
-        @change="fetchTableData"
-        :table_config="table_config"
-    />
   </ui-table>
 </template>
 <script>
@@ -82,26 +67,31 @@ export default {
      this.table_loading = true;
      this.table_form.orgid = this.id
     //  const {rows , total }= await api_resource.get(this.table_form);
-     
-      let arrhuobi = []
       const tableData = await api_resource.get(this.table_form);
-      this.tableData = tableData
-      // console.log('tableData summary dese',tableData)
-      const iye = tableData.map((o,i) => o.projectName)
-      console.log(iye)
-      const kit = iye.map((k,i) => {
-        console.log(k,i)
-        if(k==='货币资金'){
-          arrhuobi.push(k)
+      this.table_data  = tableData
+      const field = tableData.map((o,i) => o.projectField)
+      const ss = field.reduce(function(all,item){
+        console.log(item,'hhhhhh')
+        if(item in all){
+          all[item]++;
+        }else{
+          all[item] = 1;
         }
-      });
-      
-      console.log(arrhuobi)
-      this.itemlength.one = arrhuobi.length
-      console.log(this.itemlength.one)
-  
-      // this.table_data  = rows
-      // this.table_form.total = total
+        return all
+      },{})
+      console.log(ss,'meici  chuxiang de cihsu ')
+      this.itemlength.one = ss[0];
+      this.itemlength.two = ss[1];
+      this.itemlength.three = ss[2];
+      this.itemlength.four = ss[3];
+      this.itemlength.five = ss[4];
+      console.log(this.itemlength.three,'this.itemlength.three')
+      // const kit = field.map((k,i) => {
+      //   console.log(k,'')
+      //   if(k===0){
+      //     arrhuobi.push(k)
+      //   }
+      // });
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
@@ -132,40 +122,39 @@ export default {
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
     },
-    getSummaries(param) {
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          // if (index === 2) {
-          //   sums[index] = '基金余款';
-          //   return;
-          // }
-          const values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[index] += '';
-          } else {
-            sums[index] = '';
-          }
-        });
-        return sums;
-    },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      // console.log('rowIndex='+rowIndex, 'columnIndex='+columnIndex, 'rowIndex % 2='+rowIndex % 2)
-      if (columnIndex === 0) { //第一列
-        if (rowIndex % 3 === 0) { //第几行 向下合并多少？ % ？
+      if (columnIndex === 0 ||columnIndex === 6) { //第一列
+        if(rowIndex===0){
           return {
-            rowspan: 3,
+            rowspan: this.itemlength.one,
             colspan: 1
           };
-        } else {
+        } else if(rowIndex=== this.itemlength.one){
+          return {
+            rowspan: this.itemlength.two,
+            colspan: 1
+          };
+        }else if(rowIndex=== this.itemlength.one+this.itemlength.two){
+          return {
+            rowspan: this.itemlength.three,
+            colspan: 1
+          };
+        }else if(rowIndex=== this.itemlength.one+this.itemlength.two+this.itemlength.three){
+          return {
+            rowspan: this.itemlength.four,
+            colspan: 1
+          };
+        }else if(rowIndex=== this.itemlength.one+this.itemlength.two+this.itemlength.three+this.itemlength.four){
+          return {
+            rowspan: this.itemlength.five,
+            colspan: 1
+          };
+        }else if(rowIndex=== this.itemlength.one+this.itemlength.two+this.itemlength.three+this.itemlength.four+this.itemlength.five){
+          return {
+            rowspan: 1,
+            colspan: 1
+          };
+        }else{
           return {
             rowspan: 0,
             colspan: 0
@@ -181,7 +170,18 @@ export default {
     this.table_config = table
     this.fetchTableData();
   }
+  
+// .theme-0BB2D4 .el-table .el-table__row.el-table__body 
 };
 </script>
+<style>
+  .table-tabs{
+    padding-bottom: 50px;
+  }
+  .el-table__body-wrapper .el-table_1_column_3:nth-child(1){
+    background:rgba(0,8,255,0.2);
+  }
+ 
+</style>
 
 

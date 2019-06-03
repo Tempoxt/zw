@@ -7,7 +7,7 @@
   >
 
 <el-dialog
-      title="加入"
+      title="员工调动"
       :visible.sync="dialogForm3Visible"
       class="public-dialog"
       v-el-drag-dialog
@@ -15,7 +15,7 @@
     >
 
     <el-form ref="form" :model="form" label-width="100px" :inline="true">
-        <el-form-item label="有效起始日期">
+        <!--<el-form-item label="有效起始日期">
           <el-date-picker
               v-model="form3.stayStart"
               type="date"
@@ -30,6 +30,36 @@
                value-format="yyyy-MM-dd"
               placeholder="选择日期">
           </el-date-picker>
+        </el-form-item>-->
+        <el-form-item label="调动日期">
+          <el-date-picker
+              v-model="form3.stayStart"
+              type="date"
+               value-format="yyyy-MM-dd"
+              placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+        
+        <el-form-item label="调动区域">
+          <el-select v-model="form3.startMonth" placeholder="请选择" >
+            <el-option
+            v-for="item in 12"
+            :key="item"
+            :label="item+'月'"
+            :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+         <el-form-item label="调至小组">
+          <el-select v-model="form3.startMonth" placeholder="请选择" >
+            <el-option
+            v-for="item in 12"
+            :key="item"
+            :label="item+'月'"
+            :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
 
     </el-form>

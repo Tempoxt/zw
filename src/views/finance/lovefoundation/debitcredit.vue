@@ -131,10 +131,9 @@ export default {
             // api_resource.update(row.id)
         },
         async initForm(){
-            const jieData = await this.$request.get('/lovefoundation/debitcreditfields?type=0');
-            const daiData = await this.$request.get('/lovefoundation/debitcreditfields?type=1');
-            this.formSelect1 = jieData.map(o=>({label:o.name,value:o.id}))
-            this.formSelect2 = jieData.map(o=>({label:o.name,value:o.id}))
+            const optionData = await this.$request.get('/lovefoundation/debitcreditfields');
+            this.formSelect1 = optionData.debit.map(o=>({label:o.name,value:o.id}))
+            this.formSelect2 = optionData.credit.map(o=>({label:o.name,value:o.id}))
         },
         async add(){
             this.initForm()

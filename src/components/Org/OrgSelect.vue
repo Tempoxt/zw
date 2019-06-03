@@ -2,7 +2,29 @@
     <div>
          <el-tabs v-model="activeName" >
             <el-tab-pane label="同部门" name="first">
-                
+                <el-row :gutter="20" style="height:400px">
+                    <el-col :span="10">
+                        <Org  style="height:400px" @change="changeOrg"/>
+                    </el-col>
+                    <el-col :span="2" style="height:100%">
+                        <div class="control">
+                            <div class="control-btns">
+                                <div>
+                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
+                                </div>
+                                <div>
+                                   <el-button icon="el-icon-arrow-left" circle  :type="reusltSelect.id?'primary':''" @click="remove"></el-button>
+                                </div>
+                                <div>
+                                    <el-button icon="el-icon-refresh" circle></el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="10">
+                            <OrgResult  style="height:400px" :data="result" @change="changeResult"/>
+                    </el-col>
+                </el-row>
             </el-tab-pane>
             <el-tab-pane label="我的下属" name="second">
                 
