@@ -1,6 +1,6 @@
 export default [
     {
-        path:'/hrfront/',
+        path:'',
         name: '/hrfront',
         component: () => import ('@/views/hrfront/dashboard'),
         meta: {
