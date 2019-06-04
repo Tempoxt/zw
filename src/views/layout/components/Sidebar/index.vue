@@ -21,13 +21,22 @@
         <div>
           {{$route['matched'][0].path}}
         </div>
-        <sidebar-item
-          v-for="route in sideBarMenu"
-          :key="route.url"
-          :item="route"
-          :base-path="$route['matched'][0].path"
-          :parentRoute="!!$route"
-        />
+
+         <transition-group name="el-fade-in">
+            <template v-if="isShow">
+                <sidebar-item
+                  v-for="route in sideBarMenu"
+                  :key="route.url"
+                  :item="route"
+                  :base-path="$route['matched'][0].path"
+                  :parentRoute="!!$route"
+                />
+              </template>
+              
+            </transition-group>
+
+
+        
         <!-- :index="$route['matched'][0].path+'/'+route.url" -->
       </el-menu>
     </el-scrollbar>
@@ -40,6 +49,18 @@ import SidebarItem from "./SidebarItem";
 
 export default {
   components: { SidebarItem },
+  watch:{
+    sideBarMenu:{
+      deep:true,
+      handler(){
+        this.isShow = false
+     
+        setTimeout(()=>{
+          this.isShow = true
+        },200)
+      }
+    }
+  },
   computed: {
     ...mapGetters(["sidebar", "sideBarMenu"]),
     isCollapse() {
@@ -51,7 +72,9 @@ export default {
     console.log(this.$route, "router");
   },
   data() {
-    return {};
+    return {
+      isShow:true
+    };
   }
 };
 </script>
