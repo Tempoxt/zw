@@ -10,7 +10,11 @@
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
-    ></table-header>
+    >
+      <div style="padding-left:10px">
+        <dateLap type="3" :disabled="true" v-model="table_form.dateLap" @change="fetchTableData"/>
+      </div>
+    </table-header>
     
     <div>
       <p style="font-size:18px;text-align:center;font-weight:bold;padding:13px 0;line-height:30px;background:#EBF6F8;color:#0BB2D4">爱心基金收支平衡表</p>
@@ -100,6 +104,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("lovefoundation/inexpendshow");
+import dateLap from '@/components/Table/DateLap'
 const defaultForm = () => {
     return {
         estate:1,
@@ -109,6 +114,9 @@ const defaultForm = () => {
 export default {
   mixins: [table_mixin],
   props:['id'],
+  components:{
+      dateLap
+  },
   data() {
     return {
       loading: true,
@@ -127,7 +135,11 @@ export default {
       otherInComeTotal:[],//其他收入合计
       total:[],//总计
       welfareExpend:[],//福利支出
-      welfareExpendTotal:[]//福利支出总计
+      welfareExpendTotal:[],//福利支出总计
+      options:[{
+        value:'3',
+        label:'年'
+      }],
     };
   },
   watch:{

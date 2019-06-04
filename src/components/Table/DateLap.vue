@@ -1,38 +1,38 @@
 <template>
     <div>
-        <el-select v-model="type" placeholder="请选择" style="width:60px" class="dateLap-select">
+        <el-select v-model="type" :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
             <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
             </el-option>
         </el-select>
         <el-date-picker
-                v-if="type==1"
-                class="dateLap-date"
-                v-model="value2"
-                value-format="yyyy-MM-dd"
-                format="yyyy-MM-dd"
-                placeholder="选择日">
+            v-if="type==1"
+            class="dateLap-date"
+            v-model="value2"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
+            placeholder="选择日">
         </el-date-picker>
         <el-date-picker
-                v-if="type==2"
-                class="dateLap-date"
-                v-model="value2"
-                type="month"
-                value-format="yyyy-MM"
-                format="yyyy-MM"
-                placeholder="选择月">
+            v-if="type==2"
+            class="dateLap-date"
+            v-model="value2"
+            type="month"
+            value-format="yyyy-MM"
+            format="yyyy-MM"
+            placeholder="选择月">
         </el-date-picker>
-         <el-date-picker
-                v-if="type==3"
-                class="dateLap-date"
-                v-model="value2"
-                type="year"
-                value-format="yyyy"
-                format="yyyy"
-                placeholder="选择年">
+        <el-date-picker
+            v-if="type==3"
+            class="dateLap-date"
+            v-model="value2"
+            type="year"
+            value-format="yyyy"
+            format="yyyy"
+            placeholder="选择年">
         </el-date-picker> 
     </div>
 </template>
@@ -43,6 +43,9 @@ export default {
         value:{},
         type:{
             default:'2'
+        },
+        disabled:{
+            default:false
         }
     },
     computed:{
@@ -76,7 +79,6 @@ export default {
                 value:'3',
                 label:'年'
             }],
-            // type:'2'
         }
     }
 }

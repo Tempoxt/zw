@@ -10,7 +10,11 @@
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
-    ></table-header>
+    >
+      <div style="padding-left:10px">
+        <dateLap type="3" :disabled="true" v-model="table_form.dateLap" @change="fetchTableData"/>
+      </div>
+    </table-header>
     
     <p style="font-size:18px;text-align:center;font-weight:bold;padding-bottom:20px;">爱心基金汇总</p>
     <el-table
@@ -33,6 +37,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("lovefoundation/inexpendsummary");
+import dateLap from '@/components/Table/DateLap'
 const defaultForm = () => {
     return {
         estate:1,
@@ -41,7 +46,10 @@ const defaultForm = () => {
 }
 export default {
   mixins: [table_mixin],
-  props:['id'],
+  props: ['id'],
+  components:{
+      dateLap
+  },
   data() {
     return {
       loading: true,
@@ -55,7 +63,6 @@ export default {
       form_inItem:[],
       form_inMethod:[],
       itemlength:{},
-      tableData:[]
     };
   },
   watch:{
@@ -63,15 +70,14 @@ export default {
   },
   methods: {
     async fetchTableData() {
-   
-     this.table_loading = true;
-     this.table_form.orgid = this.id
+      this.table_loading = true;
+      this.table_form.orgid = this.id
+      console.log(this.table_form)
     //  const {rows , total }= await api_resource.get(this.table_form);
       const tableData = await api_resource.get(this.table_form);
       this.table_data  = tableData
       const field = tableData.map((o,i) => o.projectField)
       const ss = field.reduce(function(all,item){
-        console.log(item,'hhhhhh')
         if(item in all){
           all[item]++;
         }else{
@@ -79,25 +85,16 @@ export default {
         }
         return all
       },{})
-      console.log(ss,'meici  chuxiang de cihsu ')
       this.itemlength.one = ss[0];
       this.itemlength.two = ss[1];
       this.itemlength.three = ss[2];
       this.itemlength.four = ss[3];
       this.itemlength.five = ss[4];
-      console.log(this.itemlength.three,'this.itemlength.three')
-      // const kit = field.map((k,i) => {
-      //   console.log(k,'')
-      //   if(k===0){
-      //     arrhuobi.push(k)
-      //   }
-      // });
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
     },
     async initForm(){
-      console.log(this.tableData,'this is in initform table datat')
         // const tableData = await this.$request.get('/lovefoundation/inexpendsummary')
         // this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
         // this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
@@ -170,8 +167,6 @@ export default {
     this.table_config = table
     this.fetchTableData();
   }
-  
-// .theme-0BB2D4 .el-table .el-table__row.el-table__body 
 };
 </script>
 <style>
