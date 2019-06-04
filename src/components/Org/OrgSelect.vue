@@ -26,7 +26,7 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="我的下属" name="second">
+           <!-- <el-tab-pane label="我的下属" name="second">
                 
             </el-tab-pane>
             <el-tab-pane label="组织结构" name="third">
@@ -56,6 +56,7 @@
 
                 
             </el-tab-pane>
+            -->
             
         </el-tabs>
     </div>
