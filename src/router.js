@@ -63,7 +63,7 @@ const generateRoutes = (menu, base) => {
         for (let router of menu) {
             let r = {
                 component: Layout,
-                path: router.url,
+                path: router.url||Math.random()+'',
                 children: []
             }
             if (router.subs && router.subs.length) {
