@@ -19,7 +19,7 @@
                         <el-button icon="el-icon-plus"  size="mini"></el-button>
                     </div>
                     <div class="list-r-b">
-                        
+                        <NoData msg="暂无任务"></NoData>
                     </div>
 				</div>
 			</el-col>
@@ -29,11 +29,15 @@
 </template>
 
 <script>
+import NoData from "./NoData"
 export default {
     data() {
       return {
         value: new Date()
       }
+    },
+    components:{
+        NoData
     }
 }
 </script>
@@ -63,6 +67,13 @@ export default {
     .list-r-h{
         font-size: 16px;
         font-weight: bold;
+        border-bottom: 1px solid rgba(245,245,245,1);
+        padding-bottom: 15px;
+    }
+    .list-r-b{
+        width: 100%;
+        height: 190px;
+        position: relative;
     }
 }
 </style>
