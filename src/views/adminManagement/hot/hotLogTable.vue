@@ -176,6 +176,7 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hot/record");
 import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
+import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
         estate:1,

@@ -9,12 +9,38 @@
           </div>
 
           <el-tree
+            v-if="same=='true'"
             class="tree"
             :data="data2"
             :props="{children: 'subs', label: 'name',isLeaf:'leaf' }"
             node-key="orgid"
             :filter-node-method="filterNode"
             ref="tree2"
+            :highlight-current="true"
+            :check-on-click-node="false"
+            @node-click="handleChangeNode"
+            :expand-on-click-node="false"
+            :load="loadNode1"
+            lazy
+          >
+            <span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`">
+
+              <span v-if="data.subs === 1" class="icon iconfont icon-zonggongsi"></span>
+              <!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+              <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span> -->
+              &nbsp;
+              <span class="label">{{ node.label }} <span style="color:#A3AFB7;">{{data.principalship}}</span></span>
+            </span>
+          </el-tree>
+
+          <el-tree
+            v-if="same=='false'"
+            class="tree"
+            :data="dataSame"
+            :props="{children: 'subs', label: 'name',isLeaf:'leaf' }"
+            node-key="orgid"
+            :filter-node-method="filterNode"
+            ref="treeSame"
             :highlight-current="true"
             :check-on-click-node="false"
             @node-click="handleChangeNode"
@@ -38,9 +64,15 @@
 <script>
 import * as api_common from "@/api/common";
 export default {
+    props:{
+        same:{
+            default:'true'
+        },
+    },
     watch:{
        filterText(val) {
         this.$refs.tree2.filter(val);
+        this.$refs.treeSame.filter(val);
       }
     },
     methods:{
@@ -72,12 +104,13 @@ export default {
     data(){
         return {
             data2:[],
+            dataSame:[],
             filterText:'',
-           
         }
     },
     async created(){
-         this.data2 = await this.$request.get('/org/select');
+        this.data2 = await this.$request.get('/org/hotpayselect');//org/samedeptselect
+        this.dataSame = await this.$request.get('/org/samedeptselect');//org/samedeptselect
         //  this.data2[0].disabled = true
         //  let defaultId = this.data2[0].orgid
         //  this.$emit('change',defaultId)

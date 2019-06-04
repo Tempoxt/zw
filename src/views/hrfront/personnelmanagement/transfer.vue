@@ -1,161 +1,62 @@
-  <template>
+<template>
   <ui-table ref="table" 
-  :table_column="table_field" 
-  :table_query.sync="table_form.query"
-  @query="querySubmit"
-  
-  >
+    :table_column="table_field" 
+    :table_query.sync="table_form.query"
+    @query="querySubmit"
+    
+    >
 
-<el-dialog
+    <el-dialog
       title="员工调动"
       :visible.sync="dialogForm3Visible"
       class="public-dialog"
       v-el-drag-dialog
       width="800px"
-    >
+      >
 
-    <el-form ref="form" :model="form" label-width="100px" :inline="true">
-        <!--<el-form-item label="有效起始日期">
-          <el-date-picker
-              v-model="form3.stayStart"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-         <el-form-item label="有效结束日期">
-          <el-date-picker
-              v-model="form3.stayEnd"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>-->
-        <el-form-item label="调动日期">
-          <el-date-picker
-              v-model="form3.stayStart"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-        
-        <el-form-item label="调动区域">
-          <el-select v-model="form3.startMonth" placeholder="请选择" >
-            <el-option
-            v-for="item in 12"
-            :key="item"
-            :label="item+'月'"
-            :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
+      <el-form ref="form3" :model="form3" label-width="100px" :inline="true">
 
-         <el-form-item label="调至小组">
-          <el-select v-model="form3.startMonth" placeholder="请选择" >
-            <el-option
-            v-for="item in 12"
-            :key="item"
-            :label="item+'月'"
-            :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
+          <el-form-item label="调动日期">
+            <el-date-picker
+                v-model="form3.transferDate"
+                value-format="yyyy-MM-dd"
+                format="yyyy-MM-dd"
+                placeholder="选择日期"
+                >
+            </el-date-picker>
+          </el-form-item>
+          
+          <el-form-item label="调动区域">
+            <el-select v-model="form3.workGroup" placeholder="请选择">
+              <el-option
+              v-for="item in areaDa"
+              :key="item.id"
+              :label="item.officeaddressname"
+              :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
 
-    </el-form>
+          <el-form-item label="调至小组">
+            <el-select v-model="form3.team" placeholder="请选择">
+              <el-option
+              v-for="item in optionsDa"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
 
-      <OrgSelect v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
+      </el-form>
+
+      <OrgSelect v-model="form3.ids" activeName="first" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogForm3Visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleForm3Submit">确 定</el-button>
+        <el-button type="primary"  @click="handleForm3Submit">确 定</el-button>
       </div>
     </el-dialog>
-
-
-
-  <el-dialog
-      title="高温津贴设置"
-      :visible.sync="dialogForm2Visible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="500px"
-    >
-      <div style="width:400px;margin:0 auto">
-        <el-form ref="form" :model="form2" label-width="100px">
-          <el-row :gutter="20">
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'高温津贴'}" v-model="form2.hotAllowance" />
-            </el-col>
-          
-             <el-col :span="24">
-
-                <el-form-item label="津贴月份">
-                    <div style="display:flex">
-                         <el-select v-model="form2.startMonth" placeholder="请选择" >
-                                <el-option
-                                v-for="item in 12"
-                                :key="item"
-                                :label="item+'月'"
-                                :value="item">
-                                </el-option>
-                            </el-select>    
-                            <span style="padding:0 10px;">至</span>   
-                            <el-select v-model="form2.endMonth" placeholder="请选择">
-                                <el-option
-                                v-for="item in 12"
-                                :key="item"
-                                :label="item+'月'"
-                                :value="item">
-                                </el-option>
-                            </el-select>      
-                    </div>  
-                </el-form-item>
-            </el-col>   
-            
-          </el-row>
-        </el-form>
-      </div>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogForm2Visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleForm2Submit">确 定</el-button>
-      </div>
-    </el-dialog>
-
-
-
-  <el-dialog
-      :title="dialogStatus==='insert'?'添加':'编辑'"
-      :visible.sync="dialogFormVisible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="500px"
-    >
-      <div style="width:400px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
-          <el-row :gutter="20">
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form.chineseName" disabled/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'有效起始日期'}" v-model="form.stayStart" disabled/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`day`" :field="{name:'有效结束日期'}" v-model="form.stayEnd"/>
-            </el-col>   
-            
-          </el-row>
-        </el-form>
-      </div>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-      </div>
-    </el-dialog>
-
-
 
 
     <table-header
@@ -165,9 +66,9 @@
       :table_form.sync="table_form"
       :table_column="table_field"
     >
-          <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
-          </div>
+      <div style="padding-left:10px">
+        <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+      </div>
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
@@ -216,6 +117,9 @@ const defaultForm = () => {
 export default {
   mixins: [table_mixin],
   props:['id'],
+  props:{
+        value:{},
+    },
   components:{
       dateLap,
       OrgSelect
@@ -232,72 +136,59 @@ export default {
       defaultForm,
       roomAdminList:[],
       dormList:[],
-      dialogForm2Visible:false,
       dialogForm3Visible:false,
-      form2:{},
-      form3:{}
+      form3:{
+        transferDate:'',
+        team:'',
+        workGroup:'',
+        ids:''
+      },
+      optionsDa:[],
+      areaDa:[],
     };
   },
-  watch:{
-   
-  },
   methods: {
-    reset(){
-      this.$request.get('hot/historyreset',{params:{dateLap:this.table_form.dateLap}})
-    },
-    async set(){
-        this.form2 = await this.$request.get('/hot/recordbasic')
-        this.dialogForm2Visible = true
-    },
-    async handleForm2Submit(){
-        await this.$request.put('/hot/recordbasic',this.form2)
-        this.dialogForm2Visible = false
-    },
     async handleForm3Submit(){
       this.form3.ids = this.$refs.OrgSelect.getIdsResult()
-      await this.$request.post('/hot/record',this.form3)
+      let form = Object.assign({},this.form3)
+      console.log(this.form3,'mmmmmmmm')
+      await this.$request.post('/transfer/record',form)
       this.dialogForm3Visible = false
+      this.fetchTableData()
     },
     add(){
-        this.form3 = {}
-        this.dialogForm3Visible = true
-    },
-    async edit(){
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
+      this.form3 = {}
+      this.$set(this.form3,'transferDate',dayjs().format('YYYY-MM-DD'))
+      console.log(this.form3)
+      this.dialogForm3Visible = true
+      this.getOptions();
+      this.getAreas()
     },
     async fetchTableData() {
-    
-     this.table_loading = true;
-     this.table_form.org_id = this.id
-     const {rows , total }= await api_resource.get(this.table_form);
+      this.table_loading = true;
+      this.table_form.org_id = this.id
+      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
-       this.table_form.total = total
+      this.table_form.total = total
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
     },
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        form.org_id = this.id
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
+    async getOptions(){//获取调至小组的下拉选项
+      this.optionsDa = await this.$request.get('/org/teamselect')
+    },
+    async getAreas(){//获取调至区域的下拉选项
+      this.areaDa = await this.$request.get('/officeaddress')
     },
   },
+
   async created() {
     const { field, action,table } = await api_common.menuInit("transfer/record");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
-    this.table_form.dateLap = dayjs().format('YYYY-MM')
+    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     this.fetchTableData();
-    
   }
 };
 </script>
