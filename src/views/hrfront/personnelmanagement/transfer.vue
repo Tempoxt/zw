@@ -50,7 +50,7 @@
 
       </el-form>
 
-      <OrgSelect v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
+      <OrgSelect v-model="form3.ids" activeName="first" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogForm3Visible = false">取 消</el-button>
@@ -145,26 +145,7 @@ export default {
       },
       optionsDa:[],
       areaDa:[],
-      date:'',
-      isDisabled:true,
-      isdisabledFn:true
-      //changeDisable:true,
     };
-  },
-  // computed:{
-  //   isdisabledFn(){
-  //     console.log(this.form3,'dhddddddd')
-  //     if(this.today!=''&&this.form3.team!= undefined){
-  //       //return this.isDisable = false;
-  //     }else{
-  //      // return this.isDisable = true;
-  //     }
-  //   },
-  // },
-  watch:{
-    data(val){
-      console.log(val,'----------------')
-    }
   },
   methods: {
     async handleForm3Submit(){
