@@ -107,7 +107,7 @@ export default {
             this.select = data
         },
         changeSameOrg(data){
-            this.select = data
+            this.selectSame = data
         },
         changeResult(data){
             this.resultSelect= data
