@@ -46,9 +46,9 @@
           placeholder="快速查找"
           v-model="table_form.keyword"
           class="actions-input"
-          @keyup.enter.native="handleAction('fetchTableData')"
+          @keyup.enter.native="search()"
           clearable
-          @clear="handleAction('fetchTableData')"
+          @clear="search()"
           v-if="table_column.some(item=>item.isquicksearch)"
         >
         </el-input>
@@ -138,6 +138,10 @@ export default {
     };
   },
   methods: {
+    search(){
+      this.table_form.currentpage = 1
+      this.handleAction('fetchTableData')
+    },
     handleAction(action) {
       this.$emit("action", action);
     },

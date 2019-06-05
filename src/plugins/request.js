@@ -57,7 +57,7 @@ service.interceptors.response.use(response => {
     if(response.config.method==='put' && response.status===200){
         Message({
             type: 'success',
-            message: '修改成功'
+            message: response.data ||'修改成功'
         })
     }
     return data

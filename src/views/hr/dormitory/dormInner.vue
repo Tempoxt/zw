@@ -178,7 +178,7 @@ export default {
       this.dialogMapsVisible = true
     },
     async fetchTableData() {
-    //  this.$side.getTree()
+     this.$side.getTree()
      this.table_loading = true;
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows

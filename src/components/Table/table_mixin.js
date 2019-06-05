@@ -115,12 +115,15 @@ export default {
         var lastRow = this.table_field[this.table_field.length-1]
         lastRow.width = 'auto'
         lastRow.menuid = lastRow.menuid_id
-        api_pagemanager.update(lastRow.id,lastRow)
+        api_pagemanager.update(lastRow.id,{width:lastRow.width,menuid:lastRow.menuid_id})
+        return
       }
       row.width = newWidth
-      
       row.menuid = row.menuid_id
-      api_pagemanager.update(row.id,row)
+      api_pagemanager.update(row.id,{
+        width:newWidth,
+        menuid:row.menuid_id
+      })
     },
     table_sort_change({ column, prop, order }){
       this.table_sort = {}
