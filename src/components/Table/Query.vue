@@ -277,6 +277,7 @@ export default {
         this.tableQuery.query.splice(i,1)
       },
       query(){
+        this.tableQuery.currentpage = 1
         this.$emit('query',this.tableQuery)
         this.queryDialogFormVisible = false
       },

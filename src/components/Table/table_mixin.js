@@ -141,6 +141,7 @@ export default {
       this.$refs.table.table_queryFormVisible = true
     },
     querySubmit(query){
+      this.table_form.currentpage = 1
       this.table_form.query = query
       this.fetchTableData()
     },

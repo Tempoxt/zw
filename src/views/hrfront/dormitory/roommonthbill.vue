@@ -124,8 +124,10 @@ export default {
           //     const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
           //     this.$set(data,'subs',rows)
           // }
-         
+          
           const { roomId,dormId } = data
+          const { rows } = await api_common.resource('dormitory/room').get({dorm:roomId||dormId});
+          this.rows = rows
           this.current_id = roomId||dormId
           this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
           this.current_data = data

@@ -28,7 +28,7 @@
 
 
 
-    <el-input @focus="showDialog" v-model="data" :placeholder="$parent.$attrs.placeholder||'请输入'" v-bind="$parent.$attrs" v-on="$parent.$listeners" ></el-input>
+    <el-input @focus="showDialog" prefix-icon="el-icon-location-outline" v-model="data" :placeholder="$parent.$attrs.placeholder||'请选择坐标'" v-bind="$parent.$attrs" v-on="$parent.$listeners" ></el-input>
   </el-form-item>
   </div>
 </template>

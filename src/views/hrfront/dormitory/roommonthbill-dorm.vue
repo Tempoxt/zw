@@ -8,7 +8,7 @@
 
 
  <el-dialog
-      title="添加月单费"
+      :title="`月单费`"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
@@ -33,7 +33,7 @@
                <form-render
                 :type="`select`" 
                 @change="changeFormMonth"
-                :field="{name:'宿舍',options:rows.map(o=>({label:o.dormName,value:o.id}))}"
+                :field="{name:'宿舍',options:rows.map(o=>({label:o.dormName||o.roomName,value:o.id}))}"
                 v-model="form.dorm"
                 />
             </el-col>
@@ -209,7 +209,7 @@ export default {
     };
   },
   watch:{
-    id(){
+    id(val){
       this.fetchTableData()
     },
   },
@@ -252,8 +252,9 @@ export default {
         return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
     },
     async add(){
-        console.log(this.table_data,'123')
-        this.form.dorm = this.rows[0].id
+        // console.log(this.table_data,'123')
+        // console.log(this.rows,'this.rows')
+        // this.form.dorm = this.rows[0].id
         this.dialogFormVisible = true
     },
     async changeFormMonth(){
@@ -268,13 +269,19 @@ export default {
      
     },
     async handleFormSubmit(){
-        await this.$request.post('dormitory/dormmonthbill',this.form)
+         if(this.isInsert){
+             await this.$request.post('dormitory/dormmonthbill',this.form)
+        }else{
+              await this.$request.put('dormitory/dormmonthbill',this.form.id,this.form)
+        }
+      
         this.dialogFormVisible = false
         this.fetchTableData()
     },
 
     async edit(){
-      this.roomList = (await api_common.resource('dormitory/room').find(this.id)).rows.map(o=>{
+
+      this.roomList = (await api_common.resource('dormitory/room').find(this.id||0)).rows.map(o=>{
             return {
                 label:o.dormName,
                 value:o.id
