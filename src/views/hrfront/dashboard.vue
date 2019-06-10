@@ -1,6 +1,6 @@
 <template>
 	<div class="dashboard">
-		<el-tabs v-model="activeName" @tab-click="handleClick">
+		<el-tabs v-model="activeName">
 			<el-tab-pane label="工作台" name="workbench">
 				<el-row>
 				  <el-col :span="12">
@@ -118,9 +118,6 @@
 		barChart
 	},
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
-      }
     }
   };
 </script>

@@ -26,10 +26,6 @@ export default {
             //重置
             show: true
           },
-          dataZoom: {
-            //数据缩放视图
-            show: true
-          },
           saveAsImage: {
             //保存图片
             show: true
@@ -81,12 +77,9 @@ export default {
     if (this.color) {
       option.color = this.color;
     }
+    $(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
     let myChart = echarts.init(document.getElementById(this.id));
     myChart.setOption(option);
-    //建议加上以下这一行代码，不加的效果图如下（当浏览器窗口缩小的时候）。超过了div的界限（红色边框）
-    window.addEventListener("resize", function() {
-      myChart.resize();
-    });
   }
 };
 </script>

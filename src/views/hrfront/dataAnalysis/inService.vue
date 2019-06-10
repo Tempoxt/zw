@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-    <div id="ring-diagram"></div>
+    <div id="ring-diagram" class="box-card-c"></div>
   </el-card>
 </template>
 
@@ -9,7 +9,7 @@ import echarts from "echarts";
 
 export default {
   mounted() {
-    let myChart = echarts.init(document.getElementById("ring-diagram"));
+    
     let option = {
       title: {
         text: "在职人数统计"
@@ -24,10 +24,6 @@ export default {
         feature: {
           restore: {
             //重置
-            show: true
-          },
-          dataZoom: {
-            //数据缩放视图
             show: true
           },
           saveAsImage: {
@@ -86,11 +82,9 @@ export default {
         }
       ]
     };
+    $(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
+    let myChart = echarts.init(document.getElementById("ring-diagram"));
     myChart.setOption(option);
-    //建议加上以下这一行代码，不加的效果图如下（当浏览器窗口缩小的时候）。超过了div的界限（红色边框）
-    window.addEventListener("resize", function() {
-      myChart.resize();
-    });
   }
 };
 </script>
