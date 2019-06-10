@@ -29,7 +29,7 @@
               <div >
                   <span class="icon iconfont icon-zonggongsi"></span>
                 &nbsp;
-                <span>{{ node.label||data.name }} ({{data.adminName}})</span>
+                <span>{{ node.label||data.name }} </span>
               
               </div>
                <span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}})</span>
