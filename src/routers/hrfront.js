@@ -1,13 +1,13 @@
-export default [
-    {
-        path:'',
+export default [{
+        path: '',
         name: '/hrfront',
-        component: () => import ('@/views/hrfront/dashboard'),
+        component: () =>
+            import ('@/views/hrfront/dashboard'),
         meta: {
             title: '人力资源'
         }
     },
-    
+
     {
         name: 'attendanceDetail',
         component: () =>
@@ -27,14 +27,15 @@ export default [
     {
         name: 'employeeDoc',
         component: () =>
-            import ('@/views/hrfront/personnelmanagement/personnelmanagement'),
+            import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
         meta: {
             title: '员工档案'
         }
     },
     {
         name: 'transfer/record',
-        component: () => import ('@/views/hrfront/personnelmanagement/transfer'),
+        component: () =>
+            import ('@/views/hrfront/personnelmanagement/transfer'),
         meta: {
             title: '人员调动'
         }
@@ -103,14 +104,14 @@ export default [
             title: '注销登记'
         }
     },
-    {
-        name: 'personnelmanagement-employee',
-        component: () =>
-            import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
-        meta: {
-            title: '人事管理'
-        }
-    },
+    // {
+    //     name: 'personnelmanagement-employee',
+    //     component: () =>
+    //         import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
+    //     meta: {
+    //         title: '人事管理'
+    //     }
+    // },
     {
         name: 'personnelmanagement-employee',
         component: () =>
