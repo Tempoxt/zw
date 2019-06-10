@@ -70,7 +70,7 @@ export default {
       ]
     };
     for (let i = 0; i < this.datas.length; i++) {
-        option.legend.data[i]={}
+      option.legend.data[i]={}
       option.legend.data[i].name = this.datas[i].name;
       option.legend.data[i].icon = "circle";
     }

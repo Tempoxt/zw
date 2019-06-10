@@ -14,7 +14,7 @@ import '@assets/style/theme/F2353C/index.css'
 import '@assets/style/theme/9463F7/index.css'
 
 import '@assets/iconfont/iconfont.css'
-// import 'element-ui/lib/theme-chalk/index.css'
+ import 'element-ui/lib/theme-chalk/index.css'
 import '@assets/style/index.scss'
 // import '@assets/style/element-variables.scss'
 import './config/permission'

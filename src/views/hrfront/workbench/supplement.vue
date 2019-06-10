@@ -26,8 +26,8 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" >通过</el-button>
-					<el-button class="btn">退回</el-button>
+					<el-button type="primary" @click="by">通过</el-button>
+					<el-button class="btn" @click="goBack">退回</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -65,7 +65,42 @@
 
 <script>
 export default {
-
+methods: {
+      by() {
+        this.$confirm('确定通过补卡申请?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '补卡成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消补卡'
+          });          
+        });
+	  },
+	  goBack() {
+        this.$confirm('确定退回补卡申请?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '退回成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退回'
+          });          
+        });
+      }
+    }
 }
 </script>
 

@@ -125,6 +125,18 @@
 .dashboard .selectdate .el-date-editor{
       width: 120px;
 }
+.dashboard .el-calendar-table .el-calendar-day {
+    height: 25px;
+}
+.dashboard .el-calendar-table thead th {
+    padding: 6px 0;
+}
+.dashboard .el-calendar__body {
+    padding: 8px 20px 35px;
+}
+.dashboard .el-calendar__header {
+    padding: 6px 20px;
+}
 </style>
 
 <style lang="scss" scoped>
