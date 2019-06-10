@@ -303,7 +303,7 @@ export default {
       }, 300);
     },
     async distribution(row){
-
+        console.log(row,'rowrow')
         this.dialogLoading2 = true
         this.distribution_form = {}
         this.distributionRow = row
@@ -311,7 +311,7 @@ export default {
 
         const { rows } = await this.$request.get('/dormitory/checkinemp',{
           params:{
-            dormType:this.data.dormType
+            dormType:this.data.dormType||row.dormType
           }
         })
         this.memberList = rows.map(o=>{

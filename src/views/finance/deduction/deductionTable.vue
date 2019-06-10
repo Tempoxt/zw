@@ -96,7 +96,7 @@
     >
       <div style="padding-left:10px">
         <el-date-picker
-          v-model="table_form.month"
+          v-model="table_form.dateLap"
           type="month"
           size="medium"
           @change="fetchTableData"
@@ -233,7 +233,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
-    this.$set(this.table_form,'month',dayjs().format('YYYY-MM'))
+    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 
     this.fetchTableData();
   }
