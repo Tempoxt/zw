@@ -28,6 +28,7 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
+      :cell-style="cellStyle"
     >
     <each-table-column :table_field="table_field"/>
     </el-table>
@@ -118,6 +119,23 @@ export default {
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
+    },
+    cellStyle({row, column, rowIndex, columnIndex}){
+      if(rowIndex === 0 && columnIndex ===0){ //指定坐标
+          return 'background:rgba(11,178,212,0.2)'
+      }else if(rowIndex === this.itemlength.one && columnIndex ===0){ //指定坐标
+          return 'background:rgba(244,122,36,0.2)'
+      }else if(rowIndex === this.itemlength.one+this.itemlength.two && columnIndex ===0){ //指定坐标
+          return 'background:rgba(242,53,60,0.2)'
+      }else if(rowIndex === this.itemlength.one+this.itemlength.two+this.itemlength.three && columnIndex ===0){ //指定坐标
+          return 'background:rgba(31,211,97,0.2)'
+      }else if(rowIndex === this.itemlength.one+this.itemlength.two+this.itemlength.three+this.itemlength.four && columnIndex ===0){ //指定坐标
+          return 'background:rgba(148,99,247,0.2)'
+      }else if(rowIndex === this.itemlength.one+this.itemlength.two+this.itemlength.three+this.itemlength.four+this.itemlength.five && columnIndex ===0){ //指定坐标
+          return 'background:rgba(0,8,255,0.2)'
+      }else{
+          return ''
+      }
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0 ||columnIndex === 6) { //第一列

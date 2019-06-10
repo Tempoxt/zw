@@ -16,34 +16,38 @@
       </div>
     </table-header>
     
-    <div>
-      <p style="font-size:18px;text-align:center;font-weight:bold;padding:13px 0;line-height:30px;background:#EBF6F8;color:#0BB2D4">爱心基金收支平衡表</p>
+    <div class="blance">
+      <p>爱心基金收支平衡表</p>
       <!--<span>输出日期：2019年01月05日</span>-->
     </div>
 
-    <el-table
+  
+     <!-- <el-table
       @selection-change="handleChangeSelection"
       :data="totalData"
       border
       style="width: 100%"
-      :show-header="false"
       :span-method="objectSpanMethod"
     >
         <each-table-column :table_field="table_field"/>
-    </el-table>
+    </el-table>-->
+    <!--donateInComeTotal-->
     <el-table
       @selection-change="handleChangeSelection"
-      :data="donateInComeTotal"
+      :data="table_data"
       border
       style="width: 100%"
+      :show-header="false"
       v-loading="table_loading"
       :header-cell-style="headerCellStyle"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
+      :span-method="objectSpanMethod"
+      :cell-style="cellStyle"
     >
         <each-table-column :table_field="table_field"/>
     </el-table>
-    <el-table
+   <!-- <el-table
       @selection-change="handleChangeSelection"
       :data="donate"
       border
@@ -97,7 +101,7 @@
       @header-dragend="table_dragend"
     >
         <each-table-column :table_field="table_field"/>
-    </el-table>
+    </el-table>-->
   </ui-table>
 </template>
 <script>
@@ -140,6 +144,9 @@ export default {
         value:'3',
         label:'年'
       }],
+      allData:[],
+      title:{},
+      itemLength:{}
     };
   },
   watch:{
@@ -147,44 +154,52 @@ export default {
   },
   methods: {
     async fetchTableData() {
-     this.table_loading = true;
-     this.table_form.orgid = this.id
-     const tableData = await api_resource.get(this.table_form);
-     this.welfareExpend = tableData.welfareExpend//福利支出
-     this.donate = tableData.donateInCome;//捐赠收入
-     this.otherInComeTotal = Array(tableData.otherInComeTotal);//其他收入合计
-     this.otherExpendTotal = Array(tableData.otherExpendTotal);//其他支出合计
-     this.donateInComeTotal = Array(tableData.donateInComeTotal);//捐赠收入合计
-     this.welfareExpendTotal = Array(tableData.welfareExpendTotal);//福利支出合计
-     this.totalData = Array(tableData.total);//账载资金
-     console.log(tableData)
-    //  const {rows , total }= await api_resource.get(this.table_form);
-      // this.table_data  = rows
-      // this.table_form.total = total
+      this.table_loading = true;
+      this.table_form.orgid = this.id
+      const tableData = await api_resource.get(this.table_form);
+      this.table_data.push(tableData.total) 
+      this.title.itemName = this.table_field[0].showname
+      this.title.inCome = this.table_field[1].showname
+      this.title.expend = this.table_field[2].showname
+      this.table_data.push(this.title);
+      this.table_data.push(tableData.donateInComeTotal)
+      this.itemLength.donate = tableData.donateInCome.length;
+      this.itemLength.expend = tableData.welfareExpend.length;
+      for(var i in tableData.donateInCome){
+          this.table_data.push(tableData.donateInCome[i])
+      }
+      this.table_data.push(tableData.otherInComeTotal)
+      this.table_data.push(tableData.welfareExpendTotal) 
+      for(var i in tableData.welfareExpend){
+          this.table_data.push(tableData.welfareExpend[i])
+      }
+      this.table_data.push(tableData.otherExpendTotal)
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
     },
     async initForm(){
         const {inItem,inMethod} = await this.$request.get('/lovefoundation/inexpendshow')
-        console.log(inItem,'inItem lallalalalalalalalaal............')
-        // this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
-        // this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
     },
-     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-     console.log(rowIndex,columnIndex)
-      if (columnIndex === 1) { //第一列
-        if(rowIndex===0){
-          return {
-            rowspan: 1,
-            colspan: 2
-          };
-        } else{
-          return {
-            rowspan: 0,
-            colspan: 0
-          };
-        }
+    cellStyle({row, column, rowIndex, columnIndex}){
+      if(rowIndex === 0 && columnIndex ===1||(rowIndex === 2 && columnIndex ===1)|| (rowIndex === (4+Number(this.itemLength.donate)) && columnIndex ===2) || 
+      (rowIndex === (3+Number(this.itemLength.donate)) && columnIndex ===1) || (rowIndex === (5+Number(this.itemLength.donate)+Number(this.itemLength.expend)) && columnIndex ===2)){ //指定坐标
+          return 'color:#F2353C;font-weight:bold'
+      }else if(rowIndex === 1 && (columnIndex ===0 || columnIndex ===1 ||columnIndex ===2)){ //指定坐标
+          return 'color:#0BB2D4'
+      }else if(rowIndex === 0 && columnIndex ===0 ||(rowIndex === 2 && columnIndex ===0) || (rowIndex === (3+Number(this.itemLength.donate)) && columnIndex ===0 ) || 
+      (rowIndex === (4+Number(this.itemLength.donate)) && columnIndex ===0)|| (rowIndex === (4+Number(this.itemLength.donate)+Number(this.itemLength.expend)+1) && columnIndex ===0)){ //指定坐标
+          return 'font-weight:bold;'
+      }else{
+          return ''
+      }
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if(rowIndex===0 &&columnIndex === 1){
+        return {
+          rowspan: 1,
+          colspan: 2
+        };
       }
     }
   },
@@ -198,9 +213,8 @@ export default {
 };
 </script>
 <style>
-  .el-table_16_column_50 ,.el-table_16_column_51,.el-table_17_column_53,.el-table_19_column_59,.el-table_22_column_68,.el-table_20_column_62 {font-weight:bold}
-  .el-table_16_column_51  {
-    color:#F2353C;
+  .blance{
+    font-size:18px;text-align:center;font-weight:bold;padding:13px 0;line-height:30px;background:#EBF6F8;color:#0BB2D4
   }
 </style>
 

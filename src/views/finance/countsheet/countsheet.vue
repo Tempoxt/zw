@@ -4,7 +4,7 @@
                 <inexpendsummTable />
             </el-tab-pane>
             <el-tab-pane label="爱心基金展示" name="third">
-                <inexpendshowTable />>
+                <inexpendshowTable />
             </el-tab-pane>
     </el-tabs>
 </template>
