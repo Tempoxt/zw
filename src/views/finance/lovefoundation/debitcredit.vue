@@ -1,16 +1,16 @@
   <template>
   <ui-table ref="table" 
-  :table_column="table_field" 
-  :table_query.sync="table_form.query"
-  @query="querySubmit"
-  >
+    :table_column="table_field" 
+    :table_query.sync="table_form.query"
+    @query="querySubmit"
+    >
 
-  <el-dialog
+    <el-dialog
       :title="dialogStatus==='insert'?'添加':'编辑'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
-    >
+      >
       <div style="width:500px;margin:0 auto">
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
@@ -51,15 +51,15 @@
     <el-table
       @selection-change="handleChangeSelection"
       :data="table_data"
-      border
-      show-summary
-      :summary-method="getSummaries"
+
       style="width: 100%"
       v-loading="table_loading"
       :header-cell-style="headerCellStyle"
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
+      show-summary
+      :summary-method="getSummaries"
     >
     <el-table-column 
       type="selection" 
@@ -68,21 +68,22 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+      <el-table-column type="index" :index="indexMethod" width="70"/>
+      <each-table-column :table_field="table_field"/>
     </el-table>
-     <table-pagination 
-        :total="table_form.total" 
-        :pagesize.sync="table_form.pagesize"
-        :currentpage.sync="table_form.currentpage"
-        @change="fetchTableData"
-        :table_config="table_config"
+    <table-pagination 
+      :total="table_form.total" 
+      :pagesize.sync="table_form.pagesize"
+      :currentpage.sync="table_form.currentpage"
+      @change="fetchTableData"
+      :table_config="table_config"
     />
   </ui-table>
 </template>
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+import { constants } from 'crypto';
 const api_resource = api_common.resource("lovefoundation/debitcredit");
 const defaultForm = () => {
     return {
@@ -106,7 +107,8 @@ export default {
         selectData:[],
         formSelect1:[],
         formSelect2:[],
-        putForm:{}
+        putForm:{},
+        total_data:[]
         };
     },
     watch:{
@@ -114,7 +116,6 @@ export default {
     },
     methods: {
         async fetchTableData() {
-    
             this.table_loading = true;
             this.table_form.orgid = this.id
             const {rows , total }= await api_resource.get(this.table_form);
@@ -163,17 +164,14 @@ export default {
             this.dialogFormVisible = true;
         },
         getSummaries(param) {
-          console.log(param)
           const { columns, data } = param;
           const sums = [];
           columns.forEach((column, index) => {
-          if (index === 1) {
+          if (index === 2) {
             sums[index] = '基金余款';
             return;
           }
           if(index === 6){
-            console.log(data)
-            console.log(column.property,'column.propertyvvvvvvvvvvvvvvv')
             const values = data.map(item => Number(item[column.property]));
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {
@@ -191,7 +189,7 @@ export default {
           }
         });
         return sums;
-      }
+      } 
     },
     async created() {
         const { field, action,table } = await api_common.menuInit("lovefoundation/debitcredit");
@@ -199,8 +197,10 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
+        
     }
 };
 </script>
+
 
 

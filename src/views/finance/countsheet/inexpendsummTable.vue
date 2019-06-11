@@ -37,8 +37,9 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("lovefoundation/inexpendsummary");
 import dateLap from '@/components/Table/DateLap'
+import dayjs from 'dayjs'
+const api_resource = api_common.resource("lovefoundation/inexpendsummary");
 const defaultForm = () => {
     return {
         estate:1,
@@ -73,8 +74,6 @@ export default {
     async fetchTableData() {
       this.table_loading = true;
       this.table_form.orgid = this.id
-      console.log(this.table_form)
-    //  const {rows , total }= await api_resource.get(this.table_form);
       const tableData = await api_resource.get(this.table_form);
       this.table_data  = tableData
       const field = tableData.map((o,i) => o.projectField)
@@ -94,31 +93,6 @@ export default {
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
-    },
-    async initForm(){
-        // const tableData = await this.$request.get('/lovefoundation/inexpendsummary')
-        // this.form_inItem = inItem.map(o=>({label:o.text,value:o.value}))
-        // this.form_inMethod = inMethod.map(o=>({label:o.text,value:o.value}))
-    },
-    async add(){
-        this.initForm()
-        this.dialogFormVisible = true
-    },
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-    },
-    async edit(){
-      this.initForm()
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
     },
     cellStyle({row, column, rowIndex, columnIndex}){
       if(rowIndex === 0 && columnIndex ===0){ //指定坐标
@@ -183,18 +157,10 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
+    this.$set(this.table_form,'dateLap',dayjs().format('YYYY'))
     this.fetchTableData();
   }
 };
 </script>
-<style>
-  .table-tabs{
-    padding-bottom: 50px;
-  }
-  .el-table__body-wrapper .el-table_1_column_3:nth-child(1){
-    background:rgba(0,8,255,0.2);
-  }
- 
-</style>
 
 

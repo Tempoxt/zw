@@ -20,18 +20,6 @@
       <p>爱心基金收支平衡表</p>
       <!--<span>输出日期：2019年01月05日</span>-->
     </div>
-
-  
-     <!-- <el-table
-      @selection-change="handleChangeSelection"
-      :data="totalData"
-      border
-      style="width: 100%"
-      :span-method="objectSpanMethod"
-    >
-        <each-table-column :table_field="table_field"/>
-    </el-table>-->
-    <!--donateInComeTotal-->
     <el-table
       @selection-change="handleChangeSelection"
       :data="table_data"
@@ -47,68 +35,14 @@
     >
         <each-table-column :table_field="table_field"/>
     </el-table>
-   <!-- <el-table
-      @selection-change="handleChangeSelection"
-      :data="donate"
-      border
-      style="width: 100%"
-      :show-header="false"
-    >
-        <each-table-column :table_field="table_field"/>
-    </el-table>
-
-    <el-table
-      :data="otherInComeTotal"
-      border
-      :show-header="false"
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      @header-dragend="table_dragend"
-    >
-        <each-table-column :table_field="table_field"/>
-    </el-table>
-
-     <el-table
-      :data="welfareExpendTotal"
-      border
-      :show-header="false"
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      @header-dragend="table_dragend"
-    >
-        <each-table-column :table_field="table_field"/>
-    </el-table>
-
-     <el-table
-      :data="welfareExpend"
-      border
-      :show-header="false"
-      style="width: 100%"
-      v-loading="table_loading"
-    >
-        <each-table-column :table_field="table_field"/>
-    </el-table>
-
-    <el-table
-      :data="otherExpendTotal"
-      border
-      :show-header="false"
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      @header-dragend="table_dragend"
-    >
-        <each-table-column :table_field="table_field"/>
-    </el-table>-->
   </ui-table>
 </template>
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("lovefoundation/inexpendshow");
 import dateLap from '@/components/Table/DateLap'
+import dayjs from 'dayjs'
+const api_resource = api_common.resource("lovefoundation/inexpendshow");
 const defaultForm = () => {
     return {
         estate:1,
@@ -208,6 +142,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
+    this.$set(this.table_form,'dateLap',dayjs().format('YYYY'))
     this.fetchTableData();
   }
 };
