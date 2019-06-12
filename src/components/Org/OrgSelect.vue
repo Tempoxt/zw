@@ -1,7 +1,7 @@
 <template>
     <div>
          <el-tabs v-model="activeName" >
-            <el-tab-pane label="同部门" name="first" v-if="activeName==='first'">
+            <el-tab-pane label="同部门" name="first">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="10">
                         <Org  style="height:400px" same="false" @change="changeSameOrg"/>
@@ -13,7 +13,7 @@
                                     <el-button icon="el-icon-arrow-right" circle :type="!selectSame.disabled?'primary':''" @click="addSame"></el-button>
                                 </div>
                                 <div>
-                                   <el-button icon="el-icon-arrow-left" circle  :type="resultSameSelect.id?'primary':''" @click="removeSame"></el-button>
+                                   <el-button icon="el-icon-arrow-left" circle :type="resultSameSelect.id?'primary':''" @click="removeSame"></el-button>
                                 </div>
                                 <div>
                                     <el-button icon="el-icon-refresh" circle></el-button>
@@ -26,10 +26,9 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-           <el-tab-pane label="我的下属" name="second"  v-if="activeName!=='first'">
-                
-            </el-tab-pane>
-            <el-tab-pane label="组织结构" name="third"  v-if="activeName!=='first'">
+            <!-- <el-tab-pane label="我的下属" name="second">
+            </el-tab-pane> -->
+            <el-tab-pane label="组织结构" name="third" v-if="activeNam!='first'">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="10">
                         <Org  style="height:400px"  same="true" @change="changeOrg"/>
@@ -53,10 +52,7 @@
                         <OrgResult  style="height:400px" :data="result" @change="changeResult"/>
                     </el-col>
                 </el-row>
-
-                
-            </el-tab-pane>
-            
+            </el-tab-pane>   
         </el-tabs>
     </div>
 </template>
@@ -64,23 +60,19 @@
 import Org from './Org.vue'
 import OrgResult from './OrgResult'
 export default {
-    props:{
-       activeName:{
-           default:'second'
-       }
-    },
+    props:["activeNam"],
     components:{
         Org,
         OrgResult
     },
     data(){
         return {
-            // activeName:'second',
+            activeName:'first',
             select:{
                 disabled:true
             },
             selectSame:{
-                 disabled:true
+                disabled:true
             },
             resultSelect:{
                 
@@ -93,7 +85,7 @@ export default {
             },
             resultSame:[
                
-            ]
+            ],
         }
     },
     methods:{
@@ -147,7 +139,10 @@ export default {
             })
             this.resultSameSelect = {}
         }
-    }
+    },
+    // async crated(){
+    //     console.log(this.props.activeName)
+    // }
 }
 </script>
 

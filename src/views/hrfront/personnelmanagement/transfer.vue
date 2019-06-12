@@ -50,7 +50,7 @@
 
       </el-form>
 
-      <OrgSelect v-model="form3.ids" activeName="first" ref="OrgSelect" v-if="dialogForm3Visible"/>
+      <OrgSelect v-model="form3.ids" activeNam="first" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogForm3Visible = false">取 消</el-button>

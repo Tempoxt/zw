@@ -15,6 +15,14 @@ export default [{
         }
     },
     {
+        name: 'salary',
+        component: () =>
+            import ('@/views/finance/salary/salaryslip'),
+        meta: {
+            title: '薪资单'
+        }
+    },
+    {
         name: 'applybasic',
         component: () =>
             import ('@/views/finance/salary/applybasic'),

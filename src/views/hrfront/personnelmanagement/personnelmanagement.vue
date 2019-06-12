@@ -305,7 +305,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="联系方式" v-if="!isInsert">
+                        <!-- <el-tab-pane label="联系方式" v-if="!isInsert">
                             <div class="line-box">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
@@ -338,7 +338,7 @@
                                     </el-col>
                             </el-row>
                             </div>
-                        </el-tab-pane>
+                        </el-tab-pane> -->
 
                         
                         <!-- <el-tab-pane label="合同信息" v-if="!isInsert&&profileData.contractRecords!=''">
@@ -710,9 +710,9 @@
             </div>
         </el-dialog>
 
-        <!-- <div class="img-show-mask" v-show="maskBtn" id="img-show-mask" @click="closeBigImg">
+        <div class="img-show-mask" v-show="maskBtn" id="img-show-mask" @click="closeBigImg">
             <img :src="bigImg" class="bigImg" id="bigImg" />
-        </div> -->
+        </div>
 
         <table-header
             :table_actions="table_actions"
@@ -759,6 +759,7 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hrm/staff");
 import Device from '@/utils/zk_sdk/baseISSOnline.js'
 import dayjs from 'dayjs'
+import { constants } from 'crypto';
 let baseUrl = process.env.VUE_APP_STATIC
 export default {
     mixins: [table_mixin],
@@ -908,7 +909,7 @@ export default {
             this.getDialog()
         },
         cellStyle({row, column, rowIndex, columnIndex}){
-            if(columnIndex ===2){ //指定坐标
+            if(column.label == '工号'){
                 return 'color:#0BB2D4;cursor:pointer'
             }else{
                 return  ''
@@ -962,10 +963,13 @@ export default {
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
             })
-            let row = this.table_selectedRows[0]
+            let row = this.table_selectedRows[0];
             this.form = await api_resource.find(row.id)
             this.dialogFormVisible = true
-            this.getDialog()
+            this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
+            this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async fetchDepartment(){
             this.departmentData = await api_common.resource('org/branchdepartment').get({id:this.form.subCompany})
@@ -990,6 +994,7 @@ export default {
                 this.fetchTableData()
             }else{
                 this.dialogFormVisible = false
+                this.fetchTableData()
             }  
         },
         async fetchProvinse(val){

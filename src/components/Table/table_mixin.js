@@ -284,30 +284,7 @@ export default {
                     delete item.subs
                 })
             } else {
-                const dataa =  await this.$request.get('/lovefoundation/balance');
-                var file = this.table_data.filter(filed=>filed.summary);
-                if(file.length === this.table_data.length){
-                    const vie ={
-                        amount: dataa.balance,
-                        applicant: null,
-                        applyDate: null,
-                        certificateDate: null,
-                        credit: "",
-                        debit: "",
-                        delestate: 0,
-                        effectiveDate: "基金余款",
-                        estate: 1,
-                        expendAttachment: "",
-                        id: 0,
-                        lockstate: 0,
-                        remark: "",
-                        summary: ""
-                    }
-                    this.table_data.push(vie);
-                    data = this.table_data;
-                }else{  
-                    data = this.table_data;
-                }
+                data = this.table_data;
             }
             const export_file = async(type) => {
                 this.$msgbox.close()
@@ -346,7 +323,6 @@ export default {
                         bookType: type
                     })
                 }
-
                 loading.close();
             }
             this.$alert( <el-button-group>

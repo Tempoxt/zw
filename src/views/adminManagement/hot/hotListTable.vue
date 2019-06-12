@@ -34,7 +34,7 @@
 
     </el-form>
 
-      <OrgSelect v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
+      <OrgSelect v-model="form3.ids" activeNam="" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogForm3Visible = false">取 消</el-button>
@@ -226,11 +226,14 @@ export default {
         this.dialogForm2Visible = false
     },
     async handleForm3Submit(){
+      
+        console.log(this.$refs.OrgSelect,'oooooooooooooo')
       this.form3.ids = this.$refs.OrgSelect.getIdsResult()
       await this.$request.post('/hot/record',this.form3)
       this.dialogForm3Visible = false
     },
     add(){
+        console.log(this.$refs.OrgSelect,'oooooooooooooo')
         this.form3 = {}
         this.dialogForm3Visible = true
     },
