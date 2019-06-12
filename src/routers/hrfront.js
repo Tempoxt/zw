@@ -112,12 +112,20 @@ export default [{
     //         title: '人事管理'
     //     }
     // },
+    // {
+    //     name: 'personnelmanagement-employee',
+    //     component: () =>
+    //         import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
+    //     meta: {
+    //         title: '档案管理'
+    //     }
+    // },
     {
-        name: 'personnelmanagement-employee',
+        name: 'outDutyLog',
         component: () =>
-            import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
+            import ('@/views/hrfront/personnelmanagement/outDutyLog'),
         meta: {
-            title: '档案管理'
+            title: '离职登记'
         }
     },
     {

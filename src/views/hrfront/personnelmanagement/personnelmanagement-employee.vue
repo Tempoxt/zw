@@ -56,9 +56,7 @@ export default {
          const { menu } = await getTabs(this.$route.query.menuid)
          this.menu = menu
          this.view_activeName = menu[0].name
-
     }
-    
 }
 </script>
 
