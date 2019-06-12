@@ -15,34 +15,34 @@
       v-el-drag-dialog
     >
       <div style="width:500px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="120px">
           <el-row :gutter="20">
            <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'宿舍',options:dormList}" v-model="form.dorm"/>
+              <form-render :type="`select`" :field="{name:'宿舍*',options:dormList}" v-model="form.dorm"/>
             </el-col>
            
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房屋编码'}" v-model="form.houseNumber" />
+              <form-render :type="`input`" :field="{name:'房屋编码*'}" v-model="form.houseNumber" />
             </el-col>
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房屋编号'}" v-model="form.roomName"/>
+              <form-render :type="`input`" :field="{name:'房屋编号*'}" v-model="form.roomName"/>
             </el-col>
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'床位数'}" v-model="form.totalBeds"/>
+              <form-render :type="`input`" :field="{name:'床位数*'}" v-model="form.totalBeds"/>
             </el-col>
 
          
              <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'室长',options:roomAdminList}" v-model="form.roomAdmin"/>
+              <form-render :type="`select`" :field="{name:'室长*',options:roomAdminList}" v-model="form.roomAdmin"/>
             </el-col> 
           <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房租'}" v-model="form.rent"/>
+              <form-render :type="`input`" :field="{name:'房租*'}" v-model="form.rent"/>
             </el-col>
            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"/>
+              <form-render :type="`input`" :field="{name:'电表初始读数*'}" v-model="form.initalElectric"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
+              <form-render :type="`input`" :field="{name:'水表初始读数*'}" v-model="form.initalWater"/>
             </el-col>
             <el-col :span="24">
               <form-render
@@ -145,7 +145,8 @@ import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
         estate:1,
-        roomAdmin:''
+        roomAdmin:'',
+        dormType:1
     }
 }
 export default {
