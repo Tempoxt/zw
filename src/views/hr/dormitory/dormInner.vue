@@ -15,20 +15,20 @@
       v-el-drag-dialog
     >
       <div style="width:500px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="120px">
           <el-row :gutter="20">
            
             <!-- <el-col :span="24">
               <form-render :type="`input`" :field="{name:'宿舍编号'}" v-model="form.dormCode"/>
             </el-col> -->
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'宿舍名称'}" v-model="form.dormName" />
+              <form-render :type="`input`" :field="{name:'宿舍名称*'}" v-model="form.dormName" />
             </el-col>
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电费价格'}" v-model="form.electricPrice"/>
+              <form-render :type="`input`" :field="{name:'电费价格*'}" v-model="form.electricPrice"/>
             </el-col>
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水费价格'}" v-model="form.waterPrice"/>
+              <form-render :type="`input`" :field="{name:'水费价格*'}" v-model="form.waterPrice"/>
             </el-col>
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
@@ -38,13 +38,13 @@
             </el-col>
 
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'宿舍地址'}" v-model="form.dormAddress"/>
+              <form-render :type="`input`" :field="{name:'宿舍地址*'}" v-model="form.dormAddress"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`map`" :field="{name:'宿舍坐标'}" v-model="form.dormLocation"/>
+              <form-render :type="`map`" :field="{name:'宿舍坐标*'}" v-model="form.dormLocation"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'管理员',options:adminList}" v-model="form.admin"/>
+              <form-render :type="`select`" :field="{name:'管理员*',options:adminList}" v-model="form.admin"/>
             </el-col>
             
 

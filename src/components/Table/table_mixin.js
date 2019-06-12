@@ -347,11 +347,11 @@ export default {
       this.importLoading = true
       try {
         await request.post(this.importUploadUrl,form)
+        this.fetchTableData()
         this.$message({
           message: '导入成功',
           type: 'success'
         });
-        this.fetchTableData()
       } catch (error) {
         
       }finally{
@@ -360,6 +360,7 @@ export default {
         this.$nextTick(()=>{
           this.$refs.importInput.value = null
           ev.target.value = null
+          this.fetchTableData()
         })
       }
       

@@ -29,7 +29,9 @@ export default {
             let row = this.table_field.find(field=>field.showname===column.label)
             row.width = newWidth
             row.menuid = row.menuid_id
-            api_pagemanager.update(row.id,row)
+            api_pagemanager.update(row.id,row,{
+              alert:false
+            })
         },
         async delete() {
         let rows = this.table_selectedRows.map(row=>row.id)

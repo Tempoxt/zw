@@ -45,8 +45,8 @@ export function resource (url) {
     create (data) {
       return request.post(`${url}`, data)
     },
-    update (pk, data) {
-      return request.put(`/${url}/` + pk, data)
+    update (pk, data,config) {
+      return request.put(`/${url}/` + pk, data,config)
     },
     remove (ids,parmas) {
       return request.delete(`/${url}/bluk`, {
