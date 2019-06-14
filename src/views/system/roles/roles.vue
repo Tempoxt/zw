@@ -25,7 +25,7 @@
                 </el-tree>
             </div>
         </el-col>
-        <el-col :span="4"  class="col bg-gray">
+        <el-col :span="4"  class="col bg-gray"  style="overflow-y: scroll;">
             <div class="label">
                 操作权限
             </div>
@@ -41,7 +41,7 @@
                 </el-checkbox-group>
             </div>
         </el-col>
-        <el-col :span="8"  class="col bg-gray">
+        <el-col :span="8"  class="col bg-gray" style="overflow-y: scroll;">
              <div class="label">
                 字段权限
             </div>
@@ -78,7 +78,7 @@
                 </el-row>
             </div>
         </el-col>
-        <el-col :span="6"  class="col bg-gray-2">
+        <el-col :span="6"  class="col bg-gray-2"  style="overflow-y: scroll;">
 
             <div class="label">
                 数据范围
@@ -87,7 +87,7 @@
                   <el-radio :label="1" v-model="data" @change="update">全部</el-radio>
              </div>
              <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
-                 <div v-for="i in [{label:'本人相关',value:2},{label:'本部门',value:3},{label:'本部门及下属部门',value:4}]" :key="i.value"  class="cell">
+                 <div v-for="i in [{label:'本部门及下属部门',value:4},{label:'本部门',value:3},{label:'本人相关',value:2}]" :key="i.value"  class="cell">
                      <el-radio :label="i.value">{{i.label}}</el-radio>
                  </div>
             </el-radio-group>
