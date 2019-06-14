@@ -16,7 +16,7 @@
                 
                     <el-tabs @tab-click="tabClick">
                         <el-tab-pane label="个人信息">
-                            <div class="line-box">
+                            <div class="line-boxs">
                             <el-row :gutter="40">
                                 <el-col :span="12">
                                     <el-row :gutter="0">
@@ -36,7 +36,6 @@
                                                 prop="nation"
                                             />
                                         </el-col>
-                                    
                                         <!-- <el-col :span="24">
                                         <form-render
                                                 :type="`select`"
@@ -67,10 +66,7 @@
                                             v-model="form.stayEnd"
                                             prop="stayEnd"
                                             />
-                                        </el-col>
-
-
-                                        
+                                        </el-col>   
                                     </el-row>
                                 </el-col>
                                 <el-col :span="12">
@@ -112,12 +108,12 @@
                         </el-tab-pane>
 
                         <el-tab-pane label="入职信息">
-                            <div class="line-box">
+                            <div class="line-boxs">
                             <el-row :gutter="40">
                                 <el-col :span="12">
                                     <el-row :gutter="20">
                                         <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'员工工号'}" v-model="form.employeeCode" placeholder="自动生成"/>
+                                            <form-render :type="`input`" :field="{name:'员工工号'}" v-model="form.employeeCode" placeholder="自动生成"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
@@ -136,7 +132,7 @@
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.workShop"/>
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -287,10 +283,10 @@
                                                 :type="`radio`"
                                                 :field="{name:'宿舍分配',options:[{
                                                 value: 0,
-                                                label: '分配'
+                                                label: '不分配'
                                                 },{
                                                 value: 1,
-                                                label: '不分配'
+                                                label: '分配'
                                                 }]}"
                                                 v-model="form.liveDormitory"
                                             />
@@ -305,50 +301,92 @@
                             </div>
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="联系方式" v-if="!isInsert">
-                            <div class="line-box">
+                        <el-tab-pane label="联系方式" v-if="!isInsert">
+                            <div class="line-boxs">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
                                         <el-row :gutter="0">
                                             <el-col :span="24">
-                                                <form-render :type="`input`" :field="{name:'手机号'}" v-model="connect.phones"/>
+                                                <form-render :type="`input`" :field="{name:'手机号'}" v-model="connect.contactPhone"/>
                                             </el-col>
                                         
                                             <el-col :span="24">
-                                                <form-render :type="`input`" :field="{name:'外部邮箱'}" v-model="connect.outMail"/>
+                                                <form-render :type="`input`" :field="{name:'外部邮箱'}" v-model="connect.outsideEmail"/>
                                             </el-col>
                                         
                                             <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'紧急联系人'}" v-model="connect.contact"/>
+                                            <form-render :type="`input`" :field="{name:'紧急联系人'}" v-model="connect.emContactor"/>
                                             </el-col>   
                                         </el-row>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-row :gutter="0">
                                             <el-col :span="24">
-                                                <form-render :type="`input`" :field="{name:'短号'}" v-model="connect.short"/>
+                                                <form-render :type="`input`" :field="{name:'短号'}" v-model="connect.shortPhoneNum"/>
                                             </el-col>
                                             <el-col :span="24">
-                                                <form-render :type="`input`" :field="{name:'内部邮箱'}" v-model="connect.inMail"/>
+                                                <form-render :type="`input`" :field="{name:'内部邮箱'}" v-model="connect.insideEmail"/>
                                             </el-col>
                                             <el-col :span="24">
-                                                <form-render :type="`input`" :field="{name:'紧急联系电话'}" v-model="connect.contactCall"/>
+                                                <form-render :type="`input`" :field="{name:'紧急联系电话'}" v-model="connect.emContact"/>
                                             </el-col>
                                         </el-row>
                                     </el-col>
                             </el-row>
                             </div>
-                        </el-tab-pane> -->
+                        </el-tab-pane>
 
-                        
-                        <!-- <el-tab-pane label="合同信息" v-if="!isInsert&&profileData.contractRecords!=''">
-                            <div class="line-box">
-                                <el-row :gutter="40">
-                                    
-                                </el-row>
+                        <el-tab-pane label="合同信息" v-if="!isInsert">
+                            <div class="line-boxs">
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="handleContract">
+                                    <i class="icon iconfont icon-tianjia"></i>
+                                    <span>添加</span>
+                                </el-button>
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="editContract" :disabled="!isDisabled">
+                                    <i class="icon iconfont icon-bianji"></i>
+                                    <span>编辑</span>
+                                </el-button>
+
+                                <el-table 
+                                    @selection-change="handleChangeSelect"
+                                    :data="contractData"
+                                    height="350px"
+                                    :header-cell-style="headerStyle"
+                                    style="width: 100%;margin-top:20px;">
+                                    <el-table-column 
+                                        type="selection" 
+                                        width="60" 
+                                        class-name="table-column-disabled"
+                                        :selectable="table_disable"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="contractName"
+                                        label="合同名称">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="contractTypeShow"
+                                        label="合同类型">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="contractStart"
+                                        label="合同开始时间">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="contractEnd"
+                                        label="合同结束时间">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="contractTimeShow"
+                                        label="年限">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="contractStatus"
+                                        label="状态">
+                                    </el-table-column>
+                                </el-table>
                             </div>
-                        </el-tab-pane> -->
-
+                        </el-tab-pane>
                     </el-tabs>
                 </el-form>
             </div>
@@ -383,7 +421,7 @@
                         </Col>
                         <Col span="12">
                             <span class="labelCon">签发机关：</span>
-                            <span class="labelCon promp">{{profileData.chineseName}}</span>
+                            <span class="labelCon promp">{{profileData.qfjg}}</span>
                         </Col>
                         <Col span="12">
                             <span class="labelCon">身份证号：</span>
@@ -433,7 +471,7 @@
                         </Col>
                         <Col span="12">
                             <span class="labelCon">所属主体：</span>
-                            <span class="labelCon promp">{{profileData.socialSecurityMain}}</span>
+                            <span class="labelCon promp">{{profileData.subCompanyShow}}</span>
                         </Col>
                         <Col span="12">
                             <span class="labelCon">试用期限：</span>
@@ -448,7 +486,7 @@
                             <span class="labelCon promp">{{profileData.contractTimeShow}}</span>
                         </Col>
                         <Col span="12">
-                        <span class="labelCon">所任小组：</span> 
+                            <span class="labelCon">所任小组：</span> 
                             <span class="labelCon promp">{{profileData.team__name}}</span>
                         </Col>
                         <Col span="12">
@@ -521,23 +559,23 @@
                 </div>
                 <Divider v-if="profileData.contractRecords!=''"/>
                 <p class="info" v-if="profileData.contractRecords!=''">合同管理 <i  @click="showContactInfo" class="icon iconfont icon-bianji editIcon"></i></p>
-                <div class="demo-drawer-profile" v-for="item in profileData.contractRecords" :key="item.id">
-                    <Row>
+                <div class="demo-drawer-profile">
+                    <Row class="mb20" v-for="item in profileData.contractRecords" :key="item.id">
                         <Col span="12">
                             <span class="labelCon">合同名称：</span>
-                            <span class="labelCon promp">{{item.chineseName}}</span>
+                            <span class="labelCon promp">{{item.contractName}}</span>
                         </Col>
                         <Col span="12">
                             <span class="labelCon">合同开始：</span>
-                            <span class="labelCon promp">{{item.chineseName}}</span>
+                            <span class="labelCon promp">{{item.contractStart}}</span>
                         </Col>
                         <Col span="12">
                             <span class="labelCon">合同类型：</span>
-                            <span class="labelCon promp">{{item.chineseName}}</span>
+                            <span class="labelCon promp">{{item.contractTypeShow}}</span>
                         </Col>
                         <Col span="12">
                             <span class="labelCon">合同结束：</span>
-                            <span class="labelCon promp">{{item.chineseName}}</span>
+                            <span class="labelCon promp">{{item.contractEnd}}</span>
                         </Col>
                     </Row>
                 </div>
@@ -551,8 +589,8 @@
                 </div>
                 <Divider v-if="profileData.workRecords!=''"/>
                 <p class="info" v-if="profileData.workRecords!=''">工作经历</p>
-                <div class="demo-drawer-profile" v-for="item in profileData.workRecords" :key="item.id">
-                    <Row>
+                <div class="demo-drawer-profile">
+                    <Row class="mb20" v-for="item in profileData.workRecords" :key="item.id">
                         <Col span="12">
                             <span class="labelCon">工作单位：</span>
                             <span class="labelCon promp">{{item.workCompany}}</span>
@@ -581,8 +619,8 @@
                 </div>
                 <Divider v-if="profileData.educationRecords!=''" />
                 <p class="info" v-if="profileData.educationRecords!=''">教育经历</p>
-                <div class="demo-drawer-profile" v-for="item in profileData.educationRecords" :key="item.id">
-                    <Row>
+                <div class="demo-drawer-profile">
+                    <Row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
                         <Col span="12">
                             <span class="labelCon">学校：</span>
                             <span class="labelCon promp">{{item.enduExp}}</span>
@@ -607,8 +645,8 @@
                 </div>
                 <Divider v-if="profileData.familyRecords!=''"/>
                 <p class="info" v-if="profileData.familyRecords!=''">家庭成员</p>
-                <div class="demo-drawer-profile" v-for="item in profileData.familyRecords" :key="item.id">
-                    <Row>
+                <div class="demo-drawer-profile">
+                    <Row class="mb20" v-for="item in profileData.familyRecords" :key="item.id">
                         <Col span="12">
                             <span class="labelCon">姓名：</span>
                             <span class="labelCon promp">{{item.familyMemberName}}</span>
@@ -629,8 +667,8 @@
                 </div>
                 <Divider v-if="profileData.dutyRecords!=''" />
                 <p class="info" v-if="profileData.dutyRecords!=''">入职记录</p>
-                <div class="demo-drawer-profile" v-for="item in profileData.dutyRecords" :key="item.id">
-                    <Row>
+                <div class="demo-drawer-profile">
+                    <Row class="mb20" v-for="item in profileData.dutyRecords" :key="item.id">
                         <Col span="12">
                             <span class="labelCon">入职日期：</span>
                             <span class="labelCon promp">{{item.onDutyTime}}</span>
@@ -654,37 +692,57 @@
 
         <!-- 人员档案的合同模块的添加弹框 -->
         <el-dialog
-            title="添加合同"
+            :title="dialogContract==='inser'?'添加合同':'编辑合同'"
             :visible.sync="dialogContractFormVisible"
             class="public-dialog"
             v-el-drag-dialog
             >
             <div>
-                <el-form ref="form" :model="form" label-width="100px" v-loading="loading2" :rules="rules">
-                    <div class="line-box">
+                <el-form ref="contract" :model="contract" label-width="100px" v-loading="loading2" :rules="ruleCon">
+                    <div class="line-boxs">
                         <el-row :gutter="40">
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'合同名称'}" v-model="contract.name"/>
+                                        <form-render :type="`input`" :field="{name:'合同名称'}" v-model="contract.contractName" prop="contractName"/>
                                     </el-col>
                                 
                                     <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'合同类型'}" v-model="contract.ctype"/>
+                                        <form-render prop="contractType" :type="`select`" :field="{name:'合同类型',options:contrTy}" v-model="contract.contractType"/>
                                     </el-col>
                                 
                                     <el-col :span="24">
-                                    <form-render :type="`input`" :field="{name:'合同年限'}" v-model="contract.time"/>
+                                        
+                                    <form-render :type="`select`" prop="contractTime"
+                                        :field="{name:'合同年限',options:[{
+                                        value: 1,
+                                        label: '一年半'
+                                        },{
+                                        value: 2,
+                                        label: '两年'
+                                        },{
+                                        value: 3,
+                                        label: '三年'
+                                        },{
+                                        value: 4,
+                                        label: '四年'
+                                        },{
+                                        value: 5,
+                                        label: '五年'
+                                        },{
+                                        value: 6,
+                                        label: '无限期'
+                                        }]}" v-model="contract.contractTime"/>
                                     </el-col>   
                                 </el-row>
                             </el-col>
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'开始时间'}" v-model="contract.start"/>
+                                        <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart"/>
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'结束时间'}" v-model="contract.end"/>
+                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" :type="`day`" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
                                     </el-col>
                                 </el-row>
                             </el-col>
@@ -694,18 +752,10 @@
             </div>
 
             <div slot="footer" class="dialog-footer dialog-multiple-footer">
-                <div>
-                    <el-switch
-                        v-if="isInsert"
-                        v-model="form_multiple"
-                        active-text="连续添加"
-                        inactive-text="">
-                        
-                    </el-switch>
-                </div>
+                <div></div>
                 <div>
                     <el-button @click="dialogContractFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+                    <el-button type="primary" @click="handleContractFormSubmit">确 定</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -840,7 +890,23 @@ export default {
                 workGroup:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
-                
+            },
+            ruleCon:{
+                contractEnd:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                contractStart:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                contractName:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                contractType:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                contractTime:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
             },
             staffId:'',
             paydataForm:{},
@@ -849,7 +915,12 @@ export default {
             dialogContractFormVisible:false,
             contract:{},
             maskBtn:false,	
-            bigImg:''
+            bigImg:'',
+            contractData:[],
+            contrTy:[],
+            selections:[],
+            dialogContract:'inser',
+            teamData:{}
         };
     },
     watch:{
@@ -858,14 +929,59 @@ export default {
             this.fetchTableData()
         },
         'form.subCompany'(){
-            if(this.form.subCompany){
-                this.fetchDepartment()
+            console.log(this.form,'hhhhhhhhhhhhhhhhhhh')
+            // this.form.subCompany='';
+            // if(this.form.subCompany){
+            //     this.fetchDepartment()
+            // }
+        }
+    },
+    computed: {
+        isDisabled() {
+            let len = this.selections.length;
+            if(len!==1){
+                return false
             }
+            return true
         }
     },
     methods: {
+        table_disable(row){
+            return !row.lockstate
+        },
+        handleChangeSelect(val) {
+            this.selections = val
+        },
+        handleContract(){
+            this.contract = {}
+            this.dialogContract = "inser"
+            this.fetchContract()
+            this.dialogContractFormVisible = true
+        },
+        async editContract(){
+            this.dialogContract = 'inse'
+            this.fetchContract()
+            let row = this.selections[0];
+            this.contract = await this.$request.get('/hrm/staff/contract/'+row.id)
+            this.dialogContractFormVisible = true
+        },
+        async handleContractFormSubmit(){
+            await this.form_validate()
+            this.contract.emID = this.staffId;
+            let contract = Object.assign({},this.contract)
+            let row = this.selections[0];
+            if(this.dialogContract=="inser"){
+                await this.$request.post('/hrm/staff/contract',this.contract)
+            }else{
+                await this.$request.put('/hrm/staff/contract/'+row.id,this.contract)
+            }
+            this.dialogContractFormVisible = false
+            this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
+        },
+        headerStyle(row,rowIndex,column,columnIndex){
+            return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
+        },
         previewImg(e){//图片预览功能
-            console.log(e.target.dataset.img,'this url preview');
             this.bigImg = baseUrl+e.target.dataset.img
             this.maskBtn = true;
             this.$nextTick(function() {
@@ -890,8 +1006,6 @@ export default {
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
-            // console.log(this.form,'form  heihdsdsd')
-            // this.connect.phone = this.form
         },
         async showPersonInfo(){
             this.dialogStatus = 'inserts';
@@ -915,22 +1029,19 @@ export default {
                 return  ''
             }
         },
-        openDrawer(row,column,cell,event){
+        async openDrawer(row,column,cell,event){
             this.staffId = row.id;
             if(row.employeeCode==event.target.innerHTML){
                 this.openDrawers = true
                 this.fetchProfileData()
+                this.form = await api_resource.find(row.id)
+                this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
+                this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
             }
         },
         async tabClick(v){
-            console.log(v.label,'v.label')
             this.tab_label  = v.label
-            console.log(this.tab_label,'this.tab_label')
-            if(this.tab_label ==='薪资信息'){
-                this.paydataForm = await api_common.resource('hrm/staff/paydata').find(this.form.id)
-                this.fetchwageTypeData()
-                this.fetchsocialSecuritiesData()
-            }
+ 
             console.log(v,'v')
         },
         selectNation(){
@@ -964,15 +1075,24 @@ export default {
                 this.$refs['form'].clearValidate()
             })
             let row = this.table_selectedRows[0];
-            this.form = await api_resource.find(row.id)
+            // this.staffId = row.id;
+            this.form = await api_resource.find(row.id);
             this.dialogFormVisible = true
             this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
+            await api_common.resource('org/branchdepartment').get({id:this.form.subCompany}) 
+            console.log(this.form.department,'form.department') 
+            // if(!isNaN(this.form.department)){
+            this.form.department = await api_common.resource('org/branchteam').get({id:this.form.department})
+            // }
         },
         async fetchDepartment(){
             this.departmentData = await api_common.resource('org/branchdepartment').get({id:this.form.subCompany})
+        },
+        async fetchContract(){
+            this.contrTy = (await api_common.resource('basicdata/contracttypes').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async handleFormSubmit(){
             console.log(this.form,'form')
@@ -981,13 +1101,14 @@ export default {
             if(this.isInsert){
                 await api_resource.create(form)
             }else{
-                if(this.tab_label ==='薪资信息'){
-                    await api_common.resource('hrm/staff/paydata').update(form.id,this.paydataForm)
+                if(this.tab_label ==='联系方式'){
+                    await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
                 }else if(this.tab_label ==='1'){
 
                 }else{
                     await api_resource.update(form.id,form)
-                } 
+                }
+                this.fetchProfileData()
             }
             if(this.form_multiple){
                 this.form.introducer = ''
@@ -1011,6 +1132,11 @@ export default {
             this.socialSecuritiesData = (await api_common.resource('basicdata/socialsecurities').get()).map(o=>({label:o.name,value:o.id}))
         },
         async fetchTableData() {
+            if(!this.orgid){
+                return
+            }
+            this.table_loading = true;
+            this.table_form.orgid = this.orgid
             const {rows , total }= await api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
@@ -1029,6 +1155,7 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
+      
         this.Device = new Device()
         var vm =  this
         Device.createISSonlineDevice({
@@ -1079,6 +1206,9 @@ export default {
 };
 </script>
 <style >
+    .line-boxs{
+        margin-top: 20px;
+    }
     .img-show-mask {
         width: 100%;
         height: 100%;
@@ -1149,6 +1279,7 @@ export default {
         height: 65px;
     }
     .mt30{margin-top: 30px;}
+    .mb20{margin-bottom: 20px;}
     .flexImg{
         display: flex;
         justify-content: flex-start;

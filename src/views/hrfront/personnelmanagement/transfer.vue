@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     async handleForm3Submit(){
-      this.form3.ids = this.$refs.OrgSelect.getIdsResult()
+      this.form3.ids = this.$refs.OrgSelect.getIdsSameResult()
       let form = Object.assign({},this.form3)
       console.log(this.form3,'mmmmmmmm')
       await this.$request.post('/transfer/record',form)
