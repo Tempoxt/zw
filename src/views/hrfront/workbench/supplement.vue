@@ -106,7 +106,7 @@ methods: {
 
 <style lang="scss" scoped>
 .box-card{
-	height: 340px;
+	height: 360px;
 	margin-top: 10px;
 	margin-left: 10px;
 }

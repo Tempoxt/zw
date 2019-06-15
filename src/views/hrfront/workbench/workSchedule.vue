@@ -111,6 +111,7 @@ export default {
     return {
       value: new Date(),
       value1:false,
+			value2: '',
       dialogFormVisible: false,
       dialogFormVisible2:false,
       form: {
@@ -123,7 +124,34 @@ export default {
         resource: "",
         desc: ""
       },
-      formLabelWidth: "100px"
+      formLabelWidth: "100px",
+			pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
     };
   },
   components: {
@@ -145,7 +173,7 @@ export default {
 
 <style lang="scss" scoped>
 .box-card {
-  height: 350px;
+  height: 370px;
   margin-left: 10px;
 }
 .add-form{
