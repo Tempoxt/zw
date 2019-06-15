@@ -182,7 +182,7 @@
                                     <el-row :gutter="20">
                                         
                                         <el-col :span="24">
-                                            <form-render :type="`day`" :field="{name:'入职日期'}" v-model="form.onDutyTime"/>
+                                            <form-render :type="`day`" :field="{name:'入职日期'}" :picker-options="pickerOptions1" v-model="form.onDutyTime"/>
                                         </el-col>
                                         <el-col :span="24">
                                         <form-render
@@ -921,7 +921,12 @@ export default {
             contrTy:[],
             selections:[],
             dialogContract:'inser',
-            teamData:{}
+            teamData:{},
+            pickerOptions1: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+            }   
         };
     },
     watch:{
