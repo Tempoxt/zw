@@ -15,7 +15,7 @@
       <el-form ref="form" :model="form" label-width="100px" :inline="true">
           <el-form-item label="离职日期">
             <el-date-picker
-                v-model="form.transferDate"
+                v-model="form.quitdate"
                 value-format="yyyy-MM-dd"
                 format="yyyy-MM-dd"
                 placeholder="请选择"
@@ -24,7 +24,7 @@
           </el-form-item>
           
           <el-form-item label="离职原因">
-            <el-select v-model="form.workGroup" placeholder="请选择">
+            <el-select v-model="form.reasonid" placeholder="请选择">
               <el-option
               v-for="item in reasons"
               :key="item.id"
@@ -36,7 +36,7 @@
 
       </el-form>
 
-      <OrgSelect v-model="form.ids" :activeName="third ||first" ref="OrgSelect" v-if="dialogFormVisible"/>
+      <OrgSelect v-model="form.staffid" :activeNam="third" ref="OrgSelect" v-if="dialogFormVisible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -111,9 +111,9 @@ export default {
     },
     methods: {
         async handleFormSubmit(){
-            this.form.ids = this.$refs.OrgSelect.getIdsResult()
-            let form = Object.assign({},this.form3)
-            console.log(this.form,'mmmmmmmm')
+            this.form.staffid = this.$refs.OrgSelect.getIdsResult()
+            let form = Object.assign({},this.form)
+            console.log(form,'mmmmmmmm')
             await this.$request.post('/hrm/quit',form)
             this.dialogFormVisible = false
             this.fetchTableData()
@@ -125,7 +125,6 @@ export default {
         },
         async getReasons(){
             this.reasons = await this.$request.get('/basicdata/dtl?main=1')
-            console.log(reasons,'ssssss')
         },
         async fetchTableData() {
             this.table_loading = true;

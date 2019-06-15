@@ -33,6 +33,22 @@ export default [{
         }
     },
     {
+        name: 'onDuty',
+        component: () =>
+            import ('@/views/hrfront/personnelmanagement/personnelmanagement'),
+        meta: {
+            title: '在职员工'
+        }
+    },
+    {
+        name: 'outDuty',
+        component: () =>
+            import ('@/views/hrfront/personnelmanagement/personnelmanagementOut'),
+        meta: {
+            title: '离职员工'
+        }
+    },
+    {
         name: 'transfer/record',
         component: () =>
             import ('@/views/hrfront/personnelmanagement/transfer'),

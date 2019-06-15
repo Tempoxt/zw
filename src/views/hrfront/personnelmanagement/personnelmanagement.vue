@@ -6,14 +6,13 @@
     >
         <!-- 个人信息的添加和编辑 -->
         <el-dialog
-            :title="dialogStatus==='insert'?'添加':'编辑'"
+            :title="dialogStatus==='insert'?'添加员工':'编辑员工'"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
             >
             <div>
                 <el-form ref="form" :model="form" label-width="100px" v-loading="loading2" :rules="rules">
-                
                     <el-tabs @tab-click="tabClick">
                         <el-tab-pane label="个人信息">
                             <div class="line-boxs">
@@ -408,6 +407,7 @@
             </div>
         </el-dialog>
 
+
         <!-- 人员档案的信息预览 -->
         <div>
             <Drawer :closable="false" width="640" v-model="openDrawers">
@@ -742,7 +742,7 @@
                                         <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart"/>
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" :type="`day`" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
+                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" type="date" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
                                     </el-col>
                                 </el-row>
                             </el-col>
@@ -825,7 +825,8 @@ export default {
                 workNature:1,
                 subCompany:'',
                 department:'',
-                workShop:'',
+                team:'',
+                workGroup:'',
                 onDutyTime:dayjs().format('YYYY-MM-DD')
             }
         }
@@ -929,11 +930,9 @@ export default {
             this.fetchTableData()
         },
         'form.subCompany'(){
-            console.log(this.form,'hhhhhhhhhhhhhhhhhhh')
-            // this.form.subCompany='';
-            // if(this.form.subCompany){
-            //     this.fetchDepartment()
-            // }
+            if(this.form.subCompany){
+                this.fetchDepartment()
+            }
         }
     },
     computed: {
@@ -1075,18 +1074,18 @@ export default {
                 this.$refs['form'].clearValidate()
             })
             let row = this.table_selectedRows[0];
-            // this.staffId = row.id;
+            this.staffId = row.id;
             this.form = await api_resource.find(row.id);
             this.dialogFormVisible = true
             this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
-            await api_common.resource('org/branchdepartment').get({id:this.form.subCompany}) 
-            console.log(this.form.department,'form.department') 
-            // if(!isNaN(this.form.department)){
-            this.form.department = await api_common.resource('org/branchteam').get({id:this.form.department})
-            // }
+            // await api_common.resource('org/branchdepartment').get({id:this.form.subCompany}) 
+            // console.log(this.form.department,'form.department') 
+            // // if(!isNaN(this.form.department)){
+            // // this.form.department = await api_common.resource('org/branchteam').get({id:this.form.department})
+            // // }
         },
         async fetchDepartment(){
             this.departmentData = await api_common.resource('org/branchdepartment').get({id:this.form.subCompany})
@@ -1205,110 +1204,7 @@ export default {
     }
 };
 </script>
-<style >
-    .line-boxs{
-        margin-top: 20px;
-    }
-    .img-show-mask {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        left: 0;
-        top: 0;
-        z-index: 3000;
-        background: rgb(0,0,0,.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .ivu-drawer-body{
-        padding-left: 30px;
-    }
-    .detail{
-        color: #37474F;
-        font-size: 14px;
-        font-weight: bold;
-        height: 50px;
-        line-height: 50px;
-        padding-left: 20px;
-        background: #E4EAEC;
-        box-shadow: 0px 1px 0px rgba(228,234,236,1);
-        margin:-16px -30px 0;
-        margin-bottom: 0
-    }
-    .info{
-        color: #0BB2D4;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 17px 0 24px 2px;
-    }
-    .conStyle{
-        margin-left: -20px;
-        display: flex;
-        align-items: flex-start
-    }
-    .labelCon{
-        display: inline-block;
-        width: 112px;
-        text-align: right;
-        font-size: 14px;
-        color: #4C5D66;
-    }
-    .promp{
-        color: #A3AFB7;
-        text-align: left;
-        width: auto;
-    }
-    .ivu-col{
-        margin-bottom: 8px;
-    }
-    .addr{
-        width: 215px;
-        word-wrap:break-word;
-    }
-    .alignStart{
-        display: flex;
-        align-items: flex-start
-    }
-    .ivu-row{
-        margin-left: -27px;
-        margin-bottom: -8px;
-    }
-    .posti{
-        width: 107px;
-        height: 65px;
-    }
-    .mt30{margin-top: 30px;}
-    .mb20{margin-bottom: 20px;}
-    .flexImg{
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-    .flexImg>div{
-        width: 140px;
-        height: 176px;
-        background: #F5FAFB;
-        margin-right: 10px;
-        text-align: center;
-        padding-top: 7px;
-    }
-    .diploma{
-        width: 107px
-    }
-    .imgInfo{
-        font-size: 12px;
-        color: #4C5D66;
-        margin-bottom: 5px;
-    }
-    .editIcon{
-        color:#CCD5DB;
-        width: 16px;
-        height: 14px;
-        font-weight: normal;
-        margin-left: 22px;
-    }
-</style>
+
 
 
 
