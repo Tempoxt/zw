@@ -486,7 +486,7 @@
                             <span class="labelCon promp">{{profileData.contractTimeShow}}</span>
                         </Col>
                         <Col span="12">
-                            <span class="labelCon">所任小组：</span> 
+                            <span class="labelCon">所属小组：</span> 
                             <span class="labelCon promp">{{profileData.team__name}}</span>
                         </Col>
                         <Col span="12">
