@@ -23,7 +23,7 @@ export default {
 
 <style lang="scss" scoped>
 .box-card{
-	height: 350px;
+	height: 370px;
 }
 .cardName{
 	color: #37474F;
