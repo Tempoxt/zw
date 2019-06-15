@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-select v-model="type" :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
+        <el-select v-model="ctype" :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
             <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -9,7 +9,7 @@
             </el-option>
         </el-select>
         <el-date-picker
-            v-if="type==1"
+            v-if="ctype==1"
             class="dateLap-date"
             v-model="value2"
             value-format="yyyy-MM-dd"
@@ -17,7 +17,7 @@
             placeholder="选择日">
         </el-date-picker>
         <el-date-picker
-            v-if="type==2"
+            v-if="ctype==2"
             class="dateLap-date"
             v-model="value2"
             type="month"
@@ -26,7 +26,7 @@
             placeholder="选择月">
         </el-date-picker>
         <el-date-picker
-            v-if="type==3"
+            v-if="ctype==3"
             class="dateLap-date"
             v-model="value2"
             type="year"
@@ -38,17 +38,18 @@
 </template>
 <script>
 import dayjs from 'dayjs'
+import { setTimeout } from 'timers';
 export default {
     props:{
         value:{},
-        type:{
-            default:'2'
-        },
+        type:{},
         disabled:{
             default:false
         }
     },
+
     computed:{
+      
         value2:{
             get(){
                 return dayjs(this.value).format('YYYY-MM-DD')
@@ -65,10 +66,14 @@ export default {
              
             },
             immediate:true
+        },
+        ctype(){
+             this.$emit('change')
         }
     },
     data(){
         return {
+            ctype:this.type||'2',
             options:[{
                 value:'1',
                 label:'日'

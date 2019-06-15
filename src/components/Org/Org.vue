@@ -110,7 +110,7 @@ export default {
     },
     async created(){
         this.data2 = await this.$request.get('/org/hotpayselect');//org/samedeptselect
-        this.dataSame = await this.$request.get('/org/samedeptselect');//org/samedeptselect
+        this.dataSame = await this.$request.get('/org/select');//org/samedeptselect
         //  this.data2[0].disabled = true
         //  let defaultId = this.data2[0].orgid
         //  this.$emit('change',defaultId)
