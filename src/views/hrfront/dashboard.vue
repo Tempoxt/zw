@@ -49,6 +49,8 @@
                       <inService 
 					  :show="checkFullshow" 
 					  ref="echart1" 
+					  screenIndex='1'
+					  @fullScreen="fullScreen"
 					  :class="{'speech-mode':screenIndex=='1'}"
 					  ></inService>
 				  </el-col>
@@ -57,7 +59,9 @@
 					   :show="checkFullshow"
 					   ref="echart2"
 					   title="男女比列统计" 
-					   id="men-and-women" 
+					   id="men-and-women"
+					   screenIndex='2'
+					   @fullScreen="fullScreen"
 					   :color="['#FF64C6','#3889FF']"
 					   :datas="[{ value: 335, name: '男' },{ value: 634, name: '女' }]"
 					   :class="{'speech-mode':screenIndex=='2'}"
@@ -71,6 +75,8 @@
 					    ref="echart3"
 					    title="学历分布统计" 
 					   id="education"
+					   screenIndex='3'
+					   @fullScreen="fullScreen"
 					   :datas="[{ value: 335, name: '博/硕' },{ value: 634, name: '本科' },{ value: 634, name: '大专' },{ value: 634, name: '高中/中专' },{ value: 634, name: '初中及以下' }]"
 					    :class="{'speech-mode':screenIndex=='3'}"
 					   ></pieChart>
@@ -80,6 +86,8 @@
 						:show="checkFullshow" 
 						ref="echart4" 
 						title="各年龄段男女占比统计" 
+						screenIndex='4'
+						@fullScreen="fullScreen"
 						id="egg-data"
 						:class="{'speech-mode':screenIndex=='4'}"
 						></barChart>
@@ -132,7 +140,7 @@
 	},
     methods: {
 		speechMode(id){
-			screenfull.request();
+			screenfull.toggle();
 			this.speechSwitch(id);
 		},
 		speechSwitch(id){
@@ -141,6 +149,11 @@
 		    this.$refs["echart"+id].checkFull();
 			this.checkFullshow=false;
 			this.fulltype=true;
+		},
+		fullScreen(res){
+			console.log(res)
+			this.speechMode(res);
+			this.fulltype=false;
 		},
 		keyEsc(){
 			this.screenIndex=""

@@ -9,7 +9,7 @@
 import echarts from "echarts";
 
 export default {
-	props:["show"],
+	props:["show","screenIndex"],
 	data() {
 		return {
 			option: {}
@@ -28,8 +28,12 @@ export default {
 			let aaa = echarts.init(document.getElementById("ring-diagram2"));
 			aaa.setOption(this.option);
 		},
+		fullScreen(){
+			this.$emit("fullScreen",this.screenIndex)
+		},
 		init(){
 			console.log("1234564")
+			let _this=this;
 			this.option = {
 			  title: {
 			    text: "在职人数统计"
@@ -42,9 +46,13 @@ export default {
 			    show: true,
 			    orient: "horizontal",
 			    feature: {
-			      restore: {
-			        //重置
-			        show: true
+			      myTool2: {
+			          show: true,
+								title:"全屏",
+			          icon: 'image://http://echarts.baidu.com/images/favicon.png',
+			          onclick: function (){
+			              _this.fullScreen()
+			          }
 			      },
 			      saveAsImage: {
 			        //保存图片

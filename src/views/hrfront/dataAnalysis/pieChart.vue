@@ -9,7 +9,7 @@
 import echarts from "echarts";
 
 export default {
-  props: ["title", "id", "color", "datas","show"],
+  props: ["title", "id", "color", "datas","show","screenIndex"],
 	data() {
 		return {
 			option: {}
@@ -20,15 +20,18 @@ export default {
   },
 	methods:{		
 		checkFull(){
-			
 			console.log(this.show)
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
 			console.log(window.screen.height)
 			let aaa = echarts.init(document.getElementById(this.id+"2"));
 			aaa.setOption(this.option);
+		},		
+		fullScreen(){
+			this.$emit("fullScreen",this.screenIndex)
 		},
 		init(){
+			let _this=this;
 			  this.option = {
 			    title: {
 			      text: this.title
@@ -41,9 +44,13 @@ export default {
 			      show: true,
 			      orient: "horizontal",
 			      feature: {
-			        restore: {
-			          //重置
-			          show: true
+			        myTool2: {
+			            show: true,
+			        		title:"全屏",
+			            icon: 'image://http://echarts.baidu.com/images/favicon.png',
+			            onclick: function (){
+			                _this.fullScreen()
+			            }
 			        },
 			        saveAsImage: {
 			          //保存图片
