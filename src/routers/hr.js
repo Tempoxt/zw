@@ -46,7 +46,7 @@ export default [
   },
   {
     path:'officeaddress',
-    name: 'mealsetting',
+    name: 'officeaddress',
     component: () => import('@/views/hr/officeaddress'),
     meta:{
       title:'办公地点'
@@ -54,7 +54,7 @@ export default [
   },
   {
     path:'basicdata/jobtitle',
-    name: 'basicdata/jobtitle',
+    name: 'jobtitle',
     component: () => import('@/views/hr/basicdata/jobtitle'),
     meta:{
       title:'职位管理'

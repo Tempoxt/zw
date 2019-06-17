@@ -158,7 +158,12 @@
       :table_form.sync="table_form"
       :table_column="table_field"
     ></table-header>
+
+
     <el-table
+     fit highlight-current-row 
+     row-key="id" 
+      ref="dragTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
@@ -170,15 +175,20 @@
       @sort-change="table_sort_change"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-       <el-table-column type="index" :index="indexMethod" />
+      <el-table-column type="index" :index="indexMethod" />
       <each-table-column :table_field="table_field"/>
     </el-table>
   </ui-table>
+
+
 </template>
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("pagemanager/field");
+import Sortable from 'sortablejs'
+import { Promise } from 'q';
+
 let defaultForm = function() {
   return {
     issearch:true,
@@ -202,11 +212,42 @@ export default {
     currentMenuid:{
       handler(){
         this.fetchTableData();
+        this.$nextTick(() => {
+          this.setSort()
+        })
       },
       immediate:true
     }
   },
   methods: {
+    setSort() {
+      const vm = this
+      const el = this.$refs.dragTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
+      this.sortable = Sortable.create(el, {
+        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+        setData: function(dataTransfer) {
+          // to avoid Firefox bug
+          // Detail see : https://github.com/RubaXa/Sortable/issues/1012
+          dataTransfer.setData('Text', '')
+        },
+         onEnd: async evt => {
+          console.log(evt,'data')
+          const { oldIndex,newIndex} = evt
+
+           let row = vm.table_data[oldIndex]
+           let row2 = vm.table_data[newIndex]
+          //  row.sort = newIndex
+          await api_resource.update(row.id,{sort:newIndex},{alert:false});
+          await api_resource.update(row2.id,{sort:oldIndex},{alert:false});
+          vm.fetchTableData()
+          // const targetRow = this.list.splice(evt.oldIndex, 1)[0]
+          // this.list.splice(evt.newIndex, 0, targetRow)
+          // // for show the changes, you can delete in you code
+          // const tempIndex = this.newList.splice(evt.oldIndex, 1)[0]
+          // this.newList.splice(evt.newIndex, 0, tempIndex)
+        }
+      })
+    },
     async add() {
       this.form = defaultForm();
       this.dialogFormVisible = true;
@@ -222,18 +263,25 @@ export default {
       if (this.isInsert) {
         await api_resource.create(form);
       } else {
-        await api_resource.update(form.id, form);
+        await api_resource.update(form.id, form,{alert:false});
       }
       this.dialogFormVisible = false;
       this.fetchTableData();
+    },
+    async resetSort(){
+        await Promise.all(this.table_data.map(async (row,i)=>{
+          return api_resource.update(row.id,{sort:i},{alert:false});
+        }))
+        this.fetchTableData()
     },
     async fetchTableData(menuid) {
       this.table_loading = true;
       this.table_form.menuid = this.currentMenuid
       const { rows }  = await api_resource.get(this.table_form);
       this.table_data = rows
-      setTimeout(() => {
+      setTimeout(async () => {
         this.table_loading = false;
+      
       }, 300);
     }
   },
@@ -292,3 +340,12 @@ export default {
   }
 };
 </script>
+<style>
+
+.sortable-ghost{
+  opacity: .8;
+  color: #fff!important;
+  background: #9463F7!important;
+
+}
+</style>

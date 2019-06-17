@@ -57,7 +57,7 @@
     </div>
 </template>
 <script>
-import Org from './Org.vue'
+import Org from './Org2.vue'
 import OrgResult from './OrgResult'
 export default {
     props:["activeNam"],
