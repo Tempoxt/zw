@@ -1,7 +1,40 @@
 <template>
    <el-row class="h-full">
     <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
-        <org @change="changeOrg" v-model="orgid"/>
+        <!-- <org @change="changeOrg"/> -->
+        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+            <div style="padding:20px">
+            <div class="side-header">
+                <el-input placeholder="快速查找" v-model="filterText" class="input">
+                <i slot="suffix" class="el-input__icon el-icon-search"></i>
+                </el-input>
+            </div>
+
+            <el-tree
+                class="tree"
+                :data="data2"
+                :props="{children: 'subs', label: 'name' }"
+                default-expand-all
+                node-key="orgid"
+                :filter-node-method="filterNode"
+                ref="tree2"
+                :highlight-current="true"
+                :check-on-click-node="false"
+                @node-click="handleChangeNode"
+                :expand-on-click-node="false"
+            >
+                <span slot-scope="{ node, data }">
+
+                <span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
+                <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+                <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
+                &nbsp;
+                <span>{{ node.label }}</span>
+                </span>
+            </el-tree>
+            
+            </div>
+        </el-scrollbar>
     </el-col>
     <el-col :span="19">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
@@ -27,32 +60,62 @@ export default {
         personnelmanagement,
         personnelmanagementOut
     },
+     watch:{
+      filterText(val) {
+        this.$refs.tree2.filter(val);
+      }
+    },
     data(){
         return {
             view_activeName:'',
             menu:[],
-            orgid:'',
-            activeName:'second'
+            orgid:0,
+            activeName:'second',
+            data2:[],
+            filterText:'',
         }
     },
     methods:{
+        handleChangeNode(val){
+            this.orgid = val.orgid
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name && data.name.indexOf(value) !== -1;
+        },
         handleClick(val){
             
         },
         changeOrg(orgid){
             this.orgid = orgid
         }
-        // changeOrg(id){
-        //     this.orgid = id
-        // }
     },
     async created(){
-         const { menu } = await getTabs(this.$route.query.menuid)
-         this.menu = menu
-         this.view_activeName = menu[0].name
+        const { menu } = await getTabs(this.$route.query.menuid)
+        this.menu = menu
+        this.view_activeName = menu[0].name;
+        console.log()
+        this.data2 = await this.$request.get('org',{
+            params:{
+                showteam:1
+            }
+        });
+        let defaultMenuid = this.data2[0].orgid
+        this.$refs.tree2.setCurrentKey(defaultMenuid);
+        this.orgid = defaultMenuid;
     }
 }
 </script>
+<style lang="scss" scoped>
+
+.scroll {
+  height: calc(100% - 30px);
+  width: 100%;
+ /deep/ .scrollbar-wrapper {
+    overflow-x: hidden;
+  }
+}
+</style>
 <style >
     .line-boxs{
         margin-top: 20px;
