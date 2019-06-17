@@ -231,6 +231,12 @@ export default {
     async lock(){
       this.multipleAction('lock','锁定成功')
     },
+    async audit(){
+      this.multipleAction('check','审核成功')
+    },
+    async away(){
+      this.multipleAction('forbid','办离成功')
+    },
     async delete() {
       let rows = this.table_selectedRows.map(row=>row.id)
       this.$confirm('此操作将删除选中行, 是否继续?', '提示', {
