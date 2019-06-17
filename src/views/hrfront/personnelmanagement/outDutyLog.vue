@@ -12,28 +12,39 @@
       width="800px"
       >
 
-      <el-form ref="form" :model="form" label-width="100px" :inline="true">
-          <el-form-item label="离职日期">
-            <el-date-picker
-                v-model="form.quitdate"
-                value-format="yyyy-MM-dd"
-                format="yyyy-MM-dd"
-                placeholder="请选择"
-                >
-            </el-date-picker>
-          </el-form-item>
-          
-          <el-form-item label="离职原因">
-            <el-select v-model="form.reasonid" placeholder="请选择">
+      <el-form ref="form" :model="form" label-width="100px" :inline="true" :rules="rules">
+
+            <el-form-item label="离职日期" prop="quitdate">
+                <el-date-picker
+                    v-model="form.quitdate"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    placeholder="请选择"
+                    >
+                </el-date-picker>
+            </el-form-item>
+            
+            <el-form-item label="离职原因" prop="reasonid">
+                <el-select v-model="form.reasonid" placeholder="请选择">
+                    <el-option
+                        v-for="item in reasons"
+                        :key="item.id"
+                        :label="item.title"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+          <el-form-item label="离职类别" prop="quittype">
+            <el-select v-model="form.quittype" placeholder="请选择">
               <el-option
-              v-for="item in reasons"
+              v-for="item in status"
               :key="item.id"
               :label="item.title"
               :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-
       </el-form>
 
       <OrgSelect v-model="form.staffid" :activeNam="third" ref="OrgSelect" v-if="dialogFormVisible"/>
@@ -101,7 +112,19 @@ export default {
             queryDialogFormVisible:true,
             table_height:window.innerHeight-296,
             dialogFormVisible:false,
-            reasons:[]
+            reasons:[],
+            status:[],
+             rules:{
+                quitdate:[
+                    { required: true, message: '请选择', trigger: 'blur' },
+                ],
+                reasonid:[
+                    { required: true, message: '请选择', trigger: 'blur' },
+                ],
+                quittype:[
+                    { required: true, message: '请选择', trigger: 'blur' },
+                ],
+            },
         };
     },
     watch:{
@@ -111,6 +134,7 @@ export default {
     },
     methods: {
         async handleFormSubmit(){
+            await this.form_validate()
             this.form.staffid = this.$refs.OrgSelect.getIdsResult()
             let form = Object.assign({},this.form)
             console.log(form,'mmmmmmmm')
@@ -121,10 +145,14 @@ export default {
         add(){
             this.form = {}
             this.dialogFormVisible = true
-            this.getReasons();
+            this.getReasons()
+            this.getStatus()
         },
         async getReasons(){
             this.reasons = await this.$request.get('/basicdata/dtl?main=1')
+        },
+        async getStatus(){
+            this.status = await this.$request.get('/basicdata/dtl?main=2')
         },
         async fetchTableData() {
             this.table_loading = true;

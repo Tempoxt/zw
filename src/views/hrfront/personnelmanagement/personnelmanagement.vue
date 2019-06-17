@@ -471,7 +471,7 @@
                         </Col>
                         <Col span="12">
                             <span class="labelCon">所属主体：</span>
-                            <span class="labelCon promp">{{profileData.subCompanyShow}}</span>
+                            <span class="labelCon promp">{{profileData.socialSecurityMain}}</span>
                         </Col>
                         <Col span="12">
                             <span class="labelCon">试用期限：</span>
@@ -742,7 +742,7 @@
                                         <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart"/>
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" type="date" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
+                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" type="day" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
                                     </el-col>
                                 </el-row>
                             </el-col>
@@ -789,9 +789,10 @@
                 width="60" 
                 class-name="table-column-disabled"
                 :selectable="table_disable_selected"
+                fixed
             >
             </el-table-column>
-            <el-table-column type="index" :index="indexMethod"/>
+            <el-table-column type="index" :index="indexMethod" fixed/>
             <each-table-column :table_field="table_field"/>
         </el-table>
         <table-pagination 
@@ -832,6 +833,7 @@ export default {
         }
         return {
             baseUrl,
+            fixedPer:['idCardImage','employeeCode','chineseName'],
             openDrawers: false,
             loading: true,
             loading2:false,
@@ -926,7 +928,7 @@ export default {
                 disabledDate(time) {
                     return time.getTime() > Date.now();
                 },
-            }   
+            },
         };
     },
     watch:{
@@ -1156,6 +1158,11 @@ export default {
     async created() {
         const { field, action,table } = await api_common.menuInit("hrm/staff");
         this.table_field = field;
+        console.log(this.table_field ,'this.table_field' )
+        const arr = ['idCardImage','employeeCode','chineseName'];
+    //    const sds = this.table_field.filter(o=>o.name)
+       const sds = this.table_field.filter(o=>!arr.include(o.name))
+       console.log(sds,'ydfdnvbxmgndfmgndf')
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();

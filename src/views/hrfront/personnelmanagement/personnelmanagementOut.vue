@@ -68,7 +68,7 @@
                     </Col>
                     <Col span="12">
                         <span class="labelCon">所属主体：</span>
-                        <span class="labelCon promp">{{profileData.subCompanyShow}}</span>
+                        <span class="labelCon promp">{{profileData.socialSecurityMain}}</span>
                     </Col>
                     <Col span="12">
                         <span class="labelCon">试用期限：</span>
