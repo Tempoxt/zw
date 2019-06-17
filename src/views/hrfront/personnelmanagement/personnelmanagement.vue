@@ -793,7 +793,9 @@
             >
             </el-table-column>
             <el-table-column type="index" :index="indexMethod" fixed/>
-            <each-table-column :table_field="table_field"/>
+            <el-table-column prop="employeeCode" label="工号" fixed/>
+            <el-table-column prop="chineseName" label="姓名" fixed/>
+            <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
         </el-table>
         <table-pagination 
             :total="table_form.total" 
@@ -1160,8 +1162,8 @@ export default {
         this.table_field = field;
         console.log(this.table_field ,'this.table_field' )
         const arr = ['idCardImage','employeeCode','chineseName'];
-    //    const sds = this.table_field.filter(o=>o.name)
-       const sds = this.table_field.filter(o=>!arr.include(o.name))
+       const sds = this.table_field.filter(o=>o.name)
+    //    const sds = this.table_field.filter(o=>(o.name).include('idCardImage','employeeCode','chineseName'))
        console.log(sds,'ydfdnvbxmgndfmgndf')
         this.table_actions = action;
         this.table_config = table

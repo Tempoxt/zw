@@ -307,15 +307,17 @@
       @cell-click="openDrawer"
       :cell-style="cellStyle"
     >
-      <el-table-column 
-        type="selection" 
-        width="60" 
-        class-name="table-column-disabled"
-        :selectable="table_disable_selected"
-        >
-      </el-table-column>
-      <el-table-column type="index" :index="indexMethod" />
-      <each-table-column :table_field="table_field"/>
+        <el-table-column 
+            type="selection" 
+            width="60" 
+            class-name="table-column-disabled"
+            :selectable="table_disable_selected"
+            >
+        </el-table-column>
+        <el-table-column type="index" :index="indexMethod" fixed/>
+        <el-table-column prop="employeeCode" label="工号" fixed/>
+        <el-table-column prop="chineseName" label="姓名" fixed/>
+        <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
