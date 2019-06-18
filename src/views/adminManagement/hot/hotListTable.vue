@@ -226,14 +226,12 @@ export default {
         this.dialogForm2Visible = false
     },
     async handleForm3Submit(){
-      
-        console.log(this.$refs.OrgSelect,'oooooooooooooo')
       this.form3.ids = this.$refs.OrgSelect.getIdsResult()
       await this.$request.post('/hot/record',this.form3)
       this.dialogForm3Visible = false
+      this.fetchTableData()
     },
     add(){
-        console.log(this.$refs.OrgSelect,'oooooooooooooo')
         this.form3 = {}
         this.dialogForm3Visible = true
     },

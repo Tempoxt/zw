@@ -100,8 +100,13 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+      <el-table-column type="index" :index="indexMethod" width="70" fixed/>
+      <el-table-column prop="month" label="月份" fixed/>
+      <el-table-column prop="signState" label="签收状态" fixed/>
+      <el-table-column prop="chineseName" label="姓名" fixed/>
+      <el-table-column prop="employeeCode" label="工号" fixed/>
+      <each-table-column :table_field="table_field.filter(o=>!['month','signState','chineseName','employeeCode'].includes(o.name))"/>
+      <!-- <each-table-column :table_field="table_field"/> -->
     </el-table>
      <table-pagination 
         :total="table_form.total" 

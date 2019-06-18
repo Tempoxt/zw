@@ -235,10 +235,10 @@
                                         <form-render
                                                 :type="`select`"
                                                 :field="{name:'考勤方案',options:[{
-                                                value: 1,
+                                                value: 0,
                                                 label: '需考勤'
                                                 },{
-                                                value: 2,
+                                                value: 1,
                                                 label: '不需考勤'
                                                 }]}"
                                                 v-model="form.checkWorkType"
