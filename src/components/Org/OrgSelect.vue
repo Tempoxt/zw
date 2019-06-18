@@ -16,7 +16,7 @@
                                    <el-button icon="el-icon-arrow-left" circle :type="resultSameSelect.id?'primary':''" @click="removeSame"></el-button>
                                 </div>
                                 <div>
-                                    <el-button icon="el-icon-refresh" circle></el-button>
+                                    <el-button icon="el-icon-refresh" circle  @click="resetSame"></el-button>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                                    <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove"></el-button>
                                 </div>
                                 <div>
-                                    <el-button icon="el-icon-refresh" circle></el-button>
+                                    <el-button icon="el-icon-refresh" circle @click="reset"></el-button>
                                 </div>
                             </div>
                         </div>
@@ -135,6 +135,13 @@ export default {
             })
             this.resultSelect = {}
         },
+		reset(){
+			this.result.forEach((o,i)=>{
+			    this.$set(o,'disabled',false)
+			})
+			this.result=[]
+			this.resultSelect = {}
+		},
         addSame(){
             if(this.selectSame && !this.selectSame.disabled){
                 this.resultSame.push(this.selectSame)
@@ -150,7 +157,14 @@ export default {
                 }
             })
             this.resultSameSelect = {}
-        }
+        },
+		resetSame(){
+			this.resultSame.forEach((o,i)=>{
+			    this.$set(o,'disabled',false)
+			})
+			this.resultSame=[]
+			this.resultSameSelect = {}
+		}
     },
     // async crated(){
     //     console.log(this.props.activeName)
