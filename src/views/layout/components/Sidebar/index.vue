@@ -18,10 +18,6 @@
         :unique-opened="true"
       >
         <span>人事</span>
-        <div>
-          {{$route['matched'][0].path}}
-        </div>
-
          <transition-group name="el-fade-in">
             <template v-if="isShow">
                 <sidebar-item
@@ -32,12 +28,7 @@
                   :parentRoute="!!$route"
                 />
               </template>
-              
             </transition-group>
-
-
-        
-        <!-- :index="$route['matched'][0].path+'/'+route.url" -->
       </el-menu>
     </el-scrollbar>
   </div>
@@ -54,9 +45,10 @@ export default {
       deep:true,
       handler(){
         this.isShow = false
-     
+        
         setTimeout(()=>{
           this.isShow = true
+          this.$forceUpdate()
         },200)
       }
     }

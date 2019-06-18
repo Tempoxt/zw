@@ -39,10 +39,10 @@
               <form-render :type="`input`" :field="{name:'房租'}" v-model="form.rent"/>
             </el-col>
            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"/>
+              <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"  :disabled="!isInsert"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
+              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"  :disabled="!isInsert"/>
             </el-col>
             <el-col :span="24">
               <form-render

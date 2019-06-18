@@ -31,7 +31,7 @@
               <form-render :type="`input`" :field="{name:'水费价格*'}" v-model="form.waterPrice"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"/>
+              <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater" />
             </el-col>
              <el-col :span="24">
               <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"/>
