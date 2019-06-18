@@ -126,13 +126,14 @@ export default {
             }
         },
         remove(){
-            this.$set(this.reusltSelect,'disabled',false)
+			//console.log(this.resultSelect)
+            this.$set(this.resultSelect,'disabled',false)
             this.result.forEach((o,i)=>{
-                if(o.id===this.reusltSelect.id){
+                if(o.id===this.resultSelect.id){
                     this.result.splice(i,1)
                 }
             })
-            this.reusltSelect = {}
+            this.resultSelect = {}
         },
         addSame(){
             if(this.selectSame && !this.selectSame.disabled){
