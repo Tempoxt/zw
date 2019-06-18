@@ -88,7 +88,7 @@
 						title="各年龄段男女占比统计" 
 						screenIndex='4'
 						@fullScreen="fullScreen"
-						id="egg-data"
+						id="ege-data"
 						:class="{'speech-mode':screenIndex=='4'}"
 						></barChart>
 				  </el-col>

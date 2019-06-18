@@ -47,7 +47,7 @@
           </el-form-item>
       </el-form>
 
-      <OrgSelect v-model="form.staffid" :activeNam="third" ref="OrgSelect" v-if="dialogFormVisible"/>
+      <OrgSelect getApi="/org/samedeptselect" v-model="form.staffid" :activeNam="third" ref="OrgSelect" v-if="dialogFormVisible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>

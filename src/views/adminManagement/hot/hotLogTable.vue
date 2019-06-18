@@ -34,7 +34,7 @@
 
     </el-form>
 
-      <OrgSelect v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
+      <OrgSelect getApi="/org/select" filter_mark="hotAllowance" v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogForm3Visible = false">取 消</el-button>

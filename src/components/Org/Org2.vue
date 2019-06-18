@@ -9,7 +9,7 @@
           </div>
           <el-tree
             class="tree"
-            :data="dataSame"
+            :data="data"
             :props="{children: 'subs', label: 'name',isLeaf:'leaf' }"
             node-key="orgid"
             :filter-node-method="filterNode"
@@ -22,12 +22,11 @@
             lazy
           >
             <span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`">
-
               <span v-if="data.subs === 1" class="icon iconfont icon-zonggongsi"></span>
               <!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
               <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span> -->
               &nbsp;
-              <span class="label">{{ node.label }} <span style="color:#A3AFB7;">{{data.principalship}}</span></span>
+              <span class="label">{{ node.label }}<span style="color:#A3AFB7;">{{data.principalship}}</span></span>
             </span>
           </el-tree>
         </div>
@@ -40,10 +39,16 @@ export default {
         same:{
             default:'true'
         },
+		filter_mark:{
+            default:''
+        },
+		getApi:{
+		    default:'/org'
+        }
     },
     watch:{
        filterText(val) {
-        this.$refs.tree2.filter(val);
+        this.$refs.treeSame.filter(val);
       }
     },
     methods:{
@@ -55,31 +60,50 @@ export default {
         if (!value) return true;
         return data.name && data.name.indexOf(value) !== -1;
       },
-       async loadNode1(node, resolve) {
+      async loadNode1(node, resolve) {
           const  { data }  = node
-          if(data.subs){
-             let res = await this.$request.get('org/select',{
-                 params:{
-                     org_id:data.id
-                 }
-             })
-             res.forEach(o=>{
-                 o.leaf = !o.subs
-             })
-             resolve(res);
-          }else{
-              resolve([])
-          }
+		//  console.log(data)
+		if(data.subs.length==0||data.subs==1){
+			  //console.log(data)
+			  if (data.subs) {
+			  	  let _id=data.id
+				  if (data.orgid) {
+					_id=data.orgid
+				  }
+				  let _urldata='org/select?org_id='+_id
+				  if (this.filter_mark) {
+					 _urldata='org/select?org_id='+_id+"&filter_mark="+this.filter_mark
+				  }
+				  console.log(_urldata)
+				 let res = await this.$request.get(_urldata)
+				 res.forEach(o=>{
+					 o.leaf = !o.subs
+				 })
+				 resolve(res);
+			  } else{
+			  	resolve([]);
+			  }
+		  }else{
+			  data.subs.forEach(o=>{
+				o.leaf = !o.subs
+			  })
+			  resolve(data.subs)
+		  }
+          
       }
     },
     data(){
         return {
-            data2:[],
+            data:[],
             filterText:'',
         }
     },
     async created(){
-        this.data2 = await this.$request.get('/org/hotpayselect');//org/samedeptselect
+		let _urldata=this.getApi
+		if (this.filter_mark) {
+		   _urldata=this.getApi+"?filter_mark="+this.filter_mark
+		}
+        this.data = await this.$request.get(_urldata);//org/samedeptselect
     }
 }
 </script>
