@@ -31,7 +31,7 @@
             <el-tab-pane label="组织结构" name="third" v-if="activeNam!='first'">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="10">
-                        <Org2  style="height:400px" :getApi="getApi" :filter_mark="filter_mark" same="true" @change="changeOrg"/>
+                        <Org2  style="height:400px" :searchApi="searchApi" :filter_mark="filter_mark" same="true" @change="changeOrg"/>
                     </el-col>
                     <el-col :span="2" style="height:100%">
                         <div class="control">
@@ -68,7 +68,8 @@ export default {
 		filter_mark:{
             default:''
         },
-		getApi:{}
+		getApi:{},
+		searchApi:{}
 	},
     components:{
         Org,

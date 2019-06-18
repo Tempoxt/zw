@@ -43,12 +43,21 @@ export default {
             default:''
         },
 		getApi:{
-		    default:'/org'
-        }
+		    default:'/org/select'
+        },
+		searchApi:{
+			default:'hrm/basesearsh'
+		}
     },
     watch:{
-       filterText(val) {
-        this.$refs.treeSame.filter(val);
+       async filterText(val) {
+		   //console.log(this.searchApi)
+		   if(this.searchApi){
+			   let res = await this.$request.get(this.searchApi+"?keyword="+val)
+			   this.data=res;
+		   }else{
+			   this.$refs.treeSame.filter(val);
+		   }
       }
     },
     methods:{
@@ -63,7 +72,7 @@ export default {
       async loadNode1(node, resolve) {
           const  { data }  = node
 		//  console.log(data)
-		if(data.subs.length==0||data.subs==1){
+		//if(data.subs==[]||data.subs==1){
 			  //console.log(data)
 			  if (data.subs) {
 			  	  let _id=data.id
@@ -83,12 +92,12 @@ export default {
 			  } else{
 			  	resolve([]);
 			  }
-		  }else{
-			  data.subs.forEach(o=>{
-				o.leaf = !o.subs
-			  })
-			  resolve(data.subs)
-		  }
+		  // }else{
+			 //  data.subs.forEach(o=>{
+				// o.leaf = !o.subs
+			 //  })
+			 //  resolve(data.subs)
+		  // }
           
       }
     },

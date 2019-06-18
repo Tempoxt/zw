@@ -63,7 +63,6 @@ export default {
       async loadNode1(node, resolve) {
           const  { data }  = node
 		//  console.log(data)
-		if(data.subs.length==0||data.subs==1){
 			  //console.log(data)
 			  if (data.subs) {
 			  	  let _id=data.id
@@ -83,12 +82,6 @@ export default {
 			  } else{
 			  	resolve([]);
 			  }
-		  }else{
-			  data.subs.forEach(o=>{
-				o.leaf = !o.subs
-			  })
-			  resolve(data.subs)
-		  }
           
       }
     },
