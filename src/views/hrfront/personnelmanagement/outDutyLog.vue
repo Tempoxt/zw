@@ -47,7 +47,7 @@
           </el-form-item>
       </el-form>
 
-      <OrgSelect v-model="form.staffid" :activeNam="third" ref="OrgSelect" v-if="dialogFormVisible"/>
+      <OrgSelect v-model="form.staffid" ref="OrgSelect" v-if="dialogFormVisible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -135,9 +135,14 @@ export default {
     methods: {
         async handleFormSubmit(){
             await this.form_validate()
-            this.form.staffid = this.$refs.OrgSelect.getIdsResult()
+            let staffid1 = this.$refs.OrgSelect.getIdsResult()
+            let staffid2 = this.$refs.OrgSelect.getIdsSameResult()
+            if(staffid1==''||staffid2==''){
+                this.form.staffid = staffid1||staffid2
+            }else{
+                this.form.staffid = staffid1+','+staffid2
+            }
             let form = Object.assign({},this.form)
-            console.log(form,'mmmmmmmm')
             await this.$request.post('/hrm/quit',form)
             this.dialogFormVisible = false
             this.fetchTableData()

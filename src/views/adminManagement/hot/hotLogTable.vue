@@ -224,7 +224,13 @@ export default {
         this.dialogForm2Visible = false
     },
     async handleForm3Submit(){
-      this.form3.ids = this.$refs.OrgSelect.getIdsResult()
+      let ids1 = this.$refs.OrgSelect.getIdsResult()
+      let ids2 = this.$refs.OrgSelect.getIdsSameResult()
+      if(ids1==''||ids2==''){
+        this.form.ids = ids1||ids2
+      }else{
+        this.form.ids = ids1+','+ids2
+      }
       await this.$request.post('/hot/record',this.form3)
       this.dialogForm3Visible = false
       this.fetchTableData()
