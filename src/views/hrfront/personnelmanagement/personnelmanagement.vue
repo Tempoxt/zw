@@ -1103,7 +1103,6 @@ export default {
             this.contrTy = (await api_common.resource('basicdata/contracttypes').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async handleFormSubmit(){
-            console.log(this.form,'form')
             await this.form_validate()
             let form = Object.assign({},this.form)
             if(this.isInsert){
@@ -1160,15 +1159,9 @@ export default {
     async created() {
         const { field, action,table } = await api_common.menuInit("hrm/staff");
         this.table_field = field;
-        console.log(this.table_field ,'this.table_field' )
-        const arr = ['idCardImage','employeeCode','chineseName'];
-       const sds = this.table_field.filter(o=>o.name)
-    //    const sds = this.table_field.filter(o=>(o.name).include('idCardImage','employeeCode','chineseName'))
-       console.log(sds,'ydfdnvbxmgndfmgndf')
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
-      
         this.Device = new Device()
         var vm =  this
         Device.createISSonlineDevice({

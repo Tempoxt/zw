@@ -235,6 +235,11 @@ export default {
         this.form3 = {}
         this.dialogForm3Visible = true
     },
+    async audit(){
+      let rows = this.table_selectedRows.map(row=>row.id)
+      await this.$request.put('/hot/history/bluk?ids='+rows.join(','),{action:'check'})
+      this.fetchTableData()
+    },
     async edit(){
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
