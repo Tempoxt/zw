@@ -50,14 +50,17 @@ export default {
 		}
     },
     watch:{
-       async filterText(val) {
-		   //console.log(this.searchApi)
-		   if(this.searchApi){
-			   let res = await this.$request.get(this.searchApi+"?keyword="+val)
-			   this.data=res;
-		   }else{
-			   this.$refs.treeSame.filter(val);
-		   }
+      async filterText(val) {
+        let _urldata=this.getApi
+        if(this.searchApi){
+          let res = await this.$request.get(this.searchApi+"?keyword="+val)
+          this.data=res;
+          if(val==''){
+            this.data = await this.$request.get(_urldata)
+          }
+        }else{
+          this.$refs.treeSame.filter(val);
+        }
       }
     },
     methods:{
@@ -108,11 +111,11 @@ export default {
         }
     },
     async created(){
-		let _urldata=this.getApi
-		if (this.filter_mark) {
-		   _urldata=this.getApi+"?filter_mark="+this.filter_mark
-		}
-        this.data = await this.$request.get(_urldata);//org/samedeptselect
+      let _urldata=this.getApi
+      if (this.filter_mark) {
+        _urldata=this.getApi+"?filter_mark="+this.filter_mark
+      }
+      this.data = await this.$request.get(_urldata);//org/samedeptselect
     }
 }
 </script>

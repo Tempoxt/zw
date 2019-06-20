@@ -63,6 +63,13 @@ export default {
                 return <img src={baseUrl+this.row.signImage} width="50" height="50"></img>
             }
         },
+        'staff__isDimission'(){
+            if(this.row.staff__isDimission=='80'){
+                return <span>离职</span>
+            }else{
+                return <span>在职</span>
+            }
+        }
     },
     render(){
         

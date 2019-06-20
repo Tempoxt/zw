@@ -6,113 +6,40 @@
   
   >
 
-<el-dialog
-      title="加入"
-      :visible.sync="dialogForm3Visible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="800px"
-    >
-
-    <el-form ref="form" :model="form" label-width="100px" :inline="true">
-        <el-form-item label="有效起始日期">
-          <el-date-picker
-              v-model="form3.stayStart"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-         <el-form-item label="有效结束日期">
-          <el-date-picker
-              v-model="form3.stayEnd"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-
-    </el-form>
-
-      <OrgSelect v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogForm3Visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleForm3Submit">确 定</el-button>
-      </div>
-    </el-dialog>
-
-
-
-  <el-dialog
-      title="高温津贴设置"
-      :visible.sync="dialogForm2Visible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="500px"
-    >
-      <div style="width:400px;margin:0 auto">
-        <el-form ref="form" :model="form2" label-width="100px">
-          <el-row :gutter="20">
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'高温津贴'}" v-model="form2.hotAllowance" />
-            </el-col>
-          
-             <el-col :span="24">
-
-                <el-form-item label="津贴月份">
-                    <div style="display:flex">
-                         <el-select v-model="form2.startMonth" placeholder="请选择" >
-                                <el-option
-                                v-for="item in 12"
-                                :key="item"
-                                :label="item+'月'"
-                                :value="item">
-                                </el-option>
-                            </el-select>    
-                            <span style="padding:0 10px;">至</span>   
-                            <el-select v-model="form2.endMonth" placeholder="请选择">
-                                <el-option
-                                v-for="item in 12"
-                                :key="item"
-                                :label="item+'月'"
-                                :value="item">
-                                </el-option>
-                            </el-select>      
-                    </div>  
-                </el-form-item>
-            </el-col>   
-            
-          </el-row>
-        </el-form>
-      </div>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogForm2Visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleForm2Submit">确 定</el-button>
-      </div>
-    </el-dialog>
-
-
-
-  <el-dialog
-      :title="dialogStatus==='insert'?'添加':'编辑'"
+    <el-dialog
+      title='薪资基础编辑'
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
       width="500px"
-    >
+      >
       <div style="width:400px;margin:0 auto">
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form.chineseName" disabled/>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'姓名'}" v-model="form.staff__chineseName" disabled/>
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'工号'}" v-model="form.staff__employeeCode" disabled/>
+            </el-col>
+            
+            <el-col :span="24">
+              <form-render :type="`select`" :field="{name:'社保主体',options:social}" v-model="form.staff__socialSecurityMain"/>
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`select`" :field="{name:'银行',options:banks}" v-model="form.bank"/>
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'银行卡号'}" v-model="form.bankaccount"/>
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'等别'}" v-model="form.jobLevel"/>
             </el-col>
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'有效起始日期'}" v-model="form.stayStart" disabled/>
+              <form-render :type="`input`" :field="{name:'级别'}" v-model="form.wageLevel"/>
             </el-col>
              <el-col :span="24">
-              <form-render :type="`day`" :field="{name:'有效结束日期'}" v-model="form.stayEnd"/>
+              <form-render :type="`select`" :field="{name:'类别',options:sheetType}" v-model="form.sheetType"/>
             </el-col>   
             
           </el-row>
@@ -124,8 +51,6 @@
         <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
       </div>
     </el-dialog>
-
-
 
 
     <table-header
@@ -201,10 +126,9 @@ export default {
       defaultForm,
       roomAdminList:[],
       dormList:[],
-      dialogForm2Visible:false,
-      dialogForm3Visible:false,
-      form2:{},
-      form3:{}
+      social:[],
+      banks:[],
+      sheetType:[]
     };
   },
   watch:{
@@ -217,20 +141,12 @@ export default {
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true
     },
-    async handleForm2Submit(){
-        await this.$request.put('/hot/recordbasic',this.form2)
-        this.dialogForm2Visible = false
-    },
-    async handleForm3Submit(){
-      this.form3.ids = this.$refs.OrgSelect.getIdsResult()
-      await this.$request.post('/hot/record',this.form3)
-      this.dialogForm3Visible = false
-    },
     add(){
         this.form3 = {}
         this.dialogForm3Visible = true
     },
     async edit(){
+      console.log(this.social)
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
@@ -264,6 +180,21 @@ export default {
   async created() {
     const { field, action,table } = await api_common.menuInit("basicwage");
     this.table_field = field;
+    console.log(this.table_field,'this.table_field ')
+    var socialSecurityMain = this.table_field.filter(o=>['staff__socialSecurityMain'].includes(o.name))[0].sourcefrom.choice
+    var social = socialSecurityMain.map(item=>item)
+    this.social = social.map(o=>{return {label:o[0],value:o[1]}})
+
+    
+    var banks = this.table_field.filter(o=>['bank'].includes(o.name))[0].sourcefrom.choice
+    var bank = banks.map(item=>item)
+    this.banks = bank.map(o=>{return {label:o[0],value:o[1]}})
+
+    var sheetType = this.table_field.filter(o=>['sheetType'].includes(o.name))[0].sourcefrom.choice
+    console.log(sheetType)
+    var sheet = sheetType.map(item=>item)
+    this.sheetType = sheet.map(o=>{return {label:o[1],value:o[0]}})
+
     this.table_actions = action;
     this.table_config = table
     this.fetchTableData();

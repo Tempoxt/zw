@@ -47,7 +47,19 @@
               <form-render :type="`select`" :field="{name:'管理员*',options:adminList}" v-model="form.admin"/>
             </el-col>
             
-
+             <el-col :span="24">
+              <form-render
+                :type="`radio`"
+                :field="{name:'是否只有总表',options:[{
+                  value: 1,
+                  label: '是'
+                },{
+                  value: 0,
+                  label: '否'
+                }]}"
+                v-model="form.isTotalMeter"
+              />
+            </el-col>
 
             
             <el-col :span="24">

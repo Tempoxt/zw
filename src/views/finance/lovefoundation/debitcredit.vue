@@ -61,15 +61,23 @@
       show-summary
       :summary-method="getSummaries"
     >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
+      <el-table-column 
+        type="selection" 
+        width="60" 
+        class-name="table-column-disabled"
+        :selectable="table_disable_selected"
+        >
       </el-table-column>
-      <el-table-column type="index" :index="indexMethod" width="70"/>
-      <each-table-column :table_field="table_field"/>
+        <el-table-column type="index" :index="indexMethod" width="70"/>
+        <!-- <each-table-column :table_field="table_field"/> -->
+        <each-table-column :table_field="table_field.filter(o=>!['expendAttachment'].includes(o.name))"/>
+        <el-table-column prop="expendAttachment" label="附件">
+            <template slot-scope="scope">
+              <div v-for="item in scope.row.expendAttachment.split(',')" :key="item">
+                <a :href="baseUrl+item" target="_blank" v-if="item!=''">附件链接</a>
+              </div>
+            </template>
+        </el-table-column>
     </el-table>
     <table-pagination 
       :total="table_form.total" 
@@ -85,6 +93,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import { constants } from 'crypto';
 const api_resource = api_common.resource("lovefoundation/debitcredit");
+let baseUrl = process.env.VUE_APP_STATIC
 const defaultForm = () => {
     return {
         estate:1,
@@ -96,19 +105,20 @@ export default {
     props:['id'],
     data() {
         return {
-        loading: true,
-        form:{},
-        api_resource,
-        orgCategory:[],
-        queryDialogFormVisible:true,
-        table_height:window.innerHeight-236,
-        adminList:[],
-        defaultForm,
-        selectData:[],
-        formSelect1:[],
-        formSelect2:[],
-        putForm:{},
-        total_data:[]
+          baseUrl,
+          loading: true,
+          form:{},
+          api_resource,
+          orgCategory:[],
+          queryDialogFormVisible:true,
+          table_height:window.innerHeight-236,
+          adminList:[],
+          defaultForm,
+          selectData:[],
+          formSelect1:[],
+          formSelect2:[],
+          putForm:{},
+          total_data:[],
         };
     },
     watch:{
