@@ -78,8 +78,8 @@ export default {
   // height: 400px;
 }
 .main {
-  overflow-y: scroll;
-  // overflow-y: hidden;
+  // overflow-y: scroll;
+  overflow-y: hidden;
   height: calc(100% - 100px);
 }
 </style>
