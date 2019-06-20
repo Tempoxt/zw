@@ -88,9 +88,9 @@ export default {
           // async audit(){
           //   this.multipleAction('check','审核成功')
           // },
-          async away(){
-            this.multipleAction('forbid','办离成功')
-          },
+          // async away(){
+          //   this.multipleAction('forbid','办离成功')
+          // },
         query() {
             this.$refs.table.query()
         },

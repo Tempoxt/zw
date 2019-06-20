@@ -147,6 +147,14 @@ export default {
             this.dialogFormVisible = false
             this.fetchTableData()
         },
+        async away(){
+            let rows = this.table_selectedRows.map(row=>row.id)
+            await this.$request.put('/hrm/quit/bluk',{
+                action:'forbid',
+                ids:rows.join(',')
+            })
+            this.fetchTableData()
+        },
         add(){
             this.form = {}
             this.dialogFormVisible = true
