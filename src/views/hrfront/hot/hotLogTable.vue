@@ -226,6 +226,7 @@ export default {
       this.form3.ids = this.$refs.OrgSelect.getIdsResult()
       await this.$request.post('/hot/record',this.form3)
       this.dialogForm3Visible = false
+			this.fetchTableData()
     },
     add(){
         this.form3 = {}
