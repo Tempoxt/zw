@@ -5,7 +5,6 @@
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
-          
           </div>
           <el-tree
             class="tree"
@@ -26,7 +25,7 @@
               <!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
               <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span> -->
               &nbsp;
-              <span class="label">{{ node.label }}<span style="color:#A3AFB7;">{{data.principalship}}</span></span>
+              <span class="label">{{ node.label }}&nbsp<span style="color:#A3AFB7;">{{data.principalship}}</span>&nbsp<span v-show="data.employeeCode!=0" style="color:#A3AFB7;">{{data.employeeCode}}</span></span>
             </span>
           </el-tree>
         </div>
@@ -52,12 +51,17 @@ export default {
     watch:{
        async filterText(val) {
 		   //console.log(this.searchApi)
-		   if(this.searchApi){
-			   let res = await this.$request.get(this.searchApi+"?keyword="+val)
-			   this.data=res;
-		   }else{
-			   this.$refs.treeSame.filter(val);
+		   if (val!="") {
+				if(this.searchApi){
+				   let res = await this.$request.get(this.searchApi+"?keyword="+val)
+				   this.data=res;
+			   }else{
+				   this.$refs.treeSame.filter(val);
+			   }
+		   } else{
+		   	  this.init()
 		   }
+		   
       }
     },
     methods:{
@@ -99,7 +103,14 @@ export default {
 			 //  resolve(data.subs)
 		  // }
           
-      }
+      },
+	  async init(){
+		let _urldata=this.getApi
+		if (this.filter_mark) {
+		   _urldata=this.getApi+"?filter_mark="+this.filter_mark
+		}
+        this.data = await this.$request.get(_urldata);//org/samedeptselect
+	  }
     },
     data(){
         return {
@@ -107,12 +118,8 @@ export default {
             filterText:'',
         }
     },
-    async created(){
-		let _urldata=this.getApi
-		if (this.filter_mark) {
-		   _urldata=this.getApi+"?filter_mark="+this.filter_mark
-		}
-        this.data = await this.$request.get(_urldata);//org/samedeptselect
+    created(){
+        this.init()
     }
 }
 </script>
