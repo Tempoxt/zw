@@ -60,7 +60,11 @@
         @action="handleAction"
         :table_form.sync="table_form"
         :table_column="table_field"
-    ></table-header>
+    >
+        <div style="padding-left:10px">
+            <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+        </div>
+    </table-header>
     <el-table
         @selection-change="handleChangeSelection"
         :data="table_data"
@@ -96,13 +100,15 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 import OrgSelect from '@/components/Org/OrgSelect'
+import dateLap from '@/components/Table/DateLap'
 const api_resource = api_common.resource("hrm/quit");
 export default {
     mixins: [table_mixin],
     props:['orgid'],
     components:{
-      OrgSelect
-  },
+      OrgSelect,
+      dateLap
+    },
     data() {
         return {
             loading: true,
@@ -147,6 +153,14 @@ export default {
             this.dialogFormVisible = false
             this.fetchTableData()
         },
+        async away(){
+            let rows = this.table_selectedRows.map(row=>row.id)
+            await this.$request.put('/hrm/quit/bluk',{
+                action:'forbid',
+                ids:rows.join(',')
+            })
+            this.fetchTableData()
+        },
         add(){
             this.form = {}
             this.dialogFormVisible = true
@@ -175,6 +189,7 @@ export default {
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table
+        this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
         this.fetchTableData();
     }
 };

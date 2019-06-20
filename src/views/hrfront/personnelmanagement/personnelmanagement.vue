@@ -794,7 +794,11 @@
             </el-table-column>
             <el-table-column type="index" :index="indexMethod" fixed/>
             <el-table-column prop="employeeCode" label="工号" fixed/>
-            <el-table-column prop="chineseName" label="姓名" fixed/>
+            <el-table-column prop="chineseName" label="姓名" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.chineseName"></div>
+                </template>
+            </el-table-column>
             <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
         </el-table>
         <table-pagination 
