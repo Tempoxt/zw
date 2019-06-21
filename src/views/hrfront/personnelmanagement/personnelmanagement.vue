@@ -140,6 +140,17 @@
                                                 :field="{name:'所任职务',options:jobtitlesData}"
                                                 v-model="form.principalship"
                                             />
+                                            <!-- <el-form-item label="所任职务">
+                                                <el-select v-model="form.principalship" placeholder="请选择" >
+                                                    <input class="search-text" @keyup='search($event)' placeholder="请输入内容" />
+                                                    <el-option
+                                                        v-for="item in jobtitlesData"
+                                                        :key="item.id"
+                                                        :label="item.name"
+                                                        :value="item.id">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item> -->
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -408,32 +419,30 @@
                             </div>
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="证件管理" v-if="!isInsert">
+                        <el-tab-pane label="证件管理" v-if="!isInsert">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
                                     <i class="icon iconfont icon-tianjia"></i>
                                     <span>添加</span>
                                 </el-button>
-                                <el-button type="button" class="el-button el-button--default el-button--small" @click="editCard" :disabled="!isDisabled">
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="editCard" :disabled="!Disabled">
                                     <i class="icon iconfont icon-bianji"></i>
                                     <span>编辑</span>
                                 </el-button>
-                                <el-button type="button" class="el-button el-button--default el-button--small" @click="deleteCard" :disabled="!isDisabled">
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="deleteCard" :disabled="!Disabled">
                                     <i class="icon iconfont icon-lajitong"></i>
                                     <span>删除</span>
                                 </el-button>
                                 <div class="flexImg mt20">
-                                    <div v-for="item in cardInfo" :key="item.cardType" v-if="item.images!=''">
-                                        <div class="imgInfo"><span>{{item.cardName}}</span><el-checkbox></el-checkbox></div>
+                                    <div v-if="item.images!=''" v-for="item in cardInfo" :key="item.cardType">
+                                        <div class="imgInfo"><span>{{item.cardName}}</span><el-checkbox :true-label="item.cardName" @change="changeCheckbox" v-model="checkbox"></el-checkbox></div>
                                         <div>
-                                            <img v-for="img in item.images" :key="img.id" class="posti" :src="baseUrl+img.cardConnect" alt="">
+                                            <img v-for="img in item.images" :key="img.id" class="posti" :src="img.cardConnect" alt="">
                                         </div>
                                     </div>
                                 </div>
-                                
-                               
                             </div>
-                        </el-tab-pane> -->
+                        </el-tab-pane>
 
                     </el-tabs>
                 </el-form>
@@ -875,13 +884,14 @@
             >
             </el-table-column>
             <el-table-column type="index" :index="indexMethod" fixed/>
-            <el-table-column prop="employeeCode" label="工号" fixed/>
+            <el-table-column prop="employeeCode" sortable label="工号" fixed/>
             <el-table-column prop="chineseName" label="姓名" fixed>
                 <template slot-scope="scope">
                     <div v-html="scope.row.chineseName"></div>
                 </template>
             </el-table-column>
             <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
+                <!-- <each-table-column :table_field="table_field"/> -->
         </el-table>
         <table-pagination 
             :total="table_form.total" 
@@ -1049,9 +1059,27 @@ export default {
                 return false
             }
             return true
+        },
+        Disabled() {
+            console.log(this.selections,'sele')
+            // let len = this.selections.length;
+            // if(len!==1){
+            //     return false
+            // }
+            // return true
         }
     },
     methods: {
+        async search(e){
+            let searchvalue = e.currentTarget.value;
+            var data =  await api_common.resource('basicdata/jobtitles').get()
+            this.jobtitlesData = data.filter((item)=>{
+                return item.name.includes(searchvalue);
+            });
+        },
+        // changeCheckbox(){
+        //     console.log('00000000')
+        // },
         table_disable(row){
             return !row.lockstate
         },
@@ -1212,6 +1240,8 @@ export default {
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
+            
+            // this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get())
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
             console.log(this.banks,'bbbbbbbbbbbbbbbbbbbbb')
@@ -1242,10 +1272,8 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
-            // this.paydataForm.emID = 
             if(this.isInsert){
                 await api_resource.create(form)
-                // await api_common.resource('hrm/staff/paydata').put(this.paydataForm)
             }else{
                 if(this.tab_label ==='联系方式'){
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
