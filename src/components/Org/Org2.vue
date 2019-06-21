@@ -110,6 +110,9 @@ export default {
 		   _urldata=this.getApi+"?filter_mark="+this.filter_mark
 		}
         this.data = await this.$request.get(_urldata);//org/samedeptselect
+	  },
+	  empty(){
+		  this.filterText=""
 	  }
     },
     data(){
