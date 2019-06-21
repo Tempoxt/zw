@@ -182,7 +182,7 @@
                                     <el-row :gutter="20">
                                         
                                         <el-col :span="24">
-                                            <form-render :type="`day`" :field="{name:'入职日期'}" :picker-options="pickerOptions1" v-model="form.onDutyTime"/>
+                                            <form-render :type="`day`" :field="{name:'入职日期'}" v-model="form.onDutyTime"/>
                                         </el-col>
                                         <el-col :span="24">
                                         <form-render
@@ -386,6 +386,55 @@
                                 </el-table>
                             </div>
                         </el-tab-pane>
+
+                        <!-- <el-tab-pane label="银行卡信息" v-if="!isInsert">
+                            <div class="line-boxs">
+                                <el-row :gutter="40">
+                                    <el-col :span="12">
+                                        <el-row :gutter="0">
+                                            <el-col :span="24">
+                                                <form-render :type="`select`" :field="{name:'银行'}" v-model="connect.contactPhone"/>
+                                            </el-col> 
+                                        </el-row>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-row :gutter="0">
+                                            <el-col :span="24">
+                                                <form-render :type="`input`" :field="{name:'银行卡号'}" v-model="connect.shortPhoneNum"/>
+                                            </el-col>
+                                        </el-row>
+                                    </el-col>
+                            </el-row>
+                            </div>
+                        </el-tab-pane>
+
+                        <el-tab-pane label="证件管理" v-if="!isInsert">
+                            <div class="line-boxs">
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
+                                    <i class="icon iconfont icon-tianjia"></i>
+                                    <span>添加</span>
+                                </el-button>
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="editCard" :disabled="!isDisabled">
+                                    <i class="icon iconfont icon-bianji"></i>
+                                    <span>编辑</span>
+                                </el-button>
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="deleteCard" :disabled="!isDisabled">
+                                    <i class="icon iconfont icon-lajitong"></i>
+                                    <span>删除</span>
+                                </el-button>
+                                <div class="flexImg mt20">
+                                    <div>
+                                        <div class="imgInfo"><span>银行卡</span><el-checkbox style="margin-left:30px;"></el-checkbox></div>
+                                        <div>
+                                            <img class="posti" src="http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                               
+                            </div>
+                        </el-tab-pane> -->
+
                     </el-tabs>
                 </el-form>
             </div>
@@ -930,11 +979,11 @@ export default {
             selections:[],
             dialogContract:'inser',
             teamData:{},
-            pickerOptions1: {
-                disabledDate(time) {
-                    return time.getTime() > Date.now();
-                },
-            },
+            // pickerOptions1: {:picker-options="pickerOptions1"
+            //     disabledDate(time) {
+            //         return time.getTime() > Date.now();
+            //     },
+            // },
         };
     },
     watch:{
