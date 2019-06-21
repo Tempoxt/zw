@@ -19,6 +19,7 @@
             :expand-on-click-node="false"
             :load="loadNode1"
             lazy
+			:class="{'search-for':searchFor}"
           >
             <span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`">
               <span v-if="data.subs === 1" class="icon iconfont icon-zonggongsi"></span>
@@ -54,12 +55,18 @@ export default {
 		   if (val!="") {
 				if(this.searchApi){
 				   let res = await this.$request.get(this.searchApi+"?keyword="+val)
+				   for(let i=0;i<res.length;i++){
+					  delete res[i].subs
+				   }
 				   this.data=res;
+				   console.log(this.data)
 			   }else{
 				   this.$refs.treeSame.filter(val);
 			   }
+			   this.searchFor=true
 		   } else{
 		   	  this.init()
+			  this.searchFor=false
 		   }
 		   
       }
@@ -118,6 +125,7 @@ export default {
     data(){
         return {
             data:[],
+			searchFor:false,
             filterText:'',
         }
     },
@@ -126,6 +134,11 @@ export default {
     }
 }
 </script>
+<style>
+	.search-for .el-tree-node__content>.el-tree-node__expand-icon {
+	  color: #fff;
+	}
+</style>
 <style lang="scss" scoped>
 
 .scroll {
