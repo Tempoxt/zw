@@ -398,7 +398,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="银行卡信息">
+                        <!-- <el-tab-pane label="银行卡信息">
                             <div class="line-boxs">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
@@ -417,9 +417,9 @@
                                     </el-col>
                             </el-row>
                             </div>
-                        </el-tab-pane>
+                        </el-tab-pane> -->
 
-                        <el-tab-pane label="证件管理" v-if="!isInsert">
+                        <!-- <el-tab-pane label="证件管理" v-if="!isInsert">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
                                     <i class="icon iconfont icon-tianjia"></i>
@@ -442,7 +442,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </el-tab-pane>
+                        </el-tab-pane> -->
 
                     </el-tabs>
                 </el-form>
@@ -835,7 +835,8 @@
                         </el-row>
                          <el-row>
                             <el-col :span="24">
-                                <form-render prop="img" :type="`img2`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
+                                <!-- imgMultiple -->
+                                <form-render prop="img" :type="`img`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
                             </el-col>
                         </el-row>
                     </div>
@@ -918,7 +919,7 @@ export default {
             return {
                 trialTime:1,
                 contractTime:2,
-                checkWorkType:1,
+                checkWorkType:0,
                 fileType:400,
                 liveDormitory:1,
                 workNature:1,
@@ -1240,8 +1241,6 @@ export default {
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
-            
-            // this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get())
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
             console.log(this.banks,'bbbbbbbbbbbbbbbbbbbbb')
