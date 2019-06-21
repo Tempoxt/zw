@@ -387,20 +387,20 @@
                             </div>
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="银行卡信息" v-if="!isInsert">
+                        <el-tab-pane label="银行卡信息">
                             <div class="line-boxs">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
                                         <el-row :gutter="0">
                                             <el-col :span="24">
-                                                <form-render :type="`select`" :field="{name:'银行'}" v-model="connect.contactPhone"/>
+                                                <form-render :type="`select`" :field="{name:'银行',options:banks}" v-model="form.bankValue"/>
                                             </el-col> 
                                         </el-row>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-row :gutter="0">
                                             <el-col :span="24">
-                                                <form-render :type="`input`" :field="{name:'银行卡号'}" v-model="connect.shortPhoneNum"/>
+                                                <form-render :type="`input`" :field="{name:'银行卡号'}" v-model="form.bankAccount"/>
                                             </el-col>
                                         </el-row>
                                     </el-col>
@@ -408,7 +408,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="证件管理" v-if="!isInsert">
+                        <!-- <el-tab-pane label="证件管理" v-if="!isInsert">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
                                     <i class="icon iconfont icon-tianjia"></i>
@@ -423,10 +423,10 @@
                                     <span>删除</span>
                                 </el-button>
                                 <div class="flexImg mt20">
-                                    <div>
-                                        <div class="imgInfo"><span>银行卡</span><el-checkbox style="margin-left:30px;"></el-checkbox></div>
+                                    <div v-for="item in cardInfo" :key="item.cardType" v-if="item.images!=''">
+                                        <div class="imgInfo"><span>{{item.cardName}}</span><el-checkbox></el-checkbox></div>
                                         <div>
-                                            <img class="posti" src="http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg" alt="">
+                                            <img v-for="img in item.images" :key="img.id" class="posti" :src="baseUrl+img.cardConnect" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -809,6 +809,39 @@
             </div>
         </el-dialog>
 
+        <!-- 添加/编辑证件 -->
+        <el-dialog
+            :title="dialogCard==='inser'?'添加证件':'编辑证件'"
+            :visible.sync="dialogCardFormVisible"
+            class="public-dialog"
+            v-el-drag-dialog
+            >
+            <div>
+                <el-form ref="cardPerform" :model="cardPerform" label-width="100px" v-loading="loading2"  :rules="ruleImg">
+                    <div class="line-boxs">
+                        <el-row>
+                            <el-col :span="24">
+                                <form-render :type="`select`" :field="{name:'证件类型',options:cardType}" v-model="cardPerform.cardType"/>
+                            </el-col>
+                        </el-row>
+                         <el-row>
+                            <el-col :span="24">
+                                <form-render prop="img" :type="`img2`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer dialog-multiple-footer">
+                <div></div>
+                <div>
+                    <el-button @click="dialogCardFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleCardFormSubmit">确 定</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
         <div class="img-show-mask" v-show="maskBtn" id="img-show-mask" @click="closeBigImg">
             <img :src="bigImg" class="bigImg" id="bigImg" />
         </div>
@@ -966,11 +999,17 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
             },
+            ruleImg:{
+                img:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+            },
             staffId:'',
             paydataForm:{},
             connect:{},
             profileData:{},
             dialogContractFormVisible:false,
+            dialogCardFormVisible:false,
             contract:{},
             maskBtn:false,	
             bigImg:'',
@@ -978,7 +1017,13 @@ export default {
             contrTy:[],
             selections:[],
             dialogContract:'inser',
+            dialogCard:'inser',
             teamData:{},
+            cardInfo:[],
+            cardPerform:{},
+            banks:[],
+            bank:{},
+            cardType:[]
             // pickerOptions1: {:picker-options="pickerOptions1"
             //     disabledDate(time) {
             //         return time.getTime() > Date.now();
@@ -1012,6 +1057,40 @@ export default {
         },
         handleChangeSelect(val) {
             this.selections = val
+        },
+        handleCard(){
+            this.cardPerform = {}
+            this.dialogCard = "inser"
+            this.getCardInfo()
+            this.dialogCardFormVisible = true
+        },
+        async editCard(){
+            this.dialogCard = 'inse'
+            this.getCardInfo()
+            // let row = this.selections[0];
+            // this.cardPerform = await this.$request.get('/hrm/staff/card/?emID='+row.id)
+            // this.dialogCardFormVisible = true
+        },
+        async deleteCard(){
+
+        },
+        async handleCardFormSubmit(){
+            this.cardPerform.emID = this.form.id;
+            let cardPerform = Object.assign({},this.cardPerform)
+            let row = this.selections[0];
+
+            if(this.dialogCard=="inser"){
+                await this.$request.post('/hrm/staff/card',this.cardPerform)
+            }else{
+                await this.$request.put('/hrm/staff/card/'+row.id,this.cardPerform)
+            }
+            this.dialogCardFormVisible = false
+            this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
+        },
+        
+        //获取证件类型
+        async getCardInfo(){
+            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         handleContract(){
             this.contract = {}
@@ -1067,6 +1146,8 @@ export default {
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async showPersonInfo(){
             this.dialogStatus = 'inserts';
@@ -1098,6 +1179,7 @@ export default {
                 this.form = await api_resource.find(row.id)
                 this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
                 this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
+                this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
             }
         },
         async tabClick(v){
@@ -1130,6 +1212,9 @@ export default {
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
+            console.log(this.banks,'bbbbbbbbbbbbbbbbbbbbb')
         },
         async edit(){
             this.$nextTick(()=>{
@@ -1143,11 +1228,10 @@ export default {
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
-            // await api_common.resource('org/branchdepartment').get({id:this.form.subCompany}) 
-            // console.log(this.form.department,'form.department') 
-            // // if(!isNaN(this.form.department)){
-            // // this.form.department = await api_common.resource('org/branchteam').get({id:this.form.department})
-            // // }
+            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
+            this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
+            this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async fetchDepartment(){
             this.departmentData = await api_common.resource('org/branchdepartment').get({id:this.form.subCompany})
@@ -1158,14 +1242,15 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
+            // this.paydataForm.emID = 
             if(this.isInsert){
                 await api_resource.create(form)
+                // await api_common.resource('hrm/staff/paydata').put(this.paydataForm)
             }else{
                 if(this.tab_label ==='联系方式'){
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
-                }else if(this.tab_label ==='1'){
-
                 }else{
+                    console.log(form,'fffffffffff')
                     await api_resource.update(form.id,form)
                 }
                 this.fetchProfileData()
@@ -1264,7 +1349,3 @@ export default {
     }
 };
 </script>
-
-
-
-
