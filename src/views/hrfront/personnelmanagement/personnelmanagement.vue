@@ -142,7 +142,7 @@
                                             />
                                             <!-- <el-form-item label="所任职务">
                                                 <el-select v-model="form.principalship" placeholder="请选择" >
-                                                    <input class="search-text" @keyup='search($event)' placeholder="请输入内容" />
+                                                    <input class="search-text" @keyup='search($event)' placeholder="搜索"/>
                                                     <el-option
                                                         v-for="item in jobtitlesData"
                                                         :key="item.id"
@@ -398,7 +398,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="银行卡信息">
+                        <el-tab-pane label="银行卡信息">
                             <div class="line-boxs">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
@@ -417,7 +417,7 @@
                                     </el-col>
                             </el-row>
                             </div>
-                        </el-tab-pane> -->
+                        </el-tab-pane>
 
                         <!-- <el-tab-pane label="证件管理" v-if="!isInsert">
                             <div class="line-boxs">
@@ -429,16 +429,20 @@
                                     <i class="icon iconfont icon-bianji"></i>
                                     <span>编辑</span>
                                 </el-button>
-                                <el-button type="button" class="el-button el-button--default el-button--small" @click="deleteCard" :disabled="!Disabled">
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="deleteCard" :disabled="!disabl">
                                     <i class="icon iconfont icon-lajitong"></i>
                                     <span>删除</span>
                                 </el-button>
-                                <div class="flexImg mt20">
+                                <div class="flexImg mt20" style="min-height:200px;">
                                     <div v-if="item.images!=''" v-for="item in cardInfo" :key="item.cardType">
-                                        <div class="imgInfo"><span>{{item.cardName}}</span><el-checkbox :true-label="item.cardName" @change="changeCheckbox" v-model="checkbox"></el-checkbox></div>
-                                        <div>
-                                            <img v-for="img in item.images" :key="img.id" class="posti" :src="img.cardConnect" alt="">
-                                        </div>
+                                        <el-checkbox-group v-model="checkList">
+                                            <div class="imgInfo" style="position:relative"><span>{{item.cardName}}</span>
+                                                <el-checkbox style="position:absolute;right:15px;" :label="item.cardType" v-model="checkbox" ></el-checkbox>
+                                            </div>
+                                            <div>
+                                                <img v-for="img in item.images" :key="img.id" class="posti" :src="baseUrl+img.cardConnect" alt="">
+                                            </div>
+                                        </el-checkbox-group>   
                                     </div>
                                 </div>
                             </div>
@@ -830,13 +834,13 @@
                     <div class="line-boxs">
                         <el-row>
                             <el-col :span="24">
-                                <form-render :type="`select`" :field="{name:'证件类型',options:cardType}" v-model="cardPerform.cardType"/>
+                                <form-render prop="cardType" :type="`select`" :field="{name:'证件类型',options:cardType}" v-model="cardPerform.cardType"/>
                             </el-col>
                         </el-row>
                          <el-row>
                             <el-col :span="24">
                                 <!-- imgMultiple -->
-                                <form-render prop="img" :type="`img`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
+                                <form-render prop="image" :type="`imgMultiple`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
                             </el-col>
                         </el-row>
                     </div>
@@ -1011,9 +1015,12 @@ export default {
                 ],
             },
             ruleImg:{
-                img:[
+                image:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
+                cardType:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ]
             },
             staffId:'',
             paydataForm:{},
@@ -1031,10 +1038,14 @@ export default {
             dialogCard:'inser',
             teamData:{},
             cardInfo:[],
-            cardPerform:{},
+            cardPerform:{
+                image:[]
+            },
             banks:[],
             bank:{},
-            cardType:[]
+            cardType:[],
+            checkList:[],
+            checkbox:''
             // pickerOptions1: {:picker-options="pickerOptions1"
             //     disabledDate(time) {
             //         return time.getTime() > Date.now();
@@ -1062,12 +1073,18 @@ export default {
             return true
         },
         Disabled() {
-            console.log(this.selections,'sele')
-            // let len = this.selections.length;
-            // if(len!==1){
-            //     return false
-            // }
-            // return true
+            let len = this.checkList.length;
+            if(len!==1){
+                return false
+            }
+            return true
+        },
+        disabl() {
+            let len = this.checkList.length;
+            if(len>0){
+                return true
+            }
+            return false
         }
     },
     methods: {
@@ -1078,9 +1095,6 @@ export default {
                 return item.name.includes(searchvalue);
             });
         },
-        // changeCheckbox(){
-        //     console.log('00000000')
-        // },
         table_disable(row){
             return !row.lockstate
         },
@@ -1096,14 +1110,17 @@ export default {
         async editCard(){
             this.dialogCard = 'inse'
             this.getCardInfo()
-            // let row = this.selections[0];
-            // this.cardPerform = await this.$request.get('/hrm/staff/card/?emID='+row.id)
-            // this.dialogCardFormVisible = true
+            this.dialogCardFormVisible = true
+            let row = this.checkList[0];
+            this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
         },
         async deleteCard(){
-
+            let rows = this.checkList.map(row=>row)
+            await this.$request.delete('/hrm/staff/card/bluk?ids='+rows.join(','))
+            this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
         },
         async handleCardFormSubmit(){
+            await this.form_validate()
             this.cardPerform.emID = this.form.id;
             let cardPerform = Object.assign({},this.cardPerform)
             let row = this.selections[0];
@@ -1243,7 +1260,6 @@ export default {
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
-            console.log(this.banks,'bbbbbbbbbbbbbbbbbbbbb')
         },
         async edit(){
             this.$nextTick(()=>{
@@ -1277,7 +1293,6 @@ export default {
                 if(this.tab_label ==='联系方式'){
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
                 }else{
-                    console.log(form,'fffffffffff')
                     await api_resource.update(form.id,form)
                 }
                 this.fetchProfileData()

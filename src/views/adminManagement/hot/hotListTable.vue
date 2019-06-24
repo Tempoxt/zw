@@ -216,6 +216,10 @@ export default {
   methods: {
     reset(){
       this.$request.get('hot/historyreset',{params:{dateLap:this.table_form.dateLap}})
+      this.$message({
+          type: 'success',
+          message: '重置成功'
+      })
     },
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')

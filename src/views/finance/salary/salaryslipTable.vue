@@ -103,7 +103,12 @@
       <el-table-column type="index" :index="indexMethod" width="70" fixed/>
       <el-table-column prop="month" label="月份" fixed/>
       <el-table-column prop="signState" label="签收状态" fixed/>
-      <el-table-column prop="staff__chineseName" label="姓名" fixed/>
+      <!-- <el-table-column prop="staff__chineseName" label="姓名" fixed/> -->
+      <el-table-column prop="chineseName" label="姓名" fixed>
+          <template slot-scope="scope">
+              <div v-html="scope.row.staff__chineseName"></div>
+          </template>
+      </el-table-column>
       <el-table-column prop="staff__employeeCode" label="工号" fixed/>
       <each-table-column :table_field="table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name))"/>
       <!-- <each-table-column :table_field="table_field"/> -->
