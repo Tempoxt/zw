@@ -135,10 +135,12 @@
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
+                                                filterable
                                                 prop="principalship"
                                                 :type="`select`"
                                                 :field="{name:'所任职务',options:jobtitlesData}"
                                                 v-model="form.principalship"
+                                                placeholder="请搜索或选择"
                                             />
                                             <!-- <el-form-item label="所任职务">
                                                 <el-select v-model="form.principalship" placeholder="请选择" >
@@ -1112,7 +1114,8 @@ export default {
             this.getCardInfo()
             this.dialogCardFormVisible = true
             let row = this.checkList[0];
-            this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
+            console.log(row,'wwwww')
+            this.cardPerform = await api_common.resource("hrm/staff/typecard").get({emID:this.staffId,cardType:row});
         },
         async deleteCard(){
             let rows = this.checkList.map(row=>row)
