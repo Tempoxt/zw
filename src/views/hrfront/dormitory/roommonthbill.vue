@@ -140,7 +140,7 @@ export default {
           })
       },
       async getTree(){
-          this.data2 =  [await api_common.resource('dormitory/dormtree').get()];
+          this.data2 =  [await api_common.resource('dormitory/dormtree/front').get()];
           this.$nextTick(()=>{
             this.$refs.tree2.setCurrentKey(this.orgid)
           })
