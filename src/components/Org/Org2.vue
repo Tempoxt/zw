@@ -55,11 +55,7 @@ export default {
 		   if (val!="") {
 				if(this.searchApi){
 				   let res = await this.$request.get(this.searchApi+"?keyword="+val)
-				   for(let i=0;i<res.length;i++){
-					  delete res[i].subs
-				   }
 				   this.data=res;
-				   console.log(this.data)
 			   }else{
 				   this.$refs.treeSame.filter(val);
 			   }
