@@ -60,6 +60,19 @@
                 <el-col :span="24" v-if="url!=='org/departments'">
                   <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
                 </el-col>
+                <el-col :span="24">
+                  <form-render :type="`subdepart`" :field="{name:'部门分管',defaultName:form.departmentLeaderName}" v-model="form.departmentLeader"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`subdepart`" :field="{name:'部门负责人',defaultName:form.orgManagerName}" v-model="form.orgManager"/>
+                </el-col>
+                <el-col :span="24">
+                  <form-render :type="`subdepart`" :field="{name:'部门主管',defaultName:form.departmentDirectorName}" v-model="form.departmentDirector"/>
+                </el-col>
+                
+                <el-col :span="24">
+                  <form-render :type="`subdepart`" :field="{name:'部门专员',defaultName:form.departmentCommissionerName}" v-model="form.departmentCommissioner"/>
+                </el-col>
                 
                 <el-col :span="24">
                   <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort" placeholder=""/>
@@ -94,8 +107,6 @@ import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("org/departments");
 const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
-
-
 export default {
     props:{
         currentMenuid:Number,
