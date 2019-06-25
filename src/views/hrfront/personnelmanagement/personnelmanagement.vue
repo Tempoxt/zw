@@ -435,7 +435,7 @@
                                     <span>删除</span>
                                 </el-button>
                                 <div class="flexImg mt20" style="min-height:200px;">
-                                    <div v-if="item.images!=''" v-for="item in cardInfo" :key="item.cardType">
+                                    <div v-show="item.images!=''" v-for="item in cardInfo" :key="item.cardType" >
                                         <el-checkbox-group v-model="checkList">
                                             <div class="imgInfo" style="position:relative"><span>{{item.cardName}}</span>
                                                 <el-checkbox style="position:absolute;right:15px;" :label="item.cardType" v-model="checkbox" ></el-checkbox>
