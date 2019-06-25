@@ -189,6 +189,7 @@ export default {
         width: 107px;
         height: 65px;
     }
+    .mt20{margin-top: 20px;}
     .mt30{margin-top: 30px;}
     .mb20{margin-bottom: 20px;}
     .flexImg{
@@ -218,6 +219,15 @@ export default {
         height: 14px;
         font-weight: normal;
         margin-left: 22px;
+    }
+    .search-text{
+        height: 30px;
+        line-height: 30px;
+        margin-left: 18px;
+        padding-left: 5px;
+    }
+    .imgInfo .el-checkbox__label{
+        display: none;
     }
 </style>
 

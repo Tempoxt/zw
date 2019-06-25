@@ -153,7 +153,7 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
+      :cell-style="cellStyle"
     >
     <el-table-column 
       type="selection" 
@@ -266,31 +266,38 @@ export default {
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
     },
+    cellStyle({row,column,rowIndex,columnIndex}){
+        // console.log(column,'eeeee')
+      if(row.Remark!=''&&row.Remark!=null){
+        return 'color:red'
+      }else if(row.weekday=='六'||row.weekday=='日'){
+        return 'background-color:rgb(245, 250, 251);'
+      }
+    },
     async fetchTableData() {
-     if(!this.id){
-       return
-     }
-     this.table_loading = true;
-     this.table_form.org_id = this.id
-     this.table_form.sheetType = 2
-     const {rows , total }= await api_resource.get(this.table_form);
+      if(!this.id){
+        return
+      }
+      this.table_loading = true;
+      this.table_form.org_id = this.id
+      this.table_form.sheetType = 2
+      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
-       this.table_form.total = total
+      this.table_form.total = total
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
     },
     async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        form.org_id = this.id
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-        
+      let form = Object.assign({},this.form)
+      form.org_id = this.id
+      if(this.isInsert){
+          await api_resource.create(form)
+      }else{
+          await api_resource.update(form.id,form)
+      }
+      this.dialogFormVisible = false
+      this.fetchTableData()
     },
   },
   async created() {

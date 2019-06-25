@@ -21,28 +21,42 @@
               <form-render :type="`select`" :field="{name:'宿舍',options:dormList}" v-model="form.dorm"/>
             </el-col>
            
-             <el-col :span="24">
+            <el-col :span="24">
               <form-render :type="`input`" :field="{name:'房屋编码'}" v-model="form.houseNumber" />
             </el-col>
-             <el-col :span="24">
+            <el-col :span="24">
               <form-render :type="`input`" :field="{name:'房屋编号'}" v-model="form.roomName"/>
             </el-col>
-             <el-col :span="24">
+            <el-col :span="24">
               <form-render :type="`input`" :field="{name:'床位数'}" v-model="form.totalBeds"/>
             </el-col>
-
-         
-             <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'室长',options:roomAdminList}" v-model="form.roomAdmin"/>
-            </el-col> 
-          <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房租'}" v-model="form.rent"/>
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'减免电量'}" v-model="form.electricCut"/>
             </el-col>
            <el-col :span="24">
               <form-render :type="`input`" :field="{name:'电表初始读数'}" v-model="form.initalElectric"  :disabled="!isInsert"/>
             </el-col>
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'水表初始读数'}" v-model="form.initalWater"  :disabled="!isInsert"/>
+            </el-col>
+            <el-col :span="24">
+              <form-render :type="`select`" :field="{name:'室长',options:roomAdminList}" v-model="form.roomAdmin"/>
+            </el-col> 
+          <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'房租'}" v-model="form.rent"/>
+            </el-col>
+            <el-col :span="24">
+              <form-render
+                :type="`radio`"
+                :field="{name:'住宿人员类型',options:[{
+                  value: 1,
+                  label: '正式工'
+                },{
+                  value: 2,
+                  label: '劳务工'
+                }]}"
+                v-model="form.employeeType"
+              />
             </el-col>
             <el-col :span="24">
               <form-render
@@ -138,7 +152,9 @@ export default {
   data() {
     return {
       loading: true,
-      form:{},
+      form:{
+        
+      },
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
@@ -147,7 +163,6 @@ export default {
       defaultForm,
       roomAdminList:[],
       dormList:[],
-     
     };
   },
   watch:{
@@ -168,7 +183,8 @@ export default {
       }, 300);
     },
     async add(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
+      this.form.electricCut=0
+        this.dormList = (await api_common.resource('dormitory/dorm').get()).map(o=>{
             return {
                 label:o.dormName,
                 value:o.id
@@ -194,7 +210,7 @@ export default {
         this.fetchTableData()
     },
     async edit(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
+        this.dormList = (await api_common.resource('dormitory/dorm').get()).map(o=>{
             return {
                 label:o.dormName,
                 value:o.id

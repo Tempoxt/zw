@@ -36,7 +36,7 @@
                                             />
                                         </el-col>
                                         <!-- <el-col :span="24">
-                                        <form-render
+                                            <form-render
                                                 :type="`select`"
                                                 :field="{name:'籍贯',options:nativeplacesData}"
                                                 v-model="form.provinse"
@@ -135,11 +135,11 @@
                                         <el-col :span="24">
                                             <form-render
                                                 filterable
+                                                placeholder="请搜索或选择"
                                                 prop="principalship"
                                                 :type="`select`"
                                                 :field="{name:'所任职务',options:jobtitlesData}"
                                                 v-model="form.principalship"
-                                                placeholder="请搜索或选择"
                                             />
                                             <!-- <el-form-item label="所任职务">
                                                 <el-select v-model="form.principalship" placeholder="请选择" >
@@ -303,7 +303,7 @@
                                             />
                                         </el-col>
                                         
-                                        <el-col :span="24">
+                                        <el-col :span="24" v-if="form.liveDormitory==0">
                                         <form-render :type="`input`" :field="{name:'现住地址'}" v-model="form.nowAddress" placeholder="不分配宿舍请填写"/>
                                         </el-col>
                                     </el-row>
@@ -420,7 +420,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="证件管理" v-if="!isInsert">
+                        <el-tab-pane label="证件管理" v-if="!isInsert">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
                                     <i class="icon iconfont icon-tianjia"></i>
@@ -443,11 +443,11 @@
                                             <div>
                                                 <img v-for="img in item.images" :key="img.id" class="posti" :src="baseUrl+img.cardConnect" alt="">
                                             </div>
-                                        </el-checkbox-group>   
+                                        </el-checkbox-group>
                                     </div>
                                 </div>
                             </div>
-                        </el-tab-pane> -->
+                        </el-tab-pane>
 
                     </el-tabs>
                 </el-form>
@@ -639,6 +639,20 @@
                         <Col span="12">
                             <span class="labelCon">合同结束：</span>
                             <span class="labelCon promp">{{item.contractEnd}}</span>
+                        </Col>
+                    </Row>
+                </div>
+                <Divider/>
+                <p class="info">银行卡信息 <i @click="showContactInfo" class="icon iconfont icon-bianji editIcon"></i></p>
+                <div class="demo-drawer-profile">
+                    <Row>
+                        <Col span="12">
+                            <span class="labelCon">银行：</span>
+                            <span class="labelCon promp">{{profileData.bank}}</span>
+                        </Col>
+                        <Col span="12">
+                            <span class="labelCon">卡号：</span>
+                            <span class="labelCon promp">{{profileData.bankAccount}}</span>
                         </Col>
                     </Row>
                 </div>
@@ -937,7 +951,6 @@ export default {
         }
         return {
             baseUrl,
-            fixedPer:['idCardImage','employeeCode','chineseName'],
             openDrawers: false,
             loading: true,
             loading2:false,
@@ -1089,13 +1102,6 @@ export default {
         }
     },
     methods: {
-        async search(e){
-            let searchvalue = e.currentTarget.value;
-            var data =  await api_common.resource('basicdata/jobtitles').get()
-            this.jobtitlesData = data.filter((item)=>{
-                return item.name.includes(searchvalue);
-            });
-        },
         table_disable(row){
             return !row.lockstate
         },
@@ -1103,7 +1109,11 @@ export default {
             this.selections = val
         },
         handleCard(){
-            this.cardPerform = {}
+            // this.cardPerform = {}
+            this.cardPerform = {
+                image:[]
+            }
+            console.log(this.cardPerform,'cardPErform')
             this.dialogCard = "inser"
             this.getCardInfo()
             this.dialogCardFormVisible = true
@@ -1279,6 +1289,7 @@ export default {
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
+            this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async fetchDepartment(){
