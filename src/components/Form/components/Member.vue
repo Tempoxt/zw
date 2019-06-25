@@ -50,12 +50,12 @@
 <script>
 import * as api_common from "@/api/common";
 import * as api_user from "@/api/user";
+import { setTimeout } from 'timers';
 export default {
   name: "form-member",
   props: {
     field: Object,
-    value: {},
-    
+    value: {}    
   },
   methods: {
     async fetchUser(){
@@ -75,14 +75,17 @@ export default {
         console.log(data,'da222ta')
         this.visible = false;
         this.data = data.id;
-        this.input5 = data.chineseName
-      
+        this.input5 = data.name
+        this.field.defaultName = this.input5
     },
     nodeSelect(data) {
       if(data.leaf){
-          this.visible = false;
-          this.data = data.id;
+         this.visible = false;
+         this.data = data.id;
          this.input5 = data.name
+     
+         this.field.defaultName = this.input5
+        
       }
     },
     async loadNode1(node, resolve){
@@ -137,7 +140,8 @@ export default {
         this.data = this.value;
         // this.input5 = this.field.real_name
       }
-    }
+    },
+    
   },
   data() {
     return {
@@ -154,7 +158,7 @@ export default {
     };
   },
   created(){
-    
+  
   }
 //   async created() {
 //     this.data2 = await api_common.api_org();

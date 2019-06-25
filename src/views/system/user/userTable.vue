@@ -16,7 +16,7 @@
                 <el-tab-pane label="用户信息" name="first">
                     <el-row :gutter="20">
                         <el-col :span="12">
-                        <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID" />
+                        <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID"/>
                         </el-col>
                         <el-col :span="12">
                             <form-render :type="`input`" :field="{name:'登录密码',type:'password'}" v-model="form.password" :disabled="form.ldap_check===1"/>
