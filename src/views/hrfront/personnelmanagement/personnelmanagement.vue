@@ -420,7 +420,7 @@
                             </el-row>
                             </div>
                         </el-tab-pane>
-<!-- 
+
                         <el-tab-pane label="证件管理" v-if="!isInsert">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
@@ -448,7 +448,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </el-tab-pane> -->
+                        </el-tab-pane>
 
                     </el-tabs>
                 </el-form>
@@ -856,7 +856,7 @@
                          <el-row>
                             <el-col :span="24">
                                 <!-- imgMultiple -->
-                                <form-render prop="image" :type="`imgMultiple`" ref="imgMultiple" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
+                                <form-render prop="image" :type="`imgMultiple`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
                             </el-col>
                         </el-row>
                     </div>
@@ -1110,7 +1110,11 @@ export default {
             this.selections = val
         },
         handleCard(){
-            this.cardPerform = {}
+            // this.cardPerform = {}
+            this.cardPerform = {
+                image:[]
+            }
+            console.log(this.cardPerform,'cardPErform')
             this.dialogCard = "inser"
             this.getCardInfo()
             this.dialogCardFormVisible = true
@@ -1129,7 +1133,6 @@ export default {
         },
         async handleCardFormSubmit(){
             await this.form_validate()
-            console.log(this.$refs.imgMultiple.value)
             this.cardPerform.emID = this.form.id;
             let cardPerform = Object.assign({},this.cardPerform)
             let row = this.selections[0];

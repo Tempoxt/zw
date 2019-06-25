@@ -231,9 +231,18 @@ export default {
       }else{
         this.form3.ids = ids1+','+ids2
       }
-      await this.$request.post('/hot/record',this.form3)
-      this.dialogForm3Visible = false
-      this.fetchTableData()
+      if(this.form3.ids!==''){
+        await this.$request.post('/hot/record',this.form3)
+        this.dialogForm3Visible = false
+        this.fetchTableData()
+      }else{
+        this.$message.error('请选择要添加的人员');
+      }
+    
+      // let repeat = await this.$request.post('/hot/record',this.form3)
+      // console.log(repeat,'rrrrrrrr')
+      // this.dialogForm3Visible = false
+      // this.fetchTableData()
     },
     add(){
         this.form3 = {}
