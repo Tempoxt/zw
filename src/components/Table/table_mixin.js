@@ -111,13 +111,13 @@ export default {
           isEnd = true
         }
       })
-      if(isEnd){
-        var lastRow = this.table_field[this.table_field.length-1]
-        lastRow.width = 'auto'
-        lastRow.menuid = lastRow.menuid_id
-        api_pagemanager.update(lastRow.id,{width:lastRow.width,menuid:lastRow.menuid_id},{alert:false})
-        return
-      }
+      // if(isEnd){
+      //   var lastRow = this.table_field[this.table_field.length-1]
+      //   lastRow.width = 'auto'
+      //   lastRow.menuid = lastRow.menuid_id
+      //   api_pagemanager.update(lastRow.id,{width:lastRow.width,menuid:lastRow.menuid_id},{alert:false})
+      //   return
+      // }
       row.width = newWidth
       row.menuid = row.menuid_id
       api_pagemanager.update(row.id,{

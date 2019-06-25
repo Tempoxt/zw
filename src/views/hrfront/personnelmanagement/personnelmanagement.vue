@@ -119,7 +119,6 @@
                                             <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany"/>
                                             <!-- <form-render :type="`input`" :field="{name:'所属公司'}" v-model="form.officeaddressname"/> -->
                                         </el-col>
-                                    
                                         <el-col :span="24">
                                             <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department"/>
 
@@ -1114,7 +1113,6 @@ export default {
             this.getCardInfo()
             this.dialogCardFormVisible = true
             let row = this.checkList[0];
-            console.log(row,'wwwww')
             this.cardPerform = await api_common.resource("hrm/staff/typecard").get({emID:this.staffId,cardType:row});
         },
         async deleteCard(){
@@ -1265,9 +1263,11 @@ export default {
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
-            this.$nextTick(()=>{
-                this.$refs['form'].clearValidate()
-            })
+         
+            this.form = this.defaultForm()
+            // this.$nextTick(()=>{
+            //     this.$refs['form'].clearValidate()
+            // })
             let row = this.table_selectedRows[0];
             this.staffId = row.id;
             this.form = await api_resource.find(row.id);
