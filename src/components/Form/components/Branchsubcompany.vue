@@ -80,7 +80,6 @@ export default {
       let that = this;
       (function f(data) {
         data.some(row => {
-          
           if (row[that.field.field_key || 'id'] == orgid) {
             info = row;
             return true;

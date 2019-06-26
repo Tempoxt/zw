@@ -232,7 +232,13 @@ export default {
         this.form3.ids = ids1+','+ids2
       }
       if(this.form3.ids!==''){
-        await this.$request.post('/hot/record',this.form3)
+        let repeat = await this.$request.post('/hot/record',this.form3)
+        if(repeat!==''){
+          var rep = repeat.map(o=>o)
+          this.$message.error({message:rep+'存在时间重叠的名单记录',duration:12000})
+        }else{
+          return 
+        }
         this.dialogForm3Visible = false
         this.fetchTableData()
       }else{

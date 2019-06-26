@@ -188,6 +188,7 @@ export default {
     .posti{
         width: 107px;
         height: 65px;
+        margin-bottom: 10px;
     }
     .mt20{margin-top: 20px;}
     .mt30{margin-top: 30px;}
@@ -199,7 +200,7 @@ export default {
     }
     .flexImg>div{
         width: 140px;
-        height: 176px;
+        min-height: 176px;
         background: #F5FAFB;
         margin-right: 10px;
         text-align: center;

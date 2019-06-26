@@ -46,13 +46,15 @@ export default {
   
   watch: {
     data() {
+      this.fileList = []
       this.$parent.$emit("input", this.data);
     },
     value: {
       immediate: true,
       handler(val) {
         this.data = this.value;
-      }
+      },
+      deep:true
     }
   },
   computed: {
@@ -77,9 +79,13 @@ export default {
     handleRemov(index){
       this.data.splice(index,1);
     },
-    handleAvatarSuccess(res, file) {-
-      this.fileList.push(res.path)
-      this.data = this.fileList
+    handleAvatarSuccess(res, file) {
+      if(this.data!=''){
+        this.data.push(res.path)
+      }else{
+        this.fileList.push(res.path)
+        this.data = this.fileList
+      }
     },
     handlePreview(file) {
       console.log(file);
@@ -93,7 +99,6 @@ export default {
         }
         return isLt2M;
       }
-  
   },
   created() {
   }

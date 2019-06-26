@@ -22,10 +22,8 @@
             :filter-node-method="filterNode"
         >
             <span slot-scope="{ node, data }">
-            <span
-                  :class="`icon iconfont ${(node.isLeaf&&data.name)?'icon-zuzhi2':'icon-wenjian'}`"
-                ></span>&nbsp;
-            <span>{{ node.label }}</span>
+              <span :class="`icon iconfont ${(node.isLeaf&&data.name)?'icon-zuzhi2':'icon-wenjian'}`"></span>&nbsp;
+              <span>{{ node.label }}</span>
             </span>
         </el-tree>
         </el-scrollbar>
@@ -67,7 +65,6 @@ export default {
       console.log(data);
     },
     nodeSelect(data) {
-      console.log(data,'data')
       this.data = data[this.field.field_key || 'id'];
       this.visible = false;
     },
@@ -84,7 +81,6 @@ export default {
       let that = this;
       (function f(data) {
         data.some(row => {
-          
           if (row[that.field.field_key || 'id'] == orgid) {
             info = row;
             return true;
@@ -99,7 +95,6 @@ export default {
   },
   watch: {
     'field.id'(){
-
        if(this.field.id){
           this.fetchData()
         }else{
@@ -107,7 +102,13 @@ export default {
         }
     },
     data(val) {
-      this.findDataName();
+      if(this.field.id){
+        this.fetchData()
+      }else{
+        this.data2 = []
+        this.input5 = ''
+      }
+      // this.findDataName();
       this.$parent.$emit("input", this.data);
     },
     value: {

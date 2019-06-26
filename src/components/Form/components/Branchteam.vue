@@ -67,12 +67,16 @@ export default {
       console.log(data);
     },
     nodeSelect(data) {
-      console.log(data,'data')
       this.data = data[this.field.field_key || 'id'];
       this.visible = false;
     },
     async fetchData(){
-        this.data2 = [(await api_common.resource('org/branchteam').get({id:this.field.id}))];
+        let team = [(await api_common.resource('org/branchteam').get({id:this.field.id}))];
+        if(team[0].subs && team[0].subs.length){
+          this.data2 = team
+        }else{
+          this.data2 = []
+        }
         this.findDataName();
     },
     findDataName() {
@@ -84,14 +88,20 @@ export default {
       let that = this;
       (function f(data) {
         data.some(row => {
-          
-          if (row[that.field.field_key || 'id'] == orgid) {
+          if(row.subs && row.subs.length){
+            info = row.subs[0];
+            f(row.subs);
+          }else if (row[that.field.field_key || 'id'] == orgid) {
             info = row;
             return true;
           }
-          if (row.subs && row.subs.length) {
-            f(row.subs);
-          }
+          // if (row[that.field.field_key || 'id'] == orgid) {
+          //   info = row;
+          //   return true;
+          // }
+          // if (row.subs && row.subs.length) {
+          //   f(row.subs);
+          // }
         });
       })(this.data2);
       this.input5 = info.name;
@@ -99,16 +109,20 @@ export default {
   },
   watch: {
     'field.id'(val){
-  
       if(this.field.id){
         this.fetchData()
       }else{
         this.value = ''
+        this.input5 = ''
       }
       
     },
     data(val) {
-      this.findDataName();
+      if(this.field.id){
+        this.fetchData()
+      }else{
+        this.input5 = ''
+      }
       this.$parent.$emit("input", this.data);
     },
     value: {

@@ -209,11 +209,8 @@
                                                 value: 3,
                                                 label: '3个月'
                                                 },{
-                                                value: 4,
-                                                label: '半年'
-                                                },{
-                                                value: 5,
-                                                label: '一年'
+                                                value: 0,
+                                                label: '无试用期'
                                                 }]}"
                                                 v-model="form.trialTime"
                                             />
@@ -1109,7 +1106,6 @@ export default {
             this.selections = val
         },
         handleCard(){
-            // this.cardPerform = {}
             this.cardPerform = {
                 image:[]
             }
@@ -1124,23 +1120,24 @@ export default {
             this.dialogCardFormVisible = true
             let row = this.checkList[0];
             this.cardPerform = await api_common.resource("hrm/staff/typecard").get({emID:this.staffId,cardType:row});
+            this.checkList = []
         },
         async deleteCard(){
             let rows = this.checkList.map(row=>row)
-            await this.$request.delete('/hrm/staff/card/bluk?ids='+rows.join(','))
+            await this.$request.delete('/hrm/staff/card/bluk?emID='+this.staffId+'&types='+rows.join(','))
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
+            this.checkList = []
         },
         async handleCardFormSubmit(){
             await this.form_validate()
             this.cardPerform.emID = this.form.id;
             let cardPerform = Object.assign({},this.cardPerform)
-            let row = this.selections[0];
-
-            if(this.dialogCard=="inser"){
-                await this.$request.post('/hrm/staff/card',this.cardPerform)
-            }else{
-                await this.$request.put('/hrm/staff/card/'+row.id,this.cardPerform)
-            }
+            await this.$request.post('/hrm/staff/card',this.cardPerform)
+            // if(this.dialogCard=="inser"){
+            //     await this.$request.post('/hrm/staff/card',this.cardPerform)
+            // }else{
+            //     await this.$request.put('/hrm/staff/card',this.cardPerform)
+            // }
             this.dialogCardFormVisible = false
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
         },
@@ -1242,7 +1239,7 @@ export default {
         async tabClick(v){
             this.tab_label  = v.label
  
-            console.log(v,'v')
+            // console.log(v,'v')
         },
         selectNation(){
             this.form.nation = this.nationData.find(o=>o.label===this.form._nation+'族').value
