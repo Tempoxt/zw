@@ -24,7 +24,7 @@
                   v-for="route in sideBarMenu"
                   :key="route.url"
                   :item="route"
-                  :base-path="$route['matched'][0].path"
+                  :base-path="basePath"
                   :parentRoute="!!$route"
                 />
               </template>
@@ -37,10 +37,17 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import SidebarItem from "./SidebarItem";
+import { setTimeout } from 'timers';
 
 export default {
   components: { SidebarItem },
   watch:{
+    $route(){
+      this.basePath = null
+      this.$nextTick(()=>{
+        this.basePath = this.$route['matched'][0].path
+      })
+    },
     sideBarMenu:{
       deep:true,
       handler(){
@@ -65,6 +72,7 @@ export default {
   },
   data() {
     return {
+      basePath:this.$route['matched'][0].path,
       isShow:true
     };
   }
