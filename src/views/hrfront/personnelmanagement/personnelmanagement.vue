@@ -13,18 +13,18 @@
             >
             <div>
                 <el-form ref="form" :model="form" label-width="100px" v-loading="loading2" :rules="rules">
-                    <el-tabs @tab-click="tabClick">
-                        <el-tab-pane label="个人信息">
+                    <el-tabs @tab-click="tabClick" v-model="activeName" >
+                        <el-tab-pane label="个人信息" name="first">
                             <div class="line-boxs">
                             <el-row :gutter="40">
                                 <el-col :span="12">
                                     <el-row :gutter="0">
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'姓名'}" v-model="form.chineseName" prop="chineseName"/>
+                                            <form-render :type="`input`" :field="{name:'姓名'}" v-model="form.chineseName" prop="chineseName" :disabled="!isInsert"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'身份证号'}" v-model="form.idCard" @change="fetchProvinse" prop="idCard"/>
+                                            <form-render :type="`input`" :field="{name:'身份证号'}" v-model="form.idCard" @change="fetchProvinse" prop="idCard" :disabled="!isInsert"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
@@ -32,7 +32,7 @@
                                                 :type="`select`"
                                                 :field="{name:'民族',options:nationData}"
                                                 v-model="form.nation"
-                                                prop="nation"
+                                                prop="nation" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <!-- <el-col :span="24">
@@ -47,7 +47,7 @@
                                             :type="`day`"
                                             :field="{name:'出生年月'}"
                                             v-model="form.birthday"
-                                            prop="birthday"
+                                            prop="birthday" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -55,7 +55,7 @@
                                             :type="`day`"
                                             :field="{name:'证件生效'}"
                                             v-model="form.stayBegin"
-                                            prop="stayBegin"
+                                            prop="stayBegin" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -63,7 +63,7 @@
                                             :type="`day`"
                                             :field="{name:'证件失效'}"
                                             v-model="form.stayEnd"
-                                            prop="stayEnd"
+                                            prop="stayEnd" :disabled="!isInsert"
                                             />
                                         </el-col>   
                                     </el-row>
@@ -71,10 +71,10 @@
                                 <el-col :span="12">
                                     <el-row :gutter="0">
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'签发机关'}" v-model="form.qfjg"  prop="qfjg"/>
+                                            <form-render :type="`input`" :field="{name:'签发机关'}" v-model="form.qfjg"  prop="qfjg" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'住址'}" v-model="form.contactAddr" prop="contactAddr"/>
+                                            <form-render :type="`input`" :field="{name:'住址'}" v-model="form.contactAddr" prop="contactAddr" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -87,7 +87,7 @@
                                                 label: '女'
                                                 }]}"
                                                 v-model="form.sex"
-                                                prop="sex"
+                                                prop="sex" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -106,21 +106,21 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="入职信息">
+                        <el-tab-pane label="入职信息" name="second">
                             <div class="line-boxs">
                             <el-row :gutter="40">
                                 <el-col :span="12">
                                     <el-row :gutter="20">
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'员工工号'}" v-model="form.employeeCode" placeholder="自动生成"/>
+                                        <el-col :span="24" v-if="!isInsert">
+                                            <form-render :type="`input`" :field="{name:'员工工号'}" :disabled="true" v-model="form.employeeCode" placeholder="自动生成"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany"/>
+                                            <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany" :disabled="!isInsert"/>
                                             <!-- <form-render :type="`input`" :field="{name:'所属公司'}" v-model="form.officeaddressname"/> -->
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department"/>
+                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department" :disabled="!isInsert"/>
 
                                         <!-- <form-render
                                                 :type="`select`"
@@ -130,7 +130,7 @@
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -139,7 +139,7 @@
                                                 prop="principalship"
                                                 :type="`select`"
                                                 :field="{name:'所任职务',options:jobtitlesData}"
-                                                v-model="form.principalship"
+                                                v-model="form.principalship" :disabled="!isInsert"
                                             />
                                             <!-- <el-form-item label="所任职务">
                                                 <el-select v-model="form.principalship" placeholder="请选择" >
@@ -158,7 +158,7 @@
                                                 prop="teamID"
                                                 :type="`select`"
                                                 :field="{name:'智能班组',options:teamidData}"
-                                                v-model="form.teamID"
+                                                v-model="form.teamID" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -166,7 +166,7 @@
                                                 prop="workGroup"
                                                 :type="`select`"
                                                 :field="{name:'工作地点',options:workGroupData}"
-                                                v-model="form.workGroup"
+                                                v-model="form.workGroup" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -185,7 +185,7 @@
                                                 value: 4,
                                                 label: '返聘'
                                                 }]}"
-                                                v-model="form.workNature"
+                                                v-model="form.workNature" :disabled="!isInsert"
                                             />
                                         </el-col>
                                     </el-row>
@@ -212,7 +212,7 @@
                                                 value: 0,
                                                 label: '无试用期'
                                                 }]}"
-                                                v-model="form.trialTime"
+                                                v-model="form.trialTime" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -237,7 +237,7 @@
                                                 value: 6,
                                                 label: '无限期'
                                                 }]}"
-                                                v-model="form.contractTime"
+                                                v-model="form.contractTime" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -250,19 +250,19 @@
                                                 value: 1,
                                                 label: '不需考勤'
                                                 }]}"
-                                                v-model="form.checkWorkType"
+                                                v-model="form.checkWorkType" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
                                             <el-form-item label="介绍人">
                                             <el-select
                                                 v-model="form.introducer"
-                                                
                                                 filterable
+                                                clearable
                                                 remote
                                                 reserve-keyword
                                                 placeholder="请输入关键词"
-                                                :remote-method="remoteMethod"
+                                                :remote-method="remoteMethod" :disabled="!isInsert"
                                                 >
                                                 <el-option
                                                 v-for="item in introducerData"
@@ -283,7 +283,7 @@
                                                 value: 401,
                                                 label: '正式'
                                                 }]}"
-                                                v-model="form.fileType"
+                                                v-model="form.fileType" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -296,12 +296,12 @@
                                                 value: 1,
                                                 label: '分配'
                                                 }]}"
-                                                v-model="form.liveDormitory"
+                                                v-model="form.liveDormitory" :disabled="!isInsert"
                                             />
                                         </el-col>
                                         
                                         <el-col :span="24" v-if="form.liveDormitory==0">
-                                        <form-render :type="`input`" :field="{name:'现住地址'}" v-model="form.nowAddress" placeholder="不分配宿舍请填写"/>
+                                        <form-render :type="`input`" :field="{name:'现住地址'}" v-model="form.nowAddress" placeholder="不分配宿舍请填写"  :disabled="!isInsert"/>
                                         </el-col>
                                     </el-row>
                                 </el-col>
@@ -309,7 +309,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="联系方式" v-if="!isInsert">
+                        <el-tab-pane label="联系方式" v-if="!isInsert" name="third">
                             <div class="line-boxs">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
@@ -344,7 +344,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="合同信息" v-if="!isInsert">
+                        <el-tab-pane label="合同信息" v-if="!isInsert" name="fourth">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleContract">
                                     <i class="icon iconfont icon-tianjia"></i>
@@ -396,7 +396,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="银行卡信息">
+                        <el-tab-pane label="银行卡信息" name="fifth">
                             <div class="line-boxs">
                                 <el-row :gutter="40">
                                     <el-col :span="12">
@@ -417,7 +417,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="证件管理" v-if="!isInsert">
+                        <el-tab-pane label="证件管理" v-if="!isInsert" name="sixth">
                             <div class="line-boxs">
                                 <el-button type="button" class="el-button el-button--default el-button--small" @click="handleCard">
                                     <i class="icon iconfont icon-tianjia"></i>
@@ -618,7 +618,7 @@
                     </Row>
                 </div>
                 <Divider v-if="profileData.contractRecords!=''"/>
-                <p class="info" v-if="profileData.contractRecords!=''">合同管理 <i  @click="showContactInfo" class="icon iconfont icon-bianji editIcon"></i></p>
+                <p class="info" v-if="profileData.contractRecords!=''">合同管理 <i  @click="showContractInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
                     <Row class="mb20" v-for="item in profileData.contractRecords" :key="item.id">
                         <Col span="12">
@@ -640,7 +640,7 @@
                     </Row>
                 </div>
                 <Divider/>
-                <p class="info">银行卡信息 <i @click="showContactInfo" class="icon iconfont icon-bianji editIcon"></i></p>
+                <p class="info">银行卡信息 <i @click="showBankInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
                     <Row>
                         <Col span="12">
@@ -654,7 +654,7 @@
                     </Row>
                 </div>
                 <Divider v-if="profileData.cardRecords!=''" />
-                <p class="info" v-if="profileData.cardRecords!=''">证件管理</p>
+                <p class="info" v-if="profileData.cardRecords!=''">证件管理 <i @click="showCardInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile flexImg">
                     <div class="idCard" v-for="item in profileData.cardRecords" :key="item.id">
                         <p class="imgInfo">{{item.cardName}}</p>
@@ -943,7 +943,8 @@ export default {
                 department:'',
                 team:'',
                 workGroup:'',
-                onDutyTime:dayjs().format('YYYY-MM-DD')
+                onDutyTime:dayjs().format('YYYY-MM-DD'),
+                bankValue:1
             }
         }
         return {
@@ -1056,7 +1057,8 @@ export default {
             bank:{},
             cardType:[],
             checkList:[],
-            checkbox:''
+            checkbox:'',
+            activeName:'first',
             // pickerOptions1: {:picker-options="pickerOptions1"
             //     disabledDate(time) {
             //         return time.getTime() > Date.now();
@@ -1133,11 +1135,6 @@ export default {
             this.cardPerform.emID = this.form.id;
             let cardPerform = Object.assign({},this.cardPerform)
             await this.$request.post('/hrm/staff/card',this.cardPerform)
-            // if(this.dialogCard=="inser"){
-            //     await this.$request.post('/hrm/staff/card',this.cardPerform)
-            // }else{
-            //     await this.$request.put('/hrm/staff/card',this.cardPerform)
-            // }
             this.dialogCardFormVisible = false
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
         },
@@ -1203,19 +1200,34 @@ export default {
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
-        async showPersonInfo(){
+        showPersonInfo(){
             this.dialogStatus = 'inserts';
-            this.tab_label = "个人信息"
+            this.activeName = "first"
             this.getDialog()
         },
-        async showEntryInfo(){
+        showEntryInfo(){
             this.dialogStatus = 'inserts';
-            this.tab_label = "入职信息"
+            this.activeName = "second"
             this.getDialog()
         },
-        async showContactInfo(){
+        showContactInfo(){
             this.dialogStatus = 'inserts';
-            this.tab_label = "联系方式"
+            this.activeName = "third"
+            this.getDialog()
+        },
+        showContractInfo(){
+            this.dialogStatus = 'inserts';
+            this.activeName = "fourth"
+            this.getDialog()
+        },
+        showBankInfo(){
+            this.dialogStatus = 'inserts';
+            this.activeName = "fifth"
+            this.getDialog()
+        },
+        showCardInfo(){
+            this.dialogStatus = 'inserts';
+            this.activeName = "sixth"
             this.getDialog()
         },
         cellStyle({row, column, rowIndex, columnIndex}){
@@ -1257,6 +1269,7 @@ export default {
             this.Device.startFun()
         },
         async add(){
+            this.activeName = 'first'
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
             })
@@ -1271,6 +1284,7 @@ export default {
         },
         async edit(){
          
+            this.activeName = 'first'
             this.form = this.defaultForm()
             // this.$nextTick(()=>{
             //     this.$refs['form'].clearValidate()
