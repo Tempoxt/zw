@@ -69,6 +69,17 @@ export default {
             }else{
                 return <span>在职</span>
             }
+        },
+        'checkState'(){
+            if(this.row.checkState==1){
+                return <span>待分配</span>
+            }else if(this.row.checkState==2){
+                return <span>待入住</span>
+            }else if(this.row.checkState==3){
+                return <span>待审核搬离</span>
+            }else if(this.row.checkState==4){
+                return <span>待搬离</span>
+            }
         }
     },
     render(){

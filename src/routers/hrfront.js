@@ -208,4 +208,13 @@ export default [{
             title: '招聘档案'
         }
     },
+    {
+        name: 'checklistview',
+        component: () =>
+            import ('@/views/hrfront/dormitory/checklistview'),
+        meta: {
+            title: '入住待处理清单'
+        }
+    },
+    
 ]
