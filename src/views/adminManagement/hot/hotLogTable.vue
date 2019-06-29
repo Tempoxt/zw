@@ -109,7 +109,7 @@
               <form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form.chineseName" disabled/>
             </el-col>
              <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'有效起始日期'}" v-model="form.stayStart" disabled/>
+              <form-render :type="`input`" :field="{name:'有效起始日期'}" v-model="form.stayStart"/>
             </el-col>
              <el-col :span="24">
               <form-render :type="`day`" :field="{name:'有效结束日期'}" v-model="form.stayEnd"/>
