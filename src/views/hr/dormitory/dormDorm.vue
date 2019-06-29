@@ -184,7 +184,7 @@ export default {
     },
     async add(){
       this.form.electricCut=0
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).map(o=>{
+        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
             return {
                 label:o.dormName,
                 value:o.id
@@ -210,7 +210,7 @@ export default {
         this.fetchTableData()
     },
     async edit(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).map(o=>{
+        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
             return {
                 label:o.dormName,
                 value:o.id
