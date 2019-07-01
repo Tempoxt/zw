@@ -96,7 +96,6 @@ export default {
         filterText(val) {
             this.$refs.tree2.filter(val);
         },
-       
     },
     computed:{
         disable(){
@@ -200,6 +199,13 @@ export default {
 .flexSpace{
     width: 100%;
 }
+.flexSpace:hover .icon-lajitong,.flexSpace:hover .icon-bianji,.flexSpace:active .icon-lajitong,.flexSpace:active .icon-bianji{
+    color: #CCD5DB
+}
+.theme-0BB2D4 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-lajitong,
+.theme-0BB2D4 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-bianji{
+    color: #CCD5DB
+}
 .addIcon{
     border: 1px solid #E4EAEC;
     padding: 0 10px;border-radius:4px;
@@ -210,7 +216,8 @@ export default {
 }
 .icon-bianji,.icon-lajitong{
     font-size: 14px;
-    color: #CCD5DB
+    color: transparent
+    // color: #CCD5DB
 }
 .ml15{
     margin-left: 15px;
