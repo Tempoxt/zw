@@ -53,6 +53,7 @@ import dayjs from 'dayjs'
 const api_resource = api_common.resource("productrecheck/scanrecord");
 export default {
     mixins: [table_mixin],
+    props:['proid'],
     components:{
         dateLap
     },
@@ -65,8 +66,18 @@ export default {
             table_height:window.innerHeight-296,
         };
     },
+    watch:{
+        proid(){
+            this.fetchTableData()
+        }
+    },
     methods: {
         async fetchTableData() {
+            if(!this.proid){
+                this.proid = 0
+            }
+            this.table_loading = true;
+            this.table_form.customer = this.proid
             this.table_loading = true;
             const {rows , total }= await api_resource.get(this.table_form);
             this.table_data  = rows

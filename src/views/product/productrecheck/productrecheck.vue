@@ -45,7 +45,8 @@
         <el-col :span="19">
             <el-tabs v-model="activeName"  class="table-tabs">
                 <el-tab-pane label="产品信息登记" name="first">
-                    <productInfo :proid="proid"/>
+                    <productInfo :proid="proid" :changes="changes"/>
+                  
                 </el-tab-pane>
                 <el-tab-pane label="扫码记录" name="second" lazy>
                     <scanRecord :proid="proid"/>
@@ -58,8 +59,8 @@
       :visible.sync="dialogFormVisible"
       class="public-dialog"
       v-el-drag-dialog
-    >
-    <!-- width:700px; -->
+        >
+        <!-- width:700px; -->
       <div style="margin:30px auto;">
         <el-form ref="form" :model="form" label-width="100px" :rules="rules">
           <el-row :gutter="20">
@@ -103,6 +104,13 @@ export default {
                 return false
             }
             return true
+        },
+        disabeld(){
+            if(this.form.customer==''||this.form.productCode==''||this.form.quickMarkLen==''||this.form.fixPrefix==''){
+                return true
+            }else{
+                return false
+            }
         }
     },
     data(){
@@ -111,12 +119,14 @@ export default {
             view_activeName:'',
             menu:[],
             proid:'',
+            changes:false,
             activeName:'first',
             data2:[],
             filterText:'',
             name:'',
             api_resource,
             dialogFormVisible:false,
+            dialogForm1Visible:false,
             form:{
                 name:''
             },
@@ -124,14 +134,35 @@ export default {
                 name:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
-            }
+            },
+            // loading: false,
+            // form1:{},
+            // api_resource,
+            // queryDialogFormVisible:true,
+            // table_height:window.innerHeight-296,
+            // dialogFormVisible:false,
+            // customId:'',
+            // customData:[],
+            // rules1:{
+            //     customer:[
+            //         { required: true, message: '请输入', trigger: 'blur' },
+            //     ],
+            //     fixPrefix:[
+            //         { required: true, message: '请输入', trigger: 'blur' },
+            //     ],
+            //     quickMarkLen:[
+            //         { required: true, message: '请输入', trigger: 'blur' },
+            //     ],
+            //     productCode:[
+            //         { required: true, message: '请输入', trigger: 'blur' },
+            //     ],
+            // }
         }
     },
     methods:{
         handleChangeNode(val){
             this.proid = val.id
             this.name = val.name
-            console.log(this.proid,this.name,'************')
         },
         filterNode(value, data) {
             if (!value) return true;
@@ -146,7 +177,6 @@ export default {
             this.dialogStatus = 'inse'
             this.dialogFormVisible = true;
             this.form = await this.$request.get('/productrecheck/customer/'+data.id)
-            console.log(this.form,'fff')
         },
         async deleteCustom(data){
             await this.$request.delete('/productrecheck/customer/'+data.id)
@@ -161,11 +191,59 @@ export default {
                 await this.$request.put('/productrecheck/customer/'+this.form.id,{name:this.form.name})
             }
             this.dialogFormVisible = false
+            this.changes = true
+            console.log(this.changes,'dddddd')
             this.data2 = await this.$request.get('productrecheck/customer');
-        }
+        },
+        // async fetchTableData() {
+        //     this.table_loading = true;
+        //     const {rows , total }= await api_resource.get(this.table_form);
+        //     this.table_data  = rows
+        //     this.table_form.total = total
+        //     setTimeout(() => {
+        //         this.table_loading = false;
+        //     }, 300);
+        // },
+        // async fetchCustom(){
+        //     this.customData = (await this.$request.get('productrecheck/allcustomer')).map(o=>{return {label:o.name,value:o.id}});
+        // },
+        // add(){
+        //     this.form = {}
+        //     if(this.proid ==''||this.proid =='0'){
+        //         this.form.customer = ''
+        //     }else{
+        //         this.form.customer = this.proid
+        //     }
+        //     this.dialogFormVisible = true
+        //     this.fetchCustom()
+        // },
+        // async edit(){
+        //     this.proid = ''
+        //     this.dialogStatus=='ins'
+        //     this.fetchCustom()
+        //     this.dialogFormVisible = true;
+        //     let row = this.table_selectedRows[0];
+        //     this.form = await api_resource.find(row.id);
+        // },
+        // async handleForm1Submit(){
+        //     if(this.dialogStatus=='insert'){
+        //         await api_resource.create(this.form)
+        //     }else{
+        //         await this.$request.put('/productrecheck/customer/'+this.form.id,this.form)
+        //     }
+        //     this.dialogFormVisible = false
+        //     this.data2 = await this.$request.get('productrecheck/customer');
+        //     this.fetchTableData()
+        // }
     },
     
     async created(){
+        // const { field, action,table } = await api_common.menuInit("productrecheck/product");
+        // this.table_field = field;
+        // this.table_actions = action;
+        // this.table_config = table
+        // this.fetchTableData();
+        // console.log(this.proid,'pppppp')
         this.data2 = await this.$request.get('productrecheck/customer');
     }
 }

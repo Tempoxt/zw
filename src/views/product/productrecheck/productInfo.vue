@@ -79,7 +79,7 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("productrecheck/product");
 export default {
     mixins: [table_mixin],
-    props:['proid'],
+    props:['proid','changes'],
     data() {
         return {
             loading: false,
@@ -106,6 +106,14 @@ export default {
             }
         };
     },
+    watch:{
+        changes(){
+            this.fetchTableData()
+        },
+        proid(){
+            this.fetchTableData()
+        }
+    },
     computed:{
         disabeld(){
             if(this.form.customer==''||this.form.productCode==''||this.form.quickMarkLen==''||this.form.fixPrefix==''){
@@ -117,7 +125,13 @@ export default {
     },
     methods: {
         async fetchTableData() {
+            console.log(this.proid,'pppp')
+            if(!this.proid){
+                this.proid = 0
+                // return
+            }
             this.table_loading = true;
+            this.table_form.customer = this.proid
             const {rows , total }= await api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
@@ -150,7 +164,7 @@ export default {
             if(this.dialogStatus=='insert'){
                 await api_resource.create(this.form)
             }else{
-                await this.$request.put('/productrecheck/customer/'+this.form.id,this.form)
+                await this.$request.put('/productrecheck/product/'+this.form.id,this.form)
             }
             this.dialogFormVisible = false
             this.data2 = await this.$request.get('productrecheck/customer');
@@ -163,6 +177,6 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
-    }
+    },
 };
 </script>
