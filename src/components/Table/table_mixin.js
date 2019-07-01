@@ -358,7 +358,7 @@ export default {
           center:true
       });
       try {
-        await new Promise(resolve=>setTimeout(resolve,3000))
+        // await new Promise(resolve=>setTimeout(resolve,3000))
         await request.post(this.importUploadUrl,form)
         this.fetchTableData()
         this.$message({
