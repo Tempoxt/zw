@@ -61,7 +61,7 @@ export default {
       },
       table_sort:{},
       form_multiple:false,
-      
+      importLoading:false
     }
   },
   computed: {
@@ -351,7 +351,14 @@ export default {
       var form = new FormData();
       form.append('the_file',files[0])
       this.importLoading = true
+      MessageBox.close()
+      MessageBox.alert(
+          <div v-loading={true}><br /></div>, '导入中', {
+          showConfirmButton:false,
+          center:true
+      });
       try {
+        await new Promise(resolve=>setTimeout(resolve,3000))
         await request.post(this.importUploadUrl,form)
         this.fetchTableData()
         this.$message({
@@ -372,12 +379,11 @@ export default {
       
     },
     import(){
-      const {
-        handleImportChange
+      let {
+        handleImportChange,
       } = this
-
       MessageBox.alert(
-          <el-button-group class="table-import-upload" v-loading={this.importLoading}>
+          <el-button-group class="table-import-upload" ref="import">
             <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
             <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
           </el-button-group>
