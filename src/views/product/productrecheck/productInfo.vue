@@ -125,10 +125,8 @@ export default {
     },
     methods: {
         async fetchTableData() {
-            console.log(this.proid,'pppp')
             if(!this.proid){
                 this.proid = 0
-                // return
             }
             this.table_loading = true;
             this.table_form.customer = this.proid

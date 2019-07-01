@@ -135,28 +135,6 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
             },
-            // loading: false,
-            // form1:{},
-            // api_resource,
-            // queryDialogFormVisible:true,
-            // table_height:window.innerHeight-296,
-            // dialogFormVisible:false,
-            // customId:'',
-            // customData:[],
-            // rules1:{
-            //     customer:[
-            //         { required: true, message: '请输入', trigger: 'blur' },
-            //     ],
-            //     fixPrefix:[
-            //         { required: true, message: '请输入', trigger: 'blur' },
-            //     ],
-            //     quickMarkLen:[
-            //         { required: true, message: '请输入', trigger: 'blur' },
-            //     ],
-            //     productCode:[
-            //         { required: true, message: '请输入', trigger: 'blur' },
-            //     ],
-            // }
         }
     },
     methods:{
@@ -185,65 +163,22 @@ export default {
         },
         async handleFormSubmit(){
             if(this.dialogStatus=='insert'){
-                await api_resource.create(this.form)
-                this.$message.success('创建成功');
+                let mess = await api_resource.create(this.form)
+                if(mess.name!=this.form.name){
+                    this.$message.error(mess.name[0]);
+                }else{
+                    this.$message.success('创建成功');
+                } 
             }else{
                 await this.$request.put('/productrecheck/customer/'+this.form.id,{name:this.form.name})
             }
             this.dialogFormVisible = false
             this.changes = true
-            console.log(this.changes,'dddddd')
             this.data2 = await this.$request.get('productrecheck/customer');
         },
-        // async fetchTableData() {
-        //     this.table_loading = true;
-        //     const {rows , total }= await api_resource.get(this.table_form);
-        //     this.table_data  = rows
-        //     this.table_form.total = total
-        //     setTimeout(() => {
-        //         this.table_loading = false;
-        //     }, 300);
-        // },
-        // async fetchCustom(){
-        //     this.customData = (await this.$request.get('productrecheck/allcustomer')).map(o=>{return {label:o.name,value:o.id}});
-        // },
-        // add(){
-        //     this.form = {}
-        //     if(this.proid ==''||this.proid =='0'){
-        //         this.form.customer = ''
-        //     }else{
-        //         this.form.customer = this.proid
-        //     }
-        //     this.dialogFormVisible = true
-        //     this.fetchCustom()
-        // },
-        // async edit(){
-        //     this.proid = ''
-        //     this.dialogStatus=='ins'
-        //     this.fetchCustom()
-        //     this.dialogFormVisible = true;
-        //     let row = this.table_selectedRows[0];
-        //     this.form = await api_resource.find(row.id);
-        // },
-        // async handleForm1Submit(){
-        //     if(this.dialogStatus=='insert'){
-        //         await api_resource.create(this.form)
-        //     }else{
-        //         await this.$request.put('/productrecheck/customer/'+this.form.id,this.form)
-        //     }
-        //     this.dialogFormVisible = false
-        //     this.data2 = await this.$request.get('productrecheck/customer');
-        //     this.fetchTableData()
-        // }
     },
     
     async created(){
-        // const { field, action,table } = await api_common.menuInit("productrecheck/product");
-        // this.table_field = field;
-        // this.table_actions = action;
-        // this.table_config = table
-        // this.fetchTableData();
-        // console.log(this.proid,'pppppp')
         this.data2 = await this.$request.get('productrecheck/customer');
     }
 }
