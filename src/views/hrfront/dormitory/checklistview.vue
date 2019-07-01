@@ -122,7 +122,7 @@ export default {
     async audit({row}){
       console.log(row)
         await this.$request.put('dormitory/cancelcheckstate',{
-            checkState:row.checkState,
+            selectState:row.selectState,
             employeeCode:row.employeeCode
         })
         this.fetchTableData()
@@ -135,7 +135,7 @@ export default {
     },
     async fetchTableData() {
       this.table_loading = true;
-      this.table_form.checkState = this.status
+      this.table_form.selectState = this.status
       const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
       this.table_form.total = total

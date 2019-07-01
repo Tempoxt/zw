@@ -117,7 +117,7 @@ export default {
             dialogStatus:'insert',
             view_activeName:'',
             menu:[],
-            proid:'',
+            proid:0,
             changes:false,
             activeName:'first',
             data2:[],
@@ -170,15 +170,17 @@ export default {
                 } 
             }else{
                 await this.$request.put('/productrecheck/customer/'+this.form.id,{name:this.form.name})
+                
+                this.changes = true
             }
             this.dialogFormVisible = false
-            this.changes = true
             this.data2 = await this.$request.get('productrecheck/customer');
         },
     },
     
     async created(){
         this.data2 = await this.$request.get('productrecheck/customer');
+        this.proid = this.data2[0].id
     }
 }
 </script>

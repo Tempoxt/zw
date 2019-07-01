@@ -23,7 +23,7 @@
                             <form-render :type="`input`" prop="quickMarkLen" :field="{name:'二维码长度'}" v-model="form.quickMarkLen"/>
                         </el-col>
                         <el-col :span="24">
-                            <form-render :type="`input`" prop="fixPrefix" :field="{name:'固定前缀'}" v-model="form.fixPrefix"/>
+                            <form-render :type="`input`" prop="fixPrefix" maxlength="8" :field="{name:'固定前缀'}" v-model="form.fixPrefix"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -107,10 +107,10 @@ export default {
         };
     },
     watch:{
-        changes(){
+        proid(){
             this.fetchTableData()
         },
-        proid(){
+        changes(){
             this.fetchTableData()
         }
     },
@@ -125,9 +125,9 @@ export default {
     },
     methods: {
         async fetchTableData() {
-            if(!this.proid){
-                this.proid = 0
-            }
+            // if(!this.proid){
+            //     return 
+            // }
             this.table_loading = true;
             this.table_form.customer = this.proid
             const {rows , total }= await api_resource.get(this.table_form);
@@ -151,7 +151,6 @@ export default {
             this.fetchCustom()
         },
         async edit(){
-            this.proid = ''
             this.dialogStatus=='ins'
             this.fetchCustom()
             this.dialogFormVisible = true;
