@@ -7,6 +7,8 @@ import hrfront from './routers/hrfront'
 import system from './routers/system'
 import salary from './routers/salary'
 import financial from './routers/financial'
+import productrecheck from './routers/productrecheck'
+import cost from './routers/cost'
 import setting from './routers/setting'
 import adminManagement from './routers/adminManagement'
 Vue.use(Router)
@@ -18,6 +20,8 @@ let asyncRoutes = [
     ...setting,
     ...financial,
     ...adminManagement,
+    ...productrecheck,
+    ...cost
 ]
 
 let router = new Router({
