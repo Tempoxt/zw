@@ -14,7 +14,7 @@
                 <el-form ref="form" :model="form" label-width="100px" :rules="rules">
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <form-render :type="`select`" prop="customer" :field="{name:'客户名称',options:customData}" v-model="form.customer"/>
+                            <form-render :type="`select`" prop="customer" :field="{name:'客户名称',options:customData}" :disabled="dialogStatus!=='insert'" v-model="form.customer"/>
                         </el-col>
                         <el-col :span="24">
                             <form-render :type="`input`" prop="productCode" :field="{name:'产品编号'}" v-model="form.productCode"/>
@@ -23,7 +23,7 @@
                             <form-render :type="`input`" prop="quickMarkLen" :field="{name:'二维码长度'}" v-model="form.quickMarkLen"/>
                         </el-col>
                         <el-col :span="24">
-                            <form-render :type="`input`" prop="fixPrefix" maxlength="8" :field="{name:'固定前缀'}" v-model="form.fixPrefix"/>
+                            <form-render :type="`input`" prop="fixPrefix" :field="{name:'固定前缀'}" v-model="form.fixPrefix"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -96,6 +96,7 @@ export default {
                 ],
                 fixPrefix:[
                     { required: true, message: '请输入', trigger: 'blur' },
+                    { max: 8, message:'请输入小于8位字符', trigger:'blur'},
                 ],
                 quickMarkLen:[
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -158,6 +159,7 @@ export default {
             this.form = await api_resource.find(row.id);
         },
         async handleFormSubmit(){
+            await this.form_validate()
             if(this.dialogStatus=='insert'){
                 await api_resource.create(this.form)
             }else{
