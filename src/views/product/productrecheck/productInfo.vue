@@ -140,6 +140,7 @@ export default {
         },
         async edit(){
             this.proid = ''
+            this.dialogStatus=='ins'
             this.fetchCustom()
             this.dialogFormVisible = true;
             let row = this.table_selectedRows[0];
@@ -149,7 +150,7 @@ export default {
             if(this.dialogStatus=='insert'){
                 await api_resource.create(this.form)
             }else{
-                await this.$request.put('/productrecheck/customer/'+this.form.id,{name:this.form.name})
+                await this.$request.put('/productrecheck/customer/'+this.form.id,this.form)
             }
             this.dialogFormVisible = false
             this.data2 = await this.$request.get('productrecheck/customer');
