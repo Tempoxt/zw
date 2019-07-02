@@ -119,7 +119,7 @@ export default {
  .icon-guanbi1{
   margin-right: 10px;
  }
- .icon-qiyong{
+ .imgItem .icon-qiyong{
    color: #1FD361;margin-right: 10px;
  }
  .avatar{

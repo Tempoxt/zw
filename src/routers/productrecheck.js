@@ -12,5 +12,12 @@ export default [
         meta: {
             title: 'GM19015'
         }
+    },
+    {
+        name: 'OperateList',
+        component: () => import ('@/views/product/operate/operate'),
+        meta: {
+            title: '操作名单'
+        }
     }
  ]

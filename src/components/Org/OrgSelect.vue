@@ -4,7 +4,7 @@
             <el-tab-pane label="同部门" name="first">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="10">
-                        <Org2 ref="sameDepartment"  style="height:400px" getApi="/org/samedeptselect" :filter_mark="filter_mark" same="false" @change="changeSameOrg"/>
+                        <Org2 ref="sameDepartment"  style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" same="false" @change="changeSameOrg"/>
                     </el-col>
                     <el-col :span="2" style="height:100%">
                         <div class="control">
@@ -123,6 +123,9 @@ export default {
                 this.result.push(this.select)
                 this.$set(this.select,'disabled',true)
                 this.select.disabled = true
+            }
+            if(this.select.subs==1){
+                this.$set(this.select,'disabled',true)
             }
         },
         remove(){

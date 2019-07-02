@@ -1,0 +1,145 @@
+<template>
+    <ui-table ref="table" 
+        :table_column="table_field" 
+        :table_query.sync="table_form.query"
+        @query="querySubmit"
+        >
+        <el-dialog
+            :title="dialogStatus==='insert'?'添加':'编辑'"
+            :visible.sync="dialogFormVisible"
+            class="public-dialog"
+            v-el-drag-dialog
+            >
+            <div>
+                <OrgSelect v-model="form.hrmData" searchApi='hrm/oprpartstaff' filter_mark="operatorList" ref="OrgSelect" v-if="dialogFormVisible"/>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleFormSubmit" :disabled="disabeld">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <table-header
+            :table_actions="table_actions"
+            :table_selectedRows="table_selectedRows"
+            @action="handleAction"
+            :table_form.sync="table_form"
+            :table_column="table_field"
+        ></table-header>
+        <el-table
+            @selection-change="handleChangeSelection"
+            :data="table_data"
+            border
+            style="width: 100%"
+            v-loading="table_loading"
+            :header-cell-style="headerCellStyle"
+            :height="table_height"
+            @header-dragend="table_dragend"
+            @sort-change="table_sort_change"
+            >
+            <el-table-column 
+                type="selection" 
+                width="60" 
+                class-name="table-column-disabled"
+                :selectable="table_disable_selected"
+                >
+            </el-table-column>
+            
+            <el-table-column type="index" :index="indexMethod"/>
+            <each-table-column :table_field="table_field"/>
+        </el-table>
+        <table-pagination 
+            :total="table_form.total" 
+            :pagesize.sync="table_form.pagesize"
+            :currentpage.sync="table_form.currentpage"
+            @change="fetchTableData"
+            :table_config="table_config"
+        />
+  </ui-table>
+</template>
+<script>
+import * as api_common from "@/api/common";
+import table_mixin from "@c/Table/table_mixin";
+import OrgSelect from '@/components/Org/OrgSelect'
+const api_resource = api_common.resource("operatelist/operatelist");
+export default {
+    mixins: [table_mixin],
+    props:['orgid'],
+    components:{
+      OrgSelect
+    },
+    data() {
+        return {
+            loading: false,
+            form:{},
+            api_resource,
+            queryDialogFormVisible:true,
+            table_height:window.innerHeight-296,
+            dialogFormVisible:false,
+            customId:'',
+            customData:[],
+        };
+    },
+    watch:{
+        orgid(){
+            this.fetchTableData()
+        }
+    },
+    computed:{
+        disabeld(){
+            if(this.form.customer==''||this.form.productCode==''||this.form.quickMarkLen==''||this.form.fixPrefix==''){
+                return true
+            }else{
+                return false
+            }
+        }
+    },
+    methods: {
+        async fetchTableData() {
+            // if(!this.orgid){
+            //     return 
+            // }
+            this.table_loading = true;
+            this.table_form.orgid = this.orgid
+            const {rows , total }= await api_resource.get(this.table_form);
+            this.table_data  = rows
+            this.table_form.total = total
+            setTimeout(() => {
+                this.table_loading = false;
+            }, 300);
+        },
+        
+        add(){
+            this.form = {}
+            this.dialogFormVisible = true
+        },
+        async delete(){
+            let row = this.table_selectedRows[0];
+            await this.$request.delete('operatelist/operatelist/'+row.id)
+            this.fetchTableData();
+        },
+        async handleFormSubmit(){
+            let ids1 = this.$refs.OrgSelect.getIdsResult()
+            let ids2 = this.$refs.OrgSelect.getIdsSameResult()
+            if(ids1==''||ids2==''){
+                this.form.hrmData = ids1||ids2
+            }else{
+                this.form.hrmData = ids1+','+ids2
+            }
+            console.log(this.form);
+            await api_resource.create(this.form)
+          
+            this.dialogFormVisible = false
+            this.fetchTableData()
+        }
+    },
+    async created() {
+        const { field, action,table } = await api_common.menuInit("operatelist/operatelist");
+        this.table_field = field;
+        this.table_actions = action;
+        this.table_config = table
+        this.fetchTableData();
+    },
+};
+</script>

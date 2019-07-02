@@ -74,7 +74,9 @@
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
-                                                :type="`input`"
+                                                :type="`textarea`"
+                                                autosize
+                                                :rows='1'
                                                 prop="jobResponsibility"
                                                 filterable
                                                 :field="{name:'岗位职责'}"
@@ -216,28 +218,35 @@
                                             </el-col>
                                             <el-col :span="24">
                                                 <form-render
-                                                    :type="`input`"
+                                                    :type="`textarea`" autosize
+                                                    :rows='1'
                                                     :field="{name:'专业要求'}"
                                                     v-model="form.needMajor"
                                                 /> 
                                             </el-col>
                                             <el-col :span="24">
                                                 <form-render
-                                                    :type="`input`"
+                                                    autosize
+                                                    :rows='1'
+                                                    :type="`textarea`"
                                                     :field="{name:'经验要求'}"
                                                     v-model="form.needWorkExp"
                                                 /> 
                                             </el-col>
                                             <el-col :span="24">
                                                 <form-render
-                                                    :type="`input`"
+                                                    autosize
+                                                    :rows='1'
+                                                    :type="`textarea`"
                                                     :field="{name:'技能要求'}"
                                                     v-model="form.needSkill"
                                                 />
                                             </el-col>
                                             <el-col :span="24">
                                                 <form-render
-                                                    :type="`input`"
+                                                    autosize
+                                                    :rows='1'
+                                                    :type="`textarea`"
                                                     :field="{name:'其它要求'}"
                                                     v-model="form.needElse"
                                                 /> 
@@ -330,12 +339,21 @@ const defaultForm = function(){
     return {
         selectable:0,
         iconName:{},
+        checkWorkType:0,
+        needClass:1
         // department:'',
     }
 }
 export default {
     props:['url'],
     mixins: [table_mixin],
+    watch:{
+        url(){
+            this.api_resource = api_common.resource(this.url)
+            this.fetchMenu()
+            this.fetchTableData()
+        }
+    },
     methods:{
         handleClick(){
            
@@ -393,6 +411,14 @@ export default {
             }
             this.dialogFormVisible = false
             this.fetchTableData()
+        },
+        async fetchMenu(){
+            const { field, action,table } = await api_common.menuInit(
+               this.url,
+            );
+            this.table_field = field;
+            this.table_actions = action;
+            this.table_config = table
         }
     },
     data(){
@@ -569,20 +595,9 @@ export default {
             ]
         }
     },
+    
     async created() {
-        const { field, action,table } = await api_common.menuInit(
-            "recruit/jobmsg",
-        );
-        this.table_field = field;
-        if(this.url == 'recruit/donejobmsg'){
-            this.table_actions = action.filter(o=>['查询'].includes(o.name))
-        }else{
-            this.table_actions = action;
-        }
-        
-
-        this.table_config = table
-
+        this.fetchMenu()
         this.fetchTableData()
     }
 }

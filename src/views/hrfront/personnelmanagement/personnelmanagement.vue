@@ -130,7 +130,7 @@
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team" :disabled="!isInsert"/>
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -158,7 +158,7 @@
                                                 prop="teamID"
                                                 :type="`select`"
                                                 :field="{name:'智能班组',options:teamidData}"
-                                                v-model="form.teamID" :disabled="!isInsert"
+                                                v-model="form.teamID"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -813,10 +813,10 @@
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart"/>
+                                        <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart" @change="changeStart"/>
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" type="day" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
+                                        <form-render prop="contractEnd" placeholder="按照年限自动计算" type="day" :disabled="true" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
                                     </el-col>
                                 </el-row>
                             </el-col>
@@ -976,16 +976,16 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 nation: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 birthday:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 stayBegin:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 stayEnd:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 qfjg:[
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -994,36 +994,33 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 sex:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 department:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 principalship:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 teamID:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
                 workGroup:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ],
             },
             ruleCon:{
-                contractEnd:[
-                    { required: true, message: '请输入', trigger: 'blur' },
-                ],
                 contractStart:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请输入', trigger: 'change' },
                 ],
                 contractName:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 contractType:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请输入', trigger: 'change' },
                 ],
                 contractTime:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请输入', trigger: 'change' },
                 ],
             },
             ruleImg:{
@@ -1101,6 +1098,21 @@ export default {
         }
     },
     methods: {
+        contract_validate(){
+            return new Promise((resolve,reject)=>{
+                this.$refs.contract.validate((valid) => {
+                if(valid){
+                    resolve()
+                }else{
+                    reject()
+                    return false
+                }
+                })
+            })
+        },
+        changeStart(){
+            console.log('sssssss')
+        },
         table_disable(row){
             return !row.lockstate
         },
@@ -1131,7 +1143,7 @@ export default {
             this.checkList = []
         },
         async handleCardFormSubmit(){
-            await this.form_validate()
+            // await this.form_validate()
             this.cardPerform.emID = this.form.id;
             let cardPerform = Object.assign({},this.cardPerform)
             await this.$request.post('/hrm/staff/card',this.cardPerform)
@@ -1157,7 +1169,7 @@ export default {
             this.dialogContractFormVisible = true
         },
         async handleContractFormSubmit(){
-            await this.form_validate()
+            await this.contract_validate()
             this.contract.emID = this.staffId;
             let contract = Object.assign({},this.contract)
             let row = this.selections[0];
