@@ -330,7 +330,7 @@ const defaultForm = function(){
     return {
         selectable:0,
         iconName:{},
-        department:'',
+        // department:'',
     }
 }
 export default {
@@ -365,7 +365,6 @@ export default {
         },
         async edit(){
             this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
-            console.log(this.form,'zxzs')
             const {name,icon} = this.form
             this.form_activeName = 'first'
             this.form.iconName = {
