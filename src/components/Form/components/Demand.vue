@@ -68,7 +68,6 @@ export default {
       console.log(data);
     },
     nodeSelect(data) {
-      console.log(data,'data')
       this.data = data[this.field.field_key || 'id'];
       this.visible = false;
 			this.input5 = data.name
@@ -97,13 +96,10 @@ export default {
   },
   watch: {
     data(val) {
-      console.log(this.field.defaultName,'dddddd')
       if(this.field.defaultName){
 				this.input5 = this.field.defaultName
       }
-      console.log(this.input5)
       this.findDataName();
-      console.log(this.data,'ddaaaa')
       this.$parent.$emit("input", this.data);
     },
     value: {

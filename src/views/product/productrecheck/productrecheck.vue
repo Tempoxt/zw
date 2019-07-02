@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-row class="h-full">
-        <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
+        <el-col :span="5" class="h-full">
             <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
                 <div style="padding:20px">
                     <div class="side-header">
@@ -223,6 +223,9 @@ export default {
 }
 .ml15{
     margin-left: 15px;
+}
+.el-col{
+    border-left: 1px solid #e8e8e8
 }
 </style>
 
