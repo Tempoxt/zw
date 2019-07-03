@@ -1,36 +1,38 @@
 <template>
-    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div style="padding:20px">
-          <div class="side-header">
+	<div>
+		<div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
-              <i slot="suffix" class="el-input__icon el-icon-search"></i>
-            </el-input>
-          
-          </div>
-          <el-tree
-            class="tree"
-            :data="data"
-            :props="{children: 'subs', label: 'name',isLeaf:'leaf' }"
-            node-key="orgid"
-            :filter-node-method="filterNode"
-            ref="treeSame"
-            :highlight-current="true"
-            :check-on-click-node="false"
-            @node-click="handleChangeNode"
-            :expand-on-click-node="false"
-            :load="loadNode1"
-            lazy
-          >
-            <span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`">
-              <span v-if="data.subs === 1" class="icon iconfont icon-zonggongsi"></span>
-              <!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
-              <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span> -->
-              &nbsp;
-              <span class="label">{{ node.label }}<span style="color:#A3AFB7;">{{data.principalship}}</span></span>
-            </span>
-          </el-tree>
+				<i slot="suffix" class="el-input__icon el-icon-search"></i>
+			</el-input>
         </div>
-    </el-scrollbar>
+  		
+        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+        	<div style="padding:20px">
+				<el-tree
+					class="tree"
+					:data="data"
+					:props="{children: 'subs', label: 'name',isLeaf:'leaf' }"
+					node-key="orgid"
+					:filter-node-method="filterNode"
+					ref="treeSame"
+					:highlight-current="true"
+					:check-on-click-node="false"
+					@node-click="handleChangeNode"
+					:expand-on-click-node="false"
+					:load="loadNode1"
+					lazy
+					>
+					<span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`">
+						<span v-if="data.subs === 1" class="icon iconfont icon-zonggongsi"></span>
+						<!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+						<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span> -->
+						&nbsp;
+						<span class="label">{{ node.label }}<span style="color:#A3AFB7;">{{data.principalship}}</span></span>
+					</span>
+				</el-tree>
+        	</div>
+    	</el-scrollbar>
+	</div>
 </template>
 <script>
 import * as api_common from "@/api/common";
@@ -52,38 +54,34 @@ export default {
       }
     },
     methods:{
-
-      handleChangeNode(data,node){
-          this.$emit('change',data)
-      },
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.name && data.name.indexOf(value) !== -1;
-      },
-      async loadNode1(node, resolve) {
-          const  { data }  = node
-		//  console.log(data)
-			  //console.log(data)
-			  if (data.subs) {
-			  	  let _id=data.id
-				  if (data.orgid) {
+		handleChangeNode(data,node){
+			this.$emit('change',data)
+		},
+		filterNode(value, data) {
+			if (!value) return true;
+			return data.name && data.name.indexOf(value) !== -1;
+		},
+		async loadNode1(node, resolve) {
+			const  { data }  = node
+			if (data.subs) {
+				let _id=data.id
+				if (data.orgid) {
 					_id=data.orgid
-				  }
-				  let _urldata='org/select?org_id='+_id
-				  if (this.filter_mark) {
-					 _urldata='org/select?org_id='+_id+"&filter_mark="+this.filter_mark
-				  }
-				  console.log(_urldata)
-				 let res = await this.$request.get(_urldata)
-				 res.forEach(o=>{
-					 o.leaf = !o.subs
-				 })
-				 resolve(res);
-			  } else{
-			  	resolve([]);
-			  }
-          
-      }
+				}
+				let _urldata='org/select?org_id='+_id
+				if (this.filter_mark) {
+					_urldata='org/select?org_id='+_id+"&filter_mark="+this.filter_mark
+				}
+				console.log(_urldata)
+				let res = await this.$request.get(_urldata)
+				res.forEach(o=>{
+					o.leaf = !o.subs
+				})
+				resolve(res);
+			} else{
+				resolve([]);
+			}
+		}
     },
     data(){
         return {

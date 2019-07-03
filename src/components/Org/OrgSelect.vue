@@ -3,7 +3,7 @@
          <el-tabs v-model="activeName" @tab-click="tabclick()">
             <el-tab-pane label="同部门" name="first">
                 <el-row :gutter="20" style="height:400px">
-                    <el-col :span="10">
+                    <el-col :span="11">
                         <Org2 ref="sameDepartment"  style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" same="false" @change="changeSameOrg"/>
                     </el-col>
                     <el-col :span="2" style="height:100%">
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="11">
                             <OrgResult  style="height:400px" :data="resultSame" @change="changeSameResult"/>
                     </el-col>
                 </el-row>
@@ -30,7 +30,7 @@
             </el-tab-pane> -->
             <el-tab-pane label="组织结构" name="third" v-if="activeNam!='first'">
                 <el-row :gutter="20" style="height:400px">
-                    <el-col :span="10">
+                    <el-col :span="11">
                         <Org2 ref="organizationalStructure" style="height:400px" :searchApi="searchApi" :filter_mark="filter_mark" same="true" @change="changeOrg"/>
                     </el-col>
                     <el-col :span="2" style="height:100%">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="11">
                         <OrgResult  style="height:400px" :data="result" @change="changeResult"/>
                     </el-col>
                 </el-row>
@@ -85,18 +85,10 @@ export default {
             selectSame:{
                 disabled:true
             },
-            resultSelect:{
-                
-            },
-            result:[
-               
-            ],
-            resultSameSelect:{
-                
-            },
-            resultSame:[
-               
-            ],
+            resultSelect:{},
+            result:[],
+            resultSameSelect:{},
+            resultSame:[],
         }
     },
     methods:{
@@ -119,6 +111,7 @@ export default {
             this.resultSameSelect= data
         },
         add(){
+            console.log(this.select,'this.select')
             if(this.select && !this.select.disabled){
                 this.result.push(this.select)
                 this.$set(this.select,'disabled',true)
@@ -172,10 +165,7 @@ export default {
 		   this.$refs.sameDepartment.empty()
 		   this.$refs.organizationalStructure.empty()	
 		}
-    },
-    // async crated(){
-    //     console.log(this.props.activeName)
-    // }
+    }
 }
 </script>
 

@@ -25,6 +25,22 @@ export default [{
         }
     },
     {
+        name: 'attendanceDetail',
+        component: () =>
+            import ('@/views/hrfront/attendance/openDisplay/recordlist'),
+        meta: {
+            title: '考勤明细1'
+        }
+    },
+    {
+        name: 'attendaceList',
+        component: () =>
+            import ('@/views/hrfront/attendance/openDisplay/countlist'),
+        meta: {
+            title: '考勤总汇1'
+        }
+    },
+    {
         name: 'employeeDoc',
         component: () =>
             import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),

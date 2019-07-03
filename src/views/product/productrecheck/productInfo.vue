@@ -161,7 +161,10 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             if(this.dialogStatus=='insert'){
-                await api_resource.create(this.form)
+                let info = await api_resource.create(this.form)
+                if(!info.id){
+                    this.$message.error(info)
+                }
             }else{
                 await this.$request.put('/productrecheck/product/'+this.form.id,this.form)
             }
