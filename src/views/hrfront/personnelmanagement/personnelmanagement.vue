@@ -20,11 +20,11 @@
                                 <el-col :span="12">
                                     <el-row :gutter="0">
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'姓名'}" v-model="form.chineseName" prop="chineseName" :disabled="!isInsert"/>
+                                            <form-render :type="`input`" :field="{name:'姓名'}" v-model="form.chineseName" prop="chineseName"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'身份证号'}" v-model="form.idCard" @change="fetchProvinse" prop="idCard" :disabled="!isInsert"/>
+                                            <form-render :type="`input`" :field="{name:'身份证号'}" v-model="form.idCard" @change="fetchProvinse" prop="idCard"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
@@ -32,7 +32,7 @@
                                                 :type="`select`"
                                                 :field="{name:'民族',options:nationData}"
                                                 v-model="form.nation"
-                                                prop="nation" :disabled="!isInsert"
+                                                prop="nation"
                                             />
                                         </el-col>
                                         <!-- <el-col :span="24">
@@ -47,7 +47,7 @@
                                             :type="`day`"
                                             :field="{name:'出生年月'}"
                                             v-model="form.birthday"
-                                            prop="birthday" :disabled="!isInsert"
+                                            prop="birthday"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -55,7 +55,7 @@
                                             :type="`day`"
                                             :field="{name:'证件生效'}"
                                             v-model="form.stayBegin"
-                                            prop="stayBegin" :disabled="!isInsert"
+                                            prop="stayBegin"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -63,7 +63,7 @@
                                             :type="`day`"
                                             :field="{name:'证件失效'}"
                                             v-model="form.stayEnd"
-                                            prop="stayEnd" :disabled="!isInsert"
+                                            prop="stayEnd"
                                             />
                                         </el-col>   
                                     </el-row>
@@ -71,10 +71,10 @@
                                 <el-col :span="12">
                                     <el-row :gutter="0">
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'签发机关'}" v-model="form.qfjg"  prop="qfjg" :disabled="!isInsert"/>
+                                            <form-render :type="`input`" :field="{name:'签发机关'}" v-model="form.qfjg"  prop="qfjg"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'住址'}" v-model="form.contactAddr" prop="contactAddr" :disabled="!isInsert"/>
+                                            <form-render :type="`input`" :field="{name:'住址'}" v-model="form.contactAddr" prop="contactAddr"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -87,7 +87,7 @@
                                                 label: '女'
                                                 }]}"
                                                 v-model="form.sex"
-                                                prop="sex" :disabled="!isInsert"
+                                                prop="sex"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -116,11 +116,11 @@
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany" :disabled="!isInsert"/>
+                                            <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany"/>
                                             <!-- <form-render :type="`input`" :field="{name:'所属公司'}" v-model="form.officeaddressname"/> -->
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department" :disabled="!isInsert"/>
+                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department"/>
 
                                         <!-- <form-render
                                                 :type="`select`"
@@ -139,7 +139,7 @@
                                                 prop="principalship"
                                                 :type="`select`"
                                                 :field="{name:'所任职务',options:jobtitlesData}"
-                                                v-model="form.principalship" :disabled="!isInsert"
+                                                v-model="form.principalship"
                                             />
                                             <!-- <el-form-item label="所任职务">
                                                 <el-select v-model="form.principalship" placeholder="请选择" >
@@ -166,7 +166,7 @@
                                                 prop="workGroup"
                                                 :type="`select`"
                                                 :field="{name:'工作地点',options:workGroupData}"
-                                                v-model="form.workGroup" :disabled="!isInsert"
+                                                v-model="form.workGroup"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -185,7 +185,7 @@
                                                 value: 4,
                                                 label: '返聘'
                                                 }]}"
-                                                v-model="form.workNature" :disabled="!isInsert"
+                                                v-model="form.workNature"
                                             />
                                         </el-col>
                                     </el-row>
@@ -212,7 +212,7 @@
                                                 value: 0,
                                                 label: '无试用期'
                                                 }]}"
-                                                v-model="form.trialTime" :disabled="!isInsert"
+                                                v-model="form.trialTime"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -237,7 +237,7 @@
                                                 value: 6,
                                                 label: '无限期'
                                                 }]}"
-                                                v-model="form.contractTime" :disabled="!isInsert"
+                                                v-model="form.contractTime"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -250,7 +250,7 @@
                                                 value: 1,
                                                 label: '不需考勤'
                                                 }]}"
-                                                v-model="form.checkWorkType" :disabled="!isInsert"
+                                                v-model="form.checkWorkType"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -262,7 +262,7 @@
                                                 remote
                                                 reserve-keyword
                                                 placeholder="请输入关键词"
-                                                :remote-method="remoteMethod" :disabled="!isInsert"
+                                                :remote-method="remoteMethod"
                                                 >
                                                 <el-option
                                                 v-for="item in introducerData"
@@ -283,7 +283,7 @@
                                                 value: 401,
                                                 label: '正式'
                                                 }]}"
-                                                v-model="form.fileType" :disabled="!isInsert"
+                                                v-model="form.fileType"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -296,12 +296,12 @@
                                                 value: 1,
                                                 label: '分配'
                                                 }]}"
-                                                v-model="form.liveDormitory" :disabled="!isInsert"
+                                                v-model="form.liveDormitory" 
                                             />
                                         </el-col>
                                         
                                         <el-col :span="24" v-if="form.liveDormitory==0">
-                                        <form-render :type="`input`" :field="{name:'现住地址'}" v-model="form.nowAddress" placeholder="不分配宿舍请填写"  :disabled="!isInsert"/>
+                                        <form-render :type="`input`" :field="{name:'现住地址'}" v-model="form.nowAddress" placeholder="不分配宿舍请填写"/>
                                         </el-col>
                                     </el-row>
                                 </el-col>

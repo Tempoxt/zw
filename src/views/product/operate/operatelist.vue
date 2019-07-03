@@ -127,10 +127,19 @@ export default {
             }else{
                 this.form.hrmData = ids1+','+ids2
             }
-            console.log(this.form);
-            await api_resource.create(this.form)
-          
-            this.dialogFormVisible = false
+            var repeat = await api_resource.create(this.form)
+            if(repeat.no_team_list&&repeat.no_team_list.length!==0){
+                var rep = repeat.no_team_list.map(o=>o)
+                this.$confirm(rep+'没有小组', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                });
+                // this.$message.error({message:rep+'没有小组',duration:12000})
+            }else{
+                this.dialogFormVisible = false
+                this.$message.success({message:'创建成功'})
+            }
             this.fetchTableData()
         }
     },
