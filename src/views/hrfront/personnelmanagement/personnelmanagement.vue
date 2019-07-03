@@ -414,11 +414,11 @@
                                         </el-row>
                                     </el-col>
                                 </el-row>
-                                <el-row :gutter="40">
-                                    <el-col :span="12">
-                                        
-                                    </el-col>
-                                </el-row>
+                                <!-- <el-row :gutter="40">
+                                    <div style="margin-left:120px;">
+                                        <img src="http://f.hiphotos.baidu.com/image/pic/item/8d5494eef01f3a29f863534d9725bc315d607c8e.jpg" class="bankCard">
+                                    </div>
+                                </el-row> -->
                             </div>
                         </el-tab-pane>
 
@@ -1103,6 +1103,7 @@ export default {
         }
     },
     methods: {
+        
         contract_validate(){
             return new Promise((resolve,reject)=>{
                 this.$refs.contract.validate((valid) => {
@@ -1375,7 +1376,6 @@ export default {
         },
         async fetchProfileData() {
            this.profileData =await this.$request.get('hrm/detailmsg/'+this.staffId)
-        // this.profileData =await this.$request.get('hrm/detailmsg/16036')
         },
     },
     async created() {

@@ -25,7 +25,7 @@ export default [{
         }
     },
     {
-        name: 'attendanceDetail',
+        name: 'refakelist',
         component: () =>
             import ('@/views/hrfront/attendance/openDisplay/recordlist'),
         meta: {
@@ -33,7 +33,7 @@ export default [{
         }
     },
     {
-        name: 'attendaceList',
+        name: 'cofakelist',
         component: () =>
             import ('@/views/hrfront/attendance/openDisplay/countlist'),
         meta: {

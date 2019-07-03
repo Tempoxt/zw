@@ -1,13 +1,13 @@
 <template>
   	<div>
-		<div class="side-header">
+		<div class="side-header" style="margin-top:20px">
 			<el-input placeholder="快速查找" v-model="filterText" class="input">
 				<i slot="suffix" class="el-input__icon el-icon-search"></i>
 			</el-input>
 		</div>
 
 		<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-			<div style="padding:20px">
+			<div style="padding:0 20px 20px">
 				<el-tree
 					class="tree"
 					:data="data"

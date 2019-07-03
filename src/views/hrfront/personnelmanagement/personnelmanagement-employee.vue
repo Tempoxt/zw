@@ -230,5 +230,9 @@ export default {
     .imgInfo .el-checkbox__label{
         display: none;
     }
+    .bankCard{
+        width: 40%;
+        height: 200px;
+    }
 </style>
 

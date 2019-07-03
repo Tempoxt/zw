@@ -117,6 +117,7 @@ export default {
         async delete(){
             let row = this.table_selectedRows[0];
             await this.$request.delete('operatelist/operatelist/'+row.id)
+            this.$message.success({message:'删除成功'})
             this.fetchTableData();
         },
         async handleFormSubmit(){
