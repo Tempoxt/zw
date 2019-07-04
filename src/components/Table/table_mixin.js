@@ -11,7 +11,7 @@ import tableColumn from '@c/publicTable/tableColumn'
 import eachTableColumn from '@c/publicTable/eachTableColumn'
 import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
-
+const download = require('downloadjs')
 export default {
   props:{
     resource:String,
@@ -264,6 +264,15 @@ export default {
         .then(() => {
           this.fetchTableData()
         })
+    },
+    async download(){
+       const { data,name,contentType} =  await request.get('hrm/v2/export',{
+          params:this.table_form,
+          responseType:'arraybuffer'
+        })
+        
+
+        download(data,name||this.$route.meta.title,contentType)
     },
     async export(){
       const formatJson = function(filterVal, jsonData){

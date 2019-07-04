@@ -32,7 +32,7 @@ service.interceptors.request.use(config => {
 })
 
 service.interceptors.response.use(response => {
-    const { status, data } = response
+    const { status, data,config ,headers } = response
     if (status === 201) {
         Message({
             type: 'success',
@@ -54,7 +54,7 @@ service.interceptors.response.use(response => {
         window.location.href = '/account/login'
         return Promise.reject(response)
     }
-    
+    console.log( response,'response')
     if(response.config.method==='put' && response.status===200){
         if(response.config.alert!==false){
             Message({
@@ -63,6 +63,16 @@ service.interceptors.response.use(response => {
             })
         }
         
+    }
+    if(config.responseType==="arraybuffer"){
+        let contentType = headers['content-type'];
+        let name
+        try {
+            name = window.decodeURI(headers['content-disposition'].split('=')[1]);
+        }catch(err){
+            name = ''
+        }
+        return { data , name , contentType}
     }
     return data
 }, error => {
