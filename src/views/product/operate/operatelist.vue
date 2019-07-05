@@ -115,19 +115,14 @@ export default {
             this.dialogFormVisible = true
         },
         async delete(){
-            let row = this.table_selectedRows[0];
-            await this.$request.delete('operatelist/operatelist/'+row.id)
+            let rows = this.table_selectedRows.map(row=>row.id)
+            await this.$request.delete('operatelist/operatelist?ids='+rows.join(','))
             this.$message.success({message:'删除成功'})
             this.fetchTableData();
         },
         async handleFormSubmit(){
-            let ids1 = this.$refs.OrgSelect.getIdsResult()
-            let ids2 = this.$refs.OrgSelect.getIdsSameResult()
-            if(ids1==''||ids2==''){
-                this.form.hrmData = ids1||ids2
-            }else{
-                this.form.hrmData = ids1+','+ids2
-            }
+            let ids = this.$refs.OrgSelect.getIdsResult()
+            this.form.hrmData = ids;
             var repeat = await api_resource.create(this.form)
             if(repeat.no_team_list&&repeat.no_team_list.length!==0){
                 var rep = repeat.no_team_list.map(o=>o)

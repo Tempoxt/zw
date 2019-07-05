@@ -23,9 +23,9 @@
 					lazy
 					:class="{'search-for':searchFor}"
 					>
-					<span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`">
+					<span slot-scope="{ node, data }" :class="`${data.disabled?'disabled':''}`" >
 						<span v-if="data.subs === 1" class="icon iconfont icon-zonggongsi"></span>
-						<!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+						<!-- <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>v-show="data.seleSim!=true&&data.leaf!=true"
 						<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span> -->
 						&nbsp;
 						<span class="label">{{ node.label }}&nbsp;
@@ -53,7 +53,9 @@ export default {
         },
 		searchApi:{
 			default:'hrm/basesearsh'
-		}
+		},
+		sele:'',
+		leaf:false
     },
     watch:{
        	async filterText(val) {
@@ -70,11 +72,19 @@ export default {
 				this.init()
 				this.searchFor=false
 			}
-      	}
+		},
+		sele(){
+			console.log(this.sele,'sssss')
+			// console.log(this.data,'ddddd')
+		},
+		leaf(){
+			console.log(this.leaf,'leaf')
+		}
     },
     methods:{
 
 		handleChangeNode(data,node){
+			console.log(data,'dddd')
 			this.$emit('change',data)
 		},
 		filterNode(value, data) {

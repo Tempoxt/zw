@@ -4,29 +4,30 @@
             <el-tab-pane label="同部门" name="first">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="11">
-                        <Org2 ref="sameDepartment"  style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" same="false" @change="changeSameOrg"/>
+                        <Org2 ref="sameDepartment" style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" same="false"
+                          @change="changeOrg"/>
                     </el-col>
                     <el-col :span="2" style="height:100%">
                         <div class="control">
                             <div class="control-btns">
                                 <div>
-                                    <el-button icon="el-icon-arrow-right" circle :type="!selectSame.disabled?'primary':''" @click="addSame"></el-button>
+                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
                                 </div>
                                 <div>
-                                   <el-button icon="el-icon-arrow-left" circle :type="resultSameSelect.id?'primary':''" @click="removeSame"></el-button>
+                                   <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove"></el-button>
                                 </div>
                                 <div>
-                                    <el-button icon="el-icon-refresh" circle  @click="resetSame"></el-button>
+                                    <el-button icon="el-icon-refresh" circle @click="reset"></el-button>
                                 </div>
                             </div>
                         </div>
                     </el-col>
                     <el-col :span="11">
-                            <OrgResult  style="height:400px" :data="resultSame" @change="changeSameResult"/>
+                        <OrgResult  style="height:400px" :data="result" @change="changeResult"/>
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <!-- <el-tab-pane label="我的下属" name="second">
+            <!-- <el-tab-pane label="我的下属" name="second">:sele="select.seleSim" :leaf="select.leaf" 
             </el-tab-pane> -->
             <el-tab-pane label="组织结构" name="third" v-if="activeNam!='first'">
                 <el-row :gutter="20" style="height:400px">
@@ -80,50 +81,38 @@ export default {
         return {
             activeName:'first',
             select:{
-                disabled:true
-            },
-            selectSame:{
-                disabled:true
+                disabled:true,
+                // seleSim:true,
+                // leaf:false
             },
             resultSelect:{},
             result:[],
-            resultSameSelect:{},
-            resultSame:[],
+            sele:'false'
         }
     },
     methods:{
         getIdsResult(){
             return this.result.map(o=>o.id).join(',')
         },
-        getIdsSameResult(){
-            return this.resultSame.map(o=>o.id).join(',')
-        },
         changeOrg(data){
             this.select = data
         },
-        changeSameOrg(data){
-            this.selectSame = data
-        },
         changeResult(data){
             this.resultSelect= data
-        },
-        changeSameResult(data){
-            this.resultSameSelect= data
         },
         add(){
             console.log(this.select,'this.select')
             if(this.select && !this.select.disabled){
                 this.result.push(this.select)
                 this.$set(this.select,'disabled',true)
+                // this.$set(this.select,'seleSim',true)
                 this.select.disabled = true
-            }
-            if(this.select.subs==1){
-                this.$set(this.select,'disabled',true)
+                this.select.seleSim = true
             }
         },
         remove(){
-			//console.log(this.resultSelect)
-            this.$set(this.resultSelect,'disabled',false)
+            this.$set(this.resultSelect,'disabled',false) 
+            // this.$set(this.resultSelect,'seleSim',false)
             this.result.forEach((o,i)=>{
                 if(o.id===this.resultSelect.id){
                     this.result.splice(i,1)
@@ -134,33 +123,11 @@ export default {
 		reset(){
 			this.result.forEach((o,i)=>{
 			    this.$set(o,'disabled',false)
+			    // this.$set(o,'seleSim',false)
 			})
 			this.result=[]
 			this.resultSelect = {}
-		},
-        addSame(){
-            if(this.selectSame && !this.selectSame.disabled){
-                this.resultSame.push(this.selectSame)
-                this.$set(this.selectSame,'disabled',true)
-                this.selectSame.disabled = true
-            }
         },
-        removeSame(){
-            this.$set(this.resultSameSelect,'disabled',false)
-            this.resultSame.forEach((o,i)=>{
-                if(o.id===this.resultSameSelect.id){
-                    this.resultSame.splice(i,1)
-                }
-            })
-            this.resultSameSelect = {}
-        },
-		resetSame(){
-			this.resultSame.forEach((o,i)=>{
-			    this.$set(o,'disabled',false)
-			})
-			this.resultSame=[]
-			this.resultSameSelect = {}
-		},
 		tabclick(){
 		   this.$refs.sameDepartment.empty()
 		   this.$refs.organizationalStructure.empty()	
