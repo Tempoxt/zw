@@ -412,9 +412,8 @@
                                 </el-row>
                                 <el-row :gutter="40" v-if="!isInsert&&cardInfo[4]">
                                     <div style="margin-left:120px;">
-                                        <img v-for="item in cardInfo[4].images" :key="item.cardConnect" :src="baseUrl+item.cardConnect"
-                                           :style="`width:${width}px;height:${height}px`">
-                                           <!-- @click="ampliImg" -->
+                                        <img v-for="item in cardInfo[4].images" :key="item.cardConnect" :src="baseUrl+item.cardConnect" class="bankCard">
+                                           <!-- :style="`width:${width}px;height:${height}px`" @click="ampliImg" -->
                                     </div>
                                 </el-row>
                             </div>
@@ -952,8 +951,8 @@ export default {
         }
         return {
             baseUrl,
-            width:200,
-            height:150,
+            width:'40%',
+            height:200,
             openDrawers: false,
             loading: true,
             loading2:false,
@@ -1233,6 +1232,8 @@ export default {
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
             this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.width = 250
+            this.height = 200
         },
         showPersonInfo(){
             this.dialogStatus = 'inserts';
@@ -1318,7 +1319,8 @@ export default {
             this.Aledulevels = (await api_common.resource('basicdata/edulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
-         
+            this.width = 250
+            this.height = 200
             this.activeName = 'first'
             this.form = this.defaultForm()
             // this.$nextTick(()=>{

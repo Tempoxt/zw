@@ -115,8 +115,8 @@ export default {
             this.dialogFormVisible = true
         },
         async delete(){
-            let row = this.table_selectedRows[0];
-            await this.$request.delete('operatelist/operatelist/'+row.id)
+            let rows = this.table_selectedRows.map(row=>row.id)
+            await this.$request.delete('operatelist/operatelist?ids='+rows.join(','))
             this.$message.success({message:'删除成功'})
             this.fetchTableData();
         },

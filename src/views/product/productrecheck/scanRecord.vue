@@ -88,8 +88,8 @@ export default {
             }, 300);
         },
         async delete(){
-            let row = this.table_selectedRows[0];
-            await this.$request.delete('productrecheck/scanrecord/'+row.id)
+            let rows = this.table_selectedRows.map(row=>row.id)
+            await this.$request.delete('productrecheck/scanrecord?ids='+rows.join(','))
             this.fetchTableData();
         }
     },
