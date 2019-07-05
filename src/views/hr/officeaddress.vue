@@ -26,8 +26,13 @@
               <form-render :type="`input`" :field="{name:'所属城市'}" v-model="form.city"/>
             </el-col>
              <el-col :span="24">
+              <form-render  :type="`select`"  :field="{name:'银行卡地点',options:bankList}" v-model="form.bank"/>
+            </el-col>
+
+             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'详细地址'}" v-model="form.officeaddressdetail"/>
             </el-col>
+            
             <el-col :span="24">
               <form-render
                 :type="`radio`"
@@ -112,7 +117,8 @@ export default {
       queryDialogFormVisible:true,
       table_height:window.innerHeight-236,
       defaultForm,
-      officeaddress:[]
+      officeaddress:[],
+      bankList:[]
     };
   },
   watch:{
@@ -137,10 +143,15 @@ export default {
         this.fetchTableData()
    },
     async add(){
+      this.initForm()
         this.dialogFormVisible = true
     },
-
+   async initForm(){
+    this.bankList = await api_common.getTag('AddBankCard')
+    console.log(this.bankList,'this.bankList')
+   },
    async edit(){
+     this.initForm()
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;

@@ -1367,7 +1367,8 @@ export default {
             }
             this.table_loading = true;
             this.table_form.orgid = this.orgid
-            const {rows , total }= await api_resource.get(this.table_form);
+            // const {rows , total }= await api_resource.get(this.table_form);
+            const {rows , total }= await this.$request.get('/hrm/v2/staff',{params:this.table_form})
             this.table_data  = rows
             this.table_form.total = total
             setTimeout(() => {
