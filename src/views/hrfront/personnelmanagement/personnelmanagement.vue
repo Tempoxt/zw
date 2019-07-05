@@ -117,20 +117,13 @@
                                     
                                         <el-col :span="24">
                                             <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany"/>
-                                            <!-- <form-render :type="`input`" :field="{name:'所属公司'}" v-model="form.officeaddressname"/> -->
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department"/>
-
-                                        <!-- <form-render
-                                                :type="`select`"
-                                                :field="{name:'所属部门',options:departmentData}"
-                                                v-model="form.department"
-                                            /> -->
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
+                                            <form-render :type="`branchteam`" clearable :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -141,17 +134,6 @@
                                                 :field="{name:'所任职务',options:jobtitlesData}"
                                                 v-model="form.principalship"
                                             />
-                                            <!-- <el-form-item label="所任职务">
-                                                <el-select v-model="form.principalship" placeholder="请选择" >
-                                                    <input class="search-text" @keyup='search($event)' placeholder="搜索"/>
-                                                    <el-option
-                                                        v-for="item in jobtitlesData"
-                                                        :key="item.id"
-                                                        :label="item.name"
-                                                        :value="item.id">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item> -->
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -251,6 +233,20 @@
                                                 label: '不需考勤'
                                                 }]}"
                                                 v-model="form.checkWorkType"
+                                            />
+                                        </el-col>
+                                        <el-col :span="24" v-if="isInsert">
+                                        <form-render
+                                                :type="`select`"
+                                                :field="{name:'学历',options:Aledulevels}"
+                                                v-model="form.eduLevel"
+                                            />
+                                        </el-col>
+                                        <el-col :span="24" v-if="!isInsert"> 
+                                        <form-render
+                                                :type="`select`"
+                                                :field="{name:'学历',options:alledulevels}"
+                                                v-model="form.eduLevel"
                                             />
                                         </el-col>
                                         <el-col :span="24">
@@ -416,7 +412,9 @@
                                 </el-row>
                                 <el-row :gutter="40" v-if="!isInsert&&cardInfo[4]">
                                     <div style="margin-left:120px;">
-                                        <img v-for="item in cardInfo[4].images" :key="item.cardConnect" :src="baseUrl+item.cardConnect" class="bankCard" style="margin-right:10px">
+                                        <img v-for="item in cardInfo[4].images" :key="item.cardConnect" :src="baseUrl+item.cardConnect"
+                                           :style="`width:${width}px;height:${height}px`">
+                                           <!-- @click="ampliImg" -->
                                     </div>
                                 </el-row>
                             </div>
@@ -954,6 +952,8 @@ export default {
         }
         return {
             baseUrl,
+            width:200,
+            height:150,
             openDrawers: false,
             loading: true,
             loading2:false,
@@ -1061,6 +1061,8 @@ export default {
             checkList:[],
             checkbox:'',
             activeName:'first',
+            alledulevels:[],
+            Aledulevels:[]
             // pickerOptions1: {:picker-options="pickerOptions1"
             //     disabledDate(time) {
             //         return time.getTime() > Date.now();
@@ -1103,7 +1105,21 @@ export default {
         }
     },
     methods: {
-        
+        ampliImg(e){
+            let height = e.target.height;
+            let width = e.target.width;
+            console.log(width,'width')
+            console.log(height,'height')
+            if(width>=770||height>400){
+                return
+            }
+            this.$set(e.target,'height',height*2)
+            this.$set(e.target,'width',width*2)
+            this.width = width*2
+            this.height = height*2
+            // let imgapli = e.cardConnect;
+
+        },
         contract_validate(){
             return new Promise((resolve,reject)=>{
                 this.$refs.contract.validate((valid) => {
@@ -1129,7 +1145,6 @@ export default {
             this.cardPerform = {
                 image:[]
             }
-            console.log(this.cardPerform,'cardPErform')
             this.dialogCard = "inser"
             this.getCardInfo()
             this.dialogCardFormVisible = true
@@ -1217,6 +1232,7 @@ export default {
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         showPersonInfo(){
             this.dialogStatus = 'inserts';
@@ -1299,6 +1315,7 @@ export default {
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.Aledulevels = (await api_common.resource('basicdata/edulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
          
@@ -1320,6 +1337,7 @@ export default {
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
             this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async fetchDepartment(){
             this.departmentData = await api_common.resource('org/branchdepartment').get({id:this.form.subCompany})

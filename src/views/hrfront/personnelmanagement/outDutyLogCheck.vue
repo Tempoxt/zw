@@ -142,13 +142,8 @@ export default {
     methods: {
         async handleFormSubmit(){
             await this.form_validate()
-            let staffid1 = this.$refs.OrgSelect.getIdsResult()
-            let staffid2 = this.$refs.OrgSelect.getIdsSameResult()
-            if(staffid1==''||staffid2==''){
-                this.form.staffid = staffid1||staffid2
-            }else{
-                this.form.staffid = staffid1+','+staffid2
-            }
+            let staffid = this.$refs.OrgSelect.getIdsResult()
+            this.form.staffid = staffid
             let form = Object.assign({},this.form)
             await this.$request.post('/hrm/quit',form)
             this.dialogFormVisible = false

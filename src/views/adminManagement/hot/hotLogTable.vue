@@ -224,13 +224,8 @@ export default {
         this.dialogForm2Visible = false
     },
     async handleForm3Submit(){
-      let ids1 = this.$refs.OrgSelect.getIdsResult()
-      let ids2 = this.$refs.OrgSelect.getIdsSameResult()
-      if(ids1==''||ids2==''){
-        this.form3.ids = ids1||ids2
-      }else{
-        this.form3.ids = ids1+','+ids2
-      }
+      let ids = this.$refs.OrgSelect.getIdsResult()
+      this.form3.ids = ids;
       if(this.form3.ids!==''){
         let repeat = await this.$request.post('/hot/record',this.form3)
         if(repeat!==''){
