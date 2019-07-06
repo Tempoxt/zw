@@ -147,7 +147,6 @@
               v-model="form_multiple"
               active-text="连续添加"
               inactive-text="">
-              
           </el-switch>
         </div>
         <div>
@@ -280,7 +279,7 @@ export default {
   },
   methods: {
     add(){
-     
+      this.form = defaultForm()
       this.dialogFormVisible = true;
     },
     async edit(){
@@ -315,8 +314,13 @@ export default {
         }else{
             await api_resource.update(form.id,form)
         }
-        this.dialogFormVisible = false
-        this.fetchTableData()
+        if(this.form_multiple){
+            this.form.emID = ''
+            this.fetchTableData()
+        }else{
+            this.dialogFormVisible = false
+            this.fetchTableData()
+        }
     }
   },
   async created() {
