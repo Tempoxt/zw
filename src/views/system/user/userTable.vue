@@ -16,7 +16,7 @@
                 <el-tab-pane label="用户信息" name="first">
                     <el-row :gutter="20">
                         <el-col :span="12">
-                        <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID"/>
+                          <form-render :type="`member`" :field="{name:'员工姓名 ',defaultName:form.real_name}" v-model="form.emID"/>
                         </el-col>
                         <el-col :span="12">
                             <form-render :type="`input`" :field="{name:'登录密码',type:'password'}" v-model="form.password" :disabled="form.ldap_check===1"/>
@@ -138,10 +138,23 @@
 
         </el-form>
       </div>
+      
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+      <div slot="footer" class="dialog-footer  dialog-multiple-footer">
+        <div>
+          <el-switch
+              v-if="isInsert"
+              v-model="form_multiple"
+              active-text="连续添加"
+              inactive-text="">
+              
+          </el-switch>
+        </div>
+        <div>
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+        </div>
+       
       </div>
     </el-dialog>
 
@@ -220,7 +233,7 @@ import * as api_common from "@/api/common";
 import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("user");
-const defaultForm = ()=>({ldap_check:0,estate:1,role:[]})
+const defaultForm = ()=>({ldap_check:1,estate:1,role:[]})
 
 const cityOptions = ['上海', '北京', '广州', '深圳'];
 
