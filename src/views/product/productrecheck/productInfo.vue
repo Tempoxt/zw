@@ -109,9 +109,11 @@ export default {
     },
     watch:{
         proid(){
+            this.table_form.currentpage = 1
             this.fetchTableData()
         },
         changes(){
+            this.table_form.currentpage = 1
             this.fetchTableData()
         }
     },

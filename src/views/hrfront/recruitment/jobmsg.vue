@@ -383,6 +383,7 @@ export default {
         },
         async edit(){
             this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
+            this.fetchFormData()
             const {name,icon} = this.form
             this.form_activeName = 'first'
             this.form.iconName = {

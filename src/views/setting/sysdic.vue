@@ -57,19 +57,19 @@
             @node-click="handleChangeNode"
             :expand-on-click-node="false"
           >
-            <span slot-scope="{ node, data }" style="display:flex;justify-content: space-between;width: 100%;">
+            <div slot-scope="{ node, data }" class="flexSpace">
               <div >
                   <span class="icon iconfont icon-zonggongsi"></span>
                     &nbsp;
                 <span>{{ node.label||data.title }} <span v-if="data.tag"> ({{data.tag}})</span></span>
             
               </div>
-           <div class="actions">
+              <div class="actions">
                 <span class="icon iconfont icon-lajitong" @click="del(data)"></span> &nbsp;
                 <span class="icon iconfont icon-bianji" @click="edit(data)"></span>
               </div>
              
-            </span>
+            </div>
           </el-tree>
          
         </div>
@@ -187,6 +187,23 @@ export default {
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
+}
+.flexSpace{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    width: 100%;
+}
+.flexSpace:hover .icon-lajitong,.flexSpace:hover .icon-bianji,.flexSpace:active .icon-lajitong,.flexSpace:active .icon-bianji{
+    color: #CCD5DB
+}
+.theme-0BB2D4 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-lajitong,
+.theme-0BB2D4 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-bianji{
+    color: #CCD5DB
+}
+.icon-bianji,.icon-lajitong{
+    font-size: 14px;
+    color: transparent
 }
 </style>
 
