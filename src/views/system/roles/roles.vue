@@ -1,6 +1,6 @@
 <template>
     <el-row :gutter="40" class="row">
-        <el-col :span="6" class="col">
+        <el-col :span="6" class="col" style="overflow-y: scroll;">
             <div class="label">
                 菜单权限
             </div>

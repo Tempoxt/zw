@@ -55,6 +55,9 @@
        <el-tab-pane :label="getViewData('tableconfig').name" :name="getViewData('tableconfig').url" v-if="getViewData('tableconfig')" lazy>
         <pagemanager-config :currentMenuid="currentMenuid"/>
       </el-tab-pane>
+       <el-tab-pane :label="getViewData('tableform').name" :name="getViewData('tableform').url" v-if="getViewData('tableform')" lazy>
+        <pagemanager-form :currentMenuid="currentMenuid"/>
+      </el-tab-pane>
     </el-tabs>
 
 
@@ -76,6 +79,7 @@ import * as api_common from "@/api/common";
 import pagemanagerAction from "./pagemanager/action";
 import pagemanagerField from "./pagemanager/field";
 import pagemanagerConfig from "./pagemanager/config";
+import pagemanagerForm from "./pagemanager/form";
 import view_init from '@/mixins/view_init'
 export default {
   mixins:[view_init],
@@ -93,7 +97,8 @@ export default {
   components: {
     pagemanagerAction,
     pagemanagerField,
-    pagemanagerConfig
+    pagemanagerConfig,
+    pagemanagerForm
   },
   methods: {
     filterNode(value, data) {
