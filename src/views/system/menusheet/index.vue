@@ -118,6 +118,7 @@
       @header-dragend="table_dragend"
       ref="elTable"
       @sort-change="table_sort_change"
+      :tree-props="{subs: 'subs'}"
     >
     <el-table-column 
       type="selection" 
@@ -212,6 +213,7 @@ export default {
       const position = this.position
       const { menu } = await api_resource.get({position,...this.table_form});
       this.table_data = menu;
+      console.log(this.table_data,'********')
       setTimeout(() => {
         this.table_loading = false;
         
@@ -228,6 +230,7 @@ export default {
     
     );
     this.table_field = field;
+    // console.log(this.table_field,'--+++---')
     this.table_actions = action;
     this.fetchTableData();
   },

@@ -45,11 +45,9 @@ export default {
         type:{},
         disabled:{
             default:false
-        }
+        },
     },
-
     computed:{
-      
         value2:{
             get(){
                 return dayjs(this.value).format('YYYY-MM-DD')
@@ -63,12 +61,20 @@ export default {
     watch:{
         value:{
             handler(val){
-             
+                console.log(val,'')
             },
             immediate:true
         },
         ctype(){
-             this.$emit('change')
+            console.log(this.value)
+            if(this.ctype == 2){
+                this.value2 = dayjs(this.value).format('YYYY-MM')
+            }else if(this.ctype == 1){
+                this.value2 = dayjs(this.value).format('YYYY-MM-DD')
+            }else {
+                this.value2 = dayjs(this.value).format('YYYY')
+            }
+            this.$emit('change')
         }
     },
     data(){

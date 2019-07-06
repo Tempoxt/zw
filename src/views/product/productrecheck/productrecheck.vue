@@ -43,15 +43,15 @@
             </el-scrollbar>
         </el-col>
         <el-col :span="19">
-            <el-tabs v-model="activeName"  class="table-tabs">
-                <el-tab-pane label="产品信息登记" name="first">
-                    <productInfo :proid="proid" :changes="changes"/>
-                  
-                </el-tab-pane>
-                <el-tab-pane label="扫码记录" name="second" lazy>
-                    <scanRecord :proid="proid"/>
-                </el-tab-pane>
+            <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
+                <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
             </el-tabs>
+            <div v-if="view_activeName==='产品信息登记'">
+                <productInfo :proid="proid" :changes="changes"/>
+            </div>
+            <div v-if="view_activeName==='扫码记录'">
+                <scanRecord :proid="proid"/>
+            </div>
         </el-col>
     </el-row>
      <el-dialog
@@ -126,6 +126,9 @@ export default {
             api_resource,
             dialogFormVisible:false,
             dialogForm1Visible:false,
+            view_activeName:'',
+            menu:[],
+            activeName:'first',
             form:{
                 name:''
             },
@@ -137,6 +140,9 @@ export default {
         }
     },
     methods:{
+        handleClick(val){
+            
+        },
         handleChangeNode(val){
             this.proid = val.id
             this.name = val.name
@@ -179,6 +185,9 @@ export default {
     },
     
     async created(){
+        const { menu } = await getTabs(this.$route.query.menuid)
+        this.menu = menu
+        this.view_activeName = menu[0].name;
         this.data2 = await this.$request.get('productrecheck/customer');
         this.proid = this.data2[0].id
     }
