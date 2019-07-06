@@ -1,61 +1,79 @@
 <template>
-  <div class="navbar">
-    <!-- <breadcrumb class="breadcrumb-container"/> -->
-    <div class="nav-menu">
-      <hamburger
-        :toggle-click="toggleSideBar"
-        :is-active="sidebar.opened"
-        class="hamburger-container"
-      />
-      <nav-menu/>
-    </div>
-    <div class="right-menu">
-      <span class="right-menu-item">
-         <el-tooltip class="item" effect="dark" content="搜索" placement="bottom">
-              <i class="icon iconfont icon-sousuo1"></i>
-        </el-tooltip>
-      </span>
-      <span class="right-menu-item message-item">
-          <el-tooltip class="item" effect="dark" content="消息" placement="bottom">
-                  <i class="icon iconfont icon-xiaoxi"></i>
-                <span class="count">99</span>
-          </el-tooltip>
-      </span>
-      <span class="right-menu-item">
-        <el-tooltip class="item" effect="dark" content="手机" placement="bottom">
-              <i class="icon iconfont icon-shouji"></i>
-        </el-tooltip>
-      </span>
-      <span class="right-menu-item" @click="handleScreenfull">
-        <el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
-             <i class="icon iconfont icon-quanping"></i>
-        </el-tooltip>
-      </span>
-      <template v-if="device!=='mobile'">
-        <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom"></el-tooltip>
+<div>
+	<div class="navbar">
+   		<!-- <breadcrumb class="breadcrumb-container"/> -->
+		<div class="nav-menu">
+			<hamburger
+				:toggle-click="toggleSideBar"
+				:is-active="sidebar.opened"
+				class="hamburger-container"
+			/>
+			<nav-menu/>
+		</div>
+		<div class="right-menu">
+			<span class="right-menu-item">
+				<el-tooltip class="item" effect="dark" content="搜索" placement="bottom">
+					<i class="icon iconfont icon-sousuo1"></i>
+				</el-tooltip>
+			</span>
+			<span class="right-menu-item message-item">
+				<el-tooltip class="item" effect="dark" content="消息" placement="bottom">
+					<i class="icon iconfont icon-xiaoxi"></i>
+					<span class="count">99</span>
+				</el-tooltip>
+			</span>
+			<span class="right-menu-item">
+				<el-tooltip class="item" effect="dark" content="手机" placement="bottom">
+					<i class="icon iconfont icon-shouji"></i>
+				</el-tooltip>
+			</span>
+			<span class="right-menu-item" @click="handleScreenfull">
+				<el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
+					<i class="icon iconfont icon-quanping"></i>
+				</el-tooltip>
+			</span>
+			<template v-if="device!=='mobile'">
+				<el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom"></el-tooltip>
 
-        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom"></el-tooltip>
-        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom"></el-tooltip>
-      </template>
+				<el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom"></el-tooltip>
+				<el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom"></el-tooltip>
+			</template>
 
-      <el-dropdown class="avatar-container right-menu-item" trigger="click">
-        <div class="avatar-wrapper">
-          <img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" class="user-avatar">
-          <!-- <span class="user-name">林夏</span> -->
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>{{userInfo.real_name||'暂无名称'}}</el-dropdown-item>
-          <el-dropdown-item @click.native="toggleStatus">{{status==2?'前端用户中心':'后端应用中心'}}</el-dropdown-item>
-          <!-- <router-link to="/">
-            <el-dropdown-item>{{ $t('navbar.dashboard') }}</el-dropdown-item>
-          </router-link> -->
-          <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">退出</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
-  </div>
+			<el-dropdown class="avatar-container right-menu-item" trigger="click">
+				<div class="avatar-wrapper">
+				<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" class="user-avatar">
+				<!-- <span class="user-name">林夏</span> -->
+				</div>
+				<el-dropdown-menu slot="dropdown">
+				<el-dropdown-item>{{userInfo.real_name||'暂无名称'}}</el-dropdown-item>
+				<el-dropdown-item @click.native="toggleStatus">{{status==2?'前端用户中心':'后端应用中心'}}</el-dropdown-item>
+				<el-dropdown-item @click.native="editPassword">修改密码</el-dropdown-item>
+				<!-- <router-link to="/">
+					<el-dropdown-item>{{ $t('navbar.dashboard') }}</el-dropdown-item>
+				</router-link>  @click="handleFormSubmit"-->
+				<el-dropdown-item divided>
+					<span style="display:block;" @click="logout">退出</span>
+				</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</div>
+	</div>
+  
+	<!-- <el-dialog
+		title="修改密码"
+		:visible.sync="dialogFormVisible"
+		class="public-dialog"
+		v-el-drag-dialog
+		> -->
+		<editPassword :showModal.sync="dialogFormVisible"/>
+
+		<!-- <div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+		</div>
+	</el-dialog> -->
+</div>
+ 
 </template>
 
 <script>
@@ -64,37 +82,53 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import NavMenu from "./NavMenu";
 import screenfull from "screenfull";
+import editPassword from "../../account/editPassword.vue";
 
 export default {
-  components: {
-    Breadcrumb,
-    Hamburger,
-    NavMenu
-  },
-  computed: {
-    ...mapGetters(["sidebar", "name", "device"]),
-    ...mapState({
-      status: state => state.app.status,
-      userInfo:state=>state.user.userInfo
-    })
-  },
-  methods: {
-    handleScreenfull() {
-      screenfull.toggle();
-    },
-    toggleSideBar() {
-      this.$store.dispatch("toggleSideBar");
-    },
-    toggleStatus() {
-      this.$store.commit("toggleStatus");
-    },
-    logout() {
-      // this.$router.push("/account/login");
-      this.$store.dispatch("user/LogOut").then(() => {
-        location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
-      });
-    }
-  }
+	components: {
+		Breadcrumb,
+		Hamburger,
+		NavMenu,
+		editPassword
+	},
+	data(){
+		return{
+			dialogFormVisible:false,
+			showModal:false,
+			form:{}
+		}
+	},
+	computed: {
+		...mapGetters(["sidebar", "name", "device"]),
+		...mapState({
+		status: state => state.app.status,
+		userInfo:state=>state.user.userInfo
+		})
+	},
+	methods: {
+		editPassword(){
+			this.dialogFormVisible = true
+			console.log('ssss')
+		},
+		handleFormSubmit(){
+			console.log(this.form,'fff----')
+		},
+		handleScreenfull() {
+			screenfull.toggle();
+		},
+		toggleSideBar() {
+			this.$store.dispatch("toggleSideBar");
+		},
+		toggleStatus() {
+			this.$store.commit("toggleStatus");
+		},
+		logout() {
+			// this.$router.push("/account/login");
+			this.$store.dispatch("user/LogOut").then(() => {
+				location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
+			});
+		}
+	}
 };
 </script>
 
