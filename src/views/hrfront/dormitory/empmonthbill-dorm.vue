@@ -72,7 +72,7 @@ const defaultForm = () => {
 }
 export default {
   mixins: [table_mixin],
-  props:['id','data'],
+  props:['id','data','orgid','choicetype','current_type'],
   data() {
       const generateData = _ => {
         const data = [];
@@ -120,6 +120,15 @@ export default {
   watch:{
     id(){
       this.fetchTableData()
+    },
+    orgid(){
+      this.fetchTableData()
+    },
+    choicetype(){
+      this.fetchTableData()
+    },
+    current_type(){
+      this.fetchTableData()
     }
   },
   methods: {
@@ -127,9 +136,21 @@ export default {
         console.log(data,'data')
     },
     async fetchTableData() {
-    //  this.$side.getTree()
      this.table_loading = true;
-     this.table_form.dormId = this.id
+     if(this.current_type =='room'){
+        this.table_form.room = this.id||6
+        this.table_form.dormId = ''
+     }else{
+        this.table_form.dormId = this.id
+        this.table_form.room = ''
+     }
+     if(this.orgid){
+       this.table_form.room = ''
+       this.table_form.dormId = ''
+     }
+    //  this.table_form.dormId = this.id
+     this.table_form.orgid = this.orgid
+     this.table_form.choicetype = this.choicetype
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
