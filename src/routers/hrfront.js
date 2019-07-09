@@ -73,6 +73,14 @@ export default [{
         }
     },
     {
+        name: 'hrmblacklist/record',
+        component: () =>
+            import ('@/views/hrfront/personnelmanagement/hrmblacklist'),
+        meta: {
+            title: '人员黑名单'
+        }
+    },
+    {
         name: 'clothesList',
         component: () =>
             import ('@/views/hrfront/workclothes/list'),
