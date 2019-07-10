@@ -70,7 +70,7 @@ export default {
 	   "icon iconfont icon-yeqian","icon iconfont icon-zhengjian","icon iconfont icon-fengongsi","icon iconfont icon-zonggongsi","icon iconfont icon-fenbumen",
 	   "icon iconfont icon-caozuomingdan","icon iconfont icon-zhongfu","icon iconfont icon-shengchan","icon iconfont icon-cunhuochengben","icon iconfont icon-cunhuoguanli",
 	   "icon iconfont icon-chengben","icon iconfont icon-gongyiguanli","icon iconfont icon-aixinjijin1","icon iconfont icon-jichuzidian","icon iconfont icon-xinzi",
-	   "icon iconfont icon-gaowenjintieguanli","icon iconfont icon-canyinguanli"
+	   "icon iconfont icon-gaowenjintieguanli","icon iconfont icon-canyinguanli","icon iconfont icon-fapiao","icon iconfont icon-saoma1"
 
       ]
     };

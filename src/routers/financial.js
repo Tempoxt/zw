@@ -5,13 +5,19 @@ export default [{
         meta: {
             title: '薪资基础资料'
         }
-    },
-    {
+    },{
         name: 'applywageList',
         component: () =>
             import ('@/views/finance/salary/basicwageApplysheet'),
         meta: {
             title: '薪资调整记录'
+        }
+    },{
+        name: 'invoicerecheck',
+        component: () =>
+            import ('@/views/finance/productrecheck/invoicerecheck'),
+        meta: {
+            title: '发票查重管理'
         }
     },
     {
@@ -85,5 +91,5 @@ export default [{
         meta: {
             title: '补扣款管理'
         }
-    }
+    },
 ]

@@ -181,7 +181,6 @@ export default {
   async created() {
     const { field, action,table } = await api_common.menuInit("basicwage");
     this.table_field = field;
-    console.log(this.table_field,'this.table_field ')
     var socialSecurityMain = this.table_field.filter(o=>['staff__socialSecurityMain'].includes(o.name))[0].sourcefrom.choice
     var social = socialSecurityMain.map(item=>item)
     this.social = social.map(o=>{return {label:o[0],value:o[1]}})
@@ -192,7 +191,6 @@ export default {
     this.banks = bank.map(o=>{return {label:o[0],value:o[1]}})
 
     var sheetType = this.table_field.filter(o=>['sheetType'].includes(o.name))[0].sourcefrom.choice
-    console.log(sheetType)
     var sheet = sheetType.map(item=>item)
     this.sheetType = sheet.map(o=>{return {label:o[1],value:o[0]}})
 
