@@ -116,7 +116,7 @@ export default {
   }
 }
 </style>
-<style >
+<style>
     .line-boxs{
         margin-top: 20px;
     }
@@ -139,13 +139,18 @@ export default {
         color: #37474F;
         font-size: 14px;
         font-weight: bold;
-        height: 50px;
-        line-height: 50px;
-        padding-left: 20px;
+        height: 60px;
+        line-height: 60px;
+        padding:0 20px 0;
         background: #E4EAEC;
         box-shadow: 0px 1px 0px rgba(228,234,236,1);
-        margin:-16px -30px 0;
-        margin-bottom: 0
+        margin:0 -30px 0;
+        margin-bottom: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        /* padding-top: 17px; */
+        z-index: 99999;
     }
     .info{
         color: #0BB2D4;
@@ -192,6 +197,7 @@ export default {
     }
     .mt20{margin-top: 20px;}
     .mt30{margin-top: 30px;}
+    .mt60{margin-top: 60px;}
     .mb20{margin-bottom: 20px;}
     .flexImg{
         display: flex;

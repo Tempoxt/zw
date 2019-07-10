@@ -356,7 +356,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 	.ivu-drawer-body{
         padding-left: 30px;
     }

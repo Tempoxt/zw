@@ -474,7 +474,7 @@
         <div>
             <Drawer :closable="false" width="640" v-model="openDrawers">
                 <p class="detail">员工档案详情</p>
-                <p class="info">个人信息<i @click="showPersonInfo" class="icon iconfont icon-bianji editIcon"></i></p>
+                <p class="info mt60">个人信息<i @click="showPersonInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
                     <Row>
                         <Col span="12">
