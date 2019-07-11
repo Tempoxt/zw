@@ -162,6 +162,11 @@ export default {
      if(!this.id){
        return
      }
+     if(this.table_form.keyword!=''||this.table_form.query.query!=''){
+       this.table_form.isMember = 0;
+     }else{
+       this.table_form.isMember = 1;
+     }
      this.table_loading = true;
      this.table_form.orgid = this.id
      const {rows , total }= await api_resource.get(this.table_form);
@@ -213,13 +218,14 @@ export default {
       let row = this.table_selectedRows[0]
       this.form = await api_resource.find(row.id)
       this.dialogFormVisible = true;
-    }
+    },
   },
   async created() {
     const { field, action,table } = await api_common.menuInit("lovefoundation/member");
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
+    this.table_form.isMember = 1;
     this.fetchTableData();
   }
 };
