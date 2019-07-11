@@ -150,9 +150,7 @@ export default {
 	methods: {
 		async handleFormSubmit(){
 			await this.form_validate()
-			
             let form = Object.assign({},this.form)
-			console.log(this.form,'mmmmmmmm')
 			if(this.isInsert){
 				await this.$request.post('/hrmblacklist/record',this.form)
 			}else{

@@ -140,9 +140,8 @@ export default {
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
-          table_height:window.innerHeight-236,
+          table_height:window.innerHeight-256,
           optionData:[],
-		  addItem:'手动添加',
 		  dialogForm2Visible:false,
 		  dialogFormVisible:false,
 		  status:'全部',
@@ -174,7 +173,6 @@ export default {
     watch:{
 		'form2.invoiceType'(){
 			if(this.form2.invoiceType!=''){
-				console.log(this.form2.invoiceType,'this.form2.invoiceType')
 				this.inputFocus()
 			}
 		}
@@ -218,9 +216,6 @@ export default {
             this.dialogFormVisible = true
 		},
 		async scan(){
-			this.$nextTick(()=>{
-                this.$refs['form2'].clearValidate()
-            })
 			this.addItem = '扫码添加'
 			this.form2 = {}
             this.optionData = (await api_common.resource('productrecheck/getallinvoicetype').get()).map(o=>{return {label:o.title,value:o.type}});
@@ -234,13 +229,12 @@ export default {
             this.optionData = (await api_common.resource('productrecheck/getallinvoicetype').get()).map(o=>{return {label:o.title,value:o.type}});
             let row = this.table_selectedRows[0]
             this.form = await api_resource.find(row.id);
-            this.dialogFormVisible = true;
         },
         async handleFormSubmit(){
             await this.form_validate()
-            let form = Object.assign({},this.form)
+			let form = Object.assign({},this.form)
             if(this.isInsert){
-				const data= await api_resource.create(form)
+				await api_resource.create(form)
             }else{
                 await api_resource.update(form.id,this.form)
             }
@@ -248,14 +242,19 @@ export default {
             this.fetchTableData()
 		},
 		async submitInvoice(){
-            await this.invioce_validate()
-			if(this.form2.invoiceType&&this.form2.invoiceCode!=''){
-				this.$request.post('/productrecheck/invoicerecheck/scan',this.form2)
-				
-				this.dialogForm2Visible = false
-				setTimeout(() => {
-					this.fetchTableData()
-				}, 500);
+			await this.invioce_validate()
+			
+            let form2 = Object.assign({},this.form2)
+			if(form2.invoiceType&&form2.invoiceCode!=''){
+				try {
+					await this.$request.post('/productrecheck/invoicerecheck/scan',form2)
+					this.dialogForm2Visible = false
+					setTimeout(() => {
+						this.fetchTableData()
+					}, 500);
+				} catch (error) {
+					console.log(error,'err')
+				}
 			}
 		}
     },
@@ -267,7 +266,6 @@ export default {
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
 		this.optionDatas = (await api_common.resource('productrecheck/getallinvoicetype').get()).map(o=>{return {label:o.title,value:o.type}});
 		this.optionDatas.push({value:0,label:'全部'})
-		console.log(this.optionDatas)
 		this.table_form.invoiceType = 0
         this.fetchTableData();
     }
