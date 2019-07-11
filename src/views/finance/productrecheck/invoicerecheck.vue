@@ -24,7 +24,7 @@
 							<form-render :type="`input`" prop="invoiceNumber" :field="{name:'发票号码'}" v-model="form.invoiceNumber" />
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`day`" :field="{name:'开票日期'}" v-model="form.invoiceDate" />
+							<form-render :type="`day`" prop="invoiceDate" :field="{name:'开票日期'}" v-model="form.invoiceDate" />
 						</el-col>
 						<el-col :span="24">
 							<form-render :type="`input`" prop="amount" :field="{name:'金额'}" v-model="form.amount" />
@@ -85,7 +85,7 @@
 				</el-select>
 			</div>
 			<div style="padding-left:10px">
-				<dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+				<dateLap type="1" v-model="table_form.dateLap" @change="fetchTableData"/>
 			</div>	
 		</table-header>
 		<el-table
@@ -136,7 +136,9 @@ export default {
           baseUrl,
           loading: true,
           form:{},
-          form2:{},
+          form2:{
+			  invoiceType:4
+		  },
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
@@ -152,12 +154,15 @@ export default {
             ],
             invoiceCode:[
                 { required: true, message: '请输入',trigger: 'blur' }
+			],
+			invoiceNumber:[
+                { required: true, message: '请输入', trigger: 'blur' },
+			],
+			invoiceDate:[
+                { required: true, message: '请选择', trigger: 'blur' },
             ],
             amount:[
                 { required: true, message: '请输入', trigger: 'blur' },
-            ],
-            invoiceNumber:[
-                { min: 8, max: 8, message: '长度为8位', trigger: 'blur' }
             ]
 		  },
 		  rules2:{
@@ -169,13 +174,6 @@ export default {
             ],
           }
         };
-    },
-    watch:{
-		'form2.invoiceType'(){
-			if(this.form2.invoiceType!=''){
-				this.inputFocus()
-			}
-		}
     },
     methods: {
 		invioce_validate(){
@@ -217,8 +215,11 @@ export default {
 		},
 		async scan(){
 			this.addItem = '扫码添加'
-			this.form2 = {}
+			this.form2 = {
+			  invoiceType:4
+			};
             this.optionData = (await api_common.resource('productrecheck/getallinvoicetype').get()).map(o=>{return {label:o.title,value:o.type}});
+			this.inputFocus()
             this.dialogForm2Visible = true
 		},
         async edit(){
@@ -248,12 +249,15 @@ export default {
 			if(form2.invoiceType&&form2.invoiceCode!=''){
 				try {
 					await this.$request.post('/productrecheck/invoicerecheck/scan',form2)
-					this.dialogForm2Visible = false
+					// this.dialogForm2Visible = false
+					this.form2.invoiceCode = ''
 					setTimeout(() => {
 						this.fetchTableData()
 					}, 500);
 				} catch (error) {
 					console.log(error,'err')
+					
+					this.form2.invoiceCode = ''
 				}
 			}
 		}
@@ -263,7 +267,7 @@ export default {
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table
-		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		this.table_form.dateLap = dayjs().format('YYYY-MM-DD')
 		this.optionDatas = (await api_common.resource('productrecheck/getallinvoicetype').get()).map(o=>{return {label:o.title,value:o.type}});
 		this.optionDatas.push({value:0,label:'全部'})
 		this.table_form.invoiceType = 0
