@@ -162,11 +162,14 @@ export default {
      if(!this.id){
        return
      }
-     if(this.table_form.keyword!=''||this.table_form.query.query!=''){
+     if(this.table_form.keyword!=undefined&&this.table_form.keyword!=''){
+       this.table_form.isMember = 0;
+     }else if(this.table_form.query.query.length!=0){
        this.table_form.isMember = 0;
      }else{
-       this.table_form.isMember = 1;
+        this.table_form.isMember = 1;
      }
+     
      this.table_loading = true;
      this.table_form.orgid = this.id
      const {rows , total }= await api_resource.get(this.table_form);
