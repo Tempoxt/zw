@@ -180,6 +180,18 @@ export default {
 		}
     },
     methods: {
+		invioce_validate(){
+            return new Promise((resolve,reject)=>{
+                this.$refs.form2.validate((valid) => {
+                if(valid){
+                    resolve()
+                }else{
+                    reject()
+                    return false
+                }
+                })
+            })
+        },
 		changeStatus(val){
 			this.status = val
 			this.table_form.invoiceType = val
@@ -206,6 +218,9 @@ export default {
             this.dialogFormVisible = true
 		},
 		async scan(){
+			this.$nextTick(()=>{
+                this.$refs['form2'].clearValidate()
+            })
 			this.addItem = '扫码添加'
 			this.form2 = {}
             this.optionData = (await api_common.resource('productrecheck/getallinvoicetype').get()).map(o=>{return {label:o.title,value:o.type}});
@@ -222,6 +237,7 @@ export default {
             this.dialogFormVisible = true;
         },
         async handleFormSubmit(){
+            await this.form_validate()
             let form = Object.assign({},this.form)
             if(this.isInsert){
 				const data= await api_resource.create(form)
@@ -231,17 +247,16 @@ export default {
             this.dialogFormVisible = false
             this.fetchTableData()
 		},
-		submitInvoice(){
-			this.$nextTick(()=>{
-                this.$refs['form2'].clearValidate()
-            })
+		async submitInvoice(){
+            await this.invioce_validate()
 			if(this.form2.invoiceType&&this.form2.invoiceCode!=''){
 				this.$request.post('/productrecheck/invoicerecheck/scan',this.form2)
+				
+				this.dialogForm2Visible = false
+				setTimeout(() => {
+					this.fetchTableData()
+				}, 500);
 			}
-			this.dialogForm2Visible = false
-			setTimeout(() => {
-				this.fetchTableData()
-			}, 500);
 		}
     },
     async created() {
