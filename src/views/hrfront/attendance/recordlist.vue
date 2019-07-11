@@ -22,8 +22,8 @@
                     ref="tree2"
                     :highlight-current="true"
                     :check-on-click-node="false"
-                    @node-click="handleChangeNode"
                     :expand-on-click-node="false"
+                    @node-click="handleChangeNode"
                 >
                     <span slot-scope="{ node, data }">
 
@@ -54,16 +54,30 @@ export default {
         recordlistTable,
         org
     },
+     watch:{
+       filterText(val) {
+        this.$refs.tree2.filter(val);
+      }
+    },
     data(){
         return {
             activeName:'first',
-            orgid:''
+            orgid:'',
+            data2:[],
+            filterText:'',
         }
     },
     methods:{
+        handleChangeNode(val){
+            this.orgid = val.orgid
+        },
         changeOrg(orgid){
             this.orgid = orgid
-        }
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name && data.name.indexOf(value) !== -1;
+        },
     },
     async created(){
         this.data2 = await this.$request.get('org',{
