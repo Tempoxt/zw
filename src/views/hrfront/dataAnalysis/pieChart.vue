@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div :id="id" v-show="show" class="box-card-c"></div>
-		<div :id="id+'2'" v-show="!show" class="box-card-c box-card-c2"></div>
+		<div :id="id+'2'" v-show="!show" v-if="datas" class="box-card-c box-card-c2"></div>
   </el-card>
 </template>
 
@@ -12,12 +12,26 @@ export default {
   props: ["title", "id", "color", "datas","show","screenIndex"],
 	data() {
 		return {
-			option: {}
+			option: {},
 		}
 	},
-  mounted() {
-		this.init()
-  },
+	mounted() {
+		this.$nextTick(function() {
+			this.init(this.id,this.datas)
+		})
+	},
+	watch: {
+		datas:{
+			handler(newVal, oldVal){
+				if(this.datas!=''){
+					this.datas = newVal
+					this.init(this.id,newVal)
+				}
+			},
+			immediate: true,
+			deep: true
+		}
+	},
 	methods:{		
 		checkFull(){
 			console.log(this.show)
@@ -30,8 +44,10 @@ export default {
 		fullScreen(){
 			this.$emit("fullScreen",this.screenIndex)
 		},
-		init(){
+		init(id,data){
 			let _this=this;
+			
+			//   console.log(data,'222  init data length')
 			  this.option = {
 			    title: {
 			      text: this.title
@@ -91,28 +107,37 @@ export default {
 			            show: true
 			          }
 			        },
-			        data: this.datas
+			        data: data
 			      }
 			    ]
 			  };
-			  for (let i = 0; i < this.datas.length; i++) {
-			    this.option.legend.data[i]={}
-			    this.option.legend.data[i].name = this.datas[i].name;
-			    this.option.legend.data[i].icon = "circle";
+			  if(data!=undefined){
+				for (let i = 0; i < data.length; i++) {
+					this.option.legend.data[i]={}
+					this.option.legend.data[i].name = data[i].name;
+					this.option.legend.data[i].icon = "circle";
+				}
+				if (this.color) {
+					this.option.color = this.color;
+				}
+				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
+				let myChart = echarts.init(document.getElementById(id));
+				myChart.setOption(this.option);
+				window.addEventListener('resize',function() {
+					$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
+					$(".box-card-c").height(parseInt($(".box-card-c").parent().height()));
+					myChart.resize()
+				});
 			  }
-			  if (this.color) {
-			    this.option.color = this.color;
-			  }
-			  $(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
-			  let myChart = echarts.init(document.getElementById(this.id));
-			  myChart.setOption(this.option);
-				// window.addEventListener('resize',function() {
-				// 	$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
-				// 	$(".box-card-c").height(parseInt($(".box-card-c").parent().height()));
-				// 	myChart.resize()
-				// });
 		}
-	}
+	},
+	// created(){
+	// 	console.log('1111111')
+	// 	console.log(this.datas,'6666666666')
+	// 	this.$nextTick(() => {
+	// 		this.init()
+	// 	})
+	// }
 };
 </script>
 

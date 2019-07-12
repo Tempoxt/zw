@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div :id="id" v-show="show" class="box-card-c"></div>
-		<div :id="id+'2'" v-show="!show" class="box-card-c box-card-c2"></div>
+		<div :id="id+'2'" v-show="!show" v-if="datas" class="box-card-c box-card-c2"></div>
   </el-card>
 </template>
 
@@ -9,19 +9,31 @@
 import echarts from "echarts";
 
 export default {
-  props: ["title", "id","show","screenIndex"],	
+  props: ["title", "id","show","datas","screenIndex"],	
 	data() {
 		return {
 			option: {}
 		}
 	},
-  mounted() {
-    this.init();
-  },
+	mounted() {
+		this.$nextTick(function() {
+			this.init(this.id,this.datas)
+		})
+	},
+	watch: {
+		datas:{
+			handler(newVal, oldVal){
+				if(this.datas!=''){
+					this.datas = newVal
+					this.init(this.id,newVal)
+				}
+			},
+			immediate: true,
+			deep: true
+		}
+	},
 	methods:{		
 		checkFull(){
-			
-			console.log(this.show)
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
 			console.log(window.screen.height)
@@ -31,7 +43,7 @@ export default {
 		fullScreen(){
 			this.$emit("fullScreen",this.screenIndex)
 		},
-		init(){
+		init(id,data){
 			let _this=this;
 			this.option = {
 			  title: {
@@ -41,7 +53,7 @@ export default {
 			    trigger: "axis"
 			  },
 			  legend: {
-			    data: [{name:'男',icon:"circle"}, {name:'女',icon:"circle"}]
+			    data: ['男','女']
 			  },
 			  toolbox: {
 			    show: true,
@@ -49,7 +61,7 @@ export default {
 			    feature: {
 			      myTool2: {
 			          show: true,
-			      		title:"全屏",
+			      	  title:"全屏",
 			          icon: 'image://http://echarts.baidu.com/images/favicon.png',
 			          onclick: function (){
 			              _this.fullScreen()
@@ -61,12 +73,12 @@ export default {
 			      }
 			    }
 			  },
-			  color: ["#73ACFF", "#FF64C6"],
+			  color: ["#3889FF", "#FF64C6"],
 			  calculable: true,
 			  xAxis: [
 			    {
 			      type: "category",
-			      data: ["25岁以下", "25-35岁", "36-45岁", "46-55岁", "56岁以上"]
+			      data: data.man.name
 			    }
 			  ],
 			  yAxis: [
@@ -78,25 +90,28 @@ export default {
 			    {
 			      name: "男",
 			      type: "bar",
-			      data: [2, 4, 7, 23, 25]
+			      data: data.man.value
 			    },
 			    {
 			      name: "女",
 			      type: "bar",
-			      data: [2, 5, 9, 26, 28]
+			      data: data.woman.value
 			    }
 			  ]
 			};
 			this.option.title.text = this.title;
-			$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
-			let myChart = echarts.init(document.getElementById(this.id));
-			myChart.setOption(this.option);
-			//建议加上以下这一行代码，不加的效果图如下（当浏览器窗口缩小的时候）。超过了div的界限（红色边框）
-			// window.addEventListener('resize',function() {
-			// 	$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
-			// 	$(".box-card-c").height(parseInt($(".box-card-c").parent().height()));
-			// 	myChart.resize()
-			// });
+			if(data!=undefined){
+				this.option.xAxis.data = this.datas.man.name
+				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
+				let myChart = echarts.init(document.getElementById(this.id));
+				myChart.setOption(this.option);
+				//建议加上以下这一行代码，不加的效果图如下（当浏览器窗口缩小的时候）。超过了div的界限（红色边框）
+				window.addEventListener('resize',function() {
+					$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
+					$(".box-card-c").height(parseInt($(".box-card-c").parent().height()));
+					myChart.resize()
+				});
+			}
 		}
 	}
 };
