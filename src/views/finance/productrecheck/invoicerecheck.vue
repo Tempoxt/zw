@@ -15,22 +15,25 @@
 				<el-form ref="form" :model="form" label-width="100px" :rules="rules">
 					<el-row :gutter="20">
 						<el-col :span="24">
-							<form-render :type="`select`" prop="invoiceType" :field="{name:'发票类型',options:optionData}" v-model="form.invoiceType"/>
+							<form-render :type="`select`" prop="invoiceType" placeholder="请选择发票类型" :field="{name:'发票类型',options:optionData}" v-model="form.invoiceType"/>
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`input`" prop="invoiceCode" :field="{name:'发票代码'}" v-model="form.invoiceCode"/>
+							<form-render :type="`input`" prop="invoiceCode" placeholder="请输入发票代码" :field="{name:'发票代码'}" v-model="form.invoiceCode"/>
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`input`" prop="invoiceNumber" :field="{name:'发票号码'}" v-model="form.invoiceNumber" />
+							<form-render :type="`input`" prop="invoiceNumber" placeholder="请输入发票号码" :field="{name:'发票号码'}" v-model="form.invoiceNumber" />
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`day`" prop="invoiceDate" :field="{name:'开票日期'}" v-model="form.invoiceDate" />
+							<form-render :type="`day`" prop="invoiceDate" placeholder="请选择日期" :field="{name:'开票日期'}" v-model="form.invoiceDate" />
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`input`" prop="amount" :field="{name:'金额'}" v-model="form.amount" />
+							<form-render :type="`input`" prop="amount" placeholder="请输入金额" :field="{name:'金额'}" v-model="form.amount" />
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`textarea`" :field="{name:'备注'}" v-model="form.remark" />
+							<form-render :type="`input`" prop="authCode" placeholder="请输入检验码后六位" :field="{name:'校验码'}" v-model="form.authCode" />
+						</el-col>
+						<el-col :span="24">
+							<form-render :type="`textarea`" placeholder="请输入" :field="{name:'备注'}" v-model="form.remark" />
 						</el-col>
 					</el-row>
 				</el-form>
@@ -163,7 +166,10 @@ export default {
             ],
             amount:[
                 { required: true, message: '请输入', trigger: 'blur' },
-            ]
+			],
+			authCode:[
+                { required: true, message: '请输入', trigger: 'blur' },
+			],
 		  },
 		  rules2:{
             invoiceType:[

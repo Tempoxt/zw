@@ -3,7 +3,7 @@
       v-on="$parent.$listeners">
     <el-select
       v-model="data"
-      placeholder="请选择"
+      :placeholder="$parent.$attrs.placeholder||'请选择'"
       style="width:100%"
       v-bind="$parent.$attrs"
       v-on="$parent.$listeners"
