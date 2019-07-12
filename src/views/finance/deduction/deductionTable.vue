@@ -159,7 +159,7 @@ export default {
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_height:window.innerHeight-300,
+      table_topHeight:300,
       adminList:[],
       defaultForm,
       roomAdminList:[],

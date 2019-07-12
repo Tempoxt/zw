@@ -142,7 +142,7 @@ export default {
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
-          table_height:window.innerHeight-256,
+          table_topHeight:256,
           optionData:[],
 		  dialogForm2Visible:false,
 		  dialogFormVisible:false,

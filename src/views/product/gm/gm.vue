@@ -80,7 +80,7 @@ export default {
             form:{},
             api_resource,
             queryDialogFormVisible:true,
-            table_height:window.innerHeight-296,
+            table_topHeight:296,
             dialogFormVisible:false,
             rules:{
                 VCode:[

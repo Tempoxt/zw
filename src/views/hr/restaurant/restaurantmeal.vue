@@ -129,7 +129,7 @@ export default {
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_height:window.innerHeight-310,
+      table_topHeight:310,
       defaultForm,
       officeaddress:[],
       table_tabs_options:[],

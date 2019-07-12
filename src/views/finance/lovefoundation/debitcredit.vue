@@ -111,7 +111,7 @@ export default {
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
-          table_height:window.innerHeight-236,
+          table_topHeight:236,
           adminList:[],
           defaultForm,
           selectData:[],

@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       checkedRows: this.selectedRows,
-      table_height:window.innerHeight-223,
+      table_topHeight:223,
     };
   },
   methods: {

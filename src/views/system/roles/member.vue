@@ -307,7 +307,7 @@ export default {
     },
     data(){
         return {
-            table_height:window.innerHeight-300,
+            table_topHeight:300,
             form:defaultForm(),
             defaultForm,
             api_resource,

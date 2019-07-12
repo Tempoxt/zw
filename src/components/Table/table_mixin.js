@@ -50,7 +50,6 @@ export default {
       table_modal: false,
       dialogFormVisible: false,
       table_queryFormVisible: false,
-      table_height:window.innerHeight-236,
       table_form:{
         pagesize:100,
         currentpage:1,
@@ -61,10 +60,14 @@ export default {
       },
       table_sort:{},
       form_multiple:false,
-      importLoading:false
+      importLoading:false,
+      window_innerHeight:0
     }
   },
   computed: {
+    table_height(){ 
+      return (this.window_innerHeight||window.innerHeight) - (this.table_topHeight||236)
+    },
     isInsert() {
       return this.dialogStatus === 'insert'
     },
@@ -90,6 +93,14 @@ export default {
         : [tmp, this.expandAll];
       return func.apply(null, args);
     }
+  },
+  mounted(){
+    let _onresize = window.onresize
+    window.onresize = () => {
+      _onresize && _onresize()
+      this.window_innerHeight = window.innerHeight
+    }
+    
   },
   methods: {
     indexMethod(i){
