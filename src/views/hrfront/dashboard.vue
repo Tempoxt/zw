@@ -105,7 +105,7 @@
                        <pieChart  
 					   :show="checkFullshow"
 					   ref="echart2"
-					   title="男女比列统计" 
+					   title="男女比例统计" 
 					   id="men-and-women"
 					   screenIndex='2'
 					   @fullScreen="fullScreen"
