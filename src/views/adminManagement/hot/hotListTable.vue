@@ -123,7 +123,7 @@
 	<!-- 人员档案的信息预览 -->
 	<div>
 		<Drawer :closable="false" width="640" v-model="openDrawers">
-			<p class="detail">{{chineseName}}考勤明细</p>
+			<p class="detail"><span v-html="chineseName" style="color:#37474F"></span>考勤明细</p>
 			<div class="demo-drawer-profile">
 				<el-table 
 					:data="drawerData"
@@ -134,7 +134,7 @@
       				:summary-method="getSummaries"
 					>
 					
-            		<el-table-column type="index" :index="indexMethod" fixed/>
+            		<el-table-column type="index" :index="indexMethods" fixed/>
 					<el-table-column
 						prop="CheckDate"
 						label="日期">
@@ -243,7 +243,9 @@ export default {
 			openDrawers:false,
 			drawerData: [],
 			totalAllo:'',
-			chineseName:''
+			chineseName:'',
+			curr:1,
+			page:''
 		};
 	},
 	watch:{
@@ -252,6 +254,9 @@ export default {
 		}
 	},
 	methods: {
+		indexMethods(i){
+			return (i+1)+(this.curr-1)*this.page
+		},
 		reset(){
 			this.$request.get('hot/historyreset',{params:{dateLap:this.table_form.dateLap}})
 			this.$message({
@@ -376,7 +381,7 @@ export default {
         padding-top: 10px;
         background: #E4EAEC;
         box-shadow: 0px 1px 0px rgba(228,234,236,1);
-        margin:-16px -30px 0;
+        margin:-16px -16px 0;
         margin-bottom: 30px
     }
 </style>
