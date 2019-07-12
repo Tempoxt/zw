@@ -204,18 +204,16 @@
 	},
 	watch:{
 		orgid(){
-			// this.this.orgid
 			this.fetchData()
 			this.visible = false
 			this.findDataName()
+		},
+		filterText(val) {
+			this.$refs.tree2.filter(val);
 		}
 	},
     methods: {
-		aa(data) {
-			console.log(data);
-		},
 		findDataName() {
-			console.log(this.orgid,'99999')
 			if (this.orgid === undefined) {
 				return;
 			}
@@ -226,8 +224,6 @@
 				data.some(row => {
 					if (row['orgid'] == orgid) {
 						info = row;
-						
-						console.log(info,'iiiiiiiiiii')
 						return true;
 					}
 					if (row.subs && row.subs.length) {
@@ -236,11 +232,6 @@
 				});
 			})(this.data2);
 			this.input5 = info.name;
-		},
-		nodeSelect(data) {
-			console.log(data,'data')
-			this.data = data[this.field.field_key || 'orgid'];
-			this.visible = false;
 		},
 		handleChangeNode(val){
             this.orgid = val.orgid
@@ -258,7 +249,6 @@
 		},
 		speechSwitch(id){
 			this.screenIndex=id;
-			//console.log(this.$refs.aaaa1.init)
 		    this.$refs["echart"+id].checkFull();
 			this.checkFullshow=false;
 			this.fulltype=true;
@@ -283,11 +273,13 @@
 		  return isFull;
 		},
 		async fetchData(){
-			const analysis = await this.$request.get('/dataanalysis/datastat?org_id='+this.orgid);
-			this.staffData = analysis.staff_stat
-			this.sexData = analysis.sex_stat;
-			this.eduLevelData = analysis.eduLevel_stat;
-			this.eachageData = analysis.each_age_sex_stat
+			if(this.orgid!=''&&this.orgid!=undefined){
+				const analysis = await this.$request.get('/dataanalysis/datastat?org_id='+this.orgid);
+				this.staffData = analysis.staff_stat
+				this.sexData = analysis.sex_stat;
+				this.eduLevelData = analysis.eduLevel_stat;
+				this.eachageData = analysis.each_age_sex_stat
+			}
 		}
     },
 	async mounted() {
