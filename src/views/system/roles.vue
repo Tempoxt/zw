@@ -16,7 +16,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="添加角色" :visible.sync="roleFormVisible" class="public-dialog" v-el-drag-dialog>
+    <el-dialog  :title="dialogStatus==='insert'?'添加角色':'编辑角色'"  :visible.sync="roleFormVisible" class="public-dialog" v-el-drag-dialog>
       <div>
         <el-form ref="form" :model="roleForm" label-width="80px" label-position="left">
           <el-row :gutter="20">
