@@ -97,6 +97,14 @@ export default [{
         }
     },
     {
+        name: 'clothesIssue',
+        component: () =>
+            import ('@/views/hrfront/workclothes/issue'),
+        meta: {
+            title: '发放列表'
+        }
+    },
+    {
         name: 'checkinout',
         component: () =>
             import ('@/views/hrfront/dormitory/checkinout'),

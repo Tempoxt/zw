@@ -30,7 +30,7 @@
 							<form-render :type="`input`" prop="amount" placeholder="请输入金额" :field="{name:'金额'}" v-model="form.amount" />
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`input`" prop="authCode" placeholder="请输入检验码" :field="{name:'校验码'}" v-model="form.authCode" />
+							<form-render :type="`input`" placeholder="请输入检验码" :field="{name:'校验码'}" v-model="form.authCode" />
 						</el-col>
 						<el-col :span="24">
 							<form-render :type="`textarea`" placeholder="请输入" :field="{name:'备注'}" v-model="form.remark" />

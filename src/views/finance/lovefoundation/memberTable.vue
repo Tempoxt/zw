@@ -113,7 +113,7 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
+    <el-table-column type="index" :index="indexMethod" width="70" label="序号"/>
     <each-table-column :table_field="table_field"/>
     </el-table>
      <table-pagination 

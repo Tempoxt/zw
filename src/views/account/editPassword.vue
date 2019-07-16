@@ -91,18 +91,15 @@ export default {
             }
 		},
 		disabeld(){
-            console.log(this.editForm,'hhh')
             if(this.editForm.password==''||this.editForm.passwordNew==''||this.editForm.passwordPard==''||(this.editForm.passwordNew!=this.editForm.passwordPard)){
                 return true
             }else{
-                console.log('555')
                 return false
             }
         }
 	},
 	methods:{
 		async handleFormSubmit(){
-			console.log(this.editForm);
 			this.form = await this.$request.post('/user/updatePwd',{
 				oldPwd:this.editForm.password,
 				newPwd:this.editForm.passwordNew
@@ -110,7 +107,7 @@ export default {
 		}
 	},
 	created(){
-		console.log(this.showModal,'visible')
+		// console.log(this.showModal,'visible')
 	}
 }
 </script>
