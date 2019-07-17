@@ -6,21 +6,120 @@
     @query="querySubmit"
     >
          <el-dialog
-            title="添加功能"
+            :title="dialogStatus==='insert'?'添加':'编辑'"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
             >
-            <div  v-loading="dialog_loading">
-            <el-checkbox-group v-model="actionsModel">
-              <el-row :gutter="10">
-              <el-col :md="4" v-for="action in actionsList" :key="action.id" style="margin-bottom:10px;">
-                   <el-checkbox :label="action.id" >
-                    <i :class="action.icon"></i>
-                    {{action.name}}</el-checkbox>
-              </el-col>
-            </el-row>
-                </el-checkbox-group>
+            <div v-loading="dialog_loading">
+                 <div>
+                    <el-form ref="form" :model="form" label-width="90px" label-position="left">
+                      <el-row :gutter="60">
+                        <div class="line-box">
+                        <el-col :span="12">
+                          <form-render :type="`input`" :field="{name:'字段名称'}" v-model="form.name" placeholder="请输入内容"/>
+                        </el-col>
+    
+                        <el-col :span="12">
+                          <form-render :type="`input`" :field="{name:'字段显示名'}" v-model="form.showname" placeholder="请输入内容"/>
+                        </el-col>
+
+
+                      <el-col :span="12">
+                          <form-render
+                            :type="`select`"
+                            :field="{name:'类型',options:[{
+                              value: 'text',
+                              label: '单行文本'
+                            },{
+                              value: 'textarea',
+                              label: '多行文本'
+                            },{
+                              value: 'password',
+                              label: '密码框'
+                            },{
+                              value: 'select',
+                              label: '选择项'
+                            },{
+                              value: 'checkbox',
+                              label: '多选项'
+                            },{
+                              value: 'radio',
+                              label: '单选项'
+                            },{
+                              value: 'image',
+                              label: '图片'
+                            },{
+                              value: 'file',
+                              label: '文件'
+                            }]}"
+                            v-model="form.fieldtype"
+                          />
+                        </el-col>
+
+                        <el-col :span="12">
+                          <form-render
+                            :type="`select`"
+                            :field="{name:'验证方式',options:[{
+                              value: 'text',
+                              label: '单行文本'
+                            },{
+                              value: 'textarea',
+                              label: '多行文本'
+                            },{
+                              value: 'password',
+                              label: '密码框'
+                            },{
+                              value: 'select',
+                              label: '选择项'
+                            },{
+                              value: 'checkbox',
+                              label: '多选项'
+                            },{
+                              value: 'radio',
+                              label: '单选项'
+                            },{
+                              value: 'image',
+                              label: '图片'
+                            },{
+                              value: 'file',
+                              label: '文件'
+                            }]}"
+                            v-model="form.validation"
+                          />
+                        </el-col>
+
+                        <el-col :span="12">
+                          <form-render :type="`input`" :field="{name:'数据源'}" v-model="form.sourcefrom" placeholder="请输入内容"/>
+                        </el-col>
+
+                        
+
+
+
+                        <el-col :span="12">
+                          <form-render
+                            :type="`radio`"
+                            :field="{name:'允许修改',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                            v-model="form.iseditable"
+                          />
+                        </el-col>
+
+
+                          <el-col :span="12">
+                          <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
+                        </el-col>
+                        
+                      
+                      
+                        </div>
+                        <el-col :span="24">
+                          <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入内容"/>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                  </div>
+
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -73,21 +172,13 @@ export default {
   methods: {
     async add(){
       this.dialogFormVisible = true
-      this.dialog_loading = true
-      this.actionsModel = []
-      this.actionsList = await api_actionsheet.get()
-      this.actionsModel = this.table_data.map(item=>(+item.action__id))
-      setTimeout(()=>{
-        this.dialog_loading = false
-      },300)
+      this.dialog_loading = false
+      
+    
     },
 
     async handleFormSubmit(){
-      await api_resource.create({
-        action:this.actionsModel,
-        catolog:'action',
-        menu:this.currentMenuid
-      })
+     
       this.dialogFormVisible = false
       this.fetchTableData()
     },
@@ -110,7 +201,8 @@ export default {
       actionsList:[],
       actionsModel:[],
       dialog_loading:true,
-      api_resource
+      api_resource,
+      form:{}
     };
   },
   async created() {

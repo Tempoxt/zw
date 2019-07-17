@@ -37,6 +37,15 @@ export function  getTag(tag){
 }
 export function resource (url) {
   return {
+    export (params,config) {
+      let p = Object.assign({},params)
+      delete p.pagesize
+      delete p.currentpage
+      return request.get(`/${url}/export`, {
+        params:p,
+        config
+      })
+    },
     get (params) {
       return request.get(`/${url}`, {
         params

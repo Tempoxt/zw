@@ -277,10 +277,14 @@ export default {
         })
     },
     async download(){
-       const { data,name,contentType} =  await request.get('hrm/v2/export',{
-          params:this.table_form,
+      //  const { data,name,contentType} =  await request.get('hrm/v2/export',{
+      //     params:this.table_form,
+      //     responseType:'arraybuffer'
+      //   })
+        const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
           responseType:'arraybuffer'
         })
+
         
 
         download(data,name||this.$route.meta.title,contentType)

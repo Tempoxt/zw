@@ -924,7 +924,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hrm/staff");
+const api_resource = api_common.resource("hrm/v2/staff");
 import Device from '@/utils/zk_sdk/baseISSOnline.js'
 import dayjs from 'dayjs'
 import { constants } from 'crypto';
