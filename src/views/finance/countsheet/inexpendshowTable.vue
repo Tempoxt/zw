@@ -27,6 +27,7 @@
       style="width: 100%"
       :show-header="false"
       v-loading="table_loading"
+      :height="table_height"
       :header-cell-style="headerCellStyle"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
@@ -59,6 +60,7 @@ export default {
     return {
       loading: true,
       form:{},
+			table_topHeight:326,
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,

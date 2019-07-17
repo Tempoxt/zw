@@ -56,6 +56,7 @@ export default {
     return {
       loading: true,
       form:{},
+			table_topHeight:326,
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
