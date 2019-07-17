@@ -55,55 +55,55 @@ import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("workclothes/issuepc");
 export default {
-  mixins: [table_mixin],
-  props:['flag'],
-  components:{
-    dateLap
-  },
-  data() {
-    return {
-      loading: true,
-      form:{},
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
-      activeName:'first',
-    };
-  },
-  watch:{
-    flag(){
-      this.fetchMenu()
-      this.fetchTableData()
-    }
-  },
-  methods: {
-    async fetchTableData() {
-     this.table_loading = true;
-      this.table_form.flag = this.flag
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-       this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
-    async issue(){
-      let rows = this.table_selectedRows.map(row=>row.id)
+	mixins: [table_mixin],
+	props:['flag'],
+	components:{
+		dateLap
+	},
+	data() {
+		return {
+			loading: true,
+			form:{},
+			api_resource,
+			orgCategory:[],
+			queryDialogFormVisible:true,
+			activeName:'first',
+		};
+	},
+	watch:{
+		flag(){
+			this.fetchMenu()
+			this.fetchTableData()
+		}
+	},
+	methods: {
+		async fetchTableData() {
+			this.table_loading = true;
+			this.table_form.flag = this.flag
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
+		},
+		async issue(){
+			let rows = this.table_selectedRows.map(row=>row.id)
 			await this.$request.put('/workclothes/issue?ids='+rows.join(','))
 			this.fetchTableData()
-    },
-    async fetchMenu(){
-      const { field, action,table } = await api_common.menuInit("issuepc"+this.flag);
-      this.table_field = field;
-      this.table_actions = action;
-      this.table_config = table
-    }
-  },
-  async created() {
-    this.fetchMenu()
-    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
-    this.fetchTableData();
-  }
+		},
+		async fetchMenu(){
+			const { field, action,table } = await api_common.menuInit("issuepc"+this.flag);
+			this.table_field = field;
+			this.table_actions = action;
+			this.table_config = table
+		}
+	},
+	async created() {
+		this.fetchMenu()
+		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+		this.fetchTableData();
+	}
 };
 </script>
 

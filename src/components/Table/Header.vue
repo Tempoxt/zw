@@ -115,7 +115,7 @@ export default {
           return len >= 1;
         }
         
-        if (['forbid','lock','unlock','enable','away','remove','checkout','change','confirm','finish'].indexOf(code)!==-1) {
+        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;
