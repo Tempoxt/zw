@@ -111,11 +111,14 @@ export default {
         if (code === "edit") {
           return len === 1;
         }
+        if(code === "settlement") {
+          return len === 1;
+        }
         if (code === "delete") {
           return len >= 1;
         }
         
-        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue'].indexOf(code)!==-1) {
+        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;
