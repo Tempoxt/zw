@@ -297,16 +297,8 @@
     >
  <div style="padding-left:10px">
 
-     <el-date-picker
-      v-model="table_form.dateLap"
-      type="monthrange"
-      value-format="yyyy-MM"
-       @change="fetchTableData"
-      range-separator="-"
-      start-placeholder="开始月份"
-      end-placeholder="结束月份">
-    </el-date-picker>
 
+     <DateLapRange v-model="table_form.dateLap" @change="fetchTableData"/>
 
             <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
           </div>

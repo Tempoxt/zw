@@ -20,7 +20,7 @@
           size="medium"
           v-if="table_actions[table_actions_morelen]"
         >
-          <el-button type="default" style="border-left: 0;">
+          <el-button type="default" style="border-left: 0;"  size="medium">
             <span style="font-size: 12px;">更多</span>
             <i class="el-icon-arrow-down el-icon--right" style="font-size: 14px"></i>
           </el-button>

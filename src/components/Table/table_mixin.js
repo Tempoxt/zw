@@ -10,6 +10,7 @@ import treeToArray from "./eval";
 import tableColumn from '@c/publicTable/tableColumn'
 import eachTableColumn from '@c/publicTable/eachTableColumn'
 import dateLap from '@/components/Table/DateLap'
+import DateLapRange from '@/components/Table/DateLapRange'
 import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
@@ -27,7 +28,7 @@ export default {
     tablePagination,
     tableColumn,
     eachTableColumn,
-    dateLap
+    DateLapRange
   },
   watch:{
     table_config(){
