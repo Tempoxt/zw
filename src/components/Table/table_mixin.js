@@ -9,6 +9,7 @@ const api_pagemanager = api_common.resource('pagemanager/field')
 import treeToArray from "./eval";
 import tableColumn from '@c/publicTable/tableColumn'
 import eachTableColumn from '@c/publicTable/eachTableColumn'
+import dateLap from '@/components/Table/DateLap'
 import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
@@ -25,7 +26,8 @@ export default {
     tableHeader,
     tablePagination,
     tableColumn,
-    eachTableColumn
+    eachTableColumn,
+    dateLap
   },
   watch:{
     table_config(){

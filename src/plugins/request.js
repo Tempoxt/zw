@@ -73,6 +73,7 @@ service.interceptors.response.use(response => {
         }catch(err){
             name = ''
         }
+      
         return { data , name , contentType}
     }
     return data

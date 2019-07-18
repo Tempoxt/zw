@@ -43,7 +43,7 @@ export function resource (url) {
       delete p.currentpage
       return request.get(`/${url}/export`, {
         params:p,
-        config
+        ...config
       })
     },
     get (params) {

@@ -60,30 +60,10 @@
                         <el-col :span="12">
                           <form-render
                             :type="`select`"
+                            multiple
                             :field="{name:'验证方式',options:[{
-                              value: 'text',
-                              label: '单行文本'
-                            },{
-                              value: 'textarea',
-                              label: '多行文本'
-                            },{
-                              value: 'password',
-                              label: '密码框'
-                            },{
-                              value: 'select',
-                              label: '选择项'
-                            },{
-                              value: 'checkbox',
-                              label: '多选项'
-                            },{
-                              value: 'radio',
-                              label: '单选项'
-                            },{
-                              value: 'image',
-                              label: '图片'
-                            },{
-                              value: 'file',
-                              label: '文件'
+                              value: 'required',
+                              label: '必填'
                             }]}"
                             v-model="form.validation"
                           />
@@ -176,11 +156,21 @@ export default {
       
     
     },
-
+    async edit() {
+      this.form = await api_resource.find(this.table_selectedRowsInfo[0].id)
+      this.dialogStatus = "update";
+      this.dialogFormVisible = true;
+      this.dialog_loading = false
+    },
     async handleFormSubmit(){
-     
-      this.dialogFormVisible = false
-      this.fetchTableData()
+      let form = Object.assign({ menuid: this.currentMenuid }, this.form);
+      if (this.isInsert) {
+        await api_resource.create(form);
+      } else {
+        await api_resource.update(form.id, form,{alert:false});
+      }
+      this.dialogFormVisible = false;
+      this.fetchTableData();
     },
     async fetchTableData(menuid) {
       this.table_loading = true

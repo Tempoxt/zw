@@ -3,7 +3,8 @@
     :table_column="table_field" 
     :table_query.sync="table_form.query"
     @query="querySubmit"
-    >
+    > 
+         
 
     <!-- 人员档案的信息预览 -->
     <div>
@@ -293,7 +294,23 @@
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
-    ></table-header>
+    >
+ <div style="padding-left:10px">
+
+     <el-date-picker
+      v-model="table_form.dateLap"
+      type="monthrange"
+      value-format="yyyy-MM"
+       @change="fetchTableData"
+      range-separator="-"
+      start-placeholder="开始月份"
+      end-placeholder="结束月份">
+    </el-date-picker>
+
+
+            <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
+          </div>
+    </table-header>
     <el-table
       @selection-change="handleChangeSelection"
       :data="table_data"
@@ -331,7 +348,8 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hrm/quitstaff");
+const api_resource = api_common.resource("hrm/v2/quitstaff");
+import dayjs from 'dayjs'
 export default {
   mixins: [table_mixin],
   props:['orgid'],
@@ -405,7 +423,7 @@ export default {
     },
     async remoteMethod(query){
       if (query !== '') {
-        this.introducerData = await api_common.resource('hrm/quitstaff').get({
+        this.introducerData = await api_common.resource('hrm/v2/quitstaff').get({
           keyword:query,
           pagesize:10
         })
@@ -414,6 +432,7 @@ export default {
   },
   async created() {
     const { field, action,table } = await api_common.menuInit("hrm/quitstaff");
+    this.$set(this.table_form,'dateLap','')
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table

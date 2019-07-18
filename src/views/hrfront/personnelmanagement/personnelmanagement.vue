@@ -880,7 +880,22 @@
             @action="handleAction"
             :table_form.sync="table_form"
             :table_column="table_field"
-        ></table-header>
+        >   
+        
+            <div style="padding-left:10px">
+                <el-date-picker
+                    v-model="table_form.dateLap"
+                    type="monthrange"
+                    @change="fetchTableData"
+                    value-format="yyyy-MM"
+                    range-separator="-"
+                    start-placeholder="开始月份"
+                    end-placeholder="结束月份">
+                    </el-date-picker>
+
+            <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
+          </div>
+        </table-header>
         <el-table
             @selection-change="handleChangeSelection"
             :data="table_data"
@@ -926,8 +941,8 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hrm/v2/staff");
 import Device from '@/utils/zk_sdk/baseISSOnline.js'
-import dayjs from 'dayjs'
 import { constants } from 'crypto';
+import dayjs from 'dayjs'
 let baseUrl = process.env.VUE_APP_STATIC
 export default {
     mixins: [table_mixin],
@@ -1405,6 +1420,8 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
+        this.$set(this.table_form,'dateLap','')
+ 
         this.Device = new Device()
         var vm =  this
         Device.createISSonlineDevice({
