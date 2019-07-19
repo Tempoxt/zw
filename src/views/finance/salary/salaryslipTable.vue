@@ -102,7 +102,13 @@
       </el-table-column>
       <el-table-column type="index" :index="indexMethod" width="70" fixed/>
       <el-table-column prop="month" label="月份" fixed/>
-      <el-table-column prop="signState" label="签收状态" fixed/>
+      <el-table-column prop="signState" label="签收状态" fixed>
+          <template slot-scope="scope">
+            <el-tag size="mini" type="danger" v-if="scope.row.signState==1">未签收</el-tag>
+            <el-tag size="mini" type="success" v-if="scope.row.signState==2">已签收</el-tag>
+            <el-tag size="mini" type="success" v-if="scope.row.signState==3">默认签收</el-tag>
+          </template>
+      </el-table-column>
       <el-table-column prop="chineseName" label="姓名" fixed>
           <template slot-scope="scope">
               <div v-html="scope.row.staff__chineseName"></div>
@@ -174,7 +180,7 @@ export default {
       form3:{
         otWeekday:2
       },
-      formData:[]
+      formData:[],
     };
   },
   watch:{

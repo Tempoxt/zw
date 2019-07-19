@@ -49,15 +49,6 @@ export default {
         'image'(){
             return <img src={baseUrl+this.row.image} width="50" height="50"></img>
         },
-        'signState'(){
-            if(this.row.signState==1){
-                return  <el-tag size="mini" type="danger">未签收</el-tag>
-            }else if(this.row.signState==2){
-                return <el-tag size="mini" type="success">已签收</el-tag>
-            }else if(this.row.signState==3){
-                return <el-tag size="mini" type="success">默认签收</el-tag>
-            }
-        },
         'signImage'(){
             if(this.row.signImage!=''&&this.row.signImage!=null){
                 return <img src={baseUrl+this.row.signImage} width="50" height="50"></img>
