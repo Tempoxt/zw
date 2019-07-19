@@ -152,6 +152,13 @@ export default {
             }
             this.dialogFormVisible = true
             this.fetchCustom()
+          
+            this.$nextTick(()=>{
+                  console.log(this.$refs.form)
+                this.$set(this.$refs.form.fields[0],'error','123')
+                // .error = '123'
+            })
+            
         },
         async edit(){
             this.dialogStatus=='ins'

@@ -313,14 +313,14 @@
                 ></el-table-column>
                 <el-table-column type="index" :index="indexMethod" />
                 <each-table-column :table_field="table_field"/>
-                <el-table-column
+                     <!-- <el-table-column
                     fixed="right"
                     label="操作"
                     width="100">
                     <template slot-scope="scope">
                         <el-button @click="handleClick(scope.row)" type="text" size="small">应聘名单</el-button>
                     </template>
-                    </el-table-column>
+                    </el-table-column> -->
             </el-table>
             <table-pagination 
             :total="table_form.total" 

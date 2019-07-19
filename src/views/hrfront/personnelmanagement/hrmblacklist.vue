@@ -22,7 +22,7 @@
 							</el-col>
 						
 							<el-col :span="24">
-								<form-render prop="idCard" :type="`input`" :field="{name:'身份证号'}" v-model="form.idCard"/>
+								<form-render prop="idCard" :type="`input`" :field="{name:'身份证号'}" v-model="form.idCard" :disabled="dialogStatus!=='insert'"/>
 							</el-col>
 						
 							<el-col :span="24">
@@ -128,7 +128,9 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{},
+			form:{
+				sex:1
+			},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -160,7 +162,9 @@ export default {
 			this.fetchTableData()
 		},
 		add(){
-			this.form = {}
+			this.form = {
+				sex:1
+			}
 			this.dialogFormVisible = true
 		},
 		async edit(){
@@ -168,11 +172,11 @@ export default {
             let row = this.table_selectedRows[0];
 			this.form = await this.$request.get('/hrmblacklist/record/'+row.id)
 		},
-		delete(){
-			let rows = this.table_selectedRows.map(row=>row.id)
-			this.api_resource.remove(rows.join(','))
-			this.fetchTableData()
-		},
+		// async delete(){
+		// 	let rows = this.table_selectedRows.map(row=>row.id)
+		// 	await this.api_resource.remove(rows.join(','))
+		// 	this.fetchTableData()
+		// },
 		async fetchTableData() {
 			this.table_loading = true;
 			this.table_form.org_id = this.id

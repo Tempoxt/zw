@@ -67,8 +67,8 @@ const debugForm =
   process.env.NODE_ENV === "production"
     ? {}
     : {
-        username: '1746',
-        password: 'shc6590436'
+        username:'zhaowei3',//'1746',
+        password: 'hgw@2018'//'shc6590436'
       };
 import { mapGetters } from "vuex";
 export default {
