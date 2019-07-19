@@ -181,6 +181,11 @@ export default {
       for(let field in error){
         let msg = error[field].join(',')
         let formItem =  this.$refs[formName].formItem.find(({prop})=>prop===field)
+        let x = Math.floor(Math.random() * (1 - 100)) + 100
+        while(x>0){
+          msg = msg+' '
+          x--
+        }
         formItem.changeError && formItem.changeError(msg)
       }
       return req
