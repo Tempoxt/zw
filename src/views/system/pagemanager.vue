@@ -58,6 +58,9 @@
        <el-tab-pane :label="getViewData('tableform').name" :name="getViewData('tableform').url" v-if="getViewData('tableform')" lazy>
         <pagemanager-form :currentMenuid="currentMenuid"/>
       </el-tab-pane>
+       <el-tab-pane :label="getViewData('roles/menupermission').name" :name="getViewData('roles/menupermission').url" v-if="getViewData('roles/menupermission')" lazy>
+        <menupermission :currentMenuid="currentMenuid"/>
+      </el-tab-pane>
     </el-tabs>
 
 
@@ -80,6 +83,7 @@ import pagemanagerAction from "./pagemanager/action";
 import pagemanagerField from "./pagemanager/field";
 import pagemanagerConfig from "./pagemanager/config";
 import pagemanagerForm from "./pagemanager/form";
+import menupermission from "./pagemanager/menupermission";
 import view_init from '@/mixins/view_init'
 export default {
   mixins:[view_init],
@@ -98,7 +102,8 @@ export default {
     pagemanagerAction,
     pagemanagerField,
     pagemanagerConfig,
-    pagemanagerForm
+    pagemanagerForm,
+    menupermission
   },
   methods: {
     filterNode(value, data) {
