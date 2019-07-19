@@ -14,10 +14,11 @@
       width="800px"
       >
 
-      <el-form ref="form3" :model="form3" label-width="100px" :inline="true">
+      <el-form ref="form3" :model="form3" label-width="100px" :inline="true" :rules="rules">
 
-          <el-form-item label="调动日期">
-            <el-date-picker
+          <el-form-item label="调动日期" prop="transferDate">
+            <el-date-picker 
+                :clearable="false"
                 v-model="form3.transferDate"
                 value-format="yyyy-MM-dd"
                 format="yyyy-MM-dd"
@@ -144,6 +145,11 @@ export default {
       },
       optionsDa:[],
       areaDa:[],
+      rules:{
+          transferDate:[
+              { required: true, message: '请选择日期', trigger: 'blur' },
+          ],
+      },
     };
   },
   methods: {

@@ -84,11 +84,30 @@ export default {
   },
   methods: {
     cellStyle({row,column,rowIndex,columnIndex}){
-        // console.log(column,'eeeee')
       if(row.Remark!=''&&row.Remark!=null){
         return 'color:red'
-      }else if(row.weekday=='六'||row.weekday=='日'){
-        return 'background-color:rgb(245, 250, 251);'
+      }else if(column.label=="星期"){
+        if(row.weekday=='六'||row.weekday=='日'){
+          return 'background-color:rgb(245, 250, 251);'
+        }
+      }else if(column.label=="假日"){
+        if(row.RestType=='1'){
+          return 'background-color:#f2353c;'
+        }else if(row.RestType=='2'){
+          return 'background-color:#1fd361;'
+        }else if(row.RestType=='3'){
+          return 'background-color:#0bb2d4;'
+        }else if(row.RestType=='4'){
+          return 'background-color:#ff5698;'
+        }else if(row.RestType=='5'){
+          return 'background-color:#f4af24;'
+        }else if(row.RestType=='6'){
+          return 'background-color:#f47a24;'
+        }else if(row.RestType=='9'){
+          return 'background-color:#68f59c;'
+        }else if(row.RestType=='10'){
+          return 'background-color:#1cbe57;'
+        }
       }
     },
     async fetchTableData() {
