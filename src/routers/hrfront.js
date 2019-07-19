@@ -7,7 +7,85 @@ export default [{
             title: '人力资源'
         }
     },
-
+    {
+        name: 'addAccidentIns',
+        component: () =>
+            import ('@/views/hrfront/staffinsure/addAccide'),
+        meta: {
+            title: '意外险名单新增'
+        }
+    },
+    {
+        name: 'cancelAccidentIns',
+        component: () =>
+            import ('@/views/hrfront/staffinsure/cancelAccide'),
+        meta: {
+            title: '意外险名单减少'
+        }
+    },{
+        name: 'accidentInsRecord',
+        component: () =>
+            import ('@/views/hrfront/staffinsure/accideRecord'),
+        meta: {
+            title: '意外险扣费记录'
+        }
+    },
+    {
+        name: 'addSocialIns',
+        component: () =>
+            import ('@/views/hrfront/socialFund/socialSecurity/addSecurity'),
+        meta: {
+            title: '社保名单新增'
+        }
+    },
+    {
+        name: 'cancelSocialIns',
+        component: () =>
+            import ('@/views/hrfront/socialFund/socialSecurity/cancelSecurity'),
+        meta: {
+            title: '社保名单注销'
+        }
+    },
+    {
+        name: 'securitylist',
+        component: () =>
+            import ('@/views/hrfront/socialFund/socialSecurity/securitylist'),
+        meta: {
+            title: '社保缴费记录'
+        }
+    },
+    {
+        name: 'addReserveFund',
+        component: () =>
+            import ('@/views/hrfront/socialFund/provideFund/addProfund'),
+        meta: {
+            title: '公积金名单新增'
+        }
+    },
+    {
+        name: 'cancelReserveFund',
+        component: () =>
+            import ('@/views/hrfront/socialFund/provideFund/cancelProfund'),
+        meta: {
+            title: '公积金名单注销'
+        }
+    },
+    {
+        name: 'fundlist',
+        component: () =>
+            import ('@/views/hrfront/socialFund/provideFund/profundlist'),
+        meta: {
+            title: '公积金缴费记录'
+        }
+    },
+    {
+        name: 'reserveFundPayRatio',
+        component: () =>
+            import ('@/views/hrfront/socialFund/provideFund/profundRadio'),
+        meta: {
+            title: '公积金缴纳比例'
+        }
+    },
     {
         name: 'attendanceDetail',
         component: () =>
