@@ -1,11 +1,13 @@
 <template>
-  <el-form-item :label="field.name" v-bind="$parent.$attrs">
+  <el-form-item  :error="error" :label="field.name" v-bind="$parent.$attrs">
     <el-input v-model="data" :placeholder="$parent.$attrs.placeholder||'请输入'" v-bind="$parent.$attrs" v-on="$parent.$listeners" :type="field.type||'text'"></el-input>
   </el-form-item>
 </template>
 <script>
+import errorMixin from '../errorMixin'
 export default {
   name: "form-input",
+  mixins:[errorMixin],
   props: {
     field: Object,
     value: {},
@@ -20,6 +22,9 @@ export default {
   },
   watch: {
     data() {
+      if(this.data){
+        this.error = ''
+      }
       this.$emit("input", this.data);
     },
     value: {

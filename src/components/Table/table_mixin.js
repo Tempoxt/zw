@@ -170,6 +170,21 @@ export default {
       })
      
     },
+    async throwFormError(req,formName = 'form'){
+      let error = {}
+      try {
+        await req
+      } catch(err){
+        let { field } = err
+        error = field
+      }
+      for(let field in error){
+        let msg = error[field].join(',')
+        let formItem =  this.$refs[formName].formItem.find(({prop})=>prop===field)
+        formItem.changeError && formItem.changeError(msg)
+      }
+      return req
+    },
     form_validate(){
       return new Promise((resolve,reject)=>{
           this.$refs.form.validate((valid) => {

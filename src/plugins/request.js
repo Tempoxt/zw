@@ -55,7 +55,6 @@ service.interceptors.response.use(response => {
         window.location.href = '/account/login'
         return Promise.reject(response)
     }
-    console.log( response,'response')
     if(response.config.method==='put' && response.status===200){
         if(response.config.alert!==false){
             Message({
@@ -78,11 +77,16 @@ service.interceptors.response.use(response => {
     }
     return data
 }, error => {
-    
-    Message({
-        type: 'error',
-        message: error.response.data
-    })
+    // 表单错误
+    if(error.response.status === 400 && typeof error.response.data === 'object'){  
+        return Promise.reject({field:error.response.data})
+    }else{
+        Message({
+            type: 'error',
+            message: error.response.data
+        })
+    }
+  
     return Promise.reject(error)
 })
 

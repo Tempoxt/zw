@@ -1,5 +1,5 @@
 <template>
-  <el-form-item :label="field.name"  v-bind="$parent.$attrs"
+  <el-form-item :error="error" :label="field.name"  v-bind="$parent.$attrs"
       v-on="$parent.$listeners">
     <el-select
       v-model="data"
@@ -20,8 +20,10 @@
 
 <script>
 import formMixin from "../mixin";
+import errorMixin from '../errorMixin'
 export default {
   name: "form-select",
+  mixins:[errorMixin],
   props: {
     field: Object,
     value: {}
@@ -35,11 +37,14 @@ export default {
           label: "黄金糕"
         }
       ],
-      data: ""
+      data: "",
     };
   },
   watch: {
     data() {
+      if(this.data){
+        this.error = ''
+      }
       this.$emit("input", this.data);
     },
     value: {
@@ -49,6 +54,6 @@ export default {
       }
     }
   },
-  created() {}
+  
 };
 </script>

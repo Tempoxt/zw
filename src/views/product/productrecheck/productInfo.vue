@@ -76,6 +76,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+import { setTimeout } from 'timers';
 const api_resource = api_common.resource("productrecheck/product");
 export default {
     mixins: [table_mixin],
@@ -151,14 +152,7 @@ export default {
                 this.form.customer = this.proid
             }
             this.dialogFormVisible = true
-            this.fetchCustom()
-          
-            this.$nextTick(()=>{
-                  console.log(this.$refs.form)
-                this.$set(this.$refs.form.fields[0],'error','123')
-                // .error = '123'
-            })
-            
+            this.fetchCustom()  
         },
         async edit(){
             this.dialogStatus=='ins'
@@ -170,15 +164,19 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             if(this.dialogStatus=='insert'){
-                let info = await api_resource.create(this.form)
-                if(!info.id){
-                    this.$message.error(info)
-                }
+                // let info = await api_resource.create(this.form)
+                // if(!info.id){
+                //     this.$message.error(info)
+                // }
+                 await this.throwFormError(api_resource.create(this.form))
+
             }else{
-                await this.$request.put('/productrecheck/product/'+this.form.id,this.form)
+                await this.throwFormError(api_resource.update(this.form.id,this.form))
+                // await this.$request.put('/productrecheck/product/'+this.form.id,this.form)
             }
+           
             this.dialogFormVisible = false
-            this.data2 = await this.$request.get('productrecheck/customer');
+            // this.data2 = await this.$request.get('productrecheck/customer');
             this.fetchTableData()
         }
     },
