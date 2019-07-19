@@ -101,14 +101,13 @@ export default {
 				this.table_loading = false;
 			}, 300);
     },
-    // async audit(){
-    //   let rows = this.table_selectedRows.map(row=>row.id)
-    //   await this.$request.put('staffinsure/applyinsure',{
-		// 		ids: rows.join(','),
-		// 		insureType: 3
-		// 	})
-		// 	this.fetchTableData();
-    // },
+    async audit(){
+      let rows = this.table_selectedRows.map(row=>row.id)
+      await this.$request.put('staffinsure/accidentinsureaudit',{
+				ids: rows.join(','),
+			})
+			this.fetchTableData();
+    },
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit("accidentInsRecord");
 			this.table_field = field;
