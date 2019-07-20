@@ -158,8 +158,8 @@ export default {
 		}
 	},
 	async created() {
-		this.fetchMenu()
-		this.fetchNum()
+		await this.fetchMenu()
+		await this.fetchNum()
 	}
 };
 </script>

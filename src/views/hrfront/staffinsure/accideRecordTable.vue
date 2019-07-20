@@ -84,13 +84,9 @@ export default {
 	},
 	watch:{
 		id(){
+      this.table_form.currentpage = 1
 			this.fetchTableData()
 		}
-  },
-  computed:{
-    isDisabled(){
-      // console.log(this.table_actions,'this.table_actions')
-    }
   },
 	methods: {
     

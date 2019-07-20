@@ -1,24 +1,39 @@
 <template>
-	<div class="dashboard">
+	<div class="dashboard h-full" >
+<el-scrollbar class="scroll">
 		<el-tabs v-model="activeName">
 			<el-tab-pane label="工作台" name="workbench">
-				<el-row>
-				  <el-col :span="12">
-					  <quickEntry></quickEntry>
-				  </el-col>
-				  <el-col :span="12">
-					  <workSchedule></workSchedule>
-				  </el-col>
-				</el-row>
-				<el-row>
-				  <el-col :span="12">
-					  <leaveList></leaveList>
-				  </el-col>
-				  <el-col :span="12">
-					  <supplement></supplement>
-				  </el-col>
-				</el-row>
+
+				<!-- <div class="h-full"> -->
+							<el-row>
+								<el-col :span="12">
+									<quickEntry></quickEntry>
+								</el-col>
+								<el-col :span="12">
+									<workSchedule></workSchedule>
+								</el-col>
+							</el-row>
+							
+					<!-- <el-scrollbar class="scroll"> -->
+							<el-row>
+								<el-col :span="12">
+									<leaveList></leaveList>
+								</el-col>
+								<el-col :span="12">
+									<supplement></supplement>
+								</el-col>
+							</el-row>
+							<el-row>
+								<el-col :span="12">
+									<accident></accident>
+								</el-col>
+							</el-row>
+					<!-- </el-scrollbar> -->
+
+				<!-- </div> -->
+		
 			</el-tab-pane>
+
 			<el-tab-pane label="数据分析" name="dataAnalysis">
 				<el-row>
 					<el-form ref="form" :model="form" label-width="90px">
@@ -143,7 +158,9 @@
 				  </el-col>
 				</el-row>
 			</el-tab-pane>
+			
 		</el-tabs>
+		</el-scrollbar>
 	</div>
 <!--    <div style="width:300px">
         <el-progress :text-inside="true" :stroke-width="18" :percentage="0" style="margin-bottom:10px"></el-progress>
@@ -158,6 +175,7 @@
 	import workSchedule from "./workbench/workSchedule"
 	import leaveList from "./workbench/leaveList"
 	import supplement from "./workbench/supplement"
+	import accident from "./workbench/accident"
 	import inService from "./dataAnalysis/inService"
 	import pieChart from "./dataAnalysis/pieChart"
 	import barChart from "./dataAnalysis/barChart"
@@ -196,6 +214,7 @@
 		workSchedule,
 		leaveList,
 		supplement,
+		accident,
 		inService,
 		pieChart,
 		barChart,
@@ -336,11 +355,14 @@
   };
 </script>
 <style>
+.h-full{
+	height: 100%;
+}
 .maxheight{
 	height: 500px;
 }
 .dashboard .selectdate .el-date-editor{
-      width: 120px;
+    width: 120px;
 }
 .dashboard .el-calendar-table .el-calendar-day {
     height: 25px;
@@ -358,11 +380,11 @@
 	height: 340px;
 }
 .dashboard .speech-mode .el-card__body{
-		height: 100%;
+	height: 100%;
 }
 
 .dashboard .speech-mode .el-card__body .box-card-c{
-		height: 100%;
+	height: 100%;
 }
 </style>
 
@@ -370,38 +392,34 @@
  .el-popper{
 	height: 500px!important;
 }
-.maxHei{
-	max-height: 500px;
-	overflow: scroll;
+.scroll {
+	height: 100%;
+	width: 100%;
+	/deep/ .scrollbar-wrapper {
+		overflow-x: hidden;
+	}
 }
-	.scroll {
-		height: 100%;
+.dashboard{
+	padding: 20px;
+	.selectdate{
+		display: inline-block;
+		margin-left: 60px;
+	}
+	.operating-btn{
+		text-align: right;
+	}
+	.padding-left-10{
+		padding-left: 10px
+	}
+	.speech-mode{
+		position: fixed;
+		top: 0;
+		left: 0;
+		margin-top: 0;
+		z-index: 99;
 		width: 100%;
-		/deep/ .scrollbar-wrapper {
-			overflow-x: hidden;
-		}
+		height: 100%;
 	}
-	.dashboard{
-		padding: 20px;
-		.selectdate{
-			display: inline-block;
-			margin-left: 60px;
-		}
-		.operating-btn{
-			text-align: right;
-		}
-		.padding-left-10{
-			padding-left: 10px
-		}
-		.speech-mode{
-			position: fixed;
-			top: 0;
-			left: 0;
-			margin-top: 0;
-			z-index: 99;
-			width: 100%;
-			height: 100%;
-		}
-	}
+}
 	
 </style>
