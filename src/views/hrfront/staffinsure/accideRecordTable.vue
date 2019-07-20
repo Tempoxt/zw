@@ -86,8 +86,21 @@ export default {
 		id(){
 			this.fetchTableData()
 		}
-	},
+  },
+  computed:{
+    isDisabled(){
+      // console.log(this.table_actions,'this.table_actions')
+    }
+  },
 	methods: {
+    
+    table_disable_selected(row){
+      if(row.auditStatus!=1){
+        return false
+      }else{
+        return true
+      }
+    },
 		async fetchTableData() {
 			if(!this.id){
 				return

@@ -39,6 +39,7 @@
 		width="60" 
 		class-name="table-column-disabled"
 		:selectable="table_disable_selected"
+		v-if="this.insure_status!=22"
 		>
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
@@ -114,7 +115,13 @@ export default {
 		async fetchNum(){
 			if(this.insure_status==22){
 				this.serialnumber = await this.$request.get('staffinsure/getserialnumber?insureType=3&insureStatus='+this.insure_status)
+				if(this.serialnumber==''){
+					this.table_form.serialNumber = ''
+				}else{
+					this.table_form.serialNumber = this.serialnumber[0].serialNumber
+				}
 			}
+			this.fetchTableData();
 		},
 		async apply(){
 			let rows = this.table_selectedRows.map(row=>row.staff)
@@ -130,7 +137,7 @@ export default {
 			this.table_actions = action;
 			this.table_config = table
 		},
-		async pass(){
+		async passAcc(){
 			let rows = this.table_selectedRows.map(row=>row.id)
 			await this.$request.put('staffinsure/inpassinsure',{
 				ids :rows.join(','),
@@ -139,7 +146,7 @@ export default {
 			})
 			this.fetchTableData();
 		},
-		async back(){
+		async backAcc(){
 			let rows = this.table_selectedRows.map(row=>row.id)
 			await this.$request.put('staffinsure/inrejectinsure',{
 				ids :rows.join(','),
@@ -152,7 +159,6 @@ export default {
 	async created() {
 		this.fetchMenu()
 		this.fetchNum()
-		this.fetchTableData();
 	}
 };
 </script>
