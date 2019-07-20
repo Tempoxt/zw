@@ -187,7 +187,6 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("pagemanager/field");
 import Sortable from 'sortablejs'
-import { Promise } from 'q';
 
 let defaultForm = function() {
   return {

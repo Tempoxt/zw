@@ -6,6 +6,7 @@
       :page-size.sync="pagesize"
       layout="total, sizes"
       :total="total"
+      :current-page.sync="currentpage"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     ></el-pagination>
@@ -16,12 +17,14 @@
       :page-size.sync="pagesize"
       layout="prev, pager, next"
       :total="total"
+      :current-page.sync="currentpage"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     ></el-pagination>
   </div>
 </template>
 <script>
+import { setTimeout } from 'timers';
 export default {
   props: {
     total: Number,
@@ -42,7 +45,6 @@ export default {
       this.$emit("update:currentpage", 1);
     },
     handleSizeChange(val) {
-      
       this.$emit("update:pagesize", val);
       this.$emit("update:currentpage", 1);
       this.$emit("change");

@@ -51,6 +51,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
+import { setTimeout } from 'timers';
 const api_resource = api_common.resource("standardcost/list");
 export default {
     mixins: [table_mixin],
@@ -63,7 +64,6 @@ export default {
             form:{},
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:296,
         };
     },
     methods: {
@@ -84,6 +84,7 @@ export default {
         this.table_config = table
         this.fetchTableData();
         this.table_form.dateLap = dayjs().format('YYYY-MM')
+        
     }
 };
 </script>

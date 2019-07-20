@@ -96,6 +96,7 @@ export default {
      }
      this.table_loading = true;
      this.table_form.orgid = this.id
+     
      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
        this.table_form.total = total
