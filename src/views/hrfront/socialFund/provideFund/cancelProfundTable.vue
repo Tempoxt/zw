@@ -180,8 +180,8 @@ export default {
 		}
 	},
 	async created() {
-		this.fetchMenu()
-		this.fetchTableData();
+		await this.fetchMenu()
+		await this.fetchTableData();
 	}
 };
 </script>

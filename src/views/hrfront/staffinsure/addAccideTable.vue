@@ -121,7 +121,7 @@ export default {
 					this.table_form.serialNumber = this.serialnumber[0].serialNumber
 				}
 			}
-			this.fetchTableData();
+			// this.fetchTableData();
 		},
 		async apply(){
 			let rows = this.table_selectedRows.map(row=>row.staff)
@@ -157,8 +157,10 @@ export default {
 		},
 	},
 	async created() {
-		this.fetchMenu()
-		this.fetchNum()
+		await this.fetchMenu()
+		await this.fetchNum()
+		
+		await this.fetchTableData();
 	}
 };
 </script>
