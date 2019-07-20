@@ -180,7 +180,9 @@ export default {
 	},
 	async created() {
 		await this.fetchMenu()
-		await this.fetchTableData();
+		setTimeout(()=>{
+			this.fetchTableData();
+		},500)
 	}
 };
 </script>
