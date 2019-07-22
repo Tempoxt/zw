@@ -99,7 +99,6 @@ export default {
 		insure_status(){
 			this.fetchMenu()
 			this.fetchNum()
-			this.table_data = []
 		}
 	},
 	methods: {
@@ -168,6 +167,9 @@ export default {
 	async created() {
 		await this.fetchMenu()
 		await this.fetchNum()
+		setTimeout(()=>{
+			this.fetchTableData();
+		},500)
 	}
 };
 </script>

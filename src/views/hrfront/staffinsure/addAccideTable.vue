@@ -92,7 +92,6 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
-			this.table_data = []
 			this.fetchMenu()
 			this.fetchNum()
 		}
@@ -120,7 +119,7 @@ export default {
 				}else{
 					this.table_form.serialNumber = this.serialnumber[0].serialNumber
 				}
-			}
+			}	
 			this.fetchTableData();
 		},
 		async apply(){
@@ -163,6 +162,9 @@ export default {
 	async created() {
 		await this.fetchMenu()
 		await this.fetchNum()
+		setTimeout(()=>{
+			this.fetchTableData();
+		},500)
 	}
 };
 </script>
