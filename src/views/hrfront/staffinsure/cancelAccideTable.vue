@@ -143,7 +143,7 @@ export default {
 					insureType: 3,
 					serialNumber: this.table_form.serialNumber
 				})
-				this.fetchTableData();
+				this.fetchNum();
 			}
 		},
 		async fetchNum(){
