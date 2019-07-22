@@ -126,22 +126,26 @@ export default {
 			this.fetchTableData();
 		},
 		async passAcc(){
-			let rows = this.table_selectedRows.map(row=>row.id)
-			await this.$request.put('staffinsure/outpassinsure',{
-				ids :rows.join(','),
-				insureType: 3,
-				serialNumber: this.table_form.serialNumber
-			})
-			this.fetchTableData();
+			if(this.table_form.serialNumber==''){
+				this.$message.error('请选择流水号');
+			}else{
+				await this.$request.put('staffinsure/outpassinsure',{
+					insureType: 3,
+					serialNumber: this.table_form.serialNumber
+				})
+				this.fetchTableData();
+			}
 		},
 		async backAcc(){
-			let rows = this.table_selectedRows.map(row=>row.id)
-			await this.$request.put('staffinsure/outrejectinsure',{
-				ids :rows.join(','),
-				insureType: 3,
-				serialNumber: this.table_form.serialNumber
-			})
-			this.fetchTableData();
+			if(this.table_form.serialNumber==''){
+				this.$message.error('请选择流水号');
+			}else{
+				await this.$request.put('staffinsure/outrejectinsure',{
+					insureType: 3,
+					serialNumber: this.table_form.serialNumber
+				})
+				this.fetchTableData();
+			}
 		},
 		async fetchNum(){
 			if(this.insure_status==25){

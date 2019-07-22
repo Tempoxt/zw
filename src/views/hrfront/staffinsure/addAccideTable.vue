@@ -141,9 +141,7 @@ export default {
 			if(this.table_form.serialNumber==''){
 				this.$message.error('请选择流水号');
 			}else{
-				let rows = this.table_selectedRows.map(row=>row.id)
 				await this.$request.put('staffinsure/inpassinsure',{
-					ids :rows.join(','),
 					insureType: 3,
 					serialNumber: this.table_form.serialNumber
 				})
@@ -154,9 +152,7 @@ export default {
 			if(this.table_form.serialNumber==''){
 				this.$message.error('请选择流水号');
 			}else{
-				let rows = this.table_selectedRows.map(row=>row.id)
 				await this.$request.put('staffinsure/inrejectinsure',{
-					ids :rows.join(','),
 					insureType: 3,
 					serialNumber: this.table_form.serialNumber
 				})
