@@ -159,6 +159,7 @@ export default {
 	async created() {
 		await this.fetchMenu()
 		await this.fetchNum()
+		await this.fetchTableData();
 	}
 };
 </script>
