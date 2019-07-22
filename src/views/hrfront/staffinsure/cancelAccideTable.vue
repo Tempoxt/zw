@@ -62,6 +62,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("staffinsure/accidentinsurance");
+const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
 	props:['id','insure_status'],
