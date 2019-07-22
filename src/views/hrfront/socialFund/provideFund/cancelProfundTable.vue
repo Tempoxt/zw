@@ -160,6 +160,7 @@ export default {
 			this.fetchTableData();
 		},
 		back(){
+			this.form.reason = ''
 			this.dialogFormVisible = true
 		},
 		async handleFormSubmit(){

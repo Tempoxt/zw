@@ -47,11 +47,14 @@
                 <el-col :span="24">
                   <form-render :type="`input`" placeholder="自动" :field="{name:'小组编号'}" v-model="form.teamcode" prop="teamcode" :disabled="true" />
                 </el-col>
+                <el-col :span="24" v-if="url!=='org/departments'">
+                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
+                </el-col>
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'小组名称'}" v-model="form.name"  prop="name"/>
                 </el-col>
-                <el-col :span="24" v-if="url!=='org/departments'">
-                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
+                 <el-col :span="24">
+                  <form-render :type="`subdepart`" :field="{name:'组长',defaultName:form.orgManagerName}" v-model="form.orgManager"/>
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort" placeholder=""/>

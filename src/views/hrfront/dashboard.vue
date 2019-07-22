@@ -4,7 +4,7 @@
 		<el-tabs v-model="activeName">
 			<el-tab-pane label="工作台" name="workbench">
 
-				<div class="hhh">
+				<div class="outside">
 					
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 							<el-row>
@@ -350,7 +350,7 @@
   };
 </script>
 <style>
-.hhh{
+.outside{
 	height: 790px;
 	background: #F5FAFB;
 }
