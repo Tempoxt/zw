@@ -1,10 +1,12 @@
 <template>
-	<div class="dashboard h-full" >
-<el-scrollbar class="scroll">
+	<div class="dashboard" >
+<!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
 		<el-tabs v-model="activeName">
 			<el-tab-pane label="工作台" name="workbench">
 
-				<!-- <div class="h-full"> -->
+				<div class="hhh">
+					
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 							<el-row>
 								<el-col :span="12">
 									<quickEntry></quickEntry>
@@ -12,10 +14,6 @@
 								<el-col :span="12">
 									<workSchedule></workSchedule>
 								</el-col>
-							</el-row>
-							
-					<!-- <el-scrollbar class="scroll"> -->
-							<el-row>
 								<el-col :span="12">
 									<leaveList></leaveList>
 								</el-col>
@@ -23,14 +21,14 @@
 									<supplement></supplement>
 								</el-col>
 							</el-row>
-							<el-row>
+							<el-row style="padding-bottom:30px;">
 								<el-col :span="12">
 									<accident></accident>
 								</el-col>
 							</el-row>
-					<!-- </el-scrollbar> -->
+					</el-scrollbar>
 
-				<!-- </div> -->
+				</div>
 		
 			</el-tab-pane>
 
@@ -38,7 +36,6 @@
 				<el-row>
 					<el-form ref="form" :model="form" label-width="90px">
 						<el-col :span="12">
-							<!-- <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/> -->
 							<el-popover
 								popper-class="maxheight"
 								placement="bottom"
@@ -47,7 +44,6 @@
 								trigger="click"
 								v-model="visible"
 								>
-								
 								<!-- <org v-model="orgid"></org> -->
 								<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 									<div style="padding:20px">
@@ -132,7 +128,6 @@
 				</el-row>
 				<el-row>
 				  <el-col :span="12">
-					  <!-- eduLevelData -->
 					   <pieChart 
 					   :show="checkFullshow"
 					    ref="echart3"
@@ -160,7 +155,7 @@
 			</el-tab-pane>
 			
 		</el-tabs>
-		</el-scrollbar>
+		<!-- </el-scrollbar> -->
 	</div>
 <!--    <div style="width:300px">
         <el-progress :text-inside="true" :stroke-width="18" :percentage="0" style="margin-bottom:10px"></el-progress>
@@ -355,6 +350,9 @@
   };
 </script>
 <style>
+.hhh{
+	height: 790px;
+}
 .h-full{
 	height: 100%;
 }
@@ -389,6 +387,9 @@
 </style>
 
 <style lang="scss" scoped>
+.el-tabs__content{
+	height: 550px;
+}
  .el-popper{
 	height: 500px!important;
 }
@@ -400,6 +401,7 @@
 	}
 }
 .dashboard{
+	height: 100%;
 	padding: 20px;
 	.selectdate{
 		display: inline-block;
