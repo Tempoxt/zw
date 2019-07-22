@@ -147,7 +147,7 @@ export default {
 			let rows = this.table_selectedRows.map(row=>row.id)
 			const len = rows.length;
 			const { data,name,contentType} = await this.$request.put('staffinsure/applycancelinsure',{
-				empIds: rows.join(','),
+				ids: rows.join(','),
 				insureType: 1
 			},{ responseType:'arraybuffer',alert:false})
 			this.$message({
