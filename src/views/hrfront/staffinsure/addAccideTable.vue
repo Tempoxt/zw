@@ -92,8 +92,8 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
+			this.table_data = []
 			this.fetchMenu()
-			this.fetchTableData()
 			this.fetchNum()
 		}
 	},
@@ -163,7 +163,6 @@ export default {
 	async created() {
 		await this.fetchMenu()
 		await this.fetchNum()
-		await this.fetchTableData();
 	}
 };
 </script>

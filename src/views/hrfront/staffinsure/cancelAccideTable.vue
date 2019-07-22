@@ -99,7 +99,7 @@ export default {
 		insure_status(){
 			this.fetchMenu()
 			this.fetchNum()
-			this.fetchTableData()
+			this.table_data = []
 		}
 	},
 	methods: {
@@ -150,7 +150,11 @@ export default {
 		async fetchNum(){
 			if(this.insure_status==25){
 				this.serialnumber = await this.$request.get('staffinsure/getserialnumber?insureType=3&insureStatus='+this.insure_status)
-				this.table_form.serialNumber = this.serialnumber[0].serialNumber
+					if(this.serialnumber==''){
+					this.table_form.serialNumber = ''
+				}else{
+					this.table_form.serialNumber = this.serialnumber[0].serialNumber
+				}
 			}
 			this.fetchTableData();
 		},
