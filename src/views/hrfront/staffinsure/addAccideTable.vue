@@ -59,6 +59,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("staffinsure/accidentinsurance");
+const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
 	props:['id','insure_status'],
@@ -123,11 +124,20 @@ export default {
 			this.fetchTableData();
 		},
 		async apply(){
-			let rows = this.table_selectedRows.map(row=>row.staff)
-			await this.$request.put('staffinsure/applyinsure',{
+			let rows = this.table_selectedRows.map(row=>row.staff);
+			const len = rows.length;
+			const { data,name,contentType} = await this.$request.put('staffinsure/applyinsure',{
 				empIds: rows.join(','),
 				insureType: 3
-			})
+			},{ responseType:'arraybuffer',alert:false})
+			this.$message({
+				message: '申请成功,共'+len+'人',
+				type: 'success'
+			});
+			let today = dayjs().format('YYYY-MM-DD')
+			let day = today.split('-').join('');
+			let namei = '新增被保险人名单';
+			download(data,namei+day||this.$route.meta.title+day,contentType)
 			this.fetchTableData();
 		},
 		async fetchMenu(){

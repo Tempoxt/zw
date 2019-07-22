@@ -145,11 +145,19 @@ export default {
 		},
 		async apply(){
 			let rows = this.table_selectedRows.map(row=>row.id)
-			await this.$request.put('staffinsure/applycancelinsure',{
-				ids:rows.join(','),
-				insureType:1
-			})
-			this.fetchTableData();
+			const len = rows.length;
+			const { data,name,contentType} = await this.$request.put('staffinsure/applycancelinsure',{
+				empIds: rows.join(','),
+				insureType: 1
+			},{ responseType:'arraybuffer',alert:false})
+			this.$message({
+				message: '注销成功,共'+len+'人',
+				type: 'success'
+			});
+			let today = dayjs().format('YYYY-MM-DD')
+			let day = today.split('-').join('');
+			let namei = '人员批量停交报盘表';
+			download(data,namei+day||this.$route.meta.title+day,contentType)
 		},
 		async pass(){
 			let rows = this.table_selectedRows.map(row=>row.id)
