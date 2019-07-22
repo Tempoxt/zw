@@ -113,7 +113,8 @@ export default {
 	},
 	computed:{
 		disabled(){
-			if(this.form.reason!=''){
+			let rea = this.form.reason.replace(/(^\s*)|(\s*$)/g, "")
+			if(rea.length!==0){
                 return false
             }
             return true
