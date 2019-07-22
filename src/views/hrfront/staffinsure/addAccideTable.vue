@@ -13,7 +13,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-if="insure_status==22">
-			<el-select v-model="table_form.serialNumber" placeholder="请选择" clearable filterable @change="fetchTableData">
+			<el-select v-model="table_form.serialNumber" placeholder="请选择流水号" clearable filterable @change="fetchTableData">
 				<el-option
 					v-for="item in serialnumber"
 					:key="item.serialNumber"
@@ -138,22 +138,30 @@ export default {
 			this.table_config = table
 		},
 		async passAcc(){
-			let rows = this.table_selectedRows.map(row=>row.id)
-			await this.$request.put('staffinsure/inpassinsure',{
-				ids :rows.join(','),
-				insureType: 3,
-				serialNumber: this.table_form.serialNumber
-			})
-			this.fetchTableData();
+			if(this.table_form.serialNumber==''){
+				this.$message.error('请选择流水号');
+			}else{
+				let rows = this.table_selectedRows.map(row=>row.id)
+				await this.$request.put('staffinsure/inpassinsure',{
+					ids :rows.join(','),
+					insureType: 3,
+					serialNumber: this.table_form.serialNumber
+				})
+				this.fetchTableData();
+			}
 		},
 		async backAcc(){
-			let rows = this.table_selectedRows.map(row=>row.id)
-			await this.$request.put('staffinsure/inrejectinsure',{
-				ids :rows.join(','),
-				insureType: 3,
-				serialNumber: this.table_form.serialNumber
-			})
-			this.fetchTableData();
+			if(this.table_form.serialNumber==''){
+				this.$message.error('请选择流水号');
+			}else{
+				let rows = this.table_selectedRows.map(row=>row.id)
+				await this.$request.put('staffinsure/inrejectinsure',{
+					ids :rows.join(','),
+					insureType: 3,
+					serialNumber: this.table_form.serialNumber
+				})
+				this.fetchTableData();
+			}
 		},
 	},
 	async created() {
