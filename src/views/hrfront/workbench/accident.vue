@@ -22,8 +22,9 @@
 		</el-row>
 		<el-row class="list" v-if="this.accident&&this.accident.social_cancel_backlog.value!=''"> 
 			<el-col :span="18">
-				<div class="list-l">
+				<div class="list-l relia">
 					<span class="icon iconfont icon-shebaojilu"></span>
+					<i class="el-icon el-icon-remove"></i>
 					<div>
 						<p>社保注销待办</p>
 						<span>{{this.accident.social_cancel_backlog.value}}条</span>
@@ -54,8 +55,9 @@
 		</el-row>
 		<el-row class="list" v-if="this.accident&&this.accident.accumulate_fund_cancel_backlog.value"> 
 			<el-col :span="18">
-				<div class="list-l">
+				<div class="list-l relia">
 					<span class="icon iconfont icon-gongjijinjilu"></span>
+					<i class="el-icon el-icon-remove"></i>
 					<div>
 						<p>公积金注销待办</p>
 						<span>{{this.accident.accumulate_fund_cancel_backlog.value}}条</span>
@@ -86,8 +88,9 @@
 		</el-row>
 		<el-row class="list" v-if="this.accident&&this.accident.accident_insurance_cancel_backlog.value"> 
 			<el-col :span="18">
-				<div class="list-l">
+				<div class="list-l relia">
 					<span class="icon iconfont icon-yiwaixian1"></span>
+					<i class="el-icon el-icon-remove"></i>
 					<div>
 						<p>意外险注销待办</p>
 						<span>{{this.accident.accident_insurance_cancel_backlog.value}}条</span>
@@ -169,6 +172,17 @@ export default {
 .list{
 	border-bottom: 1px solid rgba(228,234,236,1);
 	height: 60px;
+	.relia{
+		position: relative;
+		>.el-icon-remove{
+			position: absolute;
+			top: 13px;
+			left: 22px;
+			width: 9px;
+			height: 9px;
+			color: #FF004E;
+		}
+	}
 	.list-l{
 		padding-top: 8px;
 		>.icon{

@@ -352,6 +352,7 @@
 <style>
 .hhh{
 	height: 790px;
+	background: #F5FAFB;
 }
 .h-full{
 	height: 100%;
@@ -388,7 +389,7 @@
 
 <style lang="scss" scoped>
 .el-tabs__content{
-	height: 550px;
+	background: #F5FAFB!important;
 }
  .el-popper{
 	height: 500px!important;
@@ -401,6 +402,7 @@
 	}
 }
 .dashboard{
+	background: #F5FAFB;
 	height: 100%;
 	padding: 20px;
 	.selectdate{
