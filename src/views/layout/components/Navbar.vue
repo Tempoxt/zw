@@ -108,10 +108,9 @@ export default {
 	methods: {
 		editPassword(){
 			this.dialogFormVisible = true
-			console.log('ssss')
 		},
 		handleFormSubmit(){
-			console.log(this.form,'fff----')
+			// console.log(this.form,'fff----')
 		},
 		handleScreenfull() {
 			screenfull.toggle();

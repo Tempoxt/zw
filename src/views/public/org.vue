@@ -36,7 +36,12 @@
 </template>
 <script>
 import * as api_common from "@/api/common";
-export default {
+export default { 
+  props:{
+		showteam:{
+      default:''
+    },
+	},
     watch:{
        filterText(val) {
         this.$refs.tree2.filter(val);
@@ -59,9 +64,18 @@ export default {
         }
     },
     async created(){
-         this.data2 = await api_common.getOrg();
-         let defaultId = this.data2[0].orgid
-         this.$emit('change',defaultId)
+      if (this.showteam) {
+        this.data2 = await this.$request.get('org',{
+            params:{
+                showteam:this.showteam
+            }
+        });
+      }else{
+        this.data2 = await api_common.getOrg();
+      }
+        // this.data2 = await api_common.getOrg();
+        let defaultId = this.data2[0].orgid
+        this.$emit('change',defaultId)
         this.$nextTick(()=>{
            this.$refs.tree2.setCurrentKey(defaultId)
         })
