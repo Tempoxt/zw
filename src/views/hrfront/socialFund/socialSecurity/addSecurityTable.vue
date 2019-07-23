@@ -126,6 +126,11 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
+			if(this.insure_status==2){
+    			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+			}else{
+				this.table_form.dateLap =''
+			}
 			this.fetchMenu()
 			this.fetchTableData()
 		}
@@ -145,27 +150,35 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
+		ab2str(u,f) {
+		   var b = new Blob([u]);
+		   var r = new FileReader();
+		    r.readAsText(b, 'utf-8');
+		    r.onload = function (){if(f)f.call(null,r.result)}
+		},
 		async apply(){
 			let rows = this.table_selectedRows.map(row=>row.staff)
 			const len = rows.length;
-			const { data,name,contentType} = await this.$request.put('staffinsure/applyinsure',{
-				empIds: rows.join(','),
-				insureType: 1
-			},{ responseType:'arraybuffer',alert:false})
-			this.$message({
-				message: '申请成功,共'+len+'人',
-				type: 'success'
-			});
-			let today = dayjs().format('YYYY-MM-DD')
-			let day = today.split('-').join('');
-			let namei = '人员参保登记报盘表';
-			download(data,namei+day||this.$route.meta.title+day,contentType)
-			this.fetchTableData();
-			// await this.$request.put('staffinsure/applyinsure',{
-			// 	empIds:rows.join(','),
-			// 	insureType:1
-			// })
-			// this.fetchTableData();
+			try{
+				const { data,name,contentType} = await this.$request.put('staffinsure/applyinsure',{
+					empIds: rows.join(','),
+					insureType: 1
+				},{ responseType:'arraybuffer',alert:false})
+				this.$message({
+					message: '申请成功,共'+len+'人',
+					type: 'success'
+				});
+				let today = dayjs().format('YYYY-MM-DD')
+				let day = today.split('-').join('');
+				let namei = '人员参保登记报盘表';
+				download(data,namei+day,contentType)
+				this.fetchTableData();
+			}catch(err){
+				var that = this;
+				that.ab2str(err.error.response.data,function(str){
+					that.$message.error({ message: str });
+				});
+			}
 		},
 		async pass(){
 			let rows = this.table_selectedRows.map(row=>row.id)

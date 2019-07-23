@@ -227,23 +227,18 @@ export default {
       let ids = this.$refs.OrgSelect.getIdsResult()
       this.form3.ids = ids;
       if(this.form3.ids!==''){
-        let repeat = await this.$request.post('/hot/record',this.form3)
-        if(repeat!==''){
+        let repeat = await this.$request.post('/hot/record',this.form3,{alert:false})
+        if(repeat.length!==0){
           var rep = repeat.map(o=>o)
-          this.$message.error({message:rep+'存在时间重叠的名单记录',duration:12000})
+          this.$message.error({message:'创建失败,'+rep+'存在时间重叠的名单记录',duration:12000})
         }else{
-          return 
+          this.$message.success({message:'创建成功'})
         }
         this.dialogForm3Visible = false
         this.fetchTableData()
       }else{
         this.$message.error('请选择要添加的人员');
       }
-    
-      // let repeat = await this.$request.post('/hot/record',this.form3)
-      // console.log(repeat,'rrrrrrrr')
-      // this.dialogForm3Visible = false
-      // this.fetchTableData()
     },
     add(){
         this.form3 = {}

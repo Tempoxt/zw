@@ -35,10 +35,12 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(response => {
     const { status, data,config ,headers } = response
     if (status === 201) {
-        Message({
-            type: 'success',
-            message: '创建成功'
-        })
+        if(response.config.alert!==false){
+            Message({
+                type: 'success',
+                message: '创建成功'
+            })
+        }
     }
     if (status === 204) {
         Message({
@@ -62,7 +64,6 @@ service.interceptors.response.use(response => {
                 message: response.data ||'修改成功'
             })
         }
-        
     }
     if(config.responseType==="arraybuffer"){
         let contentType = headers['content-type'];
@@ -79,7 +80,7 @@ service.interceptors.response.use(response => {
 }, error => {
     // 表单错误
     if(error.response.status === 400 && typeof error.response.data === 'object'){  
-        return Promise.reject({field:error.response.data})
+        return Promise.reject({field:error.response.data,error})
     }else{
         Message({
             type: 'error',

@@ -124,22 +124,35 @@ export default {
 				}
 			}
 		},
+		ab2str(u,f) {
+		   var b = new Blob([u]);
+		   var r = new FileReader();
+		    r.readAsText(b, 'utf-8');
+		    r.onload = function (){if(f)f.call(null,r.result)}
+		},
 		async apply(){
-			let rows = this.table_selectedRows.map(row=>row.staff);
+			let rows = this.table_selectedRows.map(row=>row.staff)
 			const len = rows.length;
-			const { data,name,contentType} = await this.$request.put('staffinsure/applyinsure',{
-				empIds: rows.join(','),
-				insureType: 3
-			},{ responseType:'arraybuffer',alert:false})
-			this.$message({
-				message: '申请成功,共'+len+'人',
-				type: 'success'
-			});
-			let today = dayjs().format('YYYY-MM-DD')
-			let day = today.split('-').join('');
-			let namei = '新增被保险人名单';
-			download(data,namei+day||this.$route.meta.title+day,contentType)
-			this.fetchTableData();
+			try{
+				const { data,name,contentType} = await this.$request.put('staffinsure/applyinsure',{
+					empIds: rows.join(','),
+					insureType: 3
+				},{ responseType:'arraybuffer',alert:false})
+				this.$message({
+					message: '申请成功,共'+len+'人',
+					type: 'success'
+				});
+				let today = dayjs().format('YYYY-MM-DD')
+				let day = today.split('-').join('');
+				let namei = '新增被保险人名单';
+				download(data,namei+day,contentType)
+				this.fetchTableData();
+			}catch(err){
+				var that = this;
+				that.ab2str(err.error.response.data,function(str){
+					that.$message.error({ message: str });
+				});
+			}
 		},
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit("AccidentIns"+this.insure_status);
