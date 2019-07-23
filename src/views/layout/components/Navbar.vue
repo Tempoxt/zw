@@ -11,7 +11,7 @@
 			<nav-menu/>
 		</div>
 		<div class="right-menu">
-			<span class="right-menu-item">
+			<!-- <span class="right-menu-item">
 				<el-tooltip class="item" effect="dark" content="搜索" placement="bottom">
 					<i class="icon iconfont icon-sousuo1"></i>
 				</el-tooltip>
@@ -26,7 +26,7 @@
 				<el-tooltip class="item" effect="dark" content="手机" placement="bottom">
 					<i class="icon iconfont icon-shouji"></i>
 				</el-tooltip>
-			</span>
+			</span> -->
 			<span class="right-menu-item" @click="handleScreenfull">
 				<el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
 					<i class="icon iconfont icon-quanping"></i>
