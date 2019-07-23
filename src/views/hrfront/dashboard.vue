@@ -354,11 +354,14 @@
 	height: 790px;
 	background: #F5FAFB;
 }
-.h-full{
-	height: 100%;
-}
 .maxheight{
 	height: 500px;
+}
+.dashboard .el-card__header{
+	padding: 15px 20px;
+}
+.dashboard .el-card__body{
+	padding: 0 20px 20px!important;
 }
 .dashboard .selectdate .el-date-editor{
     width: 120px;
@@ -388,6 +391,7 @@
 </style>
 
 <style lang="scss" scoped>
+
 .el-tabs__content{
 	background: #F5FAFB!important;
 }

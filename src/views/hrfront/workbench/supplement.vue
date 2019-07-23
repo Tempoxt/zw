@@ -4,7 +4,7 @@
 		<span class="cardName">补签卡审核</span>
 		<!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
 	  </div>
-		<el-row class="list">
+		<el-row class="list" align="middle" v-for="o in 6" :key="o">
 			<el-col :span="8">
 				<div class="list-l">
 					<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">
@@ -26,12 +26,12 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="by">通过</el-button>
-					<el-button class="btn" @click="goBack">退回</el-button>
+					<el-button type="primary"  size="mini" @click="by">通过</el-button>
+					<el-button class="btn"  size="mini" @click="goBack">退回</el-button>
 				</div>
 			</el-col>
 		</el-row>
-		<el-row class="list">
+		<!-- <el-row class="list">
 			<el-col :span="8">
 				<div class="list-l">
 					<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">
@@ -57,7 +57,7 @@
 					<el-button class="btn">退回</el-button>
 				</div>
 			</el-col>
-		</el-row>
+		</el-row> -->
 
 	</el-card>
 	
@@ -105,8 +105,11 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
+.el-button--mini{
+	padding: 5px 11px!important;
+}
 .box-card{
-	height: 360px;
+	height: 460px;
 	margin-top: 10px;
 	margin-left: 10px;
 }
@@ -117,24 +120,22 @@ methods: {
 }
 .list{
 	border-bottom: 1px solid rgba(228,234,236,1);
-	height: 60px;
+	height: 50px;
 	.list-l{
-		padding-top: 8px;
+		padding-top: 5px;
 		>img{
-           width: 40px;
-		   height: 40px;
-		   float: left;
-		   border-radius: 20px;
+           width: 30px;
+		   height: 30px;
+		   border-radius: 50%;
 		}
 		>div{
 			margin-left: 10px;
 			display: inline-block;
 			p{
-				font-size: 14px;
-				margin-top: 3px;
+				font-size: 12px;
 			}
 			span{
-				font-size: 12px;
+				font-size: 10px;
 				margin-top: 5px;
 				color: #A3AFB7;
 			}
@@ -142,7 +143,7 @@ methods: {
 	}
 	.list-r{
 		text-align: right;
-        line-height: 60px;
+        line-height: 50px;
 		.btn{
             margin-left: 10px;
 		}

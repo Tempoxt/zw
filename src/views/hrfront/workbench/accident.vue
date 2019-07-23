@@ -16,11 +16,11 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="bySocialAdd">去新增</el-button>
+					<el-button type="primary" size="mini" @click="bySocialAdd">去新增</el-button>
 				</div>
 			</el-col>
 		</el-row>
-		<el-row class="list" v-if="this.accident&&this.accident.social_cancel_backlog.value!=''"> 
+		<el-row class="list" v-if="this.accident&&this.accident.social_cancel_backlog.value"> 
 			<el-col :span="18">
 				<div class="list-l relia">
 					<span class="icon iconfont icon-shebaojilu"></span>
@@ -33,7 +33,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="bySocialCancel">去注销</el-button>
+					<el-button type="primary" size="mini" @click="bySocialCancel">去注销</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -49,7 +49,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="byFundAdd">去新增</el-button>
+					<el-button type="primary" size="mini" @click="byFundAdd">去新增</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -66,7 +66,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="byFundCancel">去注销</el-button>
+					<el-button type="primary" size="mini" @click="byFundCancel">去注销</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -82,7 +82,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="byInsuranceAdd">去新增</el-button>
+					<el-button type="primary" size="mini" @click="byInsuranceAdd">去新增</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -99,7 +99,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" @click="byInsuranceCancel">去注销</el-button>
+					<el-button type="primary" size="mini" @click="byInsuranceCancel">去注销</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -160,6 +160,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-button--mini{
+	padding: 5px!important;
+}
 .box-card{
 	// height: 560px;
 	margin-top: 10px;
@@ -171,7 +174,7 @@ export default {
 }
 .list{
 	border-bottom: 1px solid rgba(228,234,236,1);
-	height: 60px;
+	height: 50px;
 	.relia{
 		position: relative;
 		>.el-icon-remove{
@@ -184,16 +187,17 @@ export default {
 		}
 	}
 	.list-l{
-		padding-top: 8px;
+		padding-top: 5px;
 		>.icon{
-           width: 40px;
-		   height: 40px;
-			 font-size: 20px;
-			 text-align: center;
-			 line-height: 40px;
-		   float: left;
-		   border-radius: 20px;
-		   border: 1px solid #CCD5DB;
+			width: 30px;
+			height: 30px;
+			font-size: 18px;
+			text-align: center;
+			line-height: 30px;
+			float: left;
+			border-radius: 50%;
+			border: 1px solid #CCD5DB;
+			margin-top: 5px;
 		}
 		>.icon-shebaojilu{
 		   color: #0BB2D4;
@@ -204,21 +208,15 @@ export default {
 		>.icon-yiwaixian1{
 			color: #3889FF
 		}
-		>img{
-           width: 40px;
-		   height: 40px;
-		   float: left;
-		   border-radius: 20px;
-		}
 		>div{
 			margin-left: 10px;
 			display: inline-block;
 			p{
-				font-size: 14px;
+				font-size: 12px;
 				margin-top: 3px;
 			}
 			span{
-				font-size: 12px;
+				font-size: 10px;
 				margin-top: 5px;
 				color: #A3AFB7;
 			}
@@ -226,7 +224,7 @@ export default {
 	}
 	.list-r{
 		text-align: right;
-        line-height: 60px;
+        line-height: 50px;
 		.btn{
             margin-left: 10px;
 		}
