@@ -195,6 +195,7 @@ export default {
 				let day = today.split('-').join('');
 				let namei = '人员批量停交报盘表';
 				download(data,namei+day,contentType)
+				this.fetchTableData();
 			}catch(err){
 				var that = this;
 				that.ab2str(err.error.response.data,function(str){
