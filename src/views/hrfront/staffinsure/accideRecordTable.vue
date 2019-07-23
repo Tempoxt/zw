@@ -99,9 +99,7 @@ export default {
 	methods: {
     
     table_disable_selected(row){
-      console.log(this.current==this.table_form.dateLap)
       if(row.auditStatus!=1||(this.current==this.table_form.dateLap&&row.is_staff==0)){
-        console.log('333333333333')
         return false
       }else{
         return true
