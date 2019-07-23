@@ -3,7 +3,7 @@
  <el-row class="h-full">
     <el-col :span="5" class="h-full">
       <div class=" h-full">
-           <org v-model="orgid" @change="changeOrg"/>
+           <org v-model="orgid" @change="changeOrg" getApi="org/delaccidentselect"/>
       </div>
 
     </el-col>

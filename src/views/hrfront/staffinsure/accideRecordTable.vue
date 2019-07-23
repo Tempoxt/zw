@@ -67,6 +67,7 @@ export default {
       orgCategory:[],
       queryDialogFormVisible:true,
       table_topHeight:236,
+      current:'',
       template:{
 				auditStatus_display(column,row){
           if(row.auditStatus==1){
@@ -78,7 +79,14 @@ export default {
           }else{
             return  <el-tag size="mini" type="success">已结付</el-tag>
           }
-				}
+        },
+        is_staff(column,row){
+          if(row.is_staff==0){
+            return <span>在职</span>
+          }else{
+            return <span>离职</span>
+          }
+        }
       }
 		};
 	},
@@ -91,7 +99,8 @@ export default {
 	methods: {
     
     table_disable_selected(row){
-      if(row.auditStatus!=1){
+      if(row.auditStatus!=1&&this.current==this.table_form.dateLap&&row.is_staff==0){
+        console.log('333333333333')
         return false
       }else{
         return true
@@ -126,7 +135,8 @@ export default {
 	},
 	async created() {
 		this.fetchMenu()
-		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+    this.current = dayjs().format('YYYY-MM')
 		this.fetchTableData();
 	}
 };

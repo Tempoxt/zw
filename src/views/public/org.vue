@@ -41,6 +41,9 @@ export default {
 		showteam:{
       default:''
     },
+    getApi:{
+     
+    }
 	},
     watch:{
        filterText(val) {
@@ -64,7 +67,9 @@ export default {
         }
     },
     async created(){
-      if (this.showteam) {
+      if(this.getApi){
+        this.data2 = await this.$request.get(this.getApi);
+      }else if (this.showteam) {
         this.data2 = await this.$request.get('org',{
             params:{
                 showteam:this.showteam
@@ -73,7 +78,6 @@ export default {
       }else{
         this.data2 = await api_common.getOrg();
       }
-        // this.data2 = await api_common.getOrg();
         let defaultId = this.data2[0].orgid
         this.$emit('change',defaultId)
         this.$nextTick(()=>{

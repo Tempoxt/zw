@@ -35,6 +35,17 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
+		<div style="padding-left:10px" v-if="insure_status==14">
+				<!-- <span>社保主体:  </span> -->
+				<el-select v-model="table_form.socialSecurityMain"  @change="fetchTableData" placeholder="请选择社保主体">
+					<el-option
+					v-for="item in company"
+					:key="item.id"
+					:label="item.company"
+					:value="item.company">
+					</el-option>
+				</el-select>
+			</div>
 		<div style="padding-left:10px" v-if="insure_status==15">
           <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
         </div>
@@ -109,6 +120,10 @@ export default {
 			},
 			form:{
 				reason:''
+			},
+			company:[],
+			table_form:{
+				socialSecurityMain:'松岗总公司'
 			}
 		};
 	},
@@ -118,9 +133,15 @@ export default {
 		},
 		insure_status(){
 			if(this.insure_status==15){
-    			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
-			}else{
+				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+    			this.table_form.socialSecurityMain = ''
+			}else if(this.insure_status==16){
+    			this.table_form.socialSecurityMain = ''
 				this.table_form.dateLap =''
+			}else{
+				this.getComp()
+				this.table_form.dateLap =''
+    			this.table_form.socialSecurityMain = '松岗总公司'
 			}
 			this.fetchMenu()
 			this.fetchTableData()
@@ -149,6 +170,9 @@ export default {
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
+		},
+		async getComp(){
+			this.company = await this.$request.get('staffinsure/getsubcompany')
 		},
 		ab2str(u,f) {
 		   var b = new Blob([u]);
@@ -210,6 +234,7 @@ export default {
 	},
 	async created() {
 		await this.fetchMenu()
+		this.getComp()
 		setTimeout(()=>{
 			this.fetchTableData();
 		},500)
