@@ -50,9 +50,8 @@ export default {
         changeOrg(orgid){
             this.orgid = orgid
         },
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.name && data.name.indexOf(value) !== -1;
+        handleClick(val){
+            
         },
     },
     async created() {

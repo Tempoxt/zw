@@ -59,7 +59,6 @@ export default {
       this.table_form.orgid = this.id
       const rows  = await api_resource.get(this.table_form);
       this.table_data  = rows
-      console.log(this.table_data)
       setTimeout(() => {
         this.table_loading = false;
       }, 300);
