@@ -94,7 +94,9 @@ export default {
 		},
 		insure_status(){
 			this.fetchMenu()
-			this.fetchNum()
+			if(this.insure_status==22){
+				this.fetchNum()
+			}
 		}
 	},
 	methods: {
@@ -120,8 +122,7 @@ export default {
 				}else{
 					this.table_form.serialNumber = this.serialnumber[0].serialNumber
 				}
-			}	
-			this.fetchTableData();
+			}
 		},
 		async apply(){
 			let rows = this.table_selectedRows.map(row=>row.staff);
@@ -145,6 +146,9 @@ export default {
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table
+			setTimeout(()=>{
+				this.fetchTableData();
+			},500)
 		},
 		async passAcc(){
 			if(this.table_form.serialNumber==''){
@@ -172,9 +176,6 @@ export default {
 	async created() {
 		await this.fetchMenu()
 		await this.fetchNum()
-		setTimeout(()=>{
-			this.fetchTableData();
-		},500)
 	}
 };
 </script>

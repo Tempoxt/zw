@@ -99,7 +99,9 @@ export default {
 		},
 		insure_status(){
 			this.fetchMenu()
-			this.fetchNum()
+			if(this.insure_status==25){
+				this.fetchNum()
+			}
 		}
 	},
 	methods: {
@@ -133,11 +135,6 @@ export default {
 			let namei = '减少被保险人名单';
 			download(data,namei+day||this.$route.meta.title+day,contentType)
 			this.fetchTableData();
-			// await this.$request.put('staffinsure/applycancelinsure',{
-			// 	ids:rows.join(','),
-			// 	insureType:3
-			// })
-			// this.fetchTableData();
 		},
 		async passAcc(){
 			if(this.table_form.serialNumber==''){
@@ -170,21 +167,21 @@ export default {
 					this.table_form.serialNumber = this.serialnumber[0].serialNumber
 				}
 			}
-			this.fetchTableData();
 		},
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit("AccidentIns"+this.insure_status);
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table
+			setTimeout(()=>{
+				this.fetchTableData();
+			},500)
 		}
 	},
 	async created() {
 		await this.fetchMenu()
 		await this.fetchNum()
-		setTimeout(()=>{
-			this.fetchTableData();
-		},500)
+		
 	}
 };
 </script>

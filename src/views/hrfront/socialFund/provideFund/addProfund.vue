@@ -8,7 +8,6 @@
 
     </el-col>
     <el-col :span="19">
-        <!-- <addAccideTable :id="orgid" /> -->
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
@@ -48,18 +47,12 @@ export default {
         }
     },
     methods:{
-        handleChangeNode(val){
-            this.orgid = val.orgid
-        },
         changeOrg(orgid){
             this.orgid = orgid
         },
         filterNode(value, data) {
             if (!value) return true;
             return data.name && data.name.indexOf(value) !== -1;
-        },
-        handleClick(val){
-            
         },
     },
     async created() {
