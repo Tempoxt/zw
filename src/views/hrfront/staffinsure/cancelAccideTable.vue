@@ -145,6 +145,9 @@ export default {
 					serialNumber: this.table_form.serialNumber
 				})
 				this.fetchNum();
+				setTimeout(()=>{
+					this.fetchTableData();
+				},500)
 			}
 		},
 		async backAcc(){
@@ -156,6 +159,9 @@ export default {
 					serialNumber: this.table_form.serialNumber
 				})
 				this.fetchNum();
+				setTimeout(()=>{
+					this.fetchTableData();
+				},500)
 			}
 		},
 		async fetchNum(){
