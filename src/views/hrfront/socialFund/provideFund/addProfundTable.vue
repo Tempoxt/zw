@@ -36,7 +36,7 @@
 		>
 		<div style="padding-left:10px" v-if="insure_status==11">
 				<!-- <span>社保主体:  </span> -->
-				<el-select v-model="table_form.socialSecurityMain"  @change="fetchTableData" placeholder="请选择社保主体">
+				<el-select v-model="table_form.socialSecurityMain" clearable @change="fetchTableData" placeholder="请选择社保主体">
 					<el-option
 					v-for="item in company"
 					:key="item.id"
