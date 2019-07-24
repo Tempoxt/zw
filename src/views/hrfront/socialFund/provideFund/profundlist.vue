@@ -2,7 +2,7 @@
    <el-row class="h-full">
     <el-col :span="5" class="h-full">
       <div class=" h-full">
-          <org @change="changeOrg" />
+          <org @change="changeOrg" getApi="org/fundselect"/>
       </div>
 
     </el-col>
