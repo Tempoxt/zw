@@ -68,16 +68,36 @@
             @click="handleAction('fetchTableData')"
           ></el-button>
         </el-tooltip>
+
         <el-popover
+        
+            v-if="table_column.length>=38"
             placement="bottom"
             trigger="click"
-            transition="el-zoom-in-top"
+            transition="el-zoom-in-top" popper-class="h-full"
           >
-          <el-checkbox-group v-model="checkList" @change="handleChange" text-color="#606266" class="checkbox-group">
-              <div v-for="column in table_column" :key="column.id" class="column-item" >
-                 <el-checkbox :label="column.id" >{{column.showname}}</el-checkbox>
-              </div>
-          </el-checkbox-group>
+
+          <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+            <el-checkbox-group v-model="checkList" @change="handleChange" text-color="#606266" class="checkbox-group">
+                <div v-for="column in table_column" :key="column.id" class="column-item" >
+                  <el-checkbox :label="column.id" >{{column.showname}}</el-checkbox>
+                </div>
+            </el-checkbox-group>
+          
+          </el-scrollbar>
+          <el-button icon="icon iconfont icon-lie" size="small"  slot="reference"   :disabled="!(showColumnfilter && table_column && table_column.length)"></el-button>
+        </el-popover>
+
+         <el-popover v-else
+            placement="bottom"
+            trigger="click"
+            transition="el-zoom-in-top" 
+          >
+            <el-checkbox-group v-model="checkList" @change="handleChange" text-color="#606266" class="checkbox-group">
+                <div v-for="column in table_column" :key="column.id" class="column-item" >
+                  <el-checkbox :label="column.id" >{{column.showname}}</el-checkbox>
+                </div>
+            </el-checkbox-group>
           <el-button icon="icon iconfont icon-lie" size="small"  slot="reference"   :disabled="!(showColumnfilter && table_column && table_column.length)"></el-button>
         </el-popover>
 
@@ -168,6 +188,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+.scroll {
+  height: calc(100%);
+  width: 100%;
+ /deep/ .scrollbar-wrapper {
+    overflow-x: hidden;
+  }
+}
 .header {
   display: flex;
   justify-content: space-between;
