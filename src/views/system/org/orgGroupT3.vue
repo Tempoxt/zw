@@ -53,8 +53,8 @@
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'小组名称'}" v-model="form.name"  prop="name"/>
                 </el-col>
-                 <el-col :span="24">
-                  <form-render :type="`subdepart`" :field="{name:'组长',defaultName:form.orgManagerName}" v-model="form.orgManager"/>
+                <el-col :span="24">
+                  <form-render :type="`multiporg`" :field="{name:'组长',defaultName:form.orgManagerListName}"  v-model="form.orgManagerList"/>
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort" placeholder=""/>

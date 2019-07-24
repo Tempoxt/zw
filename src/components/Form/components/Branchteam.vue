@@ -105,6 +105,8 @@ export default {
         });
       })(this.data2);
       this.input5 = info.name;
+      // console.log(info,'iiiiiiiiii')
+      this.data = info.id
     }
   },
   watch: {
@@ -123,6 +125,8 @@ export default {
       }else{
         this.input5 = ''
       }
+      console.log(this.data,'3333333')
+      console.log(this.input5,'666666666666')
       this.$parent.$emit("input", this.data);
     },
     value: {
