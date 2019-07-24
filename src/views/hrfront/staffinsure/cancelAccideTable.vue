@@ -126,7 +126,7 @@ export default {
 		    r.onload = function (){if(f)f.call(null,r.result)}
 		},
 		async apply(){
-			let rows = this.table_selectedRows.map(row=>row.staff)
+			let rows = this.table_selectedRows.map(row=>row.id)
 			const len = rows.length;
 			try{
 				const { data,name,contentType} = await this.$request.put('staffinsure/applycancelinsure',{

@@ -346,10 +346,10 @@
                                     <i class="icon iconfont icon-tianjia"></i>
                                     <span>添加</span>
                                 </el-button>
-                                <el-button type="button" class="el-button el-button--default el-button--small" @click="editContract" :disabled="!isDisabled">
+                                <!-- <el-button type="button" class="el-button el-button--default el-button--small" @click="editContract" :disabled="!isDisabled">
                                     <i class="icon iconfont icon-bianji"></i>
                                     <span>编辑</span>
-                                </el-button>
+                                </el-button> -->
 
                                 <el-table 
                                     @selection-change="handleChangeSelect"
