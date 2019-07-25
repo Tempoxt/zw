@@ -97,7 +97,6 @@ export default {
 				this.data = data.employeeCode;
 				this.input5.push(data.name)
 				this.all.push(data)
-				this.field.defaultName = this.input5.map(o=>o)
 			}
 		},
 		async loadNode1(node, resolve){
