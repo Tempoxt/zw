@@ -12,13 +12,13 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='待购买'">
-            <addAccideTable insure_status="21" :id="orgid"/>
+            <addAccideTable insure_status="1" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='待确认'">
-            <addAccideTable insure_status="22" :id="orgid"/>
+            <addAccideTable insure_status="2" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='已购买'">
-            <addAccideTable insure_status="23" :id="orgid"/>
+            <addAccideTable insure_status="3" :id="orgid"/>
         </div>
     </el-col>
   </el-row>

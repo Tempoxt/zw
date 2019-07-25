@@ -34,7 +34,7 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-if="insure_status==11">
+		<div style="padding-left:10px" v-if="insure_status==1">
 				<!-- <span>社保主体:  </span> -->
 				<el-select v-model="table_form.socialSecurityMain" clearable @change="fetchTableData" placeholder="请选择社保主体">
 					<el-option
@@ -45,7 +45,7 @@
 					</el-option>
 				</el-select>
 			</div>
-		<div style="padding-left:10px" v-if="insure_status==12">
+		<div style="padding-left:10px" v-if="insure_status==2">
           <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
         </div>
     </table-header>
@@ -131,10 +131,10 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
-			if(this.insure_status==12){
+			if(this.insure_status==2){
 				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     			this.table_form.socialSecurityMain = ''
-			}else if(this.insure_status==13){
+			}else if(this.insure_status==3){
     			this.table_form.socialSecurityMain = ''
 				this.table_form.dateLap =''
 			}else{
@@ -162,10 +162,23 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			this.table_form.insureStatus = this.insure_status
-			const {rows , total }= await api_resource.get(this.table_form);
-			this.table_data  = rows
-			this.table_form.total = total
+			this.table_form.insureType = 2
+			if(this.insure_status==1){
+				const {rows , total }= await this.$request.get('staffinsure/insurewaitaffirm',{params:this.table_form})
+				this.table_data  = rows
+				this.table_form.total = total
+				setTimeout(() => {
+					this.table_loading = false;
+				}, 300);
+			}else{
+				this.table_form.insureStatus = this.insure_status
+				const {rows , total }= await api_resource.get(this.table_form);
+				this.table_data  = rows
+				this.table_form.total = total
+				setTimeout(() => {
+					this.table_loading = false;
+				}, 300);
+			}
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);

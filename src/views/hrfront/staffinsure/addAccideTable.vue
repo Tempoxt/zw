@@ -12,7 +12,7 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-if="insure_status==22">
+		<div style="padding-left:10px" v-if="insure_status==2">
 			<el-select v-model="table_form.serialNumber" placeholder="请选择流水号" clearable filterable @change="fetchTableData">
 				<el-option
 					v-for="item in serialnumber"
@@ -39,7 +39,7 @@
 		width="60" 
 		class-name="table-column-disabled"
 		:selectable="table_disable_selected"
-		v-if="this.insure_status!=22"
+		v-if="this.insure_status!=2"
 		>
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
@@ -94,7 +94,7 @@ export default {
 		},
 		insure_status(){
 			this.fetchMenu()
-			if(this.insure_status==22){
+			if(this.insure_status==2){
 				this.fetchNum()
 			}
 		}
@@ -106,22 +106,41 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			this.table_form.insureStatus = this.insure_status
-			const {rows , total }= await api_resource.get(this.table_form);
-			this.table_data  = rows
-			this.table_form.total = total
+			this.table_form.insureType = 3
+			if(this.insure_status==1){
+				this.table_form.serialNumber = ''
+				const {rows , total }= await this.$request.get('staffinsure/insurewaitaffirm',{params:this.table_form})
+				this.table_data  = rows
+				this.table_form.total = total
+				setTimeout(() => {
+					this.table_loading = false;
+				}, 300);
+			}else{
+				if(this.insure_status==3){
+					this.table_form.serialNumber = ''
+				}
+				this.table_form.insureStatus = this.insure_status
+				const {rows , total }= await api_resource.get(this.table_form);
+				this.table_data  = rows
+				this.table_form.total = total
+				setTimeout(() => {
+					this.table_loading = false;
+				}, 300);
+			}
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
 		},
 		async fetchNum(){
-			if(this.insure_status==22){
+			if(this.insure_status==2){
 				this.serialnumber = await this.$request.get('staffinsure/getserialnumber?insureType=3&insureStatus='+this.insure_status)
 				if(this.serialnumber==''){
 					this.table_form.serialNumber = ''
 				}else{
 					this.table_form.serialNumber = this.serialnumber[0].serialNumber
 				}
+			}else{
+				this.table_form.serialNumber = ''
 			}
 		},
 		ab2str(u,f) {
@@ -160,6 +179,7 @@ export default {
 			this.table_actions = action;
 			this.table_config = table
 			setTimeout(()=>{
+				console.log(this.table_form.serialNumber,'serialNumberserialNumberserialNumberserialNumber')
 				this.fetchTableData();
 			},500)
 		},
