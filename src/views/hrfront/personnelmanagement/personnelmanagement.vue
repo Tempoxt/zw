@@ -123,7 +123,7 @@
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" clearable :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -815,7 +815,7 @@
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart" @change="changeStart"/>
+                                        <form-render prop="contractStart" :type="`day`" :field="{name:'开始时间'}" v-model="contract.contractStart"/>
                                     </el-col>
                                     <el-col :span="24">
                                         <form-render prop="contractEnd" placeholder="按照年限自动计算" type="day" :disabled="true" :field="{name:'结束时间'}" v-model="contract.contractEnd"/>
@@ -988,16 +988,16 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 nation: [
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 birthday:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 stayBegin:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 stayEnd:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 qfjg:[
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -1006,19 +1006,19 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 sex:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 department:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 principalship:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 teamID:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 workGroup:[
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
             },
             ruleCon:{
@@ -1138,9 +1138,6 @@ export default {
                 }
                 })
             })
-        },
-        changeStart(){
-            console.log('sssssss')
         },
         table_disable(row){
             return !row.lockstate
@@ -1365,7 +1362,7 @@ export default {
                 if(this.tab_label ==='联系方式'){
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
                 }else{
-                    await api_common.resource('hrm/staff').create(form.id,form)
+                    await api_common.resource('hrm/staff').update(form.id,form)
                     // await api_resource.update(form.id,form)
                 }
                 this.fetchProfileData()

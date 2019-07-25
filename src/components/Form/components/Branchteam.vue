@@ -31,6 +31,8 @@
         </el-scrollbar>
         </el-popover>
         <el-select
+        clearable
+        @clear="clear"
         v-model="input5"
         placeholder="请选择"
         v-popover:popover
@@ -55,6 +57,10 @@ export default {
     }
   },
   methods: {
+    clear(){
+      this.data = ''
+      this.input5 = ''
+    },
     filterNode(value, data) {
       if (!value) return true;
       return data.name.indexOf(value) !== -1;
@@ -105,7 +111,6 @@ export default {
         });
       })(this.data2);
       this.input5 = info.name;
-      // console.log(info,'iiiiiiiiii')
       this.data = info.id
     }
   },
@@ -116,17 +121,17 @@ export default {
       }else{
         this.value = ''
         this.input5 = ''
+        return
       }
       
     },
     data(val) {
-      if(this.field.id){
+      if(this.data!==undefined&&this.data!==null&&this.data!==''&&this.field.id){
         this.fetchData()
       }else{
         this.input5 = ''
+        return 
       }
-      console.log(this.data,'3333333')
-      console.log(this.input5,'666666666666')
       this.$parent.$emit("input", this.data);
     },
     value: {
