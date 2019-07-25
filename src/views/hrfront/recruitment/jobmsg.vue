@@ -305,14 +305,14 @@
                 @header-dragend="table_dragend"
                 @sort-change="table_sort_change"
                 v-loading="table_loading">
-                <el-table-column 
-                type="selection" 
-                width="60" 
-                class-name="table-column-disabled"
-                :selectable="table_disable_selected"
-                ></el-table-column>
-                <el-table-column type="index" :index="indexMethod" />
-                <each-table-column :table_field="table_field"/>
+                    <el-table-column 
+                    type="selection" 
+                    width="60" 
+                    class-name="table-column-disabled"
+                    :selectable="table_disable_selected"
+                    ></el-table-column>
+                    <el-table-column type="index" :index="indexMethod" />
+                    <each-table-column :table_field="table_field"/>
                      <!-- <el-table-column
                     fixed="right"
                     label="操作"
@@ -378,7 +378,9 @@ export default {
                 params:{
                     ids:rows.join(',')
                 },
+                alert:false
             })
+			this.$message.success('完成成功')
             this.fetchTableData()
         },
         async edit(){
