@@ -1365,7 +1365,7 @@ export default {
                 if(this.tab_label ==='联系方式'){
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
                 }else{
-                    await api_common.resource('hrm/staff').create(form.id,form)
+                    await api_common.resource('hrm/staff').update(form.id,form)
                     // await api_resource.update(form.id,form)
                 }
                 this.fetchProfileData()
