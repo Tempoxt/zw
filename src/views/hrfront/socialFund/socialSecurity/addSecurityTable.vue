@@ -160,6 +160,10 @@ export default {
 		}
 	},
 	methods: {
+		reset(){
+			this.$request.put('staffinsure/socialinsurereset',{foo:'bar'})
+			this.fetchTableData();
+		},
 		async fetchTableData() {
 			if(!this.id){
 				return
