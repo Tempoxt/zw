@@ -132,29 +132,58 @@
 					max-height="840"
 					show-summary
       				:summary-method="getSummaries"
+					:cellStyle="drawerStyle"
 					>
 					
-            		<el-table-column type="index" :index="indexMethods" fixed/>
-					<el-table-column
+            		<el-table-column type="index" :index="indexMethods" label="日期" />
+					<!-- <el-table-column
 						prop="CheckDate"
-						label="日期">
+						label="日期"  width="120">
+					</el-table-column> -->
+					<el-table-column
+						prop="weekday"
+						label="星期"  width="50">
+					</el-table-column>
+					
+					<el-table-column
+						prop="OnDutyTime1"
+						label="上班1" width="60">
 					</el-table-column>
 					<el-table-column
-						prop="ClassName"
-						label="班次">
+						prop="OffDutyTime1"
+						label="下班1" width="60">
+					</el-table-column>
+					
+					<el-table-column
+						prop="OnDutyTime2"
+						label="上班2" width="60">
+					</el-table-column>
+					
+					<el-table-column
+						prop="OffDutyTime2"
+						label="下班2" width="60">
+					</el-table-column>
+					
+					<el-table-column
+						prop="OnDutyTime3"
+						label="上班3" width="60">
 					</el-table-column>
 					<el-table-column
-						prop="RestType"
-						label="假日">
+						prop="OffDutyTime3"
+						label="下班3" width="60">
 					</el-table-column>
 					<el-table-column
-						prop="weekDay"
-						label="星期">
+						prop="Remark"
+						label="异常说明" width="120">
 					</el-table-column>
-					<el-table-column
-						prop="allowance"
-						label="高温津贴">
-					</el-table-column>
+					<!-- <el-table-column
+						prop="hotDetail"
+						label="高温津贴" width="60">
+						<template slot-scope="scope">
+							<span v-if="scope.row.hotDetail==1||scope.row.hotDetail==0.5">有效</span>
+							<span v-if="scope.row.hotDetail==''">无效</span>
+						</template>
+					</el-table-column> -->
 				</el-table>
 			</div>
 		</Drawer>
@@ -269,17 +298,35 @@ export default {
 			})
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(column.label == '工作日'){
+			if(column.label == '津贴天数'){
 				return 'color:#0BB2D4;cursor:pointer'
 			}else{
 				return  ''
 			}
 		},
+		drawerStyle({row,column,rowIndex,columnIndex}){
+			// console.log(column,'eeeee')
+			if(row.Remark!=''&&row.Remark!=null){
+				return 'color:red'
+			}else if(column.label=="星期"){
+				if(row.weekday=='六'){
+					return 'background-color:#68f59c;'
+				}
+				if(row.weekday=='日'){
+					return 'background-color:#1cbe57;'
+				}
+			}else if(column.label=="日期"&&row.hotDetail!=''&&row.hotDetail!=null){
+				return 'background-color:#0bb2d4;'
+			}
+			// else if(column.label=="高温津贴"&&row.hotDetail!=''&&row.hotDetail!=null){
+			// 	return 'background-color:#0bb2d4;'
+			// }
+		},
         headerStyle(row,rowIndex,column,columnIndex){
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
         },
 		async openDrawer(row,column,cell,event){
-            if(row.shouldWorkDays==event.target.innerHTML){
+            if(row.allowanceDays==event.target.innerText){
 				this.openDrawers = true
 				this.chineseName = row.chineseName 
 				const alloData = await this.$request.get('/attendance/hotdetail?history_id='+row.id)
@@ -291,11 +338,11 @@ export default {
 			const { columns, data } = param;
 			const sums = [];
 			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = '合计';
-					return;
-				}
-				if(index === 5){
+				// if (index === 0) {
+				// 	sums[index] = '合计';
+				// 	return;
+				// }
+				if(index === 0){
 					sums[index] = this.totalAllo;
 				}
 			});

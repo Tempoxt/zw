@@ -780,7 +780,11 @@
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'合同名称'}" v-model="contract.contractName" prop="contractName"/>
+                                         <form-render :type="`input`" :field="{name:'合同名称'}" v-model="contract.contractName" prop="contractName"/>
+                                        <!-- <form-render :type="`select`" :field="{name:'合同名称',options:[{
+                                            value: 1,
+                                            label: '劳动合同'
+                                        }]}" v-model="contract.contractName" prop="contractName"/> -->
                                     </el-col>
                                 
                                     <el-col :span="24">
@@ -1026,7 +1030,7 @@ export default {
                     { required: true, message: '请选择', trigger: 'change' },
                 ],
                 contractName:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: 'change blur' },
                 ],
                 contractType:[
                     { required: true, message: '请选择', trigger: 'change' },
@@ -1182,7 +1186,7 @@ export default {
         },
         handleContract(){
             // this.contract = {
-            //     contractName:''
+            //     contractName: 1
             // }
             this.dialogContract = "inser"
             this.fetchContract()
