@@ -35,7 +35,7 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-if="insure_status==14">
+		<div style="padding-left:10px" v-if="insure_status==4">
 				<!-- <span>社保主体:  </span> -->
 				<el-select v-model="table_form.socialSecurityMain" clearable @change="fetchTableData" placeholder="请选择社保主体">
 					<el-option
@@ -46,7 +46,7 @@
 					</el-option>
 				</el-select>
 			</div>
-		<div style="padding-left:10px" v-if="insure_status==15">
+		<div style="padding-left:10px" v-if="insure_status==5">
           <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
         </div>
     </table-header>
@@ -132,10 +132,10 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
-			if(this.insure_status==15){
+			if(this.insure_status==5){
 				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     			this.table_form.socialSecurityMain = ''
-			}else if(this.insure_status==16){
+			}else if(this.insure_status==0){
     			this.table_form.socialSecurityMain = ''
 				this.table_form.dateLap =''
 			}else{
@@ -164,6 +164,7 @@ export default {
 			this.table_loading = true;
 			this.table_form.org_id = this.id
 			this.table_form.insureStatus = this.insure_status
+			this.table_form.insureType = 2
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total

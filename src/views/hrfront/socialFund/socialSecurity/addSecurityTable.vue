@@ -144,13 +144,15 @@ export default {
 			if(this.insure_status==2){
 				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     			this.table_form.socialSecurityMain = ''
+				this.fetchTableData()
 			}else if(this.insure_status==3){
     			this.table_form.socialSecurityMain = ''
 				this.table_form.dateLap =''
+				this.fetchTableData()
 			}else{
 				this.getComp()
 				this.table_form.dateLap =''
-    			this.table_form.socialSecurityMain = '松岗总公司'
+				this.table_form.socialSecurityMain = '松岗总公司'
 			}
 			this.fetchMenu()
 			this.fetchTableData()
@@ -163,13 +165,23 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			this.table_form.insureStatus = this.insure_status
-			const {rows , total }= await api_resource.get(this.table_form);
-			this.table_data  = rows
-			this.table_form.total = total
-			setTimeout(() => {
-				this.table_loading = false;
-			}, 300);
+			this.table_form.insureType = 1
+			if(this.insure_status==1){
+				const {rows , total }= await this.$request.get('staffinsure/insurewaitaffirm',{params:this.table_form})
+				this.table_data  = rows
+				this.table_form.total = total
+				setTimeout(() => {
+					this.table_loading = false;
+				}, 300);
+			}else{
+				this.table_form.insureStatus = this.insure_status
+				const {rows , total }= await api_resource.get(this.table_form);
+				this.table_data  = rows
+				this.table_form.total = total
+				setTimeout(() => {
+					this.table_loading = false;
+				}, 300);
+			}
 		},
 		async getComp(){
 			this.company = await this.$request.get('staffinsure/getsubcompany')

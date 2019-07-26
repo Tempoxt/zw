@@ -18,7 +18,7 @@
             <cancelSecurityTable insure_status="5" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='已注销'">
-            <cancelSecurityTable insure_status="6" :id="orgid"/>
+            <cancelSecurityTable insure_status="0" :id="orgid"/>
         </div>
     </el-col>
   </el-row>

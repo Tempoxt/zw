@@ -134,7 +134,7 @@ export default {
 			if(this.insure_status==5){
 				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     			this.table_form.socialSecurityMain = ''
-			}else if(this.insure_status==6){
+			}else if(this.insure_status==0){
     			this.table_form.socialSecurityMain = ''
 				this.table_form.dateLap =''
 			}else{
@@ -163,6 +163,7 @@ export default {
 			this.table_loading = true;
 			this.table_form.org_id = this.id
 			this.table_form.insureStatus = this.insure_status
+			this.table_form.insureType = 1
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total

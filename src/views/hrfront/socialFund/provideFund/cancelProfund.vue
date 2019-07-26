@@ -12,13 +12,13 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='待注销'">
-            <cancelProfundTable insure_status="14" :id="orgid"/>
+            <cancelProfundTable insure_status="4" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='待确认'">
-            <cancelProfundTable insure_status="15" :id="orgid"/>
+            <cancelProfundTable insure_status="5" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='已注销'">
-            <cancelProfundTable insure_status="16" :id="orgid"/>
+            <cancelProfundTable insure_status="0" :id="orgid"/>
         </div>
     </el-col>
   </el-row>
