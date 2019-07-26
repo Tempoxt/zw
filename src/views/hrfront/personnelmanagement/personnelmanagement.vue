@@ -1023,16 +1023,16 @@ export default {
             },
             ruleCon:{
                 contractStart:[
-                    { required: true, message: '请输入', trigger: 'change' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 contractName:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 contractType:[
-                    { required: true, message: '请输入', trigger: 'change' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 contractTime:[
-                    { required: true, message: '请输入', trigger: 'change' },
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
             },
             ruleImg:{
@@ -1181,7 +1181,9 @@ export default {
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         handleContract(){
-            this.contract = {}
+            // this.contract = {
+            //     contractName:''
+            // }
             this.dialogContract = "inser"
             this.fetchContract()
             this.dialogContractFormVisible = true
@@ -1228,14 +1230,9 @@ export default {
             this.maskBtn = false;
         },
         async getDialog(){
-            this.form = await api_resource.find(this.staffId)
+            this.form = await api_common.resource('hrm/staff').find(this.staffId)
             this.dialogFormVisible = true
-            this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
-            this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.getSelectOption()
             this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
             this.width = 250
             this.height = 200
@@ -1279,11 +1276,10 @@ export default {
         },
         async openDrawer(row,column,cell,event){
             this.staffId = row.id;
-            if(row.employeeCode==event.target.innerHTML){
+            if(row.employeeCode==event.target.innerText){
                 this.openDrawers = true
                 this.fetchProfileData()
-                this.form = await api_resource.find(row.id)
-                this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
+                this.connect = await api_common.resource('hrm/staff/contact').find(row.id)
                 this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
                 this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
             }
@@ -1315,13 +1311,16 @@ export default {
             })
             this.form = this.defaultForm()
             this.dialogFormVisible = true
+            this.getSelectOption()
+            this.Aledulevels = (await api_common.resource('basicdata/edulevels').get()).map(o=>{return {label:o.name,value:o.id}})
+        },
+        async getSelectOption(){
             this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.Aledulevels = (await api_common.resource('basicdata/edulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
             this.width = 250
@@ -1338,15 +1337,10 @@ export default {
             this.form = await api_common.resource('hrm/staff').find(row.id)
 
             this.dialogFormVisible = true
-            this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
-            this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
-            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.getSelectOption()
             this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
             this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
-            this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
             this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async fetchDepartment(){
