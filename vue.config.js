@@ -19,7 +19,7 @@ class HelloWorldPlugin {
             host: '192.168.0.192',
             port: 22,
             username: 'zhaowei',
-            password: 'hgw@2018',
+            password: 'hgw@2019',
             path:process.env.VUE_APP_SERVER_DIR||'/home/zhaowei/erp_test/frontend/'
         }, function(err) {
             if(err){
