@@ -1333,7 +1333,10 @@ export default {
             // })
             let row = this.table_selectedRows[0];
             this.staffId = row.id;
-            this.form = await api_resource.find(row.id);
+            
+            // this.form = await api_resource.find(row.id);
+            this.form = await api_common.resource('hrm/staff').find(row.id)
+
             this.dialogFormVisible = true
             this.nationData = (await api_common.resource('basicdata/nations').get()).map(o=>{return {label:o.name,value:o.id}})
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
