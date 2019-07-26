@@ -131,6 +131,7 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
+			this.table_form.currentpage = 1
 			if(this.insure_status==2){
 				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     			this.table_form.socialSecurityMain = ''

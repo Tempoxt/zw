@@ -93,6 +93,7 @@ export default {
 			this.fetchTableData()
 		},
 		insure_status(){
+			this.table_form.currentpage = 1
 			this.fetchMenu()
 			if(this.insure_status==2){
 				this.fetchNum()
