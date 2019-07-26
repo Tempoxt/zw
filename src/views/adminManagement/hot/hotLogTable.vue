@@ -268,7 +268,8 @@ export default {
         if(this.isInsert){
             await api_resource.create(form)
         }else{
-            await api_resource.update(form.id,form)
+            await api_resource.update(form.id,form,{alert:false})
+            this.$message.success('修改成功');
         }
         this.dialogFormVisible = false
         this.fetchTableData()
