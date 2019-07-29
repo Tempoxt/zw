@@ -64,7 +64,8 @@ export default {
       table_sort:{},
       form_multiple:false,
       importLoading:false,
-      window_innerHeight:0
+      window_innerHeight:0,
+      checkin:0,
     }
   },
   computed: {
@@ -406,7 +407,14 @@ export default {
       });
       try {
         // await new Promise(resolve=>setTimeout(resolve,3000))
-        await request.post(this.importUploadUrl,form)
+        if(this.checkin==0){
+          await request.post(this.importUploadUrl,form)
+        }else if(this.checkin==1){
+          await request.post(this.importUploadCheckin,form)
+        }else if(this.checkin==2){
+          await request.post(this.importUploadCheckout,form)
+        }
+        // await request.post(this.importUploadUrl,form)
         this.fetchTableData()
         this.$message({
           message: '导入成功',
@@ -423,9 +431,9 @@ export default {
           this.fetchTableData()
         })
       }
-      
     },
     import(){
+      this.checkin = 0;
       let {
         handleImportChange,
       } = this
@@ -439,6 +447,41 @@ export default {
           center:true
         });
     },
+
+    //导入入住
+    importCheckIn(){
+      this.checkin = 1;
+      let {
+        handleImportChange,
+      } = this
+      MessageBox.alert(
+        <el-button-group class="table-import-upload" ref="import">
+          <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+          <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+        </el-button-group>
+        , '选择文件导入', {
+        showConfirmButton:false,
+        center:true
+      });
+    },
+
+    //导入搬离
+    importCheckOut(){
+      this.checkin = 2;
+      let {
+        handleImportChange,
+      } = this
+      MessageBox.alert(
+        <el-button-group class="table-import-upload" ref="import">
+          <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+          <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+        </el-button-group>
+        , '选择文件导入', {
+        showConfirmButton:false,
+        center:true
+      });
+    },
+
     // tree table.......---------------------
     table_tree_showRow: function(row) {
       const show = row.row.parent

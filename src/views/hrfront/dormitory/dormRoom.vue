@@ -266,7 +266,9 @@ export default {
 
       },
       memberList:[],
-      rows2:[]
+      rows2:[],
+      importUploadCheckin:'/dormitory/import/checkin',
+      importUploadCheckout:'/dormitory/import/confirmout'
     };
   },
   watch:{
