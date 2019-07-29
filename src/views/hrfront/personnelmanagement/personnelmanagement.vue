@@ -159,10 +159,10 @@
                                                 label: '全职'
                                                 },{
                                                 value: 2,
-                                                label: '兼职'
+                                                label: '实习'
                                                 },{
                                                 value: 3,
-                                                label: '实习'
+                                                label: '兼职'
                                                 },{
                                                 value: 4,
                                                 label: '返聘'
@@ -780,11 +780,11 @@
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                         <form-render :type="`input`" :field="{name:'合同名称'}" v-model="contract.contractName" prop="contractName"/>
-                                        <!-- <form-render :type="`select`" :field="{name:'合同名称',options:[{
-                                            value: 1,
+                                        <!-- <form-render :type="`input`" :field="{name:'合同名称'}" v-model="contract.contractName" prop="contractName"/> -->
+                                        <form-render :type="`select`" :field="{name:'合同名称',options:[{
+                                            value: '劳动合同',
                                             label: '劳动合同'
-                                        }]}" v-model="contract.contractName" prop="contractName"/> -->
+                                        }]}" v-model="contract.contractName" prop="contractName"/>
                                     </el-col>
                                 
                                     <el-col :span="24">
@@ -857,7 +857,6 @@
                         </el-row>
                          <el-row>
                             <el-col :span="24">
-                                <!-- imgMultiple -->
                                 <form-render prop="image" :type="`imgMultiple`" :field="{name:'图片'}" :data="{'upload_msg':'employee_card'}" v-model="cardPerform.image"/>
                             </el-col>
                         </el-row>
@@ -1119,8 +1118,8 @@ export default {
         ampliImg(e){
             let height = e.target.height;
             let width = e.target.width;
-            console.log(width,'width')
-            console.log(height,'height')
+            // console.log(width,'width')
+            // console.log(height,'height')
             if(width>=770||height>400){
                 return
             }
@@ -1185,9 +1184,9 @@ export default {
             this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         handleContract(){
-            // this.contract = {
-            //     contractName: 1
-            // }
+            this.contract = {
+                contractName: '劳动合同'
+            }
             this.dialogContract = "inser"
             this.fetchContract()
             this.dialogContractFormVisible = true

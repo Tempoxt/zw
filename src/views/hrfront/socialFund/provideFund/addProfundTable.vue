@@ -157,6 +157,13 @@ export default {
 		}
 	},
 	methods: {
+		table_disable_selected(row){
+			if(this.insure_status==1&&(row.socialInsuranceNum==''||row.socialInsuranceNum==null)){
+				return false
+			}else{
+				return true
+			}
+		},
 		async fetchTableData() {
 			if(!this.id){
 				return
@@ -165,6 +172,7 @@ export default {
 			this.table_form.org_id = this.id
 			this.table_form.insureType = 2
 			if(this.insure_status==1){
+				this.table_form.insureStatus = ''
 				const {rows , total }= await this.$request.get('staffinsure/insurewaitaffirm',{params:this.table_form})
 				this.table_data  = rows
 				this.table_form.total = total

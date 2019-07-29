@@ -180,7 +180,6 @@ export default {
 			this.table_actions = action;
 			this.table_config = table
 			setTimeout(()=>{
-				console.log(this.table_form.serialNumber,'serialNumberserialNumberserialNumberserialNumber')
 				this.fetchTableData();
 			},500)
 		},
