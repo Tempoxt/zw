@@ -251,6 +251,7 @@
                                         </el-col>
                                         <el-col :span="24">
                                             <el-form-item label="介绍人">
+                                            
                                             <el-select
                                                 v-model="form.introducer"
                                                 filterable
@@ -259,6 +260,7 @@
                                                 reserve-keyword
                                                 placeholder="请输入关键词"
                                                 :remote-method="remoteMethod"
+                                                :disabled="!isInsert"
                                                 >
                                                 <el-option
                                                 v-for="item in introducerData"
@@ -868,7 +870,7 @@
                 <div></div>
                 <div>
                     <el-button @click="dialogCardFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="handleCardFormSubmit">确 定</el-button>
+                    <el-button type="primary" @click="handleCardFormSubmit" :disabled="disableUp">确 定</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -1063,6 +1065,7 @@ export default {
             teamData:{},
             cardInfo:[],
             cardPerform:{
+                cardType:'',
                 image:[]
             },
             banks:[],
@@ -1112,6 +1115,13 @@ export default {
                 return true
             }
             return false
+        },
+        disableUp(){
+            console.log(this.cardPerform,'cccccccccc')
+            if(this.cardPerform.cardType===''||this.cardPerform.image.length===0){
+                return true
+            }
+            return false
         }
     },
     methods: {
@@ -1150,6 +1160,7 @@ export default {
         },
         handleCard(){
             this.cardPerform = {
+                cardType:'',
                 image:[]
             }
             this.dialogCard = "inser"
@@ -1338,12 +1349,14 @@ export default {
             
             // this.form = await api_resource.find(row.id);
             this.form = await api_common.resource('hrm/staff').find(row.id)
-
+            if(this.form.introducerName.employeeCode!==null){
+                this.form.introducer = this.form.introducerName.chineseName+'('+this.form.introducerName.employeeCode+')'
+            }
             this.dialogFormVisible = true
             this.getSelectOption()
             this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
-            this.connect = await api_common.resource('hrm/staff/contact').find(this.form.id)
+            this.connect = await api_common.resource('hrm/staff/contact').find(this.staffId)
             this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async fetchDepartment(){

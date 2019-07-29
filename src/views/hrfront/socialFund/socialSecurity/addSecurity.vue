@@ -11,13 +11,13 @@
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <div v-if="view_activeName==='待参保'">
+        <div v-if="view_activeName==='待加入'">
             <addSecurityTable insure_status="1" :id="orgid"/>
         </div>
-        <div v-if="view_activeName==='待确认'">
+        <div v-if="view_activeName==='加入确认'">
             <addSecurityTable insure_status="2" :id="orgid"/>
         </div>
-        <div v-if="view_activeName==='已参保'">
+        <div v-if="view_activeName==='已加入'">
             <addSecurityTable insure_status="3" :id="orgid"/>
         </div>
     </el-col>

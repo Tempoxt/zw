@@ -14,7 +14,7 @@
         <div v-if="view_activeName==='待注销'">
             <cancelProfundTable insure_status="4" :id="orgid"/>
         </div>
-        <div v-if="view_activeName==='待确认'">
+        <div v-if="view_activeName==='注销确认'">
             <cancelProfundTable insure_status="5" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='已注销'">
