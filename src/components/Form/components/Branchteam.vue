@@ -95,19 +95,12 @@ export default {
       (function f(data) {
         data.some(row => {
           if(row.subs && row.subs.length){
-            info = row.subs[0];
+            // info = row.subs[0];
             f(row.subs);
           }else if (row[that.field.field_key || 'id'] == orgid) {
             info = row;
             return true;
           }
-          // if (row[that.field.field_key || 'id'] == orgid) {
-          //   info = row;
-          //   return true;
-          // }
-          // if (row.subs && row.subs.length) {
-          //   f(row.subs);
-          // }
         });
       })(this.data2);
       this.input5 = info.name;
@@ -126,7 +119,7 @@ export default {
       
     },
     data(val) {
-      if(this.data!==undefined&&this.data!==null&&this.data!==''&&this.field.id){
+      if(this.field.id){
         this.fetchData()
       }else{
         this.input5 = ''

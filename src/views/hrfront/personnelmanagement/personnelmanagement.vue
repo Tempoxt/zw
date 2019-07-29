@@ -282,7 +282,7 @@
                                                 v-model="form.fileType"
                                             />
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="24" v-if="form.liveDormitory===1||form.liveDormitory===0">
                                             <form-render
                                                 :type="`radio`"
                                                 :field="{name:'宿舍分配',options:[{
