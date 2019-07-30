@@ -51,7 +51,6 @@
                         v-model="form_multiple"
                         active-text="连续添加"
                         inactive-text="">
-                        
                     </el-switch>
                 </div>
                 <div>
@@ -210,9 +209,22 @@ export default {
                 await this.api_resource.create(form)
             }else{
                 await this.api_resource.update(form.id,form)
-            }
-            this.dialogFormVisible = false
-            this.fetchTableData()
+			}
+			if(this.form_multiple){
+				this.form ={
+					lastYearCount:'',
+					fatherDepart:'',
+					yearCount:'',
+					department:''
+				}
+            	this.$nextTick(()=>{
+					this.$refs['form'].clearValidate()
+				})
+				this.fetchTableData()
+			}else{
+				this.dialogFormVisible = false
+				this.fetchTableData()
+			}
         },
 	},
 	async created() {
