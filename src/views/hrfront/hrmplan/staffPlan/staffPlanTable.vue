@@ -33,7 +33,7 @@
 					</el-col>
 				
 					<el-col :span="12">
-						<form-render :type="`select`" prop="fatherDepart" :field="{name:'事业部',options:departList}" v-model="form.fatherDepart"  :disabled="!isInsert"/>
+						<form-render :type="`select`" prop="fatherDepart" :field="{name:'事业部',options:departList}" v-model="form.fatherDepart" @change="clearDepart" :disabled="!isInsert"/>
 					</el-col>
 					<el-col :span="12">
 						<form-render :type="`input`" prop="yearCount" :field="{name:'当年规划人数'}" v-model="form.yearCount" placeholder="请输入人数"/>
@@ -170,6 +170,9 @@ export default {
 		}
 	},
 	methods: {
+		clearDepart(){
+			this.form.department = ''
+		},
 		async fetchTableData() {
 			if(!this.id){
 				return
