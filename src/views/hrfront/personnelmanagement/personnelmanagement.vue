@@ -1337,6 +1337,7 @@ export default {
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
+            this.dialogFormVisible = true
             this.width = 250
             this.height = 200
             this.activeName = 'first'
@@ -1352,7 +1353,6 @@ export default {
             if(this.form.introducerName.employeeCode!==null){
                 this.form.introducer = this.form.introducerName.chineseName+'('+this.form.introducerName.employeeCode+')'
             }
-            this.dialogFormVisible = true
             this.getSelectOption()
             this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
