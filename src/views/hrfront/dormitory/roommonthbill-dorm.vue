@@ -204,7 +204,8 @@ export default {
               return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
           },
 
-      }
+      },
+      importUploadUrl:"/dormitory/import/meter"
     };
   },
   watch:{
@@ -213,6 +214,9 @@ export default {
     },
   },
   methods: {
+    importMeter(){
+      this.import();
+    },
     changeMonth(){
         this.table_form.month = this.month
         this.fetchTableData()

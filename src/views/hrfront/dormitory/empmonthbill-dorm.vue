@@ -112,8 +112,8 @@ export default {
               console.log(row,'row')
               return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
           },
-
-      }
+      },
+      importUploadUrl:"/dormitory/import/empmothbill"
     };
   },
   watch:{
@@ -131,6 +131,10 @@ export default {
     }
   },
   methods: {
+    
+    importEmb(){
+      this.import();
+    },
     log(data){
         console.log(data,'data')
     },

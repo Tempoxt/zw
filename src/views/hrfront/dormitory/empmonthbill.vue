@@ -73,11 +73,7 @@
 <script>
 import * as api_common from "@/api/common";
 const api_restaurant = api_common.resource('restaurant')
-import dormInner from './dormInner'
-import roommonthbillRoom from './empmonthbill-dormRoom'
 import roommonthbillDorm from './empmonthbill-dorm'
-import roommonthbillInner from './empmonthbill-inner'
-import dormDorm from './dormDorm'
 export default {
     provide(){
 		return {
@@ -85,11 +81,7 @@ export default {
 		}
     },
     components:{
-		dormInner,
-		roommonthbillRoom,
-		roommonthbillDorm,
-		roommonthbillInner,
-		dormDorm
+		roommonthbillDorm
     },
     watch:{
 		tabActive(val){
