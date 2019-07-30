@@ -28,7 +28,7 @@
           </el-form-item>
           
           <el-form-item label="调动区域">
-            <el-select v-model="form3.workGroup" placeholder="请选择">
+            <el-select v-model="form3.workGroup" placeholder="请选择" clearable>
               <el-option
               v-for="item in areaDa"
               :key="item.id"
@@ -39,7 +39,7 @@
           </el-form-item>
 
           <el-form-item label="调至小组">
-            <el-select v-model="form3.team" placeholder="请选择">
+            <el-select v-model="form3.team" placeholder="请选择" clearable>
               <el-option
               v-for="item in optionsDa"
               :key="item.id"
@@ -152,19 +152,37 @@ export default {
       },
     };
   },
+
   methods: {
     async handleForm3Submit(){
       this.form3.ids = this.$refs.OrgSelect.getIdsResult()
       let form = Object.assign({},this.form3)
-      console.log(this.form3,'mmmmmmmm')
-      await this.$request.post('/transfer/record',form)
-      this.dialogForm3Visible = false
-      this.fetchTableData()
+
+      if(this.form3.team!==''||this.form3.workGroup!==''){
+        if(this.form3.ids!==''){
+          let repeat = await this.$request.post('/transfer/record',form,{alert:false})
+          if(repeat.length!==0){
+            var rep = repeat.map(o=>o)
+            this.$message.error({message:'创建失败,'+rep+'已在该小组',duration:12000})
+          }else{
+            this.$message.success({message:'创建成功'})
+          }
+          this.dialogForm3Visible = false
+          this.fetchTableData()
+        }else{
+          this.$message.error('请选择需要调动的人员');
+        }   
+      }else{
+        this.$message.error('请选择需要调动的区域或小组');
+      }
     },
     add(){
-      this.form3 = {}
+      this.form3 = {
+        team:'',
+        workGroup:'',
+        ids:''
+      }
       this.$set(this.form3,'transferDate',dayjs().format('YYYY-MM-DD'))
-      console.log(this.form3)
       this.dialogForm3Visible = true
       this.getOptions();
       this.getAreas()
