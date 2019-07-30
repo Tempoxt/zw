@@ -17,7 +17,7 @@
 				<el-row :gutter="40">
 					<el-col :span="12">
 						<el-form-item label="年份" prop="year">
-							<el-date-picker
+							<el-date-picker :disabled="!isInsert"
 								:clearable="false"
 								v-model="form.year"
 								type="year"
@@ -33,13 +33,13 @@
 					</el-col>
 				
 					<el-col :span="12">
-						<form-render :type="`select`" prop="fatherDepart" :field="{name:'事业部',options:departList}" v-model="form.fatherDepart" />
+						<form-render :type="`select`" prop="fatherDepart" :field="{name:'事业部',options:departList}" v-model="form.fatherDepart"  :disabled="!isInsert"/>
 					</el-col>
 					<el-col :span="12">
 						<form-render :type="`input`" prop="yearCount" :field="{name:'当年规划人数'}" v-model="form.yearCount" placeholder="请输入人数"/>
 					</el-col>
 					<el-col :span="12">
-						<form-render :type="`select`" prop="department" :field="{name:'部门',options:depart}" v-model="form.department"/>
+						<form-render :type="`select`" prop="department" :field="{name:'部门',options:depart}" v-model="form.department" :disabled="!isInsert"/>
 					</el-col>
 				</el-row>
 			</el-form>

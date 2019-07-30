@@ -135,6 +135,7 @@ export default {
     },
     watch:{
         flag(){
+			this.table_form.currentpage = 1
             this.fetchMenu()
             this.fetchTableData()
         }
