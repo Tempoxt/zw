@@ -1373,7 +1373,8 @@ export default {
                 // await api_resource.create(form)
             }else{
                 if(this.tab_label ==='联系方式'){
-                    await api_common.resource('hrm/staff/contact').update(form.id,this.connect)
+                    await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
+                    this.$message.success('修改成功');
                 }else{
                     await api_common.resource('hrm/staff').update(form.id,form)
                     // await api_resource.update(form.id,form)
