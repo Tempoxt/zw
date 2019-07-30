@@ -85,6 +85,14 @@ export default [{
         meta: {
             title: '公积金缴纳比例'
         }
+    }, 
+    {
+        name: 'hrmplan/staffplan',
+        component: () =>
+            import ('@/views/hrfront/hrmplan/staffPlan/staffPlan'),
+        meta: {
+            title: '人员编制规划'
+        }
     },
     {
         name: 'attendanceDetail',
