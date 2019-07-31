@@ -7,6 +7,27 @@
   >
 
 
+	<el-dialog
+		title="请选择起始日期"
+		:visible.sync="dialogForm1Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+
+		<el-form ref="form1" :model="form1" label-width="100px" :inline="true" >
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<form-render :type="`day`" prop="dateLap" :field="{name:''}" v-model="form1.dateLap"/>
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm1Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled">确 定</el-button>
+		</div>
+	</el-dialog>
 
 
 
@@ -76,6 +97,7 @@ const api_resource = api_common.resource("dormitory/checklistview");
 import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
+const download = require('downloadjs')
 const defaultForm = () => {
     return {
         estate:1,
@@ -83,86 +105,121 @@ const defaultForm = () => {
     }
 }
 export default {
-  mixins: [table_mixin],
- 
-  components:{
-      dateLap,
-      OrgSelect
-  },
-  data() {
-    return {
-      loading: true,
-      form:{},
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
-      adminList:[],
-      defaultForm,
-      roomAdminList:[],
-      dormList:[],
-      statusData:[
-        {id:0,name:'全部'},
-        {id:1,name:'待分配'},
-        {id:2,name:'待入住'},
-        {id:3,name:'待审核搬离'},
-        {id:4,name:'待搬离'}
-      ],
-      status:0
-    };
-  },
-  watch:{
-   
-  },
-  methods: {
-    changeStatus(val){
-      this.status = val
-      this.fetchTableData()
-    },
-    async audit({row}){
-      console.log(row)
-        await this.$request.put('dormitory/cancelcheckstate',{
-            selectState:row.selectState,
-            employeeCode:row.employeeCode
-        })
-        this.fetchTableData()
-    },
-
-    async edit(){
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
-    },
-    async fetchTableData() {
-      this.table_loading = true;
-      this.table_form.selectState = this.status
-      const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-      this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
- 
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        form.org_id = this.id
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-    },
-  },
-  async created() {
-    const { field, action,table } = await api_common.menuInit("dormitory/checklistview");
-    this.table_field = field;
-    this.table_actions = action;
-    this.table_config = table
-    this.fetchTableData();
-    // this.table_form.dateLap = dayjs().format('YYYY-MM')
-  }
+	mixins: [table_mixin],
+	components:{
+		dateLap,
+		OrgSelect
+	},
+	data() {
+		return {
+			loading: true,
+			form:{},
+			form1:{
+				dateLap:''
+			},
+			api_resource,
+			orgCategory:[],
+			queryDialogFormVisible:true,
+			dialogForm1Visible:false,
+			adminList:[],
+			defaultForm,
+			roomAdminList:[],
+			dormList:[],
+			statusData:[
+				{id:0,name:'全部'},
+				{id:1,name:'待分配'},
+				{id:2,name:'待入住'},
+				{id:3,name:'待审核搬离'},
+				{id:4,name:'待搬离'}
+			],
+			status:0,
+		};
+	},
+	watch:{
+	
+	},
+	computed:{
+		disabled(){
+			if(this.form1.dateLap!==''){
+				return false
+			}
+			return true
+		},
+	},
+	methods: {
+		changeStatus(val){
+			this.status = val
+			this.fetchTableData()
+		},
+		async audit({row}){
+			await this.$request.put('dormitory/cancelcheckstate',{
+				selectState:row.selectState,
+				employeeCode:row.employeeCode
+			})
+			this.fetchTableData()
+		},
+		ab2str(u,f) {
+			var b = new Blob([u]);
+			var r = new FileReader();
+			r.readAsText(b, 'utf-8');
+			r.onload = function (){if(f)f.call(null,r.result)}
+		},
+		exportExpireSheet(){
+			this.form1.dateLap = ''
+			this.dialogForm1Visible = true
+		},
+		async handleForm1Submit(){
+			try{
+				const { data,name,contentType} = await this.$request.get('/dormitory/export/expirein?dateLap='+this.form1.dateLap,{ responseType:'arraybuffer'})
+				// let today = dayjs().format('YYYY-MM-DD')
+				// let day = today.split('-').join('');
+				// let namei = '减少被保险人名单';
+				download(data,name||this.$route.meta.title,contentType)
+			}catch(err){
+				var that = this;
+				that.ab2str(err.error.response.data,function(str){
+					that.$message.error({ message: str });
+				});
+			}finally{
+				this.dialogForm1Visible = false
+			}
+		},
+		async edit(){
+			let row = this.table_selectedRows[0]
+			this.form = await api_resource.find(row.id)
+			this.dialogFormVisible = true;
+		},
+		async fetchTableData() {
+			this.table_loading = true;
+			this.table_form.selectState = this.status
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
+		},
+	
+		async handleFormSubmit(){
+			let form = Object.assign({},this.form)
+			form.org_id = this.id
+			if(this.isInsert){
+				await api_resource.create(form)
+			}else{
+				await api_resource.update(form.id,form)
+			}
+			this.dialogFormVisible = false
+			this.fetchTableData()
+		},
+	},
+	async created() {
+		const { field, action,table } = await api_common.menuInit("dormitory/checklistview");
+		this.table_field = field;
+		this.table_actions = action;
+		this.table_config = table
+		this.fetchTableData();
+		// this.table_form.dateLap = dayjs().format('YYYY-MM')
+	}
 };
 </script>
 
