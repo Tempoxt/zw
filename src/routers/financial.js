@@ -92,4 +92,12 @@ export default [{
             title: '补扣款管理'
         }
     },
+    {
+        name: 'salary/achievement',
+        component: () =>
+            import ('@/views/finance/salary/achievement'),
+        meta: {
+            title: '月份绩效考核'
+        }
+    },
 ]

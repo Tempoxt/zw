@@ -5,86 +5,51 @@
   @query="querySubmit"
   
   >
-
-
   
-  <el-dialog
-      :title="dialogStatus==='insert'?'添加':'编辑'"
-      :visible.sync="dialogFormVisible"
-      class="public-dialog"
-      v-el-drag-dialog
-    >
-      <div style="width:500px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="120px">
-          <el-row :gutter="20">
-           <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'宿舍*',options:dormList}" v-model="form.dorm"/>
-            </el-col>
-           
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房屋编码*'}" v-model="form.houseNumber" />
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房屋编号*'}" v-model="form.roomName"/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'床位数*'}" v-model="form.totalBeds"/>
-            </el-col>
+  	<el-dialog
+		:title="dialogStatus==='insert'?'添加补扣款':'编辑'"
+		:visible.sync="dialogFormVisible"
+		class="public-dialog"
+		v-el-drag-dialog
+		>
+      		<el-form ref="form" :model="form"  label-width="100px"  :rules="rules">
+				<el-row >
+					<el-col :span="12" v-if="!isInsert">
+						<form-render :type="`input`" :field="{name:'姓名'}" v-model="form.name" :disabled="!isInsert"/>
+					</el-col>
+					<el-col :span="12">
+						<form-render :type="`select`" prop="type" :field="{name:'分类',options:dedulist}" v-model="form.type"/>
+					</el-col>
+				
+					<el-col :span="12">
+						<form-render :type="`input`" prop="itemName" :field="{name:'补扣项目'}" v-model="form.itemName" />
+					</el-col>
+					<el-col :span="12">
+						<form-render :type="`input`" prop="amount" :field="{name:'补扣金额'}" v-model="form.amount"/>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="扣款月份" prop="recordate">
+							<el-date-picker
+								v-model="form.recordate"
+								type="month"
+								style="width:100%"
+								format="yyyy-MM"
+								value-format="yyyy-MM"
+								placeholder="选择月份">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+				</el-row>
 
-         
-             <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'室长*',options:roomAdminList}" v-model="form.roomAdmin"/>
-            </el-col> 
-          <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'房租*'}" v-model="form.rent"/>
-            </el-col>
-           <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'电表初始读数*'}" v-model="form.initalElectric"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'水表初始读数*'}" v-model="form.initalWater"/>
-            </el-col>
-            <el-col :span="24">
-              <form-render
-                :type="`radio`"
-                :field="{name:'类别',options:[{
-                  value: 1,
-                  label: '男生宿舍'
-                },{
-                  value: 0,
-                  label: '女生宿舍'
-                }]}"
-                v-model="form.dormType"
-              />
-            </el-col>
-            
-            <el-col :span="24">
-              <form-render
-                :type="`radio`"
-                :field="{name:'记录状态',options:[{
-                  value: 1,
-                  label: '启用'
-                },{
-                  value: 0,
-                  label: '禁用'
-                }]}"
-                v-model="form.estate"
-              />
-            </el-col>
-            <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
+			</el-form>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-      </div>
+			<OrgSelect v-model="form.ids" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+		</div>
     </el-dialog>
-
-
 
 
     <table-header
@@ -94,17 +59,9 @@
       :table_form.sync="table_form"
       :table_column="table_field"
     >
-      <div style="padding-left:10px">
-        <el-date-picker
-          v-model="table_form.dateLap"
-          type="month"
-          size="medium"
-          @change="fetchTableData"
-          format="yyyy年MM月"
-          value-format="yyyy-MM"
-          placeholder="选择月份">
-        </el-date-picker>
-    </div>
+     	<div style="padding-left:10px">
+		   <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+    	</div>
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
@@ -126,7 +83,7 @@
       >
       </el-table-column>
     <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+    <each-table-column :table_field="table_field" :template="template"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -140,7 +97,9 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+import dateLap from '@/components/Table/DateLap'
 const api_resource = api_common.resource("deduction");
+import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
@@ -150,94 +109,116 @@ const defaultForm = () => {
     }
 }
 export default {
-  mixins: [table_mixin],
-  props:['id'],
-  data() {
-    return {
-      loading: true,
-      form:{},
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
-      table_topHeight:300,
-      adminList:[],
-      defaultForm,
-      roomAdminList:[],
-      dormList:[]
-    };
-  },
-  watch:{
-    id(){
-      this.fetchTableData()
-    }
-  },
-  methods: {
-    async fetchTableData() {
-     if(!this.id){
-       return
-     }
-     this.table_loading = true;
-     this.table_form.orgid = this.id
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-       this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
-    async add(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
-            return {
-                label:o.dormName,
-                value:o.id
-            }
-        })
-        this.roomAdminList = (await api_common.resource('dormitory/dorm/dormadmin').get({roomId:this.id})).rows.map(o=>{
-            return {
-                label:o.chineseName,
-                value:o.id
-            }
-        })
-        this.form.dorm = this.id
-        this.dialogFormVisible = true
-    },
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-    },
-    async edit(){
-        this.dormList = (await api_common.resource('dormitory/dorm').get()).rows.map(o=>{
-            return {
-                label:o.dormName,
-                value:o.id
-            }
-        })
-         this.roomAdminList = (await api_common.resource('dormitory/dorm/dormadmin').get({roomId:this.id})).rows.map(o=>{
-            return {
-                label:o.chineseName,
-                value:o.employeeID
-            }
-        })
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
-    }
-  },
-  async created() {
-    const { field, action,table } = await api_common.menuInit("deduction");
-    this.table_field = field;
-    this.table_actions = action;
-    this.table_config = table
-    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+	mixins: [table_mixin],
+	props:['id','flag'],
+	components:{
+      	dateLap,
+		OrgSelect
+	},
+	data() {
+		return {
+			loading: true,
+			form:{},
+			api_resource,
+			orgCategory:[],
+			queryDialogFormVisible:true,
+			table_topHeight:259,
+			defaultForm,
+			rules:{
+				type:[
+					{ required: true, message: '请选择', trigger: 'change' },
+				],
+				itemName:[
+					{ required: true, message: '请输入', trigger: 'blur' },
+				],
+				amount:[
+					{ required: true, message: '请输入', trigger: 'blur' },
+				],
+				recordate:[
+					{ required: true, message: '请选择', trigger: 'change' },
+				],
+			},
+			dedulist:[],
+			template:{
+				paymentname(column,row){
+					if(row.paymentname==='已结付'){
+						return <el-tag type="success">{row.paymentname}</el-tag>
+					}else{
+						return <el-tag type="info">{row.paymentname}</el-tag>
+					}
+				},
+			},
+			importUploadUrl:"/deduction/upload"
+		};
+	},
+	computed:{
+		disabled(){
 
-    this.fetchTableData();
-  }
+		}
+	},
+	watch:{
+		id(){
+			this.fetchTableData()
+		},
+        flag(){
+			this.table_form.currentpage = 1
+            this.fetchMenu()
+            this.fetchTableData()
+        }
+	},
+	methods: {
+		async fetchTableData() {
+		if(!this.id){
+			return
+		}
+		this.table_loading = true;
+		this.table_form.orgid = this.id
+        this.table_form.flag = this.flag
+		const {rows , total }= await api_resource.get(this.table_form);
+		this.table_data  = rows
+		this.table_form.total = total
+		setTimeout(() => {
+			this.table_loading = false;
+		}, 300);
+		},
+		async add(){
+			this.dialogFormVisible = true
+        	this.dedulist = await api_common.getTag('deduction')
+		},
+		async handleFormSubmit(){
+            await this.form_validate()
+			if(this.isInsert){
+				let workcodeid = this.$refs.OrgSelect.getIdsResult()
+				this.form.ids = workcodeid
+				let form = Object.assign({},this.form)
+				await api_resource.create(form)
+			}else{
+				let form = Object.assign({},this.form)
+				await api_resource.update(form.id,form)
+				// ,{alert:false}
+            	// this.$message.success({message:'修改成功'})
+			}
+			this.dialogFormVisible = false
+			this.fetchTableData()
+		},
+		async edit(){
+			this.dialogFormVisible = true;
+        	this.dedulist = await api_common.getTag('deduction')
+			let row = this.table_selectedRows[0]
+			this.form = await api_resource.find(row.id)
+		},
+		async fetchMenu(){
+            const { field, action,table } = await api_common.menuInit("deduction"+this.flag);
+            this.table_field = field;
+            this.table_actions = action;
+            this.table_config = table
+        }
+	},
+	async created() {
+        this.fetchMenu()
+		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+		this.fetchTableData();
+	}
 };
 </script>
 
