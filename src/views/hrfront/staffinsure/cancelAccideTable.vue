@@ -30,7 +30,7 @@
 	</el-dialog>
 
 	<el-dialog
-		title="请选择扣费开始日期"
+		title="请选择扣费结束日期"
 		:visible.sync="dialogForm2Visible"
 		class="public-dialog"
 		v-el-drag-dialog
