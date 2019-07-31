@@ -82,10 +82,12 @@ service.interceptors.response.use(response => {
     if(error.response.status === 400 && typeof error.response.data === 'object'){  
         return Promise.reject({field:error.response.data,error})
     }else{
-        Message({
-            type: 'error',
-            message: error.response.data
-        })
+        if(error.response.config.alert!==false){
+            Message({
+                type: 'error',
+                message: error.response.data
+            })
+        }
     }
   
     return Promise.reject(error)

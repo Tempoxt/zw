@@ -220,13 +220,12 @@ export default {
 				let namei = '减少被保险人名单';
 				download(data,namei+day,contentType)
 				this.fetchTableData();
+				this.dialogForm1Visible = false
 			}catch(err){
 				var that = this;
 				that.ab2str(err.error.response.data,function(str){
-					that.$message.error({ message: str });
+					that.$message.error({ message: str ,duration:5000});
 				});
-			}finally{
-				this.dialogForm1Visible = false
 			}
 		},
 		passAcc(){
@@ -237,17 +236,22 @@ export default {
 			if(this.table_form.serialNumber==''){
 				this.$message.error('请选择流水号');
 			}else{
-				await this.$request.put('staffinsure/outpassinsure',{
-					insureType: 3,
-					serialNumber: this.table_form.serialNumber,
-					dateLap:this.form2.dateLap
-				})
-				this.fetchNum();
-				setTimeout(()=>{
-					this.fetchTableData();
-				},500)
+				try{
+					let mes = await this.$request.put('staffinsure/outpassinsure',{
+						insureType: 3,
+						serialNumber: this.table_form.serialNumber,
+						dateLap:this.form2.dateLap
+					},{alert:false})
+					this.$message.success({ message: mes});
+					this.fetchNum();
+					setTimeout(()=>{
+						this.fetchTableData();
+					},500)
+					this.dialogForm2Visible = false
+				}catch(error){
+					this.$message.error({ message: error.response.data ,duration:5000});
+				}
 			}
-			this.dialogForm2Visible = false
 		},
 		async backAcc(){
 			if(this.table_form.serialNumber==''){
