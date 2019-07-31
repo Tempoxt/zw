@@ -16,6 +16,7 @@
 					<el-col :span="14" :offset="4">
 						<el-form-item label="月份" prop="month">
 							<el-date-picker
+								@change="changeMonth"
 								:clearable="false"
 								v-model="form.month"
 								type="month"
@@ -27,17 +28,17 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<el-form-item label="姓名" prop="emID">
-							<el-select v-model="form.emID" multiple placeholder="请选择" @focus="focus" style="width:100%">
-								<!-- <el-option
-									v-for="item in options"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-								</el-option> -->
+						<el-form-item label="姓名" prop="ids" v-if="isInsert">
+							<el-select v-model="form.ids" multiple placeholder="请选择" @focus="focus" style="width:100%" @remove-tag="removeTag">
+								<option value="" key="1"></option>
 							</el-select>
 						</el-form-item>
-						<!-- <form-render :type="`select`" prop="emID" :field="{name:'姓名'}" :disabled="!isInsert" v-model="form.emID" @focus="focus"/> -->
+						<el-form-item label="姓名" prop="ids" v-else>
+							<el-select v-model="form.chineseName" style="width:100%" :disabled="!isInsert">
+								<option value="" key="1"></option>
+							</el-select>
+						</el-form-item>
+						<!-- <form-render :type="`multiselect`" prop="emID" :field="{name:'姓名'}" :disabled="!isInsert" v-model="form.emID"/> -->
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" prop="assessBase" :field="{name:'考核基数'}" disabled v-model="form.assessBase"/>
@@ -81,7 +82,7 @@
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm1Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled1">确 定</el-button>
+			<el-button type="primary" @click="handleForm1Submit">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -151,7 +152,9 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{},
+			form:{
+				// emID:[]
+			},
 			api_resource,
 			table_topHeight:259,
 			orgCategory:[],
@@ -160,7 +163,7 @@ export default {
 			dialogFormVisible:false,
 			dialogForm1Visible:false,
 			rules:{
-				emID: [
+				ids: [
 					{ required: true, message: '请选择', trigger: 'change' },
 				],
 				month: [
@@ -179,10 +182,11 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
 			},
-			form1:{
-				ids:''
-			},
-			importUploadUrl:"/salary/ahupload"
+			form1:{},
+			importUploadUrl:"/salary/ahupload",
+			allIds:[],
+			allNames:[],
+			all:[]
 		};
 	},
 	computed:{
@@ -198,20 +202,39 @@ export default {
 	},
 	watch:{
 		id(){
-		this.fetchTableData()
+			this.fetchTableData()
 		},
 	},
 	methods: {
+		changeMonth(){
+			this.form.ids = ''
+		},
+		removeTag(data){
+			var a = this.form.ids.map(o=>o)
+			var idx = a.indexOf(data)
+			this.all.splice(idx,1)
+		},
 		focus(){
 			this.dialogForm1Visible = true
-			console.log('滚滚滚')
 		},
 		handleForm1Submit(){
-			if(this.form1.ids!==''){
-				this.dialogForm1Visible = false
+			let ids = this.$refs.OrgSelect.getIdsAryResult()
+			let names = this.$refs.OrgSelect.getNamesAryResult();
+			if(this.form.ids.length!==0){
+				ids.map(o=>this.allIds.push(o))
+				names.map(o=>this.form.ids.push(o))
+			}else{
+				this.allIds = ids
+				this.form.ids = names
 			}
+			console.log(this.form.ids,'fffffffffff')
+			console.log(this.allIds,'aaaaaaaa')
+			this.dialogForm1Visible = false
 		},
 		add(){
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
 			this.form = defaultForm()
 			this.dialogFormVisible = true
 		},
@@ -234,8 +257,10 @@ export default {
 			}, 300);
 		},
 		async handleFormSubmit(){
+			this.form.ids = this.allIds.join(',');
+			console.log(this.form,'ddddddddddddddd')
 			let form = Object.assign({},this.form)
-			form.org_id = this.id
+			// form.org_id = this.id
 			if(this.isInsert){
 				await api_resource.create(form)
 			}else{

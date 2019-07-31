@@ -148,7 +148,8 @@ export default {
 					}
 				},
 			},
-			importUploadUrl:"/deduction/upload"
+			importUploadUrl:"/deduction/upload",
+			downloadUrl:'/deduction/export'
 		};
 	},
 	computed:{

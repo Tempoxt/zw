@@ -424,6 +424,22 @@ export default {
         })
       }
     },
+    async handleDownloadChange(){
+      try {
+        if(this.downloadUrl){
+          await request.get(this.downloadUrl)
+          this.download()
+          this.$message({
+            message: '下载成功',
+            type: 'success'
+          });
+        }
+      } catch (error) {
+        
+      }finally{
+        MessageBox.close()
+      }
+    },
     import(){
       let {
         handleImportChange,
@@ -432,6 +448,7 @@ export default {
           <el-button-group class="table-import-upload" ref="import">
             <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
             <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+            <el-button type="" style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
           </el-button-group>
           , '选择文件导入', {
           showConfirmButton:false,

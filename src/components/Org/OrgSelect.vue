@@ -94,6 +94,16 @@ export default {
         getIdsResult(){
             return this.result.map(o=>o.id).join(',')
         },
+        getIdsAryResult(){
+            let idsAry = []
+            this.result.map(o=>idsAry.push(o.id))
+            return idsAry
+        },
+        getNamesAryResult(){
+            let nameAry = []
+            this.result.map(o=>nameAry.push(o.name))
+            return nameAry
+        },
         changeOrg(data){
             this.select = data
         },
