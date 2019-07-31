@@ -172,6 +172,9 @@ export default {
 	methods: {
 		clearDepart(){
 			this.form.department = ''
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
 		},
 		async fetchTableData() {
 			if(!this.id){

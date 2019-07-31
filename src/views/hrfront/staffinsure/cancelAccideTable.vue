@@ -6,6 +6,52 @@
   
   >
 
+  	<el-dialog
+		title="请选择退保申请日期"
+		:visible.sync="dialogForm1Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+
+		<el-form ref="form1" :model="form1" label-width="100px" :inline="true" >
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<form-render :type="`day`" prop="dateLap" :field="{name:''}" v-model="form1.dateLap"/>
+					<!-- <el-input v-model="form.reason" placeholder="请输入退回原因（必填）"  size="small"></el-input> -->
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm1Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled">确 定</el-button>
+		</div>
+	</el-dialog>
+
+	<el-dialog
+		title="请选择扣费结束日期"
+		:visible.sync="dialogForm2Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+
+		<el-form ref="form2" :model="form2" label-width="100px" :inline="true" >
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<form-render :type="`day`" prop="dateLap" :field="{name:''}" v-model="form2.dateLap"/>
+					<!-- <el-input v-model="form.reason" placeholder="请输入退回原因（必填）"  size="small"></el-input> -->
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm2Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm2Submit" :disabled="disabled2">确 定</el-button>
+		</div>
+	</el-dialog>
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -73,7 +119,15 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			serialnumber:[],
+			form1:{
+				dateLap:''
+			},
+			form2:{
+				dateLap:''
+			},
 			table_topHeight:286,
+			dialogForm1Visible:false,
+			dialogForm2Visible:false,
 			template:{
 				staff__outDutyTime(column,row){
 					if(row.expire){
@@ -105,6 +159,20 @@ export default {
 			}
 		}
 	},
+	computed:{
+		disabled(){
+			if(this.form1.dateLap!==''){
+                return false
+            }
+            return true
+		},
+		disabled2(){
+			if(this.form2.dateLap!==''){
+                return false
+            }
+            return true
+		}
+	},
 	methods: {
 		async fetchTableData() {
 			if(!this.id){
@@ -130,13 +198,18 @@ export default {
 		    r.readAsText(b, 'utf-8');
 		    r.onload = function (){if(f)f.call(null,r.result)}
 		},
-		async apply(){
+		apply(){
+			this.form1.dateLap = ''
+			this.dialogForm1Visible = true
+		},
+		async handleForm1Submit(){
 			let rows = this.table_selectedRows.map(row=>row.id)
-			const len = rows.length;
+			var len = rows.length;
 			try{
 				const { data,name,contentType} = await this.$request.put('staffinsure/applycancelinsure',{
 					ids: rows.join(','),
-					insureType: 3
+					insureType: 3,
+					dateLap:this.form1.dateLap
 				},{ responseType:'arraybuffer',alert:false})
 				this.$message({
 					message: '注销成功,共'+len+'人',
@@ -152,21 +225,29 @@ export default {
 				that.ab2str(err.error.response.data,function(str){
 					that.$message.error({ message: str });
 				});
+			}finally{
+				this.dialogForm1Visible = false
 			}
 		},
-		async passAcc(){
+		passAcc(){
+			this.form2.dateLap = ''
+			this.dialogForm2Visible = true
+		},
+		async handleForm2Submit(){
 			if(this.table_form.serialNumber==''){
 				this.$message.error('请选择流水号');
 			}else{
 				await this.$request.put('staffinsure/outpassinsure',{
 					insureType: 3,
-					serialNumber: this.table_form.serialNumber
+					serialNumber: this.table_form.serialNumber,
+					dateLap:this.form2.dateLap
 				})
 				this.fetchNum();
 				setTimeout(()=>{
 					this.fetchTableData();
 				},500)
 			}
+			this.dialogForm2Visible = false
 		},
 		async backAcc(){
 			if(this.table_form.serialNumber==''){
