@@ -216,7 +216,7 @@ export default {
             }else{
                 await this.api_resource.update(form.id,form)
 			}
-			if(this.form_multiple){
+			if(this.isInsert&&this.form_multiple){
 				this.form ={
 					lastYearCount:'',
 					fatherDepart:'',

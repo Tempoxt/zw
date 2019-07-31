@@ -54,6 +54,9 @@ export default {
 		searchApi:{
 			default:'hrm/basesearsh'
 		},
+		month:{
+			default:''
+		},
 		sele:'',
 		leaf:false
     },
@@ -61,7 +64,10 @@ export default {
        	async filterText(val) {
 		   //console.log(this.searchApi)
 			if (val!="") {
-				if(this.searchApi){
+				if(this.searchApi&&this.month){
+					let res = await this.$request.get(this.searchApi+"?keyword="+val+'&month='+this.month)
+					this.data=res;
+				}else if(this.searchApi){
 					let res = await this.$request.get(this.searchApi+"?keyword="+val)
 					this.data=res;
 				}else{

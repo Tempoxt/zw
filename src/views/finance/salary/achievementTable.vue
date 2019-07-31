@@ -28,17 +28,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<el-form-item label="姓名" prop="ids" v-if="isInsert">
-							<el-select v-model="form.ids" multiple placeholder="请选择" @focus="focus" style="width:100%" @remove-tag="removeTag">
+						<el-form-item label="姓名" prop="ids">
+							<el-select v-model="form.ids" multiple placeholder="请选择" :disabled="!isInsert" @focus="focus" style="width:100%" @remove-tag="removeTag">
 								<option value="" key="1"></option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="姓名" prop="ids" v-else>
-							<el-select v-model="form.chineseName" style="width:100%" :disabled="!isInsert">
-								<option value="" key="1"></option>
-							</el-select>
-						</el-form-item>
-						<!-- <form-render :type="`multiselect`" prop="emID" :field="{name:'姓名'}" :disabled="!isInsert" v-model="form.emID"/> -->
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" prop="assessBase" :field="{name:'考核基数'}" disabled v-model="form.assessBase"/>
@@ -66,7 +60,7 @@
         </div>
         <div>
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+            <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
         </div>
       </div>
     </el-dialog>
@@ -78,7 +72,7 @@
       v-el-drag-dialog
       >
 
-			<OrgSelect v-model="form1.ids" ref="OrgSelect" v-if="dialogForm1Visible"/>
+		<OrgSelect searchApi='/hrm/ahpartstaff' :month="this.form.month" filter_mark="achievement"  ref="OrgSelect" v-if="dialogForm1Visible"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm1Visible = false">取 消</el-button>
@@ -139,7 +133,8 @@ const defaultForm = () => {
     return {
       assessBase:'100',
       unAssessBase:'100',
-      totalBonus:'1200'
+	  totalBonus:'1200',
+	  ids:''
     }
 }
 export default {
@@ -152,9 +147,7 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{
-				// emID:[]
-			},
+			form:{},
 			api_resource,
 			table_topHeight:259,
 			orgCategory:[],
@@ -182,32 +175,20 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
 			},
-			form1:{},
 			importUploadUrl:"/salary/ahupload",
 			allIds:[],
-			allNames:[],
-			all:[]
 		};
-	},
-	computed:{
-		disabled1(){
-		if(this.form1.ids!==''){
-			return false
-		}
-		return true
-		},
-		disabled(){
-
-		}
 	},
 	watch:{
 		id(){
 			this.fetchTableData()
-		},
+		}
 	},
 	methods: {
 		changeMonth(){
-			this.form.ids = ''
+			if(this.isInsert){
+				this.form.ids = ''
+			}
 		},
 		removeTag(data){
 			var a = this.form.ids.map(o=>o)
@@ -218,6 +199,7 @@ export default {
 			this.dialogForm1Visible = true
 		},
 		handleForm1Submit(){
+			console.log(this.form.ids,'dddddd')
 			let ids = this.$refs.OrgSelect.getIdsAryResult()
 			let names = this.$refs.OrgSelect.getNamesAryResult();
 			if(this.form.ids.length!==0){
@@ -227,20 +209,37 @@ export default {
 				this.allIds = ids
 				this.form.ids = names
 			}
-			console.log(this.form.ids,'fffffffffff')
-			console.log(this.allIds,'aaaaaaaa')
 			this.dialogForm1Visible = false
 		},
 		add(){
+			this.form.chineseName = null
+			// console.log(this.form.chineseName,'iiiiiiiiiiii')
+			this.form = defaultForm()
+			// console.log(this.form,'ffffffff')
+			this.form.ids = null
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})
-			this.form = defaultForm()
 			this.dialogFormVisible = true
 		},
 		async edit(){
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
 			let row = this.table_selectedRows[0]
-			this.form = await api_resource.find(row.id)
+			let form = await api_resource.find(row.id)
+			this.form.month = form.month;
+			this.form = {
+				id:form.id,
+				month:form.month,
+				totalBonus:form.totalBonus,
+				assessBase:form.assessBase,
+				assessBonus:form.assessBonus,
+				unAssessBase:form.unAssessBase,
+				totalBonus:form.totalBonus,
+				ids:[form.chineseName],
+				emID:form.emID
+			}
 			this.dialogFormVisible = true;
 		},
 		async fetchTableData() {
@@ -257,16 +256,16 @@ export default {
 			}, 300);
 		},
 		async handleFormSubmit(){
-			this.form.ids = this.allIds.join(',');
-			console.log(this.form,'ddddddddddddddd')
-			let form = Object.assign({},this.form)
-			// form.org_id = this.id
+            await this.form_validate()
 			if(this.isInsert){
+				this.form.ids = this.allIds.join(',');
+				let form = Object.assign({},this.form)
 				await api_resource.create(form)
 			}else{
+				let form = Object.assign({},this.form)
 				await api_resource.update(form.id,form)
 			}
-			if(this.form_multiple){
+			if(this.isInsert&&this.form_multiple){
 				this.form = defaultForm()
 				this.$nextTick(()=>{
 					this.$refs['form'].clearValidate()
