@@ -13,7 +13,7 @@
       class="scroll-container"
      >
         <ul class="el-select-dropdown__list" v-if="filterText" >
-            <li class="el-select-dropdown__item" v-for="item in user" :key="item.id" @click="select(item)">{{item.chineseName}} - {{item.employeeCode}}</li>
+            <li class="el-select-dropdown__item" v-for="item in user" :key="item.id" @click="select(item)">{{item.real_name}} - {{item.user_num}}</li>
         </ul>
       
         <el-tree

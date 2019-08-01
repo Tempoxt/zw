@@ -230,7 +230,8 @@ export default {
 			form: {},
 			categoryForm: {},
 			roleFormVisible: false,
-			roleForm: {}
+			roleForm: {},
+			dialogStatus:''
 		};
 	},
 	async created() {
