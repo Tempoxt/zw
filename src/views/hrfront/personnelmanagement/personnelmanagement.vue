@@ -948,8 +948,8 @@ export default {
     data() {
         const defaultForm  = function(){
             return {
-                trialTime:1,
-                contractTime:2,
+                trialTime:2,
+                contractTime:1,
                 checkWorkType:0,
                 fileType:400,
                 liveDormitory:1,

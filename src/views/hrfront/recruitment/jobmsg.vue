@@ -340,7 +340,9 @@ const defaultForm = function(){
         selectable:0,
         iconName:{},
         checkWorkType:0,
-        needClass:1
+        needClass:1,
+        contractTime:1,
+        trialTime:2
         // department:'',
     }
 }
