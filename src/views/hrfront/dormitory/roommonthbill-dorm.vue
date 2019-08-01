@@ -205,7 +205,8 @@ export default {
           },
 
       },
-      importUploadUrl:"/dormitory/import/meter"
+      importUploadUrl:"/dormitory/import/meter",
+      downloadUrl:"/dormitory/import/meter",
     };
   },
   watch:{

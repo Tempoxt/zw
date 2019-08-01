@@ -427,8 +427,11 @@ export default {
     async handleDownloadChange(){
       try {
         if(this.downloadUrl){
-          await request.get(this.downloadUrl)
-          this.download()
+          const  { data,name,contentType } = await request.get(this.downloadUrl,{
+            responseType:'arraybuffer'
+          })
+          download(data,name||this.$route.meta.title,contentType)
+          // this.download()
           this.$message({
             message: '下载成功',
             type: 'success'

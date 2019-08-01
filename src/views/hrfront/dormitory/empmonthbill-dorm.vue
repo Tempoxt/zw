@@ -113,7 +113,8 @@ export default {
               return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
           },
       },
-      importUploadUrl:"/dormitory/import/empmothbill"
+      importUploadUrl:"/dormitory/import/empmothbill",
+      downloadUrl:"/dormitory/import/empmothbill",
     };
   },
   watch:{

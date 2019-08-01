@@ -40,7 +40,6 @@
 			<el-row>
 				<el-col :span="24" style="padding:20px;">
 					<form-render :type="`day`" prop="dateLap" :field="{name:''}" v-model="form2.dateLap"/>
-					<!-- <el-input v-model="form.reason" placeholder="请输入退回原因（必填）"  size="small"></el-input> -->
 				</el-col>
 			</el-row>
 		</el-form>
