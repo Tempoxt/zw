@@ -115,7 +115,7 @@ export default {
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			table_topHeight:259,
+			table_topHeight:289,
 			rules:{
 				type:[
 					{ required: true, message: '请选择', trigger: 'change' },
