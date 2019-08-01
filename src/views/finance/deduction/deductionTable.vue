@@ -101,13 +101,6 @@ import dateLap from '@/components/Table/DateLap'
 const api_resource = api_common.resource("deduction");
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
-const defaultForm = () => {
-    return {
-        estate:1,
-        roomAdmin:'',
-        dormType:1
-    }
-}
 export default {
 	mixins: [table_mixin],
 	props:['id','flag'],
@@ -123,7 +116,6 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			table_topHeight:259,
-			defaultForm,
 			rules:{
 				type:[
 					{ required: true, message: '请选择', trigger: 'change' },
@@ -191,16 +183,20 @@ export default {
 			if(this.isInsert){
 				let workcodeid = this.$refs.OrgSelect.getIdsResult()
 				this.form.ids = workcodeid
-				let form = Object.assign({},this.form)
-				await api_resource.create(form)
+				if(this.form.ids!=''){
+					let form = Object.assign({},this.form)
+					await api_resource.create(form)
+					this.dialogFormVisible = false
+					this.fetchTableData()
+				}
 			}else{
 				let form = Object.assign({},this.form)
 				await api_resource.update(form.id,form)
+				this.dialogFormVisible = false
+				this.fetchTableData()
 				// ,{alert:false}
             	// this.$message.success({message:'修改成功'})
 			}
-			this.dialogFormVisible = false
-			this.fetchTableData()
 		},
 		async edit(){
 			this.dialogFormVisible = true;
