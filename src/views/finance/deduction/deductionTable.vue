@@ -25,6 +25,16 @@
 						<form-render :type="`input`" prop="itemName" :field="{name:'补扣项目'}" v-model="form.itemName" />
 					</el-col>
 					<el-col :span="12">
+						<!-- <el-form-item
+							label="补扣金额"
+							prop="amount"
+							:rules="[
+							{ required: true, message: '请输入'},
+							{ type: 'number', message: '补扣金额必须为数字值'}
+							]"
+						>
+							<el-input type="amount" v-model.number="form.amount" min="0.0" step="0.1" autocomplete="off"></el-input>
+						</el-form-item> -->
 						<form-render :type="`input`" prop="amount" :field="{name:'补扣金额'}" v-model="form.amount"/>
 					</el-col>
 					<el-col :span="12">
@@ -109,6 +119,16 @@ export default {
 		OrgSelect
 	},
 	data() {
+		var checkAmount = (rule, value, callback) => {
+			if (!value) {
+				return callback(new Error('请输入'));
+			}else if (!(/^\d+(\.\d{1,2})?$/.test(value))) {
+				callback(new Error('请输入精度为两位小数以内的正数'));
+			}else{
+				callback();
+			}
+		
+		};
 		return {
 			loading: true,
 			form:{},
@@ -124,7 +144,8 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
 				amount:[
-					{ required: true, message: '请输入', trigger: 'blur' },
+					//  /^\d+(\.\d+)?$/.test(n+"")
+					{ validator: checkAmount, trigger: 'blur' }
 				],
 				recordate:[
 					{ required: true, message: '请选择', trigger: 'change' },
