@@ -151,7 +151,7 @@ export default {
 				},
 			},
 			importUploadUrl:"/deduction/upload",
-			downloadUrl:'/deduction/export'
+			downloadUrl:'/deduction/titleExport'
 		};
 	},
 	computed:{
