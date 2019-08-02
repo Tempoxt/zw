@@ -25,16 +25,6 @@
 						<form-render :type="`input`" prop="itemName" :field="{name:'补扣项目'}" v-model="form.itemName" />
 					</el-col>
 					<el-col :span="12">
-						<!-- <el-form-item
-							label="补扣金额"
-							prop="amount"
-							:rules="[
-							{ required: true, message: '请输入'},
-							{ type: 'number', message: '补扣金额必须为数字值'}
-							]"
-						>
-							<el-input type="amount" v-model.number="form.amount" min="0.0" step="0.1" autocomplete="off"></el-input>
-						</el-form-item> -->
 						<form-render :type="`input`" prop="amount" :field="{name:'补扣金额'}" v-model="form.amount"/>
 					</el-col>
 					<el-col :span="12">
@@ -144,7 +134,6 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
 				amount:[
-					//  /^\d+(\.\d+)?$/.test(n+"")
 					{ validator: checkAmount, trigger: 'blur' }
 				],
 				recordate:[
@@ -197,6 +186,9 @@ export default {
 		},
 		async add(){
 			this.dialogFormVisible = true
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
         	this.dedulist = await api_common.getTag('deduction')
 		},
 		async handleFormSubmit(){
@@ -221,6 +213,9 @@ export default {
 		},
 		async edit(){
 			this.dialogFormVisible = true;
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
         	this.dedulist = await api_common.getTag('deduction')
 			let row = this.table_selectedRows[0]
 			this.form = await api_resource.find(row.id)
