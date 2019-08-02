@@ -47,7 +47,7 @@
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -167,7 +167,7 @@ export default {
 			this.table_form.currentpage = 1
             this.fetchMenu()
             this.fetchTableData()
-        }
+		}
 	},
 	methods: {
 		async fetchTableData() {
@@ -201,6 +201,8 @@ export default {
 					await api_resource.create(form)
 					this.dialogFormVisible = false
 					this.fetchTableData()
+				}else{
+					this.$message.error({message:'请选择员工'})
 				}
 			}else{
 				let form = Object.assign({},this.form)
