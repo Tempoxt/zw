@@ -415,7 +415,10 @@ export default {
           type: 'success'
         });
       } catch (error) {
-        
+        this.$message({
+          message: error.response.data,
+          type: 'error'
+        });
       }finally{
         this.importLoading = false
         MessageBox.close()

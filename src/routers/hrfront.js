@@ -8,6 +8,30 @@ export default [{
         }
     },
     {
+        name: 'commFactor',
+        component: () =>
+            import ('@/views/hrfront/comissManage/comissionFactor'),
+        meta: {
+            title: '业务提成系数'
+        }
+    },
+    {
+        name: 'productAddRatio',
+        component: () =>
+            import ('@/views/hrfront/comissManage/proAppreRate'),
+        meta: {
+            title: '产品增值率'
+        }
+    },
+    {
+        name: 'commRecord',
+        component: () =>
+            import ('@/views/hrfront/comissManage/comissionRecord'),
+        meta: {
+            title: '业务提成记录'
+        }
+    },
+    {
         name: 'addAccidentIns',
         component: () =>
             import ('@/views/hrfront/staffinsure/addAccide'),
