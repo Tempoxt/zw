@@ -16,12 +16,12 @@
 			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetchTableData"/>
 		</div>
 		<div style="padding-left:10px" v-if="m==2">
-			<el-select v-model="form.quarter" placeholder="请选择">
+			<el-select v-model="form.quarter" placeholder="请选择" @change="fetchTableData">
 				<el-option
 				v-for="item in quarter"
-				:key="item.value"
-				:label="item.label"
-				:value="item.value">
+				:key="item.season"
+				:label="item.title"
+				:value="item.season">
 				</el-option>
 			</el-select>
 		</div>
@@ -79,12 +79,7 @@ export default {
 			table_topHeight:286,
 			dialogForm1Visible:false,
 			dialogFormVisible:false,
-			quarter:[
-				{value:1,label:'2019年一季度'},
-				{value:2,label:'2019年二季度'},
-				{value:3,label:'2019年三季度'},
-				{value:4,label:'2019年四季度'},
-			]
+			quarter:[]
 		};
 	},
 	watch:{
@@ -93,18 +88,24 @@ export default {
 		},
 		url(){
 			this.table_form.currentpage = 1
-            this.fetchMenu()
+			this.fetchMenu()
+			this.feycnQuarter()
+			this.form.quarter = this.quarter[0].season;
+			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		}
 	},
 	methods: {
 		async reset(){
-			if(m==1){
-				await api_common.resource('commission/valueIncreasereset').get(this.table_form)
-				// this.$request.get('commission/valueIncreasereset',this.table_form)
+			if(this.m==1){
+				await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
+				// await api_common.resource('commission/valueIncrease/reset').post()
 			}else{
-				await api_common.resource('commission/seasonValueIncreasereset').get(this.table_form)
-				// this.$request.get('commission/seasonValueIncrease',this.table_form)
+				await this.$request.post('commission/seasonValueIncrease/reset',{dateLap:this.table_form.dateLap})
+				// await api_common.resource('commission/seasonValueIncrease/reset').post({dateLap:this.table_form.dateLap})
 			}
+		},
+		async feycnQuarter(){
+			this.quarter = await api_common.resource('commission/seasonValueIncrease/optional').get()
 		},
 		async fetchTableData() {
 			if(!this.id){
@@ -112,12 +113,12 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			this.form.quarter = 1;
 			if(this.url=="commission/monthDetail"){
 				const {rows , total } = await api_resource.get(this.table_form)
 				this.table_data  = rows
 				this.table_form.total = total
 			}else{
+				this.table_form.dateLap = this.form.quarter
 				const {rows , total }= await api_common.resource('commission/seasonValueIncrease').get(this.table_form)
 				this.table_data  = rows
 				this.table_form.total = total
@@ -137,6 +138,7 @@ export default {
 	async created() {
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		await this.fetchMenu()
+		await this.feycnQuarter()
 	}
 };
 </script>

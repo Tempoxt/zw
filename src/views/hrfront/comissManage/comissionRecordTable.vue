@@ -12,7 +12,7 @@
 		class="public-dialog"
 		v-el-drag-dialog
 		>
-    	<el-form ref="form" :model="form"  label-width="100px" :rules="rules">
+    	<el-form ref="form" :model="form"  label-width="120px" :rules="rules">
 				<el-row >
 					<el-col :span="14" :offset="4">
 						<el-form-item label="月份" prop="recordate">
@@ -39,20 +39,10 @@
 				</el-row>
 			</el-form>
 
-      <div slot="footer" class="dialog-footer dialog-multiple-footer">
-        <div>
-            <el-switch
-                v-if="isInsert"
-                v-model="form_multiple"
-                active-text="连续添加"
-                inactive-text="">
-            </el-switch>
-        </div>
-        <div>
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-        </div>
-      </div>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+		</div>
     </el-dialog>
 
 	<el-dialog
@@ -61,7 +51,7 @@
 		class="public-dialog"
 		v-el-drag-dialog
 		>
-    	<el-form ref="form1" :model="form1"  label-width="100px" :rules="rules1">
+    	<el-form ref="form1" :model="form1"  label-width="110px" :rules="rules1">
 				<el-row >
 					<el-col :span="14" :offset="4">
 						<el-form-item label="月份" prop="recordate">
@@ -100,20 +90,10 @@
 				</el-row>
 			</el-form>
 
-      <div slot="footer" class="dialog-footer dialog-multiple-footer">
-        <div>
-            <el-switch
-                v-if="isInsert"
-                v-model="form_multiple"
-                active-text="连续添加"
-                inactive-text="">
-            </el-switch>
-        </div>
-        <div>
-            <el-button @click="dialogForm1Visible = false">取 消</el-button>
-            <el-button type="primary" @click="handleForm1Submit">确 定</el-button>
-        </div>
-      </div>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm1Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm1Submit">确 定</el-button>
+		</div>
     </el-dialog>
 
     <table-header
@@ -150,13 +130,13 @@
     <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"  :template="template"/>
 	<el-table-column
-      fixed="right"
-      label="操作"
-      width="100">
-      <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">明细</el-button>
-        <el-button type="text" size="small">编辑</el-button>
-      </template>
+		v-if="this.url=='commission/presoncommcollect'"
+		fixed="right"
+		label="操作"
+		width="100">
+		<template slot-scope="scope">
+			<el-button @click="handleClick(scope.row)" type="text" size="small">明细</el-button>
+		</template>
     </el-table-column>
     </el-table>
      <table-pagination 
@@ -173,10 +153,10 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
-const api_resource = api_common.resource("staffinsure/accidentinsurance");
+const api_resource = api_common.resource("commission/commissionSet/person");
 export default {
 	mixins: [table_mixin],
-	props:['id','url'],
+	props:['id','url','view_activeName'],
 	components:{
 		dateLap
 	},
@@ -187,12 +167,9 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			serialnumber:[],
-			form1:{
-				dateLap:''
-			},
-			form2:{
-				dateLap:''
-			},
+			form:{},
+			form1:{},
+			form2:{},
 			table_topHeight:286,
 			dialogForm1Visible:false,
 			dialogForm2Visible:false,
@@ -203,7 +180,7 @@ export default {
 				month: [
 					{ required: true, message: '请输入', trigger: 'change' },
 				],
-				assessBase: [
+				recordate: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
 				assessBonus: [
@@ -217,7 +194,7 @@ export default {
 				month: [
 					{ required: true, message: '请选择', trigger: 'change' },
 				],
-				assessBase: [
+				recordate: [
 					{ required: true, message: '请选择', trigger: 'blur' },
 				],
 				assessBonus: [
@@ -236,6 +213,15 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				]
 			},
+			template:{
+				ClearState(column,row){
+					if(row.ClearState===0){
+						return <el-tag type="success">已结付</el-tag>
+					}else{
+						return <el-tag type="info">未结付</el-tag>
+					}
+				},
+			}
 		};
 	},
 	watch:{
@@ -243,8 +229,10 @@ export default {
 			this.fetchTableData()
 		},
 		url(){
-			this.table_form.currentpage = 1
+			this.table_data = []
             this.fetchMenu()
+			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+			this.table_form.currentpage = 1
 		}
 	},
 	methods: {
@@ -254,15 +242,32 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			const {rows , total }= await api_resource.get(this.table_form);
-			this.table_data  = rows
-			this.table_form.total = total
+			if(this.url=="commission/presoncommcollect"){
+				const {rows , total }= await api_resource.get(this.table_form);
+				this.table_data  = rows
+				this.table_form.total = total
+			}else if(this.url=="commison/cuscommdetail"){
+				const {rows , total }= await api_common.resource('commission/commissionSet/customer').get(this.table_form)
+				this.table_data  = rows
+				this.table_form.total = total
+			}else{
+				const {rows , total }= await api_common.resource('commission/commissionSet/receiptDetail').get(this.table_form)
+				this.table_data  = rows
+				this.table_form.total = total
+			}
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
 		},
+		handleClick(row){
+			this.$emit('change','收款提成明细')
+		},
 		async edit(){
-			this.dialogFormVisible = true
+			if(this.m==1){
+				this.dialogFormVisible = true
+			}else{
+				this.dialogForm1Visible = true
+			}
 			this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
 		},
 		async handleFormSubmit(){
@@ -279,15 +284,16 @@ export default {
 				this.dialogFormVisible = false
 				this.fetchTableData()
 			}
-        },
+		},
+		handleForm1Submit(){
+
+		},
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit(this.url);
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table
-			setTimeout(()=>{
-				this.fetchTableData();
-			},500)
+			this.fetchTableData();
 		}
 	},
 	async created() {
