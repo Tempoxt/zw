@@ -321,7 +321,8 @@ export default {
                 if (j === 'timestamp') {
                   return parseTime(v[j])
                 } else {
-                  return v[j]
+                
+                  return (v[j]+'').replace(/<[^>]+>/g,"")
                 }
               }))
               if(v.subs&&v.subs.length){
@@ -341,6 +342,7 @@ export default {
       }else{
         data = this.table_data
       }
+      
       const export_file = async (type)=>{
         this.$msgbox.close()
         const loading = this.$loading({
