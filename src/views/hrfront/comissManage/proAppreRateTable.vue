@@ -89,7 +89,7 @@ export default {
 		url(){
 			this.table_form.currentpage = 1
 			this.fetchMenu()
-			this.feycnQuarter()
+			this.fetchQuarter()
 			this.form.quarter = this.quarter[0].season;
 			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		}
@@ -98,13 +98,11 @@ export default {
 		async reset(){
 			if(this.m==1){
 				await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
-				// await api_common.resource('commission/valueIncrease/reset').post()
 			}else{
 				await this.$request.post('commission/seasonValueIncrease/reset',{dateLap:this.table_form.dateLap})
-				// await api_common.resource('commission/seasonValueIncrease/reset').post({dateLap:this.table_form.dateLap})
 			}
 		},
-		async feycnQuarter(){
+		async fetchQuarter(){
 			this.quarter = await api_common.resource('commission/seasonValueIncrease/optional').get()
 		},
 		async fetchTableData() {
@@ -138,7 +136,7 @@ export default {
 	async created() {
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		await this.fetchMenu()
-		await this.feycnQuarter()
+		await this.fetchQuarter()
 	}
 };
 </script>

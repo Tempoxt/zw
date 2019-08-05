@@ -5,7 +5,6 @@
       <div class=" h-full">
            <org v-model="orgid" @change="changeOrg" getApi="org?org_id=d4"/>
       </div>
- <!-- getApi="org/org_id=4" -->
     </el-col>
     <el-col :span="19">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
