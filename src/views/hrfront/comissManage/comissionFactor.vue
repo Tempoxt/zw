@@ -191,6 +191,8 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				]
 			},
+			importUploadUrl:'commission/commissionSet/upload',
+			downloadUrl:'commission/commissionSet/downtemplate',
 		}
 	},
 	methods: {

@@ -15,10 +15,10 @@
     	<el-form ref="form" :model="form"  label-width="120px" :rules="rules">
 				<el-row >
 					<el-col :span="14" :offset="4">
-						<el-form-item label="月份" prop="recordate">
+						<el-form-item label="月份" prop="month">
 							<el-date-picker
 								disabled
-								v-model="form.recordate"
+								v-model="form.month"
 								type="month"
 								style="width:100%"
 								format="yyyy-MM"
@@ -28,13 +28,13 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" disabled prop="assessBonus" :field="{name:'姓名'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" disabled prop="staff__chineseName" :field="{name:'姓名'}" v-model="form.staff__chineseName" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入贷款延期利息" :field="{name:'贷款延期利息'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="productOverInterest" placeholder="请输入贷款延期利息" :field="{name:'贷款延期利息'}" v-model="form.productOverInterest" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入模具款延期利息" :field="{name:'模具款延期利息'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="modelOverInterest" placeholder="请输入模具款延期利息" :field="{name:'模具款延期利息'}" v-model="form.modelOverInterest" />
 					</el-col>
 				</el-row>
 			</el-form>
@@ -54,10 +54,10 @@
     	<el-form ref="form1" :model="form1"  label-width="110px" :rules="rules1">
 				<el-row >
 					<el-col :span="14" :offset="4">
-						<el-form-item label="月份" prop="recordate">
+						<el-form-item label="月份" prop="month">
 							<el-date-picker
 								disabled
-								v-model="form.recordate"
+								v-model="form.month"
 								type="month"
 								style="width:100%"
 								format="yyyy-MM"
@@ -156,7 +156,7 @@ import dayjs from 'dayjs'
 const api_resource = api_common.resource("commission/commissionSet/person");
 export default {
 	mixins: [table_mixin],
-	props:['id','url','view_activeName'],
+	props:['id','url'],
 	components:{
 		dateLap
 	},
@@ -172,18 +172,20 @@ export default {
 			form2:{},
 			table_topHeight:286,
 			dialogForm1Visible:false,
-			dialogForm2Visible:false,
+			dialogFormVisible:false,
+			importUploadUrl:'commission/commissionSet/person/upload',
+			downloadUrl:'commission/commissionSet/person/downtemplate',
 			rules:{
-				ids: [
-					{ required: true, message: '请选择', trigger: 'change' },
-				],
-				month: [
+				staff__chineseName: [
 					{ required: true, message: '请输入', trigger: 'change' },
 				],
-				recordate: [
+				month: [
+					{ required: true, message: '请选择', trigger: 'change' },
+				],
+				productOverInterest: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				assessBonus: [
+				modelOverInterest: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				]
 			},
@@ -226,13 +228,28 @@ export default {
 	},
 	watch:{
 		id(){
-			this.fetchTableData()
+			if(this.url!=='commission/receiptCommDetail'){
+				this.fetchTableData()
+			}else{
+				if(Number(this.id)){
+					this.fetchTableData()
+				}else{
+					return 
+				}
+			}
 		},
 		url(){
 			this.table_data = []
             this.fetchMenu()
 			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 			this.table_form.currentpage = 1
+			if(this.url=='commission/presoncommcollect'){
+				this.importUploadUrl = 'commission/commissionSet/person/upload'
+				this.downloadUrl= 'commission/commissionSet/person/downtemplate'
+			}else{
+				this.importUploadUrl = ''
+				this.downloadUrl= ''
+			}
 		}
 	},
 	methods: {
@@ -260,15 +277,17 @@ export default {
 			}, 300);
 		},
 		handleClick(row){
-			this.$emit('change','收款提成明细')
+			this.$emit('change','收款提成明细',row.staff__id)
 		},
 		async edit(){
-			if(this.m==1){
+			if(this.url=='commission/presoncommcollect'){
+				let row = this.table_selectedRowsInfo[0];
 				this.dialogFormVisible = true
+				this.form = await this.api_resource.find(row.id)
 			}else{
 				this.dialogForm1Visible = true
 			}
-			this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
+			
 		},
 		async handleFormSubmit(){
             await this.form_validate()
@@ -298,7 +317,7 @@ export default {
 	},
 	async created() {
 		await this.fetchMenu()
-		
+		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 	}
 };
 </script>

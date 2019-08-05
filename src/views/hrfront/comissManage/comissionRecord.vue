@@ -2,9 +2,44 @@
 
  <el-row class="h-full">
     <el-col :span="5" class="h-full">
-      <div class=" h-full">
-           <org v-model="orgid" @change="changeOrg" getApi="org?org_id=d4"/>
-      </div>
+        <div class=" h-full">
+            <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+                <div style="padding:20px">
+                <div class="side-header">
+                    <el-input placeholder="快速查找" v-model="filterText" class="input">
+                    <i slot="suffix" class="el-input__icon el-icon-search"></i>
+                    </el-input>
+                
+                </div>
+
+                <el-tree
+                    class="tree"
+                    :data="data2"
+                    :props="{children: 'subs', label: 'name' }"
+                    default-expand-all
+                    node-key="orgid"
+                    :filter-node-method="filterNode"
+                    ref="tree2"
+                    :highlight-current="true"
+                    :check-on-click-node="false"
+                    @node-click="handleChangeNode"
+                    :expand-on-click-node="false"
+                >
+                    <span slot-scope="{ node, data }">
+
+                    <span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
+                    <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+                    <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
+                    &nbsp;
+                    <span>{{ node.label }}</span>
+                    </span>
+                </el-tree>
+                
+                </div>
+            </el-scrollbar>
+            <!-- <org v-model="orgid" @change="changeOrg" :getApi='this.gteApi'/> -->
+            <!-- <org v-model="orgid" v-else @change="changeOrg" getApi="org?org_id=d4&showteam=1&showstaff=1"/>  v-if="this.view_activeName!='收款提成明细'"-->
+        </div>
 
     </el-col>
     <el-col :span="19">
@@ -15,7 +50,7 @@
             <comissionRecordTable url="commission/presoncommcollect" @change="changeTab"  :id="orgid"/>
         </div>
         <div v-if="view_activeName==='客户提成明细'">
-            <comissionRecordTable url="commison/cuscommdetail"  @change="changeTab" :id="orgid"/>
+            <comissionRecordTable url="commison/cuscommdetail" @change="changeTab" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='收款提成明细'">
             <comissionRecordTable @change="changeTab" url="commission/receiptCommDetail" :id="orgid"/>
@@ -35,7 +70,33 @@ export default {
     watch:{
         filterText(val) {
             this.$refs.tree2.filter(val);
-        }
+        },
+        async view_activeName(){
+            this.filterText = ''
+            if(this.view_activeName=='收款提成明细'){
+                this.data2 =  await this.$request.get('org?org_id=d4&showteam=1&showstaff=1')
+                if(Number(this.orgid)){
+                    return 
+                }else{
+                    let d1 = this.data2[0].subs[0]
+                    let t1 = d1.subs[0]
+                    let defaultId = t1.subs[0].orgid
+                    this.orgid = defaultId
+                    this.$nextTick(()=>{
+                        this.$refs.tree2.setCurrentKey(defaultId)
+                    })
+                }
+               
+            }else{
+                this.orgid = ''
+                this.data2 =  await this.$request.get('org?org_id=d4')
+                let defaultId = this.data2[0].orgid
+                this.orgid = defaultId
+                this.$nextTick(()=>{
+                    this.$refs.tree2.setCurrentKey(defaultId)
+                })
+            }
+        },
     },
     data(){
         return {
@@ -44,18 +105,26 @@ export default {
             filterText:'',
             view_activeName:'',
             menu:[],
+            data2:[],
         }
     },
     methods:{
+        handleChangeNode(val,node){
+            this.orgid = val.orgid
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name && data.name.indexOf(value) !== -1;
+        },
         changeOrg(orgid){
             this.orgid = orgid
         },
         handleClick(val){
-            
+
         },
-        changeTab(view_activeName){
+        changeTab(view_activeName,orgid){
             this.view_activeName = view_activeName
-            console.log(this.view_activeName,'view_activeName')
+            this.orgid = orgid
         }
     },
     async created() {
@@ -65,5 +134,15 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+
+.scroll {
+  height: calc(100% - 30px);
+  width: 100%;
+ /deep/ .scrollbar-wrapper {
+    overflow-x: hidden;
+  }
+}
+</style>
 
 
