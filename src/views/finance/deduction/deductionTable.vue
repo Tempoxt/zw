@@ -128,16 +128,16 @@ export default {
 			table_topHeight:289,
 			rules:{
 				type:[
-					{ required: true, message: '请选择', trigger: 'change' },
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
 				],
 				itemName:[
-					{ required: true, message: '请输入', trigger: 'blur' },
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 				],
 				amount:[
-					{ validator: checkAmount, trigger: 'blur' }
+					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
 				recordate:[
-					{ required: true, message: '请选择', trigger: 'change' },
+					{ required: true, message: '请选择', trigger:  ['blur', 'change']},
 				],
 			},
 			dedulist:[],
