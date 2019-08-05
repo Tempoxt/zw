@@ -176,6 +176,7 @@ export default {
 				],
 			},
 			importUploadUrl:"/salary/ahupload",
+			downloadUrl:'salary/ahuploadtemplate',
 			allIds:[],
 		};
 	},
@@ -199,7 +200,6 @@ export default {
 			this.dialogForm1Visible = true
 		},
 		handleForm1Submit(){
-			console.log(this.form.ids,'dddddd')
 			let ids = this.$refs.OrgSelect.getIdsAryResult()
 			let names = this.$refs.OrgSelect.getNamesAryResult();
 			if(this.form.ids.length!==0){
@@ -213,9 +213,7 @@ export default {
 		},
 		add(){
 			this.form.chineseName = null
-			// console.log(this.form.chineseName,'iiiiiiiiiiii')
 			this.form = defaultForm()
-			// console.log(this.form,'ffffffff')
 			this.form.ids = null
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
