@@ -11,6 +11,7 @@
   "dependencies": {
     "axios-rest-client": "^0.1.10",
     "core-decorators": "^0.20.0",
+    "cropperjs": "^1.5.5",
     "dayjs": "^1.8.10",
     "downloadjs": "^1.4.7",
     "echarts": "^4.2.1",
