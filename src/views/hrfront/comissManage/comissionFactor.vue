@@ -90,9 +90,9 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-      <div style="padding-left:10px">
+      	<!-- <div style="padding-left:10px">
           <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
-        </div>
+        </div> -->
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
@@ -129,8 +129,8 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import OrgSelect from '@/components/Org/OrgSelect'
-import dateLap from '@/components/Table/DateLap'
-import dayjs from 'dayjs'
+// import dateLap from '@/components/Table/DateLap'
+// import dayjs from 'dayjs'
 const api_resource = api_common.resource("commission/commissionSet");
 const defaultForm = () => {
     return {
@@ -144,7 +144,7 @@ export default {
 	mixins: [table_mixin],
 	components:{
 		OrgSelect,
-		dateLap
+		// dateLap
 	},
 	data() {
 		var checkAmount = (rule, value, callback) => {
@@ -246,7 +246,7 @@ export default {
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
-		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+		// this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		this.fetchTableData();
 	}
 };
