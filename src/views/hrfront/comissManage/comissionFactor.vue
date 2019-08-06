@@ -15,26 +15,6 @@
     	<el-form ref="form" :model="form"  label-width="110px" :rules="rules">
 				<el-row >
 					<el-col :span="14" :offset="4">
-						<el-form-item prop="staff" label="姓名">
-							<el-select
-								style="width:100%"
-								v-model="form.staff"
-								filterable
-								clearable
-								placeholder="请选择"
-								:disabled="!isInsert"
-								>
-								<el-option
-									v-for="item in nameData"
-									:key="item.id"
-									:label="item.chineseName  +`(${item.employeeCode})`"
-									:value="item.id">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<!-- <form-render :type="`select`" prop="staff" :field="{name:'姓名',options:nameData}" :disabled="!isInsert" filterable v-model="form.staff" /> -->
-					</el-col>
-					<el-col :span="14" :offset="4">
 						<el-form-item prop="cusCode" label="客户编码">
 							<el-select
 								style="width:100%"
@@ -52,6 +32,25 @@
 									:key="item.CusCode"
 									:label="item.CusName +`(${item.CusCode})`"
 									:value="item.CusCode">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<el-form-item prop="staff" label="姓名">
+							<el-select
+								style="width:100%"
+								v-model="form.staff"
+								filterable
+								clearable
+								placeholder="请选择"
+								:disabled="!isInsert"
+								>
+								<el-option
+									v-for="item in nameData"
+									:key="item.id"
+									:label="item.chineseName  +`(${item.employeeCode})`"
+									:value="item.id">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -173,22 +172,22 @@ export default {
 			nameData:[],
 			rules:{
 				staff: [
-					{ required: true, message: '请选择', trigger: 'change' },
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
 				],
 				valueIncrease: [
-					{ required: true, message: '请输入', trigger: 'change' },
-					{ validator: checkAmount, trigger: 'blur' }
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
 				productCommission: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-					{ validator: checkAmount, trigger: 'blur' }
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
 				modelCommission: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-					{ validator: checkAmount, trigger: 'blur' }
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
 				cusCode: [
-					{ required: true, message: '请输入', trigger: 'blur' },
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 				]
 			},
 			importUploadUrl:'commission/commissionSet/upload',
@@ -201,7 +200,7 @@ export default {
                 this.productData = await api_common.resource('commission/getCusNameByCusCode').get({
                     CusCode:query
                 })
-            } 
+            }
         },
 		async fetchTableData() {
 			this.table_loading = true;
@@ -220,25 +219,18 @@ export default {
 		async edit(){
 			this.dialogFormVisible = true
 			this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
-			this.fetchDepart()
+			this.nameData = await api_common.resource('commission/getSalesStaff').get()
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
-			// this.form.cusName = 'dsds'
             let form = Object.assign({},this.form)
             if(this.isInsert){
 				await this.throwFormError(api_resource.create(form))
             }else{
-				await this.throwFormError(api_resource.update(this.form.id,this.form,{alert:false}))
-				this.$message.success({message:'修改成功'})
+				await this.throwFormError(api_resource.update(this.form.id,this.form))
 			}
 			if(this.isInsert&&this.form_multiple){
-				this.form ={
-					lastYearCount:'',
-					fatherDepart:'',
-					yearCount:'',
-					department:''
-				}
+				this.form.staff = ''
             	this.$nextTick(()=>{
 					this.$refs['form'].clearValidate()
 				})

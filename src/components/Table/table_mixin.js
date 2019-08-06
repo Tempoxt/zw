@@ -415,7 +415,7 @@ export default {
           type: 'success'
         });
       } catch (error) {
-        
+          this.$message.error({message:error.response.data})
       }finally{
         this.importLoading = false
         MessageBox.close()
