@@ -248,8 +248,8 @@ export default {
 				this.importUploadUrl = 'commission/commissionSet/person/upload'
 				this.downloadUrl= 'commission/commissionSet/person/downtemplate'
 			}else{
-				this.importUploadUrl = ''
-				this.downloadUrl= ''
+				this.importUploadUrl = 'commission/commissionSet/customer/import'
+				this.downloadUrl= 'commission/commissionSet/customer/import'
 			}
 		}
 	},

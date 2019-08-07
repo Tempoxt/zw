@@ -80,8 +80,8 @@ export default {
                 }else{
                     let d1 = this.data2[0].subs[0]
                     let t1 = d1.subs[0]
-                    if(t1){
-                        var defaultId = t1.orgid
+                    if(t1.subs[0]){
+                        var defaultId = t1.subs[0].orgid
                     }else{
                         var defaultId = t1.orgid
                     }
