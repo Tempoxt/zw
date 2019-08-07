@@ -415,7 +415,6 @@
                                 <el-row :gutter="40" v-if="!isInsert&&cardInfo[4]">
                                     <div style="margin-left:120px;">
                                         <img v-for="item in cardInfo[4].images" :key="item.cardConnect" :src="baseUrl+item.cardConnect" class="bankCard">
-                                           <!-- :style="`width:${width}px;height:${height}px`" @click="ampliImg" -->
                                     </div>
                                 </el-row>
                             </div>
@@ -1117,7 +1116,6 @@ export default {
             return false
         },
         disableUp(){
-            console.log(this.cardPerform,'cccccccccc')
             if(this.cardPerform.cardType===''||this.cardPerform.image.length===0){
                 return true
             }
@@ -1125,21 +1123,6 @@ export default {
         }
     },
     methods: {
-        ampliImg(e){
-            let height = e.target.height;
-            let width = e.target.width;
-            // console.log(width,'width')
-            // console.log(height,'height')
-            if(width>=770||height>400){
-                return
-            }
-            this.$set(e.target,'height',height*2)
-            this.$set(e.target,'width',width*2)
-            this.width = width*2
-            this.height = height*2
-            // let imgapli = e.cardConnect;
-
-        },
         contract_validate(){
             return new Promise((resolve,reject)=>{
                 this.$refs.contract.validate((valid) => {

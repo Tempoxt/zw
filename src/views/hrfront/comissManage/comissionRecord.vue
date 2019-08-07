@@ -42,7 +42,7 @@
         </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="19" style="border-left:1px solid rgb(232, 232, 232)">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>

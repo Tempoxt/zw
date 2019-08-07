@@ -37,13 +37,13 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<el-form-item prop="staff" label="姓名">
+						<el-form-item prop="staff" label="员工姓名">
 							<el-select
 								style="width:100%"
 								v-model="form.staff"
 								filterable
 								clearable
-								placeholder="请选择"
+								placeholder="请搜索或选择"
 								:disabled="!isInsert"
 								>
 								<el-option
@@ -56,13 +56,28 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="4">
+						<form-render :type="`select`" prop="projectType" :field="{name:'项目类型',options:projectData}" v-model="form.projectType" />
+					</el-col>
+					<el-col :span="14" :offset="4">
 						<form-render :type="`inputSuffix`" prop="valueIncrease" :field="{name:'标准增值率'}" v-model="form.valueIncrease" />
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`inputSuffix`" prop="modelCommission" :field="{name:'模具提成系数'}" v-model="form.modelCommission" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`inputSuffix`" prop="productCommission" :field="{name:'贷款提成系数'}" v-model="form.productCommission" />	
+						<form-render :type="`inputSuffix`" prop="productCommission" :field="{name:'贷款提成系数'}" v-model="form.productCommission" />
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<form-render :type="`input`" :field="{name:'零件收款天数'}" v-model="form.partsCollectionDay" />
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<form-render :type="`input`" :field="{name:'组件收款天数'}" v-model="form.moduleCollectionDay" />
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<form-render :type="`input`" :field="{name:'客户信息来源'}" v-model="form.cusSource" />
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<form-render :type="`textarea`" :field="{name:'备注'}" v-model="form.remark" />
 					</el-col>
 				</el-row>
 			</el-form>
@@ -90,9 +105,6 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-      	<!-- <div style="padding-left:10px">
-          <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
-        </div> -->
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
@@ -129,8 +141,6 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import OrgSelect from '@/components/Org/OrgSelect'
-// import dateLap from '@/components/Table/DateLap'
-// import dayjs from 'dayjs'
 const api_resource = api_common.resource("commission/commissionSet");
 const defaultForm = () => {
     return {
@@ -143,8 +153,7 @@ const defaultForm = () => {
 export default {
 	mixins: [table_mixin],
 	components:{
-		OrgSelect,
-		// dateLap
+		OrgSelect
 	},
 	data() {
 		var checkAmount = (rule, value, callback) => {
@@ -170,6 +179,7 @@ export default {
 			allIds:[],
 			productData:[],
 			nameData:[],
+			projectData:[],
 			rules:{
 				staff: [
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
@@ -188,7 +198,10 @@ export default {
 				],
 				cusCode: [
 					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
-				]
+				],
+				projectType: [
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+				],
 			},
 			importUploadUrl:'commission/commissionSet/upload',
 			downloadUrl:'commission/commissionSet/downtemplate',
@@ -215,11 +228,16 @@ export default {
 			this.dialogFormVisible = true
 			this.form = {}
 			this.nameData = await api_common.resource('commission/getSalesStaff').get()
+			this.projectData = (await api_common.resource('commission/getProjectType').get()).map(o=>{return {label:o.name,value:o.id}})
 		},
 		async edit(){
 			this.dialogFormVisible = true
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
 			this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
 			this.nameData = await api_common.resource('commission/getSalesStaff').get()
+			this.projectData = (await api_common.resource('commission/getProjectType').get()).map(o=>{return {label:o.name,value:o.id}})
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
@@ -246,10 +264,7 @@ export default {
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
-		// this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		this.fetchTableData();
 	}
 };
 </script>
-
-

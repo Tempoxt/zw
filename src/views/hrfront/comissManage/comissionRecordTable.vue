@@ -57,7 +57,7 @@
 						<el-form-item label="月份" prop="month">
 							<el-date-picker
 								disabled
-								v-model="form.month"
+								v-model="form1.month"
 								type="month"
 								style="width:100%"
 								format="yyyy-MM"
@@ -67,25 +67,25 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" disabled prop="assessBonus" :field="{name:'客户编码'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" disabled prop="cusCode" :field="{name:'客户编码'}" v-model="form1.cusCode" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" disabled prop="assessBonus" :field="{name:'客户简称'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" disabled prop="cusName" :field="{name:'客户简称'}" v-model="form1.cusName" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入" :field="{name:'应收贷款余额'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="balance" placeholder="请输入" :field="{name:'应收贷款余额'}" v-model="form1.balance" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入" :field="{name:'欠款余额'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="debtAmount" placeholder="请输入" :field="{name:'欠款金额'}" v-model="form1.debtAmount" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入" :field="{name:'欠款利息'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="debtInterest" placeholder="请输入" :field="{name:'欠款利息'}" v-model="form1.debtInterest" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入" :field="{name:'呆坏账金额'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="badDebtAmount" placeholder="请输入" :field="{name:'呆坏账金额'}" v-model="form1.badDebtAmount" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="assessBonus" placeholder="请输入" :field="{name:'呆坏账利息'}" v-model="form.assessBonus" />
+						<form-render :type="`input`" prop="badDebtInterest" placeholder="请输入" :field="{name:'呆坏账利息'}" v-model="form1.badDebtInterest" />
 					</el-col>
 				</el-row>
 			</el-form>
@@ -153,6 +153,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
+import { setTimeout } from 'timers';
 const api_resource = api_common.resource("commission/commissionSet/person");
 export default {
 	mixins: [table_mixin],
@@ -190,28 +191,28 @@ export default {
 				]
 			},
 			rules1:{
-				ids: [
+				cusCode: [
+					{ required: true, message: '请选择', trigger: 'change' },
+				],
+				cusName: [
 					{ required: true, message: '请选择', trigger: 'change' },
 				],
 				month: [
 					{ required: true, message: '请选择', trigger: 'change' },
 				],
-				recordate: [
-					{ required: true, message: '请选择', trigger: 'blur' },
-				],
-				assessBonus: [
+				balance: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				unAssessBase: [
+				debtAmount: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				totalBonus: [
+				debtInterest: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				unAssessBase: [
+				badDebtAmount: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				totalBonus: [
+				badDebtInterest: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				]
 			},
@@ -253,6 +254,22 @@ export default {
 		}
 	},
 	methods: {
+		async reset(){
+			if(this.table_form.dateLap!==null){
+				if(this.url=='commission/presoncommcollect'){
+					const mes = await this.$request.post('/commission/personal/reset',{dateLap:this.table_form.dateLap})
+					this.$message.success({message: mes})
+				}else if(this.url=='commison/cuscommdetail'){
+					const mes = await this.$request.post('/commission/customer/reset',{dateLap:this.table_form.dateLap})
+					this.$message.success({message: mes})
+				}else{
+					const mes = await this.$request.post('commission/reset',{dateLap:this.table_form.dateLap})
+					this.$message.success({message: mes})
+				}
+			}else{
+				this.$message.error({message:'请选择月份'})
+			}
+		},
 		async fetchTableData() {
 			if(!this.id){
 				return
@@ -285,34 +302,46 @@ export default {
 				this.dialogFormVisible = true
 				this.form = await this.api_resource.find(row.id)
 			}else{
+				let row = this.table_selectedRowsInfo[0];
 				this.dialogForm1Visible = true
+				this.form1 = await this.$request.get('/commission/commissionSet/customer/update/'+row.id)
 			}
 			
 		},
 		async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
-            if(this.isInsert){
-                await this.api_resource.create(form)
-            }else{
-                await this.api_resource.update(form.id,form)
-			}
-			if(this.isInsert&&this.form_multiple){
-			
-			}else{
-				this.dialogFormVisible = false
-				this.fetchTableData()
-			}
+            await this.api_resource.update(form.id,form)
+			this.dialogFormVisible = false
+			this.fetchTableData()
 		},
-		handleForm1Submit(){
-
+		form1_validate(form = 'form1'){
+		return new Promise((resolve,reject)=>{
+			this.$refs[form].validate((valid) => {
+			if(valid){
+				resolve()
+			}else{
+				reject()
+				return false
+			}
+			})
+		})
+		},
+		async handleForm1Submit(){
+			await this.form1_validate()
+            let form = Object.assign({},this.form1)
+            await this.$request.put('/commission/commissionSet/customer/update/'+form.id,form)
+			this.dialogForm1Visible = false
+			this.fetchTableData()
 		},
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit(this.url);
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table
-			this.fetchTableData();
+			setTimeout(()=>{
+				this.fetchTableData();
+			},500)
 		}
 	},
 	async created() {

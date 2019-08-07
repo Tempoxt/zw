@@ -96,11 +96,8 @@ export default {
 	},
 	methods: {
 		async reset(){
-			if(this.m==1){
-				await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
-			}else{
-				await this.$request.post('commission/seasonValueIncrease/reset',{dateLap:this.table_form.dateLap})
-			}
+			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
+			this.$message.success({message: mes})
 		},
 		async fetchQuarter(){
 			this.quarter = await api_common.resource('commission/seasonValueIncrease/optional').get()
