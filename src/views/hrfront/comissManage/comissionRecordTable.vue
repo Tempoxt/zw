@@ -73,7 +73,7 @@
 						<form-render :type="`input`" disabled prop="cusName" :field="{name:'客户简称'}" v-model="form1.cusName" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="balance" placeholder="请输入" :field="{name:'应收贷款余额'}" v-model="form1.balance" />
+						<form-render :type="`input`" prop="balance" placeholder="请输入" :field="{name:'应收货款余额'}" v-model="form1.balance" />
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" prop="debtAmount" placeholder="请输入" :field="{name:'欠款金额'}" v-model="form1.debtAmount" />
