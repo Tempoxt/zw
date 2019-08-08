@@ -203,12 +203,12 @@ export default {
 				balance: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				debtAmount: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-				],
-				debtInterest: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-				],
+				// debtAmount: [
+				// 	{ required: true, message: '请输入', trigger: 'blur' },
+				// ],
+				// debtInterest: [
+				// 	{ required: true, message: '请输入', trigger: 'blur' },
+				// ],
 				// badDebtAmount: [
 				// 	{ required: true, message: '请输入', trigger: 'blur' },
 				// ],
