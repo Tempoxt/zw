@@ -245,6 +245,7 @@ export default {
 					const mes = await this.$request.post('commission/reset',{dateLap:this.table_form.dateLap})
 					this.$message.success({message: mes})
 				}
+				this.fetchTableData();
 			}else{
 				this.$message.error({message:'请选择月份'})
 			}
@@ -326,7 +327,6 @@ export default {
 	async created() {
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		await this.fetchMenu()
-		
 	}
 };
 </script>
