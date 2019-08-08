@@ -220,10 +220,9 @@ export default {
 			this.fetchTableData()
 		},
 		url(){
-			this.table_data = []
-            this.fetchMenu()
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
+			this.fetchMenu()
 			if(this.url=='commission/presoncommcollect'){
 				this.importUploadUrl = 'commission/commissionSet/person/upload'
 				this.downloadUrl= 'commission/commissionSet/person/downtemplate'
@@ -319,14 +318,15 @@ export default {
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table
-			setTimeout(()=>{
+			// setTimeout(()=>{
 				this.fetchTableData();
-			},500)
+			// },500)
 		}
 	},
 	async created() {
-		await this.fetchMenu()
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+		await this.fetchMenu()
+		
 	}
 };
 </script>
