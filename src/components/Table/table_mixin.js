@@ -408,10 +408,10 @@ export default {
       });
       try {
         // await new Promise(resolve=>setTimeout(resolve,3000))
-        await request.post(this.importUploadUrl,form,{alert:false})
+        const mes = await request.post(this.importUploadUrl,form,{alert:false})
         this.fetchTableData()
         this.$message({
-          message: '导入成功',
+          message: mes,
           type: 'success'
         });
       } catch (error) {
