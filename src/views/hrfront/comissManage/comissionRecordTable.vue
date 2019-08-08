@@ -203,18 +203,6 @@ export default {
 				balance: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				// debtAmount: [
-				// 	{ required: true, message: '请输入', trigger: 'blur' },
-				// ],
-				// debtInterest: [
-				// 	{ required: true, message: '请输入', trigger: 'blur' },
-				// ],
-				// badDebtAmount: [
-				// 	{ required: true, message: '请输入', trigger: 'blur' },
-				// ],
-				// badDebtInterest: [
-				// 	{ required: true, message: '请输入', trigger: 'blur' },
-				// ]
 			},
 			template:{
 				ClearState(column,row){
@@ -230,20 +218,10 @@ export default {
 	watch:{
 		id(){
 			this.fetchTableData()
-			// if(this.url!=='commission/receiptCommDetail'){
-			// 	this.fetchTableData()
-			// }else{
-			// 	if(Number(this.id)){
-			// 		this.fetchTableData()
-			// 	}else{
-			// 		return 
-			// 	}
-			// }
 		},
 		url(){
 			this.table_data = []
             this.fetchMenu()
-			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			if(this.url=='commission/presoncommcollect'){
