@@ -88,6 +88,7 @@ export default {
 		},
 		url(){
 			this.table_form.currentpage = 1
+			this.table_form.query.query= []
 			this.fetchMenu()
 			this.fetchQuarter()
 			this.form.quarter = this.quarter[0].season;
