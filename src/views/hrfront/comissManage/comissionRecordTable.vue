@@ -245,6 +245,7 @@ export default {
             this.fetchMenu()
 			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 			this.table_form.currentpage = 1
+			this.table_form.query.query= []
 			if(this.url=='commission/presoncommcollect'){
 				this.importUploadUrl = 'commission/commissionSet/person/upload'
 				this.downloadUrl= 'commission/commissionSet/person/downtemplate'
