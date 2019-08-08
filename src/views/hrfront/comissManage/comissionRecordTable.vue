@@ -209,12 +209,12 @@ export default {
 				debtInterest: [
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
-				badDebtAmount: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-				],
-				badDebtInterest: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-				]
+				// badDebtAmount: [
+				// 	{ required: true, message: '请输入', trigger: 'blur' },
+				// ],
+				// badDebtInterest: [
+				// 	{ required: true, message: '请输入', trigger: 'blur' },
+				// ]
 			},
 			template:{
 				ClearState(column,row){
