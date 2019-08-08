@@ -75,22 +75,11 @@ export default {
             this.filterText = ''
             if(this.view_activeName=='收款提成明细'){
                 this.data2 =  await this.$request.get('org?org_id=d4&showteam=1&showstaff=1&filter_model=StaffCommission')
-                if(Number(this.orgid)){
-                    return 
-                }else{
-                    let d1 = this.data2[0].subs[0]
-                    let t1 = d1.subs[0]
-                    if(t1.subs[0]){
-                        var defaultId = t1.subs[0].orgid
-                    }else{
-                        var defaultId = t1.orgid
-                    }
-                    this.orgid = defaultId
-                    this.$nextTick(()=>{
-                        this.$refs.tree2.setCurrentKey(defaultId)
-                    })
-                }
-               
+                let defaultId = this.data2[0].orgid
+                this.orgid = defaultId
+                this.$nextTick(()=>{
+                    this.$refs.tree2.setCurrentKey(defaultId)
+                })
             }else{
                 this.orgid = ''
                 this.data2 =  await this.$request.get('org?org_id=d4')

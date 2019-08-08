@@ -229,15 +229,16 @@ export default {
 	},
 	watch:{
 		id(){
-			if(this.url!=='commission/receiptCommDetail'){
-				this.fetchTableData()
-			}else{
-				if(Number(this.id)){
-					this.fetchTableData()
-				}else{
-					return 
-				}
-			}
+			this.fetchTableData()
+			// if(this.url!=='commission/receiptCommDetail'){
+			// 	this.fetchTableData()
+			// }else{
+			// 	if(Number(this.id)){
+			// 		this.fetchTableData()
+			// 	}else{
+			// 		return 
+			// 	}
+			// }
 		},
 		url(){
 			this.table_data = []
