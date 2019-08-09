@@ -63,7 +63,7 @@ export default {
             form:{},
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:296,
+            // table_topHeight:296,
             importUploadUrl:"/standardcost"
         };
     },

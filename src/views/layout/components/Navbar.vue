@@ -27,6 +27,11 @@
 					<i class="icon iconfont icon-shouji"></i>
 				</el-tooltip>
 			</span> -->
+			<span class="right-menu-item" @click="openFile">
+				<el-tooltip class="item" effect="dark" content="帮助" placement="bottom">
+					<a style="color:#fff" target="_blank" :href="baseUrl+'使用说明.pdf'"><i class="icon iconfont icon-bangzhu"></i></a>
+				</el-tooltip>
+			</span>
 			<span class="right-menu-item" @click="handleScreenfull">
 				<el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
 					<i class="icon iconfont icon-quanping"></i>
@@ -83,7 +88,7 @@ import Hamburger from "@/components/Hamburger";
 import NavMenu from "./NavMenu";
 import screenfull from "screenfull";
 import editPassword from "../../account/editPassword.vue";
-
+let baseUrl = process.env.VUE_APP_STATIC
 export default {
 	components: {
 		Breadcrumb,
@@ -95,7 +100,8 @@ export default {
 		return{
 			dialogFormVisible:false,
 			showModal:false,
-			form:{}
+			form:{},
+			baseUrl
 		}
 	},
 	computed: {
@@ -106,6 +112,9 @@ export default {
 		})
 	},
 	methods: {
+		openFile(){
+			console.log('11')
+		},
 		editPassword(){
 			this.dialogFormVisible = true
 		},

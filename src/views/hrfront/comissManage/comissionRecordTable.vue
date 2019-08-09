@@ -41,7 +41,7 @@
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -183,12 +183,12 @@ export default {
 				month: [
 					{ required: true, message: '请选择', trigger: 'change' },
 				],
-				productOverInterest: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-				],
-				modelOverInterest: [
-					{ required: true, message: '请输入', trigger: 'blur' },
-				]
+				// productOverInterest: [
+				// 	{ required: true, message: '请输入', trigger: 'blur' },
+				// ],
+				// modelOverInterest: [
+				// 	{ required: true, message: '请输入', trigger: 'blur' },
+				// ]
 			},
 			rules1:{
 				cusCode: [
@@ -214,6 +214,14 @@ export default {
 				},
 			}
 		};
+	},
+	computed:{
+		disabled(){
+			if(this.form.productOverInterest!=''||this.form.modelOverInterest!=''){
+				return false
+			}
+			return true
+		}
 	},
 	watch:{
 		id(){

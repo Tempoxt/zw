@@ -1,9 +1,8 @@
 <template>
   <div>
-    <i
-      :class="`el-icon-tickets icon iconfont icon-caidanqiehuan white hamburger ${isActive?'is-active':''}`"
-      @click="toggleClick"
-    ></i>
+    <span :class="`icon iconfont icon-caidanqiehuan white hamburger ${isActive?'is-active':''}`"
+      @click="toggleClick"></span>
+    <!-- el-icon-tickets  -->
     <!-- <svg
       :class="{'is-active':isActive}"
       t="1492500959545"
@@ -47,6 +46,11 @@ export default {
 </script>
 
 <style scoped>
+.icon-caidanqiehuan:before{
+  position: relative;
+  top: -22px;
+  left: 2px;
+}
 .hamburger {
   display: inline-block;
   cursor: pointer;
