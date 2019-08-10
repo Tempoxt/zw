@@ -125,10 +125,11 @@
 		<Drawer :closable="false" width="640" v-model="openDrawers">
 			<p class="detail"><span v-html="chineseName" style="color:#37474F"></span>考勤明细</p>
 			<div class="demo-drawer-profile">
-				<el-table 
+				<el-table
+					class="dtable"
 					:data="drawerData"
 					:header-cell-style="headerStyle"
-					style="width: 100%;margin-top:30px;" 
+					style="width: 100%;margin-top:30px" 
 					max-height="840"
 					show-summary
       				:summary-method="getSummaries"
@@ -175,6 +176,9 @@
 					<el-table-column
 						prop="Remark"
 						label="异常说明" width="120">
+						<template slot-scope="scope">
+							<a :title="scope.row.Remark" style="width:80px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red">{{scope.row.Remark}}</a>
+						</template>
 					</el-table-column>
 					<!-- <el-table-column
 						prop="hotDetail"
@@ -222,7 +226,7 @@
 			>
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
+		<each-table-column :table_field="table_field" :template="template"/>
     </el-table>
     <table-pagination 
         :total="table_form.total" 
@@ -275,7 +279,22 @@ export default {
 			totalAllo:'',
 			chineseName:'',
 			curr:1,
-			page:''
+			page:'',
+			template:{
+				auditStatus(column,row){
+					if(row.auditStatus==-1){
+						return  <el-tag size="info" type="info">考勤未处理</el-tag>
+					}else if(row.auditStatus==0){
+						return  <el-tag size="mini" type="warning">未审核</el-tag>
+					}else if(row.auditStatus==1){
+						return  <el-tag size="mini">已审核</el-tag>
+					}else if(row.auditStatus==2){
+						return  <el-tag size="mini" type="danger">待结付</el-tag>
+					}else if(row.auditStatus==3){
+						return  <el-tag size="mini" type="success">已结付</el-tag>
+					}
+				}
+			}
 		};
 	},
 	watch:{
@@ -412,7 +431,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style  lang="scss" scoped>
 	.ivu-drawer-body{
         padding-left: 30px;
     }
@@ -434,7 +453,24 @@ export default {
         box-shadow: 0px 1px 0px rgba(228,234,236,1);
         margin:-16px -16px 0;
         margin-bottom: 30px
-    }
+	}
+	.theme-0BB2D4 .el-table--small td, .theme-0BB2D4 .el-table--small th{
+		color: red;
+		padding: 1px 0;
+	}
+	.theme-0BB2D4{
+		.dtable{
+			/deep/.cell{
+				font-size:10px;
+			}
+			/deep/td{
+				padding: 0px;
+			}
+			/deep/th{
+				padding: 1px 0;
+			}
+		}
+	}
 </style>
 
 
