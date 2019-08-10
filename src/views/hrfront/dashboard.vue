@@ -7,7 +7,7 @@
 				<div class="outside">
 					
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-							<el-row>
+							<!-- <el-row>
 								<el-col :span="12">
 									<quickEntry></quickEntry>
 								</el-col>
@@ -20,7 +20,7 @@
 								<el-col :span="12">
 									<supplement></supplement>
 								</el-col>
-							</el-row>
+							</el-row> -->
 							<el-row style="padding-bottom:30px;">
 								<el-col :span="12">
 									<accident></accident>
