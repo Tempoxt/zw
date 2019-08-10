@@ -123,7 +123,7 @@
 	<!-- 人员档案的信息预览 -->
 	<div>
 		<Drawer :closable="false" width="640" v-model="openDrawers">
-			<p class="detail"><span v-html="chineseName" style="color:#37474F"></span>考勤明细</p>
+			<p class="detail"><span style="color:#37474F">{{chineseName}}({{emplCode}})</span>考勤明细</p>
 			<div class="demo-drawer-profile">
 				<el-table
 					class="dtable"
@@ -278,6 +278,7 @@ export default {
 			drawerData: [],
 			totalAllo:'',
 			chineseName:'',
+			emplCode:'',
 			curr:1,
 			page:'',
 			template:{
@@ -346,8 +347,10 @@ export default {
         },
 		async openDrawer(row,column,cell,event){
             if(row.allowanceDays==event.target.innerText){
+				console.log(row,'rrrrrrrr')
 				this.openDrawers = true
-				this.chineseName = row.chineseName 
+				this.chineseName = row.chineseName
+				this.emplCode = row.employeeCode
 				const alloData = await this.$request.get('/attendance/hotdetail?history_id='+row.id)
 				this.drawerData = alloData.detail
 				this.totalAllo = alloData.total
