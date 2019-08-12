@@ -177,7 +177,7 @@
 						prop="Remark"
 						label="异常说明" width="120">
 						<template slot-scope="scope">
-							<a :title="scope.row.Remark" style="width:80px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red">{{scope.row.Remark}}</a>
+							<span :title="scope.row.Remark" style="width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red;cursor:default">{{scope.row.Remark}}</span>
 						</template>
 					</el-table-column>
 					<!-- <el-table-column
