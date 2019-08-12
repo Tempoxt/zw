@@ -1,6 +1,6 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
           <org @change="changeOrg" getApi="org/fundselect"/>
       </div>
