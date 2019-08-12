@@ -84,7 +84,7 @@ export default {
 			      radius: ["35%", "50%"],
 			      center: ["50%", "65%"],
 				  avoidLabelOverlap: true,
-				  minAngle:5,
+				  minAngle:20,
 			      label: {
 			        normal: {
 			          show: true,
