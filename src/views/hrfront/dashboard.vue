@@ -111,6 +111,7 @@
 					  @fullScreen="fullScreen"
 					  :class="{'speech-mode':screenIndex=='1'}"
 					  ></inService>
+					  <div class="totalR">总人数:{{totalP}}</div>
 				  </el-col>
 				  <el-col :span="12" class="padding-left-10">
                        <pieChart  
@@ -201,7 +202,8 @@
 		filterText:'',
 		visible:false,
 		data2:[],
-		form:{}
+		form:{},
+		totalP:''
       };
     },
 	components:{
@@ -293,6 +295,9 @@
 				this.sexData = analysis.sex_stat;
 				this.eduLevelData = analysis.eduLevel_stat;
 				this.eachageData = analysis.each_age_sex_stat
+				let per = this.staffData.map(o=>o.value)
+				this.totalP = per.reduce((tem,item,index)=>tem+item)
+				console.log(this.totalP)
 			}
 		}
     },
@@ -387,6 +392,17 @@
 
 .dashboard .speech-mode .el-card__body .box-card-c{
 	height: 100%;
+}
+.totalR{
+	font-size: 16px;
+	font-weight: bold;
+	position: relative;
+	bottom: 40px;
+	left: 0;
+	right: 0;
+	height: 0;
+	display: flex;
+	justify-content: center
 }
 </style>
 
