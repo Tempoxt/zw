@@ -379,7 +379,7 @@
     padding: 6px 20px;
 }
 .dashboard .el-card__body {
-	height: 340px;
+	height: 335px;
 }
 .dashboard .speech-mode .el-card__body{
 	height: 100%;

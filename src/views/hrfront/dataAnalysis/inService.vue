@@ -73,7 +73,7 @@ export default {
 			  },
 			  legend: {
 			    orient: "horizontal",
-				top: "30",
+				top: "40",
 				data:[]
 			  },
 			  color: ["#FF004E", "#FFA023", "#FFD323", "#1FD361", "#0BB2D4", "#3889FF"],
@@ -81,9 +81,10 @@ export default {
 			    {
 				  name: this.title,
 			      type: "pie",
-			      radius: ["50%", "70%"],
-			      center: ["50%", "60%"],
-			      avoidLabelOverlap: false,
+			      radius: ["35%", "50%"],
+			      center: ["50%", "65%"],
+				  avoidLabelOverlap: true,
+				  minAngle:5,
 			      label: {
 			        normal: {
 			          show: true,
@@ -93,7 +94,7 @@ export default {
 			        emphasis: {
 			          show: true,
 			          textStyle: {
-			            fontSize: "18",
+			            fontSize: "16",
 			            fontWeight: "bold"
 			          }
 			        }
@@ -139,6 +140,7 @@ export default {
 <style lang="scss" scoped>
 .box-card {
   margin-top: 10px;
+  padding-top: 15px;
 	#ring-diagram2{
 		height: 100%;
 	}

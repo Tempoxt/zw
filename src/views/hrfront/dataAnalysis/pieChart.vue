@@ -76,7 +76,7 @@ export default {
 			    },
 			    legend: {
 			      orient: "horizontal",
-			      top: "30",
+			      top: "40",
 			      borderRadius: 15,
 			      data: []
 			    },
@@ -85,9 +85,10 @@ export default {
 			      {
 			        name: this.title,
 			        type: "pie",
-			        radius: "50%",
-			        center: ["50%", "60%"],
-			        avoidLabelOverlap: false,
+					radius: "50%",
+					minAngle:5,
+			        center: ["50%", "65%"],
+			        avoidLabelOverlap: true,
 			        label: {
 			          normal: {
 			            show: true,
@@ -97,7 +98,7 @@ export default {
 			          emphasis: {
 			            show: true,
 			            textStyle: {
-			              fontSize: "18",
+			              fontSize: "16",
 			              fontWeight: "bold"
 			            }
 			          }
@@ -144,6 +145,7 @@ export default {
 <style lang="scss" scoped>
 .box-card {
   margin-top: 10px;
+  padding-top: 15px;
 	.box-card-c.box-card-c2{
 		height: 100%;
 	}

@@ -53,6 +53,7 @@ export default {
 			    trigger: "axis"
 			  },
 			  legend: {
+				top: "30",
 			    data: ['男','女']
 			  },
 			  toolbox: {
@@ -75,6 +76,9 @@ export default {
 			  },
 			  color: ["#3889FF", "#FF64C6"],
 			  calculable: true,
+			  	// grid: {
+				// 	top: '90',
+				// },
 			  xAxis: [
 			    {
 			      type: "category",
@@ -120,7 +124,8 @@ export default {
 <style lang="scss" scoped>
 .box-card {
   margin-top: 10px;
-		.box-card-c.box-card-c2{
+  padding-top: 15px;
+	.box-card-c.box-card-c2{
 		height: 100%;
 	}
   .box-card-c {

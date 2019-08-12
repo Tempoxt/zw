@@ -211,7 +211,15 @@ export default [{
         component: () =>
             import ('@/views/hrfront/workclothes/issue'),
         meta: {
-            title: '发放列表'
+            title: '工衣发放'
+        }
+    },
+    {
+        name: 'clothesReport',
+        component: () =>
+            import ('@/views/hrfront/workclothes/report'),
+        meta: {
+            title: '工衣报表'
         }
     },
     {
@@ -340,6 +348,14 @@ export default [{
             import ('@/views/hrfront/restaurant/consumedata'),
         meta: {
             title: '员工报餐统计'
+        }
+    },
+    {
+        name: 'restconsume',
+        component: () =>
+            import ('@/views/hrfront/restaurant/record'),
+        meta: {
+            title: '食堂消费记录'
         }
     },
     {
