@@ -16,7 +16,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" size="mini" @click="bySocialAdd">去新增</el-button>
+					<el-button type="primary" size="mini" @click="bySocialAdd">处理</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -33,7 +33,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" size="mini" @click="bySocialCancel">去注销</el-button>
+					<el-button type="primary" size="mini" @click="bySocialCancel">处理</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -49,7 +49,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" size="mini" @click="byFundAdd">去新增</el-button>
+					<el-button type="primary" size="mini" @click="byFundAdd">处理</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -66,7 +66,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" size="mini" @click="byFundCancel">去注销</el-button>
+					<el-button type="primary" size="mini" @click="byFundCancel">处理</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -82,7 +82,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" size="mini" @click="byInsuranceAdd">去新增</el-button>
+					<el-button type="primary" size="mini" @click="byInsuranceAdd">处理</el-button>
 				</div>
 			</el-col>
 		</el-row>
@@ -99,7 +99,7 @@
 			</el-col>
 			<el-col :span="6">
 				<div class="list-r">
-					<el-button type="primary" size="mini" @click="byInsuranceCancel">去注销</el-button>
+					<el-button type="primary" size="mini" @click="byInsuranceCancel">处理</el-button>
 				</div>
 			</el-col>
 		</el-row>
