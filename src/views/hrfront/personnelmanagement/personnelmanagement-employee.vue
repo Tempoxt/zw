@@ -143,7 +143,7 @@ export default {
     .posti{
         width: 107px;
         height: 65px;
-        margin-bottom: 10px;
+        margin-bottom: 3px;
     }
     .mt20{margin-top: 20px;}
     .mt30{margin-top: 30px;}
@@ -189,6 +189,10 @@ export default {
     .bankCard{
         width: 40%;
         height: 200px;
+    }
+    .preview .el-dialog__header{
+        line-height: 0;
+        background: transparent
     }
 </style>
 

@@ -661,7 +661,7 @@
                 <div class="demo-drawer-profile flexImg">
                     <div class="idCard" v-for="item in profileData.cardRecords" :key="item.id">
                         <p class="imgInfo">{{item.cardName}}</p>
-                        <img class="posti" v-for="img in item.cardConnects" :key="img" :src="baseUrl+img" :data-img="img" alt="" @click="previewImg">
+                        <img class="posti" v-for="img in item.cardConnects" :key="img" :src="img" alt="" @click="previewImg(img)">
                     </div>
                 </div>
                 <Divider v-if="profileData.workRecords!=''"/>
@@ -874,9 +874,20 @@
             </div>
         </el-dialog>
 
-        <div class="img-show-mask" v-show="maskBtn" id="img-show-mask" @click="closeBigImg">
-            <img :src="bigImg" class="bigImg" id="bigImg" />
-        </div>
+        
+    <el-dialog
+      :visible.sync="dialogForm3Visible"
+      class="public-dialog preview"
+      v-el-drag-dialog
+      @close="closeBigImg"
+      >
+        <el-carousel trigger="click" :autoplay="false" :initial-index="index">
+            <el-carousel-item v-for="item in list" :key="item">
+               <img style="width:100%;height:100%" :src="baseUrl+item">
+               <!-- <img style="width:100%;height:100%" src="http://e.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9eac1754f45df39b6003bf3b396.jpg"> -->
+            </el-carousel-item>
+        </el-carousel>
+    </el-dialog>
 
         <table-header
             :table_actions="table_actions"
@@ -973,6 +984,7 @@ export default {
             api_resource,
             orgCategory:[],
             queryDialogFormVisible:true,
+            dialogForm3Visible:false,
             table_topHeight:296,
             nationData:[],
             nativeplacesData:[],
@@ -984,6 +996,8 @@ export default {
             wageTypeData:[],
             wageGradeData:[],
             socialSecuritiesData:[],
+            list:[],
+            index:null,
             rules:{
                 chineseName: [
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -1208,23 +1222,16 @@ export default {
         headerStyle(row,rowIndex,column,columnIndex){
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
         },
-        previewImg(e){//图片预览功能
-            this.bigImg = baseUrl+e.target.dataset.img
-            this.maskBtn = true;
-            this.$nextTick(function() {
-                var imgShowMask = document.getElementById('img-show-mask');
-                var img = document.getElementById('bigImg');
-                var w = document.documentElement.clientWidth || document.body.clientWidth;
-                var h = document.documentElement.clientHeight || document.body.clientHeight;
-                var offsetY=window.pageYOffset;
-                var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-                imgShowMask.style.height=scrollHeight+'px';
-                img.style.left=(w/2-250)+'px';
-                img.style.top=(h/2-70+offsetY)+'px';
-            });
+        previewImg(img){//图片预览功能
+            let allImgs = this.profileData.cardRecords.map(o=>o.cardConnects)
+            this.list = allImgs.flat()
+            this.index = this.list.indexOf(img)
+            this.dialogForm3Visible = true
         },
-        closeBigImg: function() { //关闭图片预览
-            this.maskBtn = false;
+        closeBigImg() { //关闭图片预览
+            this.dialogForm3Visible = false;
+            this.index = ""
+            this.list = []
         },
         async getDialog(){
             this.form = await api_common.resource('hrm/staff').find(this.staffId)
