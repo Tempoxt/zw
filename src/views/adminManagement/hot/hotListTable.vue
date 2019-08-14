@@ -390,7 +390,7 @@ export default {
 		},
 		async audit(){
 			let rows = this.table_selectedRows.map(row=>row.id)
-			await this.$request.put('/hot/history/bluk?ids='+rows.join(','),{action:'check'})
+			await this.$request.post('/hot/history/bluk',{ids:rows.join(','),action:'check'})
 			this.fetchTableData()
 		},
 		async edit(){
