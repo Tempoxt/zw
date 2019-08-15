@@ -56,12 +56,13 @@ export default {
 .mini-table {
   .el-table__row {
     >td {
-        padding: 3px 0;
+        padding: 0px 0;
         font-size: 12px;
     }
     .cell {
           white-space: nowrap;
           text-overflow: ellipsis;
+          line-height: 20px;
     }
   }
 }
