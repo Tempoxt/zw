@@ -136,11 +136,14 @@
 					:cellStyle="drawerStyle"
 					>
 					
-            		<el-table-column type="index" :index="indexMethods" label="日期" />
-					<!-- <el-table-column
+            		<!-- <el-table-column type="index" :index="indexMethods" label="日期" /> -->
+					<el-table-column
 						prop="CheckDate"
-						label="日期"  width="120">
-					</el-table-column> -->
+						label="日期"  width="50">
+						<template slot-scope="scope">
+							<span :title="scope.row.CheckDate">{{scope.row.CheckDate.split('-')[2]}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column
 						prop="weekday"
 						label="星期"  width="50">
@@ -335,7 +338,7 @@ export default {
 				if(row.weekday=='日'){
 					return 'background-color:#1cbe57;'
 				}
-			}else if(column.label=="日期"&&row.hotDetail!=''&&row.hotDetail!=null){
+			}else if(column.label=="日期"&&row.hotDetail!=''&&row.hotDetail!=null&&row.hotDetail==1){
 				return 'background-color:#0bb2d4;'
 			}
 			// else if(column.label=="高温津贴"&&row.hotDetail!=''&&row.hotDetail!=null){
