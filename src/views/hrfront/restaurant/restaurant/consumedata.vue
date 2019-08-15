@@ -249,7 +249,7 @@ export default {
 			dialogPayVisible:false,
 			template:{
 				paymongey(column,row){
-					return <el-button type="text"  onClick={vm.showPayInfo.bind(vm,row)}>{row.paymongey}</el-button>
+					return <el-button type="text" size="medium" onClick={vm.showPayInfo.bind(vm,row)}>{row.paymongey}</el-button>
 				}
 			},
 			payData:[],
