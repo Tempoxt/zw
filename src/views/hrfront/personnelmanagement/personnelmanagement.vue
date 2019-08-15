@@ -661,7 +661,7 @@
                 <div class="demo-drawer-profile flexImg">
                     <div class="idCard" v-for="item in profileData.cardRecords" :key="item.id">
                         <p class="imgInfo">{{item.cardName}}</p>
-                        <img class="posti" v-for="img in item.cardConnects" :key="img" :src="img" alt="" @click="previewImg(img)">
+                        <img class="posti" v-for="img in item.cardConnects" :key="img" :src="baseUrl+img" alt="" @click="previewImg(img)">
                     </div>
                 </div>
                 <Divider v-if="profileData.workRecords!=''"/>
