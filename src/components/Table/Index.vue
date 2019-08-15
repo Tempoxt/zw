@@ -52,3 +52,17 @@ export default {
 }
 </style>
 
+<style lang="scss">
+.mini-table {
+  .el-table__row {
+    >td {
+        padding: 3px 0;
+        font-size: 12px;
+    }
+    .cell {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+    }
+  }
+}
+</style>

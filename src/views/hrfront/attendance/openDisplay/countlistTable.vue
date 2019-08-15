@@ -3,6 +3,7 @@
 	:table_column="table_field" 
 	:table_query.sync="table_form.query"
 	@query="querySubmit"
+  class="mini-table"
 	>
     <table-header
       :table_actions="table_actions"
