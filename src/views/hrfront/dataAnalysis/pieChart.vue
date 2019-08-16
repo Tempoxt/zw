@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div :id="id" v-show="show" class="box-card-c"></div>
-		<div :id="id+'2'" v-show="!show" v-if="datas" class="box-card-c box-card-c2"></div>
+		<div :id="id+'2'" v-show="!show" class="box-card-c box-card-c2"></div>
   </el-card>
 </template>
 
@@ -57,12 +57,13 @@ export default {
 			      formatter: "{a} <br/>{b}: {c} ({d}%)"
 			    },
 			    toolbox: {
+				  right:20,
 			      show: true,
 			      orient: "horizontal",
 			      feature: {
 			        myTool2: {
 			            show: true,
-			        		title:"全屏",
+			        	title:"全屏",
 			            icon: 'image://http://echarts.baidu.com/images/favicon.png',
 			            onclick: function (){
 			                _this.fullScreen()

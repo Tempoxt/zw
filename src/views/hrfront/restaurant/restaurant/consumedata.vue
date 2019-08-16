@@ -15,6 +15,7 @@
 		:data="payData"
 		border
 		show-summary
+        :summary-method="getSummaries"
 		height="500"
 		style="width: 100%">
 		<el-table-column
@@ -283,6 +284,36 @@ export default {
 		}
 	},
 	methods: {
+		
+		getSummaries(param) {
+			const { columns, data } = param;
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}else if(index === 1){
+					sums[index] = '';
+					return;
+				}else{
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+							const value = Number(curr);
+							if (!isNaN(value)) {
+							return prev + curr;
+							} else {
+							return prev;
+							}
+						}, 0);
+						sums[index] = sums[index];
+					} else {
+						sums[index] = '';
+					}
+				}
+			});
+			return sums;
+		},
 		async showPayInfo(row){
 			this.payloading = true
 			this.dialogPayVisible = true

@@ -190,6 +190,9 @@ export default {
         width: 40%;
         height: 200px;
     }
+    .preview .el-dialog{
+        width:35%
+    }
     .preview .el-dialog__header{
         line-height: 0;
         background: transparent

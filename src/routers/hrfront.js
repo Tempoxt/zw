@@ -8,6 +8,14 @@ export default [{
         }
     },
     {
+        name: 'frontGateManage',
+        component: () =>
+            import ('@/views/hrfront/devicemanager/devicelistmanage'),
+        meta: {
+            title: '考勤门禁设置'
+        }
+    },
+    {
         name: 'commFactor',
         component: () =>
             import ('@/views/hrfront/comissManage/comissionFactor'),

@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div :id="id" v-show="show" class="box-card-c"></div>
-		<div :id="id+'2'" v-show="!show" v-if="datas" class="box-card-c box-card-c2"></div>
+		<div :id="id+'2'" v-show="!show" class="box-card-c box-card-c2"></div>
   </el-card>
 </template>
 
@@ -15,11 +15,6 @@ export default {
 			option: {}
 		}
 	},
-	mounted() {
-		this.$nextTick(function() {
-			this.init(this.id,this.datas)
-		})
-	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
@@ -31,6 +26,11 @@ export default {
 			immediate: true,
 			deep: true
 		}
+	},
+	mounted() {
+		this.$nextTick(function() {
+			this.init(this.id,this.datas)
+		})
 	},
 	methods:{		
 		checkFull(){
@@ -57,6 +57,7 @@ export default {
 			    data: ['男','女']
 			  },
 			  toolbox: {
+				right:20,
 			    show: true,
 			    orient: "horizontal",
 			    feature: {
@@ -70,7 +71,9 @@ export default {
 			      },
 			      saveAsImage: {
 			        //保存图片
-			        show: true
+					show: true,
+					type:'png',
+					pixelRatio: 1,
 			      }
 			    }
 			  },

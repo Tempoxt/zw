@@ -1,8 +1,8 @@
 <template>
   <el-card class="box-card">
-    <div id="ring-diagram" v-show="show" class="box-card-c"></div>
+    <div :id="id" v-show="show" class="box-card-c"></div>
 		<!-- <div id="ring-diagram2" v-show="!show" class="box-card-c"></div> -->
-		<div :id="id+'2'" v-show="!show"  v-if="datas" class="box-card-c"></div>
+		<div :id="id+'2'" v-show="!show" class="box-card-c"></div>
   </el-card>
 </template>
 
@@ -54,6 +54,7 @@ export default {
 			    formatter: "{a} <br/>{b}: {c} ({d}%)"
 			  },
 			  toolbox: {
+				right:20,
 			    show: true,
 			    orient: "horizontal",
 			    feature: {
