@@ -170,7 +170,11 @@ export default {
             let row = this.table_selectedRows[0]
             this.form = await api_resource.find(row.id);
             this.form = this.form[0];
-            this.form.credit = this.formSelect2.find(o=>o.label==this.form.credit).value
+            try {
+              this.form.credit = this.formSelect2.find(o=>o.label==this.form.credit).value
+            } catch (error) {
+              this.form.credit = ''
+            }
             this.dialogFormVisible = true;
         },
         getSummaries(param) {
