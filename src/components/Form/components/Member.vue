@@ -138,6 +138,9 @@ export default {
           this.input5 = this.field.real_name
         }
         this.data = this.value;
+        if(isNaN(+this.value)){
+          this.input5 = this.value
+        }
         // this.input5 = this.field.real_name
       }
     },

@@ -109,6 +109,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import { constants } from 'crypto';
+import { setTimeout } from 'timers';
 const api_resource = api_common.resource("lovefoundation/debitcredit");
 let baseUrl = process.env.VUE_APP_STATIC
 const defaultForm = () => {
@@ -179,8 +180,18 @@ export default {
                 this.putForm.remark = form.remark
                 
                 this.putForm.effectiveDate = form.effectiveDate
-                this.putForm.grantees = form.grantees
-                this.putForm.payee = form.payee
+                // this.putForm.grantees =  !isNaN(+form.grantees)?form.grantees:''
+                if(isNaN(+form.grantees)){
+                   delete this.putForm.grantees
+                }else{
+                  this.putForm.grantees = form.grantees
+                }
+                if(isNaN(+form.payee)){
+                  delete this.putForm.payee
+                }else{
+                  this.putForm.payee = this.form.payee
+                }
+               
 
 
 
@@ -195,6 +206,7 @@ export default {
             let row = this.table_selectedRows[0]
             this.form = await api_resource.find(row.id);
             this.form = this.form[0];
+            console.log(this.form,'this.formthis.form')
             try {
               this.form.credit = this.formSelect2.find(o=>o.label==this.form.credit).value
             } catch (error) {
@@ -205,7 +217,7 @@ export default {
             } catch (error) {
               this.form.debit = ''
             }
-            this.dialogFormVisible = true;
+             this.dialogFormVisible = true;
         },
         getSummaries(param) {
           const { columns, data } = param;
