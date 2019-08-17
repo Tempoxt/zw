@@ -14,6 +14,12 @@
       <div style="width:500px;margin:0 auto">
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
+            
+            <el-col :span="24">
+              <form-render :type="`day`" :field="{name:'收款日期'}" v-model="form.effectiveDate" v-if="!isInsert"/>
+            </el-col>
+
+
            <el-col :span="24">
               <form-render :type="`select`" :field="{name:'借方科目',options:formSelect1}" v-model="form.debit"/>
             </el-col>
@@ -26,6 +32,17 @@
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'金额'}" v-model="form.amount" />
             </el-col>
+
+             <el-col :span="24">
+              <form-render :type="`member`" :field="{name:'受助人'}" v-model="form.grantees" v-if="!isInsert"/>
+            </el-col>
+
+             <el-col :span="24">
+              <form-render :type="`member`" :field="{name:'收款人'}" v-model="form.payee" v-if="!isInsert"/>
+            </el-col>
+
+
+
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'备注'}" v-model="form.remark" />
             </el-col>
@@ -118,7 +135,7 @@ export default {
           formSelect1:[],
           formSelect2:[],
           putForm:{},
-          total_data:[],
+          total_data:[]
         };
     },
     watch:{
@@ -160,6 +177,13 @@ export default {
                 this.putForm.credit = form.credit
                 this.putForm.amount = form.amount
                 this.putForm.remark = form.remark
+                
+                this.putForm.effectiveDate = form.effectiveDate
+                this.putForm.grantees = form.grantees
+                this.putForm.payee = form.payee
+
+
+
                 await api_resource.update(form.id,this.putForm)
             }
             this.dialogFormVisible = false
@@ -167,6 +191,7 @@ export default {
         },
         async edit(){
             this.initForm()
+            // this.$request('/lovefoundation/debitcredit/staff')
             let row = this.table_selectedRows[0]
             this.form = await api_resource.find(row.id);
             this.form = this.form[0];
@@ -174,6 +199,11 @@ export default {
               this.form.credit = this.formSelect2.find(o=>o.label==this.form.credit).value
             } catch (error) {
               this.form.credit = ''
+            }
+            try {
+              this.form.debit = this.formSelect1.find(o=>o.label==this.form.debit).value
+            } catch (error) {
+              this.form.debit = ''
             }
             this.dialogFormVisible = true;
         },
