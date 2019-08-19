@@ -13,7 +13,7 @@
                     <el-tree
                         class="tree"
                         :data="data2"
-                        :props="{children: 'sub', label: 'name' }"
+                        :props="{children: 'subs', label: 'name' }"
                         default-expand-all
                         node-key="id"
                         :filter-node-method="filterNode"

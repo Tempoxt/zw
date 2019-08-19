@@ -11,16 +11,35 @@
             v-el-drag-dialog
             >
             <el-form ref="form" :model="form"  label-width="110px" :rules="rules">
-				<el-row >
+                <el-row v-if="!isInsert">
 					<el-col :span="12">
-						<form-render :type="`select`" :field="{name:'设备类型',options:deviceData}" v-model="form.typew" />
+						<form-render :type="`input`" disabled :field="{name:'工号'}" v-model="form.staff__chineseName" />
 					</el-col>
 					<el-col :span="12">
+						<form-render :type="`input`" disabled :field="{name:'姓名'}" v-model="form.staff_employeeCode" />
+					</el-col>
+				</el-row>
+				<el-row >
+					<el-col :span="12"  v-if="isInsert">
+						<form-render :type="`select`" :field="{name:'设备类型',options:deviceData}" v-model="typew" />
+					</el-col>
+					<el-col :span="12">
+                        <!-- <el-form-item label="设备名称">
+							<el-select multiple v-model="form.device" placeholder="请选择" style="width:100%">
+                                <el-option 
+                                v-for="item in nameData"
+                                :key="item.value"
+                                :label="item.name"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+						</el-form-item> -->
 						<form-render :type="`select`" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
 					</el-col>
 				</el-row>
 			</el-form>
-                <OrgSelect v-model="form.staff"  ref="OrgSelect" v-if="dialogFormVisible"/>
+
+                <OrgSelect v-model="form.staff" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -88,10 +107,8 @@ export default {
             dialogFormVisible:false,
             deviceData:[],
             nameData:[],
+            typew:'',
             rules:{
-                type:[
-                    { required: true, message: '请选择', trigger:  ['blur','change'] },
-                ],
                 device:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
@@ -103,12 +120,14 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-        // 'form.type'(){
-        //     this.form.device = ''
-        //     if(this.form.type!==''){
-        //         this.getName()
-        //     }
-        // }
+        typew(){
+            if(this.isInsert){
+                this.form.device = []
+            }
+            if(this.typew!==''){
+                this.getName()
+            }
+        }
     },
     methods: {
         async fetchTableData() {
@@ -131,25 +150,48 @@ export default {
             this.fetchTableData();
         },
         async getDevice(){
-            this.deviceData = (await this.$request.get('devicemanager/getfrontdevicetype')).map(o=>{return {label:o.name,value:o.id}})
+            this.deviceData = (await this.$request.get('devicemanager/getdevicetype')).map(o=>{return {label:o.name,value:o.value}})
         },
         async getName(){
-            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.type)).map(o=>{return {label:o.name,value:o.value}})
+            // this.nameData = await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.typew)
+            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.typew)).map(o=>{return {label:o.name,value:o.value}})
         },
         add(){
+            this.typew = ''
             this.form = {}
             this.getDevice()
             this.dialogFormVisible = true
         },
+        async edit(){
+            console.log(this.form,'pppppp')
+            let row = this.table_selectedRowsInfo[0];
+            this.dialogFormVisible = true
+            this.form  = await this.api_resource.find(row.id) 
+            this.typew = this.form.deviceType
+            this.getDevice()
+            // let form = await this.api_resource.find(row.id)
+            // let device = form.device.map(o=>o.device_id)
+            // console.log(device,'xxxxx')
+            // console.log(this.form.device,'dddd')
+            console.log(this.form,'qqqqq')
+        },
         async handleFormSubmit(){
-            this.form.staff = this.$refs.OrgSelect.getIdsResult()
-            let form = Object.assign({},this.form)
-            await this.$request.post('devicemanager/devicelistmanage',form)
-
+            console.log(this.form,'ffffff')
+            let device = this.form.device.join(',')
+            this.form.device = device
+            if(this.isInsert){
+                this.form.staff = this.$refs.OrgSelect.getIdsResult()
+                let form = Object.assign({},this.form)
+                await api_resource.create(form)
+            }else{
+                let form = Object.assign({},this.form)
+                await api_resource.update(form.id,form)
+            }
+            this.dialogFormVisible = false
+            this.fetchTableData()
             // await this.throwFormError(api_resource.create(this.form))
             // this.dialogFormVisible = _.stubFalse()
-            this.dialogFormVisible = true
-            this.fetchTableData()
+            
         }
     },
     async created() {

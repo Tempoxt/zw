@@ -13,7 +13,7 @@
                     <el-tree
                         class="tree"
                         :data="data2"
-                        :props="{children: 'sub', label: 'name' }"
+                        :props="{children: 'subs', label: 'name' }"
                         default-expand-all
                         node-key="id"
                         :filter-node-method="filterNode"
@@ -26,8 +26,10 @@
                     <div slot-scope="{ node, data }" class="flexSpace">
 
                         <div>
-                            <span v-if="data.id==0" class="icon iconfont icon-wenjian"></span>
-                            <span v-else class="icon iconfont icon-geren"></span>
+                            <span v-if="data.id==0" class="icon iconfont icon-weizhi"></span>
+                            <span v-if="data.id=='t5'" class="icon iconfont icon-menjinji"></span>
+                            <span v-if="data.id=='t1'" class="icon iconfont icon-kaoqinji"></span>
+                            <span v-else></span>
                             &nbsp;
                             <span>{{ node.label }}</span>
                         </div>

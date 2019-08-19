@@ -5,21 +5,24 @@
         @query="querySubmit"
         >
         <el-dialog
-            :title="dialogStatus==='insert'?'添加':'编辑'"
+            :title="dialogStatus==='insert'?'添加设备类型':'编辑设备类型'"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
             >
             <el-form ref="form" :model="form"  label-width="110px" :rules="rules">
 				<el-row >
-					<el-col :span="18">
-						<form-render :type="`input`" :field="{name:'设备ID',options:deviceData}" v-model="form.id" />
+					<el-col :span="18" :offset="2">
+						<form-render :type="`input`" prop="uniueTitle" :field="{name:'唯一标识'}" v-model="form.uniueTitle" />
 					</el-col>
-					<el-col :span="18">
-						<form-render :type="`input`" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
+					<el-col :span="18" :offset="2">
+						<form-render :type="`input`" prop="title" :field="{name:'类型名称'}" v-model="form.title" />
 					</el-col>
-                    <el-col :span="18">
+                    <el-col :span="18" :offset="2">
                         <form-render :type="`number`" :field="{name:'顺序'}" v-model="form.sort"/>
+                    </el-col>
+                    <el-col :span="18" :offset="2">
+                        <form-render :type="`radio`" prop="deviceStatus" :field="{name:'状态',options:statusData}" v-model="form.typeStatus"/>
                     </el-col>
 				</el-row>
 			</el-form>
@@ -80,62 +83,48 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import { setTimeout } from 'timers';
-import OrgSelect from '@/components/Org/OrgSelect'
-const api_resource = api_common.resource("devicemanager/devicelistmanage");
+const api_resource = api_common.resource("devicemanager/devicetype");
 export default {
     mixins: [table_mixin],
-    props:['id','changes'],
-    components:{
-        OrgSelect
-    },
     data() {
+        const defaultForm  = function(){
+            return {
+                uniueTitle:'',
+                sort:1,
+                typeStatus:1,
+                title:''
+            }
+        }
         return {
+            defaultForm,
             loading: false,
             form:{},
             api_resource,
             queryDialogFormVisible:true,
             table_topHeight:220,
             dialogFormVisible:false,
-            deviceData:[],
-            nameData:[],
+            statusData:[],
             rules:{
-                type:[
-                    { required: true, message: '请选择', trigger:  ['blur','change'] },
+                uniueTitle:[
+                    { required: true, message: '请输入', trigger:  'blur' },
                 ],
-                device:[
-                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                title:[
+                    { required: true, message: '请输入', trigger: 'blur'},
                 ],
             }
         };
     },
     computed:{
         disabled(){
-            if(this.form.id!==''&&this.form.device!==''&&this.form.sort!==''){
+            if(this.form.uniueTitle!==''&&this.form.title!==''){
                 return false
             }
             return true
         }
     },
-    watch:{
-        id(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
-        },
-        'form.type'(){
-            this.form.device = ''
-            if(this.form.type!==''){
-                this.getName()
-            }
-        }
-    },
     methods: {
         async fetchTableData() {
-            // if(!this.id){
-            //     return 
-            // }
             this.table_loading = true;
-            this.table_form.orgid = this.id
             const {rows , total }= await api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
@@ -145,21 +134,24 @@ export default {
         },
         async delete(){
             let rows = this.table_selectedRows.map(row=>row.id)
-            await this.$request.get('devicemanager/devicelistmanage/bluk?ids='+rows.join(','))
+            await this.$request.get('devicemanager/devicetype/bluk?ids='+rows.join(','))
             this.$message.success({message:'删除成功'})
             this.fetchTableData();
         },
-        async getDevice(){
-            this.deviceData = (await this.$request.get('devicemanager/getdevicetype')).map(o=>{return {label:o.name,value:o.value}})
-        },
-        async getName(){
-            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.type)).map(o=>{return {label:o.name,value:o.value}})
+        async getStatus(){
+            this.statusData = (await this.$request.get('devicemanager/getdevicestatus')).map(o=>{return {label:o.name,value:o.value}})
         },
         add(){
-            this.form = {}
-            this.getDevice()
+            this.form = this.defaultForm()
+            this.getStatus()
             this.dialogFormVisible = true
         },
+        async edit(){
+            this.getStatus()
+            let row = this.table_selectedRowsInfo[0];
+			this.dialogFormVisible = true
+			this.form = await this.api_resource.find(row.id)
+        },  
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
@@ -169,16 +161,21 @@ export default {
                 await api_resource.update(form.id,form)
             }
             if(this.isInsert&&this.form_multiple){
-
-            }
+                this.form = this.defaultForm()
+            	this.$nextTick(()=>{
+					this.$refs['form'].clearValidate()
+				})
+				this.fetchTableData()
+			}else{
+				this.dialogFormVisible = false
+				this.fetchTableData()
+			}
             // await this.throwFormError(api_resource.create(this.form))
             // this.dialogFormVisible = _.stubFalse()
-            this.dialogFormVisible = true
-            this.fetchTableData()
         }
     },
     async created() {
-        const { field, action,table } = await api_common.menuInit("devicemanager/devicelistmanage");
+        const { field, action,table } = await api_common.menuInit("devicemanager/devicetype");
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table

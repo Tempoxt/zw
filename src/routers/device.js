@@ -7,10 +7,10 @@ export default [
       component: () => import('@/views/device/devicelistmanage')
     },
     {
-      name: 'gatemanage',
+      name: 'devicetype',
       meta: {
         title: '设备类型'
       },
-      component: () => import('@/views/device/devicelistmanage')
+      component: () => import('@/views/device/devicetypeTable')
     },
   ]
