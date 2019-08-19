@@ -70,7 +70,6 @@ export default {
 			            }
 			        },
 			        saveAsImage: {
-			          //保存图片
 			          show: true
 			        }
 			      }
@@ -81,7 +80,7 @@ export default {
 			      borderRadius: 15,
 			      data: []
 			    },
-			    color: ["#3889FF", "#0BB2D4", "#1FD361", "#FFA023", "#FFD323", "#3889FF"],
+			    color: ["#5A8BFC","#FF8D53","#996EFF","#40CDE9","#84EBFF","#FF64A2","#FFAF47","#6556FF","#58D8BE","#B392FF","#FE68D1","#F3D044","#FF5454","#4BDB80","#FFAA7E","#C858FF","#E4D945","#5CACFC","#7DD453","#FF8D8D"],
 			    series: [
 			      {
 			        name: this.title,

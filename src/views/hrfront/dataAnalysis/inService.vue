@@ -40,6 +40,32 @@ export default {
 			let aaa = echarts.init(document.getElementById(this.id+"2"));//ring-diagram2
 			aaa.setOption(this.option);
 		},
+		base64ToBlob(code) {
+            let parts = code.split(';base64,');
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
+
+            let uInt8Array = new Uint8Array(rawLength);
+
+            for (let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], { type: contentType });
+        },
+        saveAsImage(id){
+			let myChart = echarts.init(document.getElementById(id));
+            let content = myChart.getDataURL();
+
+            let aLink = document.createElement('a');
+            let blob = this.base64ToBlob(content);
+
+            let evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, true);
+            aLink.download = "line.png";
+            aLink.href = URL.createObjectURL(blob);
+            aLink.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        },
 		fullScreen(){
 			this.$emit("fullScreen",this.screenIndex)
 		},
@@ -59,15 +85,23 @@ export default {
 			    orient: "horizontal",
 			    feature: {
 			      myTool2: {
-			          show: true,
+					  show: true,
+					  padding:10,
 					  title:"全屏",
 			          icon: 'image://http://echarts.baidu.com/images/favicon.png',
 			          onclick: function (){
 			              _this.fullScreen()
 			          }
-			      },
+				  },
+				//    myTool3: {
+				// 	  show: true,
+				// 	  title:"保存为图片",
+			    //       icon: 'image://data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7',
+			    //       onclick: function (){
+			    //           _this.saveAsImage(id)
+			    //       }
+			    //   },
 			      saveAsImage: {
-			        //保存图片
 			        show: true
 			      }
 			    }
@@ -77,12 +111,12 @@ export default {
 				top: "40",
 				data:[]
 			  },
-			  color: ["#FF004E", "#FFA023", "#FFD323", "#1FD361", "#0BB2D4", "#3889FF"],
+			  color: ["#5A8BFC","#FF8D53","#996EFF","#40CDE9","#84EBFF","#FF64A2","#FFAF47","#6556FF","#58D8BE","#B392FF","#FE68D1","#F3D044","#FF5454","#4BDB80","#FFAA7E","#C858FF","#E4D945","#5CACFC","#7DD453","#FF8D8D"],
 			  series: [
 			    {
 				  name: this.title,
 			      type: "pie",
-			      radius: ["35%", "50%"],
+			      radius: ["30%", "45%"],
 			      center: ["50%", "65%"],
 				  avoidLabelOverlap: true,
 				  minAngle:20,
@@ -146,7 +180,7 @@ export default {
 		height: 100%;
 	}
   .box-card-c{
-    height: 300px;
+    height: 380px;
   }
 }
 </style>

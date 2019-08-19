@@ -70,10 +70,7 @@ export default {
 			          }
 			      },
 			      saveAsImage: {
-			        //保存图片
 					show: true,
-					type:'png',
-					pixelRatio: 1,
 			      }
 			    }
 			  },
@@ -132,7 +129,7 @@ export default {
 		height: 100%;
 	}
   .box-card-c {
-    height: 300px;
+    height: 350px;
   }
 }
 </style>
