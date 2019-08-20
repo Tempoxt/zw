@@ -253,6 +253,7 @@
                                             <el-form-item label="介绍人">
                                             
                                             <el-select
+                                                style="width:100%"
                                                 v-model="form.introducer"
                                                 filterable
                                                 clearable
@@ -260,7 +261,6 @@
                                                 reserve-keyword
                                                 placeholder="请输入关键词"
                                                 :remote-method="remoteMethod"
-                                                :disabled="!isInsert"
                                                 >
                                                 <el-option
                                                 v-for="item in introducerData"
