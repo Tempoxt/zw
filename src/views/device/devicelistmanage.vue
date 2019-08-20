@@ -26,15 +26,13 @@
                     <div slot-scope="{ node, data }" class="flexSpace">
 
                         <div>
-                            <span v-if="data.id==0" class="icon iconfont icon-wenjian"></span>
-                            <span v-else class="icon iconfont icon-geren"></span>
+                            <span v-if="data.id===0" class="icon iconfont icon-weizhi"></span>
+                            <span v-if="data.id==='t5'" class="icon iconfont icon-menjinji"></span>
+                            <span v-if="data.id==='t1'" class="icon iconfont icon-kaoqinji"></span>
+                            <span v-if="data.id!=0&&data.id!='t5'&&data.id!='t1'&&data.id.indexOf('m')==-1"  class="icon iconfont icon-shebeileixing"></span>
                             &nbsp;
                             <span>{{ node.label }}</span>
                         </div>
-                        <!-- <div v-if="data.id!=0">
-                            <span class="icon iconfont icon-lajitong" @click="deleteCustom(data)"></span>
-                            <span class="icon iconfont icon-bianji ml15" @click="editCustom(data)"></span>
-                        </div> -->
                     </div>
                 </el-tree>
                 
