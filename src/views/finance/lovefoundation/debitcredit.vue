@@ -16,7 +16,7 @@
           <el-row :gutter="20">
             
             <el-col :span="24">
-              <form-render :type="`day`" :field="{name:'收款日期'}" v-model="form.effectiveDate" v-if="!isInsert"/>
+              <form-render :type="`day`" :field="{name:'收款日期'}" v-model="form.effectiveDate"/>
             </el-col>
 
 
@@ -34,11 +34,11 @@
             </el-col>
 
              <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'受助人'}" v-model="form.grantees" v-if="!isInsert"/>
+              <form-render :type="`member`" :field="{name:'受助人'}" v-model="form.grantees"/>
             </el-col>
 
              <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'收款人'}" v-model="form.payee" v-if="!isInsert"/>
+              <form-render :type="`member`" :field="{name:'收款人'}" v-model="form.payee"/>
             </el-col>
 
 
