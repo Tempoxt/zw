@@ -16,7 +16,7 @@
 						<form-render :type="`input`" prop="uniueTitle" :disabled="!isInsert" :field="{name:'唯一标识'}" v-model="form.uniueTitle" />
 					</el-col> -->
 					<el-col :span="18" :offset="2">
-						<form-render :type="`input`" prop="title" :field="{name:'类型名称'}" v-model="form.title" />
+						<form-render :type="`input`" prop="title" :disabled="!isInsert"  :field="{name:'类型名称'}" v-model="form.title" />
 					</el-col>
                     <el-col :span="18" :offset="2">
                         <form-render :type="`number`" :field="{name:'顺序'}" v-model="form.sort"/>
