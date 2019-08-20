@@ -124,7 +124,8 @@ export default {
 			company:[],
 			table_form:{
 				socialSecurityMain:'松岗总公司'
-			}
+			},
+			importUploadUrl:'/staffinsure/socialinsuranceinport'
 		};
 	},
 	computed:{

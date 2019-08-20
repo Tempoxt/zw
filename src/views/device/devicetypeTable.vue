@@ -105,9 +105,9 @@ export default {
             dialogFormVisible:false,
             statusData:[],
             rules:{
-                uniueTitle:[
-                    { required: true, message: '请输入', trigger:  'blur' },
-                ],
+                // uniueTitle:[
+                //     { required: true, message: '请输入', trigger:  'blur' },
+                // ],
                 title:[
                     { required: true, message: '请输入', trigger: 'blur'},
                 ],
@@ -116,7 +116,7 @@ export default {
     },
     computed:{
         disabled(){
-            if(this.form.uniueTitle!==''&&this.form.title!==''){
+            if(this.form.title!==''){
                 return false
             }
             return true
