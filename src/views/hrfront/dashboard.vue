@@ -34,7 +34,6 @@
 
 			<el-tab-pane label="数据分析" name="dataAnalysis">
 				<div class="outside">
-					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:25px">
 						<el-row>
 							<el-form ref="form" :model="form" label-width="90px">
 								<el-col :span="12">
@@ -101,8 +100,10 @@
 									<!-- <el-button plain icon="el-icon-download" >全部下载</el-button>-->
 							</el-col>
 						</el-row>
+						
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:25px">
 						<el-row>
-							<el-col :span="12">
+							<el-col :span="12" v-show="staffData.length!=0">
 								<inService
 								id="ring-diagram"
 								title="在职人数统计"  
@@ -113,9 +114,9 @@
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='1'}"
 								></inService>
-								<div class="totalR">总人数:{{totalP}}</div>
+								<div class="totalR" v-if="totalP!=''">总人数:{{totalP}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10">
+							<el-col :span="12" class="padding-left-10" v-show="sexData.length!=0">
 								<pieChart  
 								:show="checkFullshow"
 								ref="echart2"
@@ -130,8 +131,8 @@
 							</el-col>
 						</el-row>
 						<el-row>
-							<el-col :span="12">
-								<pieChart 
+							<el-col :span="12" v-show="eduLevelData.length!=0">
+								<pieChart
 								:show="checkFullshow"
 								ref="echart3"
 								title="学历分布统计" 
@@ -142,7 +143,7 @@
 								:class="{'speech-mode':screenIndex=='3'}"
 								></pieChart>
 							</el-col>
-							<el-col :span="12" class="padding-left-10">
+							<el-col :span="12" class="padding-left-10"  v-show="eachageData.length!=0">
 								<barChart 
 								:show="checkFullshow" 
 								ref="echart4" 
@@ -297,6 +298,10 @@
 				this.sexData = analysis.sex_stat;
 				this.eduLevelData = analysis.eduLevel_stat;
 				this.eachageData = analysis.each_age_sex_stat
+				console.log(this.staffData,'1111')
+				console.log(this.sexData,'2222')
+				console.log(this.eduLevelData,'3333')
+				console.log(this.eachageData,'4444')
 				let per = this.staffData.map(o=>o.value)
 				this.totalP = per.reduce((tem,item,index)=>tem+item)
 				console.log(this.totalP)
