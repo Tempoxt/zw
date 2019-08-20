@@ -12,28 +12,23 @@
             >
             <el-form ref="form" :model="form"  label-width="110px" :rules="rules">
                 <el-row v-if="!isInsert">
-					<el-col :span="12">
+					<el-col :span="16" :offset="2">
 						<form-render :type="`input`" disabled :field="{name:'工号'}" v-model="form.staff__chineseName" />
 					</el-col>
-					<el-col :span="12">
+					<el-col :span="16" :offset="2">
 						<form-render :type="`input`" disabled :field="{name:'姓名'}" v-model="form.staff_employeeCode" />
 					</el-col>
 				</el-row>
-				<el-row >
-					<el-col :span="12"  v-if="isInsert">
-						<form-render :type="`select`" :field="{name:'设备类型',options:deviceData}" v-model="typew" />
+				<el-row  v-if="isInsert">
+					<el-col :span="12">
+						<form-render :type="`select`" :field="{name:'设备类型',options:deviceData}" placeholder="请选择" v-model="typew" />
 					</el-col>
 					<el-col :span="12">
-                        <!-- <el-form-item label="设备名称">
-							<el-select multiple v-model="form.device" placeholder="请选择" style="width:100%">
-                                <el-option 
-                                v-for="item in nameData"
-                                :key="item.value"
-                                :label="item.name"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-						</el-form-item> -->
+						<form-render :type="`select`" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
+					</el-col>
+				</el-row>
+				<el-row  v-else>
+					<el-col :span="16" :offset="2">
 						<form-render :type="`select`" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
 					</el-col>
 				</el-row>

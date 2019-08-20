@@ -13,7 +13,7 @@
             <el-form ref="form" :model="form"  label-width="110px" :rules="rules">
 				<el-row >
 					<el-col :span="18" :offset="2">
-						<form-render :type="`input`" prop="uniueTitle" :field="{name:'唯一标识'}" v-model="form.uniueTitle" />
+						<form-render :type="`input`" prop="uniueTitle" :disabled="!isInsert" :field="{name:'唯一标识'}" v-model="form.uniueTitle" />
 					</el-col>
 					<el-col :span="18" :offset="2">
 						<form-render :type="`input`" prop="title" :field="{name:'类型名称'}" v-model="form.title" />
@@ -22,7 +22,7 @@
                         <form-render :type="`number`" :field="{name:'顺序'}" v-model="form.sort"/>
                     </el-col>
                     <el-col :span="18" :offset="2">
-                        <form-render :type="`radio`" prop="deviceStatus" :field="{name:'状态',options:statusData}" v-model="form.typeStatus"/>
+                        <form-render :type="`radio`" prop="deviceStatus" :field="{name:'状态',options:[{'label':'启用','value':1},{'label':'禁用','value':2}]}" v-model="form.typeStatus"/>
                     </el-col>
 				</el-row>
 			</el-form>
@@ -143,11 +143,11 @@ export default {
         },
         add(){
             this.form = this.defaultForm()
-            this.getStatus()
+            // this.getStatus()
             this.dialogFormVisible = true
         },
         async edit(){
-            this.getStatus()
+            // this.getStatus()
             let row = this.table_selectedRowsInfo[0];
 			this.dialogFormVisible = true
 			this.form = await this.api_resource.find(row.id)
