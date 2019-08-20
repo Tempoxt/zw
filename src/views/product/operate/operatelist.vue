@@ -83,6 +83,7 @@ export default {
     },
     watch:{
         orgid(){
+            this.table_form.currentpage = 1
             this.fetchTableData()
         }
     },

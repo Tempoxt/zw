@@ -148,6 +148,7 @@ export default {
 	},
 	methods: {
 		changeStatus(val){
+			this.table_form.currentpage = 1
 			this.status = val
 			this.fetchTableData()
 		},

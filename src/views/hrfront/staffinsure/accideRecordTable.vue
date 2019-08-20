@@ -14,7 +14,7 @@
 		:table_column="table_field"
 		>
       <div style="padding-left:10px">
-          <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+          <dateLap v-model="table_form.dateLap" @change="fetch"/>
         </div>
     </table-header>
     <el-table
@@ -97,7 +97,10 @@ export default {
 		}
   },
 	methods: {
-    
+     fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
     table_disable_selected(row){
       if(row.auditStatus!=1||(this.current==this.table_form.dateLap&&row.is_staff==0)){
         return false

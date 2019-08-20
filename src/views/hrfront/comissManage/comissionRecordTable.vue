@@ -105,7 +105,7 @@
 		>
 		
 		<div style="padding-left:10px">
-			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetchTableData"/>
+			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
     <el-table
@@ -225,6 +225,7 @@ export default {
 	},
 	watch:{
 		id(){
+			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
 		url(){
@@ -241,6 +242,10 @@ export default {
 		}
 	},
 	methods: {
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		async reset(){
 			if(this.table_form.dateLap!==null){
 				if(this.url=='commission/presoncommcollect'){

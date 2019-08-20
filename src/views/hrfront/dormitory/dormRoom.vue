@@ -273,6 +273,7 @@ export default {
   },
   watch:{
     id(){
+      this.table_form.currentpage = 1
       this.fetchTableData()
     }
   },

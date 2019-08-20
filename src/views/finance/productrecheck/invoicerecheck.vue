@@ -88,7 +88,7 @@
 				</el-select>
 			</div>
 			<div style="padding-left:10px">
-				<dateLap type="1" v-model="table_form.dateLap" @change="fetchTableData"/>
+				<dateLap type="1" v-model="table_form.dateLap" @change="fetch"/>
 			</div>	
 		</table-header>
 		<el-table
@@ -182,6 +182,10 @@ export default {
         };
     },
     methods: {
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		invioce_validate(){
             return new Promise((resolve,reject)=>{
                 this.$refs.form2.validate((valid) => {

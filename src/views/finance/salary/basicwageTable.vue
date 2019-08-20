@@ -61,7 +61,7 @@
       :table_column="table_field"
     >
           <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+            <dateLap v-model="table_form.dateLap" @change="fetch"/>
           </div>
     </table-header>
     <el-table
@@ -133,10 +133,15 @@ export default {
   },
   watch:{
     id(){
+      this.table_form.currentpage = 1
       this.fetchTableData()
     }
   },
   methods: {
+    fetch(){
+        this.table_form.currentpage = 1
+        this.fetchTableData()
+    },
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true

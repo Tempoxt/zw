@@ -36,7 +36,7 @@
 			>
 			<div style="padding-left:10px" v-if="insure_status==1">
 				<!-- <span>社保主体:  </span> -->
-				<el-select v-model="table_form.socialSecurityMain" clearable @change="fetchTableData" placeholder="请选择社保主体">
+				<el-select v-model="table_form.socialSecurityMain" clearable @change="fetch" placeholder="请选择社保主体">
 					<el-option
 					v-for="item in company"
 					:key="item.id"
@@ -46,7 +46,7 @@
 				</el-select>
 			</div>
 			<div style="padding-left:10px" v-if="insure_status==2">
-				<dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+				<dateLap v-model="table_form.dateLap" @change="fetch"/>
 			</div>
 		</table-header>
 		<el-table
@@ -139,6 +139,7 @@ export default {
 	},
 	watch:{
 		id(){
+            this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
 		insure_status(){
@@ -161,6 +162,10 @@ export default {
 		}
 	},
 	methods: {
+		fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		reset(){
 			this.$request.put('staffinsure/socialinsurereset',{foo:'bar'})
 			this.fetchTableData();

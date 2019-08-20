@@ -155,7 +155,7 @@
       :table_form.sync="table_form"
     >
 		<div style="padding-left:10px">
-          <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+          <dateLap v-model="table_form.dateLap" @change="fetch"/>
         </div>
 	</table-header>
 
@@ -269,6 +269,7 @@ export default {
 	watch:{
 		// 
 		async currentMenuid(id){
+            this.table_form.currentpage = 1
 			this.table_form.orgid = id 
 			this.$refs.table_pagination.reset()
 			await this.table_init_status
@@ -284,7 +285,10 @@ export default {
 		}
 	},
 	methods: {
-		
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		getSummaries(param) {
 			const { columns, data } = param;
 			const sums = [];

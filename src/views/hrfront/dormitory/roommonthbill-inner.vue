@@ -210,6 +210,7 @@ export default {
   },
   watch:{
     id(){
+      this.table_form.currentpage = 1
       this.fetchTableData()
     },
   },
@@ -218,6 +219,7 @@ export default {
       this.import();
     },
     changeMonth(){
+      this.table_form.currentpage = 1
         this.table_form.month = this.month
         this.fetchTableData()
     },
@@ -260,6 +262,7 @@ export default {
         this.dialogFormVisible = true
     },
     async changeFormMonth(){
+      this.table_form.currentpage = 1
       const { rows } = this.$request.get('dormitory/dormmonthbill',{
         params:{
           dorm:this.form.dorm,

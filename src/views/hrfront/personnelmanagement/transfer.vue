@@ -68,7 +68,7 @@
       :table_column="table_field"
     >
       <div style="padding-left:10px">
-        <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+        <dateLap v-model="table_form.dateLap" @change="fetch"/>
       </div>
     </table-header>
     <el-table
@@ -154,6 +154,10 @@ export default {
   },
 
   methods: {
+    fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
     async handleForm3Submit(){
       this.form3.ids = this.$refs.OrgSelect.getIdsResult()
       let form = Object.assign({},this.form3)

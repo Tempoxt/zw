@@ -69,7 +69,7 @@
 			>
 		
 			<div style="padding-left:10px">
-				<dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+				<dateLap v-model="table_form.dateLap" @change="fetch"/>
 			</div>
 		</table-header>
 		<el-table
@@ -160,7 +160,8 @@ export default {
 		}
 	},
 	watch:{
-		id(){
+		id(){ 
+			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
 		async 'form.fatherDepart'(){
@@ -170,6 +171,10 @@ export default {
 		}
 	},
 	methods: {
+		fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		clearDepart(){
 			this.form.department = ''
 			this.$nextTick(()=>{

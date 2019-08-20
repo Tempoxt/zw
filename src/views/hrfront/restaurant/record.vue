@@ -13,7 +13,7 @@
       :table_column="table_field"
     >
         <div style="padding-left:10px">
-          <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+          <dateLap v-model="table_form.dateLap" @change="fetch"/>
         </div>
     </table-header>
     <el-table
@@ -28,7 +28,7 @@
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
       
-    >record
+    >
     <el-table-column 
       type="selection" 
       width="60" 
@@ -72,11 +72,16 @@ export default {
 	},
 	watch:{
 		flag(){
+            this.table_form.currentpage = 1
 			this.fetchMenu()
 			this.fetchTableData()
 		}
 	},
 	methods: {
+		fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		async fetchTableData() {
 			this.table_loading = true;
 			this.table_form.flag = this.flag

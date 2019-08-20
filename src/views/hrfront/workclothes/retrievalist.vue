@@ -113,7 +113,7 @@
       :table_column="table_field"
     >
      <div style="padding-left:10px">
-       <dateLap v-model="table_form.dateLap" @change="fetchTableData" type="3" />
+       <dateLap v-model="table_form.dateLap" @change="fetch" type="3" />
      </div>
     </table-header>
     <el-table
@@ -186,6 +186,10 @@ export default {
   },
 
   methods: {
+     fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
     async fetchTableData() {
     //  this.$side.getTree()
      this.table_loading = true;

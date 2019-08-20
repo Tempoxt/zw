@@ -13,7 +13,7 @@
             :table_column="table_field"
         >
             <div style="padding-left:10px">
-                <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
+                <dateLap v-model="table_form.dateLap" @change="fetch"/>
             </div>
         </table-header>
         <el-table
@@ -68,6 +68,10 @@ export default {
         };
     },
     methods: {
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
         async fetchTableData() {
             this.table_loading = true;
             const {rows , total }= await api_resource.get(this.table_form);

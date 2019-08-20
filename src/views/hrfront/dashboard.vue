@@ -33,134 +33,132 @@
 			</el-tab-pane>
 
 			<el-tab-pane label="数据分析" name="dataAnalysis">
-					<div class="outside">
-				<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-					<el-row>
-						<el-form ref="form" :model="form" label-width="90px">
-							<el-col :span="12">
-								<el-popover
-									popper-class="maxheight"
-									placement="bottom"
-									width="300"
-									style="height:500px"
-									trigger="click"
-									v-model="visible"
-									>
-									<!-- <org v-model="orgid"></org> -->
-									<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-										<div style="padding:20px">
-										<div class="side-header">
-											<el-input placeholder="快速查找" v-model="filterText" class="input">
-											<i slot="suffix" class="el-input__icon el-icon-search"></i>
-											</el-input>
-										
-										</div>
-
-										<el-tree
-											class="tree"
-											:data="data2"
-											:props="{children: 'subs', label: 'name' }"
-											default-expand-all
-											node-key="orgid"
-											:filter-node-method="filterNode"
-											ref="tree2"
-											:highlight-current="true"
-											:check-on-click-node="false"
-											@node-click="handleChangeNode"
-											:expand-on-click-node="false"
+				<div class="outside">
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:25px">
+						<el-row>
+							<el-form ref="form" :model="form" label-width="90px">
+								<el-col :span="12">
+									<el-popover
+										popper-class="maxheight"
+										placement="bottom"
+										width="300"
+										style="height:500px"
+										trigger="click"
+										v-model="visible"
 										>
-											<span slot-scope="{ node, data }">
+										<!-- <org v-model="orgid"></org> -->
+										<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+											<div style="padding:20px">
+											<div class="side-header">
+												<el-input placeholder="快速查找" v-model="filterText" class="input">
+												<i slot="suffix" class="el-input__icon el-icon-search"></i>
+												</el-input>
+											
+											</div>
 
-											<span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
-											<span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
-											<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
-											&nbsp;
-											<span>{{ node.label }}</span>
-											</span>
-										</el-tree>
+											<el-tree
+												class="tree"
+												:data="data2"
+												:props="{children: 'subs', label: 'name' }"
+												default-expand-all
+												node-key="orgid"
+												:filter-node-method="filterNode"
+												ref="tree2"
+												:highlight-current="true"
+												:check-on-click-node="false"
+												@node-click="handleChangeNode"
+												:expand-on-click-node="false"
+											>
+												<span slot-scope="{ node, data }">
+
+												<span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
+												<span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+												<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
+												&nbsp;
+												<span>{{ node.label }}</span>
+												</span>
+											</el-tree>
+											
+											</div>
+										</el-scrollbar>
 										
-										</div>
-									</el-scrollbar>
-									
-									<el-input 
-										slot="reference"
-										size="small"
-										style="width: 240px;"
-										placeholder="深圳市兆威机电股份有限公司"
-										:value="input5"
-										suffix-icon="el-icon-caret-bottom">
-									</el-input>
-								</el-popover>
-								<!-- <div class="selectdate">
-									<DateLap></DateLap>
-								</div> -->
+										<el-input 
+											slot="reference"
+											size="small"
+											style="width: 240px;"
+											placeholder="深圳市兆威机电股份有限公司"
+											:value="input5"
+											suffix-icon="el-icon-caret-bottom">
+										</el-input>
+									</el-popover>
+									<!-- <div class="selectdate">
+										<DateLap></DateLap>
+									</div> -->
+								</el-col>
+							</el-form>
+							<el-col :span="12" class="operating-btn">
+									<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
+									<!-- <el-button plain icon="el-icon-download" >全部下载</el-button>-->
 							</el-col>
-						</el-form>
-					<el-col :span="12" class="operating-btn">
-							<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
-							<!-- <el-button plain icon="el-icon-download" >全部下载</el-button>-->
-					</el-col>
-					</el-row>
-					<el-row>
-					<el-col :span="12">
-						<inService
-						id="ring-diagram"
-						title="在职人数统计"  
-						:show="checkFullshow" 
-						:datas = staffData
-						ref="echart1" 
-						screenIndex='1'
-						@fullScreen="fullScreen"
-						:class="{'speech-mode':screenIndex=='1'}"
-						></inService>
-						<div class="totalR">总人数:{{totalP}}</div>
-					</el-col>
-					<el-col :span="12" class="padding-left-10">
-						<pieChart  
-						:show="checkFullshow"
-						ref="echart2"
-						title="男女比例统计" 
-						id="men-and-women"
-						screenIndex='2'
-						@fullScreen="fullScreen"
-						:color="['#3889FF','#FF64C6']"
-						:datas="sexData"
-						:class="{'speech-mode':screenIndex=='2'}"
-						></pieChart>
-					</el-col>
-					</el-row>
-					<el-row>
-					<el-col :span="12">
-						<pieChart 
-						:show="checkFullshow"
-							ref="echart3"
-							title="学历分布统计" 
-						id="education"
-						screenIndex='3'
-						@fullScreen="fullScreen"
-						:datas="eduLevelData"
-							:class="{'speech-mode':screenIndex=='3'}"
-						></pieChart>
-					</el-col>
-					<el-col :span="12" class="padding-left-10">
-							<barChart 
-							:show="checkFullshow" 
-							ref="echart4" 
-							title="各年龄段男女占比统计" 
-							screenIndex='4'
-							@fullScreen="fullScreen"
-							id="ege-data"
-							:datas="eachageData"
-							:class="{'speech-mode':screenIndex=='4'}"
-							></barChart>
-					</el-col>
-					</el-row>
-				</el-scrollbar></div>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								<inService
+								id="ring-diagram"
+								title="在职人数统计"  
+								:show="checkFullshow" 
+								:datas = staffData
+								ref="echart1" 
+								screenIndex='1'
+								@fullScreen="fullScreen"
+								:class="{'speech-mode':screenIndex=='1'}"
+								></inService>
+								<div class="totalR">总人数:{{totalP}}</div>
+							</el-col>
+							<el-col :span="12" class="padding-left-10">
+								<pieChart  
+								:show="checkFullshow"
+								ref="echart2"
+								title="男女比例统计" 
+								id="men-and-women"
+								screenIndex='2'
+								@fullScreen="fullScreen"
+								:color="['#3889FF','#FF64C6']"
+								:datas="sexData"
+								:class="{'speech-mode':screenIndex=='2'}"
+								></pieChart>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								<pieChart 
+								:show="checkFullshow"
+								ref="echart3"
+								title="学历分布统计" 
+								id="education"
+								screenIndex='3'
+								@fullScreen="fullScreen"
+								:datas="eduLevelData"
+								:class="{'speech-mode':screenIndex=='3'}"
+								></pieChart>
+							</el-col>
+							<el-col :span="12" class="padding-left-10">
+								<barChart 
+								:show="checkFullshow" 
+								ref="echart4" 
+								title="各年龄段男女占比统计" 
+								screenIndex='4'
+								@fullScreen="fullScreen"
+								id="ege-data"
+								:datas="eachageData"
+								:class="{'speech-mode':screenIndex=='4'}"
+								></barChart>
+							</el-col>
+						</el-row>
+					</el-scrollbar>
+				</div>
 			</el-tab-pane>
-			
-			
 		</el-tabs>
-		<!--  -->
 	</div>
 <!--    <div style="width:300px">
         <el-progress :text-inside="true" :stroke-width="18" :percentage="0" style="margin-bottom:10px"></el-progress>

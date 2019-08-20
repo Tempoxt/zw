@@ -13,10 +13,10 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-if="m==1">
-			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetchTableData"/>
+			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
 		</div>
 		<div style="padding-left:10px" v-if="m==2">
-			<el-select v-model="form.quarter" placeholder="请选择" @change="fetchTableData">
+			<el-select v-model="form.quarter" placeholder="请选择" @change="fetch">
 				<el-option
 				v-for="item in quarter"
 				:key="item.season"
@@ -84,6 +84,7 @@ export default {
 	},
 	watch:{
 		id(){
+			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
 		url(){
@@ -96,6 +97,10 @@ export default {
 		}
 	},
 	methods: {
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		async reset(){
 			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
 			this.$message.success({message: mes})

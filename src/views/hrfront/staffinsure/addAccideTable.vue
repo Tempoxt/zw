@@ -58,7 +58,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-if="insure_status==2">
-			<el-select v-model="table_form.serialNumber" placeholder="请选择流水号" clearable filterable @change="fetchTableData">
+			<el-select v-model="table_form.serialNumber" placeholder="请选择流水号" clearable filterable @change="fetch">
 				<el-option
 					v-for="item in serialnumber"
 					:key="item.serialNumber"
@@ -143,6 +143,7 @@ export default {
 	},
 	watch:{
 		id(){
+            this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
 		insure_status(){
@@ -168,6 +169,10 @@ export default {
 		}
 	},
 	methods: {
+		fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		async fetchTableData() {
 			if(!this.id){
 				return

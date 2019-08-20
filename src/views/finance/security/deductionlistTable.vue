@@ -99,7 +99,7 @@
           v-model="table_form.month"
           type="month"
           size="medium"
-          @change="fetchTableData"
+          @change="fetch"
           format="yyyy年MM月"
           value-format="yyyy-MM"
           placeholder="选择月份">
@@ -168,10 +168,15 @@ export default {
   },
   watch:{
     id(){
+      this.table_form.currentpage = 1
       this.fetchTableData()
     }
   },
   methods: {
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
     async fetchTableData() {
      if(!this.id){
        return

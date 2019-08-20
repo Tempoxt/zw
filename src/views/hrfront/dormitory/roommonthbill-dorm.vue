@@ -211,6 +211,7 @@ export default {
   },
   watch:{
     id(val){
+      this.table_form.currentpage = 1
       this.fetchTableData()
     },
   },
@@ -219,6 +220,7 @@ export default {
       this.import();
     },
     changeMonth(){
+        this.table_form.currentpage = 1
         this.table_form.month = this.month
         this.fetchTableData()
     },
