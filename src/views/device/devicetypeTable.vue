@@ -12,9 +12,9 @@
             >
             <el-form ref="form" :model="form"  label-width="110px" :rules="rules">
 				<el-row >
-					<el-col :span="18" :offset="2">
+					<!-- <el-col :span="18" :offset="2">
 						<form-render :type="`input`" prop="uniueTitle" :disabled="!isInsert" :field="{name:'唯一标识'}" v-model="form.uniueTitle" />
-					</el-col>
+					</el-col> -->
 					<el-col :span="18" :offset="2">
 						<form-render :type="`input`" prop="title" :field="{name:'类型名称'}" v-model="form.title" />
 					</el-col>
