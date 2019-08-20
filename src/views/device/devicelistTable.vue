@@ -40,7 +40,7 @@
                             <form-render :type="`select`" prop="office" :field="{name:'归属办公地点',options:addressData}" v-model="form.office"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
-                            <form-render :type="`radio`" prop="deviceStatus" :field="{name:'设备状态',options:statusData}" v-model="form.deviceStatus"/>
+                            <form-render :type="`radio`" prop="deviceStatus" :field="{name:'设备状态',options:[{'label':'启用','value':1},{'label':'禁用','value':2}]}" v-model="form.deviceStatus"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -212,14 +212,14 @@ export default {
         async getAddress(){
             this.addressData = (await this.$request.get('devicemanager/getofficeaddress')).map(o=>{return {label:o.name,value:o.value}})
         },
-        async getStatus(){
-            this.statusData = (await this.$request.get('devicemanager/getdevicestatus')).map(o=>{return {label:o.name,value:o.value}})
-        },
+        // async getStatus(){
+        //     this.statusData = (await this.$request.get('devicemanager/getdevicestatus')).map(o=>{return {label:o.name,value:o.value}})
+        // },
         add(){
             this.dialogFormVisible = true
             this.getDevice()
             this.getAddress()
-            this.getStatus()
+            // this.getStatus()
             this.form = this.defaultForm()
         },
         
@@ -227,7 +227,7 @@ export default {
 			this.dialogFormVisible = true
             this.getDevice()
             this.getAddress()
-            this.getStatus()
+            // this.getStatus()
             let row = this.table_selectedRows[0];
 			this.form = await api_resource.find(row.id)
 		},
