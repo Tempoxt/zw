@@ -13,7 +13,7 @@
                  <el-form ref="form" :model="form" label-width="110px" :rules="rules">
                     <el-row :gutter="20">
                         <el-col :span="20" :offset="2">
-                            <form-render :type="`select`" prop="deviceType" :field="{name:'设备类型',options:deviceData}" v-model="form.deviceType"/>
+                            <form-render :type="`select`" prop="deviceType" :disabled="!isInsert" :field="{name:'设备类型',options:deviceData}" v-model="form.deviceType"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
                             <form-render :type="`input`" prop="deviceName" :field="{name:'设备名称'}" v-model="form.deviceName"/>
