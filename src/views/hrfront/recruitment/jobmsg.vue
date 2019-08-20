@@ -430,7 +430,7 @@ export default {
         return {
             activeName:'first',
             form_activeName:'first',
-            table_topHeight:300,
+            table_topHeight:286,
             form:defaultForm(),
             defaultForm,
             api_resource:api_common.resource(this.url),

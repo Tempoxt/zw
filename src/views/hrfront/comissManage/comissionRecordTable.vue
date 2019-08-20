@@ -171,7 +171,7 @@ export default {
 			form:{},
 			form1:{},
 			form2:{},
-			table_topHeight:286,
+			table_topHeight:276,
 			dialogForm1Visible:false,
 			dialogFormVisible:false,
 			importUploadUrl:'commission/commissionSet/person/upload',

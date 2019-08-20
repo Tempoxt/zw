@@ -76,7 +76,7 @@ export default {
 			orgCategory:[],
 			form:{},
 			queryDialogFormVisible:true,
-			table_topHeight:286,
+			table_topHeight:276,
 			dialogForm1Visible:false,
 			dialogFormVisible:false,
 			quarter:[]

@@ -149,7 +149,7 @@ export default {
 			loading: true,
 			form:{},
 			api_resource,
-			table_topHeight:259,
+			table_topHeight:226,
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			defaultForm,
