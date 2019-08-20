@@ -153,13 +153,21 @@ export default {
       handler(){
         this.checkList = this.table_column.filter(item=>(!item.fed_isvisiable)).map(item=>item.id)
       }
+    },
+    table_actions(){
+      let otherActions = this.table_actions.slice(this.table_actions_morelen,this.table_actions.length)
+      if(otherActions.length==1){
+        this.table_actions_morelen = 5
+      }else{
+        this.table_actions_morelen = 4
+      }
     }
   },
   data() {
     return {
       table_actions_morelen: 4,
       form: {},
-      checkList:[]
+      checkList:[],
     };
   },
   methods: {
