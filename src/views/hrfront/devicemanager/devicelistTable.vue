@@ -21,10 +21,10 @@
 				</el-row>
 				<el-row  v-if="isInsert">
 					<el-col :span="12">
-						<form-render :type="`select`" :field="{name:'设备类型',options:deviceData}" placeholder="请选择" v-model="typew" />
+						<form-render :type="`select`" prop="deviceType" :field="{name:'设备类型',options:deviceData}" placeholder="请选择" v-model="form.deviceType" />
 					</el-col>
 					<el-col :span="12">
-						<form-render :type="`select`" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
+						<form-render :type="`select`" prop="device" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
 					</el-col>
 				</el-row>
 				<el-row  v-else>
@@ -39,6 +39,7 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+                 <!-- :disabled="disabled" -->
             </div>
         </el-dialog>
 
@@ -104,22 +105,33 @@ export default {
             nameData:[],
             typew:'',
             rules:{
+                deviceType:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
                 device:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
             }
         };
     },
+    computed:{
+        disabled(){
+            if(this.form.deviceType!=''&&this.form.device!=''){
+                return false
+            }
+            return true
+        }
+    }, 
     watch:{
         id(){
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-        typew(){
+        'form.deviceType'(){
             if(this.isInsert){
                 this.form.device = []
             }
-            if(this.typew!==''){
+            if(this.form.deviceType!==''&&this.form.deviceType!=undefined){
                 this.getName()
             }
         }
@@ -148,45 +160,42 @@ export default {
             this.deviceData = (await this.$request.get('devicemanager/getdevicetype')).map(o=>{return {label:o.name,value:o.value}})
         },
         async getName(){
-            // this.nameData = await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.typew)
-            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.typew)).map(o=>{return {label:o.name,value:o.value}})
+            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.form.deviceType)).map(o=>{return {label:o.name,value:o.value}})
         },
         add(){
-            this.typew = ''
             this.form = {}
+            this.$nextTick(()=>{
+                this.$refs['form'].clearValidate()
+            })
             this.getDevice()
             this.dialogFormVisible = true
         },
         async edit(){
-            console.log(this.form,'pppppp')
-            let row = this.table_selectedRowsInfo[0];
-            this.dialogFormVisible = true
-            this.form  = await this.api_resource.find(row.id) 
-            this.typew = this.form.deviceType
-            this.getDevice()
-            // let form = await this.api_resource.find(row.id)
-            // let device = form.device.map(o=>o.device_id)
-            // console.log(device,'xxxxx')
-            // console.log(this.form.device,'dddd')
-            console.log(this.form,'qqqqq')
+            // let row = this.table_selectedRowsInfo[0];
+            // this.dialogFormVisible = true
+            // this.form  = await this.api_resource.find(row.id) 
+            // this.typew = this.form.deviceType
+            // this.getDevice()
         },
         async handleFormSubmit(){
+            await this.form_validate()
             console.log(this.form,'ffffff')
-            let device = this.form.device.join(',')
-            this.form.device = device
-            if(this.isInsert){
-                this.form.staff = this.$refs.OrgSelect.getIdsResult()
+            this.form.staff = this.$refs.OrgSelect.getIdsResult()
+            if(this.form.staff==''){
+                console.log(this.form,'ddddddddddd')
+                this.$message.error('请选择人员')
+            }else{
+                if(this.form.device!=''){
+                    let device = this.form.device.join(',')
+                    this.form.device = device
+                }
                 let form = Object.assign({},this.form)
                 await api_resource.create(form)
-            }else{
-                let form = Object.assign({},this.form)
-                await api_resource.update(form.id,form)
+                this.dialogFormVisible = false
+                this.fetchTableData()
             }
-            this.dialogFormVisible = false
-            this.fetchTableData()
-            // await this.throwFormError(api_resource.create(this.form))
-            // this.dialogFormVisible = _.stubFalse()
-            
+            // this.dialogFormVisible = false
+            // this.fetchTableData()
         }
     },
     async created() {
