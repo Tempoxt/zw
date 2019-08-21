@@ -268,7 +268,7 @@ export default {
       memberList:[],
       rows2:[],
       importUploadUrl:'',
-      downloadUrl:''
+      downloadUrl:'/dormitory/import/checkin'
     };
   },
   watch:{
@@ -279,14 +279,14 @@ export default {
   },
   methods: {
     importCheckIn(){
-      this.import()
       this.importUploadUrl = '/dormitory/import/checkin'
       this.downloadUrl = "/dormitory/import/checkin"
+      this.import()
     },
     importCheckOut(){
-      this.import()
       this.importUploadUrl = '/dormitory/import/confirmout'
       this.downloadUrl = "/dormitory/import/confirmout"
+      this.import()
     },
     log(data){
         console.log(data,'data')

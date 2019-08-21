@@ -449,7 +449,9 @@ export default {
       let {
         handleImportChange,
       } = this
-      MessageBox.alert(
+      if(this.downloadUrl!=''&&this.downloadUrl!=undefined){
+        console.log(this.downloadUrl)
+        MessageBox.alert(
           <el-button-group class="table-import-upload" ref="import">
             <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
             <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
@@ -459,6 +461,17 @@ export default {
           showConfirmButton:false,
           center:true
         });
+      }else{
+        MessageBox.alert(
+          <el-button-group class="table-import-upload" ref="import">
+            <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+            <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+          </el-button-group>
+          , '选择文件导入', {
+          showConfirmButton:false,
+          center:true
+        });
+      }
     },
     // tree table.......---------------------
     table_tree_showRow: function(row) {

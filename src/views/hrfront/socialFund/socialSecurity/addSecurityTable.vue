@@ -162,6 +162,10 @@ export default {
 		}
 	},
 	methods: {
+		importSocialInsuranceNum(){
+			this.importUploadUrl = '/staffinsure/socialinsuranceinport'
+			this.import()
+		},
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
