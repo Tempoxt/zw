@@ -298,13 +298,12 @@
 				this.sexData = analysis.sex_stat;
 				this.eduLevelData = analysis.eduLevel_stat;
 				this.eachageData = analysis.each_age_sex_stat
-				console.log(this.staffData,'1111')
-				console.log(this.sexData,'2222')
-				console.log(this.eduLevelData,'3333')
-				console.log(this.eachageData,'4444')
+				// console.log(this.staffData,'1111')
+				// console.log(this.sexData,'2222')
+				// console.log(this.eduLevelData,'3333')
+				// console.log(this.eachageData,'4444')
 				let per = this.staffData.map(o=>o.value)
 				this.totalP = per.reduce((tem,item,index)=>tem+item)
-				console.log(this.totalP)
 			}
 		}
     },
