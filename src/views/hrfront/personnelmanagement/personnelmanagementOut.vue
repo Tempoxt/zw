@@ -288,6 +288,20 @@
         </Drawer>
     </div>
 
+     <el-dialog
+      :visible.sync="dialogForm3Visible"
+      class="public-dialog preview"
+      v-el-drag-dialog
+      @close="closeBigImg"
+      >
+        <el-carousel trigger="click" :autoplay="false" :initial-index="index">
+            <el-carousel-item v-for="item in list" :key="item">
+               <img style="width:100%;height:100%" :src="baseUrl+item">
+               <!-- <img style="width:100%;height:100%" src="http://e.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9eac1754f45df39b6003bf3b396.jpg"> -->
+            </el-carousel-item>
+        </el-carousel>
+    </el-dialog>
+
     <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
@@ -357,6 +371,9 @@ export default {
       table_topHeight:296,
       profileData:{},
       openDrawers: false,
+      dialogForm3Visible:false,
+      list:[],
+      index:null,
     };
   },
   watch:{
@@ -386,23 +403,31 @@ export default {
         this.fetchProfileData()
       }
     },
-    previewImg(e){//图片预览功能
-      this.bigImg = baseUrl+e.target.dataset.img
-      this.maskBtn = true;
-      this.$nextTick(function() {
-        var imgShowMask = document.getElementById('img-show-mask');
-        var img = document.getElementById('bigImg');
-        var w = document.documentElement.clientWidth || document.body.clientWidth;
-        var h = document.documentElement.clientHeight || document.body.clientHeight;
-        var offsetY=window.pageYOffset;
-        var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-        imgShowMask.style.height=scrollHeight+'px';
-        img.style.left=(w/2-250)+'px';
-        img.style.top=(h/2-70+offsetY)+'px';
-      });
+    previewImg(img){//图片预览功能
+        let allImgs = this.profileData.cardRecords.map(o=>o.cardConnects)
+        this.list = allImgs.flat()
+        this.index = this.list.indexOf(img)
+        this.dialogForm3Visible = true
     },
-    closeBigImg: function() { //关闭图片预览
-      this.maskBtn = false;
+    // previewImg(e){//图片预览功能
+    //   this.bigImg = baseUrl+e.target.dataset.img
+    //   this.maskBtn = true;
+    //   this.$nextTick(function() {
+    //     var imgShowMask = document.getElementById('img-show-mask');
+    //     var img = document.getElementById('bigImg');
+    //     var w = document.documentElement.clientWidth || document.body.clientWidth;
+    //     var h = document.documentElement.clientHeight || document.body.clientHeight;
+    //     var offsetY=window.pageYOffset;
+    //     var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    //     imgShowMask.style.height=scrollHeight+'px';
+    //     img.style.left=(w/2-250)+'px';
+    //     img.style.top=(h/2-70+offsetY)+'px';
+    //   });
+    // },
+    closeBigImg() { //关闭图片预览
+        this.dialogForm3Visible = false;
+        this.index = ""
+        this.list = []
     },
     cellStyle({row, column, rowIndex, columnIndex}){
       if(column.label == '工号'){
