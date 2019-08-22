@@ -9,6 +9,7 @@
     >
    
     <div style="position: relative;">
+        <!-- url -->
         <img id="cropimage" :src="url" ref="image" :style="`height:${imgHeight}px`">
         <div class="button-actions">
             <el-button-group>
@@ -71,6 +72,8 @@ export default {
             this.$nextTick(()=>{
                 const image = document.getElementById('cropimage');
                         this.cropper = new Cropper(this.$refs.image, {
+                        aspectRatio: 16 / 9,
+                        minCropBoxWidth:500,
                         crop(event) {
                            
                         },

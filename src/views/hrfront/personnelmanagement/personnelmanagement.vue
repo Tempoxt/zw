@@ -661,6 +661,7 @@
                 <div class="demo-drawer-profile flexImg">
                     <div class="idCard" v-for="item in profileData.cardRecords" :key="item.id">
                         <p class="imgInfo">{{item.cardName}}</p>
+                        <!-- baseUrl+img -->
                         <img class="posti" v-for="img in item.cardConnects" :key="img" :src="baseUrl+img" alt="" @click="previewImg(img)">
                     </div>
                 </div>
@@ -1223,8 +1224,13 @@ export default {
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
         },
         previewImg(img){//图片预览功能
-            let allImgs = this.profileData.cardRecords.map(o=>o.cardConnects)
-            this.list = allImgs.flat()
+            let allImgs = this.profileData.cardRecords.map(o=>o.cardConnects)||[]
+            this.list = []
+            allImgs.forEach(o=>{
+                 o.forEach((url)=>{
+                     this.list.push(url)
+                 })
+            })
             this.index = this.list.indexOf(img)
             this.dialogForm3Visible = true
         },
