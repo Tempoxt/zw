@@ -154,7 +154,7 @@ import table_mixin from "@c/Table/table_mixin";
 import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 import { setTimeout } from 'timers';
-const api_resource = api_common.resource("commission/commissionSet/person");
+let api_resource = api_common.resource("commission/commissionSet/person");
 export default {
 	mixins: [table_mixin],
 	props:['id','url'],
@@ -236,9 +236,12 @@ export default {
 			if(this.url=='commission/presoncommcollect'){
 				this.importUploadUrl = 'commission/commissionSet/person/upload'
 				this.downloadUrl= 'commission/commissionSet/person/downtemplate'
-			}else{
+			}else if(this.url=='commison/cuscommdetail'){
+				this.api_resource = api_common.resource("commission/commissionSet/customer");
 				this.importUploadUrl = 'commission/commissionSet/customer/import'
 				this.downloadUrl= 'commission/commissionSet/customer/import'
+			}else if(this.url=='commission/receiptCommDetail'){
+				this.api_resource = api_common.resource("commission/commissionSet/receiptDetail");
 			}
 		}
 	},

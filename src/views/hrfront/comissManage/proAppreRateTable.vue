@@ -95,6 +95,11 @@ export default {
 			this.fetchQuarter()
 			this.form.quarter = this.quarter[0].season;
 			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+			if(this.url=='commission/monthDetail'){
+				this.api_resource = api_common.resource("commission/valueIncrease");
+			}else if(this.url=='commission/quarterstat'){
+				this.api_resource = api_common.resource("commission/seasonValueIncrease");
+			}
 		}
 	},
 	methods: {
