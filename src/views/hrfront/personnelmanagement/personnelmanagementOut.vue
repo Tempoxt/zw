@@ -342,12 +342,14 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hrm/v2/quitstaff");
 import dayjs from 'dayjs'
+let baseUrl = process.env.VUE_APP_STATIC
 export default {
   mixins: [table_mixin],
   props:['orgid'],
   data() {
     return {
       loading: true,
+      baseUrl,
       form:{},
       api_resource,
       orgCategory:[],
