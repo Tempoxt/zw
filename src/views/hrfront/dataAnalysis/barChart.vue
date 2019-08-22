@@ -81,9 +81,6 @@ export default {
 			  },
 			  color: ["#3889FF", "#FF64C6"],
 			  calculable: true,
-			  	// grid: {
-				// 	top: '90',
-				// },
 			  xAxis: [
 			    {
 			      type: "category",
@@ -114,12 +111,6 @@ export default {
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(this.id));
 				myChart.setOption(this.option);
-				// if(data.man.value!=''||data.woman.value!=''){
-				// 	myChart.setOption(this.option);
-				// }else{
-				// 	myChart.clear();
-				// }
-				
 				//建议加上以下这一行代码，不加的效果图如下（当浏览器窗口缩小的时候）。超过了div的界限（红色边框）
 				window.addEventListener('resize',function() {
 					$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));

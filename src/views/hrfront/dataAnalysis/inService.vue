@@ -1,7 +1,6 @@
 <template>
   <el-card class="box-card">
     <div :id="id" v-show="show" class="box-card-c"></div>
-		<!-- <div id="ring-diagram2" v-show="!show" class="box-card-c"></div> -->
 		<div :id="id+'2'" v-show="!show" class="box-card-c"></div>
   </el-card>
 </template>
@@ -40,32 +39,6 @@ export default {
 			let aaa = echarts.init(document.getElementById(this.id+"2"));//ring-diagram2
 			aaa.setOption(this.option);
 		},
-		base64ToBlob(code) {
-            let parts = code.split(';base64,');
-            let contentType = parts[0].split(':')[1];
-            let raw = window.atob(parts[1]);
-            let rawLength = raw.length;
-
-            let uInt8Array = new Uint8Array(rawLength);
-
-            for (let i = 0; i < rawLength; ++i) {
-                uInt8Array[i] = raw.charCodeAt(i);
-            }
-            return new Blob([uInt8Array], { type: contentType });
-        },
-        saveAsImage(id){
-			let myChart = echarts.init(document.getElementById(id));
-            let content = myChart.getDataURL();
-
-            let aLink = document.createElement('a');
-            let blob = this.base64ToBlob(content);
-
-            let evt = document.createEvent("HTMLEvents");
-            evt.initEvent("click", true, true);
-            aLink.download = "line.png";
-            aLink.href = URL.createObjectURL(blob);
-            aLink.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-        },
 		fullScreen(){
 			this.$emit("fullScreen",this.screenIndex)
 		},
@@ -83,7 +56,6 @@ export default {
 				right:20,
 				show: true,
 				itemSize:14,
-				// backgroundColor:'#333',
 			    orient: "horizontal",
 			    feature: {
 					myTool2: {
@@ -96,21 +68,10 @@ export default {
 							_this.fullScreen()
 						}
 					},
-				//    myTool3: {
-				// 	  show: true,
-				// 	  title:"保存为图片",
-			    //       icon: 'image://data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7',
-			    //       onclick: function (){
-			    //           _this.saveAsImage(id)
-			    //       }
-			    //   },
 					saveAsImage: {
 						show: true,
 						pixelRatio:2,
-						icon:'image://../../../../assets/logo.png',
-						// icon:'path://M640 469.333333h170.666667l-298.666667 298.666667-298.666667-298.666667h170.666667V85.333333h256v384zM213.333333 853.333333h597.333334v85.333334H213.333333v-85.333334z'
 						icon: 'path://M344.9661875 31.5h336.35a12.0125 12.0125 0 0 1 12.0125 12.0125l-1.20125 472.3315h137.7233125a12.0125 12.0125 0 0 1 8.5889375 20.42125L520.40875 859.2213125a12.0125 12.0125 0 0 1-16.937625 0.1801875L172.2865 536.4454375a12.0125 12.0125 0 0 1 8.40875-20.6014375h152.2584375V43.5125c0-6.606875 5.405625-12.0125 12.0125-12.0125zM61.53125 932.4375h900.9375a30.03125 30.03125 0 1 1 0 60.0625H61.53125a30.03125 30.03125 0 1 1 0-60.0625z',
-						
 					}
 			    }
 			  },
@@ -148,14 +109,6 @@ export default {
 			        }
 				  },
 				  data: data
-				//   data:  [
-			    //     { value: 335, name: "齿轮箱业务部" },
-			    //     { value: 310, name: "总裁办" },
-			    //     { value: 234, name: "管理部" },
-			    //     { value: 135, name: "经管部" },
-			    //     { value: 1548, name: "营业部" },
-			    //     { value: 1548, name: "注塑业务部" }
-			    //   ]
 			    }
 			  ]
 			};
@@ -168,12 +121,6 @@ export default {
 				}
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(id));
-				console.log(data.value,'vvvvvvvvvvv')
-				// if(data[0].value!=''){
-				// 	myChart.setOption(this.option);
-				// }else{
-				// 	myChart.clear();
-				// }
 				myChart.setOption(this.option);
 				window.addEventListener('resize',function() {
 					$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));

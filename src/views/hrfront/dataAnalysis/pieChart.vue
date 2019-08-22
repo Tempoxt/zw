@@ -46,9 +46,7 @@ export default {
 		},
 		init(id,data){
 			let _this=this;
-			
-			//   console.log(data,'222  init data length')
-			  this.option = {
+			this.option = {
 			    title: {
 			      text: this.title
 			    },
@@ -126,12 +124,6 @@ export default {
 				}
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(id));
-				console.log(data[0].value,'sssssssssss')
-				// if(data[0].value!=''){
-				// 	myChart.setOption(this.option);
-				// }else{
-				// 	myChart.clear();
-				// }
 				myChart.setOption(this.option);
 				window.addEventListener('resize',function() {
 					$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
@@ -141,13 +133,6 @@ export default {
 			  }
 		}
 	},
-	// created(){
-	// 	console.log('1111111')
-	// 	console.log(this.datas,'6666666666')
-	// 	this.$nextTick(() => {
-	// 		this.init()
-	// 	})
-	// }
 };
 </script>
 

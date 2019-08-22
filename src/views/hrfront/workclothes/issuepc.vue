@@ -72,7 +72,9 @@ export default {
 	},
 	watch:{
 		flag(){
-            this.table_form.currentpage = 1
+			this.table_form.query.query = []
+			this.table_form.keyword = ''
+      this.table_form.currentpage = 1
 			this.fetchMenu()
 			this.fetchTableData()
 		}

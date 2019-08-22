@@ -433,7 +433,6 @@ export default {
             responseType:'arraybuffer'
           })
           download(data,name||this.$route.meta.title,contentType)
-          // this.download()
           this.$message({
             message: '下载成功',
             type: 'success'
@@ -450,7 +449,6 @@ export default {
         handleImportChange,
       } = this
       if(this.downloadUrl!=''&&this.downloadUrl!=undefined){
-        console.log(this.downloadUrl)
         MessageBox.alert(
           <el-button-group class="table-import-upload" ref="import">
             <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
