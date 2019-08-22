@@ -155,7 +155,7 @@
       :table_form.sync="table_form"
     >
 		<div style="padding-left:10px">
-          <dateLap v-model="table_form.dateLap" @change="fetch"/>
+          <dateLap v-model="table_form.dateLap" disabled @change="fetch"/>
         </div>
 	</table-header>
 
