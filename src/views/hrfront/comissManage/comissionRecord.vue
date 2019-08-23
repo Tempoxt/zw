@@ -37,8 +37,6 @@
                 
                 </div>
             </el-scrollbar>
-            <!-- <org v-model="orgid" @change="changeOrg" :getApi='this.gteApi'/> -->
-            <!-- <org v-model="orgid" v-else @change="changeOrg" getApi="org?org_id=d4&showteam=1&showstaff=1"/>  v-if="this.view_activeName!='收款提成明细'"-->
         </div>
 
     </el-col>

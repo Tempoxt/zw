@@ -120,7 +120,6 @@
 		</div>
     </el-dialog>
 
-	<!-- 人员档案的信息预览 -->
 	<div>
 		<Drawer :closable="false" width="640" v-model="openDrawers">
 			<p class="detail"><span style="color:#37474F">{{chineseName}}({{emplCode}})</span>考勤明细</p>
