@@ -35,6 +35,8 @@
       overflow-x: hidden!important;
       .el-scrollbar__view {
         height: 100%;
+        padding-top: 20px;
+        background: rgb(48, 65, 86);
       }
     }
     .el-scrollbar__bar.is-vertical{

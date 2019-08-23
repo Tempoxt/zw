@@ -1365,8 +1365,12 @@ export default {
             await this.form_validate()
             let form = Object.assign({},this.form)
             if(this.isInsert){
-                await api_common.resource('hrm/staff').create(form)
-                // await api_resource.create(form)
+                try{
+                    await api_common.resource('hrm/staff').create(form)
+                    // this.$message.success('添加成功');
+                }catch(err){
+                    this.$message.error(err.field[0]);
+                }
             }else{
                 if(this.tab_label ==='联系方式'){
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
