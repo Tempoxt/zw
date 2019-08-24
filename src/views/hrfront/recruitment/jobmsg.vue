@@ -352,7 +352,7 @@ export default {
     watch:{
         url(){
 			this.table_form.query.query = []
-            this.table_form.keyword = ''
+            // this.table_form.keyword = ''
             this.table_form.currentpage = 1
             this.api_resource = api_common.resource(this.url)
             this.fetchMenu()

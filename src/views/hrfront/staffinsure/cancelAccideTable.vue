@@ -153,7 +153,7 @@ export default {
 		insure_status(){
 			this.table_form.sortname = 'id'
 			this.table_form.query.query = []
-			this.table_form.keyword = ''
+			// this.table_form.keyword = ''
 			this.table_form.currentpage = 1
 			this.fetchMenu()
 			if(this.insure_status==5){

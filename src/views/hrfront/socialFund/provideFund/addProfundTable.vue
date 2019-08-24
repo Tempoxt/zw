@@ -136,7 +136,7 @@ export default {
 				this.table_form.sortname = 'id'
 			}
 			this.table_form.query.query = []
-			this.table_form.keyword = ''
+			// this.table_form.keyword = ''
 			this.table_form.currentpage = 1
 			if(this.insure_status==2){
 				this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
