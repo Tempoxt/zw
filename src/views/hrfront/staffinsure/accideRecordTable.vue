@@ -13,9 +13,20 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-      <div style="padding-left:10px">
+    <div style="padding-left:10px">
+          <el-date-picker
+            v-model="table_form.dateLap"
+            type="month"
+            size="medium"
+            @change="fetch"
+            format="yyyy年MM月"
+            value-format="yyyy-MM"
+            placeholder="选择月份">
+          </el-date-picker>
+    </div>
+      <!-- <div style="padding-left:10px">
           <dateLap v-model="table_form.dateLap" @change="fetch"/>
-        </div>
+        </div> -->
     </table-header>
     <el-table
       @selection-change="handleChangeSelection"
@@ -51,15 +62,11 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("staffinsure/accidentinsrecord");
 export default {
 	mixins: [table_mixin],
   props:['id'],
-  components:{
-		dateLap
-	},
 	data() {
 		return {
       loading: true,

@@ -100,14 +100,12 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 import OrgSelect from '@/components/Org/OrgSelect'
-// import dateLap from '@/components/Table/DateLap'
 const api_resource = api_common.resource("hrm/quit");
 export default {
     mixins: [table_mixin],
     props:['flag'],
     components:{
       OrgSelect,
-    //   dateLap
     },
     data() {
         return {

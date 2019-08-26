@@ -125,7 +125,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("salary/achievement");
@@ -141,7 +140,6 @@ export default {
 	mixins: [table_mixin],
 	props:['id'],
 	components:{
-		dateLap,
 		OrgSelect
 	},
 	data() {

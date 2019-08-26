@@ -106,7 +106,6 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("transfer/record");
-import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 const defaultForm = () => {
@@ -122,7 +121,6 @@ export default {
         value:{},
     },
   components:{
-      dateLap,
       OrgSelect
   },
   data() {

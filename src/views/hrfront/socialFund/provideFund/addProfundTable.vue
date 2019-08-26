@@ -84,14 +84,10 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("staffinsure/accumulationfund");
 const download = require('downloadjs')
-import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
 	props:['id','insure_status'],	
-	components:{
-		dateLap
-	},
 	data() {
 		return {
 			loading: true,

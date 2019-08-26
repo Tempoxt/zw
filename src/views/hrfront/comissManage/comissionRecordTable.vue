@@ -151,16 +151,12 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 import { setTimeout } from 'timers';
 let api_resource = api_common.resource("commission/commissionSet/person");
 export default {
 	mixins: [table_mixin],
 	props:['id','url'],
-	components:{
-		dateLap
-	},
 	data() {
 		return {
 			loading: true,

@@ -140,7 +140,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import OrgSelect from '@/components/Org/OrgSelect'
 const api_resource = api_common.resource("commission/commissionSet");
 const defaultForm = () => {
     return {
@@ -152,9 +151,6 @@ const defaultForm = () => {
 }
 export default {
 	mixins: [table_mixin],
-	components:{
-		OrgSelect
-	},
 	data() {
 		var checkAmount = (rule, value, callback) => {
 			if (!value) {

@@ -178,8 +178,6 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("attendance/countlist");
-import dateLap from '@/components/Table/DateLap'
-import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
@@ -190,10 +188,6 @@ const defaultForm = () => {
 export default {
   mixins: [table_mixin],
   props:['id'],
-  components:{
-      dateLap,
-      OrgSelect
-  },
   computed:{
     count1(){
       return ['basicWage','overtime','weekendWelfare','welfare','fullAtt','minPerformance','performance'].map(o=>+this.formData[o]).reduce((total,num)=>(

@@ -174,7 +174,6 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hot/record");
-import dateLap from '@/components/Table/DateLap'
 import OrgSelect from '@/components/Org/OrgSelect'
 const defaultForm = () => {
     return {
@@ -186,7 +185,6 @@ export default {
   mixins: [table_mixin],
   props:['id'],
   components:{
-      dateLap,
       OrgSelect
   },
   data() {

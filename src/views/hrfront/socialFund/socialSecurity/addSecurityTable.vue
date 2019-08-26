@@ -82,7 +82,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import dateLap from '@/components/Table/DateLap'
 import dayjs from 'dayjs'
 import { setTimeout } from 'timers';
 const api_resource = api_common.resource("staffinsure/socialinsurance");
@@ -90,9 +89,6 @@ const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
 	props:['id','insure_status'],
-	components:{
-		dateLap
-	},
 	data() {
 		return {
 			loading: true,

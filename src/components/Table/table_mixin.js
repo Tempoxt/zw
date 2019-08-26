@@ -28,7 +28,8 @@ export default {
     tablePagination,
     tableColumn,
     eachTableColumn,
-    DateLapRange
+    DateLapRange,
+    dateLap
   },
   watch:{
     table_config(){

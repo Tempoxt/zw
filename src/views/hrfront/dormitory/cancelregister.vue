@@ -66,8 +66,6 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("dormitory/cancelregister");
-import dateLap from '@/components/Table/DateLap'
-import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 const defaultForm = () => {
     return {
@@ -77,11 +75,6 @@ const defaultForm = () => {
 }
 export default {
   mixins: [table_mixin],
- 
-  components:{
-      dateLap,
-      OrgSelect
-  },
   data() {
     return {
       loading: true,
