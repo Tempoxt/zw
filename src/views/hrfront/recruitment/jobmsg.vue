@@ -347,9 +347,13 @@ const defaultForm = function(){
     }
 }
 export default {
-    props:['url'],
+    props:['url','id'],
     mixins: [table_mixin],
     watch:{
+        id(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
         url(){
 			this.table_form.query.query = []
             // this.table_form.keyword = ''
@@ -401,6 +405,7 @@ export default {
         },
         async fetchTableData() {
             this.table_loading = true
+			this.table_form.orgid = this.id
             const {rows,total}  =  await this.api_resource.get(this.table_form);
             this.table_data = rows
            

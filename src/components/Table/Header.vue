@@ -42,7 +42,7 @@
 
     <div class="right-actions">
       <div class="right-aciton-item">
-        <el-select v-model="ttype" @change="changeSelect" placeholder="请选择" style="width:24%" class="select-list">
+        <el-select v-model="ttype" @change="changeSelect" placeholder="请选择" :style="{width:width}" class="select-list">
             <el-option
                 v-for="item in selectList"
                 :key="item.id"
@@ -50,7 +50,7 @@
                 :value="item.name">
             </el-option>
         </el-select><el-input
-          style="width:50%"
+          style="width:180px"
           placeholder="快速查找"
           v-model="table_form.keyword"
           class="actions-input"
@@ -61,7 +61,7 @@
         >
         </el-input>
       </div>
-      <el-button-group class="right-aciton-item" style="margin-left:-60px">
+      <el-button-group class="right-aciton-item">
         <el-tooltip class="item" effect="dark" content="全屏" placement="bottom">
           <el-button
             icon="icon iconfont icon-xingzhuang"
@@ -163,6 +163,20 @@ export default {
         this.selectList = this.table_column.filter(o=>(o.isquicksearch))
         this.ttype = this.selectList[0].name
         this.table_form.quicksearch = this.ttype
+        let len = this.selectList[0].showname.length
+        console.log(len)
+        if(len==2){
+          this.width = len*40+'px'
+        }else if(len==3){
+          this.width = len*30+'px'
+        }else if(len==4){
+          this.width = len*25+'px'
+        }else if(len>=5&&len<7){
+          this.width = len*23+'px'
+        }else if(len>=7){
+          this.width = len*18+'px'
+        }
+        
       }
     },
   },
@@ -172,13 +186,26 @@ export default {
       form: {},
       checkList:[],
       selectList:[],
-      ttype:''
+      ttype:'',
+      width:'80px'
     };
   },
   methods: {
     changeSelect(){
       this.table_form.quicksearch =  this.ttype
-      // this.table_form.keyword = ''
+      let list = this.selectList.filter(o=>o.name==this.ttype)
+      let len = list[0].showname.length
+      if(len==2){
+        this.width = len*40+'px'
+      }else if(len==3){
+        this.width = len*30+'px'
+      }else if(len==4){
+        this.width = len*25+'px'
+      }else if(len>=5&&len<7){
+        this.width = len*23+'px'
+      }else if(len>=7){
+        this.width = len*18+'px'
+      }
     },
     search(){
       this.table_form.currentpage = 1
@@ -200,7 +227,6 @@ export default {
     }
   },
   created(){
-    console.log(this.table_column,'ss')
     setTimeout(()=>{
         // console.log(this.table_column,'table_column')
     },2000)
@@ -260,7 +286,7 @@ export default {
         border-radius: 2px 0 2px 2px;
         text-align: center;
         height: 34px;
-        line-height: 34px
+        line-height: 34px;
       }
     }
     .actions-input {
