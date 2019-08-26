@@ -1372,6 +1372,8 @@ export default {
                 try{
                     await api_common.resource('hrm/staff').create(form)
                     // this.$message.success('添加成功');
+                    this.dialogFormVisible = false
+                    this.fetchTableData()
                 }catch(err){
                     this.$message.error(err.field[0]);
                 }
@@ -1384,13 +1386,15 @@ export default {
                     // await api_resource.update(form.id,form)
                 }
                 this.fetchProfileData()
+                this.dialogFormVisible = false
+                this.fetchTableData()
             }
             if(this.form_multiple){
                 this.form.introducer = ''
                 this.fetchTableData()
             }else{
-                this.dialogFormVisible = false
-                this.fetchTableData()
+                // this.dialogFormVisible = false
+                // this.fetchTableData()
             }  
         },
         async fetchProvinse(val){

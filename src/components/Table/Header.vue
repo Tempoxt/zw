@@ -49,8 +49,7 @@
                 :label="item.showname"
                 :value="item.name">
             </el-option>
-        </el-select>
-        <el-input
+        </el-select><el-input
           style="width:50%"
           placeholder="快速查找"
           v-model="table_form.keyword"

@@ -1,42 +1,38 @@
 <template>
 <div>
     <el-row class="h-full">
-        <el-col :span="5" class="h-full">
-            <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
+        <el-col :span="5">
                 <div style="padding:20px" class="h-full">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
                         <i slot="suffix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </div>
-                    
-            <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-                    <el-tree
-                        class="tree"
-                        :data="data2"
-                        :props="{children: 'subs', label: 'name' }"
-                        default-expand-all
-                        node-key="id"
-                        :filter-node-method="filterNode"
-                        ref="tree2"
-                        :highlight-current="true"
-                        :check-on-click-node="false"
-                        @node-click="handleChangeNode"
-                        :expand-on-click-node="false"
-                    >
-                    <div slot-scope="{ node, data }" class="flexSpace">
+                    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+                        <el-tree
+                            class="tree"
+                            :data="data2"
+                            :props="{children: 'subs', label: 'name' }"
+                            default-expand-all
+                            node-key="id"
+                            :filter-node-method="filterNode"
+                            ref="tree2"
+                            :highlight-current="true"
+                            :check-on-click-node="false"
+                            @node-click="handleChangeNode"
+                            :expand-on-click-node="false"
+                        >
+                            <div slot-scope="{ node }" class="flexSpace">
 
-                        <div>
-                            <span class="icon iconfont icon-wenjian"></span>
-                            &nbsp;
-                            <span>{{ node.label }}</span>
-                        </div>
-                    </div>
-                </el-tree>
-                
-            </el-scrollbar>
+                                <div>
+                                    <span class="icon iconfont icon-wenjian"></span>
+                                    &nbsp;
+                                    <span>{{ node.label }}</span>
+                                </div>
+                            </div>
+                        </el-tree>
+                    </el-scrollbar>
                 </div>
-            <!-- </el-scrollbar> -->
         </el-col>
         <el-col :span="19">
             <operatelist :orgid="orgid"/>
@@ -87,10 +83,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
 .scroll {
-  height: 100%;
+  height: calc(100%);
   width: 100%;
+  padding-bottom: 20px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }

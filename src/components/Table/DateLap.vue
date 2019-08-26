@@ -1,6 +1,14 @@
 <template>
     <div>
-        <el-select v-model="ctype" :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
+        <el-select v-model="ctype" v-if="itemsDay==1" :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
+            <el-option
+                v-for="item in option"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+        </el-select>
+        <el-select v-model="ctype" v-else :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
             <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -46,6 +54,7 @@ export default {
         disabled:{
             default:false
         },
+        itemsD:{}
     },
     computed:{
         value2:{
@@ -79,10 +88,18 @@ export default {
     data(){
         return {
             ctype:this.type||'2',
+            itemsDay:this.itemsD||'2',
             options:[{
                 value:'1',
                 label:'日'
             },{
+                value:'2',
+                label:'月'
+            },{
+                value:'3',
+                label:'年'
+            }],
+            option:[{
                 value:'2',
                 label:'月'
             },{

@@ -13,7 +13,7 @@
       :table_column="table_field"
     >
           <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetch"/>
+            <dateLap v-model="table_form.dateLap" type="2" itemsD="1" @change="fetch"/>
           </div>
     </table-header>
     <el-table
