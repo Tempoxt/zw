@@ -1,38 +1,38 @@
 <template>
-    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div style="padding:20px">
+    <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
+        <div style="padding:20px" class="h-full">
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
           
           </div>
+          <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+            <el-tree
+              class="tree"
+              :data="data2"
+              :props="{children: 'subs', label: 'name' }"
+              default-expand-all
+              node-key="orgid"
+              :filter-node-method="filterNode"
+              ref="tree2"
+              :highlight-current="true"
+              :check-on-click-node="false"
+              @node-click="handleChangeNode"
+              :expand-on-click-node="false"
+            >
+              <span slot-scope="{ node, data }">
 
-          <el-tree
-            class="tree"
-            :data="data2"
-            :props="{children: 'subs', label: 'name' }"
-            default-expand-all
-            node-key="orgid"
-            :filter-node-method="filterNode"
-            ref="tree2"
-            :highlight-current="true"
-            :check-on-click-node="false"
-            @node-click="handleChangeNode"
-            :expand-on-click-node="false"
-          >
-            <span slot-scope="{ node, data }">
-
-              <span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
-              <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
-              <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
-              &nbsp;
-              <span>{{ node.label }}</span>
-            </span>
-          </el-tree>
-         
+                <span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
+                <span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+                <span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
+                &nbsp;
+                <span>{{ node.label }}</span>
+              </span>
+            </el-tree>
+          </el-scrollbar>
         </div>
-    </el-scrollbar>
+    <!-- </el-scrollbar> -->
 </template>
 <script>
 import * as api_common from "@/api/common";

@@ -2,7 +2,7 @@
 <div>
     <el-row class="h-full">
         <el-col :span="5" class="h-full">
-            <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+            <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
                 <div style="padding:20px">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
@@ -11,6 +11,7 @@
                         <span class="icon iconfont icon-tianjia addIcon" @click="addCustom"></span>
                     </div>
 
+                <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
                     <el-tree
                         class="tree"
                         :data="data2"
@@ -23,24 +24,24 @@
                         :check-on-click-node="false"
                         @node-click="handleChangeNode"
                         :expand-on-click-node="false"
-                    >
-                    <div slot-scope="{ node, data }" class="flexSpace">
+                        >
+                        <div slot-scope="{ node, data }" class="flexSpace">
 
-                        <div>
-                            <span v-if="data.id==0" class="icon iconfont icon-wenjian"></span>
-                            <span v-else class="icon iconfont icon-geren"></span>
-                            &nbsp;
-                            <span>{{ node.label }}</span>
+                            <div>
+                                <span v-if="data.id==0" class="icon iconfont icon-wenjian"></span>
+                                <span v-else class="icon iconfont icon-geren"></span>
+                                &nbsp;
+                                <span>{{ node.label }}</span>
+                            </div>
+                            <div v-if="data.id!=0">
+                                <span class="icon iconfont icon-lajitong" @click="deleteCustom(data)"></span>
+                                <span class="icon iconfont icon-bianji ml15" @click="editCustom(data)"></span>
+                            </div>
                         </div>
-                        <div v-if="data.id!=0">
-                            <span class="icon iconfont icon-lajitong" @click="deleteCustom(data)"></span>
-                            <span class="icon iconfont icon-bianji ml15" @click="editCustom(data)"></span>
-                        </div>
-                    </div>
-                </el-tree>
-                
+                    </el-tree>
+                </el-scrollbar>
                 </div>
-            </el-scrollbar>
+            <!-- </el-scrollbar> -->
         </el-col>
         <el-col :span="19">
             <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
@@ -196,7 +197,7 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: calc(100% - 30px);
+  height: 100%;
   width: 100%;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;

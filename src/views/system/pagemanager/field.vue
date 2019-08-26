@@ -117,16 +117,6 @@
               />
             </el-col>
 
-            <el-col :span="12">
-              <form-render
-                :type="`radio`"
-                :field="{name:'快速查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
-                v-model="form.isquicksearch"
-              />
-            </el-col>
-              <el-col :span="12">
-              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
-            </el-col>
             
             <el-col :span="12">
               <form-render
@@ -135,8 +125,32 @@
                 v-model="form.issearch"
               />
             </el-col>
-            
-             
+
+             <el-col :span="12">
+              <form-render :type="`number`" :field="{name:'显示排序'}" v-model="form.sort"/>
+            </el-col>
+
+            <el-col :span="12">
+              <form-render
+                :type="`select`"
+                :field="{name:'快速查询',options:[{
+                  value: 0,
+                  label: '否'
+                },{
+                  value: 1,
+                  label: '精确查询'
+                },{
+                  value: 2,
+                  label: '模糊查询'
+                }]}"
+                v-model="form.isquicksearch"
+              />
+              <!-- <form-render
+                :type="`radio`"
+                :field="{name:'快速查询',options:[{'label':'是','value':true},{'label':'否','value':false}]}"
+                v-model="form.isquicksearch"
+              /> -->
+            </el-col>
           
             </div>
             <el-col :span="24">
@@ -195,7 +209,7 @@ let defaultForm = function() {
     isvisiable: false,
     iseditable: false,
     issort:true,
-    isquicksearch:false,
+    isquicksearch:0,
     fieldtype:'text',
     sort:1,
     issort:false,
@@ -254,6 +268,7 @@ export default {
     },
     async edit() {
       this.form = await api_resource.find(this.table_selectedRowsInfo[0].id)
+      this.form.isquicksearch = +this.form.isquicksearch
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
     },

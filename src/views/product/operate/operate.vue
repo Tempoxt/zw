@@ -2,13 +2,15 @@
 <div>
     <el-row class="h-full">
         <el-col :span="5" class="h-full">
-            <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-                <div style="padding:20px">
+            <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
+                <div style="padding:20px" class="h-full">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
                         <i slot="suffix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </div>
+                    
+            <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
                     <el-tree
                         class="tree"
                         :data="data2"
@@ -32,8 +34,9 @@
                     </div>
                 </el-tree>
                 
-                </div>
             </el-scrollbar>
+                </div>
+            <!-- </el-scrollbar> -->
         </el-col>
         <el-col :span="19">
             <operatelist :orgid="orgid"/>
@@ -86,7 +89,7 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: calc(100% - 30px);
+  height: 100%;
   width: 100%;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;

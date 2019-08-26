@@ -900,7 +900,7 @@
         
             <div style="padding-left:10px">
               
-                    <DateLapRange v-model="table_form.dateLap" @change="fetchTableData"/>
+                    <DateLapRange v-model="table_form.dateLap" @change="fetch"/>
 
             <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
           </div>
@@ -1138,6 +1138,10 @@ export default {
         }
     },
     methods: {
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
         contract_validate(){
             return new Promise((resolve,reject)=>{
                 this.$refs.contract.validate((valid) => {
