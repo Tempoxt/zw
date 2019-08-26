@@ -179,7 +179,7 @@ export default {
   methods: {
     changeSelect(){
       this.table_form.quicksearch =  this.ttype
-      this.table_form.keyword = ''
+      // this.table_form.keyword = ''
     },
     search(){
       this.table_form.currentpage = 1
