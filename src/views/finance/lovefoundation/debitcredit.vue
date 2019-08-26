@@ -87,7 +87,7 @@
       </el-table-column>
         <el-table-column type="index" :index="indexMethod" width="70"/>
         <!-- <each-table-column :table_field="table_field"/> -->
-        <each-table-column :table_field="table_field.filter(o=>!['expendAttachment'].includes(o.name))"/>
+        <each-table-column :table_field="table_field.filter(o=>!['expendAttachment'].includes(o.name))" :template="template"/>
         <el-table-column prop="expendAttachment" label="附件">
             <template slot-scope="scope">
               <div v-for="item in scope.row.expendAttachment.split(',')" :key="item">
@@ -136,7 +136,14 @@ export default {
           formSelect1:[],
           formSelect2:[],
           putForm:{},
-          total_data:[]
+          total_data:[],
+          template:{
+            signAttachment(row){
+              if(row.signAttachment!=''&&row.signAttachment!=undefined){
+                return <img src={baseUrl+row.signAttachment} width="50" height="50"></img>
+              }
+            }
+          }
         };
     },
     watch:{
