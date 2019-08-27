@@ -106,6 +106,7 @@ export default {
 .scroll {
   height: calc(100%);
   width: 100%;
+  padding-bottom:30px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
