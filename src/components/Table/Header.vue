@@ -42,7 +42,7 @@
 
     <div class="right-actions">
       <div class="right-aciton-item">
-        <el-select v-model="ttype" @change="changeSelect" placeholder="请选择" :style="{width:width}" class="select-list">
+        <el-select v-model="ttype" @change="changeSelect" placeholder="请选择" :style="{width:width}" class="select-list" v-if="table_column.some(item=>item.isquicksearch)">
             <el-option
                 v-for="item in selectList"
                 :key="item.id"
@@ -164,7 +164,7 @@ export default {
         this.ttype = this.selectList[0].name
         this.table_form.quicksearch = this.ttype
         let len = this.selectList[0].showname.length
-        console.log(len)
+        // console.log(len)
         if(len==2){
           this.width = len*40+'px'
         }else if(len==3){
