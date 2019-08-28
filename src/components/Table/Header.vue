@@ -148,7 +148,7 @@ export default {
           return len >= 1;
         }
         
-        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back'].indexOf(code)!==-1) {
+        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;

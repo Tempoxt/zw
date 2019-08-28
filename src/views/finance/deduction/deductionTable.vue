@@ -54,6 +54,37 @@
 		</div>
     </el-dialog>
 
+	<el-dialog
+		title="请选择结算月份"
+		:visible.sync="dialogForm2Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+
+		<el-form ref="form2" :model="form2" label-width="100px" :inline="true" >
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<el-date-picker
+						v-model="form2.dateLap"
+						:clearable="false"
+						type="month"
+						size="medium"
+						format="yyyy年MM月"
+						value-format="yyyy-MM"
+						placeholder="选择月份">
+					</el-date-picker>
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm2Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm2Submit">确 定</el-button>
+		</div>
+	</el-dialog>
+
+
 
     <table-header
       :table_actions="table_actions"
@@ -123,9 +154,11 @@ export default {
 		return {
 			loading: true,
 			form:{},
+			form2:{},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
+			dialogForm2Visible:false,
 			table_topHeight:276,
 			rules:{
 				type:[
@@ -170,31 +203,29 @@ export default {
 				this.table_form.sortname = 'id'
 			}
 			this.table_form.query.query = []
-			// this.table_form.keyword = ''
 			this.table_form.currentpage = 1
             this.fetchMenu()
             this.fetchTableData()
 		}
 	},
 	methods: {
-		
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
 		async fetchTableData() {
-		if(!this.id){
-			return
-		}
-		this.table_loading = true;
-		this.table_form.orgid = this.id
-        this.table_form.flag = this.flag
-		const {rows , total }= await api_resource.get(this.table_form);
-		this.table_data  = rows
-		this.table_form.total = total
-		setTimeout(() => {
-			this.table_loading = false;
-		}, 300);
+			if(!this.id){
+				return
+			}
+			this.table_loading = true;
+			this.table_form.orgid = this.id
+			this.table_form.flag = this.flag
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
 		},
 		async add(){
 			this.dialogFormVisible = true
@@ -225,6 +256,16 @@ export default {
             	// this.$message.success({message:'修改成功'})
 			}
 		},
+		financialaudit(){
+			this.dialogForm2Visible = true
+		},
+		async handleForm2Submit(){
+			let ids = this.table_selectedRows.map(o=>o.id).join(',')
+			await this.$request.get('/deduction/audit',{params:{ids:ids,dateLap:this.form2.dateLap}})
+			this.$message.success({message:'结算成功'})
+			this.dialogForm2Visible = false
+			this.fetchTableData()
+		},
 		async edit(){
 			this.dialogFormVisible = true;
 			this.$nextTick(()=>{
@@ -245,6 +286,7 @@ export default {
         this.fetchMenu()
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		this.fetchTableData();
+    	this.$set(this.form2,'dateLap', dayjs().subtract(1,'month').format('YYYY-MM'))
 	}
 };
 </script>
