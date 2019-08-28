@@ -138,9 +138,9 @@ export default {
           putForm:{},
           total_data:[],
           template:{
-            signAttachment(row){
-              if(row.signAttachment!=''&&row.signAttachment!=undefined){
-                return <img src={baseUrl+row.signAttachment} width="50" height="50"></img>
+            signAttachment(row,column){
+              if(column.signAttachment!=''&&column.signAttachment!=undefined){
+                return <img src={baseUrl+column.signAttachment} width="50" height="50"></img>
               }
             }
           }
