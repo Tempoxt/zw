@@ -7,8 +7,7 @@
             <el-radio-button :label="item.position" v-for="item in tabs" :key="item.id">{{item.showname}}</el-radio-button>
           </el-radio-group>
         </span>
-        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div>
+        <div class="h-full">
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
@@ -16,6 +15,7 @@
             <el-button icon="el-icon-refresh" circle @click="refresh"></el-button>
           </div>
 
+        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
           <el-tree
             class="tree"
             :data="data2"
@@ -38,9 +38,9 @@
               <span>{{ node.label }}</span>
             </span>
           </el-tree>
+         </el-scrollbar>
          
         </div>
-         </el-scrollbar>
       </div>
 
     </el-col>
@@ -220,8 +220,9 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: calc(100% - 30px);
+  height: calc(100%);
   width: 100%;
+  padding-bottom: 80px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }

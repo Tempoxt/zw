@@ -4,8 +4,7 @@
       <div class="page-side h-full">
         
         <span class="page-title">用户管理</span>
-         <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div>
+        <div class="h-full">
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
@@ -14,6 +13,7 @@
 
          
 
+         <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
           <el-tree
             class="tree"
             :data="data2"
@@ -32,9 +32,9 @@
               <span>{{ node.label }}</span>
             </span>
           </el-tree>
+         </el-scrollbar>
          
         </div>
-         </el-scrollbar>
       </div>
 
     </el-col>
@@ -57,6 +57,11 @@ export default {
     components:{
         userTable
     },
+    watch:{
+      filterText(val) {
+        this.$refs.tree2.filter(val);
+      }
+    },
     methods:{
         handleChangeNode(val){
              this.currentMenuid = val.orgid
@@ -75,8 +80,9 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: calc(100% - 30px);
+  height: calc(100% );
   width: 100%;
+  padding-bottom: 70px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }

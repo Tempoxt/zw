@@ -3,14 +3,15 @@
     <el-col :span="5" class="h-full">
       <div class="page-side h-full">
      
-        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div>
+        <div class="h-full">
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
             <!-- <el-button icon="el-icon-refresh" circle @click="refresh"></el-button> -->
           </div>
+          
+        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
           <el-tree
             class="tree"
             :data="data2"
@@ -52,9 +53,9 @@
              
             </span>
           </el-tree>
+         </el-scrollbar>
          
         </div>
-         </el-scrollbar>
       </div>
 
     </el-col>
@@ -63,7 +64,7 @@
            <div>
               <dormInner :id="current_id" :data="current_data" v-if="current_type==='start'" />
               <dormDorm :id="current_id" :data="current_data" v-if="current_type==='dorm'" />
-              <dormRoom :id="current_id" :data="current_data" v-if="current_type==='room'" :type="_current_type"/>
+              <dormRoom :id="current_id" :data="current_data" v-if="current_type==='room'" :type="current_t"/>
            </div>
        </div>
     </el-col>
@@ -101,7 +102,7 @@ export default {
             currentMenuid:0,
             current_id:'',
             current_type:'room',
-            _current_type:"",
+            current_t:"",
             current_data:{}
         }
     },
@@ -116,8 +117,8 @@ export default {
           const { roomId,dormId } = data
           this.current_id = roomId||dormId
           // this.current_type =  data.name?'start':(data.roomName?'room':'dorm')
-          this._current_type =  data.name?'start':(data.roomName?'room':'dorm')
-          this.current_type = 'room'
+          this.current_t =  data.name?'start':(data.roomName?'room':'dorm')
+          // this.current_type = 'room'
           this.current_data = data
           
 

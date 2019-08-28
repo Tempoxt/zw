@@ -315,7 +315,6 @@ export default {
       }, 300);
     },
     async distribution(row){
-        console.log(row,'rowrow')
         this.dialogLoading2 = true
         this.distribution_form = {}
         this.distributionRow = row
@@ -391,7 +390,7 @@ export default {
         this.dialogLoading = false
     },
     async handleFormSubmit(){
-      console.log(this.checked,'this.checked')
+      // console.log(this.checked,'this.checked')
         await this.$request.post('dormitory/checkinout',{
             dormType:this.data.dormType,
             roomId:this.id,
@@ -428,7 +427,7 @@ export default {
     this.table_config = table
     this.fetchTableData();
    
-    console.log(this.table_actions,'this.table_actions')
+    // console.log(this.table_actions,'this.table_actions')
   }
 };
 </script>

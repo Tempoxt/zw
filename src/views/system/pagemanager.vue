@@ -11,15 +11,15 @@
           </el-radio-group>
 
         </span>
-         <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div>
+        <div class="h-full">
           <div class="side-header">
             <el-input placeholder="快速查找" v-model="filterText" class="input">
               <i slot="suffix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>
 
-            <!--  -->
+            
+         <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
             <el-tree
               class="tree"
               :data="data2"
@@ -39,8 +39,8 @@
                 <span>{{ node.label }}</span>
               </span>
             </el-tree>
-        </div>
         </el-scrollbar>
+        </div>
       </div>
     </el-col>
     <el-col :span="20">
@@ -167,8 +167,9 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: calc(100% - 30px);
+  height: calc(100%);
   width: 100%;
+  padding-bottom: 90px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }

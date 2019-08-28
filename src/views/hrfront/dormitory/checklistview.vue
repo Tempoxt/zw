@@ -30,6 +30,104 @@
 	</el-dialog>
 
 
+	<el-dialog
+		title="入住分配"
+		:visible.sync="dialogForm2Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="500px"
+		>
+		<el-form ref="form2" :model="form2" label-width="100px" v-loading="dialogLoading2">
+			<el-row :gutter="20">
+				<el-col :span="24">
+					<el-form-item label="人员">
+						{{distributionRow.chineseName}}
+					</el-form-item>
+				</el-col>
+				<el-col :span="24">
+					<el-form-item label="部门">
+						{{distributionRow.department}}
+					</el-form-item>
+				</el-col>
+				<el-col :span="24">
+					<el-form-item label="职位">
+						{{distributionRow.jobtitle}}
+					</el-form-item>
+				</el-col>
+				<el-col :span="24">
+					<form-render :type="`dormselect`" :field="{name:'宿舍',id:this.empId}" v-model="distribut_form.bed"/>
+				</el-col>
+				<el-col :span="24">
+					<form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="distribut_form.remark" placeholder="请输入"/>
+				</el-col>
+			</el-row>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm2Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm2Submit">确 定</el-button>
+		</div>
+	</el-dialog>
+
+	<el-dialog
+		title="入住"
+		:visible.sync="dialogFormVisible3"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="500px"
+		>
+		<el-form ref="form3" :model="checkin_form" label-width="100px">
+			<el-row :gutter="20">
+				<el-col :span="24">
+					<el-form-item label="入住员工">
+						<span v-for="(item,i) in checkinRows" :key="i">{{item.chineseName}} </span>
+					</el-form-item>
+				</el-col>
+				
+				<el-col :span="24">
+					<form-render :type="`day`" :field="{name:'申请入住时间'}"
+						v-model="checkin_form.checkinDate"
+					/>
+				</el-col>
+			</el-row>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible3 = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit3">确 定</el-button>
+		</div>
+	</el-dialog>
+
+	<el-dialog
+		title="搬离"
+		:visible.sync="dialogFormVisible4"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="500px"
+		>
+		<el-form ref="form" :model="checkout_form" label-width="100px">
+			<el-row :gutter="20">
+				<el-col :span="24">
+					<el-form-item label="搬离员工">
+						<span v-for="(item,i) in checkoutRows" :key="i">{{item.chineseName}} </span>
+					</el-form-item>
+				</el-col>
+				<el-col :span="24">
+					<form-render :type="`input`" :field="{name:'电表读数'}"
+						v-model="checkout_form.electricView"
+					/>
+				</el-col>
+				<el-col :span="24">
+					<form-render :type="`day`" :field="{name:'搬离日期'}"
+						v-model="checkout_form.checkoutDate"
+					/>
+				</el-col>
+			</el-row>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible4 = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit4">确 定</el-button>
+		</div>
+	</el-dialog>
+
 
 
     <table-header
@@ -76,6 +174,10 @@
         label="操作"
         width="100">
         <template slot-scope="scope">
+			<el-button v-if="scope.row.selectState==1" @click="distrib({row:scope.row})" type="text" size="small" >分配</el-button>
+			<el-button v-if="scope.row.selectState==2" @click="checkIn({row:scope.row})" type="text" size="small" >入住</el-button>
+			<el-button v-if="scope.row.selectState==3" @click="review({row:scope.row})" type="text" size="small" >审核</el-button>
+			<el-button v-if="scope.row.selectState==4" @click="checkOut({row:scope.row})" type="text" size="small" >搬离</el-button>
             <el-button @click="audit({row:scope.row})" type="text" size="small" >撤销</el-button>
         </template>
     </el-table-column>
@@ -111,22 +213,35 @@ export default {
 			form1:{
 				dateLap:''
 			},
+			form2:{},
+			form3:{},
+			distribut_form:{},
+			checkin_form:{},
+			checkout_form:{},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogForm1Visible:false,
+			dialogForm2Visible:false,
+			dialogFormVisible3:false,
+			dialogFormVisible4:false,
 			adminList:[],
 			defaultForm,
 			roomAdminList:[],
 			dormList:[],
+      		dialogLoading2:false,
 			statusData:[
-				{id:0,name:'全部'},
-				{id:1,name:'待分配'},
-				{id:2,name:'待入住'},
-				{id:3,name:'待审核搬离'},
-				{id:4,name:'待搬离'}
+				{ id:0, name:'全部'},
+				{ id:1, name:'待分配'},
+				{ id:2, name:'待入住'},
+				{ id:3, name:'待审核搬离'},
+				{ id:4, name:'待搬离'}
 			],
 			status:0,
+			distributionRow:{},
+			checkinRows:{},
+			checkoutRows:{},
+			empId:''
 		};
 	},
 	watch:{
@@ -144,6 +259,48 @@ export default {
 		changeStatus(val){
 			this.table_form.currentpage = 1
 			this.status = val
+			this.fetchTableData()
+		},
+		distrib({row}){
+			this.distribut_form = {}
+			this.dialogForm2Visible = true
+			this.distributionRow = row
+			this.empId = row.empId
+			// row.employeeCode  row.selectState
+		},
+		async handleForm2Submit(){
+			this.distribut_form.empId = this.empId;
+            let form = Object.assign({},this.distribut_form,this.distributionRow,)
+			await this.$request.post('/dormitory/checkinout',form)
+			this.$message.success('分配成功');
+			this.dialogForm2Visible = false
+			this.fetchTableData()
+		},
+		checkIn({row}){
+			this.checkin_form = {}
+			this.checkinRows =Array.isArray(row)?row:[row]
+			this.dialogFormVisible3 = true
+		},
+		async handleFormSubmit3(){
+			let checkIn = Object.assign({},this.checkinRows[0],this.checkin_form,);
+			await this.$request.put('/dormitory/todocheckinconfirm/'+checkIn.id,checkIn)
+			this.dialogFormVisible3 = false
+			this.fetchTableData()
+		},
+		async review({row}){
+			console.log(row,'ddddd')
+			await this.$request.put('/dormitory/checkoutaudit',{ ids:row.empId })
+			this.fetchTableData()
+		},
+		async checkOut({row}){
+			this.checkout_form = {}
+			this.checkoutRows =Array.isArray(row)?row:[row]
+			this.dialogFormVisible4 = true
+		},
+		async handleFormSubmit4(){
+			let checkOut = Object.assign({},this.checkoutRows[0],this.checkout_form,);
+			await this.$request.put('/dormitory/todocheckoutconfirm/'+checkOut.id,checkOut)
+			this.dialogFormVisible4 = false
 			this.fetchTableData()
 		},
 		async audit({row}){
@@ -166,9 +323,6 @@ export default {
 		async handleForm1Submit(){
 			try{
 				const { data,name,contentType} = await this.$request.get('/dormitory/export/expirein?dateLap='+this.form1.dateLap,{ responseType:'arraybuffer'})
-				// let today = dayjs().format('YYYY-MM-DD')
-				// let day = today.split('-').join('');
-				// let namei = '减少被保险人名单';
 				download(data,name||this.$route.meta.title,contentType)
 			}catch(err){
 				var that = this;
