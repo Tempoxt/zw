@@ -259,6 +259,7 @@ export default {
 		changeStatus(val){
 			this.table_form.currentpage = 1
 			this.status = val
+			this.table_form.selectState = this.status
 			this.fetchTableData()
 		},
 		distrib({row}){
@@ -266,7 +267,6 @@ export default {
 			this.dialogForm2Visible = true
 			this.distributionRow = row
 			this.empId = row.empId
-			// row.employeeCode  row.selectState
 		},
 		async handleForm2Submit(){
 			this.distribut_form.empId = this.empId;
@@ -288,7 +288,6 @@ export default {
 			this.fetchTableData()
 		},
 		async review({row}){
-			console.log(row,'ddddd')
 			await this.$request.put('/dormitory/checkoutaudit',{ ids:row.empId })
 			this.fetchTableData()
 		},
@@ -340,7 +339,6 @@ export default {
 		},
 		async fetchTableData() {
 			this.table_loading = true;
-			this.table_form.selectState = this.status
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
@@ -367,6 +365,13 @@ export default {
 		this.table_actions = action;
 		this.table_config = table
 		this.fetchTableData();
+		if(this.$route.fullPath.indexOf('=')!==-1){
+			let status = this.$route.fullPath.split('=')[1]
+			this.table_form.selectState = status
+			this.status = Number(status)
+		}else{
+			this.table_form.selectState = this.status
+		}
 		// this.table_form.dateLap = dayjs().format('YYYY-MM')
 	}
 };

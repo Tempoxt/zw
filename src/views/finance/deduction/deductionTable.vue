@@ -39,6 +39,9 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
+					<el-col :span="12">
+						<form-render :type="`input`" prop="remark" :field="{name:'补扣原因'}" v-model="form.remark"/>
+					</el-col>
 				</el-row>
 
 			</el-form>
