@@ -84,7 +84,7 @@
 				</el-col>
 				
 				<el-col :span="24">
-					<form-render :type="`day`" :field="{name:'申请入住时间'}"
+					<form-render :type="`day`" :field="{name:'入住时间'}"
 						v-model="checkin_form.checkinDate"
 					/>
 				</el-col>
