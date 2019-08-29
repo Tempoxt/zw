@@ -71,6 +71,18 @@
             
             <el-table-column type="index" :index="indexMethod"/>
             <each-table-column :table_field="table_field"/>
+            <el-table-column label="指纹索引" width="420px">
+                <template slot-scope="scope">
+                    <el-checkbox-group v-model="scope.row.list">
+                        <el-checkbox v-for="(item,index) in scope.row.finger_info" :key="index" :label="item.finger__tempIndex" :disabled="item.id==0" class="checkbox_finger"></el-checkbox>
+                    </el-checkbox-group>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" fixed="right">
+                <template slot-scope="scope">
+                    <el-button @click="deleteFinger(scope.row)" type="text" size="small">删除指纹</el-button>
+                </template>
+            </el-table-column>
         </el-table>
         <table-pagination 
             :total="table_form.total" 
@@ -111,7 +123,8 @@ export default {
                 device:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
-            }
+            },
+            checkList:[],
         };
     },
     computed:{
@@ -137,6 +150,16 @@ export default {
         }
     },
     methods: {
+        async deleteFinger(row){
+            this.checkList =[]
+            row.list.map(o=>{
+                let finger = row.finger_info.filter(k=>k.finger__tempIndex==o)
+                this.checkList.push(finger[0].id)
+            })
+            await this.$request.get('devicemanager/devicelistmanage/devicefinger/bluk?ids='+this.checkList.join(','))
+            this.$message.success({message:'删除成功'})
+            this.fetchTableData();
+        },
         async fetchTableData() {
             // if(!this.id){
             //     return 
@@ -146,6 +169,9 @@ export default {
             const {rows , total }= await api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
+            this.table_data.forEach((o)=>{
+                this.$set(o,'list',[])
+            })
             setTimeout(() => {
                 this.table_loading = false;
             }, 300);
@@ -179,10 +205,8 @@ export default {
         },
         async handleFormSubmit(){
             await this.form_validate()
-            console.log(this.form,'ffffff')
             this.form.staff = this.$refs.OrgSelect.getIdsResult()
             if(this.form.staff==''){
-                console.log(this.form,'ddddddddddd')
                 this.$message.error('请选择人员')
             }else{
                 if(this.form.device!=''){
@@ -194,8 +218,6 @@ export default {
                 this.dialogFormVisible = false
                 this.fetchTableData()
             }
-            // this.dialogFormVisible = false
-            // this.fetchTableData()
         }
     },
     async created() {
@@ -207,3 +229,11 @@ export default {
     },
 };
 </script>
+<style>
+    .checkbox_finger{
+        margin-right: -16px;
+    }
+    .checkbox_finger .el-checkbox__label{
+        padding-left: 4px
+    }
+</style>

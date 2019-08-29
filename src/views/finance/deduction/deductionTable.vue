@@ -173,6 +173,9 @@ export default {
 				recordate:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change']},
 				],
+				remark:[
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+				],
 			},
 			dedulist:[],
 			template:{

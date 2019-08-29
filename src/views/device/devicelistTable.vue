@@ -37,6 +37,9 @@
                             <form-render :type="`input`" prop="devicePort" :field="{name:'设备端口'}" v-model="form.devicePort"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
+                            <form-render :type="`input`" prop="deviceCapacity" :field="{name:'设备容量'}" v-model="form.deviceCapacity"/>
+                        </el-col>
+                        <el-col :span="20" :offset="2">
                             <form-render :type="`select`" prop="office" :field="{name:'归属办公地点',options:addressData}" v-model="form.office"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
@@ -166,6 +169,9 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 deviceStatus:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                deviceCapacity:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
             }
