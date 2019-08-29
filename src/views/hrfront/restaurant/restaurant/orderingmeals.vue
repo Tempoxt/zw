@@ -74,7 +74,11 @@
       @action="handleAction"
       :table_column="table_field.slice(1,table_field.length)"
       :table_form.sync="table_form"
-    ></table-header>
+    >
+		<div style="padding-left:10px">
+			<dateLap v-model="table_form.dateLap" @change="fetch"/>
+		</div>
+	</table-header>
 
 
     <el-table
@@ -113,6 +117,7 @@
 import * as api_common from "@/api/common";
 import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
+import dayjs from 'dayjs'
 const api_resource = api_common.resource("restaurant/bookmeal");
 const defaultForm = ()=>({ datelist:[], employeelist:[],mealist:[3,4]})
 export default {
@@ -192,6 +197,10 @@ export default {
       }
   },
   methods: {
+	  fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
     filterMethod(val){
       return this.options.filter(o=>{
         return o.name.indexOf(val)!==-1 || (o.employeeCode+'').indexOf(val)!==-1
@@ -241,9 +250,8 @@ export default {
     const { field, action ,table} = await api_common.menuInit("restaurant/bookmeal");
     this.table_field = field;
     this.table_actions = action;
-    this.table_config = table
-
-    
+	this.table_config = table 
+	this.table_form.dateLap = dayjs().format('YYYY-MM')
   }
 };
 </script>
