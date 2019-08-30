@@ -14,7 +14,7 @@
                                     <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
                                 </div>
                                 <div>
-                                   <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove"></el-button>
+                                   <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove(1)"></el-button>
                                 </div>
                                 <div>
                                     <el-button icon="el-icon-refresh" circle @click="reset"></el-button>
@@ -41,7 +41,7 @@
                                     <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
                                 </div>
                                 <div>
-                                   <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove"></el-button>
+                                   <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove(2)"></el-button>
                                 </div>
                                 <div>
                                     <el-button icon="el-icon-refresh" circle @click="reset"></el-button>
@@ -133,9 +133,11 @@ export default {
                 this.select.seleSim = true
             }
         },
-        remove(){
-            var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
-            this.eachNode([node],false)
+        remove(num){
+            if(num==2){
+                var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
+                this.eachNode([node],false)
+            }
             this.$set(this.resultSelect,'disabled',false) 
             // this.$set(this.resultSelect,'seleSim',false)
             this.result.forEach((o,i)=>{

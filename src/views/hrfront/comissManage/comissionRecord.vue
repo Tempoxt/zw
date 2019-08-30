@@ -130,8 +130,9 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: 100%;
+  height: calc(100% - 30px);
   width: 100%;
+
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
