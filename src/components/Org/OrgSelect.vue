@@ -127,21 +127,27 @@ export default {
                     var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.select.id)
                     this.eachNode([node],true)
                 })
+            }else{
+                this.$nextTick(()=>{
+                    var node = this.$refs.sameDepartment.$refs.treeSame.getNode(this.select.id)
+                    this.eachNode([node],true)
+                })
             }
             if(this.select && !this.select.disabled){
                 this.result.push(this.select)
                 this.$set(this.select,'disabled',true)
                 this.select.disabled = true
-                this.select.seleSim = true
             }
         },
         remove(n){
             if(n==2){
                 var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
                 this.eachNode([node],false)
+            }else{
+                var node = this.$refs.sameDepartment.$refs.treeSame.getNode(this.resultSelect.id)
+                this.eachNode([node],false)
             }
-            this.$set(this.resultSelect,'disabled',false) 
-            // this.$set(this.resultSelect,'seleSim',false)
+            this.$set(this.resultSelect,'disabled',false)
             this.result.forEach((o,i)=>{
                 if(o.id===this.resultSelect.id){
                     this.result.splice(i,1)
@@ -152,7 +158,6 @@ export default {
 		reset(){
 			this.result.forEach((o,i)=>{
 			    this.$set(o,'disabled',false)
-			    // this.$set(o,'seleSim',false)
 			})
 			this.result=[]
 			this.resultSelect = {}

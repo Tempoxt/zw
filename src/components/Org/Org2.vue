@@ -98,7 +98,6 @@ export default {
 		},
 		async loadNode1(node, resolve) {
 			const  { data }  = node
-
 			if (data.subs) {
 				let _id = data.id
 				if (data.orgid) {
@@ -109,11 +108,15 @@ export default {
 					_urldata = 'org/select?org_id='+_id+"&filter_mark="+this.filter_mark
 				}
 				let res = await this.$request.get(_urldata)
+				// if(Array.isArray(res.subs)){
+				// 	res.subs = res.subs.length
+				// }
 				res.forEach( o=> {
 					o.leaf = !o.subs
-					o.disabled = node.dd
+					if(node){
+						o.disabled = node&&node.dd
+					}
 				})
-
 				resolve(res);
 			} else{
 				resolve([]);
@@ -124,7 +127,10 @@ export default {
 			if (this.filter_mark) {
 				_urldata = this.getApi+"?filter_mark="+this.filter_mark
 			}
-			this.data = await this.$request.get(_urldata);//org/samedeptselect
+			this.data = await this.$request.get(_urldata);
+			if(this.getApi=='/org/samedeptselect'){
+				this.data[0].subs = 1
+			}
 		},
 		empty(){
 			this.filterText=""
