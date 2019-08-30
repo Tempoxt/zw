@@ -11,7 +11,7 @@
                         <div class="control">
                             <div class="control-btns">
                                 <div>
-                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
+                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add(1)"></el-button>
                                 </div>
                                 <div>
                                    <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove(1)"></el-button>
@@ -38,7 +38,7 @@
                         <div class="control">
                             <div class="control-btns">
                                 <div>
-                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add"></el-button>
+                                    <el-button icon="el-icon-arrow-right" circle :type="!select.disabled?'primary':''" @click="add(2)"></el-button>
                                 </div>
                                 <div>
                                    <el-button icon="el-icon-arrow-left" circle  :type="resultSelect.id?'primary':''" @click="remove(2)"></el-button>
@@ -121,11 +121,13 @@ export default {
                 }
             })
         },
-        add(){
-            this.$nextTick(()=>{
-                var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.select.id)
-                this.eachNode([node],true)
-            })
+        add(n){
+            if(n==2){
+                this.$nextTick(()=>{
+                    var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.select.id)
+                    this.eachNode([node],true)
+                })
+            }
             if(this.select && !this.select.disabled){
                 this.result.push(this.select)
                 this.$set(this.select,'disabled',true)
@@ -133,8 +135,8 @@ export default {
                 this.select.seleSim = true
             }
         },
-        remove(num){
-            if(num==2){
+        remove(n){
+            if(n==2){
                 var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
                 this.eachNode([node],false)
             }
