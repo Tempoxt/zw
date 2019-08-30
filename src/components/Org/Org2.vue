@@ -12,7 +12,7 @@
 					class="tree"
 					:data="data"
 					:props="{children: 'subs', label: 'name',isLeaf:'leaf' }"
-					node-key="orgid"
+					node-key="id"
 					:filter-node-method="filterNode"
 					ref="treeSame"
 					:highlight-current="true"
@@ -40,6 +40,7 @@
 </template>
 <script>
 import * as api_common from "@/api/common";
+import { setInterval } from 'timers';
 export default {
     props:{
         same:{
@@ -58,11 +59,12 @@ export default {
 			default:''
 		},
 		sele:'',
-		leaf:false
+		leaf:false,
+		dataList:{}
     },
     watch:{
        	async filterText(val) {
-		   //console.log(this.searchApi)
+		   
 			if (val!="") {
 				if(this.searchApi&&this.month){
 					let res = await this.$request.get(this.searchApi+"?keyword="+val+'&month='+this.month)
@@ -80,17 +82,14 @@ export default {
 			}
 		},
 		sele(){
-			console.log(this.sele,'sssss')
-			// console.log(this.data,'ddddd')
+			
 		},
 		leaf(){
-			console.log(this.leaf,'leaf')
+		
 		}
     },
     methods:{
-
 		handleChangeNode(data,node){
-			console.log(data,'dddd')
 			this.$emit('change',data)
 		},
 		filterNode(value, data) {
@@ -99,6 +98,7 @@ export default {
 		},
 		async loadNode1(node, resolve) {
 			const  { data }  = node
+
 			if (data.subs) {
 				let _id = data.id
 				if (data.orgid) {
@@ -111,7 +111,9 @@ export default {
 				let res = await this.$request.get(_urldata)
 				res.forEach( o=> {
 					o.leaf = !o.subs
+					o.disabled = node.dd
 				})
+
 				resolve(res);
 			} else{
 				resolve([]);
@@ -132,7 +134,7 @@ export default {
         return {
             data:[],
 			searchFor:false,
-            filterText:'',
+			filterText:''
         }
     },
     created(){

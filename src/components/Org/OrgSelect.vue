@@ -5,7 +5,7 @@
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="11">
                         <Org2 ref="sameDepartment" style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" :month="month" same="false"
-                          @change="changeOrg"/>
+                          @change="changeOrg"  :dataList="result"/>
                     </el-col>
                     <el-col :span="2" style="height:100%">
                         <div class="control">
@@ -61,6 +61,7 @@
 import Org from './Org.vue'
 import Org2 from './Org2.vue'
 import OrgResult from './OrgResult'
+
 export default {
     props:{
 		"activeNam":{
@@ -111,17 +112,30 @@ export default {
         changeResult(data){
             this.resultSelect= data
         },
+        eachNode(nodes,res){
+            nodes.forEach(node=>{
+                node.dd = res
+                this.$set(node.data,'disabled',res)
+                if(node.childNodes.length){
+                    this.eachNode(node.childNodes,res)
+                }
+            })
+        },
         add(){
-            console.log(this.select,'this.select')
+            this.$nextTick(()=>{
+                var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.select.id)
+                this.eachNode([node],true)
+            })
             if(this.select && !this.select.disabled){
                 this.result.push(this.select)
                 this.$set(this.select,'disabled',true)
-                // this.$set(this.select,'seleSim',true)
                 this.select.disabled = true
                 this.select.seleSim = true
             }
         },
         remove(){
+            var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
+            this.eachNode([node],false)
             this.$set(this.resultSelect,'disabled',false) 
             // this.$set(this.resultSelect,'seleSim',false)
             this.result.forEach((o,i)=>{
