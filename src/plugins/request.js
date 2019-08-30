@@ -85,6 +85,7 @@ service.interceptors.response.use(response => {
         if(error.response.config.alert!==false){
             Message({
                 type: 'error',
+                dangerouslyUseHTMLString: true,
                 message: error.response.data
             })
         }

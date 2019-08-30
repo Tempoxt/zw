@@ -1,7 +1,7 @@
 <template>
    <el-row class="h-full">
     <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
-        <org @change="changeOrg"  v-model="orgid" showteam="1"/>
+        <org @change="changeOrg"  v-model="orgid"/>
     </el-col>
     <el-col :span="19">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">

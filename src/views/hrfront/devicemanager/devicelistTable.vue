@@ -19,17 +19,25 @@
 						<form-render :type="`input`" disabled :field="{name:'姓名'}" v-model="form.staff_employeeCode" />
 					</el-col>
 				</el-row>
-				<el-row  v-if="isInsert">
+				<el-row>
 					<el-col :span="12">
 						<form-render :type="`select`" prop="deviceType" :field="{name:'设备类型',options:deviceData}" placeholder="请选择" v-model="form.deviceType" />
 					</el-col>
 					<el-col :span="12">
-						<form-render :type="`select`" prop="device" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
-					</el-col>
-				</el-row>
-				<el-row  v-else>
-					<el-col :span="16" :offset="2">
-						<form-render :type="`select`" multiple :field="{name:'设备名称',options:nameData}" v-model="form.device" />
+                        <el-form-item label="设备名称">
+                            <el-select v-model="form.device"  multiple placeholder="请选择" filterable style="width:100%">
+                                <el-option
+                                    v-for="item in nameData"
+                                    :key="item.value"
+                                    :label="item.name"
+                                    :value="item.value">
+                                    <span >{{ item.name }}
+                                        <span style="font-size:12px;color:red" v-if="item.deviceCapacity==0">(剩余可用容量:{{ item.deviceCapacity }})</span> 
+                                        <span v-else style="font-size:12px">(剩余可用容量:{{ item.deviceCapacity }})</span>
+                                    </span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -39,7 +47,6 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-                 <!-- :disabled="disabled" -->
             </div>
         </el-dialog>
 
@@ -129,7 +136,7 @@ export default {
     },
     computed:{
         disabled(){
-            if(this.form.deviceType!=''&&this.form.device!=''){
+            if(this.form.deviceType!=''&&this.form.device!=[]){
                 return false
             }
             return true
@@ -186,7 +193,7 @@ export default {
             this.deviceData = (await this.$request.get('devicemanager/getdevicetype')).map(o=>{return {label:o.name,value:o.value}})
         },
         async getName(){
-            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.form.deviceType)).map(o=>{return {label:o.name,value:o.value}})
+            this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.form.deviceType+'&show_capacity=1'))
         },
         add(){
             this.form = {}
@@ -209,14 +216,14 @@ export default {
             if(this.form.staff==''){
                 this.$message.error('请选择人员')
             }else{
-                if(this.form.device!=''){
-                    let device = this.form.device.join(',')
-                    this.form.device = device
+                try{
+                    let form = Object.assign({},this.form)
+                    await api_resource.create(form)
+                    this.dialogFormVisible = false
+                    this.fetchTableData()
+                }catch(err){
+                    console.log(err)
                 }
-                let form = Object.assign({},this.form)
-                await api_resource.create(form)
-                this.dialogFormVisible = false
-                this.fetchTableData()
             }
         }
     },
