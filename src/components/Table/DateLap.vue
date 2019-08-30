@@ -18,6 +18,7 @@
         </el-select>
         <el-date-picker
             v-if="ctype==1"
+            :clearable="false"
             class="dateLap-date"
             v-model="value2"
             value-format="yyyy-MM-dd"
