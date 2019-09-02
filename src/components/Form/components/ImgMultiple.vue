@@ -113,7 +113,7 @@ export default {
       this.data.splice(index,1);
     },
     handleAvatarSuccess(res, file) {
-      if(this.data!=''){
+      if(this.data!=''&&this.data!=undefined){
         this.data.push(res.path)
       }else{
         this.fileList.push(res.path)

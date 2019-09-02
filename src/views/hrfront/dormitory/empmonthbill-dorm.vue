@@ -65,146 +65,80 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("dormitory/empmonthbill");
 import dayjs from 'dayjs'
-const defaultForm = () => {
-    return {
-       
-    }
-}
 export default {
-  mixins: [table_mixin],
-  props:['id','data','orgid','choicetype','current_type'],
-  data() {
-      const generateData = _ => {
-        const data = [];
-        for (let i = 1; i <= 15; i++) {
-          data.push({
-            key: i,
-            label: `备选项 ${ i }`,
-            disabled: i ===1||i===4
-          });
-        }
-        return data;
-      };
-    return {
-      distributionData: [],
-      loading: true,
-      month:'',
-      form:{
-       
-      },
-      checked: [],
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
-      adminList:[],
-      defaultForm,
-      roomAdminList:[],
-      roomList:[],
-      dialogFormVisible2:false,
-      dialogFormVisible3:false,
-      checkinout_form:{},
-      checkinoutRows:[],
-
-      distributionRow:{},
-      distribution_form:{},
-      template:{
-          checkState(column,row){
-              console.log(row,'row')
-              return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
-          },
-      },
-      importUploadUrl:"/dormitory/import/empmothbill",
-      downloadUrl:"/dormitory/import/empmothbill",
-    };
-  },
-  watch:{
-    id(){
-      this.table_form.currentpage = 1
-      this.fetchTableData()
-    },
-    orgid(){
-      this.table_form.currentpage = 1
-      this.fetchTableData()
-    },
-    choicetype(){
-      this.table_form.currentpage = 1
-      this.fetchTableData()
-    },
-    current_type(){
-      this.table_form.currentpage = 1
-      this.fetchTableData()
-    }
-  },
-  methods: {
-    fetch(){
-        this.table_form.currentpage = 1
-        this.fetchTableData()
-    },
-    importEmb(){
-      this.import();
-    },
-    log(data){
-        console.log(data,'data')
-    },
-    async fetchTableData() {
-     this.table_loading = true;
-     if(this.current_type =='room'){
-        this.table_form.room = this.id||6
-        this.table_form.dormId = ''
-     }else{
-        this.table_form.dormId = this.id
-        this.table_form.room = ''
-     }
-     if(this.orgid){
-       this.table_form.room = ''
-       this.table_form.dormId = ''
-     }
-    //  this.table_form.dormId = this.id
-     this.table_form.orgid = this.orgid
-     this.table_form.choicetype = this.choicetype
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-       this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
-    distribution(row){
-        this.distribution_form = {}
-        this.distributionRow = row
-        this.dialogFormVisible2 = true
-    },
-    checkinout(row){
-        this.checkinout_form = {}
-        this.checkinoutRows = [row]
-        this.dialogFormVisible3 = true
-    },
-    
-    filterMethod(query, item){
-        return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
-    },
-    
-    async changeFormMonth(){
-      const { rows } = this.$request.get('/dormitory/roommonthbill',{
-        params:{
-          room:this.id,
-          room__dorm_id:this.data.id,
-          month:this.form.month
-        }
-      })
-      this.form.currentElectric = rows.electricPrice
-      this.form.currentWater = rows.waterPrice
-     
-    }
-  },
-  async created() {
-    this.$set(this.table_form,'month', dayjs().subtract(1,'month').format('YYYY-MM'))
-    const { field, action,table } = await api_common.menuInit("dormitory/empmonthbill");
-    this.table_field = field;
-    this.table_actions = action;
-    this.table_config = table
-    this.fetchTableData();
-  }
+	mixins: [table_mixin],
+	props:['id','data','orgid','choicetype','current_type'],
+	data() {
+		return {
+		loading: true,
+		api_resource,
+		queryDialogFormVisible:true,
+		template:{
+			checkState(column,row){
+				return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
+			},
+		},
+		importUploadUrl:"/dormitory/import/empmothbill",
+		downloadUrl:"/dormitory/import/empmothbill",
+		};
+	},
+	watch:{
+		id(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		orgid(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		choicetype(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		current_type(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		}
+	},
+	methods: {
+		fetch(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		importEmb(){
+			this.import();
+		},
+		async fetchTableData() {
+			this.table_loading = true;
+			if(this.current_type =='room'){
+				this.table_form.room = this.id||6
+				this.table_form.dormId = ''
+			}else{
+				this.table_form.dormId = this.id
+				this.table_form.room = ''
+			}
+			if(this.orgid){
+				this.table_form.room = ''
+				this.table_form.dormId = ''
+			}
+			this.table_form.orgid = this.orgid
+			this.table_form.choicetype = this.choicetype
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
+		},
+	},
+	async created() {
+		this.$set(this.table_form,'month', dayjs().subtract(1,'month').format('YYYY-MM'))
+		const { field, action,table } = await api_common.menuInit("dormitory/empmonthbill");
+		this.table_field = field;
+		this.table_actions = action;
+		this.table_config = table
+		this.fetchTableData();
+	}
 };
 </script>
 

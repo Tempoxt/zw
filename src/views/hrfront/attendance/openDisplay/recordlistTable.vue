@@ -60,81 +60,81 @@ const defaultForm = () => {
     }
 }
 export default {
-  mixins: [table_mixin],
-  props:['id'],
-  data() {
-    return {
-      loading: true,
-      form:{},
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
-      defaultForm,
-      formData:[],
-      importUploadUrl:"/attendance/record"
-    };
-  },
-  watch:{
-    id(){
-            this.table_form.currentpage = 1
-      this.fetchTableData()
-    }
-  },
-  methods: {
-    fetch(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
-        },
-    cellStyle({row,column,rowIndex,columnIndex}){
-      if(row.Remark!=''&&row.Remark!=null){
-        return 'color:red'
-      }else if(column.label=="星期"){
-        if(row.weekday=='六'||row.weekday=='日'){
-          return 'background-color:rgb(245, 250, 251);'
-        }
-      }else if(column.label=="假日"){
-        if(row.RestType=='1'){
-          return 'background-color:#f2353c;'
-        }else if(row.RestType=='2'){
-          return 'background-color:#1fd361;'
-        }else if(row.RestType=='3'){
-          return 'background-color:#0bb2d4;'
-        }else if(row.RestType=='4'){
-          return 'background-color:#ff5698;'
-        }else if(row.RestType=='5'){
-          return 'background-color:#f4af24;'
-        }else if(row.RestType=='6'){
-          return 'background-color:#f47a24;'
-        }else if(row.RestType=='9'){
-          return 'background-color:#68f59c;'
-        }else if(row.RestType=='10'){
-          return 'background-color:#1cbe57;'
-        }
-      }
-    },
-    async fetchTableData() {
-      if(!this.id){
-        return
-      }
-      this.table_loading = true;
-      this.table_form.org_id = this.id
-      this.table_form.sheetType = 2
-      const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-      this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
-  },
-  async created() {
-    const { field, action,table } = await api_common.menuInit("attendance/refakelist");
-    this.table_field = field;
-    this.table_actions = action;
-    this.table_config = table
-    this.table_form.dateLap = dayjs().format('YYYY-MM')
-    this.fetchTableData();
-  }
+	mixins: [table_mixin],
+	props:['id'],
+	data() {
+		return {
+			loading: true,
+			form:{},
+			api_resource,
+			orgCategory:[],
+			queryDialogFormVisible:true,
+			defaultForm,
+			formData:[],
+			importUploadUrl:"/attendance/record"
+		};
+	},
+	watch:{
+		id(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		}
+	},
+	methods: {
+		fetch(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		cellStyle({row,column,rowIndex,columnIndex}){
+			if(row.Remark!=''&&row.Remark!=null){
+				return 'color:red'
+			}else if(column.label=="星期"){
+				if(row.weekday=='六'||row.weekday=='日'){
+				return 'background-color:rgb(245, 250, 251);'
+				}
+			}else if(column.label=="假日"){
+				if(row.RestType=='1'){
+					return 'background-color:#f2353c;'
+				}else if(row.RestType=='2'){
+					return 'background-color:#1fd361;'
+				}else if(row.RestType=='3'){
+					return 'background-color:#0bb2d4;'
+				}else if(row.RestType=='4'){
+					return 'background-color:#ff5698;'
+				}else if(row.RestType=='5'){
+					return 'background-color:#f4af24;'
+				}else if(row.RestType=='6'){
+					return 'background-color:#f47a24;'
+				}else if(row.RestType=='9'){
+					return 'background-color:#68f59c;'
+				}else if(row.RestType=='10'){
+					return 'background-color:#1cbe57;'
+				}
+			}
+		},
+		async fetchTableData() {
+			if(!this.id){
+				return
+			}
+			this.table_loading = true;
+			this.table_form.org_id = this.id
+			this.table_form.sheetType = 2
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
+		},
+	},
+	async created() {
+		const { field, action,table } = await api_common.menuInit("attendance/refakelist");
+		this.table_field = field;
+		this.table_actions = action;
+		this.table_config = table
+		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		this.fetchTableData();
+	}
 };
 </script>
 

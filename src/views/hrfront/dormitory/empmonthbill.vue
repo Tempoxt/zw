@@ -6,67 +6,60 @@
 					<el-radio-button label="1">宿舍</el-radio-button>
 					<el-radio-button label="2">部门</el-radio-button>
 				</el-radio-group>
-				
-				<!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
-					<div class="h-full">
-						<div class="side-header">
-							<el-input placeholder="快速查找" v-model="filterText" class="input">
-							<i slot="suffix" class="el-input__icon el-icon-search"></i>
-							</el-input>
-							<!-- <el-button icon="el-icon-refresh" circle @click="refresh"></el-button> -->
-						</div>
-						<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-						<el-tree
-							class="tree"
-							:data="data2"
-							:props="{children: 'subs', label: 'dormName' }"
-							default-expand-all
-							node-key="orgid"
-							:filter-node-method="filterNode"
-							ref="tree2"
-							:highlight-current="true"
-							:check-on-click-node="false"
-							@node-click="handleChangeNode"
-							:expand-on-click-node="false"
-							>
-							<span slot-scope="{ node, data }" style="display:flex;justify-content: space-between;width: 100%;">
-								<template v-if="!data.roomName">
-									<div >
-										<span class="icon iconfont icon-zonggongsi"></span>&nbsp;
-										<span>{{ node.label||data.name }} </span>
-									</div>
-									<span v-if="choicetype==1" style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}} )</span>
-								</template>
-								<template v-else>
-									<div>
-										<span class="icon iconfont icon-nv" v-if="data.dormType===0" style="color:rgba(255, 52, 160, 1)"></span>
-										<span class="icon iconfont icon-nan" v-if="data.dormType===1" style="color:rgba(11, 178, 212, 1)"></span>
-										&nbsp;
-										<span>{{ data.roomName }} </span>
-									</div>
-									<span style="padding-right:10px" v-if="data.totalBeds">
-										( {{data.totalBeds+' - '}}
-										<span style="color:red" v-if="data.totalBeds-data.usedBeds">{{data.usedBeds}}</span>
-										<span style="color:rgba(0, 187, 69, 1)" v-else>住满</span>
-										)
-									</span>
-								</template>
-							</span>
-						</el-tree>
-						</el-scrollbar>
+				<div class="h-full">
+					<div class="side-header">
+						<el-input placeholder="快速查找" v-model="filterText" class="input">
+						<i slot="suffix" class="el-input__icon el-icon-search"></i>
+						</el-input>
+						<!-- <el-button icon="el-icon-refresh" circle @click="refresh"></el-button> -->
 					</div>
-				</el-scrollbar>
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+					<el-tree
+						class="tree"
+						:data="data2"
+						:props="{children: 'subs', label: 'dormName' }"
+						default-expand-all
+						node-key="orgid"
+						:filter-node-method="filterNode"
+						ref="tree2"
+						:highlight-current="true"
+						:check-on-click-node="false"
+						@node-click="handleChangeNode"
+						:expand-on-click-node="false"
+						>
+						<span slot-scope="{ node, data }" style="display:flex;justify-content: space-between;width: 100%;">
+							<template v-if="!data.roomName">
+								<div >
+									<span class="icon iconfont icon-zonggongsi"></span>&nbsp;
+									<span>{{ node.label||data.name }} </span>
+								</div>
+								<span v-if="choicetype==1" style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}} )</span>
+							</template>
+							<template v-else>
+								<div>
+									<span class="icon iconfont icon-nv" v-if="data.dormType===0" style="color:rgba(255, 52, 160, 1)"></span>
+									<span class="icon iconfont icon-nan" v-if="data.dormType===1" style="color:rgba(11, 178, 212, 1)"></span>
+									&nbsp;
+									<span>{{ data.roomName }} </span>
+								</div>
+								<span style="padding-right:10px" v-if="data.totalBeds">
+									( {{data.totalBeds+' - '}}
+									<span style="color:red" v-if="data.totalBeds-data.usedBeds">{{data.usedBeds}}</span>
+									<span style="color:rgba(0, 187, 69, 1)" v-else>住满</span>
+									)
+								</span>
+							</template>
+						</span>
+					</el-tree>
+					</el-scrollbar>
+				</div>
 			</div>
 		</el-col>
 
 		<el-col :span="19">
 		<div style="overflow: hidden;">
 			<div>
-				<!-- <roommonthbillInner :id="current_id" :data="current_data" v-if="current_type==='start'" :rows="rows"/> -->
-				
 				<roommonthbillDorm :id="current_id" :data="current_data" :orgid="orgid" :choicetype="choicetype" :current_type="current_type"/>
-				<!-- <roommonthbillDorm :id="current_id" :data="current_data" :orgid="orgid" :choicetype="choicetype" :current_type="current_type" v-if="current_type==='dorm'" />
-				<roommonthbillRoom :id="current_id" :data="current_data" :orgid="orgid" :choicetype="choicetype" :current_type="current_type" v-if="current_type==='room'" /> -->
 			</div>
 		</div>
 		</el-col>
@@ -104,13 +97,11 @@ export default {
             current_id:'',
             current_type:'start',
             current_data:{},
-            rows:[],
             choicetype:1,
             orgid:''
         }
     },
     methods:{
-
 		filterNode(value, data) {
 			if (!value) return true;
 			return data.restaurantname && data.restaurantname.indexOf(value) !== -1;

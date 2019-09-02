@@ -17,7 +17,7 @@
             :data="data2"
             :props="{children: 'subs', label: 'dormName' }"
             default-expand-all
-            node-key="id"
+            node-key="orgid"
             :filter-node-method="filterNode"
             ref="tree2"
             :highlight-current="true"
@@ -73,11 +73,9 @@
 <script>
 import * as api_common from "@/api/common";
 const api_restaurant = api_common.resource('restaurant')
-import dormInner from './dormInner'
 import roommonthbillRoom from './roommonthbill-dormRoom'
 import roommonthbillDorm from './roommonthbill-dorm'
 import roommonthbillInner from './roommonthbill-inner'
-import dormDorm from './dormDorm'
 export default {
     provide(){
       return {
@@ -85,11 +83,9 @@ export default {
       }
     },
     components:{
-       dormInner,
        roommonthbillRoom,
        roommonthbillDorm,
        roommonthbillInner,
-       dormDorm
     },
     watch:{
       tabActive(val){
@@ -111,41 +107,44 @@ export default {
         }
     },
     methods:{
+		filterNode(value, data) {
+			if (!value) return true;
+			return data.restaurantname && data.restaurantname.indexOf(value) !== -1;
+		},
+		async handleChangeNode(data,node){
+			
+			console.log(this.orgid)
+			// const { id } = data
+			// this.current_id = id
+			// this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
+			// this.current_data = data
+			// if(!data.roomName){
+			//     const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
+			//     this.$set(data,'subs',rows)
+			// }
+			
+			const { roomId,dormId } = data
+			const { rows } = await api_common.resource('dormitory/room').get({dorm:roomId||dormId});
+			this.rows = rows
+			this.current_id = roomId||dormId
+			this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
+			this.current_data = data
 
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.restaurantname && data.restaurantname.indexOf(value) !== -1;
-      },
-      async handleChangeNode(data,node){
-          // const { id } = data
-          // this.current_id = id
-          // this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
-          // this.current_data = data
-          // if(!data.roomName){
-          //     const { rows } = await api_common.resource('dormitory/room').get({dorm:id});
-          //     this.$set(data,'subs',rows)
-          // }
-          
-          const { roomId,dormId } = data
-          const { rows } = await api_common.resource('dormitory/room').get({dorm:roomId||dormId});
-          this.rows = rows
-          this.current_id = roomId||dormId
-          this.current_type =  data.start?'start':(data.roomName?'room':'dorm')
-          this.current_data = data
-          
-      },
-      async refresh(){
-          this.data2 =  await api_common.resource('restaurant/enable').get();
-          this.$nextTick(()=>{
-            this.$refs.tree2.setCurrentKey(this.orgid)
-          })
-      },
-      async getTree(){
-          this.data2 =  [await api_common.resource('dormitory/dormtree/front').get()];
-          this.$nextTick(()=>{
-            this.$refs.tree2.setCurrentKey(this.orgid)
-          })
-      }
+			console.log( this.current_type,' this.current_type')
+			
+		},
+		async refresh(){
+			this.data2 =  await api_common.resource('restaurant/enable').get();
+			this.$nextTick(()=>{
+				this.$refs.tree2.setCurrentKey(this.orgid)
+			})
+		},
+		async getTree(){
+			this.data2 =  [await api_common.resource('dormitory/dormtree/front').get()];
+			this.$nextTick(()=>{
+				this.$refs.tree2.setCurrentKey(this.data2[0].orgid)
+			})
+		}
     },
     async created(){
         this.getTree()

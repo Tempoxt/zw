@@ -41,10 +41,16 @@
               <form-render :type="`member`" :field="{name:'收款人'}" v-model="form.payee"/>
             </el-col>
 
-
+            <el-col :span="24">
+              <form-render :type="`input`" :field="{name:'凭证号'}" v-model="form.vouchers" />
+            </el-col>
 
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'备注'}" v-model="form.remark" />
+            </el-col>
+
+            <el-col :span="24">
+              <form-render :type="`imgMultiple`" :field="{name:'附件'}" :data="{'upload_msg':'axjj'}" v-model="form.expendAttachment"/>
             </el-col>
            
           </el-row>
@@ -86,7 +92,6 @@
         >
       </el-table-column>
         <el-table-column type="index" :index="indexMethod" width="70"/>
-        <!-- <each-table-column :table_field="table_field"/> -->
         <each-table-column :table_field="table_field.filter(o=>!['expendAttachment'].includes(o.name))" :template="template"/>
         <el-table-column prop="expendAttachment" label="附件">
             <template slot-scope="scope">
@@ -125,7 +130,9 @@ export default {
         return {
           baseUrl,
           loading: true,
-          form:{},
+          form:{
+            expendAttachment:[]
+          },
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
@@ -164,7 +171,6 @@ export default {
             let row = this.table_selectedRows[0]
             await this.$request.put('/lovefoundation/debitcredit/'+row.id)
             this.fetchTableData()
-            // api_resource.update(row.id)
         },
         async initForm(){
             const optionData = await this.$request.get('/lovefoundation/debitcreditfields');
@@ -185,8 +191,9 @@ export default {
                 this.putForm.credit = form.credit
                 this.putForm.amount = form.amount
                 this.putForm.remark = form.remark
-                
+                this.putForm.vouchers = form.vouchers
                 this.putForm.effectiveDate = form.effectiveDate
+                this.putForm.expendAttachment = form.expendAttachment
                 // this.putForm.grantees =  !isNaN(+form.grantees)?form.grantees:''
                 if(isNaN(+form.grantees)){
                    delete this.putForm.grantees
@@ -213,6 +220,7 @@ export default {
             let row = this.table_selectedRows[0]
             this.form = await api_resource.find(row.id);
             this.form = this.form[0];
+            this.form.expendAttachment = this.form.expendAttachment.split(',')
             console.log(this.form,'this.formthis.form')
             try {
               this.form.credit = this.formSelect2.find(o=>o.label==this.form.credit).value

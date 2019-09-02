@@ -16,17 +16,6 @@
 		>
 		<div style="width:710px;margin:0 auto"    v-loading="dialogLoading">
 			<el-form ref="form" :model="form" label-width="100px">
-				<!-- <form-render
-				:type="`radio`"
-				:field="{name:'宿舍类别',options:[{
-					value: 1,
-					label: '女生宿舍'
-				},{
-					value: 0,
-					label: '男生宿舍'
-				}]}"
-				v-model="form.dormType"
-				/> -->
 				<el-row :gutter="20">
 					<el-col :span="24">
 						<el-transfer
@@ -46,7 +35,7 @@
 							>
 							<span slot-scope="{ option }">{{ option.employeeCode }}  {{ option.chineseName }} {{ option.department }} </span>
 							<!-- <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button> -->
-							<div slot="right-footer" class="transfer-footer" slot-scope="scope">
+							<div slot="right-footer" class="transfer-footer">
 								<span>房号</span>
 								<span>{{data.roomName}}</span>
 								<span>{{data.totalBeds}}</span>
@@ -151,10 +140,6 @@
 		<div style="padding:10px 0 40px">
 			<el-button style="margin:5px" v-for="list in exportList" :key="list.title" @click="exportFile(list.url)">{{list.title}}</el-button>
 		</div>
-		<!-- <div slot="footer" class="dialog-footer">
-			<el-button @click="dialogFormVisible5 = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit5">确 定</el-button>
-		</div> -->
 	</el-dialog>
 
 
@@ -196,14 +181,6 @@
 		
 			</template>
 		</el-table-column>
-		<!-- <el-table-column
-			fixed="right"
-			label="入住记录"
-			width="100">
-			<template slot-scope="scope">
-				<el-button  type="text" size="small">查看</el-button>
-			</template>
-		</el-table-column> -->
     </el-table>
     <table-pagination 
         :total="table_form.total" 
@@ -250,9 +227,7 @@ export default {
 			checked: [],
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			adminList:[],
 			defaultForm,
-			roomAdminList:[],
 			roomList:[],
 			dialogFormVisible2:false,
 			dialogFormVisible3:false,
@@ -267,7 +242,6 @@ export default {
 				checkState(column,row){
 					return <div class={['text-danger','','text-danger',''][row.checkState]}>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
 				},
-
 			},
 			memberList:[],
 			rows2:[],
@@ -311,7 +285,7 @@ export default {
 				this.table_form.dormId = this.id
 				delete this.table_form.roomId
 			}
-			if(this.type == 'start'){
+			if(this.type == 'start'||this.type==''){
 				delete this.table_form.dormId
 				delete this.table_form.roomId
 			}
@@ -375,8 +349,8 @@ export default {
 			// })
 			// this.form.dorm = this.id
 			if(this.data.dormType===undefined){
-			this.$message('请先选择房间')
-			return 
+				this.$message('请先选择房间')
+				return 
 			}
 			this.dialogLoading = true
 			this.dialogFormVisible = true
