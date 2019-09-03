@@ -3,7 +3,8 @@
  <el-row class="h-full">
     <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
-           <hignAllowance v-model="orgid" url="org/hotselect"/>
+           <org @change="changeOrg" getApi="org/hotselect"/>
+           <!-- <hignAllowance v-model="orgid" url="org/hotselect"/> org/hotselect-->
       </div>
 
     </el-col>
@@ -20,20 +21,30 @@
   </el-row>
 </template>
 <script>
-import hignAllowance from '@/views/public/customOrg'
+// import hignAllowance from '@/views/public/customOrg'
+import org from '@/views/public/org.vue'
 import hotLogTable from './hotLogTable'
 import hotListTable from './hotListTable'
 export default {
     components:{
-        hignAllowance,
+        // hignAllowance,
         hotLogTable,
-        hotListTable
+        hotListTable,
+        org
     },
     data(){
         return {
             activeName:'first',
             orgid:''
         }
+    },
+    methods:{
+        changeOrg(id){
+            this.orgid = id
+        }
+    },
+    async created(){
+        console.log('lalalala')
     }
 }
 </script>
