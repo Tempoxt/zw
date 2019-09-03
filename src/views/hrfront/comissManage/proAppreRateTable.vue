@@ -75,7 +75,10 @@ export default {
 			table_topHeight:276,
 			dialogForm1Visible:false,
 			dialogFormVisible:false,
-			quarter:[]
+			quarter:[],
+			timer:'',
+			statusk:1,
+			val:''
 		};
 	},
 	watch:{
@@ -84,7 +87,6 @@ export default {
 			this.fetchTableData()
 		},
 		url(){
-			// this.table_form.keyword = ''
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()
@@ -102,11 +104,25 @@ export default {
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
-        },
+		},
+		async getDa(){
+			if(this.statusk!=0){
+				this.val = await this.$request.get('commission/valueIncrease/resetresult')
+				if(this.val=='已完成'){
+					this.statusk = 0
+					this.$message.success({ message: this.val})
+					this.fetchTableData()
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
 		async reset(){
 			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
 			this.$message.success({message: mes})
-			this.fetchTableData()
+			this.timer = setInterval(()=>{
+				this.getDa()
+			},10000)
 		},
 		async fetchQuarter(){
 			this.quarter = await api_common.resource('commission/seasonValueIncrease/optional').get()

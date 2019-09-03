@@ -7,7 +7,7 @@
                         <Org2 ref="sameDepartment" style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" :month="month" same="false"
                           @change="changeOrg"  :dataList="result"/>
                     </el-col>
-                    <el-col :span="2" style="height:100%">
+                    <el-col :span="2" style="height:100%;margin-top:20px">
                         <div class="control">
                             <div class="control-btns">
                                 <div>
@@ -27,14 +27,12 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <!-- <el-tab-pane label="我的下属" name="second">:sele="select.seleSim" :leaf="select.leaf" 
-            </el-tab-pane> -->
             <el-tab-pane label="组织结构" name="third" v-if="activeNam!='first'">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="11">
                         <Org2 ref="organizationalStructure" style="height:400px" :searchApi="searchApi" :filter_mark="filter_mark" :month="month" same="true" @change="changeOrg"/>
                     </el-col>
-                    <el-col :span="2" style="height:100%">
+                    <el-col :span="2" style="height:100%;margin-top:20px">
                         <div class="control">
                             <div class="control-btns">
                                 <div>

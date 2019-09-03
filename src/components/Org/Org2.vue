@@ -1,13 +1,13 @@
 <template>
   	<div>
-		<div class="side-header" style="margin-top:20px">
+		<div class="side-header" style="margin-top:20px;padding-left:20px">
 			<el-input placeholder="快速查找" v-model="filterText" class="input">
 				<i slot="suffix" class="el-input__icon el-icon-search"></i>
 			</el-input>
 		</div>
 
 		<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-			<div style="padding:0 20px 20px">
+			<div style="padding:10px 20px 20px">
 				<el-tree
 					class="tree"
 					:data="data"
@@ -129,7 +129,9 @@ export default {
 			}
 			this.data = await this.$request.get(_urldata);
 			if(this.getApi=='/org/samedeptselect'){
-				this.data[0].subs = 1
+				if(this.data[0]){
+					this.data[0].subs = 1
+				}
 			}
 		},
 		empty(){

@@ -6,162 +6,145 @@
   
   >
 
-<el-dialog
-      title="加入"
-      :visible.sync="dialogForm3Visible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="800px"
-    >
+	<el-dialog
+		title="添加"
+		:visible.sync="dialogForm3Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="800px"
+		>
 
-    <el-form ref="form" :model="form" label-width="100px" :inline="true">
-        <el-form-item label="有效起始日期">
-          <el-date-picker
-              v-model="form3.stayStart"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-         <el-form-item label="有效结束日期">
-          <el-date-picker
-              v-model="form3.stayEnd"
-              type="date"
-               value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
+		<el-form ref="form" :model="form3" label-width="110px" :rules="rule">
+			<el-row>
+				<el-col :span="12">
+					<form-render prop="stayStart" :type="`day`" :field="{name:'有效起始日期'}" v-model="form3.stayStart"/>
+				</el-col>
+				<el-col :span="12">
+					<form-render :type="`day`" :field="{name:'有效结束日期'}" v-model="form3.stayEnd"/>
+				</el-col>
+			</el-row>
+		</el-form>
 
-    </el-form>
+      	<OrgSelect searchApi='/hrm/hotpartstaff' filter_mark="hotAllowance" v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
-      <OrgSelect searchApi='/hrm/hotpartstaff' filter_mark="hotAllowance" v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogForm3Visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleForm3Submit">确 定</el-button>
-      </div>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm3Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm3Submit">确 定</el-button>
+		</div>
     </el-dialog>
 
 
 
-  <el-dialog
-      title="高温津贴设置"
-      :visible.sync="dialogForm2Visible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="500px"
-    >
-      <div style="width:400px;margin:0 auto">
-        <el-form ref="form" :model="form2" label-width="100px">
-          <el-row :gutter="20">
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'高温津贴'}" v-model="form2.hotAllowance" />
-            </el-col>
-          
-             <el-col :span="24">
+  	<el-dialog
+		title="高温津贴设置"
+		:visible.sync="dialogForm2Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="500px"
+    	>
+		<div style="width:400px;margin:0 auto">
+			<el-form ref="form" :model="form2" label-width="100px">
+				<el-row :gutter="20">
+					<el-col :span="24">
+						<form-render :type="`input`" :field="{name:'高温津贴'}" v-model="form2.hotAllowance" />
+					</el-col>
+					<el-col :span="24">
+						<el-form-item label="津贴月份">
+							<div style="display:flex">
+								<el-select v-model="form2.startMonth" placeholder="请选择" >
+									<el-option
+									v-for="item in 12"
+									:key="item"
+									:label="item+'月'"
+									:value="item">
+									</el-option>
+								</el-select>    
+								<span style="padding:0 10px;">至</span>   
+								<el-select v-model="form2.endMonth" placeholder="请选择">
+									<el-option
+									v-for="item in 12"
+									:key="item"
+									:label="item+'月'"
+									:value="item">
+									</el-option>
+								</el-select>      
+							</div>  
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+		</div>
 
-                <el-form-item label="津贴月份">
-                    <div style="display:flex">
-                         <el-select v-model="form2.startMonth" placeholder="请选择" >
-                                <el-option
-                                v-for="item in 12"
-                                :key="item"
-                                :label="item+'月'"
-                                :value="item">
-                                </el-option>
-                            </el-select>    
-                            <span style="padding:0 10px;">至</span>   
-                            <el-select v-model="form2.endMonth" placeholder="请选择">
-                                <el-option
-                                v-for="item in 12"
-                                :key="item"
-                                :label="item+'月'"
-                                :value="item">
-                                </el-option>
-                            </el-select>      
-                    </div>  
-                </el-form-item>
-            </el-col>   
-            
-          </el-row>
-        </el-form>
-      </div>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogForm2Visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleForm2Submit">确 定</el-button>
-      </div>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm2Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm2Submit">确 定</el-button>
+		</div>
     </el-dialog>
 
+  	<el-dialog
+		title='编辑'
+		:visible.sync="dialogFormVisible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="800px"
+		>
+		<div>
+			<el-form ref="form" :model="form" label-width="110px" :rules="rule1">
+				<el-row :gutter="20">
+					<el-col :span="17" :offset="3">
+						<form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form.chineseName" disabled/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render :type="`day`"  :field="{name:'有效起始日期'}" v-model="form.stayStart"/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render prop="stayEnd" :type="`day`" :field="{name:'有效结束日期'}" v-model="form.stayEnd"/>
+					</el-col>
+				</el-row>
+			</el-form>
+		</div>
 
-
-  <el-dialog
-      :title="dialogStatus==='insert'?'添加':'编辑'"
-      :visible.sync="dialogFormVisible"
-      class="public-dialog"
-      v-el-drag-dialog
-      width="500px"
-    >
-      <div style="width:400px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
-          <el-row :gutter="20">
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form.chineseName" disabled/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'有效起始日期'}" v-model="form.stayStart"/>
-            </el-col>
-             <el-col :span="24">
-              <form-render :type="`day`" :field="{name:'有效结束日期'}" v-model="form.stayEnd"/>
-            </el-col>   
-            
-          </el-row>
-        </el-form>
-      </div>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-      </div>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+		</div>
     </el-dialog>
-
-
 
 
     <table-header
-      :table_actions="table_actions"
-      :table_selectedRows="table_selectedRows"
-      @action="handleAction"
-      :table_form.sync="table_form"
-      :table_column="table_field"
-    >
-          <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetch"/>
-          </div>
+		:table_actions="table_actions"
+		:table_selectedRows="table_selectedRows"
+		@action="handleAction"
+		:table_form.sync="table_form"
+		:table_column="table_field"
+		>
+			<div style="padding-left:10px">
+				<dateLap v-model="table_form.dateLap" @change="fetch"/>
+			</div>
     </table-header>
     <el-table
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-      @sort-change="table_sort_change"
-      
-    >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
-      </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+		@selection-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="headerCellStyle"
+		:height="table_height"
+		@header-dragend="table_dragend"
+		@sort-change="table_sort_change"
+		
+		>
+		<el-table-column 
+			type="selection" 
+			width="60" 
+			class-name="table-column-disabled"
+			:selectable="table_disable_selected"
+			>
+		</el-table-column>
+		<el-table-column type="index" :index="indexMethod" width="70"/>
+		<each-table-column :table_field="table_field"/>
     </el-table>
-     <table-pagination 
+    <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
@@ -183,114 +166,122 @@ const defaultForm = () => {
     }
 }
 export default {
-  mixins: [table_mixin],
-  props:['id'],
-  components:{
-      OrgSelect
-  },
-  data() {
-    return {
-      loading: true,
-      form:{},
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
-      table_topHeight:276,
-      adminList:[],
-      defaultForm,
-      roomAdminList:[],
-      dormList:[],
-      dialogForm2Visible:false,
-      dialogForm3Visible:false,
-      form2:{},
-      form3:{}
-    };
-  },
-  watch:{
-    id(){
-      this.table_form.currentpage = 1
-      this.fetchTableData()
-    }
-  },
-  methods: {
-    fetch(){
-        this.table_form.currentpage = 1
-        this.fetchTableData()
-    },
-    async set(){
-        this.form2 = await this.$request.get('/hot/recordbasic')
-        this.dialogForm2Visible = true
-    },
-    async handleForm2Submit(){
-        await this.$request.put('/hot/recordbasic',this.form2)
-        this.dialogForm2Visible = false
-    },
-    async handleForm3Submit(){
-      let ids = this.$refs.OrgSelect.getIdsResult()
-      this.form3.ids = ids;
-      if(this.form3.ids!==''){
-        try{
-          let mes = await this.$request.post('/hot/record',this.form3)
-          this.$message.success({message:mes})
-        }catch(err){
-          this.$message.error({message:err.response.data})
-        }
-        // let repeat = await this.$request.post('/hot/record',this.form3,{alert:false})
-        // if(repeat.length!==0){
-        //   var rep = repeat.map(o=>o)
-        //   this.$message.error({message:'创建失败,'+rep+'存在时间重叠的名单记录',duration:12000})
-        // }else{
-        //   this.$message.success({message:'创建成功'})
-        // }
-        this.dialogForm3Visible = false
-        this.fetchTableData()
-      }else{
-        this.$message.error('请选择要添加的人员');
-      }
-    },
-    add(){
-        this.form3 = {}
-        this.dialogForm3Visible = true
-    },
-    async edit(){
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
-    },
-    async fetchTableData() {
-     if(!this.id){
-       return
-     }
-     this.table_loading = true;
-     this.table_form.org_id = this.id
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-       this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        form.org_id = this.id
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form,{alert:false})
-            this.$message.success('修改成功');
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-    },
-  },
-  async created() {
-    const { field, action,table } = await api_common.menuInit("hot/record");
-    this.table_field = field;
-    this.table_actions = action;
-    this.table_config = table
-    this.fetchTableData();
-    this.table_form.dateLap = dayjs().format('YYYY-MM')
-  }
+	mixins: [table_mixin],
+	props:['id'],
+	components:{
+		OrgSelect
+	},
+	data() {
+		return {
+			loading: true,
+			form:{},
+			api_resource,
+			orgCategory:[],
+			queryDialogFormVisible:true,
+			table_topHeight:276,
+			adminList:[],
+			defaultForm,
+			roomAdminList:[],
+			dormList:[],
+			dialogForm2Visible:false,
+			dialogForm3Visible:false,
+			form2:{},
+			form3:{},
+			rule:{
+				stayStart:[
+					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
+				]
+			},
+			rule1:{
+				stayEnd:[
+					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
+				]
+			}
+		};
+	},
+	watch:{
+		id(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		}
+	},
+	methods: {
+		fetch(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		async set(){
+			this.form2 = await this.$request.get('/hot/recordbasic')
+			this.dialogForm2Visible = true
+		},
+		async handleForm2Submit(){
+			await this.$request.put('/hot/recordbasic',this.form2)
+			this.dialogForm2Visible = false
+		},
+		async handleForm3Submit(){
+            await this.form_validate()
+			let ids = this.$refs.OrgSelect.getIdsResult()
+			this.form3.ids = ids;
+			if(this.form3.ids!==''){
+				try{
+					let mes = await this.$request.post('/hot/record',this.form3)
+					this.$message.success({message:mes})
+				}catch(err){
+					this.$message.error({message:err.response.data})
+				}
+				this.dialogForm3Visible = false
+				this.fetchTableData()
+			}else{
+				this.$message.error('请选择要添加的人员');
+			}
+		},
+		add(){
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
+			this.form3 = {}
+			this.dialogForm3Visible = true
+		},
+		async edit(){
+			let row = this.table_selectedRows[0]
+			this.form = await api_resource.find(row.id)
+			this.dialogFormVisible = true;
+		},
+		async fetchTableData() {
+			if(!this.id){
+				return
+			}
+			this.table_loading = true;
+			this.table_form.org_id = this.id
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
+		},
+		async handleFormSubmit(){
+            await this.form_validate()
+			let form = Object.assign({},this.form)
+			form.org_id = this.id
+			if(this.isInsert){
+				await api_resource.create(form)
+			}else{
+				await api_resource.update(form.id,form,{alert:false})
+				this.$message.success('修改成功');
+			}
+			this.dialogFormVisible = false
+			this.fetchTableData()
+		},
+	},
+	async created() {
+		const { field, action,table } = await api_common.menuInit("hot/record");
+		this.table_field = field;
+		this.table_actions = action;
+		this.table_config = table
+		this.fetchTableData();
+		this.table_form.dateLap = dayjs().format('YYYY-MM')
+	}
 };
 </script>
 

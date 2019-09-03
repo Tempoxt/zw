@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex">
         <el-select v-model="ctype" :disabled="disabled" placeholder="请选择" style="width:60px" class="dateLap-select">
             <el-option
                 v-for="item in options"
@@ -81,13 +81,18 @@ export default {
 }
 </script>
 <style lang="scss">
+.flex{
+    display: flex;
+    align-items: center
+}
 .dateLap-select {
     .el-input__inner {
-            border-right: none;
-            border-radius: 2px 0 2px 2px;
+        border-right: none;
+        border-radius: 2px 0 2px 2px;
     }
 }
 .dateLap-date{
+    border-radius: 0px 2px 2px 0px!important;
     .el-input__inner {
         border-radius: 2px 2px 2px 0px;
     }

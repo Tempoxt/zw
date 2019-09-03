@@ -4,7 +4,7 @@
     <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
            <org @change="changeOrg" getApi="org/hotselect"/>
-           <!-- <hignAllowance v-model="orgid" url="org/hotselect"/> org/hotselect-->
+           <!-- <hignAllowance v-model="orgid" url="org/hotselect"/>-->
       </div>
 
     </el-col>
@@ -44,7 +44,7 @@ export default {
         }
     },
     async created(){
-        console.log('lalalala')
+
     }
 }
 </script>

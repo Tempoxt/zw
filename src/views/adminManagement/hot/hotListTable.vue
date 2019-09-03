@@ -5,44 +5,6 @@
 	@query="querySubmit"
 	>
 
-	<el-dialog
-		title="加入"
-		:visible.sync="dialogForm3Visible"
-		class="public-dialog"
-		v-el-drag-dialog
-		width="800px"
-    	>
-
-		<el-form ref="form" :model="form" label-width="100px" :inline="true">
-			<el-form-item label="有效起始日期">
-				<el-date-picker
-					v-model="form3.stayStart"
-					type="date"
-					value-format="yyyy-MM-dd"
-					placeholder="选择日期">
-				</el-date-picker>
-			</el-form-item>
-			<el-form-item label="有效结束日期">
-				<el-date-picker
-					v-model="form3.stayEnd"
-					type="date"
-					value-format="yyyy-MM-dd"
-					placeholder="选择日期">
-				</el-date-picker>
-			</el-form-item>
-
-		</el-form>
-
-      	<OrgSelect v-model="form3.ids" activeNam="" ref="OrgSelect" v-if="dialogForm3Visible"/>
-
-		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogForm3Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm3Submit">确 定</el-button>
-		</div>
-    </el-dialog>
-
-
-
   	<el-dialog
 		title="高温津贴设置"
 		:visible.sync="dialogForm2Visible"
@@ -60,22 +22,22 @@
 						<el-form-item label="津贴月份">
 							<div style="display:flex">
 								<el-select v-model="form2.startMonth" placeholder="请选择" >
-										<el-option
-										v-for="item in 12"
-										:key="item"
-										:label="item+'月'"
-										:value="item">
-										</el-option>
-									</el-select>    
-									<span style="padding:0 10px;">至</span>   
-									<el-select v-model="form2.endMonth" placeholder="请选择">
-										<el-option
-										v-for="item in 12"
-										:key="item"
-										:label="item+'月'"
-										:value="item">
-										</el-option>
-									</el-select>      
+									<el-option
+									v-for="item in 12"
+									:key="item"
+									:label="item+'月'"
+									:value="item">
+									</el-option>
+								</el-select>    
+								<span style="padding:0 10px;">至</span>   
+								<el-select v-model="form2.endMonth" placeholder="请选择">
+									<el-option
+									v-for="item in 12"
+									:key="item"
+									:label="item+'月'"
+									:value="item">
+									</el-option>
+								</el-select>      
 							</div>  
 						</el-form-item>
 					</el-col>
@@ -86,37 +48,6 @@
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm2Visible = false">取 消</el-button>
 			<el-button type="primary" @click="handleForm2Submit">确 定</el-button>
-		</div>
-    </el-dialog>
-
-
-
-  	<el-dialog
-		:title="dialogStatus==='insert'?'添加':'编辑'"
-		:visible.sync="dialogFormVisible"
-		class="public-dialog"
-		v-el-drag-dialog
-		width="500px"
-		>
-		<div style="width:400px;margin:0 auto">
-			<el-form ref="form" :model="form" label-width="100px">
-				<el-row :gutter="20">
-					<el-col :span="24">
-						<form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form.chineseName" disabled/>
-					</el-col>
-					<el-col :span="24">
-						<form-render :type="`input`" :field="{name:'有效起始日期'}" v-model="form.stayStart" disabled/>
-					</el-col>
-					<el-col :span="24">
-						<form-render :type="`day`" :field="{name:'有效结束日期'}" v-model="form.stayEnd"/>
-					</el-col>
-				</el-row>
-			</el-form>
-		</div>
-
-		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -134,7 +65,6 @@
       				:summary-method="getSummaries"
 					:cellStyle="drawerStyle"
 					>
-					
             		<!-- <el-table-column type="index" :index="indexMethods" label="日期" /> -->
 					<el-table-column
 						prop="CheckDate"
@@ -330,7 +260,6 @@ export default {
 			}
 		},
 		drawerStyle({row,column,rowIndex,columnIndex}){
-			// console.log(column,'eeeee')
 			if(row.Remark!=''&&row.Remark!=null){
 				return 'color:red'
 			}else if(column.label=="星期"){
@@ -343,16 +272,12 @@ export default {
 			}else if(column.label=="日期"&&row.hotDetail!=''&&row.hotDetail!=null&&row.hotDetail==1){
 				return 'background-color:#0bb2d4;'
 			}
-			// else if(column.label=="高温津贴"&&row.hotDetail!=''&&row.hotDetail!=null){
-			// 	return 'background-color:#0bb2d4;'
-			// }
 		},
         headerStyle(row,rowIndex,column,columnIndex){
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
         },
 		async openDrawer(row,column,cell,event){
             if(row.allowanceDays==event.target.innerText){
-				console.log(row,'rrrrrrrr')
 				this.openDrawers = true
 				this.chineseName = row.chineseName
 				this.emplCode = row.employeeCode
@@ -365,10 +290,6 @@ export default {
 			const { columns, data } = param;
 			const sums = [];
 			columns.forEach((column, index) => {
-				// if (index === 0) {
-				// 	sums[index] = '合计';
-				// 	return;
-				// }
 				if(index === 0){
 					sums[index] = this.totalAllo;
 				}
