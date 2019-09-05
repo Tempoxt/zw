@@ -76,15 +76,17 @@
       @sort-change="table_sort_change"
       
     >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
+      <el-table-column 
+        type="selection" 
+        width="60" 
+        class-name="table-column-disabled"
+        :selectable="table_disable_selected"
+        >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+      <el-table-column type="index" :index="indexMethod" width="70" fixed/>
+      <el-table-column prop="staff__employeeCode" sortable label="工号" fixed/>
+      <el-table-column prop="staff__chineseName" label="姓名" fixed/>
+      <each-table-column :table_field="table_field.filter(o=>!['staff__employeeCode','staff__chineseName'].includes(o.name))"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -177,6 +179,7 @@ export default {
     },
   },
   async created() {
+    console.log('eeeeeee')
     const { field, action,table } = await api_common.menuInit("basicwage");
     this.table_field = field;
     var socialSecurityMain = this.table_field.filter(o=>['staff__socialSecurityMain'].includes(o.name))[0].sourcefrom.choice

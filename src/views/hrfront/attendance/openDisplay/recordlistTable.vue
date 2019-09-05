@@ -55,6 +55,7 @@ const api_resource = api_common.resource("attendance/refakelist");
 import dayjs from 'dayjs'
 import { setInterval, clearInterval } from 'timers';
 let baseUrl = process.env.VUE_APP_STATIC
+let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
 const defaultForm = () => {
     return {
@@ -68,6 +69,7 @@ export default {
 	data() {
 		return {
 			baseUrl,
+			baseUri,
 			loading: true,
 			form:{},
 			api_resource,
@@ -88,44 +90,44 @@ export default {
 		}
 	},
 	methods: {
-		// async getUrl(){
-		// 	if(this.statusk!=0){
-		// 		this.url = await this.$request.get('/attendance/refakelist/exportresult')
-		// 		if(this.url!=''){
-		// 			const res = download(baseUrl+this.url)//baseUrl'http://192.168.18.220:8001/'
-		// 			this.statusk = res.status
-		// 		}
-		// 	}else{
-		// 		clearInterval(this.timer)
-		// 	}
-		// },
-		// ab2str(u,f) {
-		// 	var b = new Blob([u]);
-		// 	var r = new FileReader();
-		// 	r.readAsText(b, 'utf-8');
-		// 	r.onload = function (){if(f)f.call(null,r.result)}
-		// },
-		// async download(){
-		// 	this.statusk = 1
-		// 	try{
-		// 		const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
-		// 			responseType:'arraybuffer'
-		// 		})
-		// 		var that = this
-		// 		this.ab2str(data,function(str){
-		// 			that.$message.success({ message: str,duration:5000});
-		// 		});
-		// 		try{
-		// 			this.timer = setInterval(()=>{
-		// 				this.getUrl()
-		// 			}, 10000)
-		// 		}catch(error){
-		// 			console.log(error)
-		// 		}
-		// 	}catch(err){
-		// 		console.log(err)
-		// 	}
-		// },
+		async getUrl(){
+			if(this.statusk!=0){
+				try{
+					this.url = await this.$request.get('/attendance/refakelist/exportresult')
+					if(this.url!=''){
+						const res = download(baseUri+'/'+this.url)
+						this.statusk = 0
+					}
+				}catch(err){
+					clearInterval(this.timer)
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
+		ab2str(u,f) {
+			var b = new Blob([u]);
+			var r = new FileReader();
+			r.readAsText(b, 'utf-8');
+			r.onload = function (){if(f)f.call(null,r.result)}
+		},
+		async download(){
+			this.statusk = 1
+			try{
+				const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
+					responseType:'arraybuffer'
+				})
+				var that = this
+				this.ab2str(data,function(str){
+					that.$message.success({ message: str,duration:5000});
+				});
+				this.timer = setInterval(()=>{
+					this.getUrl()
+				}, 10000)
+			}catch(err){
+				console.log(err)
+			}
+		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
