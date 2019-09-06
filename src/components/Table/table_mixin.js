@@ -305,6 +305,13 @@ export default {
       //     params:this.table_form,
       //     responseType:'arraybuffer'
       //   })
+        const loading = this.$loading( {
+          lock: true,
+          text: '正在下载中,请稍后',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        //
         const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
           responseType:'arraybuffer'
         })
@@ -312,6 +319,10 @@ export default {
         
 
         download(data,name||this.$route.meta.title,contentType)
+        console.log(data,'ddddd')
+        if(data!==''){
+          loading.close();
+        }
     },
     async export(){
       const formatJson = function(filterVal, jsonData){

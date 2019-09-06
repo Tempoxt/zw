@@ -214,12 +214,6 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-		// changeMonth(){
-		// 	if(this.isInsert){
-		// 		this.form.emID = ''
-		// 		// this.form.ids = ''
-		// 	}
-		// },
 		add(){
 			this.form = {}
 			this.$nextTick(()=>{

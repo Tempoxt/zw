@@ -179,6 +179,12 @@ export default {
         
       }
     },
+    table_actions(){
+      let length = this.table_actions.length
+      if( length == this.table_actions_morelen+1){
+        this.table_actions_morelen =  length
+      }
+    }
   },
   data() {
     return {
