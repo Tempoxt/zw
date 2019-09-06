@@ -1,6 +1,6 @@
 <template>
   	<el-row class="h-full">
-		<el-col :span="5" class="h-full">
+		<el-col :span="4" class="h-full">
 			<div class="page-side h-full">
 				<el-radio-group v-model="choicetype" style="margin-bottom: 20px;">
 					<el-radio-button label="1">宿舍</el-radio-button>
@@ -56,7 +56,7 @@
 			</div>
 		</el-col>
 
-		<el-col :span="19">
+		<el-col :span="20">
 		<div style="overflow: hidden;">
 			<div>
 				<roommonthbillDorm :id="current_id" :data="current_data" :orgid="orgid" :choicetype="choicetype" :current_type="current_type"/>

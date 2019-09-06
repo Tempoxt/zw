@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-row class="h-full">
-        <el-col :span="5" class="h-full">
+        <el-col :span="4" class="h-full">
             <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
                 <div style="padding:20px">
                     <div class="side-header">
@@ -43,7 +43,7 @@
                 </div>
             <!-- </el-scrollbar> -->
         </el-col>
-        <el-col :span="19">
+        <el-col :span="20">
             <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
                 <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
             </el-tabs>

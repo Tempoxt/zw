@@ -1,13 +1,13 @@
 <template>
 
  <el-row class="h-full">
-    <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
+    <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
            <org v-model="orgid" @change="changeOrg" getApi="org/delaccidentselect"/>
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>

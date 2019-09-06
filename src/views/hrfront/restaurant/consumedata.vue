@@ -1,6 +1,6 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
       <div class="page-side h-full">
         
         <!-- <span class="page-title">员工用餐记录</span>
@@ -38,7 +38,7 @@
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
         <consumedata :currentMenuid="currentMenuid"/>
     </el-col>
   </el-row>

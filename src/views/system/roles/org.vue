@@ -7,16 +7,12 @@
           @input="fetchUser"
           v-model="filterText">
         </el-input>
-     <el-scrollbar
-     
-      ref="scrollContainer"
-      class="scroll-container"
-     >
-        <ul class="el-select-dropdown__list" v-if="filterText" >
-            <li class="el-select-dropdown__item" v-for="item in user" :key="item.id" @click="select(item)">{{item.real_name}} - {{item.user_num}}</li>
-        </ul>
-      
-        <el-tree
+        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+          <ul class="el-select-dropdown__list" v-if="filterText" >
+              <li class="el-select-dropdown__item" v-for="item in user" :key="item.id" @click="select(item)">{{item.real_name}} - {{item.user_num}}</li>
+          </ul>
+          
+          <el-tree
             v-else
             class="filter-tree"
             show-checkbox
@@ -26,13 +22,13 @@
             :load="loadNode1"
             lazy
             @node-click="nodeSelect"
-        >
-            <span slot-scope="{ node, data }">
-            <span :class="data.icon"></span>&nbsp;
-            <span>{{ node.label }}</span>
-            </span>
-        </el-tree>
-         </el-scrollbar>
+          >
+              <span slot-scope="{ node, data }">
+              <span :class="data.icon"></span>&nbsp;
+              <span>{{ node.label }}</span>
+              </span>
+          </el-tree>
+        </el-scrollbar>
       
         
         <!-- <el-select
@@ -74,7 +70,6 @@ export default {
       console.log(data);
     },
     select(data){
-        console.log(data,'da222ta')
         this.visible = false;
         this.data = data.id;
         this.input5 = data.chineseName
@@ -132,7 +127,7 @@ export default {
     data(val) {
     //   this.input5 = ''
     //   this.findDataName();
-      if(this.field.defaultName){
+      if(this.field){
           this.input5 = this.field.defaultName
       }
       this.$parent.$emit("input", this.data);
@@ -140,7 +135,8 @@ export default {
     value: {
       immediate: true,
       handler(val) {
-        if(!val){
+        console.log(this.field,'fff')
+        if(!val &&this.field){
           this.input5 = this.field.real_name
         }
         this.data = this.value;
@@ -179,8 +175,9 @@ export default {
     display: none;
   }
 }
-.scroll-container {
-  height: 300px;
+.scroll {
+  height: 400px;
+  margin-bottom:-80px;
   /deep/ .el-scrollbar__wrap {
     overflow-x: hidden;
   }

@@ -1,13 +1,13 @@
 <template>
 
  <el-row class="h-full">
-    <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
+    <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
            <org v-model="orgid" @change="changeOrg"/>
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
         <recordlistTable :id="orgid" />
     </el-col>
   </el-row>

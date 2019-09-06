@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-row class="h-full">
-        <el-col :span="5" class="h-full">
+        <el-col :span="4" class="h-full">
             <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
                 <div style="padding:20px"  class="h-full">
                     <div class="side-header">
@@ -40,7 +40,7 @@
             </el-scrollbar>
                 </div>
         </el-col>
-        <el-col :span="19">
+        <el-col :span="20">
             <devicelistTable :id="id"/>
         </el-col>
     </el-row>

@@ -1,6 +1,6 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
       <div class="page-side h-full">
      
         <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
@@ -59,7 +59,7 @@
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
        <div style="overflow: hidden;">
            <div>
               <roommonthbillInner :id="current_id" :data="current_data" v-if="current_type==='start'" :rows="rows"/>

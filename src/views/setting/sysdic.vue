@@ -1,6 +1,6 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
 
          <el-dialog
             :title="dialogStatus==='insert'?'添加':'编辑'"
@@ -77,7 +77,7 @@
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
         <sysdicTable  :id="current_id"/>
     </el-col>
   </el-row>

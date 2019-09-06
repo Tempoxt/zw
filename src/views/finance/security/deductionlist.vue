@@ -1,12 +1,12 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
+    <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
           <org @change="changeOrg" />
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
          <deductionlistTable :id="currentMenuid"/>
     </el-col>
   </el-row>

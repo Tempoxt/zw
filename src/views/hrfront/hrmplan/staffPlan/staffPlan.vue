@@ -1,10 +1,10 @@
 <template>
   
     <el-row class="h-full">
-        <el-col :span="5" class="h-full" style="border-right:1px solid #e8e8e8">
+        <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
             <org @change="changeOrg" v-model="orgid"/>
         </el-col>
-        <el-col :span="19">
+        <el-col :span="20">
             <staffPlanTable :id="orgid"/>
         </el-col>
     </el-row>

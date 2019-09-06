@@ -13,68 +13,29 @@
       v-el-drag-dialog
     >
         <el-form ref="form" :model="form" label-width="80px" label-position="left">
-          <!-- <el-tree
-            :data="roleList[0].group_role"
-            show-checkbox
-            default-expand-all
-            node-key="id"
-            ref="tree"
-            highlight-current
-            :props="{
-                children: 'subs',
-                label: 'name'
-            }">
-
-
-            </el-tree> -->
-
             <el-tabs v-model="activeName" @tab-click="handleClick">
-              
                 <el-tab-pane label="同部门" name="first">
                     <br />
-                      <el-input v-model="input" placeholder="搜索"></el-input>
-                     <el-table
-                    ref="multipleTable"
-                    :data="tableData.filter(data=>!input || data.real_name.includes(input)||(data.user_num+'').includes(input))"
-                    tooltip-effect="dark"
-                    style="width: 100%"
-                    @selection-change="handleSelectionChange"
-                  >
-                    <el-table-column
-                    type="selection"
-                    width="55">
-                    </el-table-column>
-                    <el-table-column
-                    label="工号"
-                    prop="user_num"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    prop="real_name"
-                    label="姓名"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    prop="principalship"
-                    label="职位"
-                    show-overflow-tooltip>
-                    </el-table-column>
-                </el-table>
-
-
+                    <el-input v-model="input" placeholder="搜索"></el-input>
+                    <el-table
+                        ref="multipleTable"
+                        :data="tableData.filter(data=>!input || data.real_name.includes(input)||(data.user_num+'').includes(input))"
+                        tooltip-effect="dark"
+                        style="width: 100%"
+                        @selection-change="handleSelectionChange"
+                    >
+                        <el-table-column  type="selection" width="55"></el-table-column>
+                        <el-table-column label="工号" prop="user_num" width="120"> </el-table-column>
+                        <el-table-column prop="real_name" label="姓名" width="120"> </el-table-column>
+                        <el-table-column prop="principalship" label="职位" show-overflow-tooltip> </el-table-column>
+                    </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="组织结构" name="second">
                     <br />
-                 
                     <org :roleid="roleid" ref="org"/>
                 </el-tab-pane>
             </el-tabs>
-
-
-
             <br />
-             <br /> 
-             <br />
         </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -83,61 +44,57 @@
       </div>
     </el-dialog>
 
-
-            <table-header
+        <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
             :table_form.sync="table_form"
              :table_column="table_field"
             @action="handleAction"
-            
-            ></table-header>
-            <el-table 
-                @selection-change="handleChangeSelection"
-                :data="table_data"
-                border 
-                style="width: 100%"
-                :row-class-name="table_state_className"
-                :header-cell-style="headerCellStyle"
-                :height="table_height"
-                @header-dragend="table_dragend"
-                @sort-change="table_sort_change"
-                v-loading="table_loading">
+        ></table-header>
+        <el-table 
+            @selection-change="handleChangeSelection"
+            :data="table_data"
+            border 
+            style="width: 100%"
+            :row-class-name="table_state_className"
+            :header-cell-style="headerCellStyle"
+            :height="table_height"
+            @header-dragend="table_dragend"
+            @sort-change="table_sort_change"
+            v-loading="table_loading">
                 <el-table-column 
-                type="selection" 
-                width="60" 
-                class-name="table-column-disabled"
-                :selectable="table_disable_selected"
+                    type="selection" 
+                    width="60" 
+                    class-name="table-column-disabled"
+                    :selectable="table_disable_selected"
                 >
                 </el-table-column>
-                 <el-table-column type="index" :index="indexMethod" />
+                <el-table-column type="index" :index="indexMethod" />
                 <el-table-column
-                   
                     :prop="column.name"
                     :label="column.showname"
                     v-for="column in table_field.filter(column=>!column.fed_isvisiable)"
                     :key="column.id"
                     :width="column.width||'auto'"
                     :sortable="column.issort?'custom':false"
-                    
                 >
-                <template slot-scope="scope">
-                    <template v-if="column.name==='icon'">
-                        <i :class="scope.row[column.name]"></i>
+                    <template slot-scope="scope">
+                        <template v-if="column.name==='icon'">
+                            <i :class="scope.row[column.name]"></i>
+                        </template>
+                        <template v-else>
+                            {{ scope.row[column.name] }}
+                        </template>
                     </template>
-                    <template v-else>
-                        {{ scope.row[column.name] }}
-                    </template>
-                </template>
-                </el-table-column>
-            </el-table>
-          <table-pagination 
-           :total="table_form.total" 
-           :pagesize.sync="table_form.pagesize"
-           :currentpage.sync="table_form.currentpage"
-           @change="fetchTableData"
-           :table_config="table_config"
-           />
+            </el-table-column>
+        </el-table>
+        <table-pagination 
+        :total="table_form.total" 
+        :pagesize.sync="table_form.pagesize"
+        :currentpage.sync="table_form.currentpage"
+        @change="fetchTableData"
+        :table_config="table_config"
+        />
     </ui-table>
 </template>
 <script>
@@ -188,38 +145,20 @@ export default {
             //        return o
             //    }))
             // })
-
             this.tableData = await this.$request.get('user/roledept',{
                 roleid:this.roleid,
                 // keyword:this.input
             })
-            
-            // this.tableData = [
-            //     {
-            //         "id": 9,
-            //         "user_num": 111,
-            //         "real_name": "邓亚峰",
-            //         "principalship": "经理"
-            //     },
-            //     {
-            //         "id": 2,
-            //         "user_num": 222,
-            //         "real_name": "邓亚峰",
-            //         "principalship": "经理"
-            //     },
-            //     {
-            //         "id": 3,
-            //         "user_num": 333,
-            //         "real_name": "邓亚峰",
-            //         "principalship": "经理"
-            //     }
-            // ]
             this.dialogFormVisible = true
         },
         handleClick(){
             
         },
-        edit(){
+        async edit(){
+            this.tableData = await this.$request.get('user/roledept',{
+                roleid:this.roleid,
+                // keyword:this.input
+            })
             this.form =Object.assign({}, this.table_selectedRowsInfo[0])
             const {name,icon} = this.form
             this.form.iconName = {

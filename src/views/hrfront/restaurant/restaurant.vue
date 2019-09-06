@@ -39,7 +39,7 @@
       </div>
     </el-dialog>
 
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
       <div class="page-side h-full">
         <span class="page-title">就餐员工设置</span>
         <!-- <div>
@@ -92,9 +92,9 @@
             </span>
           </el-tree>
         </div>
-      </div>
+      <!-- </div> -->
     </el-col>
-    <el-col :span="19" style="height:calc(100% - 40px)">
+    <el-col :span="20" style="height:calc(100% - 40px)">
         <restaurantmember :currentMenuid="currentMenuid" :restaurantid_id="restaurantid_id" :parent_nodeid="parent_nodeid"/>
     </el-col>
   </el-row>

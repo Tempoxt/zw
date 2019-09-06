@@ -1,6 +1,6 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
       <div class="page-side h-full">
      
         <div class="h-full">
@@ -53,7 +53,7 @@
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
        <div style="overflow: hidden;">
          <dormInner :id="current_id" v-if="current_type==='start'"/>
          <dormDorm :id="current_id" v-if="current_type==='dorm'"/>

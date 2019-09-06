@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-row class="h-full">
-        <el-col :span="5">
+        <el-col :span="4">
                 <div style="padding:20px" class="h-full">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
@@ -34,7 +34,7 @@
                     </el-scrollbar>
                 </div>
         </el-col>
-        <el-col :span="19">
+        <el-col :span="20">
             <operatelist :orgid="orgid"/>
         </el-col>
     </el-row>

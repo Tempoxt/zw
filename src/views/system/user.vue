@@ -1,6 +1,6 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
       <div class="page-side h-full">
         
         <span class="page-title">用户管理</span>
@@ -38,7 +38,7 @@
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
         <user-table :currentMenuid="currentMenuid"/>
     </el-col>
   </el-row>

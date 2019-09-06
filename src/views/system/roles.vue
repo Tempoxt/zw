@@ -39,7 +39,7 @@
 			</div>
 		</el-dialog>
 
-		<el-col :span="5" class="h-full">
+		<el-col :span="4" class="h-full">
 			<div class="page-side h-full">
 				
           	<!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
@@ -95,7 +95,7 @@
 			<!-- </el-scrollbar> -->
 			</div>
 		</el-col>
-		<el-col :span="19" style="height:calc(100% - 40px)">
+		<el-col :span="20" style="height:calc(100% - 40px)">
 			<el-tabs v-model="activeName" class="table-tabs" >
 				<el-tab-pane label="角色成员分配" name="first">
 					<member :roleid="currentMenuid" :roleList="data2"/>

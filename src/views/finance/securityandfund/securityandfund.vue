@@ -1,12 +1,12 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="5" class="h-full">
+    <el-col :span="4" class="h-full">
       <div class=" h-full">
           <org @change="changeOrg" />
       </div>
 
     </el-col>
-    <el-col :span="19">
+    <el-col :span="20">
         <el-tabs v-model="activeName">
             <el-tab-pane label="社保记录" name="first">
                <securityandfundTable :id="currentMenuid"/>
