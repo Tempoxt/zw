@@ -22,7 +22,7 @@
         >
           <el-button type="default" style="border-left: 0;"  size="medium">
             <span style="font-size: 12px;">更多</span>
-            <i class="el-icon-arrow-down el-icon--right" style="font-size: 14px"></i>
+            <i class="el-icon-arrow-down el-icon--right" style="font-size: 12px"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" :split-button="true">
             <el-dropdown-item
@@ -31,7 +31,7 @@
               @click.native="handleAction(action.code,action)"
               :disabled="!isDisabled(action.code)"
             >
-              <i :class="action.icon" style="padding-right:10px;margin-right:-10px;font-size:14px"></i>
+              <i :class="action.icon" style="padding-right:10px;margin-right:-10px;font-size:12px"></i>
               {{action.name}}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -239,7 +239,14 @@ export default {
   }
 };
 </script>
+<style>
+  .el-input--small{
+    font-size: 12px;
+  }
+</style>
+
 <style lang="scss" scoped>
+
 .el-button--small{
   padding: 9px 10px;
 }

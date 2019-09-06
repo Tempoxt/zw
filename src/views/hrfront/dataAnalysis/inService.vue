@@ -86,7 +86,7 @@ export default {
 				  name: this.title,
 			      type: "pie",
 			      radius: ["30%", "45%"],
-			      center: ["50%", "65%"],
+			      center: ["50%", "55%"],
 				  avoidLabelOverlap: true,
 				  minAngle:20,
 			      label: {

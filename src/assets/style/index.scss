@@ -103,7 +103,8 @@ a {
 
 .el-table--small th, .el-table--small td {
   padding: 12px 0;
-  font-size: 14px;
+  font-size: 12px;
+  //表格字体大小
 }
 .el-table th.is-leaf, .el-table td {
   border-bottom: 1px solid #F5F5F5;
@@ -287,7 +288,8 @@ $space-width: 18px;
 }
 
 .tree {
-  font-size: 14px;
+  //修改左侧组织结构字体大小
+  font-size: 12px;
   .el-tree-node__content {
     height: 34px;
   }

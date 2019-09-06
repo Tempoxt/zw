@@ -13,7 +13,7 @@
         @contextmenu.prevent.native="openMenu(tag,$event)"
       >
         {{ tag.title }}
-        <span class="icon iconfont icon-guanbi1" @click.prevent.stop="closeSelectedTag(tag)"/>
+        <span class="icon iconfont icon-guanbi1" @click.prevent.stop="closeSelectedTag(tag)" style="font-size:20px"/>
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
@@ -164,7 +164,7 @@ export default {
       color: #495060;
       background: #fff;
       padding: 0 30px 0 25px;
-      font-size: 14px;
+      font-size: 12px;
       // margin-left: 5px;
       // margin-top: 4px;
       &:first-of-type {

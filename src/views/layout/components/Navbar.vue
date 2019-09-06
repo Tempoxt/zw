@@ -189,6 +189,7 @@ export default {
       margin: 0 8px;
       color: #fff;
       .iconfont {
+		font-size:14px;
         cursor: pointer;
       }
     }

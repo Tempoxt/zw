@@ -101,7 +101,7 @@
 							</el-col>
 						</el-row>
 						
-					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:25px">
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
 						<el-row>
 							<el-col :span="12" v-show="staffData.length!=0">
 								<inService
@@ -390,7 +390,7 @@
     padding: 6px 20px;
 }
 .dashboard .el-card__body {
-	height: 400px;
+	height: 360px;
 }
 .dashboard .speech-mode .el-card__body{
 	height: 100%;
@@ -421,7 +421,7 @@
 	height: 500px!important;
 }
 .scroll {
-	height: 100%;
+    height: calc(100% - 30px);
 	width: 100%;
 	/deep/ .scrollbar-wrapper {
 		overflow-x: hidden;

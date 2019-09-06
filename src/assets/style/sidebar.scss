@@ -6,7 +6,7 @@
     margin-left: 180px;
     position: relative;
     .iconfont {
-      
+      font-size: 14px;
     }
 
     // position: fixed;
@@ -99,6 +99,10 @@
         }
       }
     }
+  }
+  //修改侧边菜单字体大小
+  .el-menu-item,.el-submenu__title{
+    font-size:12px;
   }
   .el-menu-item, .el-submenu__title {
     height: 40px;

@@ -47,4 +47,7 @@ export default {
 #app {
   height: 100%;
 }
+.el-radio__label,.el-form-item__label,.theme-0BB2D4 .el-select-dropdown__item,.theme-0BB2D4 .el-popover{
+  font-size: 12px!important;
+}
 </style>
