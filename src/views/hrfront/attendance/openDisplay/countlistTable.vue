@@ -13,7 +13,7 @@
       :table_column="table_field"
     >
           <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" type="2" itemsD="1" @change="fetch"/>
+            <dateLap v-model="table_form.dateLap" itemsD="1" @change="fetch"/>
           </div>
     </table-header>
     <el-table
@@ -70,33 +70,36 @@ export default {
       queryDialogFormVisible:true,
       defaultForm,
       formData:[],
-      importUploadUrl:"/attendance/count"
+      importUploadUrl:"/attendance/count",
     };
   },
   watch:{
     id(){
-            this.table_form.currentpage = 1
+      this.table_form.currentpage = 1
       this.fetchTableData()
     },
   },
   methods: {
     fetch(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
-        },
+      this.table_form.currentpage = 1
+      this.fetchTableData()
+    },
+    // download(){
+    //   console.log(1111)
+    // },
     async fetchTableData() {
-		if(!this.id){
-			return
-		}
-		this.table_loading = true;
-		this.table_form.org_id = this.id
-		this.table_form.sheetType = 2
-		const {rows , total }= await api_resource.get(this.table_form);
-		this.table_data  = rows
-		this.table_form.total = total
-		setTimeout(() => {
-			this.table_loading = false;
-		}, 300);
+      if(!this.id){
+        return
+      }
+      this.table_loading = true;
+      this.table_form.org_id = this.id
+      this.table_form.sheetType = 2
+      const {rows , total }= await api_resource.get(this.table_form);
+      this.table_data  = rows
+      this.table_form.total = total
+      setTimeout(() => {
+        this.table_loading = false;
+      }, 300);
     }
   },
   async created() {

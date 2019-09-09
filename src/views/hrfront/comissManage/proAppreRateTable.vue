@@ -118,6 +118,7 @@ export default {
 			}
 		},
 		async reset(){
+			this.statusk = 1
 			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
 			this.$message.success({message: mes})
 			this.timer = setInterval(()=>{

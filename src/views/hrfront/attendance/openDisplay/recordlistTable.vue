@@ -99,7 +99,7 @@ export default {
 						this.statusk = 0
 					}
 				}catch(err){
-					clearInterval(this.timer)
+					// clearInterval(this.timer)
 				}
 			}else{
 				clearInterval(this.timer)
@@ -114,6 +114,7 @@ export default {
 		async download(){
 			this.statusk = 1
 			try{
+				// this.table_form.isDimission = 79
 				const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
 					responseType:'arraybuffer'
 				})
