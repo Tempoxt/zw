@@ -117,7 +117,6 @@ export default {
 				clearInterval(this.timer)
 			}
 			try{
-				// this.table_form.isDimission = 79
 				const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
 					responseType:'arraybuffer'
 				})

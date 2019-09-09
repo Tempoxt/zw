@@ -256,10 +256,10 @@ export default {
 				this.timer = setInterval(()=>{
 					this.getDa()
 					this.s++;
-				},10000)
+				},5000)
 			} catch (error) {
 				console.log(error)
-				this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:6000})
+				this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:4000})
 			}finally{
 				this.importLoading = false
 				MessageBox.close()
@@ -269,13 +269,13 @@ export default {
 			}
     	},
 		async getDa(){
-			if(this.statusk!=0&&this.s<=6){
-				if(this.s==6){
+			if(this.statusk!=0&&this.s<=12){
+				if(this.s==12){
 					this.$message.error({ message: '导入失败,请重试'})
 				}
 				this.val = await this.$request.get('/deduction/upload',{alert:false})
 				this.statusk = 0
-				this.$message.success({ message: this.val,duration:5000})
+				this.$message.success({ message: this.val,duration:3000})
 				this.fetchTableData()
 			}else{
 				clearInterval(this.timer)
