@@ -129,8 +129,6 @@
 								:class="{'speech-mode':screenIndex=='2'}"
 								></pieChart>
 							</el-col>
-						</el-row>
-						<el-row>
 							<el-col :span="12" v-show="eduLevelData.length!=0">
 								<pieChart
 								:show="checkFullshow"
@@ -155,6 +153,110 @@
 								:class="{'speech-mode':screenIndex=='4'}"
 								></barChart>
 							</el-col>
+							<!-- <el-col :span="12" v-show="memberData.length!=0">
+								<inService
+								id="ring-member"
+								title="直接/间接人员人数及比列"  
+								:show="checkFullshow" 
+								:datas = memberData
+								:color="['#40CDE9','#FF8D53']"
+								ref="echart5" 
+								screenIndex='5'
+								@fullScreen="fullScreen"
+								:class="{'speech-mode':screenIndex=='5'}"
+								></inService>
+								<div class="totalR" v-if="totalP!=''"></div>
+							</el-col>
+							<el-col :span="12" class="padding-left-10" v-show="leaveData.length!=0">
+								<inService
+								id="ring-leave"
+								title="请假情况统计表"  
+								:show="checkFullshow" 
+								:datas = leaveData
+								ref="echart6" 
+								screenIndex='6'
+								@fullScreen="fullScreen"
+								:class="{'speech-mode':screenIndex=='6'}"
+								></inService>
+							</el-col>
+							<el-col :span="12"  v-show="staffplanData.length!=0">
+								<histogram 
+								:show="checkFullshow" 
+								ref="echart7" 
+								title="人员规划及实际人数" 
+								screenIndex='7'
+								:color="['#5A8BFC','#40CDE9']"
+								@fullScreen="fullScreen"
+								id="staff-plan"
+								:datas="staffplanData"
+								:class="{'speech-mode':screenIndex=='7'}"
+								></histogram>
+							</el-col>
+							<el-col :span="12" class="padding-left-10" v-show="recruitData.length!=0">
+								<singlehisto 
+								:show="checkFullshow" 
+								ref="echart8" 
+								title="各部门招聘完成率统计" 
+								screenIndex='8'
+								:color="['#40CDE9']"
+								@fullScreen="fullScreen"
+								id="recruit-data"
+								:datas="recruitData"
+								:class="{'speech-mode':screenIndex=='8'}"
+								></singlehisto>
+							</el-col>
+							<el-col :span="12" v-show="leaveReaData.length!=0">
+								<singlehisto 
+								:show="checkFullshow" 
+								ref="echart9" 
+								title="离职原因分析表" 
+								screenIndex='9'
+								:color="['#5A8BFC']"
+								@fullScreen="fullScreen"
+								id="leave-reason"
+								:datas="leaveReaData"
+								:class="{'speech-mode':screenIndex=='9'}"
+								></singlehisto>
+							</el-col>
+							<el-col :span="12" class="padding-left-10" v-show="leaveEduData.length!=0">
+								<singlehisto 
+								:show="checkFullshow" 
+								ref="echart10" 
+								title="离职学历分析表" 
+								screenIndex='10'
+								:color="['#996EFF']"
+								@fullScreen="fullScreen"
+								id="leave-edu"
+								:datas="leaveEduData"
+								:class="{'speech-mode':screenIndex=='10'}"
+								></singlehisto>
+							</el-col>
+							<el-col :span="12"  v-show="manageData.length!=0">
+								<posnegBar 
+								:show="checkFullshow" 
+								ref="echart11" 
+								title="人力资源报表" 
+								screenIndex='11'
+								:color="['#FF7676','#84EBFF','#40CDE9']"
+								@fullScreen="fullScreen"
+								id="manage-data"
+								:datas="manageData"
+								:class="{'speech-mode':screenIndex=='11'}"
+								></posnegBar>
+							</el-col>
+							<el-col :span="12" class="padding-left-10" v-show="rewarPunish.length!=0">
+								<histogram 
+								:show="checkFullshow" 
+								ref="echart12" 
+								title="人员奖惩情况统计" 
+								screenIndex='12'
+								:color="['#7DD453','#FF8D53']"
+								@fullScreen="fullScreen"
+								id="reward-punish"
+								:datas="rewarPunish"
+								:class="{'speech-mode':screenIndex=='12'}"
+								></histogram>
+							</el-col> -->
 						</el-row>
 					</el-scrollbar>
 				</div>
@@ -178,6 +280,9 @@
 	import inService from "./dataAnalysis/inService"
 	import pieChart from "./dataAnalysis/pieChart"
 	import barChart from "./dataAnalysis/barChart"
+	import histogram from "./dataAnalysis/histogram"
+	import singlehisto from "./dataAnalysis/singlehisto"
+	import posnegBar from "./dataAnalysis/posnegBar"
 	import Org from "@/components/Org/Org.vue"
 	import org from '@/views/public/org'
 	
@@ -199,7 +304,15 @@
 		staffData:[],
 		sexData:[],
 		eduLevelData:[],
+		memberData:[],
+		leaveData:[],
+		staffplanData:{},
 		eachageData:{},
+		recruitData:{},
+		leaveEduData:{},
+		leaveReaData:{},
+		manageData:{},
+		rewarPunish:{},
 		orgid:'',
 		input5:'',
 		filterText:'',
@@ -218,6 +331,9 @@
 		inService,
 		pieChart,
 		barChart,
+		histogram,
+		singlehisto,
+		posnegBar,
 		Org,
 		org
 	},
@@ -298,10 +414,14 @@
 				this.sexData = analysis.sex_stat;
 				this.eduLevelData = analysis.eduLevel_stat;
 				this.eachageData = analysis.each_age_sex_stat
-				// console.log(this.staffData,'1111')
-				// console.log(this.sexData,'2222')
-				// console.log(this.eduLevelData,'3333')
-				// console.log(this.eachageData,'4444')
+				this.memberData = this.sexData
+				this.leaveData = this.sexData
+				this.staffplanData = this.eachageData
+				this.recruitData = this.eachageData
+				this.leaveReaData = this.eachageData
+				this.leaveEduData = this.eachageData
+				this.manageData = this.eachageData
+				this.rewarPunish = this.eachageData
 				let per = this.staffData.map(o=>o.value)
 				this.totalP = per.reduce((tem,item,index)=>tem+item)
 			}
@@ -338,7 +458,7 @@
 			   }
 			   if (e.keyCode==40) {
 				   console.log(_this.speechIndex)
-			   	if (_this.speechIndex<4) {
+			   	if (_this.speechIndex<12) {
 			   		_this.speechIndex=parseInt(_this.speechIndex)+1;
 					_this.speechSwitch(_this.speechIndex)
 			   	} else{
