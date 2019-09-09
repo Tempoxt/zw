@@ -76,7 +76,7 @@
       :table_form.sync="table_form"
     >
 		<div style="padding-left:10px">
-			<dateLap v-model="table_form.dateLap" @change="fetch"/>
+			<dateLap v-model="table_form.dateLap" type="1" @change="fetch"/>
 		</div>
 	</table-header>
 
@@ -251,7 +251,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
 	this.table_config = table 
-	this.table_form.dateLap = dayjs().format('YYYY-MM')
+	this.table_form.dateLap = dayjs().format('YYYY-MM-DD')
   }
 };
 </script>
