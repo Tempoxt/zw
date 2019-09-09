@@ -51,6 +51,7 @@
 					<el-col :span="14" :offset="4">
 						<el-form-item label="月份" prop="month">
 							<el-date-picker
+							    disabled
 								:clearable="false"
 								v-model="form1.month"
 								type="month"
