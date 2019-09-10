@@ -100,4 +100,12 @@ export default [{
             title: '月份绩效考核'
         }
     },
+    {
+        name: 'staffSalary',
+        component: () =>
+            import ('@/views/finance/salary/staffSalary'),
+        meta: {
+            title: '月份绩效考核'
+        }
+    },
 ]
