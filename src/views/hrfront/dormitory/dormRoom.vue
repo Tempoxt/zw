@@ -276,6 +276,16 @@ export default {
 			this.downloadUrl = "/dormitory/import/confirmout"
 			this.import()
 		},
+		importApplyIn(){
+			this.importUploadUrl = '/dormitory/import/applyin'
+			this.downloadUrl = "/dormitory/import/applyin"
+			this.import()
+		},
+		importApplyOut(){
+			this.importUploadUrl = '/dormitory/import/checkout'
+			this.downloadUrl = "/dormitory/import/checkout"
+			this.import()
+		},
 		async fetchTableData() {
 			this.table_loading = true;
 			if(this.type == 'room'){
