@@ -93,7 +93,7 @@ export default {
 		async getUrl(){
 			if(this.statusk!=0){
 				try{
-					this.url = await this.$request.get('/attendance/refakelist/exportresult')
+					this.url = await this.$request.get('/attendance/refakelist/exportresult',{alert:false})
 					if(this.url!=''){
 						const res = download(baseUri+'/'+this.url)
 						this.statusk = 0
