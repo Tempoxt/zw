@@ -268,6 +268,7 @@ export default {
 		},
 	},
 	async created() {
+		console.log(1111111111111)
 		const { field, action,table } = await api_common.menuInit("salary/achievement");
 		this.table_field = field;
 		this.table_actions = action;
