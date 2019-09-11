@@ -135,6 +135,7 @@
 								ref="echart3"
 								title="学历分布统计" 
 								id="education"
+								:color="['#6556FF','#5A8BFC','#5CACFC','#40CDE9','#58D8BE','#4BDB80','#7DD453','#84EBFF','#B392FF','#FFAA7E','#FF8D8D','#E4D945','#F3D044','#FFAF47','#FF8D53','#FE68D1']"
 								screenIndex='3'
 								@fullScreen="fullScreen"
 								:datas="eduLevelData"

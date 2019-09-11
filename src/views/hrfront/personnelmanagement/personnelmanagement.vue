@@ -50,7 +50,7 @@
                                             prop="birthday"
                                             />
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="24" v-if="isInsert">
                                         <form-render
                                             :type="`day`"
                                             :field="{name:'证件生效'}"
@@ -58,12 +58,27 @@
                                             prop="stayBegin"
                                             />
                                         </el-col>
-                                        <el-col :span="24">
+                                        
+                                        <el-col :span="24" v-if="!isInsert">
+                                        <form-render
+                                            :type="`day`"
+                                            :field="{name:'证件生效'}"
+                                            v-model="form.stayBegin"
+                                            />
+                                        </el-col>
+                                        <el-col :span="24" v-if="isInsert">
                                         <form-render
                                             :type="`day`"
                                             :field="{name:'证件失效'}"
                                             v-model="form.stayEnd"
                                             prop="stayEnd"
+                                            />
+                                        </el-col> 
+                                        <el-col :span="24" v-if="!isInsert">
+                                        <form-render
+                                            :type="`day`"
+                                            :field="{name:'证件失效'}"
+                                            v-model="form.stayEnd"
                                             />
                                         </el-col>   
                                     </el-row>
@@ -71,7 +86,8 @@
                                 <el-col :span="12">
                                     <el-row :gutter="0">
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'签发机关'}" v-model="form.qfjg"  prop="qfjg"/>
+                                            <form-render :type="`input`" v-if="isInsert" :field="{name:'签发机关'}" v-model="form.qfjg"  prop="qfjg"/>
+                                            <form-render :type="`input`" v-if="!isInsert" :field="{name:'签发机关'}" v-model="form.qfjg"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render :type="`input`" :field="{name:'住址'}" v-model="form.contactAddr" prop="contactAddr"/>
@@ -1378,13 +1394,14 @@ export default {
                     this.$message.error(err.field[0]);
                 }
             }else{
-                if(this.tab_label ==='联系方式'){
+                // if(this.tab_label ==='联系方式'){
+                //     await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
+                //     this.$message.success('修改成功');
+                // }else{
                     await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
-                    this.$message.success('修改成功');
-                }else{
                     await api_common.resource('hrm/staff').update(form.id,form)
                     // await api_resource.update(form.id,form)
-                }
+                // }
                 this.fetchProfileData()
                 this.dialogFormVisible = false
                 this.fetchTableData()
