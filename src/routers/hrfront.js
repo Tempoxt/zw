@@ -381,6 +381,13 @@ export default [{
         meta: {
             title: '入住待处理清单'
         }
+    },    
+    {
+        name: 'introducercost',
+        component: () =>
+            import ('@/views/hrfront/introducercost/introlist'),
+        meta: {
+            title: '介绍费汇总'
+        }
     },
-    
 ]

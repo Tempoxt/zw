@@ -137,7 +137,7 @@
       >
       </el-table-column>
       <el-table-column type="index" :index="indexMethod" width="70"/>
-      <each-table-column :table_field="table_field"/>
+      <each-table-column :table_field="table_field" :template="template"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -201,7 +201,15 @@ export default {
 			},
 			importUploadUrl:"/salary/ahupload",
 			downloadUrl:'salary/ahuploadtemplate',
-			// allIds:[],
+			template:{
+				payStatus_display(column,row){
+					if(row.payStatus_display=='未结付'){
+						return <el-tag size="mini" type="danger">{row.payStatus_display}</el-tag>
+					}else{
+						return <el-tag size="mini" type="success">{row.payStatus_display}</el-tag>
+					}
+				}
+			}
 		};
 	},
 	watch:{
