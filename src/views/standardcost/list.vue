@@ -12,9 +12,6 @@
             :table_form.sync="table_form"
             :table_column="table_field"
         >
-            <div style="padding-left:10px">
-                <dateLap v-model="table_form.dateLap" @change="fetchTableData"/>
-            </div>
         </table-header>
         <el-table
             @selection-change="handleChangeSelection"
@@ -78,7 +75,7 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
-        this.table_form.dateLap = dayjs().format('YYYY-MM')
+        // this.table_form.dateLap = dayjs().format('YYYY-MM')
         
     }
 };
