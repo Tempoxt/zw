@@ -159,27 +159,19 @@ export default [{
         }
     },
     {
+        name: 'employeeShift',
+        component: () =>
+            import ('@/views/hrfront/employeeTurnover/employee'),
+        meta: {
+            title: '员工转正'
+        }
+    },
+    {
         name: 'employeeDoc',
         component: () =>
             import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
         meta: {
             title: '员工档案'
-        }
-    },
-    {
-        name: 'onDuty',
-        component: () =>
-            import ('@/views/hrfront/personnelmanagement/personnelmanagement'),
-        meta: {
-            title: '在职员工'
-        }
-    },
-    {
-        name: 'outDuty',
-        component: () =>
-            import ('@/views/hrfront/personnelmanagement/personnelmanagementOut'),
-        meta: {
-            title: '离职员工'
         }
     },
     {
@@ -278,22 +270,6 @@ export default [{
             title: '注销登记'
         }
     },
-    // {
-    //     name: 'personnelmanagement-employee',
-    //     component: () =>
-    //         import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
-    //     meta: {
-    //         title: '人事管理'
-    //     }
-    // },
-    // {
-    //     name: 'personnelmanagement-employee',
-    //     component: () =>
-    //         import ('@/views/hrfront/personnelmanagement/personnelmanagement-employee'),
-    //     meta: {
-    //         title: '档案管理'
-    //     }
-    // },
     {
         name: 'outDutyLog',
         component: () =>

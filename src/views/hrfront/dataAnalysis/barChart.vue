@@ -9,7 +9,7 @@
 import echarts from "echarts";
 
 export default {
-  props: ["title", "id","show","datas","screenIndex"],	
+  	props: ["title", "id","show","datas","screenIndex"],	
 	data() {
 		return {
 			option: {}

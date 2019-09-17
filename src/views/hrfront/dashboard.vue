@@ -25,6 +25,9 @@
 								<el-col :span="12">
 									<accident></accident>
 								</el-col>
+								<el-col class="padding-left-10" :span="12" v-show="personnel.length>0">
+									<personnel :datas="personnel" title="待转正员工"></personnel>
+								</el-col>
 							</el-row>
 					</el-scrollbar>
 
@@ -278,12 +281,14 @@
 	import leaveList from "./workbench/leaveList"
 	import supplement from "./workbench/supplement"
 	import accident from "./workbench/accident"
+	import personnel from "./workbench/personnel"
 	import inService from "./dataAnalysis/inService"
 	import pieChart from "./dataAnalysis/pieChart"
 	import barChart from "./dataAnalysis/barChart"
 	import histogram from "./dataAnalysis/histogram"
 	import singlehisto from "./dataAnalysis/singlehisto"
 	import posnegBar from "./dataAnalysis/posnegBar"
+	import sunbrust from "./dataAnalysis/sunbrust"
 	import Org from "@/components/Org/Org.vue"
 	import org from '@/views/public/org'
 	
@@ -292,193 +297,193 @@
 	import table_mixin from "@c/Table/table_mixin";
 	
 	import screenfull from "screenfull";
-  export default {
-    data() {
-      return {
-		activeName: 'workbench',
-        value: '',
-		screenIndex:"",
-		checkFullshow:true,
-		speechIndex:1,
-		fulltype:false,
-		analysis:{},
-		staffData:[],
-		sexData:[],
-		eduLevelData:[],
-		memberData:[],
-		leaveData:[],
-		staffplanData:{},
-		eachageData:{},
-		recruitData:{},
-		leaveEduData:{},
-		leaveReaData:{},
-		manageData:{},
-		rewarPunish:{},
-		orgid:'',
-		input5:'',
-		filterText:'',
-		visible:false,
-		data2:[],
-		form:{},
-		totalP:''
-      };
-    },
-	components:{
-		quickEntry,
-		workSchedule,
-		leaveList,
-		supplement,
-		accident,
-		inService,
-		pieChart,
-		barChart,
-		histogram,
-		singlehisto,
-		posnegBar,
-		Org,
-		org
-	},
-	watch:{
-		orgid(){
-			this.fetchData()
-			this.visible = false
-			this.findDataName()
+	export default {
+		data() {
+			return {
+				activeName: 'workbench',
+				value: '',
+				screenIndex:"",
+				checkFullshow:true,
+				speechIndex:1,
+				fulltype:false,
+				analysis:{},
+				staffData:[],
+				sexData:[],
+				eduLevelData:[],
+				memberData:[],
+				leaveData:[],
+				staffplanData:{},
+				eachageData:{},
+				recruitData:{},
+				leaveEduData:{},
+				leaveReaData:{},
+				manageData:{},
+				rewarPunish:{},
+				orgid:'',
+				input5:'',
+				filterText:'',
+				visible:false,
+				data2:[],
+				form:{},
+				totalP:'',
+				personnel:[],
+				one:[]
+			};
 		},
-		filterText(val) {
-			this.$refs.tree2.filter(val);
-		}
-	},
-    methods: {
-		findDataName() {
-			if (this.orgid === undefined) {
-				return;
+		components:{
+			quickEntry,
+			workSchedule,
+			leaveList,
+			supplement,
+			accident,
+			personnel,
+			inService,
+			pieChart,
+			barChart,
+			histogram,
+			singlehisto,
+			posnegBar,
+			sunbrust,
+			Org,
+			org
+		},
+		watch:{
+			orgid(){
+				this.fetchData()
+				this.visible = false
+				this.findDataName()
+			},
+			filterText(val) {
+				this.$refs.tree2.filter(val);
 			}
-			let orgid = this.orgid;
-			let info = {};
-			let that = this;
-			(function f(data) {
-				data.some(row => {
-					if (row['orgid'] == orgid) {
-						info = row;
-						return true;
-					}
-					if (row.subs && row.subs.length) {
-						f(row.subs);
-					}
-				});
-			})(this.data2);
-			this.input5 = info.name;
 		},
-		handleChangeNode(val){
-            this.orgid = val.orgid
-        },
-        changeOrg(orgid){
-            this.orgid = orgid
-        },
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.name && data.name.indexOf(value) !== -1;
-        },
-		speechMode(id){
-			screenfull.toggle();
-			this.speechSwitch(id);
-		},
-		speechSwitch(id){
-			this.screenIndex=id;
-		    this.$refs["echart"+id].checkFull();
-			this.checkFullshow=false;
-			this.fulltype=true;
-		},
-		fullScreen(res){
-			console.log(res)
-			this.speechMode(res);
-			this.fulltype=false;
-		},
-		keyEsc(){
-			this.screenIndex=""
-		},
-		/** * 是否全屏并按键ESC键的方法 */
-		checkFull() {
-		  var isFull = window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled;
-		  // to fix : false || undefined == undefined
-		  if (isFull === undefined) {
-			  isFull = false;
-		  }
-		  // console.log(document.fullscreenEnabled , window.fullScreen , document.webkitIsFullScreen , document.msFullscreenEnabled);
-		  // console.log(isFull);
-		  return isFull;
-		},
-		async fetchData(){
-			if(this.orgid!=''&&this.orgid!=undefined){
-				const analysis = await this.$request.get('/dataanalysis/datastat?org_id='+this.orgid);
-				this.staffData = analysis.staff_stat
-				this.sexData = analysis.sex_stat;
-				this.eduLevelData = analysis.eduLevel_stat;
-				this.eachageData = analysis.each_age_sex_stat
-				this.memberData = this.sexData
-				this.leaveData = this.sexData
-				this.staffplanData = this.eachageData
-				this.recruitData = this.eachageData
-				this.leaveReaData = this.eachageData
-				this.leaveEduData = this.eachageData
-				this.manageData = this.eachageData
-				this.rewarPunish = this.eachageData
-				let per = this.staffData.map(o=>o.value)
-				this.totalP = per.reduce((tem,item,index)=>tem+item)
-			}
-		}
-    },
-	async mounted() {
-		let _this = this;
-		window.addEventListener('resize', function (e) {
-		  //此处填写你的业务逻辑即可
-		  if (!_this.checkFull()) {
-			//$(".box-card-c").height(300);
-			_this.keyEsc();
-			_this.checkFullshow=true
-			_this.speechIndex=1 
-			_this.fulltype=false;
-			// var myEvent = new Event('resize');
-   			//  window.dispatchEvent(myEvent);
-		  }		  
-		})
-		window.addEventListener('keyup', function (e) {
-            
-		    if (_this.fulltype) {
-               console.log(e.keyCode)
-			   if (e.keyCode==38) {
-				   if (_this.speechIndex>1) {
-				   	_this.speechIndex=parseInt(_this.speechIndex)-1;
-					_this.speechSwitch(_this.speechIndex)
-				   } else{
-				   	 _this.$message({
-				   	   message: '已经是第一个',
-				   	   type: 'warning'
-				   	 });
-				   }
-			   }
-			   if (e.keyCode==40) {
-				   console.log(_this.speechIndex)
-			   	if (_this.speechIndex<12) {
-			   		_this.speechIndex=parseInt(_this.speechIndex)+1;
-					_this.speechSwitch(_this.speechIndex)
-			   	} else{
-			   		 _this.$message({
-					  message: '已经是最后一个',
-					  type: 'warning'
+		methods: {
+			findDataName() {
+				if (this.orgid === undefined) {
+					return;
+				}
+				let orgid = this.orgid;
+				let info = {};
+				let that = this;
+				(function f(data) {
+					data.some(row => {
+						if (row['orgid'] == orgid) {
+							info = row;
+							return true;
+						}
+						if (row.subs && row.subs.length) {
+							f(row.subs);
+						}
 					});
-			   	}
-			   }
-		    }	
-		})
-		this.fetchData()
-	},
-	async created(){
-        this.data2 = await this.$request.get('org');
-        let defaultMenuid = this.data2[0].orgid
-        this.$refs.tree2.setCurrentKey(defaultMenuid);
-        this.orgid = defaultMenuid;
-    }
+				})(this.data2);
+				this.input5 = info.name;
+			},
+			handleChangeNode(val){
+				this.orgid = val.orgid
+			},
+			changeOrg(orgid){
+				this.orgid = orgid
+			},
+			filterNode(value, data) {
+				if (!value) return true;
+				return data.name && data.name.indexOf(value) !== -1;
+			},
+			speechMode(id){
+				screenfull.toggle();
+				this.speechSwitch(id);
+			},
+			speechSwitch(id){
+				this.screenIndex=id;
+				this.$refs["echart"+id].checkFull();
+				this.checkFullshow=false;
+				this.fulltype=true;
+			},
+			fullScreen(res){
+				this.speechMode(res);
+				this.fulltype=false;
+			},
+			keyEsc(){
+				this.screenIndex=""
+			},
+			/** * 是否全屏并按键ESC键的方法 */
+			checkFull() {
+				var isFull = window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled;
+				// to fix : false || undefined == undefined
+				if (isFull === undefined) {
+					isFull = false;
+				}
+				// console.log(document.fullscreenEnabled , window.fullScreen , document.webkitIsFullScreen , document.msFullscreenEnabled);
+				// console.log(isFull);
+				return isFull;
+			},
+			async fetchData(){
+				if(this.orgid!=''&&this.orgid!=undefined){
+					const analysis = await this.$request.get('/dataanalysis/datastat?org_id='+this.orgid);
+					this.staffData = analysis.staff_stat
+					this.sexData = analysis.sex_stat;
+					this.eduLevelData = analysis.eduLevel_stat;
+					this.eachageData = analysis.each_age_sex_stat
+					this.memberData = this.sexData
+					this.leaveData = this.sexData
+					this.staffplanData = this.eachageData
+					this.recruitData = this.eachageData
+					this.leaveReaData = this.eachageData
+					this.leaveEduData = this.eachageData
+					this.manageData = this.eachageData
+					this.rewarPunish = this.eachageData
+					let per = this.staffData.map(o=>o.value)
+					this.totalP = per.reduce((tem,item,index)=>tem+item)
+				}
+			}
+		},
+		async mounted() {
+			let _this = this;
+			window.addEventListener('resize', function (e) {
+				if (!_this.checkFull()) {
+					//$(".box-card-c").height(300);
+					_this.keyEsc();
+					_this.checkFullshow=true
+					_this.speechIndex=1 
+					_this.fulltype=false;
+					// var myEvent = new Event('resize');
+					//  window.dispatchEvent(myEvent);
+				}		  
+			})
+			window.addEventListener('keyup', function (e) {
+				if (_this.fulltype) {
+					if (e.keyCode==38) {
+						if (_this.speechIndex>1) {
+							_this.speechIndex=parseInt(_this.speechIndex)-1;
+							_this.speechSwitch(_this.speechIndex)
+						} else{
+							_this.$message({
+							message: '已经是第一个',
+							type: 'warning'
+							});
+						}
+					}
+					if (e.keyCode==40) {
+						if (_this.speechIndex<12) {
+							_this.speechIndex=parseInt(_this.speechIndex)+1;
+							_this.speechSwitch(_this.speechIndex)
+						} else{
+							_this.$message({
+							message: '已经是最后一个',
+							type: 'warning'
+							});
+						}
+					}
+				}
+			})
+			this.fetchData()
+		},
+		async created(){
+			this.data2 = await this.$request.get('org');
+			let defaultMenuid = this.data2[0].orgid
+			this.$refs.tree2.setCurrentKey(defaultMenuid);
+			this.orgid = defaultMenuid;
+			this.personnel = await this.$request.get('hrm/staffautoshiftremind');
+		}
   };
 </script>
 <style>
