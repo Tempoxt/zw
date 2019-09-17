@@ -16,7 +16,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=''){
+		if(this.datas!=''&&this.datas.man!=undefined){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -25,7 +25,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=''){
+				if(this.datas!=''&&this.datas.man!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -38,7 +38,6 @@ export default {
 		checkFull(){
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
-			console.log(window.screen.height)
 			let aaa = echarts.init(document.getElementById(this.id+"2"));
 			aaa.setOption(this.option);
 		},
@@ -106,12 +105,10 @@ export default {
 			  ]
 			};
 			this.option.title.text = this.title;
-			if(data!=undefined){
-				this.option.xAxis.data = this.datas.man.name
+			if(data!=undefined&&data.man.name!=undefined){
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(this.id));
 				myChart.setOption(this.option);
-				//建议加上以下这一行代码，不加的效果图如下（当浏览器窗口缩小的时候）。超过了div的界限（红色边框）
 				window.addEventListener('resize',function() {
 					$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
 					$(".box-card-c").height(parseInt($(".box-card-c").parent().height()));

@@ -1,11 +1,8 @@
 <template>
 	<div class="dashboard" >
-<!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
 		<el-tabs v-model="activeName">
 			<el-tab-pane label="工作台" name="workbench">
-
 				<div class="outside">
-					
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 							<!-- <el-row>
 								<el-col :span="12">
@@ -30,34 +27,28 @@
 								</el-col>
 							</el-row>
 					</el-scrollbar>
-
 				</div>
-		
 			</el-tab-pane>
-
 			<el-tab-pane label="数据分析" name="dataAnalysis">
 				<div class="outside">
-						<el-row>
-							<el-form ref="form" :model="form" label-width="90px">
-								<el-col :span="12">
-									<el-popover
-										popper-class="maxheight"
-										placement="bottom"
-										width="300"
-										style="height:500px"
-										trigger="click"
-										v-model="visible"
-										>
-										<!-- <org v-model="orgid"></org> -->
-										<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-											<div style="padding:20px">
+					<el-row>
+						<el-form ref="form" :model="form" label-width="90px">
+							<el-col :span="12">
+								<el-popover
+									popper-class="maxheight"
+									placement="bottom"
+									width="300"
+									style="height:500px"
+									trigger="click"
+									v-model="visible"
+									>
+									<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+										<div style="padding:20px">
 											<div class="side-header">
 												<el-input placeholder="快速查找" v-model="filterText" class="input">
-												<i slot="suffix" class="el-input__icon el-icon-search"></i>
+													<i slot="suffix" class="el-input__icon el-icon-search"></i>
 												</el-input>
-											
 											</div>
-
 											<el-tree
 												class="tree"
 												:data="data2"
@@ -72,37 +63,35 @@
 												:expand-on-click-node="false"
 											>
 												<span slot-scope="{ node, data }">
-
-												<span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
-												<span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
-												<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
-												&nbsp;
-												<span>{{ node.label }}</span>
+													<span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
+													<span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
+													<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
+													&nbsp;
+													<span>{{ node.label }}</span>
 												</span>
 											</el-tree>
-											
-											</div>
-										</el-scrollbar>
-										
-										<el-input 
-											slot="reference"
-											size="small"
-											style="width: 240px;"
-											placeholder="深圳市兆威机电股份有限公司"
-											:value="input5"
-											suffix-icon="el-icon-caret-bottom">
-										</el-input>
-									</el-popover>
-									<!-- <div class="selectdate">
-										<DateLap></DateLap>
-									</div> -->
-								</el-col>
-							</el-form>
-							<el-col :span="12" class="operating-btn">
-									<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
-									<!-- <el-button plain icon="el-icon-download" >全部下载</el-button>-->
+										</div>
+									</el-scrollbar>
+									
+									<el-input 
+										slot="reference"
+										size="small"
+										style="width: 240px;"
+										placeholder="深圳市兆威机电股份有限公司"
+										:value="input5"
+										suffix-icon="el-icon-caret-bottom">
+									</el-input>
+								</el-popover>
+								<!-- <div class="selectdate">
+									<DateLap></DateLap>
+								</div> -->
 							</el-col>
-						</el-row>
+						</el-form>
+						<el-col :span="12" class="operating-btn">
+								<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
+								<!-- <el-button plain icon="el-icon-download" >全部下载</el-button>-->
+						</el-col>
+					</el-row>
 						
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
 						<el-row>
@@ -267,19 +256,12 @@
 			</el-tab-pane>
 		</el-tabs>
 	</div>
-<!--    <div style="width:300px">
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="0" style="margin-bottom:10px"></el-progress>
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="70" style="margin-bottom:10px"></el-progress>
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="80" color="rgba(142, 113, 199, 0.7)" style="margin-bottom:10px"></el-progress>
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="100" status="success" style="margin-bottom:10px"></el-progress>
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="50" status="exception" style="margin-bottom:10px"></el-progress>
-    </div> -->
 </template>
 <script>
-	import quickEntry from "./workbench/quickEntry"
-	import workSchedule from "./workbench/workSchedule"
-	import leaveList from "./workbench/leaveList"
-	import supplement from "./workbench/supplement"
+	// import quickEntry from "./workbench/quickEntry"
+	// import workSchedule from "./workbench/workSchedule"
+	// import leaveList from "./workbench/leaveList"
+	// import supplement from "./workbench/supplement"
 	import accident from "./workbench/accident"
 	import personnel from "./workbench/personnel"
 	import inService from "./dataAnalysis/inService"
@@ -288,14 +270,10 @@
 	import histogram from "./dataAnalysis/histogram"
 	import singlehisto from "./dataAnalysis/singlehisto"
 	import posnegBar from "./dataAnalysis/posnegBar"
-	import sunbrust from "./dataAnalysis/sunbrust"
-	import Org from "@/components/Org/Org.vue"
-	import org from '@/views/public/org'
-	
+	// import sunbrust from "./dataAnalysis/sunbrust"
 	import * as api_common from "@/api/common";
 	import * as api_org from "@/api/org";
 	import table_mixin from "@c/Table/table_mixin";
-	
 	import screenfull from "screenfull";
 	export default {
 		data() {
@@ -306,19 +284,18 @@
 				checkFullshow:true,
 				speechIndex:1,
 				fulltype:false,
-				analysis:{},
-				staffData:[],
-				sexData:[],
-				eduLevelData:[],
-				memberData:[],
-				leaveData:[],
-				staffplanData:{},
-				eachageData:{},
-				recruitData:{},
-				leaveEduData:{},
-				leaveReaData:{},
-				manageData:{},
-				rewarPunish:{},
+				staffData:[],//在职人数统计
+				sexData:[],//男女比例统计
+				eduLevelData:[],//学历分布统计
+				eachageData:{},//各年龄段男女占比统计
+				memberData:[],//直接/间接人员人数及比列
+				leaveData:[],//请假情况统计表
+				staffplanData:{},//人员规划及实际人数
+				recruitData:{},//各部门招聘完成率统计
+				leaveEduData:{},//离职学历分析表
+				leaveReaData:{},//离职原因分析表
+				manageData:{},//人力资源报表
+				rewarPunish:{},//人员奖惩情况统计
 				orgid:'',
 				input5:'',
 				filterText:'',
@@ -331,10 +308,10 @@
 			};
 		},
 		components:{
-			quickEntry,
-			workSchedule,
-			leaveList,
-			supplement,
+			// quickEntry,
+			// workSchedule,
+			// leaveList,
+			// supplement,
 			accident,
 			personnel,
 			inService,
@@ -343,9 +320,7 @@
 			histogram,
 			singlehisto,
 			posnegBar,
-			sunbrust,
-			Org,
-			org
+			// sunbrust,
 		},
 		watch:{
 			orgid(){
