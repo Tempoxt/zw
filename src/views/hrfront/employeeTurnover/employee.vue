@@ -14,15 +14,6 @@
                     <employeeTable  url="hrm/staffalreadyshiftlist" :id="orgid"/>
                 </el-tab-pane>
             </el-tabs>
-            <!-- <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
-                <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
-            </el-tabs>
-            <div v-if="view_activeName==='待转正'">
-                <employeeTable  :url="1"/>
-            </div>
-            <div v-if="view_activeName==='已转正'">
-                <employeeTable  :url="2"/>
-            </div> -->
         </el-col>
     </el-row>
 </template>
@@ -55,9 +46,7 @@ export default {
         }
     },
     async created() {
-        // const { menu } = await getTabs(this.$route.query.menuid)
-        // this.menu = menu
-        // this.view_activeName = menu[0].name;
+       
     }
 };
 </script>

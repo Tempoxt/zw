@@ -292,6 +292,7 @@
 				leaveData:[],//请假情况统计表
 				staffplanData:{},//人员规划及实际人数
 				recruitData:{},//各部门招聘完成率统计
+				leaveAcountData:[],//离职人数统计表
 				leaveEduData:{},//离职学历分析表
 				leaveReaData:{},//离职原因分析表
 				manageData:{},//人力资源报表

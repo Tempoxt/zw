@@ -65,17 +65,43 @@ export default {
 			table_topHeight:286,
 			template:{
 				tollPayStatusDisPlay(column,row){
-					if(row.tollPayStatus==1||row.tollPayStatus==3){
-						return <el-tag size="mini" type="danger">{row.tollPayStatusDisPlay}</el-tag> 
-					}else if(row.tollPayStatus==2||row.tollPayStatus==4){
-						return <el-tag size="mini" type="success">{row.tollPayStatusDisPlay}</el-tag> 
+					switch(row.tollPayStatus){
+						case 1:
+						case 3:
+							return <el-tag size="mini" type="danger">{row.tollPayStatusDisPlay}</el-tag> 
+							break;
+						case 2:
+						case 4:
+							return <el-tag size="mini" type="success">{row.tollPayStatusDisPlay}</el-tag> 
+							break;
+						case 0:
+							return <el-tag size="mini" type="info">{row.tollPayStatusDisPlay}</el-tag> 
+							break;
+						case 5:
+							return <el-tag size="mini" type="warning">{row.tollPayStatusDisPlay}</el-tag> 
+							break;
+						default:
+							return <el-tag size="mini" type="info">{row.tollPayStatusDisPlay}</el-tag> 
 					}
 				},
 				introducerPayStatusDisPlay(column,row){
-					if(row.introducerPayStatus==1||row.introducerPayStatus==3){
-						return <el-tag size="mini" type="danger">{row.introducerPayStatusDisPlay}</el-tag> 
-					}else if(row.introducerPayStatus==2||row.introducerPayStatus==4){
-						return <el-tag size="mini" type="success">{row.introducerPayStatusDisPlay}</el-tag> 
+					switch(row.introducerPayStatus){
+						case 1:
+						case 3:
+							return <el-tag size="mini" type="danger">{row.introducerPayStatusDisPlay}</el-tag> 
+							break;
+						case 2:
+						case 4:
+							return <el-tag size="mini" type="success">{row.introducerPayStatusDisPlay}</el-tag> 
+							break;
+						case 0:
+							return <el-tag size="mini" type="info">{row.introducerPayStatusDisPlay}</el-tag> 
+							break;
+						case 5:
+							return <el-tag size="mini" type="warning">{row.introducerPayStatusDisPlay}</el-tag> 
+							break;
+						default:
+							return <el-tag size="mini" type="info">{row.introducerPayStatusDisPlay}</el-tag> 
 					}
 				},
 				flowStatusDisPlay(column,row){
