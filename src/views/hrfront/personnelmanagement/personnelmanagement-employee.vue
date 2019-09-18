@@ -70,18 +70,6 @@ export default {
     .line-boxs{
         margin-top: 20px;
     }
-    .img-show-mask {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        left: 0;
-        top: 0;
-        z-index: 3000;
-        background: rgb(0,0,0,.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
     .ivu-drawer-body{
         padding-left: 30px;
     }
@@ -117,7 +105,7 @@ export default {
         display: inline-block;
         width: 112px;
         text-align: right;
-        font-size: 14px;
+        font-size: 12px;
         color: #4C5D66;
     }
     .promp{
@@ -196,6 +184,9 @@ export default {
     .preview .el-dialog__header{
         line-height: 0;
         background: transparent
+    }
+    .demo-drawer-profile .el-col-12{
+        margin-bottom: 8px;
     }
 </style>
 

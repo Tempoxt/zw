@@ -493,184 +493,184 @@
                 <p class="detail">员工档案详情</p>
                 <p class="info mt60">个人信息<i @click="showPersonInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
-                    <Row>
-                        <Col span="12">
+                    <el-row>
+                        <el-col :span="12">
                             <span class="labelCon">姓名：</span>
                             <span class="labelCon promp">{{profileData.chineseName}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">签发机关：</span>
                             <span class="labelCon promp">{{profileData.qfjg}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">身份证号：</span>
                             <span class="labelCon promp">{{profileData.idCard}}</span>
-                        </Col>
-                        <Col span="12" class="alignStart">
+                        </el-col>
+                        <el-col :span="12" class="alignStart">
                             <span class="labelCon">住址：</span>
                             <span class="labelCon promp addr">{{profileData.contactAddr}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">民族：</span>
                             <span class="labelCon promp">{{profileData.nationShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">性别：</span>
                             <span class="labelCon promp">{{profileData.sexShow}}</span>
-                        </Col>
-                        <Col span="12">
-                        <span class="labelCon">籍贯：</span> 
+                        </el-col>
+                        <el-col :span="12">
+                            <span class="labelCon">籍贯：</span> 
                             <span class="labelCon promp">{{profileData.provinseShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">出生年月：</span>
                             <span class="labelCon promp">{{profileData.birthday}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">证件生效：</span>
                             <span class="labelCon promp">{{profileData.stayBegin}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">证件失效：</span>
                             <span class="labelCon promp">{{profileData.stayEnd}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider />
                 <p class="info">入职信息<i @click="showEntryInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
-                    <Row>
-                        <Col span="12">
+                    <el-row>
+                        <el-col :span="12">
                             <span class="labelCon">员工工号：</span>
                             <span class="labelCon promp">{{profileData.employeeCode}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">入职日期：</span>
                             <span class="labelCon promp">{{profileData.onDutyTime}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">所属主体：</span>
                             <span class="labelCon promp">{{profileData.socialSecurityMain}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">试用期限：</span>
                             <span class="labelCon promp">{{profileData.trialTimeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">所属部门：</span>
                             <span class="labelCon promp">{{profileData.department__name}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">合同年限：</span>
                             <span class="labelCon promp">{{profileData.contractTimeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">所属小组：</span> 
                             <span class="labelCon promp">{{profileData.team__name}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">考勤方案：</span>
                             <span class="labelCon promp">{{profileData.checkWorkTypeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">所任职务：</span>
                             <span class="labelCon promp">{{profileData.principalship__name}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">介绍人：</span>
                             <span class="labelCon promp">{{profileData.introducer}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">智能班组：</span>
                             <span class="labelCon promp">{{profileData.teamIDShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">工作状态：</span>
                             <span class="labelCon promp">{{profileData.fileTypeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">工作地点：</span>
                             <span class="labelCon promp">{{profileData.workGroup__name}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">宿舍分配：</span>
                             <span class="labelCon promp">{{profileData.liveDormitoryShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">工作性质：</span>
                             <span class="labelCon promp">{{profileData.workNatureShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">现住地址：</span>
                             <span class="labelCon promp">{{profileData.nowAddress}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider />
                 <p class="info">联系方式 <i @click="showContactInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
-                    <Row>
-                        <Col span="12">
+                    <el-row>
+                        <el-col :span="12">
                             <span class="labelCon">电话：</span>
                             <span class="labelCon promp">{{profileData.contactPhone}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">短号：</span>
                             <span class="labelCon promp">{{profileData.shortPhoneNum}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">内部邮箱：</span>
                             <span class="labelCon promp">{{profileData.insideEmail}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">外部邮箱：</span>
                             <span class="labelCon promp">{{profileData.outsideEmail}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">紧急联系人：</span>
                             <span class="labelCon promp">{{profileData.emContactor}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">紧急联系人电话：</span>
                             <span class="labelCon promp">{{profileData.emContact}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider v-if="profileData.contractRecords!=''"/>
                 <p class="info" v-if="profileData.contractRecords!=''">合同管理 <i  @click="showContractInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
-                    <Row class="mb20" v-for="item in profileData.contractRecords" :key="item.id">
-                        <Col span="12">
+                    <el-row class="mb20" v-for="item in profileData.contractRecords" :key="item.id">
+                        <el-col :span="12">
                             <span class="labelCon">合同名称：</span>
                             <span class="labelCon promp">{{item.contractName}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">合同开始：</span>
                             <span class="labelCon promp">{{item.contractStart}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">合同类型：</span>
                             <span class="labelCon promp">{{item.contractTypeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">合同结束：</span>
                             <span class="labelCon promp">{{item.contractEnd}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider/>
                 <p class="info">银行卡信息 <i @click="showBankInfo" class="icon iconfont icon-bianji editIcon"></i></p>
                 <div class="demo-drawer-profile">
-                    <Row>
-                        <Col span="12">
+                    <el-row>
+                        <el-col :span="12">
                             <span class="labelCon">银行：</span>
                             <span class="labelCon promp">{{profileData.bank}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">卡号：</span>
                             <span class="labelCon promp">{{profileData.bankAccount}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider v-if="profileData.cardRecords!=''" />
                 <p class="info" v-if="profileData.cardRecords!=''">证件管理 <i @click="showCardInfo" class="icon iconfont icon-bianji editIcon"></i></p>
@@ -684,102 +684,102 @@
                 <Divider v-if="profileData.workRecords!=''"/>
                 <p class="info" v-if="profileData.workRecords!=''">工作经历</p>
                 <div class="demo-drawer-profile">
-                    <Row class="mb20" v-for="item in profileData.workRecords" :key="item.id">
-                        <Col span="12">
+                    <el-row class="mb20" v-for="item in profileData.workRecords" :key="item.id">
+                        <el-col :span="12">
                             <span class="labelCon">工作单位：</span>
                             <span class="labelCon promp">{{item.workCompany}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">起止时间：</span>
                             <span class="labelCon promp">{{item.startEndTimeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">工作部门：</span>
                             <span class="labelCon promp">{{item.workDepartment}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">证明人：</span>
                             <span class="labelCon promp">{{item.witness}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">工作职务：</span>
                             <span class="labelCon promp">{{item.workJob}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">证明人电话：</span>
                             <span class="labelCon promp">{{item.witnessPhone}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider v-if="profileData.educationRecords!=''" />
                 <p class="info" v-if="profileData.educationRecords!=''">教育经历</p>
                 <div class="demo-drawer-profile">
-                    <Row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
-                        <Col span="12">
+                    <el-row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
+                        <el-col :span="12">
                             <span class="labelCon">学校：</span>
                             <span class="labelCon promp">{{item.enduExp}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">起止时间：</span>
                             <span class="labelCon promp">{{item.startEndTimeShow}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">所学专业：</span>
                             <span class="labelCon promp">{{item.major}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">证书名称：</span>
                             <span class="labelCon promp">{{item.enduCardName}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">教育阶段：</span>
                             <span class="labelCon promp">{{item.enduPeriod}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider v-if="profileData.familyRecords!=''"/>
                 <p class="info" v-if="profileData.familyRecords!=''">家庭成员</p>
                 <div class="demo-drawer-profile">
-                    <Row class="mb20" v-for="item in profileData.familyRecords" :key="item.id">
-                        <Col span="12">
+                    <el-row class="mb20" v-for="item in profileData.familyRecords" :key="item.id">
+                        <el-col :span="12">
                             <span class="labelCon">姓名：</span>
                             <span class="labelCon promp">{{item.familyMemberName}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">联系电话：</span>
                             <span class="labelCon promp">{{item.familyContact}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">关系：</span>
                             <span class="labelCon promp">{{item.relationship}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">联系地址：</span>
                             <span class="labelCon promp">{{item.familyAddress}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
                 <Divider v-if="profileData.dutyRecords!=''" />
                 <p class="info" v-if="profileData.dutyRecords!=''">入职记录</p>
                 <div class="demo-drawer-profile">
-                    <Row class="mb20" v-for="item in profileData.dutyRecords" :key="item.id">
-                        <Col span="12">
+                    <el-row class="mb20" v-for="item in profileData.dutyRecords" :key="item.id">
+                        <el-col :span="12">
                             <span class="labelCon">入职日期：</span>
                             <span class="labelCon promp">{{item.onDutyTime}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">离职日期：</span>
                             <span class="labelCon promp">{{item.outDutyTime}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">状态：</span>
                             <span class="labelCon promp">{{item.dutyStatus}}</span>
-                        </Col>
-                        <Col span="12">
+                        </el-col>
+                        <el-col :span="12">
                             <span class="labelCon">原因：</span>
                             <span class="labelCon promp">{{item.outDutyReason}}</span>
-                        </Col>
-                    </Row>
+                        </el-col>
+                    </el-row>
                 </div>
             </Drawer>
         </div>

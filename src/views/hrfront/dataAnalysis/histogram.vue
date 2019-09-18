@@ -37,7 +37,6 @@ export default {
 		checkFull(){
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
-			console.log(window.screen.height)
 			let aaa = echarts.init(document.getElementById(this.id+"2"));
 			aaa.setOption(this.option);
 		},
