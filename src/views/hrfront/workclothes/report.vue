@@ -18,29 +18,12 @@
 					:cellStyle="cellStyle"
 					>
             		<el-table-column type="index" :index="indexMethods"/>
-					<el-table-column
-						prop="releaseTime"
-						label="发放日期">
-					</el-table-column>
-					<el-table-column
-						prop="clothCode"
-						label="工衣编号">
-					</el-table-column>
-					<el-table-column
-						prop="clothName"
-						label="工衣名称">
-					</el-table-column>
-					<el-table-column
-						prop="clothFormat"
-						label="尺码">
-					</el-table-column>
-					<el-table-column
-						prop="count"
-						label="领用数量">
-					</el-table-column>
-					<el-table-column
-						prop="amount"
-						label="金额(元)">
+					<el-table-column prop="releaseTime" label="发放日期"></el-table-column>
+					<el-table-column prop="clothCode" label="工衣编号"></el-table-column>
+					<el-table-column prop="clothName" label="工衣名称"></el-table-column>
+					<el-table-column prop="clothFormat" label="尺码"></el-table-column>
+					<el-table-column prop="count" label="领用数量"></el-table-column>
+					<el-table-column prop="amount" label="金额(元)">
 						<template slot-scope="scope">
 							<span style="color:red;cursor:default">{{scope.row.amount}}</span>
 						</template>

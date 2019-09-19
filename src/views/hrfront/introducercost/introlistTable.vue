@@ -74,9 +74,6 @@ export default {
 						case 4:
 							return <el-tag size="mini" type="success">{row.tollPayStatusDisPlay}</el-tag> 
 							break;
-						case 0:
-							return <el-tag size="mini" type="info">{row.tollPayStatusDisPlay}</el-tag> 
-							break;
 						case 5:
 							return <el-tag size="mini" type="warning">{row.tollPayStatusDisPlay}</el-tag> 
 							break;
@@ -93,9 +90,6 @@ export default {
 						case 2:
 						case 4:
 							return <el-tag size="mini" type="success">{row.introducerPayStatusDisPlay}</el-tag> 
-							break;
-						case 0:
-							return <el-tag size="mini" type="info">{row.introducerPayStatusDisPlay}</el-tag> 
 							break;
 						case 5:
 							return <el-tag size="mini" type="warning">{row.introducerPayStatusDisPlay}</el-tag> 

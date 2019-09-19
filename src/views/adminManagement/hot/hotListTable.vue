@@ -65,61 +65,23 @@
       				:summary-method="getSummaries"
 					:cellStyle="drawerStyle"
 					>
-            		<!-- <el-table-column type="index" :index="indexMethods" label="日期" /> -->
-					<el-table-column
-						prop="CheckDate"
-						label="日期"  width="50">
+					<el-table-column prop="CheckDate" label="日期"  width="50">
 						<template slot-scope="scope">
 							<span :title="scope.row.CheckDate">{{scope.row.CheckDate.split('-')[2]}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column
-						prop="weekday"
-						label="星期"  width="50">
-					</el-table-column>
-					
-					<el-table-column
-						prop="OnDutyTime1"
-						label="上班1" width="60">
-					</el-table-column>
-					<el-table-column
-						prop="OffDutyTime1"
-						label="下班1" width="60">
-					</el-table-column>
-					
-					<el-table-column
-						prop="OnDutyTime2"
-						label="上班2" width="60">
-					</el-table-column>
-					
-					<el-table-column
-						prop="OffDutyTime2"
-						label="下班2" width="60">
-					</el-table-column>
-					
-					<el-table-column
-						prop="OnDutyTime3"
-						label="上班3" width="60">
-					</el-table-column>
-					<el-table-column
-						prop="OffDutyTime3"
-						label="下班3" width="60">
-					</el-table-column>
-					<el-table-column
-						prop="Remark"
-						label="异常说明" width="120">
+					<el-table-column prop="weekday" label="星期" width="50"></el-table-column>
+					<el-table-column prop="OnDutyTime1" label="上班1" width="60"></el-table-column>
+					<el-table-column prop="OffDutyTime1" label="下班1" width="60"></el-table-column>
+					<el-table-column prop="OnDutyTime2" label="上班2" width="60"></el-table-column>
+					<el-table-column prop="OffDutyTime2" label="下班2" width="60"></el-table-column>
+					<el-table-column prop="OnDutyTime3" label="上班3" width="60"></el-table-column>
+					<el-table-column prop="OffDutyTime3" label="下班3" width="60"></el-table-column>
+					<el-table-column prop="Remark" label="异常说明" width="120">
 						<template slot-scope="scope">
 							<span :title="scope.row.Remark" style="width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red;cursor:default">{{scope.row.Remark}}</span>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column
-						prop="hotDetail"
-						label="高温津贴" width="60">
-						<template slot-scope="scope">
-							<span v-if="scope.row.hotDetail==1||scope.row.hotDetail==0.5">有效</span>
-							<span v-if="scope.row.hotDetail==''">无效</span>
-						</template>
-					</el-table-column> -->
 				</el-table>
 			</div>
 		</Drawer>
