@@ -42,7 +42,7 @@
 						prop="amount"
 						label="金额(元)">
 						<template slot-scope="scope">
-							<span :title="scope.row.amount" style="color:red;cursor:default">{{scope.row.amount}}</span>
+							<span style="color:red;cursor:default">{{scope.row.amount}}</span>
 						</template>
 					</el-table-column>
 				</el-table>

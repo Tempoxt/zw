@@ -12,8 +12,9 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-if="m==1">
-			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
+		<div style="padding-left:10px" v-if="m==1"> 
+			<DateLapRange :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
+			<!-- <dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetch"/> -->
 		</div>
 		<div style="padding-left:10px" v-if="m==2">
 			<el-select v-model="form.quarter" placeholder="请选择" @change="fetch">
@@ -78,7 +79,8 @@ export default {
 			quarter:[],
 			timer:'',
 			statusk:1,
-			val:''
+			val:'',
+			month:dayjs().format('YYYY-MM')
 		};
 	},
 	watch:{
@@ -92,7 +94,7 @@ export default {
 			this.fetchMenu()
 			this.fetchQuarter()
 			this.form.quarter = this.quarter[0].season;
-			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+			this.$set(this.table_form,'dateLap',[this.month,this.month])
 			if(this.url=='commission/monthDetail'){
 				this.api_resource = api_common.resource("commission/valueIncrease");
 			}else if(this.url=='commission/quarterstat'){
@@ -107,7 +109,7 @@ export default {
 		},
 		async getDa(){
 			if(this.statusk!=0){
-				this.val = await this.$request.get('commission/valueIncrease/resetresult')
+				this.val = await this.$request.get('commission/valueIncrease/resetresult',{alert:false})
 				if(this.val=='已完成'){
 					this.statusk = 0
 					this.$message.success({ message: this.val})
@@ -157,7 +159,7 @@ export default {
 		}
 	},
 	async created() {
-		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+		this.$set(this.table_form,'dateLap',[this.month,this.month])
 		await this.fetchMenu()
 		await this.fetchQuarter()
 	}
