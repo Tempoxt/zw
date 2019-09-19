@@ -5,6 +5,35 @@
   @query="querySubmit"
   >
 
+	<el-dialog
+		title="请选择重置月份"
+		:visible.sync="dialogFormVisible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+		<el-form ref="form" :model="form">
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<el-date-picker
+						v-model="form.dateLap"
+						type="month"
+						size="small"
+						format="yyyy年MM月"
+						value-format="yyyy-MM"
+						placeholder="选择月份">
+					</el-date-picker>
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+		</div>
+	</el-dialog>
+
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -14,7 +43,6 @@
 		>
 		<div style="padding-left:10px" v-if="m==1"> 
 			<DateLapRange :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
-			<!-- <dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetch"/> -->
 		</div>
 		<div style="padding-left:10px" v-if="m==2">
 			<el-select v-model="form.quarter" placeholder="请选择" @change="fetch">
@@ -47,7 +75,6 @@
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
 		<each-table-column :table_field="table_field"/>
-		 <!-- :template="template" -->
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -71,10 +98,11 @@ export default {
 			loading: true,
 			api_resource,
 			orgCategory:[],
-			form:{},
+			form:{
+				dateLap:''
+			},
 			queryDialogFormVisible:true,
 			table_topHeight:276,
-			dialogForm1Visible:false,
 			dialogFormVisible:false,
 			quarter:[],
 			timer:'',
@@ -82,6 +110,14 @@ export default {
 			val:'',
 			month:dayjs().format('YYYY-MM')
 		};
+	},
+	computed:{
+		disabled(){
+			if(this.form.dateLap!==''&&this.form.dateLap!==undefined){
+                return false
+            }
+            return true
+		},
 	},
 	watch:{
 		id(){
@@ -119,13 +155,18 @@ export default {
 				clearInterval(this.timer)
 			}
 		},
-		async reset(){
+		async handleFormSubmit(){
+			this.dialogFormVisible = false
 			this.statusk = 1
-			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.table_form.dateLap})
+			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.form.dateLap})
 			this.$message.success({message: mes})
 			this.timer = setInterval(()=>{
 				this.getDa()
 			},10000)
+		},
+		async reset(){
+			this.form={}
+			this.dialogFormVisible = true
 		},
 		async fetchQuarter(){
 			this.quarter = await api_common.resource('commission/seasonValueIncrease/optional').get()

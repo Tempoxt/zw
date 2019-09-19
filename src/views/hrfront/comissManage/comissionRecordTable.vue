@@ -105,7 +105,7 @@
 		>
 		
 		<div style="padding-left:10px">
-			<dateLap type="2" :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
+			<dateLap :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
     <el-table
