@@ -5,7 +5,7 @@
 			<!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
 		</div>
 		<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-			<el-row class="list" v-for="(o,i) in datas" :key="i">
+			<el-row class="list" v-for="(o,i) in datas" :key="i" style="margin-right:13px">
 				<el-col :span="12">
 					<div class="list-l">
 						<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">

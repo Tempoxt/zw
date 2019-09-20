@@ -15,7 +15,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=''){
+		if(this.datas!=''&&this.datas.name!==undefined){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -24,7 +24,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=''){
+				if(this.datas!=''&&this.datas.name!==undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -37,7 +37,6 @@ export default {
 		checkFull(){
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
-			console.log(window.screen.height)
 			let aaa = echarts.init(document.getElementById(this.id+"2"));
 			aaa.setOption(this.option);
 		},
@@ -58,7 +57,7 @@ export default {
 			  },
 			  legend: {
 				top: "30",
-			    data: ['男','女']
+			    data: []
 			  },
 			  toolbox: {
 				right:20,
@@ -94,7 +93,7 @@ export default {
 			  yAxis: [
 			    {
 					type: "category",
-					data: data.man.name,
+					data: data.name,
 					max:6
 			    }
 			  ],
@@ -110,13 +109,12 @@ export default {
 					},
 					barWidth: 14,
 					barCategoryGap:'80%',
-					data: data.man.value,
+					data: data.value,
 			    },
 			  ]
 			};
 			this.option.title.text = this.title;
 			if(data!=undefined){
-				this.option.xAxis.data = this.datas.man.name
 				if (this.color) {
 					this.option.color = this.color;
 				}

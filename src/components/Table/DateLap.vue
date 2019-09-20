@@ -18,6 +18,7 @@
         </el-select>
         <el-date-picker
             v-if="ctype==1"
+            :style="widths"
             :clearable="false"
             class="dateLap-date"
             v-model="value2"
@@ -27,6 +28,7 @@
         </el-date-picker>
         <el-date-picker
             v-if="ctype==2"
+            :style="widths"
             class="dateLap-date"
             v-model="value2"
             type="month"
@@ -36,6 +38,7 @@
         </el-date-picker>
         <el-date-picker
             v-if="ctype==3"
+            :style="widths"
             class="dateLap-date"
             v-model="value2"
             type="year"
@@ -55,7 +58,8 @@ export default {
         disabled:{
             default:false
         },
-        itemsD:{}
+        itemsD:{},
+        width:{}
     },
     computed:{
         value2:{
@@ -90,6 +94,9 @@ export default {
         return {
             ctype:this.type||'2',
             itemsDay:this.itemsD||'2',
+            widths:{
+                width:this.width||'220px'
+            },
             options:[{
                 value:'1',
                 label:'日'

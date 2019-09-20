@@ -88,7 +88,7 @@ export default {
 			        type: "pie",
 					radius: "50%",
 					minAngle:20,
-			        center: ["50%", "65%"],
+			        center: ["50%", "60%"],
 			        avoidLabelOverlap: true,
 			        label: {
 			          normal: {

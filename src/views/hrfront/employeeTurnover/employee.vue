@@ -6,14 +6,15 @@
             </div>
         </el-col>
         <el-col :span="20" style="border-left:1px solid rgb(232, 232, 232)">
-            <el-tabs v-model="activeName" @tab-click="handleClick" class="table-tabs" >
-                <el-tab-pane label="待转正" name="first">
-                    <employeeTable  url="hrm/staffwaitshiftlist" :id="orgid"/>
-                </el-tab-pane>
-                <el-tab-pane label="已转正" name="second">
-                    <employeeTable  url="hrm/staffalreadyshiftlist" :id="orgid"/>
-                </el-tab-pane>
+            <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
+                <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
             </el-tabs>
+            <div v-if="view_activeName==='待转正'">
+                <employeeTable url="hrm/staffwaitshiftlist" :id="orgid"/>
+            </div>
+            <div v-if="view_activeName==='已转正'">
+                <employeeTable url="hrm/staffalreadyshiftlist" :id="orgid"/>
+            </div>
         </el-col>
     </el-row>
 </template>
@@ -45,8 +46,11 @@ export default {
             this.orgid = id
         }
     },
+    
     async created() {
-       
+        const { menu } = await getTabs(this.$route.query.menuid)
+        this.menu = menu
+        this.view_activeName = menu[0].name;
     }
 };
 </script>

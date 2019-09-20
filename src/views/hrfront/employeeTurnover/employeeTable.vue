@@ -82,9 +82,7 @@ export default {
 			this.table_form.query.query = []
             this.table_form.currentpage = 1
             this.api_resource = api_common.resource(this.url)
-            setTimeout(() => {
-                this.fetchTableData()
-            }, 300);
+            this.fetchMenu()
         }
     },
     methods: {
@@ -98,14 +96,18 @@ export default {
                 this.table_loading = false;
             }, 300);
         },
+		async fetchMenu(){
+			const { field, action,table } = await api_common.menuInit(this.url);
+			this.table_field = field;
+			this.table_actions = action;
+            this.table_config = table
+            setTimeout(()=>{  
+                this.fetchTableData();
+            },300)
+		},
     },
-    
     async created() {
-        const { field, action,table } = await api_common.menuInit("hrm/staffwaitshiftlist");
-        this.table_field = field;
-        this.table_actions = action;
-        this.table_config = table
-        this.fetchTableData();
+        this.fetchMenu()
     }
 };
 </script>

@@ -15,7 +15,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=''){
+		if(this.datas!=''&&this.datas.man!=undefined){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -24,7 +24,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=''){
+				if(this.datas!=''&&this.datas.man!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}

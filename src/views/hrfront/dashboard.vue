@@ -72,7 +72,6 @@
 											</el-tree>
 										</div>
 									</el-scrollbar>
-									
 									<el-input 
 										slot="reference"
 										size="small"
@@ -82,20 +81,16 @@
 										suffix-icon="el-icon-caret-bottom">
 									</el-input>
 								</el-popover>
-								<!-- <div class="selectdate">
-									<DateLap></DateLap>
-								</div> -->
 							</el-col>
 						</el-form>
 						<el-col :span="12" class="operating-btn">
-								<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
-								<!-- <el-button plain icon="el-icon-download" >全部下载</el-button>-->
+							<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
 						</el-col>
 					</el-row>
 						
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
 						<el-row>
-							<el-col :span="12" v-show="staffData.length!=0">
+							<el-col :span="12" class="relative" v-show="staffData.length!=0">
 								<inService
 								id="ring-diagram"
 								title="在职人数统计"  
@@ -146,7 +141,7 @@
 								:class="{'speech-mode':screenIndex=='4'}"
 								></barChart>
 							</el-col>
-							<!-- <el-col :span="12" v-show="memberData.length!=0">
+							<!-- <el-col :span="12" class="relative" v-show="memberData.length!=0">
 								<inService
 								id="ring-member"
 								title="直接/间接人员人数及比列"  
@@ -158,9 +153,9 @@
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='5'}"
 								></inService>
-								<div class="totalR" v-if="totalP!=''"></div>
+								<div class="totalR" v-if="totalP1!=''">总人数:{{totalP1}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10" v-show="leaveData.length!=0">
+							<el-col :span="12" class="padding-left-10 relative" v-show="leaveData.length!=0">
 								<inService
 								id="ring-leave"
 								title="请假情况统计表"  
@@ -171,8 +166,10 @@
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='6'}"
 								></inService>
-							</el-col>
-							<el-col :span="12"  v-show="staffplanData.length!=0">
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
+								<div class="totalR" v-if="totalP2!=''">总次数:{{totalP2}}</div>
+							</el-col> -->
+							<!-- <el-col :span="12"  v-show="staffplanData.length!=0">
 								<histogram 
 								:show="checkFullshow" 
 								ref="echart7" 
@@ -197,21 +194,23 @@
 								:datas="recruitData"
 								:class="{'speech-mode':screenIndex=='8'}"
 								></singlehisto>
-							</el-col>
-							<el-col :span="12" v-show="leaveReaData.length!=0">
-								<singlehisto 
-								:show="checkFullshow" 
-								ref="echart9" 
-								title="离职原因分析表" 
+							</el-col> -->
+							<!-- <el-col :span="12" class="relative" v-show="sexData.length!=0">
+								<pieChart  
+								:show="checkFullshow"
+								ref="echart9"
+								title="离职人数统计" 
+								id="leave-account"
 								screenIndex='9'
-								:color="['#5A8BFC']"
 								@fullScreen="fullScreen"
-								id="leave-reason"
-								:datas="leaveReaData"
+								:color="['#3889FF','#FF64C6']"
+								:datas="leaveAcountData"
 								:class="{'speech-mode':screenIndex=='9'}"
-								></singlehisto>
+								></pieChart>
+								<dateLap class="dateLap right20" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveData()"/>
+								<div class="totalR" v-if="totalP3!=''">离职人数:{{totalP3}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10" v-show="leaveEduData.length!=0">
+							<el-col :span="12" class="padding-left-10 relative" v-show="leaveEduData.length!=0">
 								<singlehisto 
 								:show="checkFullshow" 
 								ref="echart10" 
@@ -223,31 +222,58 @@
 								:datas="leaveEduData"
 								:class="{'speech-mode':screenIndex=='10'}"
 								></singlehisto>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap3" @change="getleaveEduData()"/>
+							</el-col>
+							<el-col :span="12" class="relative" v-show="leaveReaData.length!=0">
+								<singlehisto 
+								:show="checkFullshow" 
+								ref="echart11" 
+								title="离职原因分析表" 
+								screenIndex='11'
+								:color="['#5A8BFC']"
+								@fullScreen="fullScreen"
+								id="leave-reason"
+								:datas="leaveReaData"
+								:class="{'speech-mode':screenIndex=='11'}"
+								></singlehisto>
+								<dateLap class="dateLap right20" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
+							</el-col>
+							<el-col :span="12" class="padding-left-10" v-show="leaveEduData.length!=0">
+								<inService
+								id="turn-rate"
+								title="员工流失率"  
+								:show="checkFullshow" 
+								:datas = turnRate
+								ref="echart12" 
+								screenIndex='12'
+								@fullScreen="fullScreen"
+								:class="{'speech-mode':screenIndex=='12'}"
+								></inService>
 							</el-col>
 							<el-col :span="12"  v-show="manageData.length!=0">
 								<posnegBar 
 								:show="checkFullshow" 
-								ref="echart11" 
+								ref="echart13" 
 								title="人力资源报表" 
-								screenIndex='11'
+								screenIndex='13'
 								:color="['#FF7676','#84EBFF','#40CDE9']"
 								@fullScreen="fullScreen"
 								id="manage-data"
 								:datas="manageData"
-								:class="{'speech-mode':screenIndex=='11'}"
+								:class="{'speech-mode':screenIndex=='13'}"
 								></posnegBar>
 							</el-col>
 							<el-col :span="12" class="padding-left-10" v-show="rewarPunish.length!=0">
 								<histogram 
 								:show="checkFullshow" 
-								ref="echart12" 
+								ref="echart14" 
 								title="人员奖惩情况统计" 
-								screenIndex='12'
+								screenIndex='14'
 								:color="['#7DD453','#FF8D53']"
 								@fullScreen="fullScreen"
 								id="reward-punish"
 								:datas="rewarPunish"
-								:class="{'speech-mode':screenIndex=='12'}"
+								:class="{'speech-mode':screenIndex=='14'}"
 								></histogram>
 							</el-col> -->
 						</el-row>
@@ -262,6 +288,7 @@
 	// import workSchedule from "./workbench/workSchedule"
 	// import leaveList from "./workbench/leaveList"
 	// import supplement from "./workbench/supplement"
+	import dateLap from '@/components/Table/DateLap'
 	import accident from "./workbench/accident"
 	import personnel from "./workbench/personnel"
 	import inService from "./dataAnalysis/inService"
@@ -275,6 +302,7 @@
 	import * as api_org from "@/api/org";
 	import table_mixin from "@c/Table/table_mixin";
 	import screenfull from "screenfull";
+	import dayjs from 'dayjs'
 	export default {
 		data() {
 			return {
@@ -295,6 +323,7 @@
 				leaveAcountData:[],//离职人数统计表
 				leaveEduData:{},//离职学历分析表
 				leaveReaData:{},//离职原因分析表
+				turnRate:[],//员工流失率
 				manageData:{},//人力资源报表
 				rewarPunish:{},//人员奖惩情况统计
 				orgid:'',
@@ -304,11 +333,19 @@
 				data2:[],
 				form:{},
 				totalP:'',
+				totalP1:'',
+				totalP2:'',
+				totalP3:'',
 				personnel:[],
-				one:[]
+				one:[],
+				dateLap1:'',
+				dateLap2:'',
+				dateLap3:'',
+				dateLap4:'',
 			};
 		},
 		components:{
+			dateLap,
 			// quickEntry,
 			// workSchedule,
 			// leaveList,
@@ -334,6 +371,9 @@
 			}
 		},
 		methods: {
+			fetch(){
+				
+			},
 			findDataName() {
 				if (this.orgid === undefined) {
 					return;
@@ -392,23 +432,60 @@
 				// console.log(isFull);
 				return isFull;
 			},
-			async fetchData(){
-				if(this.orgid!=''&&this.orgid!=undefined){
-					const analysis = await this.$request.get('/dataanalysis/datastat?org_id='+this.orgid);
-					this.staffData = analysis.staff_stat
-					this.sexData = analysis.sex_stat;
-					this.eduLevelData = analysis.eduLevel_stat;
-					this.eachageData = analysis.each_age_sex_stat
-					this.memberData = this.sexData
-					this.leaveData = this.sexData
-					this.staffplanData = this.eachageData
-					this.recruitData = this.eachageData
-					this.leaveReaData = this.eachageData
-					this.leaveEduData = this.eachageData
-					this.manageData = this.eachageData
-					this.rewarPunish = this.eachageData
-					let per = this.staffData.map(o=>o.value)
+			async getstaffData(){
+				this.staffData = await this.$request.get('/dataanalysis/ondutynumberstat?org_id='+this.orgid);
+				let per = this.staffData.map(o=>o.value)
+				if(this.pre!==[]){
 					this.totalP = per.reduce((tem,item,index)=>tem+item)
+				}
+			},
+			async getsexData(){
+				this.sexData = await this.$request.get('/dataanalysis/genderratiostat?org_id='+this.orgid);
+			},
+			async geteduLevelData(){
+				this.eduLevelData = await this.$request.get('/dataanalysis/educationstat?org_id='+this.orgid);
+			},
+			async geteachageData(){
+				this.eachageData = await this.$request.get('/dataanalysis/agestagegenderratiostat?org_id='+this.orgid);
+			},
+			async getmemberData(){
+				this.memberData = await this.$request.get('/dataanalysis/directandindirectratiostat?org_id='+this.orgid);
+				let per1 = this.memberData.map(o=>o.value)
+				if(this.pre1!==[]){
+					this.totalP1 = per1.reduce((tem,item,index)=>tem+item)
+				}
+			},
+			async getleaveData(){
+				this.leaveData = await this.$request.get('/dataanalysis/vacatecasestat?dateLap='+this.dateLap1);
+				let per2 = this.leaveData.map(o=>o.value)
+				if(this.pre2!==[]){
+					this.totalP2 = per2.reduce((tem,item,index)=>tem+item)
+				}
+			},
+			async getleaveAcountData(){
+				this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2);
+				let per3 = this.leaveAcountData.map(o=>o.value)
+				if(this.pre3!==[]){
+					this.totalP3 = per3.reduce((tem,item,index)=>tem+item)
+				}
+			},
+			async getleaveEduData(){
+				this.leaveEduData = await this.$request.get('/dataanalysis/outdutyedutionstat?dateLap='+this.dateLap3);
+			},
+			async getleaveReaData(){
+				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4);
+			},
+			fetchData(){
+				if(this.orgid!=''&&this.orgid!=undefined){
+					this.getstaffData()
+					this.getsexData()
+					this.geteduLevelData()
+					this.geteachageData()
+					// this.getmemberData()
+					// this.getleaveData()
+					// this.getleaveAcountData()
+					// this.getleaveEduData()
+					// this.getleaveReaData()
 				}
 			}
 		},
@@ -451,6 +528,10 @@
 					}
 				}
 			})
+			this.dateLap4 = dayjs().format('YYYY-MM')
+			this.dateLap1 = dayjs().format('YYYY-MM')
+			this.dateLap2 = dayjs().format('YYYY-MM')
+			this.dateLap3 = dayjs().format('YYYY-MM')
 			this.fetchData()
 		},
 		async created(){
@@ -504,18 +585,28 @@
 .totalR{
 	font-size: 16px;
 	font-weight: bold;
-	position: relative;
+	position: absolute;
 	bottom: 40px;
 	left: 0;
 	right: 0;
 	height: 0;
 	display: flex;
-	justify-content: center
+	justify-content: center;
+}
+.relative{
+	position: relative;
+}
+.dateLap{
+	position: absolute;
+	top: 23px;
+	right: 90px;
+}
+.right20{
+	right: 100px!important;
 }
 </style>
 
 <style lang="scss" scoped>
-
 .el-tabs__content{
 	background: #F5FAFB!important;
 }
