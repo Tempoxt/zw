@@ -21,7 +21,7 @@
 					<form-render :type="`branchteam`" :field="{name:'调至小组',id:form.department}" v-model="form.team" clearable/>
 				</el-col>
 				<el-col :span="12">
-					<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" v-model="form.transferDate"/>
+					<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" v-model="form.transferDate" :picker-options="pickerOptions"/>
 				</el-col>
 				<el-col :span="12">
 					<form-render :type="`select`" :field="{name:'调动区域',options:areaDa}" v-model="form.workGroup" clearable filterable/>
@@ -115,7 +115,6 @@ export default {
 			form:{
 				transferDate:'',
 				team:'',
-				workGroup:'',
 				ids:''
 			},
 			optionsDa:[],
@@ -127,6 +126,11 @@ export default {
 				department:[
 					{ required: true, message: '请选择', trigger: 'blur' },
 				],
+			},
+			pickerOptions: {
+				disabledDate(time) {
+					return time.getTime() < Date.now() - 8.64e7;
+				}
 			},
 		};
 	},
@@ -140,19 +144,19 @@ export default {
 			this.form.ids = this.$refs.OrgSelect.getIdsResult()
 			let form = Object.assign({},this.form)
 			// if(this.form.team!==''||this.form.workGroup!==''){
-				if(this.form.ids!==''){
-					let repeat = await this.$request.post('/transfer/record',form,{alert:false})
-					if(repeat.length!==0){
-						var rep = repeat.map(o=>o)
-						this.$message.error({message:'创建失败,'+rep+'已在该小组',duration:12000})
-					}else{
-						this.$message.success({message:'创建成功'})
-					}
-					this.dialogForm3Visible = false
+				// if(this.form.ids!==''){
+					let repeat = await this.$request.post('/transfer/record',form)
+					// if(typeof repeat.length!==0){
+					// 	var rep = repeat.map(o=>o)
+					// 	this.$message.error({message:'创建失败,'+rep+'已在该小组',duration:12000})
+					// }else{
+						this.$message.success({message:'添加成功'})
+					// }
+					this.dialogFormVisible = false
 					this.fetchTableData()
-				}else{
-					this.$message.error('请选择需要调动的人员');
-				}
+				// }else{
+				// 	this.$message.error('请选择需要调动的人员');
+				// }
 			// }else{
 			// 	this.$message.error('请选择需要调动的区域或小组');
 			// }
@@ -163,9 +167,8 @@ export default {
 				workGroup:'',
 				ids:''
 			}
-			this.$set(this.form,'transferDate',dayjs().format('YYYY-MM-DD'))
+			// this.$set(this.form,'transferDate',dayjs().format('YYYY-MM-DD'))
 			this.dialogFormVisible = true
-			this.getOptions();
 			this.getAreas()
 		},
 		async fetchTableData() {
@@ -177,9 +180,6 @@ export default {
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
-		},
-		async getOptions(){//获取调至小组的下拉选项
-			this.optionsDa = (await this.$request.get('/org/teamselect')).map(o=>{return {label:o.name,value:o.id}})
 		},
 		async getAreas(){//获取调至区域的下拉选项
 			this.areaDa = (await this.$request.get('/officeaddress')).map(o=>{return {label:o.officeaddressname,value:o.id}})

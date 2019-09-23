@@ -46,11 +46,12 @@ export default {
   width: 100%;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
+    margin-right: -18px!important;
   }
 }
 .select-item {
     cursor: pointer;
-   line-height: 34px;
+    line-height: 34px;
     padding-left: 10px;
 }
 .active {

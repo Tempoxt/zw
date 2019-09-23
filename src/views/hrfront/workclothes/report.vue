@@ -124,8 +124,7 @@ export default {
 			if(row.workcode==event.target.innerHTML){
 				this.openDrawers = true
 				this.chineseName = row.name
-				// console.log(this.name,'nnnn')
-				//this.fetchProfileData()
+				this.clothesInfo = await this.$request.get('/workclothes/reportdetail?workcode='+row.workcode)
 			}
 		},
 		fetch(){
@@ -137,7 +136,6 @@ export default {
 			this.table_form.flag = this.flag
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
-			// this.clothesInfo = rows
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
