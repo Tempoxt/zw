@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div :id="id" v-show="show" class="box-card-c"></div>
-		<div :id="id+'2'" v-show="!show" class="box-card-c box-card-c2"></div>
+	<div :id="id+'2'" v-show="!show" class="box-card-c box-card-c2"></div>
   </el-card>
 </template>
 
@@ -60,7 +60,7 @@ export default {
 			  toolbox: {
 				right:20,
 			    show: true,
-				itemSize:14,
+				itemSize:16,
 			    orient: "horizontal",
 			    feature: {
 					myTool2: {
@@ -78,7 +78,7 @@ export default {
 					}
 			    }
 			  },
-			  color: ["#3889FF", "#FF64C6"],
+			  color: ["#7AA2FC", "#FF4EBE"],
 			  calculable: true,
 			  xAxis: [
 			    {

@@ -45,7 +45,7 @@ export default {
 
 <style lang="scss" scoped>
 .box-card{
-	height: 417px;
+	height: 431px;
 	margin-top: 10px;
 }
 .cardName{

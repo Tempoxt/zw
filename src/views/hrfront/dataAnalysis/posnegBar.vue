@@ -15,7 +15,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=''&&this.datas.man!=undefined){
+		if(this.datas!=''){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -24,7 +24,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=''&&this.datas.man!=undefined){
+				if(this.datas!=''){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -37,7 +37,6 @@ export default {
 		checkFull(){
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
-			console.log(window.screen.height)
 			let aaa = echarts.init(document.getElementById(this.id+"2"));
 			aaa.setOption(this.option);
 		},
@@ -100,33 +99,29 @@ export default {
 			  yAxis: [
 			    {
 					type: "category",
-					data: data.man.name
+					data: data.top_depart
 			    }
 			  ],
 			  series: [
 			    {
 					name: "离职人数",
 					type: "bar",
-            		data:[-120, -132, -101, -134, -190]
-					// data: data.man.value
+            		data:data.out_duty_number
 			    },
 			    {
 					name: "新进人数",
 					type: "bar",
-					// data: data.woman.value
-            		data:[200, 170, 240, 244, 200]
+            		data:data.curr_number
 				},
 				{
 					name: "总人数",
 					type: "bar",
-					// data: data.woman.value,
-					data:[320, 302, 341, 374, 390]
+					data:data.on_duty_number
 			    }
 			  ]
 			};
 			this.option.title.text = this.title;
 			if(data!=undefined){
-				this.option.xAxis.data = this.datas.man.name
 				if (this.color) {
 					this.option.color = this.color;
 				}

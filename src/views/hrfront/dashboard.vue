@@ -111,7 +111,7 @@
 								id="men-and-women"
 								screenIndex='2'
 								@fullScreen="fullScreen"
-								:color="['#3889FF','#FF64C6']"
+								:color="['#5A8BFC','#FF23AE']"
 								:datas="sexData"
 								:class="{'speech-mode':screenIndex=='2'}"
 								></pieChart>
@@ -141,7 +141,7 @@
 								:class="{'speech-mode':screenIndex=='4'}"
 								></barChart>
 							</el-col>
-							<!-- <el-col :span="12" class="relative" v-show="memberData.length!=0">
+							<el-col :span="12" class="relative" v-show="memberData.length!=0">
 								<inService
 								id="ring-member"
 								title="直接/间接人员人数及比列"  
@@ -168,7 +168,7 @@
 								></inService>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
 								<div class="totalR" v-if="totalP2!=''">总次数:{{totalP2}}</div>
-							</el-col> -->
+							</el-col>
 							<!-- <el-col :span="12"  v-show="staffplanData.length!=0">
 								<histogram 
 								:show="checkFullshow" 
@@ -195,7 +195,7 @@
 								:class="{'speech-mode':screenIndex=='8'}"
 								></singlehisto>
 							</el-col> -->
-							<!-- <el-col :span="12" class="relative" v-show="sexData.length!=0">
+							<el-col :span="12" class="relative" v-show="sexData.length!=0">
 								<pieChart  
 								:show="checkFullshow"
 								ref="echart9"
@@ -250,7 +250,7 @@
 								:class="{'speech-mode':screenIndex=='12'}"
 								></inService>
 							</el-col>
-							<el-col :span="12"  v-show="manageData.length!=0">
+							<el-col :span="12" class="relative"  v-show="manageData.length!=0">
 								<posnegBar 
 								:show="checkFullshow" 
 								ref="echart13" 
@@ -262,8 +262,38 @@
 								:datas="manageData"
 								:class="{'speech-mode':screenIndex=='13'}"
 								></posnegBar>
+								<dateLap class="dateLap right20" width="140px" itemsD="1" v-model="dateLap5" @change="getmanageData()"/>
 							</el-col>
-							<el-col :span="12" class="padding-left-10" v-show="rewarPunish.length!=0">
+							<el-col :span="12" class="padding-left-10 relative">
+								<!-- <el-card class="box-card">
+									<div>
+										<div class="title">加班比率统计分析</div>
+									</div>
+									<div class="box-card-c flexProg">
+										<div class="mr60" v-for="o in 4" :key="o">
+											<el-progress type="circle" :percentage="percentage" stroke-width="15"></el-progress>
+											<div class="depart">齿轮箱业务部</div>
+										</div>
+									</div>
+								</el-card>
+								<span class="iconAbso">
+									<svg t="1566301956703" style="margin-right:10px;" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6739" width="16" height="16"><path d="M428 928H141.2l299.2-299.2c12.5-12.5 12.5-32.8 0-45.2s-32.8-12.5-45.2 0L96 882.7V598c0-17.7-14.3-32-32-32s-32 14.3-32 32v362c0 17.7 14.3 32 32 32h364c17.7 0 32-14.3 32-32s-14.3-32-32-32zM598 96h284.8L583.6 395.2c-12.5 12.5-12.5 32.8 0 45.2s32.8 12.5 45.2 0L928 141.3V424c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H598c-17.7 0-32 14.3-32 32s14.3 32 32 32z" p-id="6740"></path></svg>
+									<svg t="1566300364709" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5452" width="16" height="16"><path d="M344.9661875 31.5h336.35a12.0125 12.0125 0 0 1 12.0125 12.0125l-1.20125 472.3315h137.7233125a12.0125 12.0125 0 0 1 8.5889375 20.42125L520.40875 859.2213125a12.0125 12.0125 0 0 1-16.937625 0.1801875L172.2865 536.4454375a12.0125 12.0125 0 0 1 8.40875-20.6014375h152.2584375V43.5125c0-6.606875 5.405625-12.0125 12.0125-12.0125zM61.53125 932.4375h900.9375a30.03125 30.03125 0 1 1 0 60.0625H61.53125a30.03125 30.03125 0 1 1 0-60.0625z" p-id="5453"></path></svg>
+								</span> -->
+								<progre
+								:show="checkFullshow" 
+								ref="echart14" 
+								title="加班比率统计分析" 
+								screenIndex='14'
+								@fullScreen="fullScreen"
+								id="overtime-rate"
+								:datas="overtimeRate"
+								:color="['#58D8BE']"
+								:class="{'speech-mode':screenIndex=='14'}"
+								></progre>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap6" @change="getovertimeRate()"/>
+							</el-col>
+							<!-- <el-col :span="12" class="padding-left-10" v-show="rewarPunish.length!=0">
 								<histogram 
 								:show="checkFullshow" 
 								ref="echart14" 
@@ -297,6 +327,7 @@
 	import histogram from "./dataAnalysis/histogram"
 	import singlehisto from "./dataAnalysis/singlehisto"
 	import posnegBar from "./dataAnalysis/posnegBar"
+	import progre from "./dataAnalysis/progre"
 	// import sunbrust from "./dataAnalysis/sunbrust"
 	import * as api_common from "@/api/common";
 	import * as api_org from "@/api/org";
@@ -326,6 +357,7 @@
 				turnRate:[],//员工流失率
 				manageData:{},//人力资源报表
 				rewarPunish:{},//人员奖惩情况统计
+				overtimeRate:{},//加班比例统计分析
 				orgid:'',
 				input5:'',
 				filterText:'',
@@ -342,6 +374,9 @@
 				dateLap2:'',
 				dateLap3:'',
 				dateLap4:'',
+				dateLap5:'',
+				dateLap6:'',
+				percentage:30
 			};
 		},
 		components:{
@@ -358,6 +393,7 @@
 			histogram,
 			singlehisto,
 			posnegBar,
+			progre,
 			// sunbrust,
 		},
 		watch:{
@@ -475,17 +511,26 @@
 			async getleaveReaData(){
 				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4);
 			},
+			async getturnRate(){
+				this.turnRate = await this.$request.get('/dataanalysis/numberloseratiostat?org_id='+this.orgid);
+			},
+			async getmanageData(){
+				this.manageData = await this.$request.get('/dataanalysis/hrreportstat?dateLap='+this.dateLap5);
+			},
+			async getovertimeRate(){
+				this.overtimeRate = await this.$request.get('/dataanalysis/overtimeratiostat?dateLap='+this.dateLap6);
+			},
 			fetchData(){
 				if(this.orgid!=''&&this.orgid!=undefined){
 					this.getstaffData()
 					this.getsexData()
 					this.geteduLevelData()
 					this.geteachageData()
-					// this.getmemberData()
-					// this.getleaveData()
-					// this.getleaveAcountData()
-					// this.getleaveEduData()
-					// this.getleaveReaData()
+					this.getleaveAcountData()
+					this.getleaveEduData()
+					this.getleaveReaData()
+					this.getturnRate()
+					this.getmanageData()
 				}
 			}
 		},
@@ -528,11 +573,16 @@
 					}
 				}
 			})
-			this.dateLap4 = dayjs().format('YYYY-MM')
 			this.dateLap1 = dayjs().format('YYYY-MM')
 			this.dateLap2 = dayjs().format('YYYY-MM')
 			this.dateLap3 = dayjs().format('YYYY-MM')
+			this.dateLap4 = dayjs().format('YYYY-MM')
+			this.dateLap5 = dayjs().format('YYYY-MM')
+			this.dateLap6 = dayjs().format('YYYY-MM')
 			this.fetchData()
+			this.getleaveData()
+			this.getmemberData()
+			this.getovertimeRate()
 		},
 		async created(){
 			this.data2 = await this.$request.get('org');
@@ -604,9 +654,44 @@
 .right20{
 	right: 100px!important;
 }
+.depart{
+	color: #4C5D66;
+	text-align: center;
+	margin-top: 5px;
+}
+.flexProg{
+	display: flex;
+	flex-wrap: wrap;
+}
+.title{
+	font-family: 'Microsoft YaHei';
+	font-size:18px;
+	font-weight: bold;
+	color: #303133;
+	padding-bottom: 30px;
+}
+.mr60{
+	margin-right:60px
+}
+.iconAbso{
+	position: absolute;
+	right: 40px;
+	top: 30px;
+}
 </style>
 
 <style lang="scss" scoped>
+.box-card {
+	width: 100%;
+  margin-top: 10px;
+  padding-top: 15px;
+	.box-card-c.box-card-c2{
+		height: 100%;
+	}
+  .box-card-c {
+    height: 350px;
+  }
+}
 .el-tabs__content{
 	background: #F5FAFB!important;
 }

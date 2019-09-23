@@ -83,6 +83,12 @@ export default {
 			  },
 			  color: ["#3889FF", "#FF64C6"],
 			  calculable: true,
+				grid: {
+					left: '5%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
 			  xAxis: [
 			    {
 			      	type: "value",
@@ -94,7 +100,6 @@ export default {
 			    {
 					type: "category",
 					data: data.name,
-					max:6
 			    }
 			  ],
 			  series: [
