@@ -89,7 +89,7 @@
 					</el-row>
 						
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
-						<el-row>
+						<el-row class="elCol">
 							<el-col :span="12" class="relative" v-show="staffData.length!=0">
 								<inService
 								id="ring-diagram"
@@ -141,7 +141,7 @@
 								:class="{'speech-mode':screenIndex=='4'}"
 								></barChart>
 							</el-col>
-							<el-col :span="12" class="relative" v-show="memberData.length!=0">
+							<el-col :span="12" class="relative" v-if="memberData&&memberData.length!=0">
 								<inService
 								id="ring-member"
 								title="直接/间接人员人数及比列"  
@@ -155,7 +155,7 @@
 								></inService>
 								<div class="totalR" v-if="totalP1!=''">总人数:{{totalP1}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10 relative" v-show="leaveData.length!=0">
+							<el-col :span="12" class="relative" v-show="leaveData.length!=0">
 								<inService
 								id="ring-leave"
 								title="请假情况统计表"  
@@ -169,143 +169,90 @@
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
 								<div class="totalR" v-if="totalP2!=''">总次数:{{totalP2}}</div>
 							</el-col>
-							<!-- <el-col :span="12"  v-show="staffplanData.length!=0">
-								<histogram 
-								:show="checkFullshow" 
-								ref="echart7" 
-								title="人员规划及实际人数" 
-								screenIndex='7'
-								:color="['#5A8BFC','#40CDE9']"
-								@fullScreen="fullScreen"
-								id="staff-plan"
-								:datas="staffplanData"
-								:class="{'speech-mode':screenIndex=='7'}"
-								></histogram>
-							</el-col>
-							<el-col :span="12" class="padding-left-10" v-show="recruitData.length!=0">
-								<singlehisto 
-								:show="checkFullshow" 
-								ref="echart8" 
-								title="各部门招聘完成率统计" 
-								screenIndex='8'
-								:color="['#40CDE9']"
-								@fullScreen="fullScreen"
-								id="recruit-data"
-								:datas="recruitData"
-								:class="{'speech-mode':screenIndex=='8'}"
-								></singlehisto>
-							</el-col> -->
+							
 							<el-col :span="12" class="relative" v-show="sexData.length!=0">
 								<pieChart  
 								:show="checkFullshow"
-								ref="echart9"
+								ref="echart7"
 								title="离职人数统计" 
 								id="leave-account"
-								screenIndex='9'
+								screenIndex='7'
 								@fullScreen="fullScreen"
 								:color="['#3889FF','#FF64C6']"
 								:datas="leaveAcountData"
-								:class="{'speech-mode':screenIndex=='9'}"
+								:class="{'speech-mode':screenIndex=='7'}"
 								></pieChart>
-								<dateLap class="dateLap right20" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveData()"/>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveData()"/>
 								<div class="totalR" v-if="totalP3!=''">离职人数:{{totalP3}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10 relative" v-show="leaveEduData.length!=0">
+							<el-col :span="12" class=" relative" v-show="leaveEduData.length!=0">
 								<singlehisto 
 								:show="checkFullshow" 
-								ref="echart10" 
+								ref="echart8" 
 								title="离职学历分析表" 
-								screenIndex='10'
+								screenIndex='8'
 								:color="['#996EFF']"
 								@fullScreen="fullScreen"
 								id="leave-edu"
 								:datas="leaveEduData"
-								:class="{'speech-mode':screenIndex=='10'}"
+								:class="{'speech-mode':screenIndex=='8'}"
 								></singlehisto>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap3" @change="getleaveEduData()"/>
 							</el-col>
 							<el-col :span="12" class="relative" v-show="leaveReaData.length!=0">
 								<singlehisto 
 								:show="checkFullshow" 
-								ref="echart11" 
+								ref="echart9" 
 								title="离职原因分析表" 
-								screenIndex='11'
+								screenIndex='9'
 								:color="['#5A8BFC']"
 								@fullScreen="fullScreen"
 								id="leave-reason"
 								:datas="leaveReaData"
-								:class="{'speech-mode':screenIndex=='11'}"
+								:class="{'speech-mode':screenIndex=='9'}"
 								></singlehisto>
-								<dateLap class="dateLap right20" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
 							</el-col>
-							<el-col :span="12" class="padding-left-10" v-show="leaveEduData.length!=0">
+							<el-col :span="12" v-if="leaveEduData.length!=0">
 								<inService
 								id="turn-rate"
 								title="员工流失率"  
 								:show="checkFullshow" 
 								:datas = turnRate
-								ref="echart12" 
-								screenIndex='12'
+								ref="echart10" 
+								screenIndex='10'
 								@fullScreen="fullScreen"
-								:class="{'speech-mode':screenIndex=='12'}"
+								:class="{'speech-mode':screenIndex=='10'}"
 								></inService>
 							</el-col>
-							<el-col :span="12" class="relative"  v-show="manageData.length!=0">
+							<el-col :span="12" class="relative"  v-if="manageData.length!=0">
 								<posnegBar 
 								:show="checkFullshow" 
-								ref="echart13" 
+								ref="echart11" 
 								title="人力资源报表" 
-								screenIndex='13'
+								screenIndex='11'
 								:color="['#FF7676','#84EBFF','#40CDE9']"
 								@fullScreen="fullScreen"
 								id="manage-data"
 								:datas="manageData"
-								:class="{'speech-mode':screenIndex=='13'}"
+								:class="{'speech-mode':screenIndex=='11'}"
 								></posnegBar>
-								<dateLap class="dateLap right20" width="140px" itemsD="1" v-model="dateLap5" @change="getmanageData()"/>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap5" @change="getmanageData()"/>
 							</el-col>
-							<el-col :span="12" class="padding-left-10 relative">
-								<!-- <el-card class="box-card">
-									<div>
-										<div class="title">加班比率统计分析</div>
-									</div>
-									<div class="box-card-c flexProg">
-										<div class="mr60" v-for="o in 4" :key="o">
-											<el-progress type="circle" :percentage="percentage" stroke-width="15"></el-progress>
-											<div class="depart">齿轮箱业务部</div>
-										</div>
-									</div>
-								</el-card>
-								<span class="iconAbso">
-									<svg t="1566301956703" style="margin-right:10px;" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6739" width="16" height="16"><path d="M428 928H141.2l299.2-299.2c12.5-12.5 12.5-32.8 0-45.2s-32.8-12.5-45.2 0L96 882.7V598c0-17.7-14.3-32-32-32s-32 14.3-32 32v362c0 17.7 14.3 32 32 32h364c17.7 0 32-14.3 32-32s-14.3-32-32-32zM598 96h284.8L583.6 395.2c-12.5 12.5-12.5 32.8 0 45.2s32.8 12.5 45.2 0L928 141.3V424c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H598c-17.7 0-32 14.3-32 32s14.3 32 32 32z" p-id="6740"></path></svg>
-									<svg t="1566300364709" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5452" width="16" height="16"><path d="M344.9661875 31.5h336.35a12.0125 12.0125 0 0 1 12.0125 12.0125l-1.20125 472.3315h137.7233125a12.0125 12.0125 0 0 1 8.5889375 20.42125L520.40875 859.2213125a12.0125 12.0125 0 0 1-16.937625 0.1801875L172.2865 536.4454375a12.0125 12.0125 0 0 1 8.40875-20.6014375h152.2584375V43.5125c0-6.606875 5.405625-12.0125 12.0125-12.0125zM61.53125 932.4375h900.9375a30.03125 30.03125 0 1 1 0 60.0625H61.53125a30.03125 30.03125 0 1 1 0-60.0625z" p-id="5453"></path></svg>
-								</span> -->
+							<el-col :span="12" class="relative">
 								<progre
 								:show="checkFullshow" 
-								ref="echart14" 
+								ref="echart12" 
 								title="加班比率统计分析" 
-								screenIndex='14'
+								screenIndex='12'
 								@fullScreen="fullScreen"
 								id="overtime-rate"
 								:datas="overtimeRate"
 								:color="['#58D8BE']"
-								:class="{'speech-mode':screenIndex=='14'}"
+								:class="{'speech-mode':screenIndex=='12'}"
 								></progre>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap6" @change="getovertimeRate()"/>
 							</el-col>
-							<!-- <el-col :span="12" class="padding-left-10" v-show="rewarPunish.length!=0">
-								<histogram 
-								:show="checkFullshow" 
-								ref="echart14" 
-								title="人员奖惩情况统计" 
-								screenIndex='14'
-								:color="['#7DD453','#FF8D53']"
-								@fullScreen="fullScreen"
-								id="reward-punish"
-								:datas="rewarPunish"
-								:class="{'speech-mode':screenIndex=='14'}"
-								></histogram>
-							</el-col> -->
 						</el-row>
 					</el-scrollbar>
 				</div>
@@ -646,14 +593,6 @@
 .relative{
 	position: relative;
 }
-.dateLap{
-	position: absolute;
-	top: 23px;
-	right: 90px;
-}
-.right20{
-	right: 100px!important;
-}
 .depart{
 	color: #4C5D66;
 	text-align: center;
@@ -677,6 +616,19 @@
 	position: absolute;
 	right: 40px;
 	top: 30px;
+}
+.el-row .el-col:nth-child(2n){
+	padding-left: 10px;
+}
+.dateLap{
+	position: absolute;
+	top: 23px;
+}
+.el-row .el-col:nth-child(n) .dateLap{
+	right: 100px!important;
+}
+.el-row .el-col:nth-child(2n) .dateLap{
+	right: 90px!important;
 }
 </style>
 

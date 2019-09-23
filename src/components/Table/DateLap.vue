@@ -67,8 +67,10 @@ export default {
                 return dayjs(this.value).format('YYYY-MM-DD')
             },
             set(val){
-                this.$emit('input',val)
-                this.$emit('change',val)
+                if(val!='Invalid Date'){
+                    this.$emit('input',val)
+                    this.$emit('change',val)
+                }
             }
         }
     },
@@ -84,7 +86,7 @@ export default {
                 this.value2 = dayjs(this.value).format('YYYY-MM')
             }else if(this.ctype == 1){
                 this.value2 = dayjs(this.value).format('YYYY-MM-DD')
-            }else {
+            }else if(this.ctype == 3){
                 this.value2 = dayjs(this.value).format('YYYY')
             }
             this.$emit('change')
