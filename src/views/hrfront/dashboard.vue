@@ -183,7 +183,7 @@
 								:datas="leaveAcountData"
 								:class="{'speech-mode':screenIndex=='7'}"
 								></pieChart>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveData()"/>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveAcountData()"/>
 								<div class="totalR" v-if="totalP3!=''">离职人数:{{totalP3}}</div>
 							</el-col>
 							<el-col :span="12" class=" relative" v-show="leaveEduData.length!=0">
