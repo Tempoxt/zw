@@ -141,10 +141,11 @@ export default {
 			this.fetchTableData()
 		},
 		async handleFormSubmit(){
+			await this.form_validate()
 			this.form.ids = this.$refs.OrgSelect.getIdsResult()
 			let form = Object.assign({},this.form)
 			// if(this.form.team!==''||this.form.workGroup!==''){
-				// if(this.form.ids!==''){
+				if(this.form.ids!==''){
 					let repeat = await this.$request.post('/transfer/record',form)
 					// if(typeof repeat.length!==0){
 					// 	var rep = repeat.map(o=>o)
@@ -154,9 +155,9 @@ export default {
 					// }
 					this.dialogFormVisible = false
 					this.fetchTableData()
-				// }else{
-				// 	this.$message.error('请选择需要调动的人员');
-				// }
+				}else{
+					this.$message.error('请选择需要调动的人员');
+				}
 			// }else{
 			// 	this.$message.error('请选择需要调动的区域或小组');
 			// }

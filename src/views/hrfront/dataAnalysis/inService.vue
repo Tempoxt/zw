@@ -16,14 +16,19 @@ export default {
 		}
 	},
 	mounted() {
-		this.$nextTick(function() {
-			this.init(this.id,this.datas)
-		})
+		if(this.datas!=''&&this.datas[0].name!=''){
+			this.$nextTick(function() {
+				this.init(this.id,this.datas)
+			})
+		}
 	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=''){
+			console.log(this.datas,'inservice')
+			console.log(this.datas.length,'this.datas.length')
+			// console.log(this.datas[0].name,'nameddddddddddd')
+				if(this.datas!=''&&this.datas[0].name!=''){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -36,7 +41,7 @@ export default {
 		checkFull(){
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
-			let aaa = echarts.init(document.getElementById(this.id+"2"));//ring-diagram2
+			let aaa = echarts.init(document.getElementById(this.id+"2"));
 			aaa.setOption(this.option);
 		},
 		fullScreen(){

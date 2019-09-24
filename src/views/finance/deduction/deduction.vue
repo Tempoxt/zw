@@ -16,6 +16,9 @@
         <div v-if="view_activeName==='已结付'">
             <deductionTable  :flag="2" :id="currentMenuid"/>
         </div>
+        <div v-if="view_activeName==='审核未通过'">
+            <deductionTable  :flag="3" :id="currentMenuid"/>
+        </div>
         <!-- <deductionTable :id="currentMenuid"/> -->
     </el-col>
   </el-row>

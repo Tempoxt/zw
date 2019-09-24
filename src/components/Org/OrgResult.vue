@@ -10,7 +10,8 @@
 
             <div style="margin-top:29px;">
                 <div v-for="(item,i) in data" :key="i" class="select-item" @click="handleClick(item)" :class="`${select===item?'active':''}`">
-                    <span :style="`${item.subs === 1?'opacity: 1;':'opacity: 0;'}`" class="icon iconfont icon-zonggongsi"></span> <span> &nbsp;&nbsp;{{item.name}} &nbsp;&nbsp;&nbsp;
+                    <span :style="`${item.subs === 1?'opacity: 1;':'opacity: 0;'}`" class="icon iconfont icon-zonggongsi"></span> 
+                    <span style="font-size:12px;"> &nbsp;&nbsp;{{item.name}} &nbsp;&nbsp;&nbsp;
                         <span style="color:#A3AFB7;" v-if="item.employeeCode!=0">{{item.employeeCode}}</span>
                     </span>
                 </div>

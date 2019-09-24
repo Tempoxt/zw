@@ -62,25 +62,51 @@
 		width="520px"
 		>
 
-		<el-form ref="form2" :model="form2" label-width="100px" :inline="true" >
+		<el-form ref="form2" :model="form2" label-width="100px" >
 			<el-row>
-				<el-col :span="24" style="padding:20px;">
-					<el-date-picker
-						v-model="form2.dateLap"
-						:clearable="false"
-						type="month"
-						size="medium"
-						format="yyyy年MM月"
-						value-format="yyyy-MM"
-						placeholder="选择月份">
-					</el-date-picker>
+				<el-col :span="24" style="padding-top:20px;">
+					<el-form-item label="结算月份" prop="dateLap" :rules="rules2">
+						<el-date-picker
+							v-model="form2.dateLap"
+							:clearable="false"
+							type="month"
+							size="small"
+							format="yyyy年MM月"
+							value-format="yyyy-MM"
+							placeholder="选择月份">
+						</el-date-picker>
+					</el-form-item>
+				</el-col>
+				<el-col :span="24">
+					<form-render
+						:type="`radio`"
+						:field="{name:'结算状态',options:[{
+							value: 1,
+							label: '通过'
+						},{
+							value: 0,
+							label: '不通过'
+						}]}"
+						v-model="form2.flag"
+						prop="status"
+					/>
+				</el-col>
+				<el-col :span="24" v-if="this.form2.flag==0">
+					<form-render
+						:type="`textarea`"
+  						:autosize="{ minRows: 2, maxRows: 4}"
+						prop="remark"
+						filterable
+						:field="{name:'不通过原因'}"
+						v-model="form2.remark"
+					/>
 				</el-col>
 			</el-row>
 		</el-form>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm2Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm2Submit">确 定</el-button>
+			<el-button type="primary" @click="handleForm2Submit" :disabled="disabled2">确 定</el-button>
 		</div>
 	</el-dialog>
 
@@ -131,10 +157,10 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("deduction");
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 import { MessageBox } from 'element-ui';
+const api_resource = api_common.resource("deduction");
 export default {
 	mixins: [table_mixin],
 	props:['id','flag'],
@@ -150,12 +176,15 @@ export default {
 			}else{
 				callback();
 			}
-		
 		};
 		return {
 			loading: true,
 			form:{},
-			form2:{},
+			form2:{
+				dateLap: '',
+				flag: 1,
+				remark: ''
+			},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -178,13 +207,23 @@ export default {
 					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 				],
 			},
+			rules2:{
+				dateLap:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+				],
+				flag:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+				],
+			},
 			dedulist:[],
 			template:{
 				paymentname(column,row){
-					if(row.paymentname==='已结付'){
+					if(row.payStatus===2){
 						return <el-tag type="success">{row.paymentname}</el-tag>
-					}else{
+					}else if(row.payStatus===0){
 						return <el-tag type="info">{row.paymentname}</el-tag>
+					}else if(row.payStatus===3){
+						return <el-tag type="danger">{row.paymentname}</el-tag>
 					}
 				},
 			},
@@ -197,8 +236,19 @@ export default {
 		};
 	},
 	computed:{
-		disabled(){
-
+		disabled2(){
+			if(this.form2.dateLap!==''&&this.form2.flag!==''){
+				if(this.form2.flag==1){
+					return false
+				}else if(this.form2.flag==0){
+					if(this.form2.remark!==''){
+						return false
+					}else{
+						return true
+					}
+				}
+			}
+			return true
 		}
 	},
 	watch:{
@@ -214,6 +264,9 @@ export default {
 			this.table_form.currentpage = 1
             this.fetchMenu()
             this.fetchTableData()
+		},
+		'form2.status'(){
+			this.form2.remark = ''
 		}
 	},
 	methods: {
@@ -325,16 +378,20 @@ export default {
 				await api_resource.update(form.id,form)
 				this.dialogFormVisible = false
 				this.fetchTableData()
-				// ,{alert:false}
-            	// this.$message.success({message:'修改成功'})
 			}
 		},
 		financialaudit(){
+			this.form2 = {
+				flag: 1,
+				remark: ''
+			}
+    		this.$set(this.form2,'dateLap', dayjs().subtract(1,'month').format('YYYY-MM'))
 			this.dialogForm2Visible = true
 		},
 		async handleForm2Submit(){
-			let ids = this.table_selectedRows.map(o=>o.id).join(',')
-			await this.$request.get('/deduction/audit',{params:{ids:ids,dateLap:this.form2.dateLap}})
+			this.form2.ids = this.table_selectedRows.map(o=>o.id).join(',')
+			console.log(this.form2,'22222222222')
+			await this.$request.get('/deduction/audit',{params:this.form2})
 			this.$message.success({message:'结算成功'})
 			this.dialogForm2Visible = false
 			this.fetchTableData()
@@ -359,7 +416,6 @@ export default {
         this.fetchMenu()
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		this.fetchTableData();
-    	this.$set(this.form2,'dateLap', dayjs().subtract(1,'month').format('YYYY-MM'))
 	}
 };
 </script>

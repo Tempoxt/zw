@@ -6,7 +6,7 @@
   
   >
 
-   <!-- 人员档案的信息预览 -->
+   <!-- 工衣领用详情 -->
 	<div>
 		<Drawer :closable="false" width="640" v-model="openDrawers">
 			<p class="detail"><span style="color:#37474F">{{chineseName}}</span>工衣领用详情</p>

@@ -96,7 +96,6 @@ export default {
 				}],
 			}
 			this.option.title.text = this.title;
-			console.log(data.name,'nnnnnnnn')//['一','二','三','四','五','六']
 			if(data!=undefined){
 				if (this.color) {
 					this.option.color = this.color;

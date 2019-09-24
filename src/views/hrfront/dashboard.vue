@@ -163,6 +163,7 @@
 								:datas = leaveData
 								ref="echart6" 
 								screenIndex='6'
+								:color="['#FF7676','#40CDE9','#FF64A2','#C858FF','#FF8D53','#84EBFF','#FE68D1','#E4D945','#5A8BFC','#4BDB80','#FF8D8D']"
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='6'}"
 								></inService>
@@ -178,7 +179,7 @@
 								id="leave-account"
 								screenIndex='7'
 								@fullScreen="fullScreen"
-								:color="['#3889FF','#FF64C6']"
+								:color="['#40CDE9','#84EBFF','#FF64A2','#996EFF']"
 								:datas="leaveAcountData"
 								:class="{'speech-mode':screenIndex=='7'}"
 								></pieChart>
