@@ -447,23 +447,23 @@
 				}
 			},
 			async getleaveAcountData(){
-				this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2);
+				this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2+'&org_id='+this.orgid);
 				let per3 = this.leaveAcountData.map(o=>o.value)
 				if(this.pre3!==[]){
 					this.totalP3 = per3.reduce((tem,item,index)=>tem+item)
 				}
 			},
 			async getleaveEduData(){
-				this.leaveEduData = await this.$request.get('/dataanalysis/outdutyedutionstat?dateLap='+this.dateLap3);
+				this.leaveEduData = await this.$request.get('/dataanalysis/outdutyedutionstat?dateLap='+this.dateLap3+'&org_id='+this.orgid);
 			},
 			async getleaveReaData(){
-				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4);
+				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4+'&org_id='+this.orgid);
 			},
 			async getturnRate(){
 				this.turnRate = await this.$request.get('/dataanalysis/numberloseratiostat?org_id='+this.orgid);
 			},
 			async getmanageData(){
-				this.manageData = await this.$request.get('/dataanalysis/hrreportstat?dateLap='+this.dateLap5);
+				this.manageData = await this.$request.get('/dataanalysis/hrreportstat?dateLap='+this.dateLap5+'&org_id='+this.orgid);
 			},
 			async getovertimeRate(){
 				this.overtimeRate = await this.$request.get('/dataanalysis/overtimeratiostat?dateLap='+this.dateLap6);
