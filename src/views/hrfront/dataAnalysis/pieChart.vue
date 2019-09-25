@@ -16,14 +16,16 @@ export default {
 		}
 	},
 	mounted() {
-		this.$nextTick(function() {
-			this.init(this.id,this.datas)
-		})
+		if(this.datas!=[]&&this.datas!=null){
+			this.$nextTick(function() {
+				this.init(this.id,this.datas)
+			})
+	    }
 	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=''&&this.datas!=null){
+				if(this.datas!=[]&&this.datas!=null){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}

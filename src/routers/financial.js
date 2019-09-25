@@ -52,14 +52,6 @@ export default [{
             title: '基金管理'
         }
     },
-    // {
-    //     name: 'feecollecting',
-    //     component: () =>
-    //         import ('@/views/finance/lovefoundation/feecollecting'),
-    //     meta: {
-    //         title: '会员缴费'
-    //     }
-    // },
     {
         name: 'lfStatistic',
         component: () =>
@@ -106,6 +98,14 @@ export default [{
             import ('@/views/finance/salary/staffSalary'),
         meta: {
             title: '月份绩效考核'
+        }
+    },
+    {
+        name: 'prodPropelPlan',
+        component: () =>
+            import ('@/views/finance/financialSheet/productPlan'),
+        meta: {
+            title: '生产推进计划'
         }
     },
 ]

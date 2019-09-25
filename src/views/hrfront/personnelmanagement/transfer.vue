@@ -143,9 +143,12 @@ export default {
 		async handleFormSubmit(){
 			await this.form_validate()
 			this.form.ids = this.$refs.OrgSelect.getIdsResult()
-			let form = Object.assign({},this.form)
 			// if(this.form.team!==''||this.form.workGroup!==''){
 				if(this.form.ids!==''){
+					if(this.form.workGroup==''){
+						delete this.form.workGroup
+					}
+			        let form = Object.assign({},this.form)
 					let repeat = await this.$request.post('/transfer/record',form)
 					// if(typeof repeat.length!==0){
 					// 	var rep = repeat.map(o=>o)
@@ -166,8 +169,10 @@ export default {
 			this.form = {
 				team:'',
 				workGroup:'',
-				ids:''
+				ids:'',
+				department:''
 			}
+			console.log(this.form,'ffff')
 			// this.$set(this.form,'transferDate',dayjs().format('YYYY-MM-DD'))
 			this.dialogFormVisible = true
 			this.getAreas()

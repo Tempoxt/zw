@@ -90,7 +90,7 @@
 						
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
 						<el-row class="elCol">
-							<el-col :span="12" class="relative" v-show="staffData.length!=0">
+							<el-col :span="12" class="relative" v-if="staffData.length!=0">
 								<inService
 								id="ring-diagram"
 								title="在职人数统计"  
@@ -103,7 +103,7 @@
 								></inService>
 								<div class="totalR" v-if="totalP!=''">总人数:{{totalP}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10" v-show="sexData.length!=0">
+							<el-col :span="12" class="padding-left-10" v-if="sexData.length!=0">
 								<pieChart  
 								:show="checkFullshow"
 								ref="echart2"
@@ -116,7 +116,7 @@
 								:class="{'speech-mode':screenIndex=='2'}"
 								></pieChart>
 							</el-col>
-							<el-col :span="12" v-show="eduLevelData.length!=0">
+							<el-col :span="12" v-if="eduLevelData.length!=0">
 								<pieChart
 								:show="checkFullshow"
 								ref="echart3"
@@ -129,7 +129,7 @@
 								:class="{'speech-mode':screenIndex=='3'}"
 								></pieChart>
 							</el-col>
-							<el-col :span="12" class="padding-left-10"  v-show="eachageData.length!=0">
+							<el-col :span="12" class="padding-left-10"  v-if="eachageData.length!=0">
 								<barChart 
 								:show="checkFullshow" 
 								ref="echart4" 
@@ -155,7 +155,7 @@
 								></inService>
 								<div class="totalR" v-if="totalP1!=''">总人数:{{totalP1}}</div>
 							</el-col>
-							<el-col :span="12" class="relative" v-show="leaveData.length!=0">
+							<el-col :span="12" class="relative" v-if="leaveData.length!=0">
 								<inService
 								id="ring-leave"
 								title="请假情况统计表"  
@@ -171,7 +171,7 @@
 								<div class="totalR" v-if="totalP2!=''">总次数:{{totalP2}}</div>
 							</el-col>
 							
-							<el-col :span="12" class="relative" v-show="sexData.length!=0">
+							<el-col :span="12" class="relative" v-if="leaveAcountData">
 								<pieChart  
 								:show="checkFullshow"
 								ref="echart7"
@@ -186,7 +186,7 @@
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveAcountData()"/>
 								<div class="totalR" v-if="totalP3!=''">离职人数:{{totalP3}}</div>
 							</el-col>
-							<el-col :span="12" class=" relative" v-show="leaveEduData.length!=0">
+							<el-col :span="12" class=" relative" v-if="leaveEduData.length!=0">
 								<singlehisto 
 								:show="checkFullshow" 
 								ref="echart8" 
@@ -200,7 +200,7 @@
 								></singlehisto>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap3" @change="getleaveEduData()"/>
 							</el-col>
-							<el-col :span="12" class="relative" v-show="leaveReaData.length!=0">
+							<el-col :span="12" class="relative" v-if="leaveReaData.length!=0">
 								<singlehisto 
 								:show="checkFullshow" 
 								ref="echart9" 
@@ -240,7 +240,7 @@
 								></posnegBar>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap5" @change="getmanageData()"/>
 							</el-col>
-							<el-col :span="12" class="relative">
+							<el-col :span="12" class="relative" v-if="overtimeRate.length!=0">
 								<progre
 								:show="checkFullshow" 
 								ref="echart12" 
