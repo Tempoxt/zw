@@ -59,6 +59,7 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+		:cell-style="cellStyle"
     	>
 		<el-table-column 
 			type="selection" 
@@ -68,7 +69,7 @@
 			>
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
+		<each-table-column :table_field="table_field" :template="template"/>
     </el-table>
     <table-pagination 
 		:total="table_form.total" 
@@ -117,7 +118,6 @@ export default {
 				team:'',
 				ids:''
 			},
-			optionsDa:[],
 			areaDa:[],
 			rules:{
 				transferDate:[
@@ -132,6 +132,22 @@ export default {
 					return time.getTime() < Date.now() - 8.64e7;
 				}
 			},
+			template:{
+				source(column,row){
+					if(row.source==1){
+						return <span>OA</span>
+					}else{
+						return <span>手动添加</span>
+					}
+				},
+				isTransfer(column,row){
+					if(row.isTransfer==1){
+						return <el-tag type="success">已生效</el-tag>
+					}else{
+						return <el-tag type="danger">未生效</el-tag>
+					}
+				}
+			}
 		};
 	},
 
@@ -140,30 +156,33 @@ export default {
 			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
+		cellStyle({row, column, rowIndex, columnIndex}){
+			if(column.label == '调后部门'||column.label == '调后职位'||column.label == '调后工作地点'||column.label == '调后小组'){
+				return 'color:#F2353C;cursor:default'
+			}else{
+				return  ''
+			}
+		},
 		async handleFormSubmit(){
 			await this.form_validate()
 			this.form.ids = this.$refs.OrgSelect.getIdsResult()
-			// if(this.form.team!==''||this.form.workGroup!==''){
-				if(this.form.ids!==''){
-					if(this.form.workGroup==''){
-						delete this.form.workGroup
-					}
-			        let form = Object.assign({},this.form)
-					let repeat = await this.$request.post('/transfer/record',form)
-					// if(typeof repeat.length!==0){
-					// 	var rep = repeat.map(o=>o)
-					// 	this.$message.error({message:'创建失败,'+rep+'已在该小组',duration:12000})
-					// }else{
-						this.$message.success({message:'添加成功'})
-					// }
-					this.dialogFormVisible = false
-					this.fetchTableData()
-				}else{
-					this.$message.error('请选择需要调动的人员');
+			if(this.form.ids!==''){
+				if(this.form.workGroup==''){
+					delete this.form.workGroup
 				}
-			// }else{
-			// 	this.$message.error('请选择需要调动的区域或小组');
-			// }
+				let form = Object.assign({},this.form)
+				try{
+					let mes = await this.$request.post('/transfer/record',form)
+					this.$message.success({message:mes})
+				}catch(err){
+					console.log(err)
+					this.$message.error({dangerouslyUseHTMLString: true,message:err.response.data,duration:4000})
+				}
+				this.dialogFormVisible = false
+				this.fetchTableData()
+			}else{
+				this.$message.error('请选择需要调动的人员');
+			}
 		},
 		add(){
 			this.form = {
@@ -173,7 +192,6 @@ export default {
 				department:''
 			}
 			console.log(this.form,'ffff')
-			// this.$set(this.form,'transferDate',dayjs().format('YYYY-MM-DD'))
 			this.dialogFormVisible = true
 			this.getAreas()
 		},
