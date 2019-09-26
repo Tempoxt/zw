@@ -29,7 +29,7 @@
 					</el-scrollbar>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="数据分析" name="dataAnalysis">
+			<!-- <el-tab-pane label="数据分析" name="dataAnalysis">
 				<div class="outside">
 					<el-row>
 						<el-form ref="form" :model="form" label-width="90px">
@@ -168,7 +168,7 @@
 								:class="{'speech-mode':screenIndex=='6'}"
 								></inService>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
-								<div class="totalR" v-if="totalP2!=''">总次数:{{totalP2}}</div>
+								<div class="totalR" v-if="totalP2!=''">总人数:{{totalP2}}</div>
 							</el-col>
 							
 							<el-col :span="12" class="relative" v-if="leaveAcountData">
@@ -257,7 +257,7 @@
 						</el-row>
 					</el-scrollbar>
 				</div>
-			</el-tab-pane>
+			</el-tab-pane> -->
 		</el-tabs>
 	</div>
 </template>

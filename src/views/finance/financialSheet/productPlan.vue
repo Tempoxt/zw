@@ -4,17 +4,17 @@
 	:table_query.sync="table_form.query"
 	@query="querySubmit"
   >
-	<!-- <el-dialog
-		title="请选择结算月份"
+	<el-dialog
+		title="请选择"
 		:visible.sync="dialogForm2Visible"
 		class="public-dialog"
 		v-el-drag-dialog
 		width="520px"
 		>
-		<el-form ref="form2" :model="form2" label-width="100px" >
+		<el-form ref="form2" :model="form2" label-width="100px">
 			<el-row>
-				<el-col :span="24" style="padding-top:20px;">
-					<el-form-item label="结算月份" prop="dateLap">
+				<el-col :span="24">
+					<el-form-item label="导入月份" prop="dateLap">
 						<el-date-picker
 							v-model="form2.dateLap"
 							:clearable="false"
@@ -29,11 +29,13 @@
 			</el-row>
 		</el-form>
 
-		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogForm2Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm2Submit" :disabled="disabled2">确 定</el-button>
-		</div>
-	</el-dialog> -->
+		<el-button-group style="margin-left:40px;padding:10px 0 30px">
+			<el-button type="primary" :disabled="disabled" @click="importFile(e)">选择文件</el-button>
+			<!-- <el-button type="primary">选择文件</el-button>
+            <input type="file" ref="input" class="input" @change="handleImportChange" ref="importInput"></input> -->
+			<el-button type="" style="margin-left:20px">下载模板</el-button>
+		</el-button-group>
+	</el-dialog>
 
 
 
@@ -58,19 +60,18 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
     >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
-      </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field" :template="template"/>
+		<el-table-column 
+		type="selection" 
+		width="60" 
+		class-name="table-column-disabled"
+		:selectable="table_disable_selected"
+		>
+		</el-table-column>
+		<el-table-column type="index" :index="indexMethod" width="70"/>
+		<each-table-column :table_field="table_field"/>
     </el-table>
-     <table-pagination 
+    <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
@@ -95,47 +96,25 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{},
 			form2:{
 				dateLap: '',
-				flag: 1,
-				remark: ''
 			},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogForm2Visible:false,
 			// table_topHeight:206,
-			dedulist:[],
-			template:{
-				paymentname(column,row){
-					if(row.payStatus===2){
-						return <el-tag type="success">{row.paymentname}</el-tag>
-					}else if(row.payStatus===0){
-						return <el-tag type="info">{row.paymentname}</el-tag>
-					}else if(row.payStatus===3){
-						return <el-tag type="danger">{row.paymentname}</el-tag>
-					}
-				},
-			},
-			timer:'',
-			statusk:1,
-			val:'',
-			s:1
+			// rules:{
+			// 	dateLap:[
+			// 		{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+			// 	],
+			// },
 		};
 	},
 	computed:{
-		disabled2(){
-			if(this.form2.dateLap!==''&&this.form2.flag!==''){
-				if(this.form2.flag==1){
-					return false
-				}else if(this.form2.flag==0){
-					if(this.form2.remark!==''){
-						return false
-					}else{
-						return true
-					}
-				}
+		disabled(){
+			if(this.form2.dateLap!==''){
+				return false
 			}
 			return true
 		}
@@ -156,13 +135,15 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
-		async add(){
-			this.dialogFormVisible = true
-			this.$nextTick(()=>{
-				this.$refs['form'].clearValidate()
-			})
-        	this.dedulist = await api_common.getTag('deduction')
+		importPlan(){
+			this.form2.dateLap = ''
+			this.dialogForm2Visible = true
 		},
+		importFile(e){
+			this.importUploadUrl = '/prodpropelplan/list/upload'
+			this.downloadUrl = '/prodpropelplan/list/upload'
+			this.handleImportChange(e)
+		}
 	},
 	async created() {
 		const { field, action,table } = await api_common.menuInit("prodpropelplan/list");
