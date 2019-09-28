@@ -16,7 +16,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=[]&&this.datas!=''){
+		if(this.datas!=[]&&this.datas[0].name!=undefined){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -25,7 +25,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=[]&&this.datas!=''){
+				if(this.datas!=[]&&this.datas[0].name!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -36,7 +36,6 @@ export default {
 	},
 	methods:{		
 		checkFull(){
-			console.log(this.show)
 			$(".box-card-c").width(parseInt($("body").width())-40);
 			$("#"+this.id+"2").height(parseInt(window.screen.height)-40);
 			console.log(window.screen.height)

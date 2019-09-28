@@ -25,8 +25,8 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-			console.log(this.datas,'inservice')
-			console.log(this.datas[0].name,'this.datas[0].name')
+			// console.log(this.datas,'inservice')
+			// console.log(this.datas[0].name,'this.datas[0].name')
 				if(this.datas!=[]&&this.datas[0].name!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
