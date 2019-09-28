@@ -104,6 +104,11 @@ export default {
 		},
 		filterText(val) {
 			this.$refs.tree2.filter(val);
+		},
+		visible(){
+			if(this.visible){
+				this.filterText = ''
+			}
 		}
   },
 	data() {
