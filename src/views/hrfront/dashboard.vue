@@ -29,7 +29,7 @@
 					</el-scrollbar>
 				</div>
 			</el-tab-pane>
-			<!-- <el-tab-pane label="数据分析" name="dataAnalysis">
+			<el-tab-pane label="数据分析" name="dataAnalysis">
 				<div class="outside">
 					<el-row>
 						<el-form ref="form" :model="form" label-width="90px">
@@ -215,16 +215,17 @@
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
 							</el-col>
 							<el-col :span="12" v-if="leaveEduData.length!=0">
-								<inService
+								<progre
 								id="turn-rate"
 								title="员工流失率"  
 								:show="checkFullshow" 
 								:datas = turnRate
 								ref="echart10" 
 								screenIndex='10'
+								:color="['#FF5454']"
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='10'}"
-								></inService>
+								></progre>
 							</el-col>
 							<el-col :span="12" class="relative"  v-if="manageData.length!=0">
 								<posnegBar 
@@ -257,7 +258,7 @@
 						</el-row>
 					</el-scrollbar>
 				</div>
-			</el-tab-pane> -->
+			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>

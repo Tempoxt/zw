@@ -82,12 +82,12 @@ export default {
 					type: 'category',
 					data: data.name,
 					z: 10,
-					boundaryGap: ['20%', '20%']
 				},
 				radiusAxis: {
 				},
 				polar: {
-					center: ['50%', '55%']
+					center: ['50%', '55%'],
+        			radius: '60%'
 				},
 				series: [ {
 					type: 'bar',

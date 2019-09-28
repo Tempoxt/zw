@@ -16,7 +16,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=[]&&this.datas!=null){
+		if(this.datas!=[]&&this.datas!=''){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -25,7 +25,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=[]&&this.datas!=null){
+				if(this.datas!=[]&&this.datas!=''){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}

@@ -37,6 +37,34 @@
 		</div>
 	</el-dialog>
 
+	<el-dialog
+		title="员工调动修改"
+		:visible.sync="dialogForm1Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="800px"
+		>
+		<el-form ref="form1" :model="form1" label-width="100px" :rules="rules1">
+			<el-row>
+				<el-col :span="24">
+					<form-render :type="`branchteam`" :field="{name:'调后小组',id:form1.department}" v-model="form1.team" clearable/>
+				</el-col>
+				<el-col :span="24">
+					<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" v-model="form1.transferDate" :picker-options="pickerOptions"/>
+				</el-col>
+				<el-col :span="24">
+					<form-render :type="`select`" :field="{name:'调后工作地点',options:areaDa}" v-model="form1.workGroup" clearable filterable/>
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm1Visible = false">取 消</el-button>
+			<el-button type="primary"  @click="handleForm1Submit">确 定</el-button>
+		</div>
+	</el-dialog>
+
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -118,6 +146,7 @@ export default {
 				team:'',
 				ids:''
 			},
+			form1:{},
 			areaDa:[],
 			rules:{
 				transferDate:[
@@ -152,6 +181,12 @@ export default {
 	},
 
 	methods: {
+		async delete(){
+			let rows = this.table_selectedRows.map(row=>row.id)
+			await this.$request.delete('transfer/record/bluk?ids='+rows.join(','))
+			this.$message.success({message:'删除成功'})
+			this.fetchTableData()
+		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
@@ -162,6 +197,30 @@ export default {
 			}else{
 				return  ''
 			}
+		},
+		
+		add(){
+			this.form = {
+				team:'',
+				workGroup:'',
+				ids:'',
+				department:''
+			}
+			this.dialogFormVisible = true
+			this.getAreas()
+		},
+		async edit(){
+			this.dialogForm1Visible = true
+            let row = this.table_selectedRows[0];
+			this.form1 = await api_resource.find(row.id)
+		},
+		async handleForm1Submit(){
+			await this.form_validate()
+			let form1 = Object.assign({},this.form1)
+			let mes = await this.$request.post('/transfer/record',form1)
+			this.$message.success({message:mes})
+			this.dialogForm1Visible = false
+			this.fetchTableData()
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
@@ -177,23 +236,11 @@ export default {
 					this.dialogFormVisible = false
 					this.fetchTableData()
 				}catch(err){
-					console.log(err)
-					// this.$message.error({dangerouslyUseHTMLString: true,message:err.response.data,duration:4000})
+
 				}
 			}else{
 				this.$message.error('请选择需要调动的人员');
 			}
-		},
-		add(){
-			this.form = {
-				team:'',
-				workGroup:'',
-				ids:'',
-				department:''
-			}
-			console.log(this.form,'ffff')
-			this.dialogFormVisible = true
-			this.getAreas()
 		},
 		async fetchTableData() {
 			this.table_loading = true;

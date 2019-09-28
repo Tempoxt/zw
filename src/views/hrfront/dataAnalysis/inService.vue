@@ -16,7 +16,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=''&&this.datas[0].name!=''){
+		if(this.datas!=[]&&this.datas[0].name!=undefined){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -26,9 +26,8 @@ export default {
 		datas:{
 			handler(newVal, oldVal){
 			console.log(this.datas,'inservice')
-			console.log(this.datas.length,'this.datas.length')
-			// console.log(this.datas[0].name,'nameddddddddddd')
-				if(this.datas!=''&&this.datas[0].name!=''){
+			console.log(this.datas[0].name,'this.datas[0].name')
+				if(this.datas!=[]&&this.datas[0].name!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
