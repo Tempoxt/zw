@@ -108,4 +108,12 @@ export default [{
             title: '生产推进计划'
         }
     },
+    {
+        name: 'prodBaseLaborHour',
+        component: () =>
+            import ('@/views/finance/financialSheet/productHours'),
+        meta: {
+            title: '组件产品基准工时'
+        }
+    },
 ]

@@ -66,6 +66,7 @@ export default {
       form_multiple:false,
       importLoading:false,
       window_innerHeight:0,
+      importForm:{}
     }
   },
   computed: {
@@ -408,9 +409,14 @@ export default {
     },
     async handleImportChange(ev){
       const files = ev.target.files;
+      this.importForm.the_file = files[0]
       if (!files) return;
+      const { importForm } = this
       var form = new FormData();
-      form.append('the_file',files[0])
+      Object.keys(importForm).forEach(key=>{
+        form.append(key,importForm[key])  
+      })
+      // form.append('the_file',files[0])
       this.importLoading = true
       MessageBox.close()
       MessageBox.alert(
@@ -460,28 +466,16 @@ export default {
       let {
         handleImportChange,
       } = this
-      if(this.downloadUrl!=''&&this.downloadUrl!=undefined){
         MessageBox.alert(
           <el-button-group class="table-import-upload" ref="import">
             <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
             <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
-            <el-button type="" style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
+            <el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
           </el-button-group>
           , '选择文件导入', {
           showConfirmButton:false,
           center:true
         });
-      }else{
-        MessageBox.alert(
-          <el-button-group class="table-import-upload" ref="import">
-            <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
-            <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
-          </el-button-group>
-          , '选择文件导入', {
-          showConfirmButton:false,
-          center:true
-        });
-      }
     },
     // tree table.......---------------------
     table_tree_showRow: function(row) {

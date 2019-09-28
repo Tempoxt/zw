@@ -4,6 +4,34 @@
 	:table_query.sync="table_form.query"
 	@query="querySubmit"
   >
+	<el-dialog
+		title="请选择重置月份"
+		:visible.sync="dialogFormVisible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+		<el-form ref="form" :model="form">
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<el-date-picker
+						v-model="form.dateLap"
+						type="month"
+						size="small"
+						format="yyyy年MM月"
+						value-format="yyyy-MM"
+						placeholder="选择月份">
+					</el-date-picker>
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+		</div>
+	</el-dialog>
+
 
     <table-header
       :table_actions="table_actions"
@@ -44,49 +72,77 @@
         @change="fetchTableData"
         :table_config="table_config"
     />
-	<!-- <importForm :showModal.sync="dialogFormVisible"/> -->
   </ui-table>
 </template>
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
-import importForm from './importForm'
 import { MessageBox } from 'element-ui';
-const api_resource = api_common.resource("prodpropelplan/list");
+const api_resource = api_common.resource("prodpropelplan/mobuleprod/list");
 export default {
 	mixins: [table_mixin],
+	props:['id','flag'],
 	components:{
-		importForm
+		OrgSelect
 	},
 	data() {
 		return {
-			dialogFormVisible:false,
-			showModal:false,
 			loading: true,
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			dialogForm2Visible:false,
-			importUploadUrl:"/prodpropelplan/list/upload",
-			importForm:{
-				month: dayjs().format('YYYY-MM'),
+			form:{
+				dateLap:''
 			},
+			dialogFormVisible:false,
+			timer:'',
+			statusk:1,
+			val:'',
+			month:dayjs().format('YYYY-MM')
 		};
 	},
 	computed:{
 		disabled(){
-			if(this.form2.dateLap!==''){
-				return false
-			}
-			return true
-		}
+			if(this.form.dateLap!==''&&this.form.dateLap!==undefined){
+                return false
+            }
+            return true
+		},
+	},
+	watch:{
 	},
 	methods: {
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
-        },
+		},
+		async getDa(){
+			if(this.statusk!=0){
+				this.val = await this.$request.get('prodpropelplan/mobuleprod/resetresult',{alert:false})
+				if(this.val=='重置成功'){
+					this.statusk = 0
+					this.$message.success({ message: this.val})
+					this.fetchTableData()
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
+		async handleFormSubmit(){
+			this.dialogFormVisible = false
+			this.statusk = 1
+			const mes = await this.$request.post('prodpropelplan/mobuleprod/list/reset',{dateLap:this.form.dateLap})
+			this.$message.success({message: mes})
+			this.timer = setInterval(()=>{
+				this.getDa()
+			},10000)
+		},
+		async reset(){
+			this.form={}
+			this.dialogFormVisible = true
+		},
 		async fetchTableData() {
 			this.table_loading = true;
 			const {rows , total }= await api_resource.get(this.table_form);
@@ -96,21 +152,18 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
-		import(){
-			// this.dialogFormVisible = true
-			let {
-				handleImportChange,
-			} = this
-			MessageBox.alert(
-				<importForm/>
-			, '选择文件导入', {
-			showConfirmButton:false,
-			center:true
-			});
+		importPlan(){
+			this.form2.dateLap = ''
+			this.dialogForm2Visible = true
 		},
+		importFile(e){
+			this.importUploadUrl = '/prodpropelplan/list/upload'
+			this.downloadUrl = '/prodpropelplan/list/upload'
+			this.handleImportChange(e)
+		}
 	},
 	async created() {
-		const { field, action,table } = await api_common.menuInit("prodpropelplan/list");
+		const { field, action,table } = await api_common.menuInit("prodpropelplan/mobuleprod/list");
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
