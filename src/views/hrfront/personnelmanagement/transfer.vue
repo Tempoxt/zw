@@ -174,12 +174,12 @@ export default {
 				try{
 					let mes = await this.$request.post('/transfer/record',form)
 					this.$message.success({message:mes})
+					this.dialogFormVisible = false
+					this.fetchTableData()
 				}catch(err){
 					console.log(err)
-					this.$message.error({dangerouslyUseHTMLString: true,message:err.response.data,duration:4000})
+					// this.$message.error({dangerouslyUseHTMLString: true,message:err.response.data,duration:4000})
 				}
-				this.dialogFormVisible = false
-				this.fetchTableData()
 			}else{
 				this.$message.error('请选择需要调动的人员');
 			}
