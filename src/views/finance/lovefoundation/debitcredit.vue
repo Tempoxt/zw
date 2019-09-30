@@ -14,31 +14,40 @@
       <div style="width:500px;margin:0 auto">
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
-            
             <el-col :span="24">
               <form-render :type="`day`" :field="{name:'收款日期'}" v-model="form.effectiveDate"/>
             </el-col>
-
-
-           <el-col :span="24">
+            
+            <el-col :span="24">
               <form-render :type="`select`" :field="{name:'借方科目',options:formSelect1}" v-model="form.debit"/>
             </el-col>
+
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'摘要'}" v-model="form.summary"/>
             </el-col>
+
             <el-col :span="24">
               <form-render :type="`select`" :field="{name:'贷方科目',options:formSelect2}" v-model="form.credit" />
             </el-col>
+
+            <el-col :span="24">
+              <form-render :type="`member`" :field="{name:'申请人',defaultName:form.applicantName}" v-model="form.applicantId"/>
+            </el-col>
+
+            <el-col :span="24">
+              <form-render :type="`day`" :field="{name:'申请日期'}" v-model="form.applyDate"/>
+            </el-col>
+
             <el-col :span="24">
               <form-render :type="`input`" :field="{name:'金额'}" v-model="form.amount" />
             </el-col>
 
-             <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'受助人'}" v-model="form.grantees"/>
+            <el-col :span="24">
+              <form-render :type="`member`" :field="{name:'受助人',defaultName:form.granteesName}" v-model="form.granteesId"/>
             </el-col>
 
-             <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'收款人'}" v-model="form.payee"/>
+            <el-col :span="24">
+              <form-render :type="`member`" :field="{name:'收款人',defaultName:form.payeeName}" clearable v-model="form.payeeId"/>
             </el-col>
 
             <el-col :span="24">
@@ -131,12 +140,13 @@ export default {
           baseUrl,
           loading: true,
           form:{
-            expendAttachment:[]
+            expendAttachment:[],
+            vouchers:''
           },
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
-          table_topHeight:236,
+          table_topHeight:226,
           adminList:[],
           defaultForm,
           selectData:[],
@@ -179,12 +189,14 @@ export default {
         },
         async add(){
             this.initForm()
+            this.form.vouchers = await this.$request.get('/lovefoundation/vouches');
             this.dialogFormVisible = true
         },
         async handleFormSubmit(){
             let form = Object.assign({},this.form)
             if(this.isInsert){
-                await api_resource.create(form)
+                // await api_resource.create(form)
+                await this.throwFormError(api_resource.create(form))
             }else{
                 this.putForm.debit = form.debit
                 this.putForm.summary = form.summary
@@ -194,34 +206,33 @@ export default {
                 this.putForm.vouchers = form.vouchers
                 this.putForm.effectiveDate = form.effectiveDate
                 this.putForm.expendAttachment = form.expendAttachment
-                // this.putForm.grantees =  !isNaN(+form.grantees)?form.grantees:''
-                if(isNaN(+form.grantees)){
-                   delete this.putForm.grantees
+                this.putForm.applyDate = form.applyDate
+                this.putForm.applicantId = this.form.applicantId
+                if(isNaN(+form.granteesId)){
+                  delete this.putForm.granteesId
                 }else{
-                  this.putForm.grantees = form.grantees
+                  this.putForm.granteesId = form.granteesId
                 }
-                if(isNaN(+form.payee)){
-                  delete this.putForm.payee
+                if(isNaN(+form.payeeId)){
+                  delete this.putForm.payeeId
                 }else{
-                  this.putForm.payee = this.form.payee
+                  this.putForm.payeeId = this.form.payeeId
                 }
-               
-
-
-
-                await api_resource.update(form.id,this.putForm)
+                await this.throwFormError(api_resource.update(form.id,this.putForm))
+                // await api_resource.update(form.id,this.putForm)
             }
             this.dialogFormVisible = false
             this.fetchTableData()
         },
         async edit(){
             this.initForm()
-            // this.$request('/lovefoundation/debitcredit/staff')
             let row = this.table_selectedRows[0]
             this.form = await api_resource.find(row.id);
             this.form = this.form[0];
+            if(this.form.vouchers==''){
+              this.form.vouchers = await this.$request.get('/lovefoundation/vouches');
+            }
             this.form.expendAttachment = this.form.expendAttachment.split(',')
-            console.log(this.form,'this.formthis.form')
             try {
               this.form.credit = this.formSelect2.find(o=>o.label==this.form.credit).value
             } catch (error) {
@@ -242,7 +253,7 @@ export default {
             sums[index] = '基金余款';
             return;
           }
-          if(index === 6){
+          if(column.label == '金额'){
             const values = data.map(item => Number(item[column.property]));
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {
@@ -263,11 +274,11 @@ export default {
       } 
     },
     async created() {
-        const { field, action,table } = await api_common.menuInit("lovefoundation/debitcredit");
-        this.table_field = field;
-        this.table_actions = action;
-        this.table_config = table
-        this.fetchTableData();
+      const { field, action,table } = await api_common.menuInit("lovefoundation/debitcredit");
+      this.table_field = field;
+      this.table_actions = action;
+      this.table_config = table
+      this.fetchTableData();
         
     }
 };

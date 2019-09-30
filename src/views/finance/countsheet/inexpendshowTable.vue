@@ -12,7 +12,7 @@
       :table_column="table_field"
     >
       <div style="padding-left:10px">
-        <dateLap type="3" :disabled="true" v-model="table_form.dateLap" @change="fetchTableData"/>
+        <dateLap itemsD='1' v-model="table_form.dateLap" @change="fetchTableData"/>
       </div>
     </table-header>
     
@@ -139,7 +139,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
-    this.$set(this.table_form,'dateLap',dayjs().format('YYYY'))
+    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
     this.fetchTableData();
   }
 };

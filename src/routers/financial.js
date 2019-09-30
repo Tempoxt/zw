@@ -116,4 +116,12 @@ export default [{
             title: '组件产品基准工时'
         }
     },
+    {
+        name: 'ExWare',
+        component: () =>
+            import ('@/views/finance/financialSheet/outboundOrder'),
+        meta: {
+            title: '出库单'
+        }
+    },
 ]
