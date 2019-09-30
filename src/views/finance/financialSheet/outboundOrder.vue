@@ -5,10 +5,10 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='材料出库单'">
-            <outboundTable a='1' url="prodpropelplan/materialsexware/list"/>
+            <outboundTable a='1' url="materialsexware/list"/>
         </div>
         <div v-if="view_activeName==='其他出库单'">
-            <outboundTable a='2' url="prodpropelplan/otherexware/list"/>
+            <outboundTable a='2' url="otherexware/list"/>
         </div>
     </div>
 </template>

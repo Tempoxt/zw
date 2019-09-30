@@ -80,7 +80,7 @@ import table_mixin from "@c/Table/table_mixin";
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 import { MessageBox } from 'element-ui';
-const api_resource = api_common.resource("prodpropelplan/materialsexware/list");
+// const api_resource = api_common.resource("prodpropelplan/materialsexware/list");
 export default {
 	mixins: [table_mixin],
 	props:['url','a'],
@@ -90,17 +90,17 @@ export default {
 	data() {
 		return {
 			loading: true,
-            api_resource:api_common.resource(this.url),
+            api_resource:api_common.resource('prodpropelplan/'+this.url),
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			form:{
 				dateLap:''
 			},
+			table_topHeight:276,
 			dialogFormVisible:false,
 			timer:'',
 			statusk:1,
 			val:'',
-			month:dayjs().format('YYYY-MM')
 		};
 	},
 	computed:{
@@ -115,7 +115,7 @@ export default {
 		url(){
 			this.table_form.query.query = []
             this.table_form.currentpage = 1
-            this.api_resource = api_common.resource(this.url)
+            this.api_resource = api_common.resource('prodpropelplan/'+this.url)
             this.fetchMenu()
 		}
 	},
@@ -127,9 +127,9 @@ export default {
 		async getDa(){
 			if(this.statusk!=0){
 				if(this.a=='1'){
-					this.val = await this.$request.get('prodpropelplan/materialsexware/resetresult',{alert:false})
+					this.val = await this.$request.get('prodpropelplan/materialsexware/resetresult')
 				}else{
-					this.val = await this.$request.get('prodpropelplan/otherexware/resetresult',{alert:false})
+					this.val = await this.$request.get('prodpropelplan/otherexware/resetresult')
 				}
 				if(this.val=='重置成功'){
 					this.statusk = 0
@@ -160,7 +160,7 @@ export default {
 		},
 		async fetchTableData() {
 			this.table_loading = true;
-			const {rows , total }= await api_resource.get(this.table_form);
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
@@ -175,7 +175,7 @@ export default {
 			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
             setTimeout(()=>{  
                 this.fetchTableData();
-            },300)
+            },500)
 		}
 	},
 	async created() {
