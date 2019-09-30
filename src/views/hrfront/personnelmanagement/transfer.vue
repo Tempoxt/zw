@@ -243,8 +243,9 @@ export default {
 		},
 		async handleForm1Submit(){
 			let form1 = Object.assign({},this.form1)
-			let mes = await this.$request.post('/transfer/record',form1)
-			this.$message.success({message:mes})
+			await api_resource.update(form1.id,form1)
+			// let mes = await this.$request.put('/transfer/record',form1)
+			// this.$message.success({message:mes})
 			this.dialogForm1Visible = false
 			this.fetchTableData()
 		},
