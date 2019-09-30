@@ -44,16 +44,31 @@
 		v-el-drag-dialog
 		width="800px"
 		>
-		<el-form ref="form1" :model="form1" label-width="100px" :rules="rules1">
+		<el-form ref="form1" :model="form1" label-width="120px" :rules="rules1">
 			<el-row>
-				<el-col :span="24">
-					<form-render :type="`branchteam`" :field="{name:'调后小组',id:form1.department}" v-model="form1.team" clearable/>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`input`" :field="{name:'姓名'}" v-model="form1.chineseName" disabled/>
 				</el-col>
-				<el-col :span="24">
-					<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" v-model="form1.transferDate" :picker-options="pickerOptions"/>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`input`" :field="{name:'调前部门'}" v-model="form1.oDepartName__name" disabled/>
 				</el-col>
-				<el-col :span="24">
-					<form-render :type="`select`" :field="{name:'调后工作地点',options:areaDa}" v-model="form1.workGroup" clearable filterable/>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`input`" :field="{name:'调前小组'}" v-model="form1.oTeam__name" disabled/>
+				</el-col>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`input`" :field="{name:'调前地点'}" v-model="form1.oWorkGroup__name" disabled/>
+				</el-col>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`input`" :field="{name:'调后部门'}" v-model="form1.nDepartName__name" disabled/>
+				</el-col>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`branchteam`" :field="{name:'调后小组',id:form1.nDepartment}" v-model="form1.nTeam" clearable/>
+				</el-col>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`select`" :field="{name:'调后地点',options:areaDa}" v-model="form1.nWorkGroup" clearable filterable/>
+				</el-col>
+				<el-col :span="20" :offset="1">
+					<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" :clearable="false" v-model="form1.transferDate" :picker-options="pickerOptions1"/>
 				</el-col>
 			</el-row>
 		</el-form>
@@ -141,6 +156,7 @@ export default {
 			roomAdminList:[],
 			dormList:[],
 			dialogFormVisible:false,
+			dialogForm1Visible:false,
 			form:{
 				transferDate:'',
 				team:'',
@@ -156,9 +172,19 @@ export default {
 					{ required: true, message: '请选择', trigger: 'blur' },
 				],
 			},
+			rules1:{
+				transferDate:[
+					{ required: true, message: '请选择日期', trigger: 'blur' },
+				],
+			},
 			pickerOptions: {
 				disabledDate(time) {
 					return time.getTime() < Date.now() - 8.64e7;
+				}
+			},
+			pickerOptions1: {
+				disabledDate(time) {
+					return time.getTime() < Date.now();
 				}
 			},
 			template:{
@@ -213,9 +239,9 @@ export default {
 			this.dialogForm1Visible = true
             let row = this.table_selectedRows[0];
 			this.form1 = await api_resource.find(row.id)
+			this.getAreas()
 		},
 		async handleForm1Submit(){
-			await this.form_validate()
 			let form1 = Object.assign({},this.form1)
 			let mes = await this.$request.post('/transfer/record',form1)
 			this.$message.success({message:mes})

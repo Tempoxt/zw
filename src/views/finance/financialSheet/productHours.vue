@@ -152,15 +152,6 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
-		importPlan(){
-			this.form2.dateLap = ''
-			this.dialogForm2Visible = true
-		},
-		importFile(e){
-			this.importUploadUrl = '/prodpropelplan/list/upload'
-			this.downloadUrl = '/prodpropelplan/list/upload'
-			this.handleImportChange(e)
-		}
 	},
 	async created() {
 		const { field, action,table } = await api_common.menuInit("prodpropelplan/mobuleprod/list");

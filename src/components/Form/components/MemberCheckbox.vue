@@ -99,7 +99,12 @@ export default {
       handler(val) {
         this.data = this.value;
       }
-    }
+    },
+    visible(){
+			if(this.visible){
+				this.filterText = ''
+			}
+		}
   },
   data() {
     return {

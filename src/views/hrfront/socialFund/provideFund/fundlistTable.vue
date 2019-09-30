@@ -81,30 +81,31 @@ export default {
       defaultForm,
       roomAdminList:[],
       dormList:[],
-      importUploadUrl:"/security/fund"
+      importUploadUrl:"/security/fund",
+      downloadUrl:"/security/fund"
     };
   },
   watch:{
     id(){
-            this.table_form.currentpage = 1
+      this.table_form.currentpage = 1
       this.fetchTableData()
     }
   },
   methods: {
-     fetch(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
-        },
+    fetch(){
+      this.table_form.currentpage = 1
+      this.fetchTableData()
+    },
     async fetchTableData() {
-     if(!this.id){
-       return
-     }
-     this.table_loading = true;
-     this.table_form.orgid = this.id
-     
-     const {rows , total }= await api_resource.get(this.table_form);
+      if(!this.id){
+        return
+      }
+      this.table_loading = true;
+      this.table_form.orgid = this.id
+      
+      const {rows , total }= await api_resource.get(this.table_form);
       this.table_data  = rows
-       this.table_form.total = total
+      this.table_form.total = total
       setTimeout(() => {
         this.table_loading = false;
       }, 300);

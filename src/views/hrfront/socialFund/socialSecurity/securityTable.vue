@@ -83,7 +83,8 @@ export default {
       defaultForm,
       roomAdminList:[],
       dormList:[],
-      importUploadUrl:"/security"
+      importUploadUrl:"/security",
+      downloadUrl:"/security",
     };
   },
   watch:{

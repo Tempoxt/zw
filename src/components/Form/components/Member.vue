@@ -72,7 +72,6 @@ export default {
       console.log(data);
     },
     select(data){
-        console.log(data,'da222ta')
         this.visible = false;
         this.data = data.id;
         this.input5 = data.name
@@ -144,6 +143,11 @@ export default {
         // this.input5 = this.field.real_name
       }
     },
+    visible(){
+			if(this.visible){
+				this.filterText = ''
+			}
+		}
     
   },
   data() {
