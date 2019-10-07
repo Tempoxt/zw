@@ -16,6 +16,7 @@
 			<el-row>
 				<el-col :span="24" style="padding:20px;">
 					<el-date-picker
+					   	:clearable="false"
 						v-model="form.dateLap"
 						type="month"
 						size="small"
@@ -30,6 +31,36 @@
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
 			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+		</div>
+	</el-dialog>
+
+
+	<el-dialog
+		title="请选择月份"
+		:visible.sync="dialogForm1Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+		<el-form ref="form1" :model="form1">
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<el-date-picker
+					   	:clearable="false"
+						v-model="form1.dateLap"
+						type="month"
+						size="small"
+						format="yyyy年MM月"
+						value-format="yyyy-MM"
+						placeholder="选择月份">
+					</el-date-picker>
+				</el-col>
+			</el-row>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm1Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled1">确 定</el-button>
 		</div>
 	</el-dialog>
 
@@ -101,19 +132,30 @@ export default {
 			form:{
 				dateLap:''
 			},
+			form1:{
+				dateLap:''
+			},
 			queryDialogFormVisible:true,
 			table_topHeight:276,
 			dialogFormVisible:false,
+			dialogForm1Visible:false,
 			quarter:[],
 			timer:'',
 			statusk:1,
 			val:'',
-			month:dayjs().format('YYYY-MM')
+			month:dayjs().format('YYYY-MM'),
+			f:""
 		};
 	},
 	computed:{
 		disabled(){
 			if(this.form.dateLap!==''&&this.form.dateLap!==undefined){
+                return false
+            }
+            return true
+		},
+		disabled1(){
+			if(this.form1.dateLap!==''&&this.form1.dateLap!==undefined){
                 return false
             }
             return true
@@ -154,6 +196,21 @@ export default {
 			}else{
 				clearInterval(this.timer)
 			}
+		},
+		disableModify(){
+			this.form1.dateLap = ''
+			this.dialogForm1Visible = true
+			this.f = 0
+		},
+		enableModify(){
+			this.form1.dateLap = ''
+			this.dialogForm1Visible = true
+			this.f = 1
+		},
+		async handleForm1Submit(){
+			this.dialogForm1Visible = false
+			await this.$request.put('commission/valueIncrease/lock',{dateLap:this.form1.dateLap,actionType:this.f})
+			this.fetchTableData()
 		},
 		async handleFormSubmit(){
 			this.dialogFormVisible = false
