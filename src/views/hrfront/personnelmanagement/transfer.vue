@@ -44,33 +44,24 @@
 		v-el-drag-dialog
 		width="800px"
 		>
-		<el-form ref="form1" :model="form1" label-width="120px" :rules="rules1">
-			<el-row>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`input`" :field="{name:'姓名'}" v-model="form1.chineseName" disabled/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`input`" :field="{name:'调前部门'}" v-model="form1.oDepartName__name" disabled/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`input`" :field="{name:'调前小组'}" v-model="form1.oTeam__name" disabled/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`input`" :field="{name:'调前地点'}" v-model="form1.oWorkGroup__name" disabled/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`input`" :field="{name:'调后部门'}" v-model="form1.nDepartName__name" disabled/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`branchteam`" :field="{name:'调后小组',id:form1.nDepartment}" v-model="form1.nTeam" clearable/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`select`" :field="{name:'调后地点',options:areaDa}" v-model="form1.nWorkGroup" clearable filterable/>
-				</el-col>
-				<el-col :span="20" :offset="1">
-					<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" :clearable="false" v-model="form1.transferDate" :picker-options="pickerOptions1"/>
-				</el-col>
-			</el-row>
+			<el-form ref="form1" :model="form1" label-width="110px" :rules="rules1">
+		
+				<form-render :type="`input`" :field="{name:'姓名'}" v-model="form1.chineseName" disabled/>
+			
+				<form-render :type="`input`" :field="{name:'调前部门'}" v-model="form1.oDepartName__name" disabled/>
+
+				<form-render :type="`input`" :field="{name:'调前小组'}" v-model="form1.oTeam__name" disabled/>
+
+				<form-render :type="`input`" :field="{name:'调前地点'}" v-model="form1.oWorkGroup__name" disabled/>
+
+				<form-render :type="`input`" :field="{name:'调后部门'}" v-model="form1.nDepartName__name" disabled/>
+
+				<form-render :type="`branchteam`" :field="{name:'调后小组',id:form1.nDepartment}" v-model="form1.nTeam" clearable/>
+
+				<form-render :type="`select`" :field="{name:'调后地点',options:areaDa}" v-model="form1.nWorkGroup" clearable filterable/>
+
+				<form-render :type="`day`" :field="{name:'生效日期'}" prop="transferDate" :clearable="false" v-model="form1.transferDate" :picker-options="pickerOptions1"/>
+
 		</el-form>
 
 		<div slot="footer" class="dialog-footer">
@@ -258,7 +249,8 @@ export default {
 				}
 				let form = Object.assign({},this.form)
 				try{
-					let mes = await this.$request.post('/transfer/record',form)
+					let mes = await api_resource.create(form)
+					// let mes = await this.$request.post('/transfer/record',form)
 					this.$message.success({message:mes})
 					this.dialogFormVisible = false
 					this.fetchTableData()

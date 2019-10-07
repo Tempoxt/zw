@@ -170,8 +170,8 @@
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
 								<div class="totalR" v-if="totalP2!=''">总人数:{{totalP2}}</div>
 							</el-col>
-							
-							<el-col :span="12" class="relative" v-if="leaveAcountData">
+							<!-- v-if="leaveAcountData" -->
+							<el-col :span="12" class="relative" >
 								<pieChart  
 								:show="checkFullshow"
 								ref="echart7"
@@ -448,10 +448,14 @@
 				}
 			},
 			async getleaveAcountData(){
-				this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2+'&org_id='+this.orgid);
-				let per3 = this.leaveAcountData.map(o=>o.value)
-				if(this.pre3!==[]){
-					this.totalP3 = per3.reduce((tem,item,index)=>tem+item)
+				if(this.dateLap2!=''&&this.orgid!=''){
+					this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2+'&org_id='+this.orgid);
+					if(this.leaveAcountData!=[]){
+						let per3 = this.leaveAcountData.map(o=>o.value)
+						if(this.pre3!==[]){
+							this.totalP3 = per3.reduce((tem,item,index)=>tem+item)
+						}
+					}
 				}
 			},
 			async getleaveEduData(){

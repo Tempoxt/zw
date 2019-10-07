@@ -16,19 +16,19 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=[]&&this.datas!=''){
+		// if(this.datas!=''){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
-	    }
+	    // }
 	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!=[]&&this.datas!=''){
+				// if(this.datas!=''){
 					this.datas = newVal
 					this.init(this.id,newVal)
-				}
+				// }
 			},
 			immediate: true,
 			deep: true

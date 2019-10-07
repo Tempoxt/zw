@@ -45,13 +45,13 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='个人提成汇总'">
-            <comissionRecordTable url="commission/presoncommcollect" @change="changeTab"  :id="orgid"/>
+            <comissionRecordTable url="commission/presoncommcollect" a='1' @change="changeTab"  :id="orgid"/>
         </div>
         <div v-if="view_activeName==='客户提成明细'">
-            <comissionRecordTable url="commison/cuscommdetail" @change="changeTab" :id="orgid"/>
+            <comissionRecordTable url="commison/cuscommdetail" a='2' @change="changeTab" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='收款提成明细'">
-            <comissionRecordTable @change="changeTab" url="commission/receiptCommDetail" :id="orgid"/>
+            <comissionRecordTable url="commission/receiptCommDetail" a='3' @change="changeTab" :id="orgid"/>
         </div>
     </el-col>
   </el-row>
