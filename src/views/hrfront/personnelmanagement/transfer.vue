@@ -209,10 +209,11 @@ export default {
 			this.fetchTableData()
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(column.label == '调后部门'||column.label == '调后职位'||column.label == '调后工作地点'||column.label == '调后小组'){
+			if((row.nDepartment!==row.oDepartment&&column.label == '调后部门')||(row.nPrincipalship!==row.oPrincipalship&&column.label == '调后职位')
+			||(row.nWorkGroup!==row.oWorkGroup&&column.label == '调后工作地点')||(row.nTeam!==row.oTeam&&column.label == '调后小组')){
 				return 'color:#F2353C;cursor:default'
 			}else{
-				return  ''
+				return ''
 			}
 		},
 		
