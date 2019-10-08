@@ -46,6 +46,7 @@
 			<el-row>
 				<el-col :span="24" style="padding:20px;">
 					<el-date-picker
+						:picker-options="pickerOptions"
 					   	:clearable="false"
 						v-model="form1.dateLap"
 						type="month"
@@ -73,7 +74,23 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-if="m==1"> 
-			<DateLapRange :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
+			<!-- <DateLapRange :disabled="true" v-model="table_form.dateLap" @change="fetch" 
+						:picker-options="pickerOptions1"/> -->
+			<div class="flex">
+				<el-select v-model="ctype" :disabled="true" style="width:60px" class="dateLap-select"></el-select>
+				<el-date-picker
+					@change="fetch" 
+					:picker-options="pickerOptions1"
+					class="dateLap-date"
+					v-model="table_form.dateLap"
+					style="width:250px"
+					value-format="yyyy-MM"
+					start-placeholder="开始月份"
+					end-placeholder="结束月份"
+					type="monthrange"
+					placeholder="选择月">
+				</el-date-picker>
+			</div>
 		</div>
 		<div style="padding-left:10px" v-if="m==2">
 			<el-select v-model="form.quarter" placeholder="请选择" @change="fetch">
@@ -144,7 +161,18 @@ export default {
 			statusk:1,
 			val:'',
 			month:dayjs().format('YYYY-MM'),
-			f:""
+			f:"",
+			ctype:'月',
+			pickerOptions: {
+				disabledDate(time) {
+					return time.getTime() < new Date('2019-07').getTime();
+				}
+			},
+			pickerOptions1: {
+				disabledDate(time) {
+					return time.getTime() < new Date('2019-06-30').getTime();
+				}
+			},
 		};
 	},
 	computed:{

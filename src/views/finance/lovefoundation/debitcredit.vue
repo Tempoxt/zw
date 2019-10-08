@@ -11,65 +11,67 @@
       class="public-dialog"
       v-el-drag-dialog
       >
-      <div style="width:500px;margin:0 auto">
-        <el-form ref="form" :model="form" label-width="100px">
-          <el-row :gutter="20">
-            <el-col :span="24">
-              <form-render :type="`day`" :field="{name:'收款日期'}" v-model="form.effectiveDate"/>
-            </el-col>
-            
-            <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'借方科目',options:formSelect1}" v-model="form.debit"/>
-            </el-col>
+      	<div style="width:520px;margin:0 auto;height:600px;">
+        	<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+				<el-form ref="form" :model="form" label-width="100px">
+					<el-row :gutter="20">
+						<el-col :span="24">
+							<form-render :type="`day`" :field="{name:'收付款日期'}" v-model="form.effectiveDate"/>
+						</el-col>
+						
+						<el-col :span="24">
+							<form-render :type="`select`" :field="{name:'借方科目',options:formSelect1}" v-model="form.debit"/>
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'摘要'}" v-model="form.summary"/>
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`input`" :field="{name:'摘要'}" v-model="form.summary"/>
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`select`" :field="{name:'贷方科目',options:formSelect2}" v-model="form.credit" />
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`select`" :field="{name:'贷方科目',options:formSelect2}" v-model="form.credit" />
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'申请人',defaultName:form.applicantName}" v-model="form.applicantId"/>
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`member`" :field="{name:'申请人',defaultName:form.applicantName}" v-model="form.applicantId"/>
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`day`" :field="{name:'申请日期'}" v-model="form.applyDate"/>
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`day`" :field="{name:'申请日期'}" v-model="form.applyDate"/>
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'金额'}" v-model="form.amount" />
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`input`" :field="{name:'金额'}" v-model="form.amount" />
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'受助人',defaultName:form.granteesName}" v-model="form.granteesId"/>
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`member`" :field="{name:'受助人',defaultName:form.granteesName}" v-model="form.granteesId"/>
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`member`" :field="{name:'收款人',defaultName:form.payeeName}" clearable v-model="form.payeeId"/>
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`member`" :field="{name:'收款人',defaultName:form.payeeName}" clearable v-model="form.payeeId"/>
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'凭证号'}" v-model="form.vouchers" />
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`input`" :field="{name:'凭证号'}" v-model="form.vouchers" />
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`input`" :field="{name:'备注'}" v-model="form.remark" />
-            </el-col>
+						<el-col :span="24">
+							<form-render :type="`input`" :field="{name:'备注'}" v-model="form.remark" />
+						</el-col>
 
-            <el-col :span="24">
-              <form-render :type="`imgMultiple`" :field="{name:'附件'}" :data="{'upload_msg':'axjj'}" v-model="form.expendAttachment"/>
-            </el-col>
-           
-          </el-row>
-        </el-form>
-      </div>
+						<el-col :span="24">
+							<form-render :type="`imgMultiple`" :field="{name:'附件'}" :data="{'upload_msg':'axjj'}" v-model="form.expendAttachment"/>
+						</el-col>
+					
+					</el-row>
+				</el-form>
+        	</el-scrollbar>
+      	</div>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-      </div>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+		</div>
     </el-dialog>
 
 
@@ -283,6 +285,17 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>
+
+.scroll {
+	height: calc(100%-30px);
+	width: 100%;
+	/deep/ .scrollbar-wrapper {
+		overflow-x: hidden;
+	}
+}
+</style>
+
 
 
 

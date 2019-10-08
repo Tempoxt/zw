@@ -57,6 +57,24 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.flex{
+    display: flex;
+    align-items: center
+}
+.dateLap-select {
+    .el-input__inner {
+        border-right: none;
+        border-radius: 2px 0 2px 2px;
+    }
+}
+.dateLap-date{
+    border-radius: 0px 2px 2px 0px!important;
+    .el-input__inner {
+        border-radius: 2px 2px 2px 0px;
+    }
+}
+</style>
 
 
 
