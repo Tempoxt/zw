@@ -52,24 +52,14 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("attendance/cofakelist");
 import dayjs from 'dayjs'
-const defaultForm = () => {
-    return {
-        estate:1,
-        sort:1
-    }
-}
 export default {
   mixins: [table_mixin],
   props:['id'],
   data() {
     return {
       loading: true,
-      form:{},
       api_resource,
-      orgCategory:[],
       queryDialogFormVisible:true,
-      defaultForm,
-      formData:[],
       importUploadUrl:"/attendance/count",
     };
   },
@@ -84,9 +74,6 @@ export default {
       this.table_form.currentpage = 1
       this.fetchTableData()
     },
-    // download(){
-    //   console.log(1111)
-    // },
     async fetchTableData() {
       if(!this.id){
         return

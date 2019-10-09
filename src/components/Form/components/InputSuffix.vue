@@ -1,7 +1,7 @@
 <template>
   <el-form-item  :error="error" :label="field.name" v-bind="$parent.$attrs">
-    <el-input v-model="data" :placeholder="$parent.$attrs.placeholder||'请输入'" v-bind="$parent.$attrs" v-on="$parent.$listeners" :type="field.type||'text'">
-      <i slot="suffix" class="el-input__icon">%</i>
+    <el-input class="suffix" v-model="data" :placeholder="$parent.$attrs.placeholder||'请输入'" v-bind="$parent.$attrs" v-on="$parent.$listeners" :type="field.type||'text'">
+      <i slot="suffix" class="el-input__icon">{{$parent.$attrs.suffix}}</i>
     </el-input>
   </el-form-item>
 </template>
@@ -15,7 +15,8 @@ export default {
     value: {},
     placeholder:{
       default:'请输入'
-    }
+    },
+    suffix:''
   },
   data() {
     return {
@@ -49,4 +50,10 @@ export default {
   }
 };
 </script>
+<style>
+  .suffix .el-input__icon{
+    color: #4C5D66;
+    font-style:normal
+  }
+</style>
 

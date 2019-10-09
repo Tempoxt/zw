@@ -59,13 +59,13 @@
 						<form-render :type="`select`" prop="projectType" :field="{name:'项目类型',options:projectData}" v-model="form.projectType" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`inputSuffix`" prop="valueIncrease" :field="{name:'标准增值率'}" v-model="form.valueIncrease" />
+						<form-render :type="`inputSuffix`" suffix="%" prop="valueIncrease" :field="{name:'标准增值率'}" v-model="form.valueIncrease" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`inputSuffix`" prop="modelCommission" :field="{name:'模具提成系数'}" v-model="form.modelCommission" />
+						<form-render :type="`inputSuffix`" suffix="%" prop="modelCommission" :field="{name:'模具提成系数'}" v-model="form.modelCommission" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`inputSuffix`" prop="productCommission" :field="{name:'贷款提成系数'}" v-model="form.productCommission" />
+						<form-render :type="`inputSuffix`" suffix="%" prop="productCommission" :field="{name:'贷款提成系数'}" v-model="form.productCommission" />
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" :field="{name:'零件收款天数'}" v-model="form.partsCollectionDay" />

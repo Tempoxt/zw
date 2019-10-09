@@ -365,5 +365,13 @@ export default [{
         meta: {
             title: '介绍费汇总'
         }
+    }, 
+    {
+        name: 'yearHolidayManager',
+        component: () =>
+            import ('@/views/attendanceSystem/annualLeave'),
+        meta: {
+            title: '介绍费汇总'
+        }
     },
 ]

@@ -57,12 +57,6 @@ import { setInterval, clearInterval } from 'timers';
 let baseUrl = process.env.VUE_APP_STATIC
 let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
-const defaultForm = () => {
-    return {
-        estate:1,
-        sort:1
-    }
-}
 export default {
 	mixins: [table_mixin],
 	props:['id'],
@@ -71,12 +65,8 @@ export default {
 			baseUrl,
 			baseUri,
 			loading: true,
-			form:{},
 			api_resource,
-			orgCategory:[],
 			queryDialogFormVisible:true,
-			defaultForm,
-			formData:[],
 			importUploadUrl:"/attendance/record",
 			timer:'',
 			url:'',

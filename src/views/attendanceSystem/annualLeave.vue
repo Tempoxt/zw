@@ -1,24 +1,24 @@
 <template>
 
-<!-- 考勤明细 -->
+<!-- 考勤总汇 -->
  <el-row class="h-full">
     <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
-           <org v-model="orgid" @change="changeOrg"/>
+           <org v-model="orgid" @change="changeOrg" />   
       </div>
 
     </el-col>
     <el-col :span="20">
-        <recordlistTable :id="orgid" />
+        <annualLeaTable :id="orgid" />
     </el-col>
   </el-row>
 </template>
 <script>
 import org from '@/views/public/org'
-import recordlistTable from './recordlistTable'
+import annualLeaTable from './annualLeaTable'
 export default {
     components:{
-        recordlistTable,
+        annualLeaTable,
         org
     },
     watch:{
@@ -38,7 +38,7 @@ export default {
         changeOrg(orgid){
             this.orgid = orgid
         },
-    }
+    },
 }
 </script>
 
