@@ -195,6 +195,7 @@ export default {
 			this.fetchTableData()
 		},
 		url(){
+			delete this.table_form.keyword
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()

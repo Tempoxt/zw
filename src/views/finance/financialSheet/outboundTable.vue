@@ -113,6 +113,7 @@ export default {
 	},
 	watch:{
 		url(){
+			delete this.table_form.keyword
 			this.table_form.query.query = []
             this.table_form.currentpage = 1
             this.api_resource = api_common.resource('prodpropelplan/'+this.url)

@@ -56,7 +56,7 @@ export default {
 		return {
 			loading: true,
 			form:{},
-					table_topHeight:326,
+			table_topHeight:326,
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -71,10 +71,6 @@ export default {
 			total:[],//总计
 			welfareExpend:[],//福利支出
 			welfareExpendTotal:[],//福利支出总计
-			options:[{
-				value:'3',
-				label:'年'
-			}],
 			allData:[],
 			title:{},
 			itemLength:{}
