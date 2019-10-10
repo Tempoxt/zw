@@ -124,4 +124,12 @@ export default [{
             title: '出库单'
         }
     },
+    {
+        name: 'budget',
+        component: () =>
+            import ('@/views/finance/financialSheet/budgeReport'),
+        meta: {
+            title: '部门预算明细'
+        }
+    },
 ]

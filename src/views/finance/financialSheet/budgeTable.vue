@@ -14,17 +14,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px">
-			<el-select v-model="status" placeholder="请选择" @change="changeStatus" style="width:140px">
-				<el-option
-					v-for="item in optionDatas"
-					:key="item.type"
-					:label="item.label"
-					:value="item.value">
-				</el-option>
-			</el-select>
-		</div>
-		<div style="padding-left:10px">
-			<dateLap v-model="table_form.dateLap" @change="fetch"/>
+			<dateLap :disabled="true"  v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
     <el-table
@@ -60,19 +50,18 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hrm/leaverecord");
+const api_resource = api_common.resource("u8report/budgetreport");
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
-	props:['id','url','m'],
+	props:['id'],
 	data() {
 		return {
 			loading: true,
 			api_resource,
-			table_topHeight:276,
 			queryDialogFormVisible:true,
-			optionDatas: [],
-			status:-1
+			visible:false,
+			gridData: [],
 		};
 	},
 	watch:{
@@ -80,26 +69,10 @@ export default {
 			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
-		url(){
-			delete this.table_form.keyword
-			this.table_form.currentpage = 1
-			this.table_form.query.query= []
-			this.fetchMenu()
-			// if(this.url=='commission/monthDetail'){
-			// 	this.api_resource = api_common.resource("commission/valueIncrease");
-			// }else if(this.url=='commission/quarterstat'){
-			// 	this.api_resource = api_common.resource("commission/seasonValueIncrease");
-			// }
-		}
 	},
 	methods: {
 		fetch(){
 			this.table_form.currentpage = 1
-			this.fetchTableData()
-		},
-		changeStatus(val){
-			// this.status = val
-			this.table_form.leaveType = val
 			this.fetchTableData()
 		},
 		async fetchTableData() {
@@ -115,22 +88,14 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
-		async fetchMenu(){
-			const { field, action,table } = await api_common.menuInit(this.url);
-			this.table_field = field;
-			this.table_actions = action;
-			this.table_config = table
-			if(this.m==2){
-				this.optionDatas = (await api_common.resource('hrm/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectvalue}});
-				this.optionDatas.unshift({value:-1,label:'全部'})
-				this.table_form.leaveType = -1
-			}
-			this.fetchTableData();
-		}
 	},
 	async created() {
+		const { field, action,table } = await api_common.menuInit("u8report/budgetreport");
+		this.table_field = field;
+		this.table_actions = action;
+		this.table_config = table
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
-		await this.fetchMenu()
+		this.fetchTableData();
 	}
 };
 </script>

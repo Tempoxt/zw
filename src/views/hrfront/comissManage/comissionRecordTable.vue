@@ -152,7 +152,6 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
-import { setTimeout } from 'timers';
 let api_resource = api_common.resource("commission/commissionSet/person");
 export default {
 	mixins: [table_mixin],
@@ -243,13 +242,13 @@ export default {
 		}
 	},
 	methods: {
-		table_disable_selected(row){
-			if(row.auditStatus!=1&&row.auditStatus!='未审核'){
-				return false
-			}else{
-				return true
-			}
-		},
+		// table_disable_selected(row){
+		// 	if(row.auditStatus&&row.auditStatus!=1&&row.auditStatus!='未审核'){
+		// 		return false
+		// 	}else{
+		// 		return true
+		// 	}
+		// },
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -316,7 +315,6 @@ export default {
 				this.dialogForm1Visible = true
 				this.form1 = await this.$request.get('/commission/commissionSet/customer/update/'+row.id)
 			}
-			
 		},
 		async handleFormSubmit(){
             await this.form_validate()
