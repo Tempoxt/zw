@@ -371,7 +371,15 @@ export default [{
         component: () =>
             import ('@/views/attendanceSystem/annualLeave'),
         meta: {
-            title: '介绍费汇总'
+            title: '年假管理'
+        }
+    },
+    {
+        name: 'unusualManager',
+        component: () =>
+            import ('@/views/attendanceSystem/exceptionManage'),
+        meta: {
+            title: '异常管理'
         }
     },
 ]

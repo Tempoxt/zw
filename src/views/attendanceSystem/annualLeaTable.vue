@@ -42,13 +42,13 @@
 				<el-popover v-if="scope.row.used_days>0" ref="popover" @show="showPopover(scope.row)" placement="bottom" width="600" trigger="click" transition="el-zoom-in-top">
 					<el-table :data="gridData">
 						<el-table-column width="100" property="applyDate" label="申请日期"></el-table-column>
-						<el-table-column width="100" property="startDate" label="年休假开始日期"></el-table-column>
+						<el-table-column width="110" property="startDate" label="年休假开始日期"></el-table-column>
 						<el-table-column width="80" property="startTime" label="年休假开始时间"></el-table-column>
-						<el-table-column width="100" property="endDate" label="年休假结束日期"></el-table-column>
+						<el-table-column width="110" property="endDate" label="年休假结束日期"></el-table-column>
 						<el-table-column width="80" property="endTime" label="年休假结束时间"></el-table-column>
 						<el-table-column width="80" property="days" label="休假天数"></el-table-column>
 					</el-table>
-					<el-button type="text" slot="reference" style="color:#1FD361">{{scope.row.used_days}}</el-button>
+					<el-button type="text" slot="reference" style="color:#1FD361;line-height:0px;width:100%;text-align:left">{{scope.row.used_days}}</el-button>
 				</el-popover>
 				<span v-else>{{scope.row.used_days}}</span>
             </template>
@@ -78,7 +78,6 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hrm/yearholidaymanager");
 import dayjs from 'dayjs'
-import { spawn } from 'child_process';
 export default {
 	mixins: [table_mixin],
 	props:['id'],
@@ -111,7 +110,6 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			this.table_form.sheetType = 2
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
