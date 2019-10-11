@@ -40,7 +40,7 @@
       <el-table-column prop="staff__socialSecurityMain" sortable label="社保主体" width="100" fixed/>
       <el-table-column prop="staff__employeeCode" sortable label="工号" fixed/>
       <el-table-column prop="staff__chineseName" label="姓名" fixed/>
-    <each-table-column :table_field="table_field.filter(o=>!['staff__socialSecurityMain','staff__employeeCode','staff__chineseName'].includes(o.name))"/>
+    <each-table-column :table_field="table_field.filter(o=>!['staff__socialSecurityMain','staff__employeeCode','staff__chineseName'].includes(o.name))" :template="template"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -64,6 +64,17 @@ export default {
       loading: true,
       api_resource,
       queryDialogFormVisible:true,
+      template:{
+        sheetType(column,row){
+          if(row.sheetType==0){
+            return <span>初始化</span>
+          }else if(row.sheetType==1){
+            return <span>入职</span>
+          }else{
+            return <span>调薪</span>
+          }
+        }
+      }
     };
   },
   watch:{
