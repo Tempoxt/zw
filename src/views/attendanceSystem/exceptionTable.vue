@@ -60,7 +60,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hrm/leaverecord");
+const api_resource = api_common.resource("holidaymanager/leavemanager");
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
@@ -72,7 +72,10 @@ export default {
 			table_topHeight:276,
 			queryDialogFormVisible:true,
 			optionDatas: [],
-			status:-1
+			status:'全部',
+			// table_form:{
+			// 	leaveType: '全部'
+			// }
 		};
 	},
 	watch:{
@@ -98,9 +101,13 @@ export default {
 			this.fetchTableData()
 		},
 		changeStatus(val){
-			// this.status = val
-			this.table_form.leaveType = val
+			this.status = val
 			this.fetchTableData()
+		},
+		async reset(){
+			const mes = await this.$request.post('holidaymanager/leavemanager/reset',{dateLap:this.table_form.dateLap})
+			this.$message.success(mes)
+			this.fetchTableData();
 		},
 		async fetchTableData() {
 			if(!this.id){
@@ -108,6 +115,7 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
+			this.table_form.leaveType = this.status
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
@@ -121,11 +129,10 @@ export default {
 			this.table_actions = action;
 			this.table_config = table
 			if(this.m==2){
-				this.optionDatas = (await api_common.resource('hrm/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectvalue}});
-				this.optionDatas.unshift({value:-1,label:'全部'})
-				this.table_form.leaveType = -1
+				this.optionDatas = (await api_common.resource('holidaymanager/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
+				this.optionDatas.unshift({value:'全部',label:'全部'})
+				this.fetchTableData();
 			}
-			this.fetchTableData();
 		}
 	},
 	async created() {

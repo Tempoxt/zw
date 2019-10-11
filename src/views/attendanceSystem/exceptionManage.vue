@@ -12,7 +12,7 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='请假管理'">
-            <exceptionTable url="hrm/leaverecord" m="2" :id="orgid"/>
+            <exceptionTable url="holidaymanager/leavemanager" m="2" :id="orgid"/>
         </div>
     </el-col>
   </el-row>

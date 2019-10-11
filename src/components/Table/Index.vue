@@ -58,7 +58,7 @@ export default {
   }
 .theme-0BB2D4 .el-table--small td, .theme-0BB2D4 .el-table--small th{padding: 4px 0;}
 .el-table--small td, .el-table--small th{padding: 4px 0;}
-.mini-table {
+.mini-table .attendanceTable{
   .el-table__row {
     >td {
         padding: 0px 0;

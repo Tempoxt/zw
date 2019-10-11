@@ -153,7 +153,7 @@
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='5'}"
 								></inService>
-								<div class="totalR" v-if="totalP1!=''">总人数:{{totalP1}}</div>
+								<div class="totalR" v-if="totalP1!=''">人数比: {{totalP1}}</div>
 							</el-col>
 							<el-col :span="12" class="relative" v-if="leaveData.length!=0">
 								<inService
@@ -435,9 +435,10 @@
 			},
 			async getmemberData(){
 				this.memberData = await this.$request.get('/dataanalysis/directandindirectratiostat?org_id='+this.orgid);
-				let per1 = this.memberData.map(o=>o.value)
-				if(this.pre1!==[]){
-					this.totalP1 = per1.reduce((tem,item,index)=>tem+item)
+				let direct = this.memberData.filter(o=>o.name=="直接人员")
+				let indirect = this.memberData.filter(o=>o.name=="间接人员")
+				if(direct!=''&&indirect!=''){
+					this.totalP1 = '1 : '+ (Number(indirect[0].value)/Number(direct[0].value)).toFixed(2)
 				}
 			},
 			async getleaveData(){
@@ -450,7 +451,7 @@
 			async getleaveAcountData(){
 				if(this.dateLap2!=''&&this.orgid!=''){
 					this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2+'&org_id='+this.orgid);
-					if(this.leaveAcountData!=[]){
+					if(this.leaveAcountData.length!=0){
 						let per3 = this.leaveAcountData.map(o=>o.value)
 						if(this.pre3!==[]){
 							this.totalP3 = per3.reduce((tem,item,index)=>tem+item)
