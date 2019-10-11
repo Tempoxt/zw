@@ -162,7 +162,9 @@ export default {
                 return <img src={baseUrl+column.signAttachment} width="50" height="50"></img>
               }
             }
-          }
+          },
+          importUploadUrl:'/lovefoundation/debitcredit/import',
+          downloadUrl:'/lovefoundation/debitcredit/import',
         };
     },
     watch:{
