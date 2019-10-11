@@ -434,7 +434,7 @@
 				this.eachageData = await this.$request.get('/dataanalysis/agestagegenderratiostat?org_id='+this.orgid);
 			},
 			async getmemberData(){
-				this.memberData = await this.$request.get('/dataanalysis/directandindirectratiostat?org_id='+this.orgid);
+				this.memberData = await this.$request.get('/dataanalysis/directandindirectratiostat');
 				let direct = this.memberData.filter(o=>o.name=="直接人员")
 				let indirect = this.memberData.filter(o=>o.name=="间接人员")
 				if(direct!=''&&indirect!=''){
