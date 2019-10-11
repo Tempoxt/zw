@@ -65,7 +65,7 @@ export default {
       api_resource,
       queryDialogFormVisible:true,
       template:{
-        sheetType(column,row){
+        sheetType(column,row){//工薪单类型
           if(row.sheetType==0){
             return <span>初始化</span>
           }else if(row.sheetType==1){
@@ -73,7 +73,34 @@ export default {
           }else{
             return <span>调薪</span>
           }
-        }
+        },
+        aWorkdayOtHours(column,row){//工作日加班工时
+          if(row.aWorkdayOtHours=='aa'){
+            return <span>按考勤</span>
+          }else if(row.aWorkdayOtHours=='as'){
+            return <span>周六</span>
+          }else{
+            return <span>{row.aWorkdayOtHours}</span>
+          }
+        },
+        aWeekOtDay(column,row){//休息日加班天数
+          if(row.aWeekOtDay=='aa'){
+            return <span>按考勤</span>
+          }else if(row.aWeekOtDay=='as'){
+            return <span>周六</span>
+          }else{
+            return <span>{row.aWeekOtDay}</span>
+          }
+        },
+        aWeekOtHours(column,row){//休息日加班工时
+          if(row.aWeekOtHours=='aa'){
+            return <span>按考勤</span>
+          }else if(row.aWeekOtHours=='as'){
+            return <span>周六</span>
+          }else{
+            return <span>{row.aWeekOtHours}</span>
+          }
+        },
       }
     };
   },
