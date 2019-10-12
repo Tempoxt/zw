@@ -172,6 +172,13 @@ export default {
             return <span>{row.aWeekOtHours}</span>
           }
         },
+        verify(column,row){
+          if(row.verify==0){
+            return <el-tag size="mini" type="danger">未审核</el-tag>
+          }else if(row.verify==1){
+            return <el-tag size="mini" type="success">已审核</el-tag>
+          }
+        }
       }
     };
   },
