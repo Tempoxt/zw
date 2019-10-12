@@ -6,56 +6,57 @@
   
   >
     <Drawer title="工薪单明细"  :closable="false" v-model="drawer" width="680" class="applybasicTableDrawer">
-      <div >
+      <div v-if="applysheetDetail[0].staff__chineseName">
         <!-- v-loading="drawer_loading" -->
         <div class="user" style="background:#F8F8F8;" >
          <el-row :gutter="20">
           <el-col :span="3">
-            <img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" style="margin-left:10px;">
+            &nbsp;
+            <!-- <img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" style="margin-left:10px;"> -->
           </el-col>
           <el-col :span="6" class="user-info-box">
-            <p>姓名：龙伊人</p>
-            <p>工号：1727</p>
+            <p>姓名：{{applysheetDetail[0].staff__chineseName}}</p>
+            <p>工号：{{applysheetDetail[0].staff__employeeCode}}</p>
           </el-col>
           <el-col :span="6" class="user-info-box">
-            <p>部门：研发部</p>
-            <p>职位：助理工程师</p>
+            <p>部门：{{applysheetDetail[0].department__name}}</p>
+            <p>职位：{{applysheetDetail[0].principalship__name}}</p>
           </el-col>
           <el-col :span="6" class="user-info-box">
             <p> &nbsp;</p>
-            <p>入职日期：2018-09-25</p>
+            <p>入职日期：{{applysheetDetail[0].staff__OnDutyTime}}</p>
           </el-col>
         </el-row>
        </div>
 
-       <div class="info-box">
+       <div class="info-box" v-for="(Detail,i) in applysheetDetail" :key="i">
           <div class="tag">
-            <img src="@/assets/examine1.png" alt="">
+            <img :src="Detail.verify===1?'@/assets/examine1.png':'@/assets/examine2.png'" alt="">
           </div>
           <div class="title">
-            <span>调薪工薪单  2018-12-15</span>
+            <span>{{['初始化','入职工薪单','调薪单'][Detail.sheetType]}}  {{Detail.changeDate}}</span>
             <span>12.5%</span>
           </div>
           <div>
             <el-row >
               <el-col :span="12">
                 <div>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">薪酬类型：</span></el-col><el-col :span="10"><span class="text-value">固定薪</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">标准工资：</span></el-col><el-col :span="10"><span class="text-value">3600.00</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工作日加班工资：</span></el-col><el-col :span="10"><span class="text-value">1366.00</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">休息日加班工资：</span></el-col><el-col :span="10"><span class="text-value text-warn"></span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">全勤奖：</span></el-col><el-col :span="10"><span class="text-value">662.00</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">绩效1：</span></el-col><el-col :span="10"><span class="text-value">662.00</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">(考核基准)绩效2：</span></el-col><el-col :span="10"><span class="text-value  text-warn">662.00</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工资总额：</span></el-col><el-col :span="10"><span class="text-value  text-warn">662.00</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">薪酬类型：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.xzType}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">标准工资：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aBasicWage}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工作日加班工资：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aOvertime}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">休息日加班工资：</span></el-col><el-col :span="10"><span class="text-value text-warn">{{Detail.aWeekendWelfare}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">全勤奖：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aFullAtt}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">绩效1：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aPerformance}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">(考核基准)绩效2：</span></el-col><el-col :span="10"><span class="text-value  text-warn">{{Detail.aMinPerformance}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工资总额：</span></el-col><el-col :span="10"><span class="text-value  text-warn">{{Detail.aTotle}}</span></el-col></el-row>
                 </div>
               </el-col>
             <el-col :span="12">
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">职位/等级：</span></el-col><el-col :span="14"><span class="text-value">固定薪</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">社保缴费基数：</span></el-col><el-col :span="14"><span class="text-value">3600.00</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">工作日加班：</span></el-col><el-col :span="14"><span class="text-value">1366.00</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">休息日加班：</span></el-col><el-col :span="14"><span class="text-value">按入职前约定转正后给予全薪</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">备注：</span></el-col><el-col :span="14"><span class="text-value">662.00</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">职位/等级：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.principalship__name}}/{{Detail.wageLevel}}</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">社保缴费基数：</span></el-col><el-col :span="14"><span class="text-value"></span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">工作日加班：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.aOvertime}}</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">休息日加班：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.aWeekendWelfare}}</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">备注：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.remark}}</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">签名：</span></el-col><el-col :span="14"><span class="text-value"><img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" style="width:30x;height:10px"></span></el-col></el-row>
@@ -130,6 +131,7 @@ export default {
   data() {
     let vm = this
     return {
+      applysheetDetail:[{},{}],
       drawer_loading:true,
       drawer:false,
       loading: true,
@@ -137,12 +139,14 @@ export default {
       queryDialogFormVisible:true,
       template:{
         sheetType(column,row){//工薪单类型
+          console.log(row,'row')
+          const { staff__employeeCode } = row 
           if(row.sheetType==0){
-            return <el-button type="text" onClick={vm.handleTypeClick.bind(vm)}>初始化</el-button>
+            return <el-button type="text" onClick={()=>{vm.handleTypeClick(staff__employeeCode)}}>初始化</el-button>
           }else if(row.sheetType==1){
-            return <el-button type="text"  onClick={vm.handleTypeClick.bind(vm)}>入职</el-button>
+            return <el-button type="text"  onClick={vm.handleTypeClick(staff__employeeCode)}>入职</el-button>
           }else{
-            return <el-button type="text"  onClick={vm.handleTypeClick.bind(vm)}>调薪</el-button>
+            return <el-button type="text"  onClick={vm.handleTypeClick(staff__employeeCode)}>调薪</el-button>
           }
         },
         aWorkdayOtHours(column,row){//工作日加班工时
@@ -189,8 +193,15 @@ export default {
     },
   },
   methods: {
-    handleTypeClick(){
+    
+    async handleTypeClick(staff__employeeCode){
       this.drawer = true
+      this.drawer_loading = true
+      const { rows } = await this.$request.get('basicwage/applysheet/detail',{
+        staff__employeeCode
+      })
+      this.applysheetDetail = rows
+      this.drawer_loading = false
     },
     async fetchTableData() {
      if(!this.id){
