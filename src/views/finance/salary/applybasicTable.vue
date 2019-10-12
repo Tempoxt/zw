@@ -5,6 +5,74 @@
   @query="querySubmit"
   
   >
+    <Drawer title="工薪单明细"  :closable="false" v-model="drawer" width="680" class="applybasicTableDrawer">
+      <div >
+        <!-- v-loading="drawer_loading" -->
+        <div class="user" style="background:#F8F8F8;" >
+         <el-row :gutter="20">
+          <el-col :span="3">
+            <img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" style="margin-left:10px;">
+          </el-col>
+          <el-col :span="6" class="user-info-box">
+            <p>姓名：龙伊人</p>
+            <p>工号：1727</p>
+          </el-col>
+          <el-col :span="6" class="user-info-box">
+            <p>部门：研发部</p>
+            <p>职位：助理工程师</p>
+          </el-col>
+          <el-col :span="6" class="user-info-box">
+            <p> &nbsp;</p>
+            <p>入职日期：2018-09-25</p>
+          </el-col>
+        </el-row>
+       </div>
+
+       <div class="info-box">
+          <div class="tag">
+            <img src="@/assets/examine1.png" alt="">
+          </div>
+          <div class="title">
+            <span>调薪工薪单  2018-12-15</span>
+            <span>12.5%</span>
+          </div>
+          <div>
+            <el-row >
+              <el-col :span="12">
+                <div>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">薪酬类型：</span></el-col><el-col :span="10"><span class="text-value">固定薪</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">标准工资：</span></el-col><el-col :span="10"><span class="text-value">3600.00</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工作日加班工资：</span></el-col><el-col :span="10"><span class="text-value">1366.00</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">休息日加班工资：</span></el-col><el-col :span="10"><span class="text-value text-warn"></span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">全勤奖：</span></el-col><el-col :span="10"><span class="text-value">662.00</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">绩效1：</span></el-col><el-col :span="10"><span class="text-value">662.00</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">(考核基准)绩效2：</span></el-col><el-col :span="10"><span class="text-value  text-warn">662.00</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工资总额：</span></el-col><el-col :span="10"><span class="text-value  text-warn">662.00</span></el-col></el-row>
+                </div>
+              </el-col>
+            <el-col :span="12">
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">职位/等级：</span></el-col><el-col :span="14"><span class="text-value">固定薪</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">社保缴费基数：</span></el-col><el-col :span="14"><span class="text-value">3600.00</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">工作日加班：</span></el-col><el-col :span="14"><span class="text-value">1366.00</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">休息日加班：</span></el-col><el-col :span="14"><span class="text-value">按入职前约定转正后给予全薪</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">备注：</span></el-col><el-col :span="14"><span class="text-value">662.00</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">签名：</span></el-col><el-col :span="14"><span class="text-value"><img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" style="width:30x;height:10px"></span></el-col></el-row>
+            </el-col>
+           
+          </el-row>
+          </div>
+        <div class="divider"></div>
+       </div>
+
+       
+      </div>
+       
+      
+    </Drawer>
+
+
 
     <table-header
       :table_actions="table_actions"
@@ -60,18 +128,21 @@ export default {
   mixins: [table_mixin],
   props:['id'],
   data() {
+    let vm = this
     return {
+      drawer_loading:true,
+      drawer:false,
       loading: true,
       api_resource,
       queryDialogFormVisible:true,
       template:{
         sheetType(column,row){//工薪单类型
           if(row.sheetType==0){
-            return <span>初始化</span>
+            return <el-button type="text" onClick={vm.handleTypeClick.bind(vm)}>初始化</el-button>
           }else if(row.sheetType==1){
-            return <span>入职</span>
+            return <el-button type="text"  onClick={vm.handleTypeClick.bind(vm)}>入职</el-button>
           }else{
-            return <span>调薪</span>
+            return <el-button type="text"  onClick={vm.handleTypeClick.bind(vm)}>调薪</el-button>
           }
         },
         aWorkdayOtHours(column,row){//工作日加班工时
@@ -111,6 +182,9 @@ export default {
     },
   },
   methods: {
+    handleTypeClick(){
+      this.drawer = true
+    },
     async fetchTableData() {
      if(!this.id){
        return
@@ -137,3 +211,62 @@ export default {
 </script>
 
 
+<style lang="scss">
+
+.applybasicTableDrawer .ivu-drawer-body {
+padding:0;
+}
+</style>
+<style lang="scss" scoped>
+.user {
+  overflow: hidden;
+}
+.user-info-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70px;
+  line-height: 26px;
+}
+.info-box {
+  padding:0 16px 0 16px;
+  margin-top: 20px;
+  position: relative;
+  .title{
+    display: flex;
+    justify-content: space-between;
+    color: #0BB2D4;
+    font-size:16px;
+    font-weight:bold;
+    margin:10px 0;
+  }
+}
+.text-right {
+  text-align: right;
+}
+.text-row {
+  margin-bottom: 12px;
+  font-size:14px;
+}
+.text-label {
+  color: #4C5D66
+}
+.text-value {
+  color: #A3AFB7;
+}
+.text-warn {
+  color:#FF652C;
+}
+.divider {
+  width: 100%;
+  border-bottom: 1px dotted #A3AFB7;
+  height:1px;
+  margin-top: 20px;
+}
+.tag {
+  position: absolute;
+  left: 48%;
+  top: 50%;
+  transform: translate(-50%,-50%)
+}
+</style>
