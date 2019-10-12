@@ -204,7 +204,7 @@ export default {
 				auditStatus(column,row){
 					if(row.auditStatus=='未审核'||row.auditStatus==0){
 						return <el-tag type="danger">未审核</el-tag>
-					}else{
+					}else if(row.auditStatus=='已审核'||row.auditStatus==1){
 						return <el-tag type="success">已审核</el-tag>
 					}
 				}
@@ -272,11 +272,12 @@ export default {
 		},
 		async audit(){
 			let rows = this.table_selectedRows.map(row=>row.id)
-			if(this.a=='1'){
-				await this.$request.put('/commission/commissionSet/personal/audit',{ids:rows.join(',')})
-			}else if(this.a == '2'){
-				await this.$request.put('/commission/commissionSet/customer/audit',{ids:rows.join(',')})
-			}
+			await this.$request.put('/commission/commissionSet/detail/audit',{ids:rows.join(','),auditType:0})
+			this.fetchTableData()
+		},
+		async cancelAudit(){
+			let rows = this.table_selectedRows.map(row=>row.id)
+			await this.$request.put('/commission/commissionSet/detail/audit',{ids:rows.join(','),auditType:1})
 			this.fetchTableData()
 		},
 		async fetchTableData() {

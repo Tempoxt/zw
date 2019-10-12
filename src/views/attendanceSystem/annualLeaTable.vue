@@ -3,8 +3,38 @@
   :table_column="table_field" 
   :table_query.sync="table_form.query"
   @query="querySubmit"
-  class="mini-table"
   >
+  	<!-- 员工年假明细 -->
+	<div>
+		<Drawer :closable="false" width="640" v-model="openDrawers">
+			<p class="detail fontStyle"><span style="color:#37474F"></span>员工年假明细</p>
+			<div class="demo-drawer-profile mt60">
+				<div v-for="(item,index) in holidayData" :key="index" style="padding-bottom:1px;border-bottom:1px dashed #A3AFB7">
+					<p class="info">{{item.desc}}   第{{item.workAge}}年</p>
+					<p class="mt1 time">开始时间: {{item.yearStartDate}} ~ {{item.yearEndDate}}</p>
+					<div class="fontStyle mt10 mb20">
+						<span>年假天数: {{item.yearDays}}</span>
+						<span class="ml80">已休天数: {{item.usedDay}}</span>
+						<span class="ml80">未休天数: {{item.remainDay}}</span>
+					</div>
+					<el-collapse v-if="item.detail.length!=0" v-model="activeNames" @change="handleChange">
+						<el-collapse-item title="休假明细" :name="String(index)">
+							<div style="margin-left:70px">
+								 <el-timeline :reverse="reverse">
+									<el-timeline-item
+									v-for="(activity, idx) in item.detail"
+									:key="idx">
+									{{activity.startDate}}  {{activity.startTime}} ~ {{activity.endDate}}  {{activity.endTime}}<span style="margin-left:15px">{{activity.days}}天</span>
+									</el-timeline-item>
+								</el-timeline>
+							</div>
+						</el-collapse-item>
+					</el-collapse>
+
+				</div>
+			</div>
+		</Drawer>
+	</div>
 
     <table-header
 		:table_actions="table_actions"
@@ -27,6 +57,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+		@cell-click="openDrawer"
+		:cell-style="cellStyle"
     	>
 		<el-table-column 
 			type="selection" 
@@ -36,33 +68,7 @@
 			>
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field.filter(o=>!['usedDay','remainDay'].includes(o.name))"/>
-		<el-table-column prop="used_days" label="已休天数" width="auto">
-			<template slot-scope="scope">
-				<el-popover v-if="scope.row.usedDay>0" ref="popover" @show="showPopover(scope.row)" placement="bottom" width="600" trigger="click" transition="el-zoom-in-top">
-					<el-table :data="gridData">
-						<el-table-column width="100" property="applyDate" label="申请日期"></el-table-column>
-						<el-table-column width="110" property="startDate" label="年休假开始日期"></el-table-column>
-						<el-table-column width="80" property="startTime" label="年休假开始时间"></el-table-column>
-						<el-table-column width="110" property="endDate" label="年休假结束日期"></el-table-column>
-						<el-table-column width="80" property="endTime" label="年休假结束时间"></el-table-column>
-						<el-table-column width="80" property="days" label="休假天数"></el-table-column>
-					</el-table>
-					<el-button type="text" slot="reference" style="color:#1FD361;line-height:0px;width:100%;text-align:left">{{scope.row.usedDay}}</el-button>
-				</el-popover>
-				<span v-else>{{scope.row.usedDay}}</span>
-            </template>
-		</el-table-column>
-		<el-table-column prop="remainDay" label="剩余天数" width="auto">
-			<template slot-scope="scope">
-				<span>{{scope.row.remainDay}}</span>
-			</template>
-		</el-table-column>
-		<!-- <el-table-column prop="remark" label="备注">
-			<template slot-scope="scope">
-				<span>{{scope.row.remark}}</span>
-			</template>
-		</el-table-column> -->
+		<each-table-column :table_field="table_field"/>
     </el-table>
     <table-pagination 
         :total="table_form.total" 
@@ -87,7 +93,10 @@ export default {
 			api_resource,
 			queryDialogFormVisible:true,
 			visible:false,
-			gridData: [],
+			holidayData: [],
+			openDrawers: false,
+			activeNames: ['0'],
+        	reverse: true,
 		};
 	},
 	watch:{
@@ -97,12 +106,25 @@ export default {
 		},
 	},
 	methods: {
+		handleChange(val) {
+			console.log(val);
+		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
-		async showPopover(data){
-			this.gridData = await this.$request.get('holidaymanager/holidaystat/'+data.employeeCode+'?yearStartDate='+data.yearStartDate+'&yearEndDate='+data.yearEndDate)
+		async openDrawer(row,column,cell,event){
+			if(row.usedDay==event.target.innerHTML){
+				this.openDrawers = true
+				this.holidayData = await this.$request.get('holidaymanager/holidaystat/'+row.employeeCode)
+			}
+		},
+		cellStyle({row, column, rowIndex, columnIndex}){
+			if(column.label == '已休天数'){
+				return 'color:#1FD361;cursor:pointer'
+			}else{
+				return  ''
+			}
 		},
 		async fetchTableData() {
 			if(!this.id){
