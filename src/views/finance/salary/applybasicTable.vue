@@ -31,7 +31,7 @@
 
        <div class="info-box" v-for="(Detail,i) in applysheetDetail" :key="i">
           <div class="tag">
-            <img :src="Detail.verify===1?'@/assets/examine1.png':'@/assets/examine2.png'" alt="">
+            <img :src="Detail.verify===1?require('@/assets/examine1.png'):require('@/assets/examine2.png')" alt="">
           </div>
           <div class="title">
             <span>{{['初始化','入职工薪单','调薪单'][Detail.sheetType]}}  {{Detail.changeDate}}</span>
@@ -64,7 +64,7 @@
            
           </el-row>
           </div>
-        <div class="divider"></div>
+        <div class="divider" v-if="i<applysheetDetail.length"></div>
        </div>
 
        
