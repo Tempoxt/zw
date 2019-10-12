@@ -18,7 +18,7 @@
 						</div>
 						<div class="mt4">
 							<span>工号: {{info.employeeCode}}</span>
-							<span>职位: </span>
+							<span>职位: {{info.job_name}}</span>
 							<span>入职日期: {{info.onDutyTime}}</span>
 						</div>
 					</div>
