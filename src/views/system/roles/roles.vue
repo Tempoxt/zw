@@ -118,31 +118,33 @@ import { throttle } from 'core-decorators';
     methods:{
         async getMenu(){
 
-            const { menu } =  await api_menu.get({position:this.menuType,power:0})
+            // const { menu } =  await api_menu.get({position:this.menuType,power:0})
+            
+            const { menu } =  await api_common.resource('roles/rolepermissionmenu/'+this.roleid).get({position:this.menuType,power:0})
             this.menu = menu
-            // const [ {},{subs:roles_menu} ] = await api_roles_menu.find(this.roleid)
+            // const [ {},{sub:roles_menu} ] = await api_roles_menu.find(this.roleid)
             this.roles_menu_checked = []
             // ;(function f(roles_menu_checked,roles_menu){
             //     roles_menu.forEach((item)=>{
             //         if(item.haspermission){
             //              roles_menu_checked.push(item.id)
             //         }
-            //         if(item.subs&&item.subs.length){
-            //             f(roles_menu_checked,item.subs)
+            //         if(item.sub&&item.sub.length){
+            //             f(roles_menu_checked,item.sub)
             //         }
             //     })
             // })(this.roles_menu_checked,roles_menu)
             ;(function f(roles_menu_checked,roles_menu){
                  roles_menu.forEach((item)=>{
-                    if(item.hasPower){
-                         roles_menu_checked.push(item.id)
+                    if(item.haspermission==1){
+                        roles_menu_checked.push(item.id)
                     }
-                    if(item.subs&&item.subs.length){
-                        f(roles_menu_checked,item.subs)
+                    if(item.sub&&item.sub.length){
+                        f(roles_menu_checked,item.sub)
                     }
                 })
             })(this.roles_menu_checked,menu)
-            console.log(this.roles_menu_checked,'roles_menu_checked')
+            // console.log(this.roles_menu_checked,'roles_menu_checked')
             let currentKey = ''
             ;(function f(data){
                 data.some(item=>{
@@ -150,8 +152,8 @@ import { throttle } from 'core-decorators';
                         currentKey = item.id 
                         return true
                     }else{
-                        if(item.subs && item.subs.length){
-                            f(item.subs)
+                        if(item.sub && item.sub.length){
+                            f(item.sub)
                         }
                     }
                 })
@@ -179,14 +181,14 @@ import { throttle } from 'core-decorators';
           
            let checkList = [ data.id ]
            const estate = this.$refs.tree.getCheckedKeys().indexOf(data.id) !==-1 ? 1: 0
-            ;(function f(subs){
-                subs.forEach(item=>{
+            ;(function f(sub){
+                sub.forEach(item=>{
                 checkList.push(item.id)
                 })
-                if(subs.subs&&subs.subs.length){
-                    f(subs.subs)
+                if(sub.sub&&sub.sub.length){
+                    f(sub.sub)
                 }
-            })(data.subs||[])
+            })(data.sub||[])
             checkList.forEach((menuid)=>{
                 api_roles_menu.update(this.roleid,{ menuid, estate })
             })
@@ -243,7 +245,7 @@ import { throttle } from 'core-decorators';
         menuType:'1',
         menu:[],
         defaultProps: {
-          children: 'subs',
+          children: 'sub',
           label: 'name'
         },
         roles_menu_checked:[],
