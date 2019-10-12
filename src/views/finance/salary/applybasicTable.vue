@@ -6,8 +6,8 @@
   
   >
     <Drawer title="工薪单明细"  :closable="false" v-model="drawer" width="680" class="applybasicTableDrawer">
-      <div v-if="applysheetDetail[0].staff__chineseName">
-        <!-- v-loading="drawer_loading" -->
+      <div v-loading="drawer_loading">
+        <!--  -->
         <div class="user" style="background:#F8F8F8;" >
          <el-row :gutter="20">
           <el-col :span="3">
@@ -144,9 +144,13 @@ export default {
           if(row.sheetType==0){
             return <el-button type="text" onClick={()=>{vm.handleTypeClick(staff__employeeCode)}}>初始化</el-button>
           }else if(row.sheetType==1){
-            return <el-button type="text"  onClick={vm.handleTypeClick(staff__employeeCode)}>入职</el-button>
+            return <el-button type="text"  onClick={()=>{
+              vm.handleTypeClick(staff__employeeCode)
+            }}>入职</el-button>
           }else{
-            return <el-button type="text"  onClick={vm.handleTypeClick(staff__employeeCode)}>调薪</el-button>
+            return <el-button type="text"  onClick={()=>{
+              vm.handleTypeClick(staff__employeeCode)
+            }}>调薪</el-button>
           }
         },
         aWorkdayOtHours(column,row){//工作日加班工时
@@ -198,7 +202,9 @@ export default {
       this.drawer = true
       this.drawer_loading = true
       const { rows } = await this.$request.get('basicwage/applysheet/detail',{
-        staff__employeeCode
+        params:{
+          staff__employeeCode
+        }
       })
       this.applysheetDetail = rows
       this.drawer_loading = false
