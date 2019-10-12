@@ -9,8 +9,22 @@
 		<Drawer :closable="false" width="640" v-model="openDrawers">
 			<p class="detail fontStyle"><span style="color:#37474F"></span>员工年假明细</p>
 			<div class="demo-drawer-profile mt60">
-				<div v-for="(item,index) in holidayData" :key="index" style="padding-bottom:1px;border-bottom:1px dashed #A3AFB7">
-					<p class="info">{{item.desc}}   第{{item.workAge}}年</p>
+				<div class="infoFlex">
+					<img src="@/assets/avatar.png" alt="" srcset="" class="imgAvatar">
+					<div class="ml30 infoSpan">
+						<div>
+							<span>姓名: {{info.chineseName}}</span>
+							<span>部门: {{info.department_name}}</span>
+						</div>
+						<div class="mt4">
+							<span>工号: {{info.employeeCode}}</span>
+							<span>职位: </span>
+							<span>入职日期: {{info.onDutyTime}}</span>
+						</div>
+					</div>
+				</div>
+				<div v-for="(item,index) in holidayData" :key="index" style="padding-bottom:1px;border-bottom:1px dashed #A3AFB7" v-show="item.workAge!=0">
+					<p class="info"><span style="font-size:14px;font-weight:normal">{{item.desc}}</span>   第{{item.workAge}}年</p>
 					<p class="mt1 time">开始时间: {{item.yearStartDate}} ~ {{item.yearEndDate}}</p>
 					<div class="fontStyle mt10 mb20">
 						<span>年假天数: {{item.yearDays}}</span>
@@ -24,7 +38,9 @@
 									<el-timeline-item
 									v-for="(activity, idx) in item.detail"
 									:key="idx">
-									{{activity.startDate}}  {{activity.startTime}} ~ {{activity.endDate}}  {{activity.endTime}}<span style="margin-left:15px">{{activity.days}}天</span>
+										<span style="color:#808080">{{activity.startDate}}  {{activity.startTime}} ~ {{activity.endDate}}  {{activity.endTime}}
+											<span style="margin-left:15px">{{activity.days}}天</span>
+										</span>
 									</el-timeline-item>
 								</el-timeline>
 							</div>
@@ -96,7 +112,8 @@ export default {
 			holidayData: [],
 			openDrawers: false,
 			activeNames: ['0'],
-        	reverse: true,
+			reverse: true,
+			info:{}
 		};
 	},
 	watch:{
@@ -117,6 +134,7 @@ export default {
 			if(row.usedDay==event.target.innerHTML){
 				this.openDrawers = true
 				this.holidayData = await this.$request.get('holidaymanager/holidaystat/'+row.employeeCode)
+				this.info = this.holidayData[0]
 			}
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){

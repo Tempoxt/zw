@@ -42,6 +42,29 @@ export default {
 }
 </script>
 <style>
+    .infoFlex{
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: #4C5D66;
+        background: #f8f8f8;
+        margin:-15px -30px -5px -30px;
+        padding:10px 30px 10px 30px;
+    }
+    .imgAvatar{
+        width: 50px;
+        height: 50px;
+    }
+    .infoSpan span{
+        display: inline-block;
+        width: 170px;
+    }
+    .ml30{
+        margin-left: 30px
+    }
+    .ml110{
+        margin-left: 110px;
+    }
     .el-collapse-item__header{
         position: relative;
     }
@@ -96,6 +119,9 @@ export default {
     .mb20{margin-bottom: 20px;}
     .ml80{margin-left: 80px;}
     .mt10{margin-top: 10px;}
+    .mt4{
+        margin-top: 4px
+    }
     /* .demo-drawer-profile .el-col-12{
         margin-bottom: 8px;
     } */
