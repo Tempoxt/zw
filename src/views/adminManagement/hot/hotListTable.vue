@@ -52,9 +52,8 @@
     </el-dialog>
 
 	<div>
-		<Drawer :closable="false" width="640" v-model="openDrawers">
-			<p class="detail"><span style="color:#37474F">{{chineseName}}({{emplCode}})</span>考勤明细</p>
-			<div class="demo-drawer-profile">
+		<Drawer :title="chineseName+'('+emplCode+')考勤明细'" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+			<div class="drawer-profile">
 				<el-table
 					class="dtable"
 					:data="drawerData"
@@ -323,27 +322,11 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-	.ivu-drawer-body{
-        padding-left: 30px;
+    .drawerInfo .ivu-drawer-header{
+        background: rgba(245,250,251,1)
     }
-	.demo-drawer-profile{
-		padding-top: 30px
-	}
-    .detail{
-		width: 100%;
-		position: fixed;
-		top: 0;
-        color: #37474F;
-        font-size: 14px;
-        font-weight: bold;
-        height: 60px;
-        line-height: 60px;
-        padding-left: 20px;
-        padding-top: 10px;
-        background: #E4EAEC;
-        box-shadow: 0px 1px 0px rgba(228,234,236,1);
-        margin:-16px -16px 0;
-        margin-bottom: 30px
+	.drawer-profile{
+		padding-left: 10px;
 	}
 	.theme-0BB2D4 .el-table--small td, .theme-0BB2D4 .el-table--small th{
 		color: red;

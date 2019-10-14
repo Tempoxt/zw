@@ -8,10 +8,9 @@
 
     <!-- 人员档案的信息预览 -->
     <div>
-        <Drawer :closable="false" width="640" v-model="openDrawers">
-            <p class="detail">员工档案详情</p>
-            <p class="info mt60">个人信息</p>
-            <div class="demo-drawer-profile">
+        <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+            <p class="info">个人信息</p>
+            <div class="drawer-profile">
                 <el-row>
                     <el-col :span="12">
                         <span class="labelCon">姓名：</span>
@@ -57,7 +56,7 @@
             </div>
             <Divider />
             <p class="info">入职信息</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row>
                     <el-col :span="12">
                         <span class="labelCon">员工工号：</span>
@@ -127,7 +126,7 @@
             </div>
             <Divider />
             <p class="info">联系方式</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row>
                     <el-col :span="12">
                         <span class="labelCon">电话：</span>
@@ -157,7 +156,7 @@
             </div>
             <Divider v-if="profileData.contractRecords!=''"/>
             <p class="info" v-if="profileData.contractRecords!=''">合同管理</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row class="mb20" v-for="item in profileData.contractRecords" :key="item.id">
                     <el-col :span="12">
                         <span class="labelCon">合同名称：</span>
@@ -179,7 +178,7 @@
             </div>
             <Divider v-if="profileData.cardRecords!=''" />
             <p class="info" v-if="profileData.cardRecords!=''">证件管理</p>
-            <div class="demo-drawer-profile flexImg">
+            <div class="drawer-profile flexImg">
                 <div class="idCard" v-for="item in profileData.cardRecords" :key="item.id">
                     <p class="imgInfo">{{item.cardName}}</p>
                     <img class="posti" v-for="img in item.cardConnects" :key="img" :src="baseUrl+img" :data-img="img" alt="" @click="previewImg(img)">
@@ -187,7 +186,7 @@
             </div>
             <Divider v-if="profileData.workRecords!=''"/>
             <p class="info" v-if="profileData.workRecords!=''">工作经历</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row class="mb20" v-for="item in profileData.workRecords" :key="item.id">
                     <el-col :span="12">
                         <span class="labelCon">工作单位：</span>
@@ -217,7 +216,7 @@
             </div>
             <Divider v-if="profileData.educationRecords!=''" />
             <p class="info" v-if="profileData.educationRecords!=''">教育经历</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
                     <el-col :span="12">
                         <span class="labelCon">学校：</span>
@@ -243,7 +242,7 @@
             </div>
             <Divider v-if="profileData.familyRecords!=''"/>
             <p class="info" v-if="profileData.familyRecords!=''">家庭成员</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row class="mb20" v-for="item in profileData.familyRecords" :key="item.id">
                     <el-col :span="12">
                         <span class="labelCon">姓名：</span>
@@ -265,7 +264,7 @@
             </div>
             <Divider v-if="profileData.dutyRecords!=''" />
             <p class="info" v-if="profileData.dutyRecords!=''">入职记录</p>
-            <div class="demo-drawer-profile">
+            <div class="drawer-profile">
                 <el-row class="mb20" v-for="item in profileData.dutyRecords" :key="item.id">
                     <el-col :span="12">
                         <span class="labelCon">入职日期：</span>

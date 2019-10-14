@@ -8,9 +8,8 @@
 
    <!-- 工衣领用详情 -->
 	<div>
-		<Drawer :closable="false" width="640" v-model="openDrawers">
-			<p class="detail"><span style="color:#37474F">{{chineseName}}</span>工衣领用详情</p>
-			<div class="demo-drawer-profile mt60">
+		<Drawer :title="chineseName+'工衣领用详情'" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+			<div class="drawer-profile">
 				<el-table
 					:data="clothesInfo"
 					:header-cell-style="headerStyle"
@@ -160,51 +159,9 @@ export default {
 	}
 };
 </script>
-<style>
-    .line-boxs{
-        margin-top: 20px;
-    }
-    .ivu-drawer-body{
-        padding-left: 30px;
-    }
-    .detail{
-        color: #37474F;
-        font-size: 14px;
-        font-weight: bold;
-        height: 60px;
-        line-height: 60px;
-        padding:0 20px 0;
-        background: #E4EAEC;
-        box-shadow: 0px 1px 0px rgba(228,234,236,1);
-        margin:0 -30px 0;
-        margin-bottom: 0;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 99999;
-    }
-    .info{
-        color: #0BB2D4;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 17px 0 24px 2px;
-    }
-    .labelCon{
-        display: inline-block;
-        width: 112px;
-        text-align: right;
-        font-size: 12px;
-        color: #4C5D66;
-    }
-    .promp{
-        color: #A3AFB7;
-        text-align: left;
-        width: auto;
-    }
-    .mt60{margin-top: 60px;}
-    .mb20{margin-bottom: 20px;}
-    .demo-drawer-profile .el-col-12{
-        margin-bottom: 8px;
+<style lang="scss" scoped>
+    .drawerInfo .ivu-drawer-header{
+        background: rgba(245,250,251,1)
     }
 </style>
 

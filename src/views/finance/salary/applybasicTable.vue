@@ -236,9 +236,11 @@ export default {
 
 
 <style lang="scss">
-
 .applybasicTableDrawer .ivu-drawer-body {
-padding:0;
+  padding:0;
+}
+.applybasicTableDrawer .ivu-drawer-header{
+  background: rgba(245,250,251,1)
 }
 </style>
 <style lang="scss" scoped>

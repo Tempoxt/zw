@@ -57,49 +57,29 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-.scroll {
-  height: calc(100% - 30px);
-  width: 100%;
- /deep/ .scrollbar-wrapper {
-    overflow-x: hidden;
-  }
-}
+    .scroll {
+        height: calc(100% - 30px);
+        width: 100%;
+        /deep/ .scrollbar-wrapper {
+            overflow-x: hidden;
+        }
+    }
 </style>
 <style>
+    .drawerInfo .ivu-drawer-body{
+        padding:0;
+    }
+    .drawerInfo .ivu-drawer-header{
+        background: rgba(245,250,251,1)
+    }
     .line-boxs{
         margin-top: 20px;
-    }
-    .ivu-drawer-body{
-        padding-left: 30px;
-    }
-    .detail{
-        color: #37474F;
-        font-size: 14px;
-        font-weight: bold;
-        height: 60px;
-        line-height: 60px;
-        padding:0 20px 0;
-        background: #E4EAEC;
-        box-shadow: 0px 1px 0px rgba(228,234,236,1);
-        margin:0 -30px 0;
-        margin-bottom: 0;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        /* padding-top: 17px; */
-        z-index: 99999;
     }
     .info{
         color: #0BB2D4;
         font-size: 16px;
         font-weight: bold;
-        margin: 17px 0 24px 2px;
-    }
-    .conStyle{
-        margin-left: -20px;
-        display: flex;
-        align-items: flex-start
+        margin: 17px 0 24px 20px;
     }
     .labelCon{
         display: inline-block;
@@ -134,8 +114,6 @@ export default {
         margin-bottom: 3px;
     }
     .mt20{margin-top: 20px;}
-    .mt30{margin-top: 30px;}
-    .mt60{margin-top: 60px;}
     .mb20{margin-bottom: 20px;}
     .flexImg{
         display: flex;
@@ -185,7 +163,7 @@ export default {
         line-height: 0;
         background: transparent
     }
-    .demo-drawer-profile .el-col-12{
+    .drawer-profile .el-col-12{
         margin-bottom: 8px;
     }
 </style>
