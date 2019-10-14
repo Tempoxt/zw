@@ -80,7 +80,9 @@ import table_mixin from "@c/Table/table_mixin";
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 import { MessageBox } from 'element-ui';
-// const api_resource = api_common.resource("prodpropelplan/materialsexware/list");
+let baseUrl = process.env.VUE_APP_STATIC
+let baseUri = process.env.VUE_APP_BASEAPI
+const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
 	props:['url','a'],
@@ -89,6 +91,8 @@ export default {
 	},
 	data() {
 		return {
+			baseUrl,
+			baseUri,
 			loading: true,
             api_resource:api_common.resource('prodpropelplan/'+this.url),
 			orgCategory:[],
@@ -100,7 +104,7 @@ export default {
 			dialogFormVisible:false,
 			timer:'',
 			statusk:1,
-			val:'',
+			result:'',
 		};
 	},
 	computed:{
@@ -124,6 +128,48 @@ export default {
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
+		},
+		async getUrl(){
+			if(this.statusk!=0){
+				try{
+					this.result = await api_common.resource('prodpropelplan/'+this.url+'/exportresult').get({alert:false})
+					console.log(this.result,'result')
+					if(this.result!=''){
+						const res = download(baseUri+'/'+this.result)
+						this.statusk = 0
+					}
+				}catch(err){
+					// clearInterval(this.timer)
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
+		ab2str(u,f) {
+			var b = new Blob([u]);
+			var r = new FileReader();
+			r.readAsText(b, 'utf-8');
+			r.onload = function (){if(f)f.call(null,r.result)}
+		},
+		async download(){
+			this.statusk = 1
+			if(this.timer!=''){
+				clearInterval(this.timer)
+			}
+			try{
+				const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
+					responseType:'arraybuffer'
+				})
+				var that = this
+				this.ab2str(data,function(str){
+					that.$message.success({ message: str,duration:5000});
+				});
+				this.timer = setInterval(()=>{
+					this.getUrl()
+				}, 10000)
+			}catch(err){
+				console.log(err)
+			}
 		},
 		async getDa(){
 			if(this.statusk!=0){
