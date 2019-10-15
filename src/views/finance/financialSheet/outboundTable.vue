@@ -133,7 +133,6 @@ export default {
 			if(this.statusk!=0){
 				try{
 					this.result = await api_common.resource('prodpropelplan/'+this.url+'/exportresult').get({alert:false})
-					console.log(this.result,'result')
 					if(this.result!=''){
 						const res = download(baseUri+'/'+this.result)
 						this.statusk = 0

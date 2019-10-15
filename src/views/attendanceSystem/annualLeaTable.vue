@@ -26,9 +26,10 @@
 					</el-col>
 				</el-row>
 			</div>
+			<!-- <span style="font-size:14px;font-weight:normal">{{item.desc}}</span> -->
 			<div v-for="(item,index) in holidayData" :key="index" v-show="item.workAge!=0" class="infoDetail">
-				<p class="info"><span style="font-size:14px;font-weight:normal">{{item.desc}}</span>   第{{item.workAge}}年</p>
-				<p class="mt1 time">开始时间: {{item.yearStartDate}} ~ {{item.yearEndDate}}</p>
+				<p class="info">第{{item.workAge}}年     </p>
+				<p class="mt1 time">年假年度: {{item.yearStartDate}} ~ {{item.yearEndDate}}</p>
 				<el-row :gutter="20" class="fontStyle mt10 ">
 					<el-col :span="7">年假天数: {{item.yearDays}}</el-col>
 					<el-col :span="7">已休天数: {{item.usedDay}}</el-col>
@@ -234,7 +235,7 @@ export default {
     }
     .time{
         color: #A3AFB7;
-        font-size: 12px;
+        font-size: 14px;
     }
     .mt10{margin-top: 10px;}
 </style>
