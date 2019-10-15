@@ -208,7 +208,11 @@ export default {
 						return <el-tag type="success">已审核</el-tag>
 					}
 				}
-			}
+			},
+			resultUrl:'',
+			timer:'',
+			statusk:1,
+			val:'',
 		};
 	},
 	computed:{
@@ -242,30 +246,43 @@ export default {
 		}
 	},
 	methods: {
-		// table_disable_selected(row){
-		// 	if(row.auditStatus&&row.auditStatus!=1&&row.auditStatus!='未审核'){
-		// 		return false
-		// 	}else{
-		// 		return true
-		// 	}
-		// },
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
+		async getDa(){
+			if(this.statusk!=0){
+				this.val = await this.$request.get('commission/resetresult?restUrl='+this.resultUrl,{alert:false})
+				if(this.val==1){
+					this.statusk = 0
+					this.$message.success({ message: '已完成'})
+					this.fetchTableData()
+				}else if(this.val==2){
+					this.statusk = 0
+					this.$message.error({ message: '重置失败,请重试'})
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
 		async reset(){
 			if(this.table_form.dateLap!==null){
 				if(this.a=='1'){
-					const mes = await this.$request.post('/commission/personal/reset',{dateLap:this.table_form.dateLap})
+					this.resultUrl = '/commission/personal/reset'
+					const mes = await this.$request.post(this.resultUrl,{dateLap:this.table_form.dateLap})
 					this.$message.success({message: mes})
 				}else if(this.a=='2'){
-					const mes = await this.$request.post('/commission/customer/reset',{dateLap:this.table_form.dateLap})
+					this.resultUrl = '/commission/customer/reset'
+					const mes = await this.$request.post(this.resultUrl,{dateLap:this.table_form.dateLap})
 					this.$message.success({message: mes})
 				}else{
-					const mes = await this.$request.post('commission/reset',{dateLap:this.table_form.dateLap})
+					this.resultUrl = '/commission/reset'
+					const mes = await this.$request.post(this.resultUrl,{dateLap:this.table_form.dateLap})
 					this.$message.success({message: mes})
+					this.timer = setInterval(()=>{
+						this.getDa()
+					},10000)
 				}
-				this.fetchTableData();
 			}else{
 				this.$message.error({message:'请选择月份'})
 			}
