@@ -83,23 +83,41 @@
             <div class="label">
                 数据范围
             </div>
-             <div class="action-top">
-                  <el-radio :label="1" v-model="data" @change="update">全部</el-radio>
-             </div>
-             <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
-                 <div v-for="i in [{label:'本部门及下属部门',value:4},{label:'本部门',value:3},{label:'本人相关',value:2}]" :key="i.value"  class="cell">
-                     <el-radio :label="i.value">{{i.label}}</el-radio>
-                 </div>
+            <div class="action-top">
+                <el-radio :label="1" v-model="data" @change="update">全部</el-radio>
+            </div>
+            <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
+                <div v-for="i in [{label:'本部门及下属部门',value:4},{label:'本部门',value:3},{label:'本人相关',value:2}]" :key="i.value"  class="cell">
+                    <el-radio :label="i.value">{{i.label}}</el-radio>
+                </div>
             </el-radio-group>
+            <!-- 选择跨部门 -->
+            <!-- <div class="action-bottom">
+                <el-radio :label="100" v-model="orgDepart" @change="showDepart">跨部门</el-radio>
+            </div>
+            <div class="org-tree" v-if="orgDepart==100">
+                <el-tree
+                    :data="orgData"
+                    show-checkbox
+                    node-key="orgid"
+                    @node-click="orgClick"
+                    ref="tree"
+                    :default-expanded-keys="org_menu_checked_default"
+                    :default-checked-keys="org_menu_checked"
+                    @check="orgNodeCheck"
+                    :highlight-current="true"
+                    accordion
+                    :props="defaultPropsorg">
+                </el-tree>
+            </div> -->
         </el-col>
-        </el-row>
+    </el-row>
 </template>
 <script>
 import * as api_common from '@/api/common'
 const api_roles_menu = api_common.resource('roles/rolepermissionmenu')
 const api_menu = api_common.resource('menusheet/menutree/0')
 const api_roles_auth = api_common.resource('roles/rolepermisson')
-const cityOptions = ['上海', '北京', '广州', '深圳'];
 import { throttle } from 'core-decorators';
   export default {
     props:['roleid'],
@@ -117,9 +135,6 @@ import { throttle } from 'core-decorators';
     },
     methods:{
         async getMenu(){
-
-            // const { menu } =  await api_menu.get({position:this.menuType,power:0})
-            
             const { menu } =  await api_common.resource('roles/rolepermissionmenu/'+this.roleid).get({position:this.menuType,power:0})
             this.menu = menu
             // const [ {},{sub:roles_menu} ] = await api_roles_menu.find(this.roleid)
@@ -165,7 +180,6 @@ import { throttle } from 'core-decorators';
            
         },
         async nodeClick({id}){
-
             this.currentMenuId = id
             const { fields,actions,data,filterfield }  = await api_roles_auth.find(this.roleid,{
                 menuid:id
@@ -178,7 +192,6 @@ import { throttle } from 'core-decorators';
             return
         },
         treeNodeCheck(data,{checkedKeys}){
-          
            let checkList = [ data.id ]
            const estate = this.$refs.tree.getCheckedKeys().indexOf(data.id) !==-1 ? 1: 0
             ;(function f(sub){
@@ -193,15 +206,35 @@ import { throttle } from 'core-decorators';
                 api_roles_menu.update(this.roleid,{ menuid, estate })
             })
         },
+        async showDepart(){
+            this.orgData = await this.$request.get('org')
+        },
+        async orgClick({id}){
+            
+        },
+        orgNodeCheck(data,{checkedKeys}){
+            let orgList = [ data.orgid ]
+            const estate = this.$refs.tree.getCheckedKeys().indexOf(data.orgid) !==-1 ? 1: 0
+            ;(function f(subs){
+                subs.forEach(item=>{
+                    orgList.push(item.orgid)
+                })
+                if(subs.subs&&subs.subs.length){
+                    f(subs.subs)
+                }
+            })(data.subs||[])
+            orgList.forEach((menuid)=>{
+                api_roles_menu.update(this.roleid,{ menuid, estate })
+            })
+        },
         async fetchData(){
             //  const loading = this.$loading({
             //     lock: true,
             //     text: 'Loading',
             //     spinner: 'el-icon-loading',
-           
             // });
             try {
-                 await this.getMenu();
+                await this.getMenu();
                 
             } catch (error) {
                 
@@ -210,9 +243,6 @@ import { throttle } from 'core-decorators';
                     // loading.close();
                 },300)
             }
-           
-            
-
         },
         checkAll(){
              this.checkedActions = this.actions.map(item=>item.id)
@@ -236,28 +266,42 @@ import { throttle } from 'core-decorators';
         }
     },
     data() {
-      return {
-        checkedActions: [],
-        cities: cityOptions,
-        isIndeterminate: true,
-        radio:'',
-        radio2:'',
-        menuType:'1',
-        menu:[],
-        defaultProps: {
-          children: 'sub',
-          label: 'name'
-        },
-        roles_menu_checked:[],
-        roles_menu_checked_default:[],
-        fields:[],
-        actions:[],
-        data:0,
-        filterfield:''
-      };
+        return {
+            checkedActions: [],
+            isIndeterminate: true,
+            radio:'',
+            radio2:'',
+            menuType:'1',
+            menu:[],
+            orgData:[],
+            defaultProps: {
+                children: 'sub',
+                label: 'name'
+            },
+            defaultPropsorg: {
+                children: 'subs',
+                label: 'name'
+            },
+            roles_menu_checked:[],
+            roles_menu_checked_default:[],
+            org_menu_checked:[],
+            org_menu_checked_default:[],
+            fields:[],
+            actions:[],
+            data:0,
+            filterfield:'',
+            orgDepart:''
+        };
     }
   };
 </script>
+<style lang="scss">
+    .org-tree .el-tree{
+        .el-tree-node__label{
+            font-size: 12px;
+        }
+    }
+</style>
 <style lang="scss" scoped>
 .label {
     font-size:16px;
@@ -284,10 +328,17 @@ import { throttle } from 'core-decorators';
     padding:10px 0;
     margin-bottom: 10px;
 }
+.action-bottom {
+    border-top: 1px solid #e8e8e8;
+    padding:10px 0;
+}
 .bg-gray {
     background: #EBF6F8
 }
 .bg-gray-2 {
     background: #DDECEF
+}
+.org-tree .el-tree{
+    background: transparent;
 }
 </style>

@@ -404,8 +404,11 @@ export default {
             this.dialogFormVisible = true
         },
         async fetchTableData() {
+            if(!this.id){
+                return
+            }
             this.table_loading = true
-			this.table_form.orgid = this.id
+			this.table_form.org_id = this.id
             const {rows,total}  =  await this.api_resource.get(this.table_form);
             this.table_data = rows
            

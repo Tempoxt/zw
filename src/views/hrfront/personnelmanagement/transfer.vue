@@ -264,7 +264,6 @@ export default {
 		},
 		async fetchTableData() {
 			this.table_loading = true;
-			this.table_form.org_id = this.id
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total

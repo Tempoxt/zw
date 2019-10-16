@@ -113,7 +113,9 @@ export default {
   },
   methods: {
     async fetchTableData() {
-   
+      if(!this.id){
+				return
+			}
      this.table_loading = true;
      this.table_form.orgid = this.id
      const {rows , total }= await api_resource.get(this.table_form);

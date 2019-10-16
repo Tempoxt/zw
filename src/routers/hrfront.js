@@ -343,6 +343,14 @@ export default [{
         }
     },
     {
+        name: 'consume',
+        component: () =>
+            import ('@/views/hrfront/restaurant/consumeDetail'),
+        meta: {
+            title: '报餐消费明细'
+        }
+    },
+    {
         name: 'recruitDoc',
         component: () =>
             import ('@/views/hrfront/recruitment/recruitment'),

@@ -68,7 +68,6 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogForm2Visible:false,
-			importUploadUrl:"/prodpropelplan/list/upload",
 			importForm:{
 				month: dayjs().format('YYYY-MM'),
 			},
@@ -102,7 +101,7 @@ export default {
 				handleImportChange,
 			} = this
 			MessageBox.alert(
-				<importForm/>
+				<importForm importUploadUrl="/prodpropelplan/list/upload" downloadUrl="/rodpropelplan/list/downtemplate"/>
 			, '选择文件导入', {
 			showConfirmButton:false,
 			center:true

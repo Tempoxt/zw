@@ -19,7 +19,7 @@
             <el-button-group class="table-import-upload" ref="import" style="margin-top:25px;">
                 <el-button type="primary" @click="()=>{}" :disabled="this.dateLap==''">选择文件</el-button>
                 <input type="file" ref="input" class="input" @change="handleImportChange"/>
-                <el-button type="" v-if="this.downloadUrl!=''&&this.downloadUrl!=undefined" style="margin-left:20px" @onClick="this.handleDownloadChange()">下载模板</el-button>
+                <el-button type="" v-if="this.downloadUrl!=''&&this.downloadUrl!=undefined" style="margin-left:20px" @click="handleDownloadChange">下载模板</el-button>
             </el-button-group>
         </div>
     <!-- </el-dialog> -->
@@ -29,7 +29,7 @@ import dayjs from 'dayjs'
 import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 export default {
-	props:['showModal'],
+	props:['importUploadUrl','downloadUrl'],
 	data() {
 		return {
 			importForm:{
@@ -37,8 +37,6 @@ export default {
                 the_file:''
             },
             dateLap:'',
-			importUploadUrl:"/prodpropelplan/list/upload",
-            downloadUrl:''
 		};
     },
 	methods: {
@@ -60,7 +58,6 @@ export default {
                 showConfirmButton:false,
                 center:true
             });
-            console.log(this.importForm,'ifi')
             try {
                 const mes = await request.post(this.importUploadUrl,form,{alert:false})
                 this.$message({
@@ -81,12 +78,28 @@ export default {
                 })
             }
         },
-		changeMonth(){
-			console.log(this.importForm,'iii')
-		}
+        async handleDownloadChange(){
+            console.log(this.downloadUrl,'this.downloadUrl')
+            try {
+                if(this.downloadUrl){
+                    const  { data,name,contentType } = await request.get(this.downloadUrl,{
+                        responseType:'arraybuffer'
+                    })
+                    download(data,name||this.$route.meta.title,contentType)
+                    this.$message({
+                        message: '下载成功',
+                        type: 'success'
+                    });
+                }
+            } catch (error) {
+                
+            }finally{
+                MessageBox.close()
+            }
+        },
 	},
 	created() {
-		// console.log(this.showModal,'visible')
+		
 	}
 };
 
