@@ -11,7 +11,7 @@
       class="public-dialog"
       v-el-drag-dialog
       >
-      	<div style="width:520px;margin:0 auto;height:600px;">
+      	<div style="width:520px;margin:0 auto;">
         	<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 				<el-form ref="form" :model="form" label-width="100px">
 					<el-row :gutter="20">
