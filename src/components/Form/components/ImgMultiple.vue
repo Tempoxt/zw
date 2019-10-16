@@ -125,10 +125,10 @@ export default {
     },
     beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 5;
+        const isLt2M = file.size / 1024 / 1024 < 15;
         console.log(file,'file')
         if (!isLt2M) {
-          this.$message.error('上传图片大小不能超过 5MB!');
+          this.$message.error('上传图片大小不能超过 15MB!');
         }
         return isLt2M;
       }
