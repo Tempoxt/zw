@@ -28,8 +28,9 @@
 import dayjs from 'dayjs'
 import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
+const download = require('downloadjs')
 export default {
-	props:['importUploadUrl','downloadUrl'],
+	props:['importUploadUrl','downloadUrl','namie'],
 	data() {
 		return {
 			importForm:{
@@ -79,13 +80,12 @@ export default {
             }
         },
         async handleDownloadChange(){
-            console.log(this.downloadUrl,'this.downloadUrl')
             try {
                 if(this.downloadUrl){
                     const  { data,name,contentType } = await request.get(this.downloadUrl,{
                         responseType:'arraybuffer'
                     })
-                    download(data,name||this.$route.meta.title,contentType)
+                    download(data,name||this.namie,contentType)
                     this.$message({
                         message: '下载成功',
                         type: 'success'

@@ -274,18 +274,16 @@ export default {
 			let {
 				handleImportChange,
 			} = this
-			if(this.downloadUrl!=''&&this.downloadUrl!=undefined){
-				MessageBox.alert(
-					<el-button-group class="table-import-upload" ref="import">
-						<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
-						<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
-						<el-button type="" style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
-					</el-button-group>
-					, '选择文件导入', {
-					showConfirmButton:false,
-					center:true
-				});
-			}
+			MessageBox.alert(
+				<el-button-group class="table-import-upload" ref="import">
+					<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+					<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+					<el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
+				</el-button-group>
+				, '选择文件导入', {
+				showConfirmButton:false,
+				center:true
+			});
 		},
 		async handleImportChange(ev){
 			const files = ev.target.files;

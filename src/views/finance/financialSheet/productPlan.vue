@@ -101,7 +101,7 @@ export default {
 				handleImportChange,
 			} = this
 			MessageBox.alert(
-				<importForm importUploadUrl="/prodpropelplan/list/upload" downloadUrl="/rodpropelplan/list/downtemplate"/>
+				<importForm importUploadUrl="/prodpropelplan/list/upload" downloadUrl="/prodpropelplan/list/downtemplate" namie={this.$route.meta.title}/>
 			, '选择文件导入', {
 			showConfirmButton:false,
 			center:true

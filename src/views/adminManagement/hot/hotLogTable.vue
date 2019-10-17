@@ -227,7 +227,7 @@ export default {
 					let mes = await this.$request.post('/hot/record',this.form3)
 					this.$message.success({message:mes})
 				}catch(err){
-					this.$message.error({message:err.response.data})
+					// this.$message.error({message:err.response.data})
 				}
 				this.dialogForm3Visible = false
 				this.fetchTableData()
@@ -267,8 +267,7 @@ export default {
 			if(this.isInsert){
 				await api_resource.create(form)
 			}else{
-				await api_resource.update(form.id,form,{alert:false})
-				this.$message.success('修改成功');
+				await api_resource.update(form.id,form)
 			}
 			this.dialogFormVisible = false
 			this.fetchTableData()
