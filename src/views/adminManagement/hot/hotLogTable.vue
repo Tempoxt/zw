@@ -264,11 +264,13 @@ export default {
             await this.form_validate()
 			let form = Object.assign({},this.form)
 			form.org_id = this.id
-			if(this.isInsert){
-				await api_resource.create(form)
-			}else{
-				await api_resource.update(form.id,form)
+			try{
+				await api_resource.update(form.id,form,{alert:false})
+				this.$message.success('修改成功')
+			}catch(err){
+				this.$message.error(err.response.data);
 			}
+			
 			this.dialogFormVisible = false
 			this.fetchTableData()
 		},
