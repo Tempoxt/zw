@@ -150,4 +150,12 @@ export default [{
             title: '部门预算明细'
         }
     },
+    {
+        name: 'moldrate',
+        component: () =>
+            import ('@/views/finance/financialSheet/moldrate'),
+        meta: {
+            title: '模具关系制造费用'
+        }
+    },
 ]

@@ -50,19 +50,13 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
-import importForm from './importForm'
-import { MessageBox } from 'element-ui';
-const api_resource = api_common.resource("prodpropelplan/list");
+const api_resource = api_common.resource("u8report/moldrate");
 export default {
 	mixins: [table_mixin],
-	components:{
-		importForm
-	},
 	data() {
 		return {
 			loading: true,
 			api_resource,
-			orgCategory:[],
 			queryDialogFormVisible:true,
 		};
 	},
@@ -80,21 +74,9 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
-		import(){
-			// this.dialogFormVisible = true
-			let {
-				handleImportChange,
-			} = this
-			MessageBox.alert(
-				<importForm importUploadUrl="/prodpropelplan/list/upload" downloadUrl="/prodpropelplan/list/downtemplate" namie={this.$route.meta.title}/>
-			, '选择文件导入', {
-			showConfirmButton:false,
-			center:true
-			});
-		},
 	},
 	async created() {
-		const { field, action,table } = await api_common.menuInit("prodpropelplan/list");
+		const { field, action,table } = await api_common.menuInit("moldrate");
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
