@@ -8,38 +8,6 @@ export default [{
         }
     },
     {
-        name: 'frontGateManage',
-        component: () =>
-            import ('@/views/hrfront/devicemanager/devicelistmanage'),
-        meta: {
-            title: '考勤门禁设置'
-        }
-    },
-    {
-        name: 'commFactor',
-        component: () =>
-            import ('@/views/hrfront/comissManage/comissionFactor'),
-        meta: {
-            title: '业务提成系数'
-        }
-    },
-    {
-        name: 'productAddRatio',
-        component: () =>
-            import ('@/views/hrfront/comissManage/proAppreRate'),
-        meta: {
-            title: '产品增值率'
-        }
-    },
-    {
-        name: 'commRecord',
-        component: () =>
-            import ('@/views/hrfront/comissManage/comissionRecord'),
-        meta: {
-            title: '业务提成记录'
-        }
-    },
-    {
         name: 'addAccidentIns',
         component: () =>
             import ('@/views/hrfront/staffinsure/addAccide'),
@@ -127,38 +95,6 @@ export default [{
         }
     },
     {
-        name: 'attendanceDetail',
-        component: () =>
-            import ('@/views/hrfront/attendance/recordlist'),
-        meta: {
-            title: '考勤明细'
-        }
-    },
-    {
-        name: 'attendaceList',
-        component: () =>
-            import ('@/views/hrfront/attendance/countlist'),
-        meta: {
-            title: '考勤总汇'
-        }
-    },
-    {
-        name: 'refakelist',
-        component: () =>
-            import ('@/views/hrfront/attendance/openDisplay/recordlist'),
-        meta: {
-            title: '考勤明细1'
-        }
-    },
-    {
-        name: 'cofakelist',
-        component: () =>
-            import ('@/views/hrfront/attendance/openDisplay/countlist'),
-        meta: {
-            title: '考勤总汇1'
-        }
-    },
-    {
         name: 'employeeShift',
         component: () =>
             import ('@/views/hrfront/employeeTurnover/employee'),
@@ -223,131 +159,11 @@ export default [{
         }
     },
     {
-        name: 'checkinout',
-        component: () =>
-            import ('@/views/hrfront/dormitory/checkinout'),
-        meta: {
-            title: '入住管理'
-        }
-    },
-    {
-        name: 'dormmonthbill',
-        component: () =>
-            import ('@/views/hrfront/dormitory/roommonthbill'),
-        meta: {
-            title: '宿舍费用管理'
-        }
-    },
-    {
-        name: 'dormCheckoutAudit',
-        component: () =>
-            import ('@/views/hrfront/dormitory/checkoutauditlist'),
-        meta: {
-            title: '搬离审核'
-        }
-    },
-    {
-        name: 'empmonthbill',
-        component: () =>
-            import ('@/views/hrfront/dormitory/empmonthbill'),
-        meta: {
-            title: '个人分摊费用'
-        }
-    },
-    {
-        name: 'liveRegister',
-        component: () =>
-            import ('@/views/hrfront/dormitory/liveregister'),
-        meta: {
-            title: '居住登记'
-        }
-    },
-    {
-        name: 'cancelRegister',
-        component: () =>
-            import ('@/views/hrfront/dormitory/cancelregister'),
-        meta: {
-            title: '注销登记'
-        }
-    },
-    {
         name: 'outDutyLog',
         component: () =>
             import ('@/views/hrfront/personnelmanagement/outDutyLog'),
         meta: {
             title: '离职登记'
-        }
-    },
-    {
-        name: 'adminManagement',
-        component: () =>
-            import ('@/views/hrfront/adminManagement'),
-        meta: {
-            title: '行政管理'
-        }
-    },
-    {
-        name: 'supportManager',
-        component: () =>
-            import ('@/views/hrfront/logistics'),
-        meta: {
-            title: '后勤管理'
-        }
-    },
-    {
-        name: 'CateringManagement',
-        component: () =>
-            import ('@/views/hrfront/CateringManagement'),
-        meta: {
-            title: '行政管理'
-        }
-    },
-    {
-        name: 'Wagebasis',
-        component: () =>
-            import ('@/views/hrfront/Wagebasis'),
-        meta: {
-            title: '工资基础'
-        }
-    },
-    {
-        name: 'restaurantmember',
-        component: () =>
-            import ('@/views/hrfront/restaurant/restaurant'),
-        meta: {
-            title: '就餐员工设置'
-        }
-    },
-    {
-        name: 'bookmeal',
-        component: () =>
-            import ('@/views/hrfront/restaurant/bookmeal'),
-        meta: {
-            title: '员工报餐管理'
-        }
-    },
-    {
-        name: 'consumedata',
-        component: () =>
-            import ('@/views/hrfront/restaurant/consumedata'),
-        meta: {
-            title: '员工报餐统计'
-        }
-    },
-    {
-        name: 'restconsume',
-        component: () =>
-            import ('@/views/hrfront/restaurant/record'),
-        meta: {
-            title: '食堂消费记录'
-        }
-    },
-    {
-        name: 'consume',
-        component: () =>
-            import ('@/views/hrfront/restaurant/consumeDetail'),
-        meta: {
-            title: '报餐消费明细'
         }
     },
     {
@@ -357,15 +173,7 @@ export default [{
         meta: {
             title: '招聘档案'
         }
-    },
-    {
-        name: 'checklistview',
-        component: () =>
-            import ('@/views/hrfront/dormitory/checklistview'),
-        meta: {
-            title: '入住待处理清单'
-        }
-    },    
+    },   
     {
         name: 'introducercost',
         component: () =>
@@ -374,6 +182,46 @@ export default [{
             title: '介绍费汇总'
         }
     }, 
+    {
+        name: 'frontGateManage',
+        component: () =>
+            import ('@/views/hrfront/devicemanager/devicelistmanage'),
+        meta: {
+            title: '考勤门禁设置'
+        }
+    },
+    {
+        name: 'attendanceDetail',
+        component: () =>
+            import ('@/views/hrfront/attendance/recordlist'),
+        meta: {
+            title: '考勤明细'
+        }
+    },
+    {
+        name: 'attendaceList',
+        component: () =>
+            import ('@/views/hrfront/attendance/countlist'),
+        meta: {
+            title: '考勤总汇'
+        }
+    },
+    {
+        name: 'refakelist',
+        component: () =>
+            import ('@/views/hrfront/attendance/openDisplay/recordlist'),
+        meta: {
+            title: '考勤明细1'
+        }
+    },
+    {
+        name: 'cofakelist',
+        component: () =>
+            import ('@/views/hrfront/attendance/openDisplay/countlist'),
+        meta: {
+            title: '考勤总汇1'
+        }
+    },
     {
         name: 'yearHolidayManager',
         component: () =>
@@ -390,4 +238,12 @@ export default [{
             title: '异常管理'
         }
     },
+    // {
+    //     name: 'overtimeApply',
+    //     component: () =>
+    //         import ('@/views/attendanceSystem/exceptionManage'),
+    //     meta: {
+    //         title: '加班记录'
+    //     }
+    // },
 ]

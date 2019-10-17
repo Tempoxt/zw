@@ -60,14 +60,14 @@ export default {
 				shiftTime(column,row){
                     if(row.color!==undefined){ 
                         if(row.color==='red'){ 
-                            return  <span style="color:red">{row.shiftTime}</span>
+                            return  <span style="color:red" title={row.shiftTime}>{row.shiftTime}</span>
                         }else if(row.color==='orange'){
-                            return  <span style="color:orange">{row.shiftTime}</span>
+                            return  <span style="color:orange" title={row.shiftTime}>{row.shiftTime}</span>
                         }else{
-                            return  <span>{row.shiftTime}</span>
+                            return  <span title={row.shiftTime}>{row.shiftTime}</span>
                         }
                     }else{
-                        return  <span>{row.shiftTime}</span>
+                        return  <span title={row.shiftTime}>{row.shiftTime}</span>
                     }
 				}
 			}

@@ -5,27 +5,21 @@ export default [{
         meta: {
             title: '薪资基础资料'
         }
-    },{
-        name: 'applywageList',
-        component: () =>
-            import ('@/views/finance/salary/basicwageApplysheet'),
-        meta: {
-            title: '薪资调整记录'
-        }
-    },{
-        name: 'invoicerecheck',
-        component: () =>
-            import ('@/views/finance/productrecheck/invoicerecheck'),
-        meta: {
-            title: '发票查重管理'
-        }
     },
     {
         name: 'salary',
         component: () =>
             import ('@/views/finance/salary/salaryslip'),
         meta: {
-            title: '薪资单'
+            title: '员工薪资记录'
+        }
+    },
+    {
+        name: 'applywageList',
+        component: () =>
+            import ('@/views/finance/salary/basicwageApplysheet'),
+        meta: {
+            title: '薪资调整记录'
         }
     },
     {
@@ -34,6 +28,46 @@ export default [{
             import ('@/views/finance/salary/applybasic'),
         meta: {
             title: '工薪确认记录'
+        }
+    },
+    {
+        name: 'deduction',
+        component: () =>
+            import ('@/views/finance/deduction/deduction'),
+        meta: {
+            title: '补扣款管理'
+        }
+    },
+    {
+        name: 'deductionlist',
+        component: () =>
+            import ('@/views/finance/security/deductionlist'),
+        meta: {
+            title: '专项扣除'
+        }
+    },
+    {
+        name: 'salary/achievement',
+        component: () =>
+            import ('@/views/finance/salary/achievement'),
+        meta: {
+            title: '月份绩效考核'
+        }
+    },
+    {
+        name: 'staffSalary',
+        component: () =>
+            import ('@/views/finance/salary/staffSalary'),
+        meta: {
+            title: '月份绩效考核'
+        }
+    },
+    {
+        name: 'invoicerecheck',
+        component: () =>
+            import ('@/views/finance/productrecheck/invoicerecheck'),
+        meta: {
+            title: '发票查重管理'
         }
     },
     {
@@ -61,43 +95,27 @@ export default [{
         }
     },
     {
-        name: 'securityandfund',
+        name: 'commFactor',
         component: () =>
-            import ('@/views/finance/securityandfund/securityandfund'),
+            import ('@/views/hrfront/comissManage/comissionFactor'),
         meta: {
-            title: '社保公积金'
+            title: '业务提成系数'
         }
     },
     {
-        name: 'deductionlist',
+        name: 'productAddRatio',
         component: () =>
-            import ('@/views/finance/security/deductionlist'),
+            import ('@/views/hrfront/comissManage/proAppreRate'),
         meta: {
-            title: '专项扣除'
+            title: '产品增值率'
         }
     },
     {
-        name: 'deduction',
+        name: 'commRecord',
         component: () =>
-            import ('@/views/finance/deduction/deduction'),
+            import ('@/views/hrfront/comissManage/comissionRecord'),
         meta: {
-            title: '补扣款管理'
-        }
-    },
-    {
-        name: 'salary/achievement',
-        component: () =>
-            import ('@/views/finance/salary/achievement'),
-        meta: {
-            title: '月份绩效考核'
-        }
-    },
-    {
-        name: 'staffSalary',
-        component: () =>
-            import ('@/views/finance/salary/staffSalary'),
-        meta: {
-            title: '月份绩效考核'
+            title: '业务提成记录'
         }
     },
     {
