@@ -22,10 +22,10 @@
                             <form-render :type="`input`" prop="deviceCode" :field="{name:'设备编号'}" v-model="form.deviceCode"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
-                            <form-render :type="`input`" prop="deviceModel" :field="{name:'设备型号'}" v-model="form.deviceModel"/>
+                            <form-render :type="`select`" prop="deviceBrand" :field="{name:'设备品牌',options:brandData}" @change="changeModel" v-model="form.deviceBrand"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
-                            <form-render :type="`input`" prop="deviceBrand" :field="{name:'设备品牌'}" v-model="form.deviceBrand"/>
+                            <form-render :type="`select`" prop="deviceModel" :field="{name:'设备型号',options:modelData}" v-model="form.deviceModel"/>
                         </el-col>
                         <el-col :span="20" :offset="2">
                             <form-render :type="`input`" prop="deviceNumber" :field="{name:'设备机号'}" v-model="form.deviceNumber"/>
@@ -140,6 +140,8 @@ export default {
             deviceData:[],
             addressData:[],
             statusData:[],
+            modelData:[],
+            brandData:[],
             rules:{
                 deviceType:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
@@ -151,10 +153,10 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 deviceModel:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
                 deviceBrand:[
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
                 deviceNumber:[
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -181,22 +183,27 @@ export default {
         id(){
             this.table_form.currentpage = 1
             this.fetchTableData()
+        },
+        'form.deviceBrand'(){
+            if(this.form.deviceBrand!=''){
+                this.getModel()
+            }
         }
     },
     computed:{
         disabled(){
-            if(this.form.deviceType!=''&&this.form.deviceName!=''&&this.form.deviceCode!=''&&this.form.deviceModel!=''&&this.form.deviceModel!=''
-            &&this.form.deviceBrand!=''&&this.form.deviceNumber!=''&&this.form.deviceIP!=''&&this.form.devicePort!=''&&this.form.office!=''&&this.form.deviceStatus!=''){
+            if(this.form.deviceType!=''&&this.form.deviceName!=''&&this.form.deviceCode!=''&&this.form.deviceModel!=''&&this.form.deviceBrand!=''
+            &&this.form.deviceCapacity!=''&&this.form.deviceNumber!=''&&this.form.deviceIP!=''&&this.form.devicePort!=''&&this.form.office!=''&&this.form.deviceStatus!=''){
                 return false
             }
             return true
         }
     },
     methods: {
+        changeModel(){
+            this.form.deviceModel = ''
+        },
         async fetchTableData() {
-            // if(!this.proid){
-            //     return 
-            // }
             this.table_loading = true;
             this.table_form.orgid = this.id
             const {rows , total }= await api_resource.get(this.table_form);
@@ -215,6 +222,12 @@ export default {
         async getDevice(){
             this.deviceData = (await this.$request.get('devicemanager/getdevicetype')).map(o=>{return {label:o.name,value:o.value}})
         },
+        async getModel(){
+            this.modelData = (await this.$request.get('devicemanager/getdevicemodel?brand_id='+this.form.deviceBrand)).map(o=>{return {label:o.title,value:o.id}})
+        },
+        async getBrand(){
+            this.brandData = (await this.$request.get('devicemanager/getdevicebrand')).map(o=>{return {label:o.title,value:o.id}})
+        },
         async getAddress(){
             this.addressData = (await this.$request.get('devicemanager/getofficeaddress')).map(o=>{return {label:o.name,value:o.value}})
         },
@@ -222,18 +235,17 @@ export default {
         //     this.statusData = (await this.$request.get('devicemanager/getdevicestatus')).map(o=>{return {label:o.name,value:o.value}})
         // },
         add(){
-            this.dialogFormVisible = true
             this.getDevice()
+            this.getBrand()
             this.getAddress()
-            // this.getStatus()
+            this.dialogFormVisible = true
             this.form = this.defaultForm()
         },
-        
 		async edit(){
-			this.dialogFormVisible = true
             this.getDevice()
+            this.getBrand()
             this.getAddress()
-            // this.getStatus()
+			this.dialogFormVisible = true
             let row = this.table_selectedRows[0];
 			this.form = await api_resource.find(row.id)
 		},
