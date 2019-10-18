@@ -226,10 +226,10 @@ export default {
 				try{
 					let mes = await this.$request.post('/hot/record',this.form3)
 					this.$message.success({message:mes})
+					this.dialogForm3Visible = false
 				}catch(err){
 					// this.$message.error({message:err.response.data})
 				}
-				this.dialogForm3Visible = false
 				this.fetchTableData()
 			}else{
 				this.$message.error('请选择要添加的人员');
