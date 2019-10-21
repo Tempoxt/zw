@@ -16,13 +16,13 @@
 		<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 			<el-row>
 				<el-col :span="12">
-					<form-render prop="startTime" :type="`datetime`" :field="{name:'开始时间'}" v-model="form.startTime"/>
+					<form-render prop="startTime" :picker-options="pickerOptions" :type="`datetime`" :field="{name:'开始时间'}" v-model="form.startTime"/>
 				</el-col>
 				<el-col :span="12">
-					<form-render prop="endTime" :type="`datetime`" :field="{name:'结束时间'}" v-model="form.endTime"/>
+					<form-render prop="endTime" :picker-options="pickerOptions" :type="`datetime`" :field="{name:'结束时间'}" v-model="form.endTime"/>
 				</el-col>
 				<el-col :span="12">
-					<form-render :type="`select`" :field="{name:'加班类别',options:[{
+					<form-render :type="`select`" :disabled="true" :field="{name:'加班类别',options:[{
 							value: 1,
 							label: '生产需要'
 						},{
@@ -60,8 +60,6 @@
 		
     </el-dialog>
 
-
-
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -69,8 +67,11 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px">
+		<div style="padding-left:10px" v-show="this.auditStatus==0">
 			<dateLap type="1" v-model="table_form.dateLap" @change="fetch"/>
+		</div>
+		<div style="padding-left:10px" v-show="this.auditStatus==1">
+			<dateLap type='2' v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
     <el-table
@@ -133,13 +134,24 @@ export default {
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
 				]
 			},
-			html:''
+			html:'',
+			dateLap:'',
+			pickerOptions: {
+				disabledDate(time) {
+					return time.getTime() < Date.now() - 8.64e7;
+				}
+			},
 		};
 	},
 	watch:{
 		auditStatus(){
 			delete this.table_form.keyword
 			this.table_form.currentpage = 1
+			if(this.auditStatus==0){
+				this.table_form.dateLap = dayjs().format('YYYY-MM-DD')
+			}else{
+				this.table_form.dateLap = dayjs().format('YYYY-MM')
+			}
 			this.fetchMenu()
 			this.fetchTableData()
 		},
@@ -164,8 +176,16 @@ export default {
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})
-			this.form = {}
+			this.form = {
+				overtimeType:1
+			}
 			this.dialogFormVisible = true
+		},
+		ab2str(u,f) {
+			var b = new Blob([u]);
+			var r = new FileReader();
+			r.readAsText(b, 'utf-8');
+			r.onload = function (){if(f)f.call(null,r.result)}
 		},
 		async handleFormSubmit(n){
 			await this.form_validate()
@@ -173,21 +193,28 @@ export default {
 			this.form.ids = ids;
 			this.form.submitTYPE = n
 			if(this.form.ids!==''){
-				try{
-					if(n==1){
+				if(n==1){
+					try{
 						const { data,name,contentType} = await this.$request.post('attendance/overtime',this.form,{responseType:'arraybuffer',alert:false})
 						this.$message.success('添加成功')
 						let namei = '加班申请单';
 						download(data,namei,contentType)
 						this.fetchTableData();
 						this.dialogFormVisible = false
-					}else{
+					}catch(err){
+						var that = this;
+						that.ab2str(err.error.response.data,function(str){
+							that.$message.error({ message: str ,duration:5000});
+						});
+					}
+				}else{
+					try{
 						const data = await this.$request.post('attendance/overtime',this.form,{alert:false})
 						this.html = data
 						this.dialogForm1Visible = true
+					}catch(err){
+						this.$message.error({ message: err.response.data ,duration:5000});
 					}
-				}catch(err){
-					// this.$message.error({message:err.response.data})
 				}
 			}else{
 				this.$message.error('请选择要添加的人员');
@@ -212,9 +239,9 @@ export default {
 	},
 	async created() {
 		this.fetchMenu()
+		this.dateLap = dayjs().format('YYYY-MM')
 		this.table_form.dateLap = dayjs().format('YYYY-MM-DD')
 		this.fetchTableData();
 	}
 };
 </script>
-
