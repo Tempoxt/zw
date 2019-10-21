@@ -238,12 +238,19 @@ export default [{
             title: '异常管理'
         }
     },
-    // {
-    //     name: 'overtimeApply',
-    //     component: () =>
-    //         import ('@/views/attendanceSystem/exceptionManage'),
-    //     meta: {
-    //         title: '加班记录'
-    //     }
-    // },
+    {
+        name: 'overtimeApply',
+        component: () =>
+            import ('@/views/attendanceSystem/overtimeRecord'),
+        meta: {
+            title: '加班记录'
+        }
+    },{
+        name: 'HolidaySet',
+        component: () =>
+            import ('@/views/attendanceSystem/holidaySetting'),
+        meta: {
+            title: '假日设定'
+        }
+    },
 ]

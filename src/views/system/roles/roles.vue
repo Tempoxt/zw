@@ -4,11 +4,10 @@
             <div class="label">
                 菜单权限
             </div>
-             <el-radio-group v-model="menuType">
+            <el-radio-group v-model="menuType">
                 <el-radio-button label="1">前台</el-radio-button>
                 <el-radio-button label="2">后台</el-radio-button>
-
-                </el-radio-group>
+            </el-radio-group>
             <div>
                 <el-tree
                 :data="menu"
@@ -79,7 +78,6 @@
             </div>
         </el-col>
         <el-col :span="6"  class="col bg-gray-2"  style="overflow-y: scroll;">
-
             <div class="label">
                 数据范围
             </div>
@@ -92,7 +90,7 @@
                 </div>
             </el-radio-group>
             <!-- 选择跨部门 -->
-            <!-- <div class="action-bottom">
+            <div class="action-bottom">
                 <el-radio :label="100" v-model="orgDepart" @change="showDepart">跨部门</el-radio>
             </div>
             <div class="org-tree" v-if="orgDepart==100">
@@ -109,7 +107,7 @@
                     accordion
                     :props="defaultPropsorg">
                 </el-tree>
-            </div> -->
+            </div>
         </el-col>
     </el-row>
 </template>
@@ -177,7 +175,6 @@ import { throttle } from 'core-decorators';
             await this.nodeClick({id:currentKey})
             this.$refs.tree.setCurrentKey(currentKey)
             this.roles_menu_checked_default = [currentKey]
-           
         },
         async nodeClick({id}){
             this.currentMenuId = id
@@ -235,7 +232,6 @@ import { throttle } from 'core-decorators';
             // });
             try {
                 await this.getMenu();
-                
             } catch (error) {
                 
             }finally{
@@ -245,8 +241,8 @@ import { throttle } from 'core-decorators';
             }
         },
         checkAll(){
-             this.checkedActions = this.actions.map(item=>item.id)
-             this.update()
+            this.checkedActions = this.actions.map(item=>item.id)
+            this.update()
         },
         @throttle(1000, {leading: false})
         update(){
@@ -313,11 +309,9 @@ import { throttle } from 'core-decorators';
     .col {
         border-right: 1px solid #e8e8ee;
         height: 100%;
-
         &:first-child{
             padding-left: 40px !important;
         }
-        
     }
 }
 .cell {
