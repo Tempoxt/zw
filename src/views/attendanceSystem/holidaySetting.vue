@@ -21,10 +21,10 @@
 			<el-form ref="form" :model="form" label-width="38px" >
 				<el-row>
 					<el-col :span="12" :offset="6" style="color:#37474F;padding:20px 0 30px;font-weight:bold">
-						{{selectDay}}  {{week}}
+						{{this.paramVal.date}}  {{this.paramVal.week}}
 					</el-col>
 					<el-col :span="12" :offset="6">
-						<el-radio-group v-model="form.isWorkTag">
+						<el-radio-group v-model="form.isWork">
 							<el-radio :label="2">休息</el-radio>
 							<br/>
 							<el-radio style="margin-top:20px" :label="1">上班</el-radio>
@@ -37,7 +37,7 @@
 			</el-form>
 
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="handleHide">取 消</el-button>
+				<el-button @click="handleHide">取消设置</el-button>
 				<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -56,17 +56,16 @@ export default {
 		return {
 			queryDialogFormVisible:true,
 			form:{
-				isWorkTag:''
+				isWork:''
 			},
 			dialogFormVisible:false,
 			showHoliday:false,
 			isSelected:true,
-			isWorkTag:'',
-			selectDay:'',
-			week:'',
 			dateLap:dayjs().format('YYYY-MM'),
 			value: new Date(),
 			datedef:[],
+			clickDay:{},
+			paramVal:{},
 			prop:'date' //对应日期字段名
 		};
 	},
@@ -75,7 +74,7 @@ export default {
 	},
 	computed:{
 		disabled(){
-			if(this.form.isWorkTag!==''&&this.form.isWorkTag!==undefined){
+			if(this.form.isWork!==''&&this.form.isWork!==undefined){
                 return false
             }
             return true
@@ -91,64 +90,88 @@ export default {
 							<span style="display: inline-block;color:#F2353C">{data.defvalue.value.holidayTitle} 
 								<span style="margin-left:5px">{data.defvalue.value.remake}</span>
 							</span>
-							<span v-show={data.defvalue.value.isWorkTag==2} class="calType rest">休</span>
-							<span v-show={data.defvalue.value.isWorkTag==1} class="calType work">班</span>
+							<span v-show={data.defvalue.value.isWork==2} class="calType rest">休</span>
+							<span v-show={data.defvalue.value.isWork==1} class="calType work">班</span>
 						</div>
 					</div>) : <div class="fs15">{data.defvalue.text}</div>
 				)
            }
            return (
-				<div onClick={()=>{this.showis(parmas)}} style="min-height:90px;">
+				<div style="min-height:90px;">
 					{loop(parmas)}
 				</div>
 			);
 		},
-		changeDate(data){
-			console.log(data,'daadadad')
-		},
-		close(){
-			this.form.isWorkTag = ''
-		},
-		pick(date, mouseEvent, bbb) {
-			console.log(date,'date')
-			console.log(mouseEvent,'mouseEvent')
-			console.log(bbb,'bbb')
-			const curr = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDay()
-			console.log(curr,'curr')
-			var month1 = date.getMonth()+1
-			var month = this.dateLap.split('-')[1]
-			console.log(month1,month)
-		},
-		async showis(parmas){
-			const data = parmas.defvalue.value
-			console.log(data,'data show')
-			const selectDay = new Date(data.date).getTime()
-			const today = new Date(dayjs().format('YYYY-MM-DD')).getTime()
-			// const today = new Date().getTime()
-			if(today<=selectDay){
-				this.selectDay = data.date
-				this.week = data.week
-				this.showHoliday = true
-				this.form = (await this.$request.get('holidaymanager/holidaydatesetlist/'+data.id))[0]
-				
-				// var dt = new Date(this.selectDay.split("-")[0], this.selectDay.split("-")[1]-1,this.selectDay.split("-")[2]);
-				// var weekDay = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-				// this.week = weekDay[dt.getDay()];
-			}else{
-				this.$message({
-					message: '今天之前的日期不允许设置',
-					type: 'warning'
-				});
+		async changeDate(date){
+			const y = date.getFullYear()
+			const m = date.getMonth()+1
+			const d = date.getDate()
+			const curr = y+'-'+this.add0(m)+'-'+this.add0(d)
+			var currmonth = this.dateLap.split('-')[1]
+			if((y+'-'+this.add0(m))!=this.dateLap){
+				this.datedef = []
+				this.dateLap = y+'-'+this.add0(m)
+				this.datedef = await this.$request.get('holidaymanager/holidaydatesetlist?datelap='+this.dateLap)
 			}
 		},
-		handleHide(data){
+		close(){
+			this.form.isWork = ''
+		},
+		add0(m){
+			return m<10?'0'+m:m 
+		},
+		async pick(date, mouseEvent, parmas) {
+			this.paramVal = parmas.value
+			const y = date.getFullYear()
+			const m = date.getMonth()+1
+			const d = date.getDate()
+			const curr = y+'-'+this.add0(m)+'-'+this.add0(d)
+			var currmonth = this.dateLap.split('-')[1]
+			if(m!=currmonth){
+				this.datedef = []
+				this.dateLap = y+'-'+this.add0(m)
+				this.datedef = await this.$request.get('holidaymanager/holidaydatesetlist?datelap='+this.dateLap)
+			}
+			if(this.datedef.length!=0){
+				const today = new Date(dayjs().format('YYYY-MM-DD')).getTime()
+				const selectDay = new Date(curr).getTime()
+				if(today<=selectDay){
+					this.datedef.map(o=>{
+						if(o.date==curr){
+							this.clickDay = o
+							return o
+						}
+					})
+					if(this.paramVal==''){
+						this.paramVal= this.clickDay
+					}
+					this.form = (await this.$request.get('holidaymanager/holidaydatesetlist/'+this.paramVal.id))[0];
+					this.form.isWork = Number(this.form.isWork)
+					this.showHoliday = true
+				}else{
+					this.$message({
+						message: '今天之前的日期不允许设置',
+						type: 'warning'
+					});
+				}
+			}
+		},
+		async handleHide(data){
+			this.form.isWork = ''
+			this.form.isWorkTag = ''
+			this.form.remake = ''
+			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
+			this.$message.success({message: mes})
 			this.showHoliday = false
+			this.fetchTableData()
 		},
 		async handleFormSubmit(){
 			this.dialogFormVisible = false
 			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
 			this.$message.success({message: mes})
-			this.form.isWorkTag = ''
+			this.form.isWork = ''
+			this.showHoliday = false
+			this.fetchTableData()
 		},
 		async fetchTableData() {
 			this.datedef = await this.$request.get('holidaymanager/holidaydatesetlist?datelap='+this.dateLap)
