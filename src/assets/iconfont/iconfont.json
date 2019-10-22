@@ -338,8 +338,8 @@
       "icon_id": "5687178",
       "name": "基础",
       "font_class": "jichu",
-      "unicode": "e60f",
-      "unicode_decimal": 58895
+      "unicode": "e6ff",
+      "unicode_decimal": 59135
     },
     {
       "icon_id": "5815970",
@@ -436,15 +436,15 @@
       "icon_id": "6710867",
       "name": "添加",
       "font_class": "tianjia",
-      "unicode": "e60c",
-      "unicode_decimal": 58892
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
     },
     {
       "icon_id": "6710908",
       "name": "编辑",
       "font_class": "bianji",
-      "unicode": "e60d",
-      "unicode_decimal": 58893
+      "unicode": "e6dd",
+      "unicode_decimal": 59101
     },
     {
       "icon_id": "6711565",
