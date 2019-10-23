@@ -1,9 +1,10 @@
 <template>
     <!-- <el-dialog
-        title="请选择"
+        title="选择文件导入"
         :visible.sync="dialogFormVisible"
         class="public-dialog"
         v-el-drag-dialog  
+        width="500px"
         > -->
         <div>
             <el-date-picker
@@ -30,7 +31,7 @@ import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
 export default {
-	props:['importUploadUrl','downloadUrl','namie'],
+	props:['importUploadUrl','downloadUrl','namie',],
 	data() {
 		return {
 			importForm:{
@@ -51,9 +52,8 @@ export default {
             Object.keys(importForm).forEach(key=>{
                 form.append(key,importForm[key])  
             })
-            // form.append('the_file',files[0])
             this.importLoading = true
-            MessageBox.close()
+            // MessageBox.close()
             MessageBox.alert(
                 <div v-loading={true}><br /></div>, '导入中', {
                 showConfirmButton:false,
@@ -65,7 +65,8 @@ export default {
                     message: mes,
                     type: 'success'
                 });
-                this.fetchTableData()
+                this.$emit("fetchData",mes)
+                this.dateLap = ''
             } catch (error) {
                 console.log(error)
                 this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:6000})
@@ -73,9 +74,7 @@ export default {
                 this.importLoading = false
                 MessageBox.close()
                 this.$nextTick(()=>{
-                    // this.$refs.importInput.value = null
                     ev.target.value = null
-                    this.fetchTableData()
                 })
             }
         },
@@ -92,7 +91,7 @@ export default {
                     });
                 }
             } catch (error) {
-                
+                console.log(error)
             }finally{
                 MessageBox.close()
             }
@@ -102,5 +101,4 @@ export default {
 		
 	}
 };
-
 </script>

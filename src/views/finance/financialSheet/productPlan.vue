@@ -81,15 +81,12 @@ export default {
 			}, 300);
 		},
 		import(){
-			// this.dialogFormVisible = true
-			let {
-				handleImportChange,
-			} = this
 			MessageBox.alert(
-				<importForm importUploadUrl="/prodpropelplan/list/upload" downloadUrl="/prodpropelplan/list/downtemplate" namie={this.$route.meta.title}/>
-			, '选择文件导入', {
-			showConfirmButton:false,
-			center:true
+				<importForm importUploadUrl="/prodpropelplan/list/upload" downloadUrl="/prodpropelplan/list/downtemplate" namie={this.$route.meta.title} 
+				on={{fetchData:()=>{this.fetch()}}}/>
+				, '选择文件导入', {
+				showConfirmButton:false,
+				center:true
 			});
 		},
 	},
