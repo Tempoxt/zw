@@ -35,7 +35,7 @@
 			</el-form>
 
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="showHoliday = false">取 消</el-button>
+				<el-button @click="handleHide">取 消</el-button>
 				<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -127,6 +127,8 @@ export default {
 		},
 		close(){
 			this.form.isWork = ''
+			this.rest = false
+			this.work = false
 		},
 		add0(m){
 			return m<10?'0'+m:m 
@@ -177,12 +179,10 @@ export default {
 		},
 		async handleHide(data){
 			this.form.isWork = ''
-			this.form.isWorkTag = ''
 			this.form.remake = ''
-			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
-			this.$message.success({message: mes})
 			this.showHoliday = false
-			this.fetchTableData()
+			this.rest = false
+			this.work = false
 		},
 		async handleFormSubmit(){
 			if(this.rest == false&&this.work == false){
