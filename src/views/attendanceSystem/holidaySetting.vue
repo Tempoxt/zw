@@ -24,11 +24,9 @@
 						{{this.paramVal.date}}  {{this.paramVal.week}}
 					</el-col>
 					<el-col :span="12" :offset="6">
-						<el-radio-group v-model="form.isWork">
-							<el-radio :label="2">休息</el-radio>
+							<el-checkbox  v-model="rest">休息</el-checkbox>
 							<br/>
-							<el-radio style="margin-top:20px" :label="1">上班</el-radio>
-						</el-radio-group>
+							<el-checkbox style="margin-top:20px" v-model="work">上班</el-checkbox>
 					</el-col>
 					<el-col :span="12" :offset="6" style="margin-top:20px">
 						<form-render :type="`input`" :field="{name:'备注'}" v-model="form.remake"/>
@@ -37,7 +35,7 @@
 			</el-form>
 
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="handleHide">取消设置</el-button>
+				<el-button @click="showHoliday = false">取 消</el-button>
 				<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -64,10 +62,26 @@ export default {
 			datedef:[],
 			paramVal:{},
 			prop:'date', //对应日期字段名
+			rest: false,
+			work: false,
 		};
 	},
 	components: {
 		eleCalendar
+	},
+	watch:{
+		rest(){
+			if(this.rest==true){
+				this.work = false
+				this.form.isWork = 2
+			}
+		},
+		work(){
+			if(this.work==true){
+				this.rest = false
+				this.form.isWork = 1
+			}
+		}
 	},
 	computed:{
 		disabled(){
@@ -82,7 +96,7 @@ export default {
             const loop = data =>{
 				return (
 					data.defvalue.value ? (<div class="click">
-						<div class="fs15">{data.defvalue.text}</div>
+						<div class="fs15" style={{color:data.defvalue.column==6||data.defvalue.column==0?'#F2353C':''}}>{data.defvalue.text}</div>
 						<div class="restWork">
 							<span style="display: inline-block;color:#F2353C">{data.defvalue.value.holidayTitle} 
 								<span style="margin-left:5px;color:#606266">{data.defvalue.value.remake}</span>
@@ -146,6 +160,11 @@ export default {
 						this.form.isWork = ''
 					}else{
 						this.form.isWork = Number(this.form.isWork)
+						if(this.form.isWork==2){
+							this.rest = true
+						}else if(this.form.isWork==1){
+							this.work = true
+						}
 					}
 					this.showHoliday = true
 				}else{
@@ -166,9 +185,14 @@ export default {
 			this.fetchTableData()
 		},
 		async handleFormSubmit(){
+			if(this.rest == false&&this.work == false){
+				this.form.isWork = ''
+			}
 			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
 			this.$message.success({message: mes})
 			this.showHoliday = false
+			this.rest = false
+			this.work = false
 			this.fetchTableData()
 		},
 		async fetchTableData() {
@@ -181,6 +205,15 @@ export default {
 };
 </script>
 <style>
+.el-table-calendar th[data-v-55be3324]:first-child,.el-table-calendar th[data-v-55be3324]:last-child{
+	color:  #F2353C
+}
+.el-table-calendar th[data-v-55be3324]{
+	background:  #F5F5F5
+}
+.el-date-table-calendar tbody tr th{
+	background:  #F5F5F5
+}
 .prev-month,.next-month{
 	height:90px;
 }
@@ -226,7 +259,7 @@ export default {
 	display:flex;justify-content:space-between;margin:15px 10px 0 8px;align-items: center;
 }
 .calType{
-	font-size:12px;width:36px;height:22px;line-height:22px;border-radius:4px;text-align:center;
+	font-size:12px;width:36px;height:22px;line-height:22px;border-radius:4px;text-align:center;font-weight:normal
 }
 .rest{
 	background-color:rgba(244,122,36,.2);
