@@ -18,25 +18,28 @@
 			v-el-drag-dialog
 			width="800px"
 			>
-			<el-form ref="form" :model="form" label-width="38px" >
+			<el-form ref="form" :model="form" label-width="60px" >
 				<el-row>
 					<el-col :span="12" :offset="6" style="color:#37474F;padding:20px 0 30px;font-weight:bold">
 						{{this.paramVal.date}}  {{this.paramVal.week}}
 					</el-col>
 					<el-col :span="12" :offset="6">
-							<el-checkbox  v-model="rest">休息</el-checkbox>
-							<br/>
-							<el-checkbox style="margin-top:20px" v-model="work">上班</el-checkbox>
+						<form-render :type="`select`" :field="{name:'日期设置',options:dataList}" clearable v-model="form.workType"/>
+						<!-- <el-checkbox  v-model="rest">休息</el-checkbox>
+						<br/>
+						<el-checkbox style="margin-top:20px" v-model="work">上班</el-checkbox> -->
 					</el-col>
-					<el-col :span="12" :offset="6" style="margin-top:20px">
+					<el-col :span="12" :offset="6" >
 						<form-render :type="`input`" :field="{name:'备注'}" v-model="form.remake"/>
 					</el-col>
 				</el-row>
 			</el-form>
-
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="handleHide">取 消</el-button>
-				<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+			<div slot="footer" class="dialog-footer dialog-multiple-footer">
+				<el-button type="text" style="color:#F2353C" @click="deleSet">取消设置</el-button>
+				<div>
+					<el-button @click="handleHide">取 消</el-button>
+					<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+				</div>
 			</div>
 		</el-dialog>
 				
@@ -54,7 +57,7 @@ export default {
 		return {
 			queryDialogFormVisible:true,
 			form:{
-				isWork:''
+				workType:''
 			},
 			showHoliday:false,
 			dateLap:dayjs().format('YYYY-MM'),
@@ -64,6 +67,7 @@ export default {
 			prop:'date', //对应日期字段名
 			rest: false,
 			work: false,
+			dataList:[]
 		};
 	},
 	components: {
@@ -73,19 +77,19 @@ export default {
 		rest(){
 			if(this.rest==true){
 				this.work = false
-				this.form.isWork = 2
+				this.form.workType = 2
 			}
 		},
 		work(){
 			if(this.work==true){
 				this.rest = false
-				this.form.isWork = 1
+				this.form.workType = 1
 			}
 		}
 	},
 	computed:{
 		disabled(){
-			if(this.form.isWork!==''&&this.form.isWork!==undefined){
+			if(this.form.workType!==''&&this.form.workType!==undefined){
                 return false
             }
             return true
@@ -101,8 +105,9 @@ export default {
 							<span style="display: inline-block;color:#F2353C">{data.defvalue.value.holidayTitle} 
 								<span style="margin-left:5px;color:#606266">{data.defvalue.value.remake}</span>
 							</span>
-							<span v-show={data.defvalue.value.isWork==2} class="calType rest">休</span>
-							<span v-show={data.defvalue.value.isWork==1} class="calType work">班</span>
+							<span v-show={data.defvalue.value.workType==2} class="calType rest">休</span>
+							<span v-show={data.defvalue.value.workType==1} class="calType work">班</span>
+							<span v-show={data.defvalue.value.workType==3} class="calType holid">假</span>
 						</div>
 					</div>) : <div class="fs15">{data.defvalue.text}</div>
 				)
@@ -126,12 +131,15 @@ export default {
 			}
 		},
 		close(){
-			this.form.isWork = ''
+			this.form.workType = ''
 			this.rest = false
 			this.work = false
 		},
 		add0(m){
 			return m<10?'0'+m:m 
+		},
+		async getList(){
+			this.dataList = (await api_common.resource('holidaymanager/holidaydatesettypelist').get()).map(o=>{return {label:o.name,value:o.value}})
 		},
 		async pick(date, mouseEvent, parmas) {
 			this.paramVal = parmas.value
@@ -157,16 +165,17 @@ export default {
 							}
 						})
 					}
+					this.getList()
 					this.form = (await this.$request.get('holidaymanager/holidaydatesetlist/'+this.paramVal.id))[0];
-					if(this.form.isWork==0){
-						this.form.isWork = ''
+					if(this.form.workType==''){
+						this.form.workType = ''
 					}else{
-						this.form.isWork = Number(this.form.isWork)
-						if(this.form.isWork==2){
-							this.rest = true
-						}else if(this.form.isWork==1){
-							this.work = true
-						}
+						this.form.workType = Number(this.form.workType)
+						// if(this.form.workType==2){
+						// 	this.rest = true
+						// }else if(this.form.workType==1){
+						// 	this.work = true
+						// }
 					}
 					this.showHoliday = true
 				}else{
@@ -177,17 +186,26 @@ export default {
 				}
 			}
 		},
+		async deleSet(){
+			this.form.workType = ''
+			this.form.remake = ''
+			this.form.workTypeTag = ''
+			this.showHoliday = false
+			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
+			this.$message.success({message: mes})
+			this.fetchTableData()
+		},
 		async handleHide(data){
-			this.form.isWork = ''
+			this.form.workType = ''
 			this.form.remake = ''
 			this.showHoliday = false
 			this.rest = false
 			this.work = false
 		},
 		async handleFormSubmit(){
-			if(this.rest == false&&this.work == false){
-				this.form.isWork = ''
-			}
+			// if(this.rest == false&&this.work == false){
+			// 	this.form.workType = ''
+			// }
 			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
 			this.$message.success({message: mes})
 			this.showHoliday = false
@@ -268,6 +286,10 @@ export default {
 .work{
 	background-color:rgba(31,211,97,.2);
 	color:#1FD361;
+}
+.holid{
+	color: #F2353C;
+	background-color:rgba(242,53,60,.2)
 }
 </style>
 

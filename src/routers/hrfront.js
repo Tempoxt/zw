@@ -252,5 +252,12 @@ export default [{
         meta: {
             title: '假日设定'
         }
+    },{
+        name: 'classset',
+        component: () =>
+            import ('@/views/attendanceSystem/shiftSetting'),
+        meta: {
+            title: '班次设定'
+        }
     },
 ]
