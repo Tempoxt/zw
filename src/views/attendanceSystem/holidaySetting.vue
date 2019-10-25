@@ -30,12 +30,12 @@
 						<el-checkbox style="margin-top:20px" v-model="work">上班</el-checkbox> -->
 					</el-col>
 					<el-col :span="12" :offset="6" >
-						<form-render :type="`input`" :field="{name:'备注'}" v-model="form.remake"/>
+						<form-render :type="`input`" :field="{name:'备注'}" maxlength="20" v-model="form.remake"/>
 					</el-col>
 				</el-row>
 			</el-form>
-			<div slot="footer" class="dialog-footer dialog-multiple-footer">
-				<el-button type="text" style="color:#F2353C" @click="deleSet">取消设置</el-button>
+			<div slot="footer" class="dialog-footer">
+				<!-- <el-button type="text" style="color:#F2353C" @click="deleSet">取消设置</el-button>  dialog-multiple-footer-->
 				<div>
 					<el-button @click="handleHide">取 消</el-button>
 					<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
@@ -102,12 +102,12 @@ export default {
 					data.defvalue.value ? (<div class="click">
 						<div class="fs15" style={{color:data.defvalue.column==6||data.defvalue.column==0?'#F2353C':''}}>{data.defvalue.text}</div>
 						<div class="restWork">
-							<span style="display: inline-block;color:#F2353C">{data.defvalue.value.holidayTitle} 
-								<span style="margin-left:5px;color:#606266">{data.defvalue.value.remake}</span>
-							</span>
-							<span v-show={data.defvalue.value.workType==2} class="calType rest">休</span>
-							<span v-show={data.defvalue.value.workType==1} class="calType work">班</span>
-							<span v-show={data.defvalue.value.workType==3} class="calType holid">假</span>
+							<div style="display:inline-block;color:#F2353C;line-height:15px;text-align:left;width:88%">{data.defvalue.value.holidayTitle} 
+								<span style="color:#606266;font-weight:normal">{data.defvalue.value.remake}</span>
+							</div>
+							<div v-show={data.defvalue.value.workType==2} class="calType rest">休</div>
+							<div v-show={data.defvalue.value.workType==1} class="calType work">班</div>
+							<div v-show={data.defvalue.value.workType==3} class="calType holid">假</div>
 						</div>
 					</div>) : <div class="fs15">{data.defvalue.text}</div>
 				)
@@ -223,6 +223,9 @@ export default {
 };
 </script>
 <style>
+.click{
+	height:90px;
+}
 .el-table-calendar th[data-v-55be3324]:first-child,.el-table-calendar th[data-v-55be3324]:last-child{
 	color:  #F2353C
 }
@@ -274,7 +277,7 @@ export default {
     font-size:16px;
 }
 .restWork{
-	display:flex;justify-content:space-between;margin:15px 10px 0 8px;align-items: center;
+	display:flex;justify-content:space-between;margin:23px 10px 0 8px;
 }
 .calType{
 	font-size:12px;width:36px;height:22px;line-height:22px;border-radius:4px;text-align:center;font-weight:normal

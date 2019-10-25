@@ -194,28 +194,52 @@
 					<p class="shift_time" style="color:#0BB2D4;margin:30px 0 25px 0px;font-weight:bold">班次规则</p>
 					<el-row class="position_left">
 						<el-col :span="11">
-							<el-form-item label="迟到时间在(分)内不计" label-width="180px">
+							<form-render label-width="180px" :type="`select`" :field="{name:'迟到时间在(分)内不计',options:[
+								{
+									value: 0,
+									label: '0'
+								},{
+									value: 3,
+									label: '3'
+								},{
+									value: 60,
+									label: '60'
+								}
+							]}" v-model="form.allowLateTime"/>
+							<!-- <el-form-item label="迟到时间在(分)内不计" label-width="180px">
 								<el-input-number v-model="form.allowLateTime" :min="0"></el-input-number>
-							</el-form-item>
+							</el-form-item> -->
 						</el-col>
 						<el-col :span="7" :offset="5">
-							<el-form-item label="早退时间在(分)内不计" label-width="180px">
+							<form-render label-width="180px" :type="`select`" :field="{name:'早退时间在(分)内不计',options:[
+								{
+									value: 0,
+									label: '0'
+								},{
+									value: 3,
+									label: '3'
+								},{
+									value: 60,
+									label: '60'
+								}
+							]}" v-model="form.allowEarlyTime"/>
+							<!-- <el-form-item label="早退时间在(分)内不计" label-width="180px">
 								<el-input-number v-model="form.allowEarlyTime" :min="0"></el-input-number>
-							</el-form-item>
+							</el-form-item> -->
 						</el-col>
 						<el-col :span="11">
 							<el-form-item label="迟到早退时间在(分)不计旷工" label-width="180px">
-								<el-input-number v-model="form.allowAbsent" :min="0"></el-input-number>
+								<el-input-number v-model="form.allowAbsent" :min="0" :disabled="true"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :span="7" :offset="5">
 							<el-form-item label="加班计算起始(分)" label-width="180px">
-								<el-input-number v-model="form.startOverTime" :min="0"></el-input-number>
+								<el-input-number v-model="form.startOverTime" :min="0" :disabled="true"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :span="11">
 							<el-form-item label="请假计算起始(分)" label-width="180px">
-								<el-input-number v-model="form.startLeaveTime" :min="0"></el-input-number>
+								<el-input-number v-model="form.startLeaveTime" :min="0" :disabled="true"></el-input-number>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -644,6 +668,9 @@ export default {
 };
 </script>
 <style lang="scss">
+.shift_form .el-select.el-select--small{
+	width: 130px!important;
+}
 .theme-0BB2D4 .shift_form .el-range-editor--small .el-range-separator{
 	margin-right:15px;
 	font-size:12px;

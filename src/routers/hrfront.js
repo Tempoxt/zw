@@ -259,5 +259,12 @@ export default [{
         meta: {
             title: '班次设定'
         }
+    },{
+        name: 'intelligentteam',
+        component: () =>
+            import ('@/views/attendanceSystem/intellTeam'),
+        meta: {
+            title: '智能班组'
+        }
     },
 ]

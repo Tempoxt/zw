@@ -23,6 +23,7 @@
         <el-select
 			v-model="input5"
 			multiple
+			@remove-tag="removeTag"
 			placeholder="请选择"
 			v-popover:popover
 			no-data-text
@@ -69,11 +70,13 @@ export default {
 			}
 		},
 		data(val) {
-			if(this.field.defaultName){
+			if(this.field.defaultName&&this.field.defaultName.length!=0){
 				this.all = this.field.defaultName
 				this.input5 = this.field.defaultName.map(o=>o.name)
+			}else{
+				console.log(this.input5)
 			}
-			var all = this.all.map(o=>o.id);
+			var all = this.all.map(o=>o.orgid);
 			var list = all.join(',')
 			this.data = list;
 			this.$parent.$emit("input", this.data);
@@ -81,7 +84,11 @@ export default {
 		value: {
 			immediate: true,
 			handler(val) {
-				this.data = this.value;
+				if(this.value!=''){
+					this.data = this.value;
+				}else{
+					this.input5 = []
+				}
 			}
 		},
   	},
@@ -103,14 +110,13 @@ export default {
 			console.log(data);
 		},
 		nodeSelect(data) {
-			// this.data = data[this.field.field_key || 'id'];
 			this.visible = false;
-			this.data = data.id;
+			this.data = data.orgid;
 			this.all.push(data)
 			this.input5.push(data.name)
 		},
 		async fetchData(){
-			this.data2 = [(await api_common.resource('org/branchdepartment').get({id:1}))];
+			this.data2 = await api_common.resource('org').get();
 		},
 	},
 	async created() {
