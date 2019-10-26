@@ -12,7 +12,8 @@
     :picker-options="{
       
     }"
-    value-format="HH:mm:ss"
+    format="HH:mm"
+    value-format="HH:mm"
     placeholder="选择时间">
   </el-time-picker>
   </el-form-item>
