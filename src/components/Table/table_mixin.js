@@ -38,6 +38,12 @@ export default {
         this.table_form.sortname = this.table_config.sortName
       }
       this.table_form.sorttype = this.table_config.sortOrder
+    },
+    table_data:{
+      handler(){
+        this.$refs.elTable&&this.$refs.elTable.doLayout()
+      },
+      deep:true
     }
   },
   data() {
