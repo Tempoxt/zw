@@ -20,6 +20,7 @@
   :style="`height:${height}`"
   >
      <el-table
+        ref="elTable"
     :data="table_data.filter(data=>['subCompanyAbbreviation','name','subCompanyLogo','web','number'].includes(data.name))"
      border
     :header-cell-style="headerCellStyle"> 

@@ -18,6 +18,7 @@
     
     <p style="font-size:18px;text-align:center;font-weight:bold;padding-bottom:20px;">爱心基金汇总</p>
     <el-table
+        ref="elTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border

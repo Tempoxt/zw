@@ -17,8 +17,8 @@
         </div>
     </table-header>
     <el-table
+      ref="elTable"
       @selection-change="handleChangeSelection"
-      :row-class-name="table_state_className"
       :data="table_data"
       border
       style="width: 100%"
@@ -64,6 +64,7 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			activeName:'first',
+			table_topHeight:286,
 		};
 	},
 	watch:{
@@ -88,6 +89,7 @@ export default {
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
+				this.$refs.elTable.doLayout()
 			}, 300);
 		},
 		async issue(){

@@ -25,6 +25,7 @@
     </div>
     </table-header>
     <el-table
+      ref="elTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border

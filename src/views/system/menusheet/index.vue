@@ -106,6 +106,7 @@
       :table_form.sync="table_form"
     ></table-header>
     <el-table
+    ref="elTableMenu"
       :data="table_tree_formatData"
       :row-style="table_tree_showRow"
       :row-class-name="table_state_className"
@@ -215,7 +216,7 @@ export default {
       console.log(this.table_data,'********')
       setTimeout(() => {
         this.table_loading = false;
-        
+        this.$refs.elTableMenu.doLayout()
       }, 300);
     }
   },

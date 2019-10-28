@@ -49,7 +49,8 @@
           <dateLap v-model="table_form.dateLap" @change="fetch"/>
         </div>
     </table-header>
-		<el-table
+	<el-table
+		ref="elTable"
 		@selection-change="handleChangeSelection"
 		:data="table_data"
 		border
@@ -69,14 +70,14 @@
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
 		<each-table-column :table_field="table_field" :template="template"/>
-    </el-table>
-     <table-pagination 
-        :total="table_form.total" 
-        :pagesize.sync="table_form.pagesize"
-        :currentpage.sync="table_form.currentpage"
-        @change="fetchTableData"
-        :table_config="table_config"
-    />
+	</el-table>
+	<table-pagination 
+		:total="table_form.total" 
+		:pagesize.sync="table_form.pagesize"
+		:currentpage.sync="table_form.currentpage"
+		@change="fetchTableData"
+		:table_config="table_config"
+	/>
   </ui-table>
 </template>
 <script>

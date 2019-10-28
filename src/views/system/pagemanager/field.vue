@@ -295,7 +295,7 @@ export default {
       this.table_data = rows
       setTimeout(async () => {
         this.table_loading = false;
-      
+        this.$refs.dragTable.doLayout()
       }, 300);
     }
   },

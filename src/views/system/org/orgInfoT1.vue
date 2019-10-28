@@ -16,6 +16,7 @@
     ></table-header>
 
      <el-table
+        ref="elTable"
     :data="table_data"
      border
     :header-cell-style="headerCellStyle"> 
