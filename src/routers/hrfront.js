@@ -266,5 +266,12 @@ export default [{
         meta: {
             title: '智能班组'
         }
+    },{
+        name: 'shiftManagement',
+        component: () =>
+            import ('@/views/attendanceSystem/temporary'),
+        meta: {
+            title: '调休管理'
+        }
     },
 ]

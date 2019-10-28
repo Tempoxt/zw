@@ -762,7 +762,7 @@
                     <el-row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
                         <el-col :span="12">
                             <span class="labelCon">学校：</span>
-                            <span class="labelCon promp">{{item.enduExp}}</span>
+                            <span class="labelCon promp">{{item.eduExp}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">起止时间：</span>
@@ -774,11 +774,11 @@
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">证书名称：</span>
-                            <span class="labelCon promp">{{item.enduCardName}}</span>
+                            <span class="labelCon promp">{{item.eduCardName}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">教育阶段：</span>
-                            <span class="labelCon promp">{{item.enduPeriod}}</span>
+                            <span class="labelCon promp">{{item.eduLevel__name}}</span>
                         </el-col>
                     </el-row>
                 </div>
@@ -1492,6 +1492,7 @@ export default {
         async remoteMethod(query){
             if (query !== '') {
                 this.introducerData = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
                     keyword:query,
                     pagesize:10
                 })
