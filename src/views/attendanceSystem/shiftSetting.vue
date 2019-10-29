@@ -346,9 +346,17 @@ export default {
 				signInEndTime2: '',//签到结束时间2
 				signOutStartTime2: '',//签退开始时间2
 				signOutEndTime2: '',//签退结束时间2
-				straight1_2:0,
-				straight2_3:0,
-				straight3_4:0
+				straight1_2: 0,
+				straight2_3: 0,
+				straight3_4: 0,
+				isExcuseOnDutyCard1: 0,
+				isExcuseOffDutyCard1: 0,
+				isExcuseOnDutyCard2: 0,
+				isExcuseOffDutyCard2: 0,
+				isExcuseOnDutyCard3: 0,
+				isExcuseOffDutyCard3: 0,
+				isExcuseOnDutyCard4: 0,
+				isExcuseOffDutyCard4: 0,
 			}
 		}
 		return {
@@ -415,22 +423,34 @@ export default {
 		'form.straight1_2'(){
 			if(this.form.straight1_2==1){
 				this.form.straight1_2 = true
+				this.form.isExcuseOffDutyCard1 = true
+				this.form.isExcuseOnDutyCard2 = true
 			}else{
 				this.form.straight1_2 = false
+				this.form.isExcuseOffDutyCard1 = false
+				this.form.isExcuseOnDutyCard2 = false
 			}
 		},
 		'form.straight2_3'(){
 			if(this.form.straight2_3==1){
 				this.form.straight2_3 = true
+				this.form.isExcuseOffDutyCard2 = true
+				this.form.isExcuseOnDutyCard3 = true
 			}else{
 				this.form.straight2_3 = false
+				this.form.isExcuseOffDutyCard2 = false
+				this.form.isExcuseOnDutyCard3 = false
 			}
 		},
 		'form.straight3_4'(){
 			if(this.form.straight3_4==1){
 				this.form.straight3_4 = true
+				this.form.isExcuseOffDutyCard3 = true
+				this.form.isExcuseOnDutyCard4 = true
 			}else{
 				this.form.straight3_4 = false
+				this.form.isExcuseOffDutyCard3 = false
+				this.form.isExcuseOnDutyCard4 = false
 			}
 		},
 		'form.isExcuseOnDutyCard1'(){
@@ -443,6 +463,12 @@ export default {
 		'form.isExcuseOnDutyCard2'(){
 			if(this.form.isExcuseOnDutyCard2==1){
 				this.form.isExcuseOnDutyCard2 = true
+				if(this.form.isExcuseOffDutyCard1==true){
+					this.form.straight1_2 = true
+				}
+				// else{
+				// 	this.form.straight1_2 = false
+				// }
 			}else{
 				this.form.isExcuseOnDutyCard2 = false
 			}
@@ -464,6 +490,12 @@ export default {
 		'form.isExcuseOffDutyCard1'(){
 			if(this.form.isExcuseOffDutyCard1==1){
 				this.form.isExcuseOffDutyCard1 = true
+				if(this.form.isExcuseOnDutyCard2==true){
+					this.form.straight1_2 = true
+				}
+				// else{
+				// 	this.form.straight1_2 = false
+				// }
 			}else{
 				this.form.isExcuseOffDutyCard1 = false
 			}

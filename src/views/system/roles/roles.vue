@@ -204,14 +204,13 @@ import { throttle } from 'core-decorators';
             })
         },
         async showDepart(){
-            this.orgData = await this.$request.get('org')
+            this.orgData = await this.$request.get('org/tree')
         },
         async orgClick({id}){
             
         },
         orgNodeCheck(data,{checkedKeys}){
             let orgList = [ data.orgid ]
-            const estate = this.$refs.tree.getCheckedKeys().indexOf(data.orgid) !==-1 ? 1: 0
             ;(function f(subs){
                 subs.forEach(item=>{
                     orgList.push(item.orgid)
@@ -220,9 +219,10 @@ import { throttle } from 'core-decorators';
                     f(subs.subs)
                 }
             })(data.subs||[])
-            orgList.forEach((menuid)=>{
-                api_roles_menu.update(this.roleid,{ menuid, estate })
-            })
+            this.depts = orgList.join(',')
+            console.log(this.depts,'dsdsds')
+            this.data = 5
+            this.update()
         },
         async fetchData(){
             //  const loading = this.$loading({
@@ -251,7 +251,8 @@ import { throttle } from 'core-decorators';
                 menuid:this.currentMenuId,
                 actions:this.checkedActions,
                 fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`)),
-                filterfield:this.filterfield
+                filterfield:this.filterfield,
+                depts:this.depts
             })
         },
         all(state){
@@ -286,7 +287,8 @@ import { throttle } from 'core-decorators';
             actions:[],
             data:0,
             filterfield:'',
-            orgDepart:''
+            orgDepart:'',
+            depts:''
         };
     }
   };

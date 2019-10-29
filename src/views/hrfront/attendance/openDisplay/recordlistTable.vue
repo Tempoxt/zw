@@ -68,6 +68,7 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
+            table_topHeight:230,
 			importUploadUrl:"/attendance/record",
 			timer:'',
 			url:'',
