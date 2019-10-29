@@ -46,7 +46,7 @@
 
 			</el-form>
 
-			<OrgSelect v-model="form.ids" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
+			<OrgSelect :result="result" v-model="form.ids" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -186,6 +186,7 @@ export default {
 				flag: 1,
 				remark: ''
 			},
+			result:[],
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -353,6 +354,7 @@ export default {
 			}, 300);
 		},
 		async add(){
+			this.result = []
 			this.dialogFormVisible = true
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()

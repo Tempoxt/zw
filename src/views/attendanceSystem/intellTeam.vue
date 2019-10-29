@@ -52,28 +52,47 @@
         v-el-drag-dialog
         >
         <!-- width:700px; -->
-        <div style="margin:30px auto;">
+        <div>
             <el-form ref="form" :model="form" label-width="100px" :rules="rules">
                 <el-row >
-                    <el-col :span="16" :offset="3">
+                    <el-col :span="17">
                         <form-render :type="`input`" prop="groupName" :field="{name:'班组名称'}" v-model="form.groupName" />
                     </el-col> 
-                    <el-col :span="16" :offset="3">
+                    <!-- <el-col :span="16" :offset="3">
                         <form-render :type="`input`" :field="{name:'班组说明'}" v-model="form.groupDesc" />
-                    </el-col> 
-                    <el-col :span="16" :offset="3">
+                    </el-col>  -->
+                    <!-- <el-col :span="16" :offset="3">
                         <form-render :type="`departMultiple`" prop="depart_id" :field="{name:'使用部门',defaultName:form.depart_info}" v-model="form.depart_id" />
-                    </el-col> 
-                    <el-col :span="16" :offset="3">
-                        <form-render :type="`select`" multiple prop="classes_id" :field="{name:'班次',options:classData}" v-model="form.classes_id" filterable/>
+                    </el-col>  -->
+                    <el-col :span="17">
+                        <!-- <form-render :type="`select`" multiple prop="classes_id" :field="{name:'使用班次',options:classData}" v-model="form.classes_id" filterable/> -->
+                        <el-form-item label="使用班次" prop="classes_id">
+                            <el-select v-model="form.classes_id"  multiple placeholder="请选择" filterable style="width:100%">
+                                <el-option
+                                    v-for="item in classData"
+                                    :key="item.id"
+                                    :label="item.className"
+                                    :value="item.id">
+                                    <span >{{item.className}}
+                                        <span class="mr5" v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}},</span>
+                                        <span class="mr5" v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">{{item.onDutyTime2}} - {{item.offDutyTime2}},</span>
+                                        <span class="mr5" v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">{{item.onDutyTime3}} - {{item.offDutyTime3}},</span>
+                                        <span v-if="item.onDutyTime4!=null&&item.offDutyTime4!=null">{{item.onDutyTime4}} - {{item.offDutyTime4}}</span>
+                                    </span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                     </el-col> 
                 </el-row>
             </el-form>
+            
+      	    <OrgSelect v-model="form.ids" :result="form.org_info" ref="OrgSelect" v-if="dialogFormVisible"/>
+
         </div>
 
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleFormSubmit" :disabled="disabeld">确 定</el-button>
+            <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -85,10 +104,12 @@ import { getTabs } from '@/api/common'
 import intellTeamTable from './intellTeamTable'
 import * as api_common from "@/api/common";
 const api_resource = api_common.resource("attendance/intelligentteam/list");
+import OrgSelect from '@/components/Org/OrgSelect'
 export default {
     mixins: [table_mixin],
     components:{
-        intellTeamTable
+        intellTeamTable,
+		OrgSelect
     },
      watch:{
         filterText(val) {
@@ -99,9 +120,9 @@ export default {
         const defaultForm  = function(){
             return {
                 groupName:'',
-                depart_id:'',
+                // depart_id:'',
                 classes_id:'',
-                depart_info:[]
+                org_info:[]
             }
         }
         return {
@@ -113,15 +134,16 @@ export default {
             form:{},
             defaultForm,
             classData:[],
+			result:[],
             rules:{
                 classes_id:[
-                    { required: true, message: '请输入', trigger: ['blur','change']},
-                ],
-                depart_id:[
                     { required: true, message: '请选择', trigger: ['blur','change']},
                 ],
+                // depart_id:[
+                //     { required: true, message: '请选择', trigger: ['blur','change']},
+                // ],
                 groupName:[
-                    { required: true, message: '请选择', trigger: ['blur','change']},
+                    { required: true, message: '请输入', trigger: ['blur','change']},
                 ],
             },
             changes:false
@@ -129,7 +151,7 @@ export default {
     },
     computed:{
         disabeld(){
-            if(this.form.groupName==''||this.form.depart_id==''||this.form.classes_id==''){
+            if(this.form.groupName==''||this.form.classes_id==''){
                 return true
             }else{
                 return false
@@ -148,7 +170,7 @@ export default {
             return data.groupName && data.groupName.indexOf(value) !== -1;
         },
         async getClass(){
-            this.classData = (await this.$request.get('/attendance/intelligentteam/classeslist')).map(o=>{return {label:o.className,value:o.id}})
+            this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
         },
         addCustom(){
             this.getClass()
@@ -161,9 +183,9 @@ export default {
         },
         async editCustom(data){
             this.dialogStatus = 'inse'
-            this.getClass()
-            this.dialogFormVisible = true;
             this.form = (await api_resource.find(data.id))[0]
+            this.classData = await this.$request.get('/attendance/intelligentteam/classeslist?team_id='+data.id)
+            this.dialogFormVisible = true;
         },
         async deleteCustom(data){
             this.$confirm('此操作将删除选中行, 是否继续?', '提示', {
@@ -182,24 +204,29 @@ export default {
         },
         async handleFormSubmit(){
             await this.form_validate()
+			this.form.ids = this.$refs.OrgSelect.getIdsResult()
             let form = Object.assign({},this.form)
+            delete form.org_info
             form.classes_id = this.form.classes_id.join(',')
-            if(this.dialogStatus=='insert'){
-                delete form.depart_info
-                let mess = await api_resource.create(form)
-                this.$message.success('创建成功');
-                this.changes = true
-                this.fetch()
-            }else{
-                try{
-                    await api_resource.update(form.id,form)
+            if(this.form.ids!==''){
+                if(this.dialogStatus=='insert'){
+                    let mess = await api_resource.create(form)
+                    this.$message.success('创建成功');
                     this.changes = true
                     this.fetch()
-                }catch(err){
-                    console.log(err)
+                }else{
+                    try{
+                        await api_resource.update(form.id,form)
+                        this.changes = true
+                        this.fetch()
+                    }catch(err){
+                        console.log(err)
+                    }
                 }
-            }
-            this.dialogFormVisible = false
+                this.dialogFormVisible = false
+            }else{
+				this.$message.error('请选择要添加的数据');
+			}
         },
         async fetch(){
             this.data2 = await this.$request.get('attendance/intelligentteam/list');
@@ -266,6 +293,9 @@ export default {
 }
 .ml15{
     margin-left: 15px;
+}
+.mr5{
+    margin-right:5px;
 }
 // .el-col{
 //     border-left: 1px solid #e8e8e8

@@ -104,7 +104,7 @@ import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
-	props:['id','url'],
+	props:['id','url','m'],
 	data() {
 		return {
 			loading: true,
@@ -141,13 +141,13 @@ export default {
 			this.fetchTableData()
 		},
 		async openDrawer(row,column,cell,event){
-			if(row.tiaoxsc1==event.target.innerText){
+			if(row.tiaoxsc1==event.target.innerText&&this.m==1){
 				this.openDrawers = true
 				this.shiftData = await this.$request.get('attendance/shiftovertime/'+row.requestId)
 			}
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(column.label == '补休工时'){
+			if(column.label == '补休工时'&&this.m==1){
 				return 'color:#0BB2D4;cursor:pointer'
 			}else{
 				return  ''

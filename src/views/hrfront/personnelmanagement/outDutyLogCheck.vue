@@ -47,7 +47,7 @@
           </el-form-item>
       </el-form>
 
-      <OrgSelect v-model="form.staffid" ref="OrgSelect" v-if="dialogFormVisible"/>
+      <OrgSelect :result="result" v-model="form.staffid" ref="OrgSelect" v-if="dialogFormVisible"/>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -130,6 +130,7 @@ export default {
                     { required: true, message: '请选择', trigger: 'blur' },
                 ],
             },
+			result:[],
         };
     },
     watch:{
@@ -160,6 +161,7 @@ export default {
             this.fetchTableData()
         },
         add(){
+			this.result = []
             this.form = {}
             this.dialogFormVisible = true
             this.getReasons()

@@ -39,7 +39,7 @@
 			</el-row>
 		</el-form>
 
-      	<OrgSelect v-model="form.ids" activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
+      	<OrgSelect :result="result" v-model="form.ids" activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="handleFormSubmit(0)">预 览</el-button>
@@ -127,6 +127,7 @@ export default {
 			dialogForm1Visible:false,
 			table_topHeight:276,
 			form:{},
+			result:[],
 			rule:{
 				startTime:[
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
@@ -174,6 +175,7 @@ export default {
 			this.fetchTableData();
 		},
 		add(){
+			this.result = []
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})

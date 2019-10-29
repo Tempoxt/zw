@@ -15,13 +15,13 @@
         <div v-if="view_activeName==='调休加班记录'">
             <temporaryTable url="attendance/shiftovertime" m="1" :id="orgid"/>
         </div>
-        <!-- <div v-if="view_activeName==='补休记录'">
-            <temporaryTable url="holidaymanager/leavemanager" m="2" :id="orgid"/>
+        <div v-if="view_activeName==='补休记录'">
+            <temporaryTable url="attendance/shift" m="2" :id="orgid"/>
         </div>
-        <div v-if="view_activeName==='结算记录'">
+        <!-- <div v-if="view_activeName==='结算记录'">
             <temporaryTable url="holidaymanager/leavemanager" m="3" :id="orgid"/>
-        </div>
-        <div v-if="view_activeName==='统计报表'">
+        </div> -->
+        <!-- <div v-if="view_activeName==='统计报表'">
             <temporaryTable url="holidaymanager/leavemanager" m="4" :id="orgid"/>
         </div> -->
     </el-col>

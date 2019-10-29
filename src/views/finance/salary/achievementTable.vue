@@ -32,7 +32,7 @@
 				</el-row>
 			</el-form>
 
-			<OrgSelect searchApi='/hrm/ahpartstaff' :month="this.form.month" filter_mark="achievement"  ref="OrgSelect" v-if="dialogFormVisible"/>
+			<OrgSelect :result="result" searchApi='/hrm/ahpartstaff' :month="this.form.month" filter_mark="achievement"  ref="OrgSelect" v-if="dialogFormVisible"/>
 
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -172,6 +172,7 @@ export default {
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			dialogForm1Visible:false,
+			result:[],
 			rules:{
 				month: [
 					{ required: true, message: '请选择', trigger: 'change' },
@@ -225,6 +226,7 @@ export default {
             this.fetchTableData()
         },
 		add(){
+			this.result = []
 			this.form = {}
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()

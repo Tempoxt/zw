@@ -373,22 +373,22 @@ export default {
 				onDutyTime1:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
-				onDutyTime2:[
-					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
-				],
 				offDutyTime1:[
-					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
-				],
-				offDutyTime2:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
 				signInStartTime1:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
-				signInStartTime2:[
+				signOutStartTime1:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
-				signOutStartTime1:[
+				onDutyTime2:[
+					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
+				],
+				offDutyTime2:[
+					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
+				],
+				signInStartTime2:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
 				signOutStartTime2:[
@@ -513,12 +513,30 @@ export default {
 			this.dialogFormVisible = true
 		},
 		async edit(){
-			this.timeSolt1 = true
-			this.timeSolt2 = true
 			this.form = this.defaultForm()
 			this.dialogFormVisible = true 
 			let row = this.table_selectedRows[0];
-            this.form = (await api_resource.find(row.id))[0];
+			this.form = (await api_resource.find(row.id))[0];
+			if(this.form.onDutyTime1!=null&&this.form.offDutyTime1!=null){
+				this.timeSolt1 = true
+			}else{
+				this.timeSolt1 = false
+			}
+			if(this.form.onDutyTime2!=null&&this.form.offDutyTime2!=null){
+				this.timeSolt2 = true
+			}else{
+				this.timeSolt2 = false
+			}
+			if(this.form.onDutyTime3!=null&&this.form.offDutyTime3!=null){
+				this.timeSolt3 = true
+			}else{
+				this.timeSolt3 = false
+			}
+			if(this.form.onDutyTime4!=null&&this.form.offDutyTime4!=null){
+				this.timeSolt4 = true
+			}else{
+				this.timeSolt4 = false
+			}
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
@@ -594,6 +612,7 @@ export default {
 						delete form.isExcuseOnDutyCard4
 						delete form.isExcuseOffDutyCard4
 						delete form.straight3_4
+						delete form.restTime4
 						if(this.isInsert){
                             const mes = await api_resource.create(form)
                             this.$message.success({ message: mes})
@@ -621,6 +640,7 @@ export default {
 						delete form.isExcuseOnDutyCard3
 						delete form.isExcuseOffDutyCard3
 						delete form.straight2_3
+						delete form.restTime3
                         if(this.isInsert){
                             const mes = await api_resource.create(form)
                             this.$message.success({ message: mes})
@@ -665,6 +685,7 @@ export default {
 					delete form.isExcuseOnDutyCard3
 					delete form.isExcuseOffDutyCard3
 					delete form.straight2_3
+					delete form.restTime3
 				}
 				if(this.timeSolt4==false){
 					delete form.onDutyTime4
@@ -676,6 +697,7 @@ export default {
 					delete form.isExcuseOnDutyCard4
 					delete form.isExcuseOffDutyCard4
 					delete form.straight3_4
+					delete form.restTime4
 				}
 				if(this.isInsert){
 					try{

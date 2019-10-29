@@ -29,7 +29,7 @@
 			</el-row>
 		</el-form>
 
-		<OrgSelect v-model="form.ids" ref="OrgSelect" v-if="dialogFormVisible"/>
+		<OrgSelect v-model="form.ids" :result="result" ref="OrgSelect" v-if="dialogFormVisible"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -156,6 +156,7 @@ export default {
 			},
 			form1:{},
 			areaDa:[],
+			result:[],
 			rules:{
 				transferDate:[
 					{ required: true, message: '请选择日期', trigger: 'blur' },
@@ -219,6 +220,7 @@ export default {
 		},
 		
 		add(){
+			this.result = []
 			this.form = {
 				team:'',
 				workGroup:'',

@@ -10,6 +10,7 @@
       v-bind="$parent.$attrs"
       v-on="$parent.$listeners"
       style="width:100%"
+      format="yyyy-MM-dd HH:mm"
       value-format="yyyy-MM-dd HH:mm"
       :placeholder="$parent.$attrs.placeholder||'选择日期时间'">
     </el-date-picker>
