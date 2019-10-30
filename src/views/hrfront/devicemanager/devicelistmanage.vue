@@ -2,7 +2,7 @@
 <div>
     <el-row class="h-full">
         <el-col :span="4" class="h-full">
-            <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
+            <div class=" h-full">
                 <div style="padding:20px" class="h-full">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
@@ -37,6 +37,7 @@
                         </el-tree>
                     </el-scrollbar>
                 </div>
+            </div>
         </el-col>
         <el-col :span="20">
             <devicelistTable :id="id"/>
