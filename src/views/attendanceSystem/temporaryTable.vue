@@ -4,54 +4,51 @@
   :table_query.sync="table_form.query"
   @query="querySubmit"
   >
-  	<!-- 员工年假明细 -->
+  	<!-- 补休加班明细 -->
 	<div>
-		<Drawer title="员工年假明细" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+		<Drawer title="补休加班明细" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
 			<div style="background: #f8f8f8;">
 				<el-row :gutter="20">
 					<el-col :span="3" class="imgFlex">
 						<img src="@/assets/avatar.png" alt="" srcset="" class="imgAvatar">
 					</el-col>
 					<el-col :span="6" class="userInfo">
-						<p>姓名: {{info.chineseName}}</p>
-						<p>工号: {{info.employeeCode}}</p>
+						<p>姓名: {{shiftData.chineseName}}</p>
+						<p>工号: {{shiftData.employeeCode}}</p>
 					</el-col>
 					<el-col :span="6" class="userInfo">
-						<p>部门: {{info.department_name}}</p>
-						<p>职位: {{info.job_name}}</p>
+						<p>部门: {{shiftData.department}}</p>
+						<p>职位: {{shiftData.jobtitle}}</p>
 					</el-col>
 					<el-col :span="6" class="userInfo">
 						<p>&nbsp;</p>
-						<p>入职日期: {{info.onDutyTime}}</p>
+						<p>入职日期: {{shiftData.ondutytime}}</p>
 					</el-col>
 				</el-row>
 			</div>
-			<!-- <span style="font-size:14px;font-weight:normal">{{item.desc}}</span> -->
-			<div v-for="(item,index) in holidayData" :key="index" v-show="item.workAge!=0" class="infoDetail">
-				<p class="info">第{{item.workAge}}年     </p>
-				<p class="mt1 time">年假年度: {{item.yearStartDate}} ~ {{item.yearEndDate}}</p>
+			<div class="infoDetail">
+				<p class="info">攒调休加班明细</p>
 				<el-row :gutter="20" class="fontStyle mt10 ">
-					<el-col :span="7">年假天数: {{item.yearDays}}</el-col>
-					<el-col :span="7">已休天数: {{item.usedDay}}</el-col>
-					<el-col :span="7">未休天数: {{item.remainDay}}</el-col>
+					<el-col :span="8">开始时间: {{shiftData.kaissj}}</el-col>
+					<el-col :span="8">结束时间: {{shiftData.jiessj}}</el-col>
+					<el-col :span="8">加班工时: {{shiftData.tiaoxks}}</el-col>
 				</el-row>
-				<el-collapse v-if="item.detail.length!=0" v-model="activeNames" @change="handleChange">
-					<el-collapse-item title="休假明细" :name="String(index)">
+				<el-collapse  v-model="activeNames" @change="handleChange" v-if="shiftData.shiftDetail&&shiftData.shiftDetail.length!=0">
+					<el-collapse-item title="补休明细" name="0">
 						<div style="margin-left:70px">
 								<el-timeline :reverse="reverse">
 								<el-timeline-item
-								v-for="(activity, idx) in item.detail"
+								v-for="(activity, idx) in shiftData.shiftDetail"
 								:key="idx">
-									<span style="color:#808080">{{activity.startDate}}  {{activity.startTime}} ~ {{activity.endDate}}  {{activity.endTime}}
-										<span style="margin-left:15px">{{activity.days}}天</span>
+									<span style="color:#808080">{{activity.shij1}} ~ {{activity.shij2}}
+										<span style="margin-left:15px">{{activity.tiaoxsc1}}</span>
 									</span>
 								</el-timeline-item>
 							</el-timeline>
 						</div>
 					</el-collapse-item>
 				</el-collapse>
-
-				<div class="divider"></div>
+				<!-- <div class="divider"></div> -->
 			</div>
 		</Drawer>
 	</div>
@@ -64,7 +61,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px">
-			<dateLap :disabled="true" type="3" v-model="table_form.dateLap" @change="fetch"/>
+			<dateLap type="2" v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
     <el-table
@@ -103,28 +100,36 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("holidaymanager/holidaystat");
+// const api_resource = api_common.resource("holidaymanager/holidaystat");
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
-	props:['id'],
+	props:['id','url','m'],
 	data() {
 		return {
 			loading: true,
-			api_resource,
+			api_resource:api_common.resource(this.url),
 			queryDialogFormVisible:true,
+			table_topHeight:276,
 			visible:false,
-			holidayData: [],
+			shiftData: {},
 			openDrawers: false,
 			activeNames: ['0'],
 			reverse: true,
-			info:{}
 		};
 	},
 	watch:{
 		id(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
+		},
+		url(){
+            this.api_resource = api_common.resource(this.url)
+			delete this.table_form.keyword
+			this.table_form.currentpage = 1
+			this.table_form.query.query= []
+			this.fetchMenu()
+			// this.fetchTableData();
 		},
 	},
 	methods: {
@@ -136,15 +141,14 @@ export default {
 			this.fetchTableData()
 		},
 		async openDrawer(row,column,cell,event){
-			if(row.usedDay==event.target.innerHTML){
+			if(row.tiaoxsc1==event.target.innerText&&this.m==1){
 				this.openDrawers = true
-				this.holidayData = await this.$request.get('holidaymanager/holidaystat/'+row.employeeCode)
-				this.info = this.holidayData[0]
+				this.shiftData = await this.$request.get('attendance/shiftovertime/'+row.requestId)
 			}
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(column.label == '已休天数'){
-				return 'color:#1FD361;cursor:pointer'
+			if(column.label == '补休工时'&&this.m==1){
+				return 'color:#0BB2D4;cursor:pointer'
 			}else{
 				return  ''
 			}
@@ -155,21 +159,24 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			const {rows , total }= await api_resource.get(this.table_form);
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
 		},
+		async fetchMenu(){
+			const { field, action,table } = await api_common.menuInit(this.url);
+			this.table_field = field;
+			this.table_actions = action;
+			this.table_config = table
+			this.fetchTableData()
+		}
 	},
 	async created() {
-		const { field, action,table } = await api_common.menuInit("holidaymanager/holidaystat");
-		this.table_field = field;
-		this.table_actions = action;
-		this.table_config = table
-		this.table_form.dateLap = dayjs().format('YYYY')
-		this.fetchTableData();
+		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		await this.fetchMenu()
 	}
 };
 </script>

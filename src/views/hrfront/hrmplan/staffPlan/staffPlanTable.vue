@@ -72,7 +72,8 @@
 				<dateLap v-model="table_form.dateLap" @change="fetch"/>
 			</div>
 		</table-header>
-		<el-table
+		<el-table 
+        	ref="elTable"
 			@selection-change="handleChangeSelection"
 			:data="table_data"
 			border

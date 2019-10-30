@@ -317,6 +317,7 @@
           </div>
     </table-header>
     <el-table
+      ref="elTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
@@ -367,7 +368,7 @@ export default {
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_topHeight:296,
+      table_topHeight:276,
       profileData:{},
       openDrawers: false,
       dialogForm3Visible:false,

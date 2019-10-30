@@ -57,6 +57,7 @@
       :table_form.sync="table_form"
     ></table-header>
     <el-table
+        ref="elTable"
       :data="table_tree_formatData"
       :row-style="table_tree_showRow"
       :row-class-name="table_state_className"

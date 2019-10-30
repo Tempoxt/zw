@@ -21,6 +21,7 @@
       <!--<span>输出日期：2019年01月05日</span>-->
     </div>
     <el-table
+        ref="elTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border

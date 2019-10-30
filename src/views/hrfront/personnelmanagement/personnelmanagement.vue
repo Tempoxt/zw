@@ -10,6 +10,7 @@
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
+       
             >
             <div>
                 <el-form ref="form" :model="form" label-width="100px" v-loading="loading2" :rules="rules">
@@ -369,8 +370,7 @@
                                     <span>编辑</span>
                                 </el-button> -->
 
-                                <el-table 
-                                    @selection-change="handleChangeSelect"
+                                <el-table
                                     :data="contractData"
                                     height="350px"
                                     :header-cell-style="headerStyle"
@@ -465,20 +465,66 @@
                             </div>
                         </el-tab-pane>
 
+                        <el-tab-pane label="教育经历" v-if="!isInsert" name="seventh">
+                            <div class="line-boxs">
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="handleEducation">
+                                    <i class="icon iconfont icon-tianjia"></i>
+                                    <span>添加</span>
+                                </el-button>
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="editEducation" :disabled="!isdisEdu">
+                                    <i class="icon iconfont icon-bianji"></i>
+                                    <span>编辑</span>
+                                </el-button>
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="deleteEducation" :disabled="!disEdu">
+                                    <i class="icon iconfont icon-lajitong"></i>
+                                    <span>删除</span>
+                                </el-button>
+
+                                <el-table 
+                                    @selection-change="handleEducationSelect"
+                                    :data="educationData"
+                                    height="350px"
+                                    :header-cell-style="headerStyle"
+                                    style="width: 100%;margin-top:20px;">
+                                    <el-table-column 
+                                        type="selection" 
+                                        width="60" 
+                                        class-name="table-column-disabled"
+                                        :selectable="table_disable_edu"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="eduExp"
+                                        label="学校">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="major"
+                                        label="所学专业">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="eduLevel__name"
+                                        label="教育阶段">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="eduStartTime"
+                                        label="起止时间" width="130">
+                                        <template slot-scope="scope">
+                                            <span :title="scope.row.eduStartTime+'-'+scope.row.eduEndTime">{{scope.row.eduStartTime}} - {{scope.row.eduEndTime}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="eduCardName"
+                                        label="证书名称">
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </el-tab-pane>
+
                     </el-tabs>
                 </el-form>
             </div>
 
-            <div slot="footer" class="dialog-footer dialog-multiple-footer">
-                <div>
-                    <el-switch
-                        v-if="isInsert"
-                        v-model="form_multiple"
-                        active-text="连续添加"
-                        inactive-text="">
-                        
-                    </el-switch>
-                </div>
+            <div slot="footer" class="dialog-footer">
                 <div>
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
@@ -716,7 +762,7 @@
                     <el-row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
                         <el-col :span="12">
                             <span class="labelCon">学校：</span>
-                            <span class="labelCon promp">{{item.enduExp}}</span>
+                            <span class="labelCon promp">{{item.eduExp}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">起止时间：</span>
@@ -728,11 +774,11 @@
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">证书名称：</span>
-                            <span class="labelCon promp">{{item.enduCardName}}</span>
+                            <span class="labelCon promp">{{item.eduCardName}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">教育阶段：</span>
-                            <span class="labelCon promp">{{item.enduPeriod}}</span>
+                            <span class="labelCon promp">{{item.eduLevel__name}}</span>
                         </el-col>
                     </el-row>
                 </div>
@@ -890,20 +936,79 @@
             </div>
         </el-dialog>
 
-        
-    <el-dialog
-      :visible.sync="dialogForm3Visible"
-      class="public-dialog preview"
-      v-el-drag-dialog
-      @close="closeBigImg"
-      >
-        <el-carousel trigger="click" :autoplay="false" :initial-index="index">
-            <el-carousel-item v-for="item in list" :key="item">
-               <img style="width:100%;height:100%" :src="baseUrl+item">
-               <!-- <img style="width:100%;height:100%" src="http://e.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9eac1754f45df39b6003bf3b396.jpg"> -->
-            </el-carousel-item>
-        </el-carousel>
-    </el-dialog>
+        <!-- 人员档案 教育经历添加 编辑 弹框 -->
+        <el-dialog
+            :title="dialogEducation==='inser'?'添加教育经历':'编辑教育经历'"
+            :visible.sync="dialogEducationFormVisible"
+            class="public-dialog"
+            v-el-drag-dialog
+            >
+            <div>
+                <el-form :model="education" label-width="100px" v-loading="loading2">
+                    <div class="line-boxs">
+                        <el-row :gutter="40">
+                            <el-col :span="12">
+                                <el-row :gutter="0">
+                                    <el-col :span="24">
+                                        <form-render :type="`input`" :field="{name:'学校'}" v-model="education.eduExp"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render :type="`input`" :field="{name:'所学专业'}" v-model="education.major"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                    <form-render :type="`select`" :field="{name:'教育阶段',options:eduType}" v-model="education.eduLevel"/>
+                                    </el-col>   
+                                </el-row>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-row :gutter="0">
+                                    <el-col :span="24">
+                                        <el-form-item label="起止时间" class="date_range" >
+                                            <el-date-picker
+                                                format="yyyy-MM-dd"
+                                                value-format="yyyy-MM-dd"
+                                                width="100%"
+                                                v-model="education.eduTime"
+                                                type="daterange"
+                                                range-separator="至"
+                                                start-placeholder="开始日期"
+                                                end-placeholder="结束日期">
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render type="input" :field="{name:'证书名称'}" v-model="education.eduCardName"/>
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer dialog-multiple-footer">
+                <div></div>
+                <div>
+                    <el-button @click="dialogEducationFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleEducationFormSubmit">确 定</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
+
+        <!-- 预览图片弹框 -->
+        <el-dialog
+            :visible.sync="dialogForm3Visible"
+            class="public-dialog preview"
+            v-el-drag-dialog
+            @close="closeBigImg"
+            >
+            <el-carousel trigger="click" :autoplay="false" :initial-index="index">
+                <el-carousel-item v-for="item in list" :key="item">
+                <img style="width:100%;height:100%" :src="baseUrl+item">
+                </el-carousel-item>
+            </el-carousel>
+        </el-dialog>
 
         <table-header
             :table_actions="table_actions"
@@ -911,16 +1016,14 @@
             @action="handleAction"
             :table_form.sync="table_form"
             :table_column="table_field"
-        >   
-        
+            >
             <div style="padding-left:10px">
-              
-                    <DateLapRange v-model="table_form.dateLap" @change="fetch"/>
-
+                <DateLapRange v-model="table_form.dateLap" @change="fetch"/>
             <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
           </div>
         </table-header>
         <el-table
+            ref="elTable"
             @selection-change="handleChangeSelection"
             :data="table_data"
             border
@@ -1083,12 +1186,17 @@ export default {
             profileData:{},
             dialogContractFormVisible:false,
             dialogCardFormVisible:false,
+            dialogEducationFormVisible:false,
+            dialogEducation:'inser',
+            educationData:[],
+            education:{},
             contract:{},
             maskBtn:false,	
             bigImg:'',
             contractData:[],
             contrTy:[],
             selections:[],
+            seleEducation:[],
             dialogContract:'inser',
             dialogCard:'inser',
             teamData:{},
@@ -1104,7 +1212,8 @@ export default {
             checkbox:'',
             activeName:'first',
             alledulevels:[],
-            Aledulevels:[]
+            Aledulevels:[],
+            eduType:[]
             // pickerOptions1: {:picker-options="pickerOptions1"
             //     disabledDate(time) {
             //         return time.getTime() > Date.now();
@@ -1145,6 +1254,20 @@ export default {
             }
             return false
         },
+        isdisEdu(){
+            let len = this.seleEducation.length;
+            if(len!==1){
+                return false
+            }
+            return true
+        },
+        disEdu() {
+            let len = this.seleEducation.length;
+            if(len>0){
+                return true
+            }
+            return false
+        },
         disableUp(){
             if(this.cardPerform.cardType===''||this.cardPerform.image.length===0){
                 return true
@@ -1172,8 +1295,19 @@ export default {
         table_disable(row){
             return !row.lockstate
         },
+        table_disable_edu(row){
+            return !row.lockstate
+        },
         handleChangeSelect(val) {
             this.selections = val
+        },
+        handleEducationSelect(val) {
+            this.seleEducation = val
+        },
+        /**证件管理 */
+        //获取证件类型
+        async getCardInfo(){
+            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         handleCard(){
             this.cardPerform = {
@@ -1199,18 +1333,48 @@ export default {
             this.checkList = []
         },
         async handleCardFormSubmit(){
-            // await this.form_validate()
             this.cardPerform.emID = this.form.id;
             let cardPerform = Object.assign({},this.cardPerform)
             await this.$request.post('/hrm/staff/card',this.cardPerform)
             this.dialogCardFormVisible = false
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
         },
-        
-        //获取证件类型
-        async getCardInfo(){
-            this.cardType = (await api_common.resource('basicdata/cardtypes').get()).map(o=>{return {label:o.name,value:o.id}})
+        /**教育经历 */
+        async getEdu(){
+            this.eduType = (await api_common.resource('hrm/edurecode/edulevel').get()).map(o=>{return {label:o.name,value:o.id}})
         },
+        handleEducation(){
+            this.education = {}
+            this.dialogEducation = "inser"
+            this.getEdu()
+            this.dialogEducationFormVisible = true
+        },
+        async editEducation(){
+            let row = this.seleEducation[0];
+            this.dialogEducation = 'inse'
+            this.dialogEducationFormVisible = true
+            this.getEdu()
+            this.education = (await this.$request.get("/hrm/edurecode/"+row.id))[0]
+        },
+        async deleteEducation(){
+            let rows = this.seleEducation.map(row=>row.id)
+            await this.$request.get('/hrm/edurecode/bluk?ids='+rows.join(','))
+            this.educationData = await api_common.resource("hrm/edurecode").get({emID:this.staffId});
+        },
+        async handleEducationFormSubmit(){
+            let row = this.seleEducation[0];
+            this.education.emID = this.staffId;
+            let eduInfo = Object.assign({},this.education)
+            if(this.dialogEducation=="inser"){
+                await this.$request.post('/hrm/edurecode',eduInfo)
+            }else{
+                await this.$request.put('/hrm/edurecode/'+row.id,eduInfo)
+            }
+            this.dialogEducationFormVisible = false
+            this.educationData = await api_common.resource("hrm/edurecode").get({emID:this.staffId});
+        },
+        
+        /**合同管理 */
         handleContract(){
             this.contract = {
                 contractName: '劳动合同'
@@ -1239,10 +1403,14 @@ export default {
             this.dialogContractFormVisible = false
             this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
         },
+
+        /**表格头部样式 */
         headerStyle(row,rowIndex,column,columnIndex){
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
         },
-        previewImg(img){//图片预览功能
+
+        /**图片预览功能 */
+        previewImg(img){
             let allImgs = this.profileData.cardRecords.map(o=>o.cardConnects)||[]
             this.list = []
             allImgs.forEach(o=>{
@@ -1258,6 +1426,8 @@ export default {
             this.index = ""
             this.list = []
         },
+        
+        /**获取右侧弹框数据 */
         async getDialog(){
             this.form = await api_common.resource('hrm/staff').find(this.staffId)
             this.dialogFormVisible = true
@@ -1315,8 +1485,6 @@ export default {
         },
         async tabClick(v){
             this.tab_label  = v.label
- 
-            // console.log(v,'v')
         },
         selectNation(){
             this.form.nation = this.nationData.find(o=>o.label===this.form._nation+'族').value
@@ -1324,6 +1492,7 @@ export default {
         async remoteMethod(query){
             if (query !== '') {
                 this.introducerData = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
                     keyword:query,
                     pagesize:10
                 })
@@ -1370,6 +1539,7 @@ export default {
             }
             this.getSelectOption()
             this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
+            this.educationData = await api_common.resource("hrm/edurecode").get({emID:this.staffId});
             this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
             this.connect = await api_common.resource('hrm/staff/contact').find(this.staffId)
             this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
@@ -1386,21 +1556,14 @@ export default {
             if(this.isInsert){
                 try{
                     await api_common.resource('hrm/staff').create(form)
-                    // this.$message.success('添加成功');
                     this.dialogFormVisible = false
                     this.fetchTableData()
                 }catch(err){
                     this.$message.error(err.field[0]);
                 }
             }else{
-                // if(this.tab_label ==='联系方式'){
-                //     await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
-                //     this.$message.success('修改成功');
-                // }else{
-                    await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
-                    await api_common.resource('hrm/staff').update(form.id,form)
-                    // await api_resource.update(form.id,form)
-                // }
+                await api_common.resource('hrm/staff/contact').update(form.id,this.connect,{alert:false})
+                await api_common.resource('hrm/staff').update(form.id,form)
                 this.fetchProfileData()
                 this.dialogFormVisible = false
                 this.fetchTableData()

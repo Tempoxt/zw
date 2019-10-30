@@ -25,7 +25,7 @@
 			</el-row>
 		</el-form>
 
-      	<OrgSelect searchApi='/hrm/hotpartstaff' filter_mark="hotAllowance" v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
+      	<OrgSelect :result="result" searchApi='/hrm/hotpartstaff' filter_mark="hotAllowance" v-model="form3.ids" ref="OrgSelect" v-if="dialogForm3Visible"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm3Visible = false">取 消</el-button>
@@ -123,6 +123,7 @@
 			</div>
     </table-header>
     <el-table
+        ref="elTable"
 		@selection-change="handleChangeSelection"
 		:data="table_data"
 		border
@@ -187,6 +188,7 @@ export default {
 			dialogForm3Visible:false,
 			form2:{},
 			form3:{},
+			result:[],
 			rule:{
 				stayStart:[
 					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
@@ -236,6 +238,7 @@ export default {
 			}
 		},
 		add(){
+			this.result = []
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})

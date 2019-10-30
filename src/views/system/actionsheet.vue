@@ -62,6 +62,7 @@
             
             ></table-header>
             <el-table 
+                     
                 @selection-change="handleChangeSelection"
                 :data="table_data"
                 border 

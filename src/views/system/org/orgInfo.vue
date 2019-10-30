@@ -15,6 +15,7 @@
     ></table-header>
 
      <el-table
+        ref="elTable"
     :data="[{a:'简称',b:'哈哈哈'},{a:'简称',b:'哈哈哈'}]"
      border
     :header-cell-style="headerCellStyle"> 

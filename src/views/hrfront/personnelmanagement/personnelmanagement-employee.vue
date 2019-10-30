@@ -66,6 +66,9 @@ export default {
     }
 </style>
 <style>
+.theme-0BB2D4 .date_range .el-range-editor--small.el-input__inner{
+    width: 100%;
+}
     .drawerInfo .ivu-drawer-body{
         padding:0;
     }

@@ -12,7 +12,7 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px">
+		<div style="padding-left:10px" v-if="this.m==2">
 			<el-select v-model="status" placeholder="请选择" @change="changeStatus" style="width:140px">
 				<el-option
 					v-for="item in optionDatas"
@@ -27,6 +27,7 @@
 		</div>
     </table-header>
     <el-table
+        ref="elTable"
 		@selection-change="handleChangeSelection"
 		:data="table_data"
 		border
@@ -59,7 +60,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("holidaymanager/leavemanager");
+// const api_resource = api_common.resource("holidaymanager/leavemanager");
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
@@ -67,14 +68,11 @@ export default {
 	data() {
 		return {
 			loading: true,
-			api_resource,
+			api_resource:api_common.resource(this.url),
 			table_topHeight:276,
 			queryDialogFormVisible:true,
 			optionDatas: [],
 			status:'全部',
-			// table_form:{
-			// 	leaveType: '全部'
-			// }
 		};
 	},
 	watch:{
@@ -83,15 +81,12 @@ export default {
 			this.fetchTableData()
 		},
 		url(){
+            this.api_resource = api_common.resource(this.url)
 			delete this.table_form.keyword
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()
-			// if(this.url=='commission/monthDetail'){
-			// 	this.api_resource = api_common.resource("commission/valueIncrease");
-			// }else if(this.url=='commission/quarterstat'){
-			// 	this.api_resource = api_common.resource("commission/seasonValueIncrease");
-			// }
+			this.fetchTableData();
 		}
 	},
 	methods: {
@@ -104,7 +99,7 @@ export default {
 			this.fetchTableData()
 		},
 		async reset(){
-			const mes = await this.$request.post('holidaymanager/leavemanager/reset',{dateLap:this.table_form.dateLap})
+			const mes = await this.$request.post(this.url+'/reset',{dateLap:this.table_form.dateLap})
 			this.$message.success(mes)
 			this.fetchTableData();
 		},
@@ -113,9 +108,17 @@ export default {
 				return
 			}
 			this.table_loading = true;
-			this.table_form.org_id = this.id
-			this.table_form.leaveType = this.status
-			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_form.orgid = this.id
+			
+			if(this.m==2){
+				console.log(this.m)
+				this.optionDatas = (await api_common.resource('holidaymanager/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
+				this.optionDatas.unshift({value:'全部',label:'全部'})
+				this.table_form.leaveType = this.status
+			}else{
+				delete this.table_form.leaveType 
+			}
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
@@ -127,11 +130,6 @@ export default {
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table
-			if(this.m==2){
-				this.optionDatas = (await api_common.resource('holidaymanager/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
-				this.optionDatas.unshift({value:'全部',label:'全部'})
-				this.fetchTableData();
-			}
 		}
 	},
 	async created() {

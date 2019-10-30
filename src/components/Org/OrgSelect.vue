@@ -70,7 +70,9 @@ export default {
         },
         month:{},
 		getApi:{},
-		searchApi:{}
+        searchApi:{},
+        result:Array
+        // result: []
 	},
     components:{
         Org,
@@ -82,12 +84,8 @@ export default {
             activeName:'first',
             select:{
                 disabled:true,
-                // seleSim:true,
-                // leaf:false
             },
             resultSelect:{},
-            result:[],
-            sele:'false'
         }
     },
     methods:{
@@ -108,7 +106,7 @@ export default {
             this.select = data
         },
         changeResult(data){
-            this.resultSelect= data
+            this.resultSelect = data
         },
         eachNode(nodes,res){
             nodes.forEach(node=>{
@@ -138,20 +136,28 @@ export default {
             }
         },
         remove(n){
-            if(n==2){
-                var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
-                this.eachNode([node],false)
+            if(this.resultSelect.disabled==undefined){
+                this.result.forEach((o,i)=>{
+                    if(o.id===this.resultSelect.id){
+                        this.result.splice(i,1)
+                    }
+                })
             }else{
-                var node = this.$refs.sameDepartment.$refs.treeSame.getNode(this.resultSelect.id)
-                this.eachNode([node],false)
-            }
-            this.$set(this.resultSelect,'disabled',false)
-            this.result.forEach((o,i)=>{
-                if(o.id===this.resultSelect.id){
-                    this.result.splice(i,1)
+                if(n==2){
+                    var node = this.$refs.organizationalStructure.$refs.treeSame.getNode(this.resultSelect.id)
+                    this.eachNode([node],false)
+                }else{
+                    var node = this.$refs.sameDepartment.$refs.treeSame.getNode(this.resultSelect.id)
+                    this.eachNode([node],false)
                 }
-            })
-            this.resultSelect = {}
+                this.$set(this.resultSelect,'disabled',false)
+                this.result.forEach((o,i)=>{
+                    if(o.id===this.resultSelect.id){
+                        this.result.splice(i,1)
+                    }
+                })
+                this.resultSelect = {}
+            }
         },
 		reset(){
 			this.result.forEach((o,i)=>{

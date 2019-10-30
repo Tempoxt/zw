@@ -26,6 +26,7 @@
 
     </table-header>
     <el-table
+        ref="elTable"
 		@selection-change="handleChangeSelection"
 		:row-class-name="table_state_className"
 		:data="table_data"

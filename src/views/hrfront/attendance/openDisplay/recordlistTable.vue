@@ -18,6 +18,7 @@
 		</div>
     </table-header>
     <el-table
+        ref="elTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
@@ -67,6 +68,7 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
+            table_topHeight:230,
 			importUploadUrl:"/attendance/record",
 			timer:'',
 			url:'',

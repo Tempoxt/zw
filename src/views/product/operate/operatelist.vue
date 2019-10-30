@@ -11,7 +11,7 @@
             v-el-drag-dialog
             >
             <div>
-                <OrgSelect v-model="form.hrmData" searchApi='hrm/oprpartstaff' filter_mark="operatorList" ref="OrgSelect" v-if="dialogFormVisible"/>
+                <OrgSelect :result="result" v-model="form.hrmData" searchApi='hrm/oprpartstaff' filter_mark="operatorList" ref="OrgSelect" v-if="dialogFormVisible"/>
             </div>
 
             <div slot="footer" class="dialog-footer">
@@ -28,6 +28,7 @@
             :table_column="table_field"
         ></table-header>
         <el-table
+            ref="elTable"
             @selection-change="handleChangeSelection"
             :data="table_data"
             border
@@ -79,6 +80,7 @@ export default {
             dialogFormVisible:false,
             customId:'',
             customData:[],
+            result:[]
         };
     },
     watch:{
@@ -112,6 +114,7 @@ export default {
         },
         
         add(){
+			this.result = []
             this.form = {}
             this.dialogFormVisible = true
         },

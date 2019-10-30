@@ -42,7 +42,7 @@
 				</el-row>
 			</el-form>
 
-                <OrgSelect v-model="form.staff" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
+                <OrgSelect :result="result" v-model="form.staff" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -58,6 +58,7 @@
             :table_column="table_field"
         ></table-header>
         <el-table
+            ref="elTable"
             @selection-change="handleChangeSelection"
             :data="table_data"
             border
@@ -132,6 +133,7 @@ export default {
                 ],
             },
             checkList:[],
+			result:[],
         };
     },
     computed:{
@@ -196,6 +198,7 @@ export default {
             this.nameData = (await this.$request.get('devicemanager/getmechinebytype?deviceType='+this.form.deviceType+'&show_capacity=1'))
         },
         add(){
+			this.result = []
             this.form = {}
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
