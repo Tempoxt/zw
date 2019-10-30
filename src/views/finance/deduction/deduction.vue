@@ -10,16 +10,18 @@
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <div v-if="view_activeName==='未结付'">
+        <div v-if="view_activeName==='未审核'">
+            <deductionTable  :flag="0" :id="currentMenuid"/>
+        </div>
+        <div v-if="view_activeName==='已审核'">
             <deductionTable  :flag="1" :id="currentMenuid"/>
         </div>
-        <div v-if="view_activeName==='已结付'">
+        <div v-if="view_activeName==='已处理'">
             <deductionTable  :flag="2" :id="currentMenuid"/>
         </div>
         <div v-if="view_activeName==='审核未通过'">
             <deductionTable  :flag="3" :id="currentMenuid"/>
         </div>
-        <!-- <deductionTable :id="currentMenuid"/> -->
     </el-col>
   </el-row>
 </template>

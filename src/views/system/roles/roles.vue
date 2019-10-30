@@ -85,22 +85,22 @@
                 <el-radio :label="1" v-model="data" @change="update">全部</el-radio>
             </div>
             <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
-                <div v-for="i in [{label:'本部门及下属部门',value:4},{label:'本部门',value:3},{label:'本人相关',value:2}]" :key="i.value"  class="cell">
+                <div v-for="i in [{label:'本部门及下属部门',value:4},{label:'本部门',value:3},{label:'本人相关',value:2},{label:'跨部门',value:5}]" :key="i.value"  class="cell">
                     <el-radio :label="i.value">{{i.label}}</el-radio>
                 </div>
             </el-radio-group>
             <!-- 选择跨部门 -->
-            <div class="action-bottom">
-                <el-radio :label="100" v-model="orgDepart" @change="showDepart">跨部门</el-radio>
-            </div>
-            <div class="org-tree" v-if="orgDepart==100">
+            <!-- <div class="action-bottom">
+                <el-radio :label="100" v-model="data" @change="showDepart">跨部门</el-radio>
+            </div> -->
+            <div class="org-tree" v-show="data==5">
                 <el-tree
                     :data="orgData"
                     show-checkbox
                     node-key="orgid"
                     @node-click="orgClick"
-                    ref="tree"
-                    :default-expanded-keys="org_menu_checked_default"
+                    ref="tree1"
+                    :default-expanded-keys="['d36','d273']"
                     :default-checked-keys="org_menu_checked"
                     @check="orgNodeCheck"
                     :highlight-current="true"
@@ -167,15 +167,21 @@ import { throttle } from 'core-decorators';
             this.roles_menu_checked_default = [currentKey]
         },
         async nodeClick({id}){
+            this.showDepart()
             this.orgDepart = 0
             this.currentMenuId = id
-            const { fields,actions,data,filterfield }  = await api_roles_auth.find(this.roleid,{
+            const { fields,actions,data,filterfield,depts }  = await api_roles_auth.find(this.roleid,{
                 menuid:id
             })
             this.fields = fields
             this.actions = actions
             this.checkedActions = this.actions.filter(item=>item.haspermission).map(item=>item.id)
             this.data = data
+          
+            this.org_menu_checked_default = depts
+            this.org_menu_checked = depts
+            this.depts = depts
+        
             this.filterfield = filterfield
             return
         },
@@ -241,14 +247,18 @@ import { throttle } from 'core-decorators';
         },
         @throttle(1000, {leading: false})
         update(){
-            api_roles_auth.update(this.roleid,{
-                data:this.data,
-                menuid:this.currentMenuId,
-                actions:this.checkedActions,
-                fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`)),
-                filterfield:this.filterfield,
-                depts:this.depts
-            })
+            if(this.data==5&&this.depts.length==0){
+                // this.showDepart()
+            }else{
+                api_roles_auth.update(this.roleid,{
+                    data:this.data,
+                    menuid:this.currentMenuId,
+                    actions:this.checkedActions,
+                    fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`)),
+                    filterfield:this.filterfield,
+                    depts:this.depts
+                })
+            }
         },
         all(state){
             this.fields.forEach(item=>{
@@ -283,7 +293,7 @@ import { throttle } from 'core-decorators';
             data:0,
             filterfield:'',
             orgDepart:'',
-            depts:''
+            depts:[]
         };
     }
   };

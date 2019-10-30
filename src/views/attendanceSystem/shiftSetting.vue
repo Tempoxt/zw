@@ -77,7 +77,7 @@
 						</el-col>
 					</el-row>
 					<el-row class="straight">
-						<el-col :span="24"><el-checkbox v-model="form.straight1_2">直通</el-checkbox></el-col>
+						<el-col :span="24"><el-checkbox v-model="form.straight1_2" @change="cstraight1_2">直通</el-checkbox></el-col>
 					</el-row>
 					<el-row class="shift_set">
 						<el-col :span="1" style="margin-left:10px" class="mt10">
@@ -123,7 +123,7 @@
 						</el-col>
 					</el-row>
 					<el-row class="straight">
-						<el-col :span="24"><el-checkbox v-model="form.straight2_3">直通</el-checkbox></el-col>
+						<el-col :span="24"><el-checkbox v-model="form.straight2_3" @change="cstraight2_3">直通</el-checkbox></el-col>
 					</el-row>
 					<el-row class="shift_set">
 						<el-col :span="1" style="margin-left:10px" class="mt10">
@@ -169,7 +169,7 @@
 						</el-col>
 					</el-row>
 					<el-row class="straight">
-						<el-col :span="24"><el-checkbox v-model="form.straight3_4">直通</el-checkbox></el-col>
+						<el-col :span="24"><el-checkbox v-model="form.straight3_4" @change="cstraight3_4">直通</el-checkbox></el-col>
 					</el-row>
 					
 					<el-row class="shift_set">
@@ -423,34 +423,22 @@ export default {
 		'form.straight1_2'(){
 			if(this.form.straight1_2==1){
 				this.form.straight1_2 = true
-				this.form.isExcuseOffDutyCard1 = true
-				this.form.isExcuseOnDutyCard2 = true
 			}else{
 				this.form.straight1_2 = false
-				this.form.isExcuseOffDutyCard1 = false
-				this.form.isExcuseOnDutyCard2 = false
 			}
 		},
 		'form.straight2_3'(){
 			if(this.form.straight2_3==1){
 				this.form.straight2_3 = true
-				this.form.isExcuseOffDutyCard2 = true
-				this.form.isExcuseOnDutyCard3 = true
 			}else{
 				this.form.straight2_3 = false
-				this.form.isExcuseOffDutyCard2 = false
-				this.form.isExcuseOnDutyCard3 = false
 			}
 		},
 		'form.straight3_4'(){
 			if(this.form.straight3_4==1){
 				this.form.straight3_4 = true
-				this.form.isExcuseOffDutyCard3 = true
-				this.form.isExcuseOnDutyCard4 = true
 			}else{
 				this.form.straight3_4 = false
-				this.form.isExcuseOffDutyCard3 = false
-				this.form.isExcuseOnDutyCard4 = false
 			}
 		},
 		'form.isExcuseOnDutyCard1'(){
@@ -461,57 +449,69 @@ export default {
 			}
 		},
 		'form.isExcuseOnDutyCard2'(){
-			if(this.form.isExcuseOnDutyCard2==1){
+			if(this.form.isExcuseOnDutyCard2==1||this.form.isExcuseOnDutyCard2 == true){
 				this.form.isExcuseOnDutyCard2 = true
 				if(this.form.isExcuseOffDutyCard1==true){
 					this.form.straight1_2 = true
 				}
-				// else{
-				// 	this.form.straight1_2 = false
-				// }
 			}else{
 				this.form.isExcuseOnDutyCard2 = false
+				this.form.straight1_2 = false
 			}
 		},
 		'form.isExcuseOnDutyCard3'(){
 			if(this.form.isExcuseOnDutyCard3==1){
 				this.form.isExcuseOnDutyCard3 = true
+				if(this.form.isExcuseOffDutyCard2==true){
+					this.form.straight2_3 = true
+				}
 			}else{
 				this.form.isExcuseOnDutyCard3 = false
+				this.form.straight2_3 = false
 			}
 		},
 		'form.isExcuseOnDutyCard4'(){
 			if(this.form.isExcuseOnDutyCard4==1){
 				this.form.isExcuseOnDutyCard4 = true
+				if(this.form.isExcuseOffDutyCard3==true){
+					this.form.straight3_4 = true
+				}
 			}else{
 				this.form.isExcuseOnDutyCard4 = false
+				this.form.straight3_4 = false
 			}
 		},
 		'form.isExcuseOffDutyCard1'(){
 			if(this.form.isExcuseOffDutyCard1==1){
 				this.form.isExcuseOffDutyCard1 = true
-				if(this.form.isExcuseOnDutyCard2==true){
+				if(this.form.isExcuseOnDutyCard2==true||this.form.isExcuseOnDutyCard2==1){
 					this.form.straight1_2 = true
 				}
-				// else{
-				// 	this.form.straight1_2 = false
-				// }
 			}else{
 				this.form.isExcuseOffDutyCard1 = false
+				this.form.straight1_2 = false
 			}
 		},
 		'form.isExcuseOffDutyCard2'(){
 			if(this.form.isExcuseOffDutyCard2==1){
 				this.form.isExcuseOffDutyCard2 = true
+				if(this.form.isExcuseOnDutyCard3==true||this.form.isExcuseOnDutyCard3==1){
+					this.form.straight2_3 = true
+				}
 			}else{
 				this.form.isExcuseOffDutyCard2 = false
+				this.form.straight2_3 = false
 			}
 		},
 		'form.isExcuseOffDutyCard3'(){
 			if(this.form.isExcuseOffDutyCard3==1){
 				this.form.isExcuseOffDutyCard3 = true
+				if(this.form.isExcuseOnDutyCard4==true||this.form.isExcuseOnDutyCard4==1){
+					this.form.straight3_4 = true
+				}
 			}else{
 				this.form.isExcuseOffDutyCard3 = false
+				this.form.straight3_4 = false
 			}
 		},
 		'form.isExcuseOffDutyCard4'(){
@@ -523,6 +523,33 @@ export default {
 		},
 	},
 	methods: {
+		cstraight1_2(){
+			if(this.form.straight1_2==true||this.form.straight1_2==1){
+				this.form.isExcuseOffDutyCard1 = true
+				this.form.isExcuseOnDutyCard2 = true
+			}else{
+				this.form.isExcuseOffDutyCard1 = false
+				this.form.isExcuseOnDutyCard2 = false
+			}
+		},
+		cstraight2_3(){
+			if(this.form.straight2_3==true||this.form.straight2_3==1){
+				this.form.isExcuseOffDutyCard2 = true
+				this.form.isExcuseOnDutyCard3 = true
+			}else{
+				this.form.isExcuseOffDutyCard2 = false
+				this.form.isExcuseOnDutyCard3 = false
+			}
+		},
+		cstraight3_4(){
+			if(this.form.straight3_4==true||this.form.straight3_4==1){
+				this.form.isExcuseOffDutyCard3 = true
+				this.form.isExcuseOnDutyCard4 = true
+			}else{
+				this.form.isExcuseOffDutyCard3 = false
+				this.form.isExcuseOnDutyCard4 = false
+			}
+		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
@@ -628,6 +655,11 @@ export default {
 			}else{
 				form.isExcuseOffDutyCard4 = +this.form.isExcuseOffDutyCard4
 			}
+
+			// console.log(form,'发的发的发的发的')
+			// if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&form.signInStartTime3!=null&&form.signOutStartTime3!=null&&form.signInEndTime3!=null&&form.signOutEndTime3!=null){
+
+			// }
 
 			if(this.timeSolt3==true||this.timeSolt4==true){
                 if(this.timeSolt3==true&&this.timeSolt4==false){

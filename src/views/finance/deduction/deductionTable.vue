@@ -220,7 +220,7 @@ export default {
 			dedulist:[],
 			template:{
 				paymentname(column,row){
-					if(row.payStatus===2){
+					if(row.payStatus===2||row.payStatus===1){
 						return <el-tag type="success">{row.paymentname}</el-tag>
 					}else if(row.payStatus===0){
 						return <el-tag type="info">{row.paymentname}</el-tag>
@@ -391,7 +391,6 @@ export default {
 		},
 		async handleForm2Submit(){
 			this.form2.ids = this.table_selectedRows.map(o=>o.id).join(',')
-			console.log(this.form2,'22222222222')
 			await this.$request.get('/deduction/audit',{params:this.form2})
 			this.$message.success({message:'结算成功'})
 			this.dialogForm2Visible = false
