@@ -1,47 +1,46 @@
 <template>
 <div>
-    <el-row class="h-full">
-        <el-col :span="4" class="h-full">
-            <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
-                <div style="padding:20px">
+    <el-row class=" h-full">
+        <el-col :span="4" class=" h-full">
+            <div class="h-full">
+                <div style="padding:20px" class="h-full">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
                         <i slot="suffix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                         <span class="icon iconfont icon-tianjia addIcon" @click="addCustom"></span>
                     </div>
+                    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+                        <el-tree
+                            class="tree"
+                            :data="data2"
+                            :props="{children: 'subs', label: 'name' }"
+                            default-expand-all
+                            node-key="id"
+                            :filter-node-method="filterNode"
+                            ref="tree2"
+                            :highlight-current="true"
+                            :check-on-click-node="false"
+                            @node-click="handleChangeNode"
+                            :expand-on-click-node="false"
+                            >
+                            <div slot-scope="{ node, data }" class="flexSpace">
 
-                <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-                    <el-tree
-                        class="tree"
-                        :data="data2"
-                        :props="{children: 'subs', label: 'name' }"
-                        default-expand-all
-                        node-key="id"
-                        :filter-node-method="filterNode"
-                        ref="tree2"
-                        :highlight-current="true"
-                        :check-on-click-node="false"
-                        @node-click="handleChangeNode"
-                        :expand-on-click-node="false"
-                        >
-                        <div slot-scope="{ node, data }" class="flexSpace">
-
-                            <div>
-                                <span v-if="data.id==0" class="icon iconfont icon-wenjian"></span>
-                                <span v-else class="icon iconfont icon-geren"></span>
-                                &nbsp;
-                                <span>{{ node.label }}</span>
+                                <div>
+                                    <span v-if="data.id==0" class="icon iconfont icon-wenjian"></span>
+                                    <span v-else class="icon iconfont icon-geren"></span>
+                                    &nbsp;
+                                    <span>{{ node.label }}</span>
+                                </div>
+                                <div v-if="data.id!=0">
+                                    <span class="icon iconfont icon-lajitong" @click="deleteCustom(data)"></span>
+                                    <span class="icon iconfont icon-bianji ml15" @click="editCustom(data)"></span>
+                                </div>
                             </div>
-                            <div v-if="data.id!=0">
-                                <span class="icon iconfont icon-lajitong" @click="deleteCustom(data)"></span>
-                                <span class="icon iconfont icon-bianji ml15" @click="editCustom(data)"></span>
-                            </div>
-                        </div>
-                    </el-tree>
-                </el-scrollbar>
+                        </el-tree>
+                    </el-scrollbar>
                 </div>
-            <!-- </el-scrollbar> -->
+            </div>
         </el-col>
         <el-col :span="20">
             <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
@@ -55,7 +54,7 @@
             </div>
         </el-col>
     </el-row>
-     <el-dialog
+    <el-dialog
       :title="dialogStatus==='insert'?'添加客户':'编辑客户'"
       :visible.sync="dialogFormVisible"
       class="public-dialog"
@@ -87,11 +86,13 @@ import productInfo from './productInfo'
 import scanRecord from './scanRecord'
 import * as api_common from "@/api/common";
 const api_resource = api_common.resource("productrecheck/customer");
+import org from '@/views/public/org'
 export default {
     mixins: [table_mixin],
     components:{
         productInfo,
-        scanRecord
+        scanRecord,
+        org
     },
      watch:{
         filterText(val) {
@@ -129,7 +130,6 @@ export default {
             dialogForm1Visible:false,
             view_activeName:'',
             menu:[],
-            activeName:'first',
             form:{
                 name:''
             },
@@ -197,13 +197,16 @@ export default {
 <style lang="scss" scoped>
 
 .scroll {
-  height: 100%;
+  height: calc(100% - 30px);
   width: 100%;
   padding-bottom: 20px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
 }
+</style>
+
+<style lang="scss" scoped>
 .side-header,.flexSpace{
     display: flex;
     justify-content:space-between;

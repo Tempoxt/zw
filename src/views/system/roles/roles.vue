@@ -105,6 +105,7 @@
                     @check="orgNodeCheck"
                     :highlight-current="true"
                     accordion
+                    @getCheckedNodes="getCheckedNodes"
                     :props="defaultPropsorg">
                 </el-tree>
             </div>
@@ -135,18 +136,7 @@ import { throttle } from 'core-decorators';
         async getMenu(){
             const { menu } =  await api_common.resource('roles/rolepermissionmenu/'+this.roleid).get({position:this.menuType,power:0})
             this.menu = menu
-            // const [ {},{sub:roles_menu} ] = await api_roles_menu.find(this.roleid)
             this.roles_menu_checked = []
-            // ;(function f(roles_menu_checked,roles_menu){
-            //     roles_menu.forEach((item)=>{
-            //         if(item.haspermission){
-            //              roles_menu_checked.push(item.id)
-            //         }
-            //         if(item.sub&&item.sub.length){
-            //             f(roles_menu_checked,item.sub)
-            //         }
-            //     })
-            // })(this.roles_menu_checked,roles_menu)
             ;(function f(roles_menu_checked,roles_menu){
                  roles_menu.forEach((item)=>{
                     if(item.haspermission==1){
@@ -177,6 +167,7 @@ import { throttle } from 'core-decorators';
             this.roles_menu_checked_default = [currentKey]
         },
         async nodeClick({id}){
+            this.orgDepart = 0
             this.currentMenuId = id
             const { fields,actions,data,filterfield }  = await api_roles_auth.find(this.roleid,{
                 menuid:id
@@ -203,6 +194,9 @@ import { throttle } from 'core-decorators';
                 api_roles_menu.update(this.roleid,{ menuid, estate })
             })
         },
+        getCheckedNodes(leafOnly, includeHalfChecked){
+
+        },
         async showDepart(){
             this.orgData = await this.$request.get('org/tree')
         },
@@ -210,6 +204,8 @@ import { throttle } from 'core-decorators';
             
         },
         orgNodeCheck(data,{checkedKeys}){
+            // console.log(data,'data')
+            // console.log(checkedKeys,'checkedKeys')
             let orgList = [ data.orgid ]
             ;(function f(subs){
                 subs.forEach(item=>{
@@ -219,8 +215,7 @@ import { throttle } from 'core-decorators';
                     f(subs.subs)
                 }
             })(data.subs||[])
-            this.depts = orgList.join(',')
-            console.log(this.depts,'dsdsds')
+            this.depts = checkedKeys.join(',')
             this.data = 5
             this.update()
         },
