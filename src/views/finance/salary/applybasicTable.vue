@@ -31,11 +31,11 @@
 
        <div class="info-box" v-for="(Detail,i) in applysheetDetail" :key="i">
           <div class="tag">
-            <img :src="Detail.verify===1?require('@/assets/examine1.png'):require('@/assets/examine2.png')" alt="">
+            <img :src="Detail.verify===1?require('@/assets/examine2.png'):require('@/assets/examine1.png')" alt="" width="96" height="79">
           </div>
           <div class="title">
             <span>{{['初始化','入职工薪单','调薪单'][Detail.sheetType]}}  {{Detail.changeDate}}</span>
-            <span>12.5%</span>
+            <span v-if="Detail.rate">{{Detail.rate}}</span>
           </div>
           <div>
             <el-row >
@@ -43,8 +43,8 @@
                 <div>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">薪酬类型：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.xzType}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">标准工资：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aBasicWage}}</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工作日加班工资：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aOvertime}}</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">休息日加班工资：</span></el-col><el-col :span="10"><span class="text-value text-warn">{{Detail.aWeekendWelfare}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工作日加班工资：</span></el-col><el-col :span="10"><span :class="`text-value ${Detail.aWorkdayOtHours!=0?'text-warn':''}`">{{Detail.aOvertime}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">休息日加班工资：</span></el-col><el-col :span="10"><span :class="`text-value ${Detail.aWeekOtDay!=0?'text-warn':''}`">{{Detail.aWeekendWelfare}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">全勤奖：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aFullAtt}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">绩效1：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aPerformance}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">(考核基准)绩效2：</span></el-col><el-col :span="10"><span class="text-value  text-warn">{{Detail.aMinPerformance}}</span></el-col></el-row>
@@ -54,12 +54,12 @@
             <el-col :span="12">
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">职位/等级：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.principalship__name}}/{{Detail.wageLevel}}</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">社保缴费基数：</span></el-col><el-col :span="14"><span class="text-value"></span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">工作日加班：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.aOvertime}}</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">休息日加班：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.aWeekendWelfare}}</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">工作日加班：</span></el-col><el-col :span="14"><span :class="`text-value ${Detail.aWorkdayOtHours!=0?'text-warn':''}`">{{Detail.workOtTitle}}</span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">休息日加班：</span></el-col><el-col :span="14"><span :class="`text-value ${Detail.aWeekOtDay!=0?'text-warn':''}`">{{Detail.weekdayTitle|weekDay}}</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">备注：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.remark}}</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">签名：</span></el-col><el-col :span="14"><span class="text-value"><img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" style="width:30x;height:10px"></span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">签名：</span></el-col><el-col :span="14"><span class="text-value"><img :src="Static_Url+Detail.signImage" alt="" style="width:120x;height:40px"></span></el-col></el-row>
             </el-col>
            
           </el-row>
@@ -125,13 +125,25 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("basicwage/applysheet");
-
+let Static_Url = process.env.VUE_APP_STATIC;
 export default {
   mixins: [table_mixin],
   props:['id'],
+  filters:{
+    weekDay(v){
+      if(v==1){
+        return '已审核'
+      }
+       if(v==0){
+        return '未审核'
+      }
+      return v
+    }
+  },
   data() {
     let vm = this
     return {
+      Static_Url,
       applysheetDetail:[{},{}],
       drawer_loading:true,
       drawer:false,
@@ -140,7 +152,6 @@ export default {
       queryDialogFormVisible:true,
       template:{
         sheetType(column,row){//工薪单类型
-          console.log(row,'row')
           const { staff__employeeCode } = row 
           if(row.sheetType==0){
             return <el-button type="text" onClick={()=>{vm.handleTypeClick(staff__employeeCode)}}>初始化</el-button>
