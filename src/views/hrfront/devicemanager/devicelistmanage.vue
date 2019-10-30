@@ -2,7 +2,7 @@
 <div>
     <el-row class="h-full">
         <el-col :span="4" class="h-full">
-            <div class=" h-full">
+            <div class=" h-full" id="srceenFull">
             <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> 
                 <div style="padding:20px">
                     <div class="side-header">
@@ -10,7 +10,7 @@
                             <i slot="suffix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </div>
-                        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+                        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" :style="{height:screenHeight}">
                             <el-tree
                                 class="tree"
                                 :data="data2"
@@ -57,11 +57,21 @@ export default {
     mixins: [table_mixin],
     components:{
         devicelistTable
-    },
-     watch:{
+    },  
+    watch: {
+        'screenHeight': function (val) { // 监听屏幕高度变化
+            var oIframe = document.getElementById('srceenFull')
+            oIframe.style.height = (Number(val) - 40) + 'px'
+        },
         filterText(val) {
             this.$refs.tree2.filter(val);
         },
+    },
+    mounted () {
+        var _this = this
+        window.onresize = function () { // 定义窗口大小变更通知事件
+            _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
+        }
     },
     computed:{
         disable(){
@@ -84,6 +94,7 @@ export default {
             id:'',
             data2:[],
             filterText:'',
+            screenHeight:document.documentElement.clientHeight+'px',
         }
     },
     methods:{
@@ -106,6 +117,7 @@ export default {
         this.$nextTick(()=>{
             this.$refs.tree2.setCurrentKey(defaultId)
         })
+        this.screenHeight = document.body.clientHeight-170+'px'
     }
 }
 </script>
@@ -114,7 +126,6 @@ export default {
 .scroll {
   height: calc(100% - 30px);
   width: 100%;
-  padding-bottom: 20px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }

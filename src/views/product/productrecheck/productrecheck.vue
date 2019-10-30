@@ -2,7 +2,7 @@
 <div>
     <el-row class=" h-full">
         <el-col :span="4" class=" h-full">
-            <div class="h-full">
+            <div class="h-full" id="srceenFull">
                 <div style="padding:20px" class="h-full">
                     <div class="side-header">
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
@@ -10,7 +10,7 @@
                         </el-input>
                         <span class="icon iconfont icon-tianjia addIcon" @click="addCustom"></span>
                     </div>
-                    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+                    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" :style="{height:screenHeight}">
                         <el-tree
                             class="tree"
                             :data="data2"
@@ -130,6 +130,7 @@ export default {
             dialogForm1Visible:false,
             view_activeName:'',
             menu:[],
+            screenHeight:document.documentElement.clientHeight,
             form:{
                 name:''
             },
@@ -138,6 +139,18 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
             },
+        }
+    },
+    watch: {
+        'screenHeight': function (val) { // 监听屏幕高度变化
+            var oIframe = document.getElementById('srceenFull')
+            oIframe.style.height = (Number(val) - 40) + 'px'
+        }
+    },
+    mounted () {
+        var _this = this
+        window.onresize = function () { // 定义窗口大小变更通知事件
+            _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
         }
     },
     methods:{
@@ -191,6 +204,7 @@ export default {
         this.view_activeName = menu[0].name;
         this.data2 = await this.$request.get('productrecheck/customer');
         this.proid = this.data2[0].id
+        this.screenHeight = document.body.clientHeight-170+'px'
     }
 }
 </script>
@@ -199,7 +213,6 @@ export default {
 .scroll {
   height: calc(100% - 30px);
   width: 100%;
-  padding-bottom: 20px;
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
