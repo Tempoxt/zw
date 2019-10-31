@@ -592,10 +592,10 @@
                             <span class="labelCon">证件失效：</span>
                             <span class="labelCon promp">{{profileData.stayEnd}}</span>
                         </el-col>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <span class="labelCon">婚姻状况：</span>
                             <span class="labelCon promp">{{profileData.marriage}}</span>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
                 </div>
                 <Divider />
@@ -666,10 +666,10 @@
                             <span class="labelCon">现住地址：</span>
                             <span class="labelCon promp">{{profileData.nowAddress}}</span>
                         </el-col>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <span class="labelCon">工龄：</span>
                             <span class="labelCon promp">{{profileData.work_age}}</span>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
                 </div>
                 <Divider />

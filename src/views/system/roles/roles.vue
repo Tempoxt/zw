@@ -210,8 +210,8 @@ import { throttle } from 'core-decorators';
             
         },
         orgNodeCheck(data,{checkedKeys}){
-            // console.log(data,'data')
-            // console.log(checkedKeys,'checkedKeys')
+            console.log(data,'data')
+            console.log(checkedKeys,'checkedKeys')
             let orgList = [ data.orgid ]
             ;(function f(subs){
                 subs.forEach(item=>{
@@ -222,8 +222,8 @@ import { throttle } from 'core-decorators';
                 }
             })(data.subs||[])
             this.depts = checkedKeys.join(',')
-            if(checkedKeys.length==0&&data.orgid!=''){
-                this.depts = data.orgid
+            if(checkedKeys.length==0){
+                this.depts = ''
             }
             this.data = 5
             this.update()
@@ -250,9 +250,9 @@ import { throttle } from 'core-decorators';
         },
         @throttle(1000, {leading: false})
         update(){
-            if(this.data==5&&this.depts.length==0){
-                // this.showDepart()
-            }else{
+            // if(this.data==5){
+            //     // this.showDepart()
+            // }else{
                 api_roles_auth.update(this.roleid,{
                     data:this.data,
                     menuid:this.currentMenuId,
@@ -261,7 +261,7 @@ import { throttle } from 'core-decorators';
                     filterfield:this.filterfield,
                     depts:this.depts
                 })
-            }
+            // }
         },
         all(state){
             this.fields.forEach(item=>{
