@@ -13,9 +13,9 @@
 					<el-tree
 						class="tree"
 						:data="data2"
-						:props="{children: 'subs', label: 'cDepName' }"
+						:props="{children: 'subs', label: 'name' }"
 						default-expand-all
-						node-key="cDepCode"
+						node-key="orgid"
 						:filter-node-method="filterNode"
 						ref="tree2"
 						:highlight-current="true"
@@ -24,9 +24,9 @@
 						:expand-on-click-node="false"
 					>
 						<span slot-scope="{ node, data }">
-							<span v-if="data.iDepGrade == 0" class="icon iconfont icon-zonggongsi"></span>
-							<span v-if="data.iDepGrade === 1" class="icon iconfont icon-fengongsi"></span>
-							<span v-if="data.iDepGrade === 2" class="icon iconfont icon-fenbumen"></span>
+							<span v-if="data.orgid == 0" class="icon iconfont icon-zonggongsi"></span>
+							<span v-if="data.orgid === 1" class="icon iconfont icon-fengongsi"></span>
+							<span v-if="data.orgid === 2" class="icon iconfont icon-fenbumen"></span>
 							&nbsp;
 							<span>{{ node.label }}</span>
 						</span>
@@ -37,7 +37,7 @@
     </el-col>
 
     <el-col :span="20">
-        <productHoursTable :id="cDepCode" />
+        <productHoursTable :id="orgid" />
     </el-col>
   </el-row>
 </template>
@@ -57,27 +57,27 @@ export default {
     data(){
         return {
             activeName:'first',
-            cDepCode:'',
+            orgid:'',
             data2:[],
             filterText:'',
         }
     },
     methods:{
 		handleChangeNode(val,node){
-            this.cDepCode = val.cDepCode
+            this.orgid = val.orgid
         },
         filterNode(value, data) {
             if (!value) return true;
-            return data.cDepName && data.cDepName.indexOf(value) !== -1;
+            return data.name && data.name.indexOf(value) !== -1;
         },
-        changeOrg(cDepCode){
-            this.cDepCode = cDepCode
+        changeOrg(orgid){
+            this.orgid = orgid
         },
 	},
 	async created() {
-		this.data2 =  await this.$request.get('prodpropelplan/mobuleprod/org')
-		let defaultId = this.data2[0].cDepCode
-		this.cDepCode = defaultId
+		this.data2 =  await this.$request.get('org/prodlobarhourselect')
+		let defaultId = this.data2[0].orgid
+		this.orgid = defaultId
 		this.$nextTick(()=>{
 			this.$refs.tree2.setCurrentKey(defaultId)
 		})
