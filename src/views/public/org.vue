@@ -100,7 +100,7 @@ export default {
 		}else if (this.getApi) {
 			this.data2 = await this.$request.get(this.getApi);
 		}else{
-			this.data2 = await this.$request.get('org',{
+			this.data2 = await this.$request.get('org/tree',{
 				params:{
 					showteam:1
 				}

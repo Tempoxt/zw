@@ -107,6 +107,19 @@
                                                 prop="sex"
                                             />
                                         </el-col>
+                                        <!-- <el-col :span="24">
+                                            <form-render
+                                                :type="`radio`"
+                                                :field="{name:'婚姻状况',options:[{
+                                                value: 0,
+                                                label: '未婚'
+                                                },{
+                                                value: 1,
+                                                label: '已婚'
+                                                }]}"
+                                                v-model="form.marriage"
+                                            />
+                                        </el-col> -->
                                         <el-col :span="24">
                                         <el-form-item label="头像"  >
                                             <img :src="`data:image/jpg;base64,`+form.idCardImage" alt="">
@@ -579,6 +592,10 @@
                             <span class="labelCon">证件失效：</span>
                             <span class="labelCon promp">{{profileData.stayEnd}}</span>
                         </el-col>
+                        <el-col :span="12">
+                            <span class="labelCon">婚姻状况：</span>
+                            <span class="labelCon promp">{{profileData.marriage}}</span>
+                        </el-col>
                     </el-row>
                 </div>
                 <Divider />
@@ -648,6 +665,10 @@
                         <el-col :span="12">
                             <span class="labelCon">现住地址：</span>
                             <span class="labelCon promp">{{profileData.nowAddress}}</span>
+                        </el-col>
+                        <el-col :span="12">
+                            <span class="labelCon">工龄：</span>
+                            <span class="labelCon promp">{{profileData.work_age}}</span>
                         </el-col>
                     </el-row>
                 </div>

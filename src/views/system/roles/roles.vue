@@ -222,6 +222,9 @@ import { throttle } from 'core-decorators';
                 }
             })(data.subs||[])
             this.depts = checkedKeys.join(',')
+            if(checkedKeys.length==0&&data.orgid!=''){
+                this.depts = data.orgid
+            }
             this.data = 5
             this.update()
         },
