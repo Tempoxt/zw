@@ -9,14 +9,15 @@
                         <el-input placeholder="快速查找" v-model="filterText" class="input">
                         <i slot="suffix" class="el-input__icon el-icon-search"></i>
                         </el-input>
-                    
+                     <!-- default-expand-all -->
                     </div>
             <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> 
                 <el-tree
                     class="tree"
                     :data="data2"
                     :props="{children: 'subs', label: 'name' }"
-                    default-expand-all
+                   
+                    :default-expanded-keys="expandedArr"
                     node-key="orgid"
                     :filter-node-method="filterNode"
                     ref="tree2"
@@ -89,6 +90,7 @@ export default {
                     this.$refs.tree2.setCurrentKey(defaultId)
                 })
             }
+            this.expandedArr=['d4']
         },
     },
     data(){
@@ -99,6 +101,7 @@ export default {
             view_activeName:'',
             menu:[],
             data2:[],
+            expandedArr:[]
         }
     },
     methods:{

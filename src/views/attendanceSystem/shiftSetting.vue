@@ -20,16 +20,16 @@
 						<el-col :span="10">
 							<form-render prop="className" :type="`input`" :field="{name:'班次名称'}" v-model="form.className"/>
 						</el-col>
-						<el-col :span="10" :offset="4">
+						<!-- <el-col :span="10" :offset="4">
 							<form-render prop="classDesc" :type="`input`" :field="{name:'班次说明'}" v-model="form.classDesc"/>
-						</el-col>
-						<el-col :span="10">
+						</el-col> -->
+						<el-col :span="10" :offset="4">
 							<form-render :type="`inputSuffix`" prop="positiveTime" suffix="时" :field="{name:'班次时间'}" v-model="form.positiveTime"/>
 						</el-col>
-						<el-col :span="10" :offset="4">
+						<el-col :span="10">
 							<form-render :type="`inputSuffix`" suffix="时" :field="{name:'考勤加班'}" v-model="form.overTime"/>
 						</el-col>
-						<el-col :span="10">
+						<el-col :span="10" :offset="4">
 							<form-render :type="`inputSuffix`" suffix="分" :field="{name:'打卡间隔'}" v-model="form.punchCardGap"/>
 						</el-col>
 					</el-row>
@@ -333,7 +333,6 @@ export default {
 				startOverTime: 30,
 				startLeaveTime: 30,
 				className: '',
-				classDesc: '',
 				onDutyTime1: '',
 				onDutyTime2: '',
 				offDutyTime1: '',
@@ -372,9 +371,6 @@ export default {
 				className:[
 					{ required: true, message: '请输入', trigger: ['blur','change'] },
 				],
-				classDesc:[
-					{ required: true, message: '请输入', trigger: ['blur','change'] },
-				],
 				positiveTime:[
 					{ required: true, message: '请输入', trigger: ['blur','change'] },
 				],
@@ -411,7 +407,7 @@ export default {
 	},
 	computed:{
 		disableSubmit(){
-			if(this.form.className!=''&&this.form.classDesc!=''&&this.form.positiveTime!=''&&this.form.onDutyTime1!=null&&this.form.onDutyTime2!=null&&this.form.offDutyTime1!=null
+			if(this.form.className!=''&&this.form.positiveTime!=''&&this.form.onDutyTime1!=null&&this.form.onDutyTime2!=null&&this.form.offDutyTime1!=null
 			&&this.form.offDutyTime2!=null&&this.timeSolt1==true&&this.timeSolt2==true&&this.form.signInStartTime1!=null&&this.form.signInEndTime1!=null&&this.form.signOutStartTime1!=null
 			&&this.form.signOutEndTime1!=null&&this.form.signInStartTime2!=null&&this.form.signInEndTime2!=null&&this.form.signOutStartTime2!=null&&this.form.signOutEndTime2!=null
 			&&this.form.onDutyTime1!=''&&this.form.onDutyTime2!=''&&this.form.offDutyTime1!=''&&this.form.offDutyTime2!=''&&this.form.signInStartTime1!=''&&this.form.signInEndTime1!=''
