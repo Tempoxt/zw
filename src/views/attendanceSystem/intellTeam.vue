@@ -2,7 +2,7 @@
 <div>
     <el-row class="h-full">
          <el-col :span="4" class="h-full">
-            <div style="padding:20px">
+            <div style="padding:20px" class="h-full">
                 <div class="side-header">
                     <el-input placeholder="快速查找" v-model="filterText" class="input">
                     <i slot="suffix" class="el-input__icon el-icon-search"></i>
@@ -243,7 +243,6 @@ export default {
 }
 </script>
 <style lang="scss">
-    
 .theme-0BB2D4 .none .el-tree-node__expand-icon.is-leaf{
     display: none!important;
 }

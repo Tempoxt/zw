@@ -413,7 +413,10 @@ export default {
 		disableSubmit(){
 			if(this.form.className!=''&&this.form.classDesc!=''&&this.form.positiveTime!=''&&this.form.onDutyTime1!=null&&this.form.onDutyTime2!=null&&this.form.offDutyTime1!=null
 			&&this.form.offDutyTime2!=null&&this.timeSolt1==true&&this.timeSolt2==true&&this.form.signInStartTime1!=null&&this.form.signInEndTime1!=null&&this.form.signOutStartTime1!=null
-			&&this.form.signOutEndTime1!=null&&this.form.signInStartTime2!=null&&this.form.signInEndTime2!=null&&this.form.signOutStartTime2!=null&&this.form.signOutEndTime2!=null){
+			&&this.form.signOutEndTime1!=null&&this.form.signInStartTime2!=null&&this.form.signInEndTime2!=null&&this.form.signOutStartTime2!=null&&this.form.signOutEndTime2!=null
+			&&this.form.onDutyTime1!=''&&this.form.onDutyTime2!=''&&this.form.offDutyTime1!=''&&this.form.offDutyTime2!=''&&this.form.signInStartTime1!=''&&this.form.signInEndTime1!=''
+			&&this.form.signOutStartTime1!=''&&this.form.signOutEndTime1!=''&&this.form.signInStartTime2!=''&&this.form.signInEndTime2!=''&&this.form.signOutStartTime2!=''
+			&&this.form.signOutEndTime2!=''){
 				return false
 			}
 			return true
@@ -656,37 +659,37 @@ export default {
 				form.isExcuseOffDutyCard4 = +this.form.isExcuseOffDutyCard4
 			}
 
-			// console.log(form,'发的发的发的发的')
-			// if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&form.signInStartTime3!=null&&form.signOutStartTime3!=null&&form.signInEndTime3!=null&&form.signOutEndTime3!=null){
-
-			// }
-
 			if(this.timeSolt3==true||this.timeSolt4==true){
                 if(this.timeSolt3==true&&this.timeSolt4==false){
 					if(form.onDutyTime3==''||form.onDutyTime3==undefined||form.offDutyTime3==''||form.offDutyTime3==undefined||form.signInStartTime3==''
 					||form.signInEndTime3==undefined||form.signOutStartTime3==''||form.signOutEndTime3==undefined){
 						this.$message.error({ message: '请填写时段3的信息'});
 					}else{
-						delete form.onDutyTime4
-						delete form.offDutyTime4
-						delete form.signInStartTime4
-						delete form.signOutStartTime4
-						delete form.signInEndTime4
-						delete form.signOutEndTime4
-						delete form.isExcuseOnDutyCard4
-						delete form.isExcuseOffDutyCard4
-						delete form.straight3_4
-						delete form.restTime4
-						if(this.isInsert){
-                            const mes = await api_resource.create(form)
-                            this.$message.success({ message: mes})
-                            this.dialogFormVisible = false
-                            this.fetchTableData()
-                        }else{
-                            await api_resource.update(form.id,form)
-                            this.dialogFormVisible = false
-                            this.fetchTableData()
-                        }
+						if(form.onDutyTime4!=null&&form.offDutyTime4!=null&&form.signInStartTime4!=null&&form.signOutStartTime4!=null&&form.signInEndTime4!=null&&form.signOutEndTime4!=null&&this.timeSolt4==false){
+							this.$message.error({ message: '请勾选时段4'});
+							return
+						}else{
+							delete form.onDutyTime4
+							delete form.offDutyTime4
+							delete form.signInStartTime4
+							delete form.signOutStartTime4
+							delete form.signInEndTime4
+							delete form.signOutEndTime4
+							delete form.isExcuseOnDutyCard4
+							delete form.isExcuseOffDutyCard4
+							delete form.straight3_4
+							delete form.restTime4
+							if(this.isInsert){
+								const mes = await api_resource.create(form)
+								this.$message.success({ message: mes})
+								this.dialogFormVisible = false
+								this.fetchTableData()
+							}else{
+								await api_resource.update(form.id,form)
+								this.dialogFormVisible = false
+								this.fetchTableData()
+							}
+						}
 					}
 				}
 
@@ -695,26 +698,31 @@ export default {
 					||form.offDutyTime4==undefined||form.signInEndTime4==undefined||form.signOutEndTime4==undefined){
 						this.$message.error({ message: '请填写时段4的信息'});
 					}else{
-						delete form.onDutyTime3
-						delete form.offDutyTime3
-						delete form.signInStartTime3
-						delete form.signOutStartTime3
-						delete form.signInEndTime3
-						delete form.signOutEndTime3
-						delete form.isExcuseOnDutyCard3
-						delete form.isExcuseOffDutyCard3
-						delete form.straight2_3
-						delete form.restTime3
-                        if(this.isInsert){
-                            const mes = await api_resource.create(form)
-                            this.$message.success({ message: mes})
-                            this.dialogFormVisible = false
-                            this.fetchTableData()
-                        }else{
-                            await api_resource.update(form.id,form)
-                            this.dialogFormVisible = false
-                            this.fetchTableData()
-                        }
+						if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&form.signInStartTime3!=null&&form.signOutStartTime3!=null&&form.signInEndTime3!=null&&form.signOutEndTime3!=null&&this.timeSolt3==false){
+							this.$message.error({ message: '请勾选时段3'});
+							return
+						}else{
+							delete form.onDutyTime3
+							delete form.offDutyTime3
+							delete form.signInStartTime3
+							delete form.signOutStartTime3
+							delete form.signInEndTime3
+							delete form.signOutEndTime3
+							delete form.isExcuseOnDutyCard3
+							delete form.isExcuseOffDutyCard3
+							delete form.straight2_3
+							delete form.restTime3
+							if(this.isInsert){
+								const mes = await api_resource.create(form)
+								this.$message.success({ message: mes})
+								this.dialogFormVisible = false
+								this.fetchTableData()
+							}else{
+								await api_resource.update(form.id,form)
+								this.dialogFormVisible = false
+								this.fetchTableData()
+							}
+						}
 					}
 				}
                 
@@ -739,6 +747,14 @@ export default {
                     }
                 }
 			}else{
+				if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&form.signInStartTime3!=null&&form.signOutStartTime3!=null&&form.signInEndTime3!=null&&form.signOutEndTime3!=null&&this.timeSolt3==false){
+					this.$message.error({ message: '请勾选时段3'});
+					return
+				}
+				if(form.onDutyTime4!=null&&form.offDutyTime4!=null&&form.signInStartTime4!=null&&form.signOutStartTime4!=null&&form.signInEndTime4!=null&&form.signOutEndTime4!=null&&this.timeSolt4==false){
+					this.$message.error({ message: '请勾选时段4'});
+					return
+				}
 				if(this.timeSolt3==false){
 					delete form.onDutyTime3
 					delete form.offDutyTime3
