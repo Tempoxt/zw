@@ -19,7 +19,7 @@
         <div v-if="view_activeName==='已处理'">
             <deductionTable  :flag="2" :id="currentMenuid"/>
         </div>
-        <div v-if="view_activeName==='审核未通过'">
+        <div v-if="view_activeName==='财务审核未通过'">
             <deductionTable  :flag="3" :id="currentMenuid"/>
         </div>
     </el-col>
@@ -49,7 +49,7 @@ export default {
             this.currentMenuid = id
         },
         handleClick(val){
-            
+            // console.log(this.view_activeName)
         },
     },
     async created(){

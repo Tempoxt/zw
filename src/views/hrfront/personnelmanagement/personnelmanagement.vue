@@ -107,19 +107,6 @@
                                                 prop="sex"
                                             />
                                         </el-col>
-                                        <!-- <el-col :span="24">
-                                            <form-render
-                                                :type="`radio`"
-                                                :field="{name:'婚姻状况',options:[{
-                                                value: 0,
-                                                label: '未婚'
-                                                },{
-                                                value: 1,
-                                                label: '已婚'
-                                                }]}"
-                                                v-model="form.marriage"
-                                            />
-                                        </el-col> -->
                                         <el-col :span="24">
                                         <el-form-item label="头像"  >
                                             <img :src="`data:image/jpg;base64,`+form.idCardImage" alt="">
@@ -149,14 +136,14 @@
                                             <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department"/>
+                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" :disabled="!isInsert" v-model="form.department"/>
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team":disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render
+                                            <form-render :disabled="!isInsert"
                                                 filterable
                                                 placeholder="请搜索或选择"
                                                 prop="principalship"
@@ -174,7 +161,7 @@
                                             />
                                         </el-col>
                                         <el-col :span="24">
-                                        <form-render
+                                        <form-render :disabled="!isInsert"
                                                 prop="workGroup"
                                                 :type="`select`"
                                                 :field="{name:'工作地点',options:workGroupData}"
@@ -592,10 +579,10 @@
                             <span class="labelCon">证件失效：</span>
                             <span class="labelCon promp">{{profileData.stayEnd}}</span>
                         </el-col>
-                        <!-- <el-col :span="12">
+                        <el-col :span="12">
                             <span class="labelCon">婚姻状况：</span>
                             <span class="labelCon promp">{{profileData.marriage}}</span>
-                        </el-col> -->
+                        </el-col>
                     </el-row>
                 </div>
                 <Divider />
@@ -666,10 +653,10 @@
                             <span class="labelCon">现住地址：</span>
                             <span class="labelCon promp">{{profileData.nowAddress}}</span>
                         </el-col>
-                        <!-- <el-col :span="12">
+                        <el-col :span="12">
                             <span class="labelCon">工龄：</span>
                             <span class="labelCon promp">{{profileData.work_age}}</span>
-                        </el-col> -->
+                        </el-col>
                     </el-row>
                 </div>
                 <Divider />

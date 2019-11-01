@@ -98,10 +98,30 @@ export default {
 			this.status = val
 			this.fetchTableData()
 		},
+		async getDa(){
+			if(this.statusk!=0){
+				this.val = await this.$request.get('holidaymanager/leavemanager/resetresult',{alert:false})
+				if(this.val=='重置成功'){
+					this.statusk = 0
+					this.$message.success({ message: this.val})
+					this.fetchTableData()
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
 		async reset(){
-			const mes = await this.$request.post(this.url+'/reset',{dateLap:this.table_form.dateLap})
-			this.$message.success(mes)
-			this.fetchTableData();
+			if(this.m==1){
+				const mes = await this.$request.post(this.url+'/reset',{dateLap:this.table_form.dateLap})
+				this.$message.success(mes)
+				this.fetchTableData();
+			}else if(this.m==2){
+				const mes = await this.$request.post(this.url+'/reset',{dateLap:this.table_form.dateLap})
+				this.$message.success(mes)
+				this.timer = setInterval(()=>{
+					this.getDa()
+				},10000)
+			}
 		},
 		async fetchTableData() {
 			if(!this.id){
@@ -111,7 +131,6 @@ export default {
 			this.table_form.orgid = this.id
 			
 			if(this.m==2){
-				console.log(this.m)
 				this.optionDatas = (await api_common.resource('holidaymanager/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
 				this.optionDatas.unshift({value:'全部',label:'全部'})
 				this.table_form.leaveType = this.status
