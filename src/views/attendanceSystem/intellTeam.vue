@@ -12,7 +12,7 @@
 
                 <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
                     <el-tree
-                        class="tree none"
+                        class="tree"
                         :data="data2"
                         :props="{children: 'subs', label: 'groupName' }"
                         default-expand-all
@@ -28,8 +28,7 @@
 
                             <div>
                                 <span class="icon iconfont icon-wenjian"></span>
-                                &nbsp;
-                                <span>{{ node.label }}</span>
+                                &nbsp;<span>{{ node.label }}</span>
                             </div>
                             <div v-if="data.id!=0">
                                 <span class="icon iconfont icon-lajitong" @click="deleteCustom(data)"></span>
@@ -243,9 +242,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.theme-0BB2D4 .none .el-tree-node__expand-icon.is-leaf{
-    display: none!important;
-}
+// .theme-0BB2D4 .none .el-tree-node__expand-icon.is-leaf{
+//     display: none!important;
+// }
 </style>
 <style lang="scss" scoped>
 
@@ -268,7 +267,7 @@ export default {
 .flexSpace{
     width: 100%;
     line-height: 33px;
-    padding: 0 3px;
+    // padding: 0 3px;
 }
 .flexSpace:hover .icon-lajitong,.flexSpace:hover .icon-bianji,.flexSpace:active .icon-lajitong,.flexSpace:active .icon-bianji{
     color: #CCD5DB
