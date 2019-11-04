@@ -80,6 +80,7 @@
 		@sort-change="table_sort_change"
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
+		:cell-class-name="cellName"
     	>
 		<el-table-column 
 			type="selection" 
@@ -136,7 +137,7 @@ export default {
 			this.fetchTableData()
 		},
 		async openDrawer(row,column,cell,event){
-			if(row.usedDay==event.target.innerHTML){
+			if(row.usedDay==event.target.innerText){
 				this.openDrawers = true
 				this.holidayData = await this.$request.get('holidaymanager/holidaystat/'+row.employeeCode)
 				this.info = this.holidayData[0]
@@ -144,9 +145,14 @@ export default {
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
 			if(column.label == '已休天数'){
-				return 'color:#1FD361;cursor:pointer'
+				return 'color:#1FD361;cursor:pointer!important'
 			}else{
 				return  ''
+			}
+		},
+		cellName({row, column, rowIndex, columnIndex}){
+			if(column.label == '已休天数'){
+				return 'remainDay'
 			}
 		},
 		async fetchTableData() {
@@ -239,6 +245,9 @@ export default {
         font-size: 14px;
     }
     .mt10{margin-top: 10px;}
+	.remainDay span{
+		cursor:pointer!important;
+	}
 </style>
 
 

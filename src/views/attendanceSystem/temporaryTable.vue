@@ -6,7 +6,7 @@
   >
   	<!-- 补休加班明细 -->
 	<div>
-		<Drawer title="补休加班明细" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+		<Drawer title="攒调休加班补休明细" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
 			<div style="background: #f8f8f8;">
 				<el-row :gutter="20">
 					<el-col :span="3" class="imgFlex">
