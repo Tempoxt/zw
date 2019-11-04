@@ -140,7 +140,7 @@ export default {
 			dateLap:'',
 			pickerOptions: {
 				disabledDate(time) {
-					return time.getTime() < new Date().getTime() + 3600*12*1000;
+					return time.getTime() < new Date().getTime() + 3600*1*1000;
 				}
 			},
 		};
