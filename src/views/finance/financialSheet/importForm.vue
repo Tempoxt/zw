@@ -31,7 +31,7 @@ import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
 export default {
-	props:['importUploadUrl','downloadUrl','namie',],
+	props:['importUploadUrl','downloadUrl','namie','getData'],
 	data() {
 		return {
 			importForm:{
@@ -39,11 +39,21 @@ export default {
                 the_file:''
             },
             dateLap:'',
+            timer:'',
+			statusk:1,
+			val:'',
+			s:1,
 		};
     },
 	methods: {
         async handleImportChange(ev){
-            this.importForm.month = this.dateLap
+            if(this.getData&&this.getData==1){
+                this.importForm.dateLap = this.dateLap
+                delete  this.importForm.month
+            }else{
+                this.importForm.month = this.dateLap
+                delete  this.importForm.dateLap
+            }
             const files = ev.target.files;
             this.importForm.the_file = files[0]
             if (!files) return;
@@ -61,11 +71,19 @@ export default {
             });
             try {
                 const mes = await request.post(this.importUploadUrl,form,{alert:false})
+                this.statusk = 1
                 this.$message({
                     message: mes,
                     type: 'success'
                 });
-                this.$emit("fetchData",mes)
+                if(this.getData&&this.getData==1){
+                    this.timer = setInterval(()=>{
+                        this.getDa()
+                        this.s++;
+                    },5000)
+                }else{
+                    this.$emit("fetchData",mes)
+                }
                 this.dateLap = ''
             } catch (error) {
                 console.log(error)
@@ -78,6 +96,20 @@ export default {
                 })
             }
         },
+        async getDa(){
+			if(this.statusk!=0&&this.s<=12){
+				if(this.s==12){
+					this.$message.error({ message: '导入失败,请重试'})
+				}
+				this.val = await this.$request.get('/u8report/uploadbudget',{alert:false})
+				this.statusk = 0
+				this.$message.success({ message: this.val,duration:3000})
+				this.$emit("fetchData",this.val)
+			}else{
+				clearInterval(this.timer)
+				this.s=0
+			}
+		},
         async handleDownloadChange(){
             try {
                 if(this.downloadUrl){
@@ -98,7 +130,7 @@ export default {
         },
 	},
 	created() {
-		
+		this.dateLap = ''
 	}
 };
 </script>

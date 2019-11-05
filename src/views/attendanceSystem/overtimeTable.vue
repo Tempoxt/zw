@@ -123,17 +123,18 @@ export default {
 	},
 	data() {
 		var checkHours = (rule, value, callback) => {
-			var dur = new Date(this.form.endTime).getTime()-new Date(this.form.startTime).getTime()
-			if (!value) {
-				return callback(new Error('请输入'));
-			}else if (value<3.5) {
-				callback(new Error('加班工时必须大于等于3.5小时'));
-			}else if (value>dur/(60*1000*60)) {
-				callback(new Error('加班工时必须小于等于加班结束时间-加班开始时间'));
-			}else{
-				callback();
+			if(this.form.endTime!=''&&this.form.startTime!=''&&this.form.endTime!=undefined&&this.form.startTime!=undefined){
+				var dur = new Date(this.form.endTime).getTime()-new Date(this.form.startTime).getTime()
+				if (!value) {
+					return callback(new Error('请输入'));
+				}else if (value<3.5) {
+					callback(new Error('加班工时必须大于等于3.5小时'));
+				}else if (value>dur/(60*1000*60)) {
+					callback(new Error('加班工时必须小于等于加班结束时间-加班开始时间'));
+				}else{
+					callback();
+				}
 			}
-		
 		};
 		return {
 			loading: true,
@@ -152,6 +153,7 @@ export default {
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
 				],
 				duration:[
+					{ required: true, message: '请输入', trigger: ['blur','change'] },
 					{ validator: checkHours, trigger:  ['blur', 'change'] }
 				]
 			},

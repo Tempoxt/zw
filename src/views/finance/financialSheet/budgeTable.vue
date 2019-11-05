@@ -53,9 +53,13 @@ import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("u8report/budgetreport");
 import dayjs from 'dayjs'
 import { MessageBox } from 'element-ui';
+import importForm from './importForm'
 export default {
 	mixins: [table_mixin],
 	props:['id'],
+	components:{
+		importForm
+	},
 	data() {
 		return {
 			loading: true,
@@ -67,7 +71,7 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
-			s:1
+			s:1,
 		};
 	},
 	watch:{
@@ -78,67 +82,13 @@ export default {
 	},
 	methods: {
 		import(){
-			let {
-				handleImportChange,
-			} = this
 			MessageBox.alert(
-				<el-button-group class="table-import-upload" ref="import">
-					<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
-					<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
-					<el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
-				</el-button-group>
+				<importForm importUploadUrl={this.importUploadUrl} getData='1'
+				on={{fetchData:()=>{this.fetch()}}}/>
 				, '选择文件导入', {
 				showConfirmButton:false,
 				center:true
 			});
-		},
-		async handleImportChange(ev){
-			const files = ev.target.files;
-			if (!files) return;
-			var form = new FormData();
-			form.append('the_file',files[0])
-			this.importLoading = true
-			MessageBox.close()
-			MessageBox.alert(
-				<div v-loading={true}><br /></div>, '导入中', {
-				showConfirmButton:false,
-				center:true
-			});
-			try {
-				const mes = await this.$request.post(this.importUploadUrl,form,{alert:false})
-				this.statusk = 1
-				this.$message({
-					message: mes,
-					type: 'success'
-				});
-				this.timer = setInterval(()=>{
-					this.getDa()
-					this.s++;
-				},5000)
-			} catch (error) {
-				console.log(error)
-				this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:4000})
-			}finally{
-				this.importLoading = false
-				MessageBox.close()
-				this.$nextTick(()=>{
-					ev.target.value = null
-				})
-			}
-    	},
-		async getDa(){
-			if(this.statusk!=0&&this.s<=12){
-				if(this.s==12){
-					this.$message.error({ message: '导入失败,请重试'})
-				}
-				this.val = await this.$request.get('/u8report/uploadbudget',{alert:false})
-				this.statusk = 0
-				this.$message.success({ message: this.val,duration:3000})
-				this.fetchTableData()
-			}else{
-				clearInterval(this.timer)
-				this.s=0
-			}
 		},
 		fetch(){
 			this.table_form.currentpage = 1
