@@ -209,20 +209,25 @@ export default {
             form.classes_id = this.form.classes_id.join(',')
             if(this.form.ids!==''){
                 if(this.dialogStatus=='insert'){
-                    let mess = await api_resource.create(form)
-                    this.$message.success('创建成功');
-                    this.changes = true
-                    this.fetch()
+                    try{
+                        let mess = await api_resource.create(form)
+                        this.$message.success('创建成功');
+                        this.changes = true
+                        this.fetch()
+                        this.dialogFormVisible = false
+                    }catch(e){
+
+                    }
                 }else{
                     try{
                         await api_resource.update(form.id,form)
                         this.changes = true
                         this.fetch()
+                        this.dialogFormVisible = false
                     }catch(err){
                         console.log(err)
                     }
                 }
-                this.dialogFormVisible = false
             }else{
 				this.$message.error('请选择要添加的数据');
 			}

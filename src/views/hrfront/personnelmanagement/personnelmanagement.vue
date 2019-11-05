@@ -140,7 +140,7 @@
                                         </el-col>
                                     
                                         <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team":disabled="!isInsert"/>
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render :disabled="!isInsert"
@@ -507,7 +507,7 @@
                                     </el-table-column>
                                     <el-table-column
                                         prop="eduStartTime"
-                                        label="起止时间" width="130">
+                                        label="起止时间" width="180">
                                         <template slot-scope="scope">
                                             <span :title="scope.row.eduStartTime+'-'+scope.row.eduEndTime">{{scope.row.eduStartTime}} - {{scope.row.eduEndTime}}</span>
                                         </template>
@@ -952,7 +952,7 @@
             v-el-drag-dialog
             >
             <div>
-                <el-form :model="education" label-width="100px" v-loading="loading2">
+                <el-form :model="education" label-width="100px" v-loading="loading2" class="educationDialog">
                     <div class="line-boxs">
                         <el-row :gutter="40">
                             <el-col :span="12">

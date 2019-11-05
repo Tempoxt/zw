@@ -22,6 +22,9 @@
 					<form-render prop="endTime" :picker-options="pickerOptions" :type="`datetime`" :field="{name:'结束时间'}" v-model="form.endTime"/>
 				</el-col>
 				<el-col :span="12">
+					<form-render prop="duration" :type="`input`" :field="{name:'加班工时'}" v-model="form.duration"/>
+				</el-col>
+				<el-col :span="12">
 					<form-render :type="`select`" :disabled="true" :field="{name:'加班类别',options:[{
 							value: 1,
 							label: '生产需要'
@@ -34,7 +37,7 @@
 					}]}" v-model="form.overtimeType"/>
 				</el-col>
 				<el-col :span="12">
-					<form-render :type="`input`" :field="{name:'加班原因'}" v-model="form.remark"/>
+					<form-render :type="`input`" :field="{name:'备注'}" v-model="form.remark"/>
 				</el-col>
 			</el-row>
 		</el-form>
@@ -119,6 +122,19 @@ export default {
 		OrgSelect
 	},
 	data() {
+		var checkHours = (rule, value, callback) => {
+			var dur = new Date(this.form.endTime).getTime()-new Date(this.form.startTime).getTime()
+			if (!value) {
+				return callback(new Error('请输入'));
+			}else if (value<3.5) {
+				callback(new Error('加班工时必须大于等于3.5小时'));
+			}else if (value>dur/(60*1000*60)) {
+				callback(new Error('加班工时必须小于等于加班结束时间-加班开始时间'));
+			}else{
+				callback();
+			}
+		
+		};
 		return {
 			loading: true,
 			api_resource,
@@ -134,6 +150,9 @@ export default {
 				],
 				endTime:[
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
+				],
+				duration:[
+					{ validator: checkHours, trigger:  ['blur', 'change'] }
 				]
 			},
 			html:'',
