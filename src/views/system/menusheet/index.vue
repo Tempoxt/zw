@@ -106,13 +106,14 @@
       :table_form.sync="table_form"
     ></table-header>
     <el-table
-    ref="elTableMenu"
+      ref="elTableMenu"
       :data="table_tree_formatData"
       :row-style="table_tree_showRow"
       :row-class-name="table_state_className"
       @selection-change="handleChangeSelection"
       border
       style="width: 100%"
+      class="menusheet-table"
       v-loading="table_loading"
       :header-cell-style="headerCellStyle"
       :height="table_height"
@@ -283,6 +284,11 @@ export default {
 </script>
 <style lang="scss" >
 .animationTreeTableShow {
-animation:treeTableShow 1s;-webkit-animation:treeTableShow 1s;
+animation:treeTableShow .5s;-webkit-animation:treeTableShow .5s;
+}
+.menusheet-table {
+  .el-table__body-wrapper {
+    overflow-y: auto;
+  }
 }
 </style>
