@@ -177,7 +177,27 @@ export default {
   props:['position'],
   mixins: [table_mixin],
   methods: {
-    
+    table_tree_showRow(row){
+      
+    },
+    table_state_className({row, column, rowIndex, columnIndex}){
+      let show = row._expanded
+      row._show = row._expanded
+       try {
+          show = row.parent
+          ? row.parent._expanded && row.parent._show
+          : true;
+        row._show = show;
+        this.$nextTick(()=>{
+          if(this.$refs.elTable){
+            this.$refs.elTable.doLayout()
+          }
+        })
+       } catch (error) {
+         
+       }
+      return `${ row.lockstate?'row-state-class':'' } ${show?'animationTreeTableShow':'hide'}`
+    },
     async handleFormSubmit() {
       let form = Object.assign(
         { position: this.position },
@@ -261,6 +281,8 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-
+<style lang="scss" >
+.animationTreeTableShow {
+animation:treeTableShow 1s;-webkit-animation:treeTableShow 1s;
+}
 </style>
