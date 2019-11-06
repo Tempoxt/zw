@@ -103,7 +103,7 @@
                     show-checkbox
                     node-key="orgid"
                     ref="tree1"
-                    :default-expanded-keys="['d36','d273']"
+                    :default-expanded-keys="org_menu_checked_default"
                     :default-checked-keys="org_menu_checked"
                     @check="orgNodeCheck"
                     :highlight-current="true"
@@ -140,16 +140,16 @@ import { throttle } from 'core-decorators';
             this.menu = menu
             this.roles_menu_checked = []
             ;(function f(roles_menu_checked,roles_menu){
-                 roles_menu.forEach((item)=>{
+                roles_menu.forEach((item)=>{
                     if(item.haspermission==1){
                         roles_menu_checked.push(item.id)
                     }
+                
                     if(item.sub&&item.sub.length){
                         f(roles_menu_checked,item.sub)
                     }
                 })
             })(this.roles_menu_checked,menu)
-            // console.log(this.roles_menu_checked,'roles_menu_checked')
             let currentKey = ''
             ;(function f(data){
                 data.some(item=>{
@@ -163,7 +163,7 @@ import { throttle } from 'core-decorators';
                     }
                 })
             })(roles_menu)
-            // this.$refs.tree.setCurrentKey(currentKey)
+            this.$refs.tree.setCurrentKey(currentKey)
             await this.nodeClick({id:currentKey})
             this.$refs.tree.setCurrentKey(currentKey)
             this.roles_menu_checked_default = [currentKey]

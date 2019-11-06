@@ -46,8 +46,8 @@
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工作日加班工资：</span></el-col><el-col :span="10"><span :class="`text-value ${Detail.aWorkdayOtHours!=0?'text-warn':''}`">{{Detail.aOvertime}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">休息日加班工资：</span></el-col><el-col :span="10"><span :class="`text-value ${Detail.aWeekOtDay!=0?'text-warn':''}`">{{Detail.aWeekendWelfare}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">全勤奖：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aFullAtt}}</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">绩效1：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aPerformance}}</span></el-col></el-row>
-                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">(考核基准)绩效2：</span></el-col><el-col :span="10"><span class="text-value  text-warn">{{Detail.aMinPerformance}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">绩效1：</span></el-col><el-col :span="10"><span class="text-value">{{Detail.aMinPerformance}}</span></el-col></el-row>
+                  <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">(考核基准)绩效2：</span></el-col><el-col :span="10"><span class="text-value  text-warn">{{Detail.aPerformance}}</span></el-col></el-row>
                   <el-row class="text-row"><el-col :span="14" class="text-right "><span class="text-label">工资总额：</span></el-col><el-col :span="10"><span class="text-value  text-warn">{{Detail.aTotle}}</span></el-col></el-row>
                 </div>
               </el-col>
