@@ -51,16 +51,16 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("introducercost/allrecordbystatus");
+// const api_resource = api_common.resource("introducercost/allrecordbystatus");
 import dayjs from 'dayjs'
 
 export default {
 	mixins: [table_mixin],
-	props:['flowStatus'],
+	props:['flowStatus','url'],
 	data() {
 		return {
 			loading: true,
-			api_resource,
+			api_resource: api_common.resource("introducercost/allrecordbystatus"),
 			queryDialogFormVisible:true,
 			table_topHeight:286,
 			template:{
@@ -112,6 +112,13 @@ export default {
 	},
 	watch:{
 		flowStatus(){
+			console.log(this.flowStatus,'this.flowStatus')
+			if(this.flowStatus==5){
+				this.api_resource = api_common.resource("introducercost/ungeneraterecord");
+				delete this.table_form.flowStatus
+			}else{
+				this.api_resource = api_common.resource("introducercost/allrecordbystatus")
+			}
 			this.table_form.query.query = []
 			this.table_form.currentpage = 1
 			this.fetchMenu()
@@ -138,7 +145,7 @@ export default {
 		async fetchTableData() {
 			this.table_loading = true;
 			this.table_form.flowStatus = this.flowStatus
-			const {rows , total }= await api_resource.get(this.table_form);
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
@@ -146,10 +153,17 @@ export default {
 			}, 300);
 		},
 		async fetchMenu(){
-			const { field, action,table } = await api_common.menuInit("Introducercost"+this.flowStatus);
-			this.table_field = field;
-			this.table_actions = action;
-			this.table_config = table
+			if(this.flowStatus==5){
+				const { field, action,table } = await api_common.menuInit("introducercost/ungeneraterecord");
+				this.table_field = field;
+				this.table_actions = action;
+				this.table_config = table
+			}else{
+				const { field, action,table } = await api_common.menuInit("Introducercost"+this.flowStatus);
+				this.table_field = field;
+				this.table_actions = action;
+				this.table_config = table
+			}
 			//setTimeout(()=>{
 				this.fetchTableData();
 			//},500)

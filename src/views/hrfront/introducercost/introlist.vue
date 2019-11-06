@@ -15,6 +15,9 @@
         <div v-if="view_activeName==='全部记录'">
             <introlistTable flowStatus="4"/>
         </div>
+        <div v-if="view_activeName==='未生成记录'">
+            <introlistTable flowStatus="5" url="introducercost/ungeneraterecord"/>
+        </div>
     </div>
 </template>
 <script>

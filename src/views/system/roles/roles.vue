@@ -63,7 +63,7 @@
             <div>
                 <el-row  class="cell" v-for="field in fields" :key="field.id">
                     <el-col :span="9">
-                        <el-radio @change="update" v-model="filterfield" :label="field.id">{{field.showname}}</el-radio>
+                        <el-radio @change="update" :label="field.id">{{field.showname}}</el-radio>
                     </el-col>
                     <el-col :span="5">
                         <el-radio v-model="field.haspermission" :label="2" @change="update">读写</el-radio>
@@ -85,27 +85,29 @@
                 <el-radio :label="1" v-model="data" @change="update">全部</el-radio>
             </div>
             <el-radio-group v-model="data" @change="update" style="margin-top: 12px;">
-                <div v-for="i in [{label:'本部门及下属部门',value:4},{label:'本部门',value:3},{label:'本人相关',value:2},{label:'跨部门',value:5}]" :key="i.value"  class="cell">
+                <div v-for="i in [{label:'本部门及下属部门',value:2},{label:'本部门',value:3},{label:'本人相关',value:4}]" :key="i.value"  class="cell flex">
                     <el-radio :label="i.value">{{i.label}}</el-radio>
+                        <div v-if="i.value==4" class="flex">
+                            <el-input size="mini" placeholder="请输入内容" v-model="filterfield" @blur="update" class="input-with-select appendIn" :disabled="data!=4"></el-input>
+                            <!-- <el-button type="primary" class="append" size="mini" :disabled="i.value!=2">确定</el-button> -->
+                        </div>
                 </div>
             </el-radio-group>
             <!-- 选择跨部门 -->
-            <!-- <div class="action-bottom">
-                <el-radio :label="100" v-model="data" @change="showDepart">跨部门</el-radio>
-            </div> -->
-            <div class="org-tree" v-show="data==5">
+            <div class="action-bottom">
+                <el-checkbox :label="100" v-model="crossDepart" @change="showDepart">跨部门</el-checkbox>
+            </div>
+            <div class="org-tree" v-show="crossDepart==true">
                 <el-tree
                     :data="orgData"
                     show-checkbox
                     node-key="orgid"
-                    @node-click="orgClick"
                     ref="tree1"
                     :default-expanded-keys="['d36','d273']"
                     :default-checked-keys="org_menu_checked"
                     @check="orgNodeCheck"
                     :highlight-current="true"
                     accordion
-                    @getCheckedNodes="getCheckedNodes"
                     :props="defaultPropsorg">
                 </el-tree>
             </div>
@@ -167,7 +169,7 @@ import { throttle } from 'core-decorators';
             this.roles_menu_checked_default = [currentKey]
         },
         async nodeClick({id}){
-            this.showDepart()
+            
             this.orgDepart = 0
             this.currentMenuId = id
             const { fields,actions,data,filterfield,depts }  = await api_roles_auth.find(this.roleid,{
@@ -181,6 +183,12 @@ import { throttle } from 'core-decorators';
             this.org_menu_checked_default = depts
             this.org_menu_checked = depts
             this.depts = depts
+            if(depts.length!=0&&depts[0]!=='0'){
+                this.crossDepart = true
+                this.showDepart()
+            }else{
+                this.crossDepart = false
+            }
         
             this.filterfield = filterfield
             return
@@ -200,18 +208,15 @@ import { throttle } from 'core-decorators';
                 api_roles_menu.update(this.roleid,{ menuid, estate })
             })
         },
-        getCheckedNodes(leafOnly, includeHalfChecked){
-
-        },
         async showDepart(){
-            this.orgData = await this.$request.get('org/tree')
-        },
-        async orgClick({id}){
-            
+            if(this.crossDepart==true){
+                this.orgData = await this.$request.get('org/tree')
+            }else{
+                this.depts = ''
+                this.update()
+            }
         },
         orgNodeCheck(data,{checkedKeys}){
-            console.log(data,'data')
-            console.log(checkedKeys,'checkedKeys')
             let orgList = [ data.orgid ]
             ;(function f(subs){
                 subs.forEach(item=>{
@@ -225,7 +230,6 @@ import { throttle } from 'core-decorators';
             if(checkedKeys.length==0){
                 this.depts = ''
             }
-            this.data = 5
             this.update()
         },
         async fetchData(){
@@ -250,18 +254,14 @@ import { throttle } from 'core-decorators';
         },
         @throttle(1000, {leading: false})
         update(){
-            // if(this.data==5){
-            //     // this.showDepart()
-            // }else{
-                api_roles_auth.update(this.roleid,{
-                    data:this.data,
-                    menuid:this.currentMenuId,
-                    actions:this.checkedActions,
-                    fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`)),
-                    filterfield:this.filterfield,
-                    depts:this.depts
-                })
-            // }
+            api_roles_auth.update(this.roleid,{
+                data:this.data,
+                menuid:this.currentMenuId,
+                actions:this.checkedActions,
+                fields:this.fields.map(item=>(`${item['id']}:${item.haspermission}`)),
+                filterfield:this.filterfield,
+                depts:this.depts
+            })
         },
         all(state){
             this.fields.forEach(item=>{
@@ -296,7 +296,8 @@ import { throttle } from 'core-decorators';
             data:0,
             filterfield:'',
             orgDepart:'',
-            depts:[]
+            depts:[],
+            crossDepart:false
         };
     }
   };
@@ -307,8 +308,40 @@ import { throttle } from 'core-decorators';
             font-size: 12px;
         }
     }
+    .flex{
+        display: flex;
+        align-items: center
+    }
+    .appendIn{
+        width: 66%;
+        height: 26px;
+        line-height: 26px;
+        .el-input__inner{
+            height: 26px;
+            line-height: 26px;
+        }
+    }
+    .append{
+        height: 26px;
+        box-sizing: border-box;
+        // line-height: 26px;
+        text-align: center;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        span{
+            margin-left: -11px;
+        }
+    }
 </style>
 <style lang="scss" scoped>
+.append{
+    height: 26px;
+    width: 30px;
+    text-align: center;
+    span{
+        margin-left: -7px;
+    }
+}
 .label {
     font-size:16px;
     font-weight:600;
