@@ -169,11 +169,5 @@ export default {
     .drawer-profile .el-col-12{
         margin-bottom: 8px;
     }
-    /* .el-range-separator{
-        width: 20px!important;
-    } */
-    .date_range .el-range-separator{
-        width: 20px!important;
-    }
 </style>
 

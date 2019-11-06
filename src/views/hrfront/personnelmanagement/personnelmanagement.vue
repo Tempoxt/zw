@@ -971,18 +971,32 @@
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <el-form-item label="起止时间" class="date_range" >
+                                        <el-form-item label="开始时间">
                                             <el-date-picker
+                                                :picker-options="pickerOptions1"
+                                                v-model="education.eduStartTime"
+                                                type="date"
                                                 format="yyyy-MM-dd"
                                                 value-format="yyyy-MM-dd"
-                                                width="100%"
-                                                v-model="education.eduTime"
-                                                type="daterange"
-                                                range-separator="至"
-                                                start-placeholder="开始日期"
-                                                end-placeholder="结束日期">
+                                                style="width:100%"
+                                                placeholder="开始日期">
                                             </el-date-picker>
                                         </el-form-item>
+                                        <!-- <form-render type="day" :picker-options="pickerOptions1" :field="{name:'开始时间'}" v-model="education.eduStartTime"/> -->
+                                    </el-col>
+                                     <el-col :span="24">
+                                        <el-form-item label="结束时间">
+                                            <el-date-picker
+                                                :picker-options="pickerOptions2"
+                                                v-model="education.eduEndTime"
+                                                type="date"
+                                                format="yyyy-MM-dd"
+                                                value-format="yyyy-MM-dd"
+                                                style="width:100%"
+                                                placeholder="结束日期">
+                                            </el-date-picker>
+                                        </el-form-item>
+                                        <!-- <form-render type="day" :field="{name:'结束时间'}" v-model="education.eduEndTime"/> -->
                                     </el-col>
                                     <el-col :span="24">
                                         <form-render type="input" :field="{name:'证书名称'}" v-model="education.eduCardName"/>
@@ -1197,7 +1211,10 @@ export default {
             dialogEducationFormVisible:false,
             dialogEducation:'inser',
             educationData:[],
-            education:{},
+            education:{
+                eduEndTime:'',
+                eduStartTime:''
+            },
             contract:{},
             maskBtn:false,	
             bigImg:'',
@@ -1221,12 +1238,21 @@ export default {
             activeName:'first',
             alledulevels:[],
             Aledulevels:[],
-            eduType:[]
-            // pickerOptions1: {:picker-options="pickerOptions1"
-            //     disabledDate(time) {
-            //         return time.getTime() > Date.now();
-            //     },
-            // },
+            eduType:[],
+            pickerOptions1: {
+				disabledDate:time=> {
+                    if (this.education.eduEndTime) {
+                        return time.getTime() > new Date(this.education.eduEndTime).getTime();
+                    }
+				}
+			},
+            pickerOptions2: {
+				disabledDate:time=> {
+                    if (this.education.eduStartTime) {
+                        return time.getTime() < new Date(this.education.eduStartTime).getTime();
+                    }
+				}
+			},
         };
     },
     watch:{

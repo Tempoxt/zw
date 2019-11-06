@@ -254,6 +254,9 @@ import { throttle } from 'core-decorators';
         },
         @throttle(1000, {leading: false})
         update(){
+            if(this.filterfield==''){
+                this.filterfield = 'creator'
+            }
             api_roles_auth.update(this.roleid,{
                 data:this.data,
                 menuid:this.currentMenuId,

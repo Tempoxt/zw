@@ -218,8 +218,9 @@ export default {
 			const { field, action,table } = await api_common.menuInit(this.url);
 			this.table_field = field;
 			this.table_actions = action;
-            this.table_config = table
-			this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+			this.table_config = table
+			this.$set(this.table_form,'dateLap', dayjs().subtract(1,'month').format('YYYY-MM'))
+			// this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
             setTimeout(()=>{  
                 this.fetchTableData();
             },500)
