@@ -46,7 +46,7 @@
 			<el-form ref="form1" :model="form1" label-width="110px" :rules="rule1">
 				<el-row :gutter="20">
 					<el-col :span="17" :offset="3">
-						<form-render :type="`input`" :field="{name:'员工'}" v-model="form1.chineseName" disabled/>
+						<form-render :type="`input`" :field="{name:'员工'}" v-model="form1.staff__chineseName" disabled/>
 					</el-col>
 					<el-col :span="17" :offset="3">
 						<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenDatas}" v-model="form1.exceptionType"/>
@@ -63,7 +63,7 @@
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm1Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm1Submit">确 定</el-button>
+			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -154,7 +154,10 @@ export default {
 			status:'全部',
 			status3:'',
 			form:{},
-			form1:{},
+			form1:{
+				exceptionType:'',
+				exceptionTime:''
+			},
 			result:[],
 			rule:{
 				exceptionType:[
@@ -173,6 +176,14 @@ export default {
 				],
 			},
 		};
+	},
+	computed:{
+		disabled(){
+			if(this.form1.exceptionType!=''&&this.form1.exceptionTime!=''){
+				return false
+			}
+			return true
+		}
 	},
 	watch:{
 		id(){
@@ -246,7 +257,7 @@ export default {
 		async edit(){
 			this.dialogForm1Visible = true;
 			let row = this.table_selectedRows[0]
-			// this.form1 = await this.api_resource.find(row.id)
+			this.form1 = (await this.api_resource.find(row.id))[0]
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
@@ -266,10 +277,9 @@ export default {
 			}
 		},
 		async handleForm1Submit(){
-			await this.form_validate()
-			let form = Object.assign({},this.form)
+			let form = Object.assign({},this.form1)
 			try{
-				await api_resource.update(form.id,form,{alert:false})
+				await this.api_resource.update(form.id,form,{alert:false})
 				this.$message.success('修改成功')
 				this.dialogForm1Visible = false
 				this.fetchTableData()
