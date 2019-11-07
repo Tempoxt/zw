@@ -181,6 +181,8 @@ export default {
             this.table_form.total = total
             setTimeout(() => {
                 this.table_loading = false;
+                this.$refs.elTable.doLayout()
+
             }, 300);
         },
         async fetchMenu(){

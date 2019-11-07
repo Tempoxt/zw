@@ -17,6 +17,9 @@
         <div v-if="view_activeName==='请假管理'">
             <exceptionTable url="holidaymanager/leavemanager" m="2" :id="orgid"/>
         </div>
+        <div v-if="view_activeName==='补卡记录'">
+            <exceptionTable url="attendance/exception" m="3" :id="orgid"/>
+        </div>
     </el-col>
   </el-row>
 </template>

@@ -273,7 +273,6 @@ export default {
 			}catch(err){
 				this.$message.error(err.response.data);
 			}
-			
 			this.dialogFormVisible = false
 			this.fetchTableData()
 		},

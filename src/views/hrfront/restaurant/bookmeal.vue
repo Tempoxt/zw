@@ -1,15 +1,17 @@
 <template>
-   <el-row class="h-full">
-    <el-col :span="4" class="h-full page-side" style="border-right:1px solid #e8e8e8">
-        <org @change="changeOrg" />
-    </el-col>
-    <el-col :span="20">
+    <el-row class="h-full">
+        <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
+            <div class=" h-full">
+                <org v-model="orgid" @change="changeOrg" />   
+            </div>
+        </el-col>
+        <el-col :span="20">
             <orderingmeals :currentMenuid="orgid"/>
-    </el-col>
-  </el-row>
+        </el-col>
+    </el-row>
 </template>
 <script>
-import org from '@/views/public/org.vue'
+import org from '@/views/public/org'
 import orderingmeals from './restaurant/orderingmeals'
 
 export default {
