@@ -1,86 +1,76 @@
 <template>
-   <el-row class="h-full">
-    <el-col :span="4" class="h-full">
+   	<el-row class="h-full">
+		<el-col :span="4" class="h-full">
+			<el-dialog
+				:title="dialogStatus==='insert'?'添加':'编辑'"
+				:visible.sync="dialogFormVisible"
+				class="public-dialog"
+				v-el-drag-dialog
+				width="500px"
+				>
+				<div>
+					<el-form ref="form" :model="form" label-width="80px" label-position="left" >
+						<el-row :gutter="40">
+							<el-col :span="24">
+								<form-render :type="`input`" :field="{name:'标识'}" v-model="form.tag" />
+							</el-col>
+							<el-col :span="24">
+								<form-render :type="`input`" :field="{name:'条目名称'}" v-model="form.title" /> 
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
 
-         <el-dialog
-            :title="dialogStatus==='insert'?'添加':'编辑'"
-            :visible.sync="dialogFormVisible"
-            class="public-dialog"
-            v-el-drag-dialog
-            width="500px"
-            >
-            <div>
-                <el-form ref="form" :model="form" label-width="80px" label-position="left" >
-                     <el-row :gutter="40">
-                                 <el-col :span="24">
-                                  <form-render :type="`input`" :field="{name:'标识'}" v-model="form.tag" />
-                                </el-col>
-                                <el-col :span="24">
-                                    <form-render
-                                        :type="`input`"
-                                        :field="{name:'条目名称'}"
-                                        v-model="form.title"
-                                    /> 
-                                </el-col>
-                                
-                        </el-row>
-                </el-form>
-            </div>
-
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-            </div>
-            </el-dialog>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">取 消</el-button>
+					<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+				</div>
+			</el-dialog>
 
 
-      <div class="page-side h-full">
-          
-        <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-        <div>
-          <div class="side-header">
-            <el-input placeholder="快速查找" v-model="filterText" class="input">
-              <i slot="suffix" class="el-input__icon el-icon-search"></i>
-            </el-input>
-            <el-button icon="el-icon-plus" circle @click="add"></el-button>
-          </div>
-          <el-tree
-            class="tree"
-            :data="data2"
-            :props="{children: 'subs', label: 'title' }"
-            default-expand-all
-            node-key="id"
-            :filter-node-method="filterNode"
-            ref="tree2"
-            :highlight-current="true"
-            :check-on-click-node="false"
-            @node-click="handleChangeNode"
-            :expand-on-click-node="false"
-          >
-            <div slot-scope="{ node, data }" class="flexSpace">
-              <div >
-                  <span class="icon iconfont icon-zonggongsi"></span>
-                    &nbsp;
-                <span>{{ node.label||data.title }} <span v-if="data.tag"> ({{data.tag}})</span></span>
-            
-              </div>
-              <div class="actions">
-                <span class="icon iconfont icon-lajitong" @click="del(data)"></span> &nbsp;
-                <span class="icon iconfont icon-bianji" @click="edit(data)"></span>
-              </div>
-             
-            </div>
-          </el-tree>
-         
-        </div>
-         </el-scrollbar>
-      </div>
-
-    </el-col>
-    <el-col :span="20">
-        <sysdicTable  :id="current_id"/>
-    </el-col>
-  </el-row>
+			<div class="page-side h-full">
+				<div style="" class="h-full">
+					<div class="side-header" style="margin-bottom:0">
+						<el-input placeholder="快速查找" v-model="filterText" class="input">
+						<i slot="suffix" class="el-input__icon el-icon-search"></i>
+						</el-input>
+						<el-button icon="el-icon-plus" circle @click="add"></el-button>
+					</div>
+					
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+						<el-tree
+							class="tree"
+							:data="data2"
+							:props="{children: 'subs', label: 'title' }"
+							default-expand-all
+							node-key="id"
+							:filter-node-method="filterNode"
+							ref="tree2"
+							:highlight-current="true"
+							:check-on-click-node="false"
+							@node-click="handleChangeNode"
+							:expand-on-click-node="false"
+						>
+							<div slot-scope="{ node, data }" class="flexSpace">
+								<div >
+									<span class="icon iconfont icon-zonggongsi"></span> &nbsp;
+									<span>{{ node.label||data.title }} <span v-if="data.tag"> ({{data.tag}})</span></span>
+								</div>
+								<div class="actions">
+									<span class="icon iconfont icon-lajitong" @click="del(data)"></span> &nbsp;
+									<span class="icon iconfont icon-bianji" @click="edit(data)"></span>
+								</div>
+							
+							</div>
+						</el-tree>	
+					</el-scrollbar>
+				</div>
+			</div>
+		</el-col>
+		<el-col :span="20">
+			<sysdicTable  :id="current_id"/>
+		</el-col>
+  	</el-row>
 </template>
 <script>
 import * as api_common from "@/api/common";
