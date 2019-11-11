@@ -1,8 +1,7 @@
 <template>
    <el-row class="h-full">
-    <el-col :span="4" class="h-full">
-      <div class="page-side h-full">
-        
+    <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
+      <div class=" h-full">
         <!-- <span class="page-title">员工用餐记录</span>
          <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
         <div>
@@ -46,7 +45,7 @@
 <script>
 import * as api_common from "@/api/common";
 import consumedata from './restaurant/consumedata'
-import org from '@/views/public/org.vue'
+import org from '@/views/public/org'
 export default {
     data(){
         return {

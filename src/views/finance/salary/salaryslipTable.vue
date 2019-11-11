@@ -68,6 +68,66 @@
         </div>
     </el-dialog>
 
+    <!-- 个税详情 -->
+    <Drawer title="个税详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+      <div class="flex-title">
+        <p class="title">个税缴纳累计表</p>
+        <div>
+          <el-date-picker
+            v-model="taxdateLap"
+            type="month"
+            size="small"
+            format="yyyy年MM月"
+            value-format="yyyy-MM"
+            placeholder="选择月份">
+          </el-date-picker>
+        </div>
+      </div>
+      <el-table
+        :data="taxAcculData"
+        border
+        show-summary
+        style="width: 100%">
+        <el-table-column prop="date" label="月份"></el-table-column>
+        <el-table-column prop="week" label="社保主体"></el-table-column>
+        <el-table-column prop="week" label="累计收入"></el-table-column>
+        <el-table-column prop="week" label="累计扣除费用"></el-table-column>
+        <el-table-column prop="week" label="累计专项扣除"></el-table-column>
+        <el-table-column prop="week" label="累计专项附加"></el-table-column>
+        <el-table-column prop="week" label="累计应缴纳税所得额"></el-table-column>
+        <el-table-column prop="week" label="累计个税"></el-table-column>
+        <el-table-column prop="week" label="应缴个税"></el-table-column>
+        <el-table-column prop="week" label="实缴个税"></el-table-column>
+        <el-table-column prop="week" label="个税差"></el-table-column>
+      </el-table>
+
+      <div class="flex-title mt20">
+        <p class="title">个税缴纳明细表</p>
+      </div>
+      <el-table
+        :data="taxAcculData"
+        border
+        show-summary
+        style="width: 100%">
+        <el-table-column prop="date" label="月份"></el-table-column>
+        <el-table-column prop="week" label="社保主体"></el-table-column>
+        <el-table-column prop="week" label="工资收入"></el-table-column>
+        <el-table-column prop="week" label="扣除费用"></el-table-column>
+        <el-table-column prop="week" label="专项扣除">
+          <el-table-column prop="week" label="社保"></el-table-column>
+          <el-table-column prop="week" label="公积金"></el-table-column>
+        </el-table-column>
+        <el-table-column prop="week" label="专项附加扣除">
+          <el-table-column prop="week" label="子女教育"></el-table-column>
+          <el-table-column prop="week" label="赡养老人"></el-table-column>
+          <el-table-column prop="week" label="住房租金"></el-table-column>
+          <el-table-column prop="week" label="继续教育"></el-table-column>
+          <el-table-column prop="week" label="住房贷款利息"></el-table-column>
+        </el-table-column>
+        <el-table-column prop="week" label="应纳税所得额"></el-table-column>
+        <el-table-column prop="week" label="应缴个税"></el-table-column>
+      </el-table>
+    </Drawer>
 
 
     <table-header
@@ -82,7 +142,7 @@
           </div>
     </table-header>
     <el-table
-        ref="elTable"
+      ref="elTable"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
@@ -92,6 +152,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
+      @cell-click="openDrawer"
+      :cell-style="cellStyle"
       
     >
     <el-table-column 
@@ -176,6 +238,10 @@ export default {
         otWeekday:2
       },
       formData:[],
+      openDrawers:false,//个税侧弹框
+      taxdateLap:'',//个税月份
+      taxAcculData:[],//个税缴纳累计表
+      taxDetailData:[],//个税缴纳明细表
     };
   },
   watch:{
@@ -203,11 +269,22 @@ export default {
     }
   },
   methods: {
-    
-        fetch(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
-        },
+    async openDrawer(row,column,cell,event){
+			// if(row.tax==event.target.innerText){
+			// 	this.openDrawers = true
+			// }
+		},
+		cellStyle({row, column, rowIndex, columnIndex}){
+			// if(column.label == '个税(实际)'){
+			// 	return 'color:#02B708;cursor:pointer'
+			// }else{
+			// 	return  ''
+			// }
+		},
+    fetch(){
+        this.table_form.currentpage = 1
+        this.fetchTableData()
+    },
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true
@@ -217,8 +294,6 @@ export default {
         this.dialogForm2Visible = false
     },
     async handleForm3Submit(){
-
-    
       await this.$request.post('basicwage/applysheet',this.form3,{
         params:{
           sheetType:2
@@ -266,7 +341,6 @@ export default {
         
     },
      async tabClick(v){
-        console.log(v.label,'v.label')
         this.tab_label  = v.label
     },
   },
@@ -280,13 +354,29 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">    
+    .drawerInfo .ivu-drawer-header{
+      background: rgba(245,250,251,1)
+    }
     .alignRight{
         text-align: right;
         margin-top: 8px;
     }
     .mb10{
         margin-bottom: 15px;
+    }
+    .mt20{
+        margin-top: 20px;
+    }
+    .flex-title{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      .title{
+        color: #0BB2D4;
+        font-weight: bold;
+      }
     }
 </style>
 

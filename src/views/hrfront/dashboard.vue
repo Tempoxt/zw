@@ -88,7 +88,7 @@
 						</el-col>
 					</el-row>
 						
-					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:60px">
 						<el-row class="elCol">
 							<el-col :span="12" class="relative" v-if="staffData.length!=0">
 								<inService

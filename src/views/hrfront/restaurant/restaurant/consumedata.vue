@@ -4,54 +4,47 @@
   :table_query.sync="table_form.query"
   @query="querySubmit"
   >
-	<el-dialog
-		title="餐费详情"
-		:visible.sync="dialogPayVisible"
-		class="public-dialog"
-		v-el-drag-dialog
-		>
+	
+	<Drawer title="餐费详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
 		<el-table
-		v-loading="payloading"
-		:data="payData"
-		border
-		show-summary
-        :summary-method="getSummaries"
-		height="500"
-		style="width: 100%">
-		<el-table-column
-			prop="date"
-			label="日期"
-			width="180">
-		</el-table-column>
-		<el-table-column
-			prop="week"
-			label="星期"
-			width="180">
-		<template slot-scope="scope">
-			{{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
-		</template>
-		</el-table-column>
-		
-		<el-table-column
-			prop="lunch"
-			label="午餐(元)">
-		</el-table-column>
+			v-loading="payloading"
+			:data="payData"
+			border
+			show-summary
+			:summary-method="getSummaries"
+			style="width: 100%">
 			<el-table-column
-			prop="dinner"
-			label="晚餐(元)">
-		</el-table-column>
-		<el-table-column
-			prop="nightingale"
-			label="夜宵(元)">
-		</el-table-column>
-		<el-table-column
-			prop="total"
-			label="小计">
-		</el-table-column>
+				prop="date"
+				label="日期"
+				width="110">
+			</el-table-column>
+			<el-table-column
+				prop="week"
+				label="星期"
+				width="110">
+			<template slot-scope="scope">
+				{{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
+			</template>
+			</el-table-column>
+			
+			<el-table-column
+				prop="lunch"
+				label="午餐(元)">
+			</el-table-column>
+				<el-table-column
+				prop="dinner"
+				label="晚餐(元)">
+			</el-table-column>
+			<el-table-column
+				prop="nightingale"
+				label="夜宵(元)">
+			</el-table-column>
+			<el-table-column
+				prop="total"
+				label="小计">
+			</el-table-column>
 		</el-table>
-    
-  
-    </el-dialog>
+	</Drawer>
 
 
     <el-dialog
@@ -162,16 +155,18 @@
 
     <el-table
         ref="elTable"
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-      @sort-change="table_sort_change"
-    > 
+		@selection-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="headerCellStyle"
+		:height="table_height"
+		@header-dragend="table_dragend"
+		@sort-change="table_sort_change"
+		@cell-click="openDrawer"
+		:cell-style="cellStyle"
+		> 
 
         <el-table-column 
 			type="selection" 
@@ -180,37 +175,9 @@
 			:selectable="table_disable_selected"
 			>
       	</el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-
-
-    <!-- :width="table_field.find(o=>o.name==='month').width||'auto'"
-      :sortable="table_field.find(o=>o.name==='month').issort?'custom':false" -->
-    <!-- <el-table-column
-      align="left"
-      v-if="table_field.length"
-      width="150"
-    
-    >
-      <template slot="header" slot-scope="scope">
-        <div class="month-select">
-            <span>{{table_form.month|monthFilter}} <span class="el-icon-caret-bottom" style="color:#c0c4cc"></span></span>
-            <el-date-picker
-                class="picker"
-                style="opacity: 0;"
-                v-model="table_form.month"
-                type="month"
-                value-format="yyyy-MM"
-                placeholder="选择月份">
-            </el-date-picker>
-        </div>
-      </template>
-      <template slot-scope="scope">
-          {{scope.row.month}}
-      </template>
-    </el-table-column> -->
-    <!-- <each-table-column :table_field="table_field.filter(f=>f.name!=='month')" :template="template"/> -->
-		
-    <each-table-column :table_field="table_field" :template="template"/>
+		<el-table-column type="index" :index="indexMethod" width="70"/>
+			
+		<each-table-column :table_field="table_field"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -238,18 +205,11 @@ export default {
 		const vm = this
 		return {
 			loading: true,
-			// form:defaultForm,
 			form:{
 				isdiet:false
 			},
 			api_resource,
 			payloading:false,
-			dialogPayVisible:false,
-			template:{
-				paymongey(column,row){
-					return <el-button type="text" size="medium" onClick={vm.showPayInfo.bind(vm,row)}>{row.paymongey}</el-button>
-				}
-			},
 			payData:[],
 			table_form:{
 				dateLap:''
@@ -260,7 +220,8 @@ export default {
 			},
 			dialogForm1Visible:false,
 			current:'',
-			settle:false
+			settle:false,
+			openDrawers: false,
 		};
   	},
 	watch:{
@@ -315,18 +276,27 @@ export default {
 			});
 			return sums;
 		},
-		async showPayInfo(row){
+		async openDrawer(row,column,cell,event){
 			this.payloading = true
-			this.dialogPayVisible = true
-			let { rows } = await this.$request.get('restaurant/consumedata/detail',{
-				params:{
-					workcode:row.workcode,
-					month:this.table_form.dateLap
-				}
-			})
-			this.payData =  rows
-			this.payloading = false
-	
+			if(row.paymongey==event.target.innerText){
+				this.openDrawers = true
+				let { rows } = await this.$request.get('restaurant/consumedata/detail',{
+					params:{
+						workcode:row.workcode,
+						month:this.table_form.dateLap
+					}
+				})
+				this.payData =  rows
+				this.payloading = false
+			}
+		},
+		
+		cellStyle({row, column, rowIndex, columnIndex}){
+			if(column.label == '订餐费用(元)'){
+				return 'color:#0BB2D4;cursor:pointer'
+			}else{
+				return  ''
+			}
 		},
 		async edit(){
 			let row = this.table_selectedRows[0];
@@ -390,3 +360,45 @@ export default {
     }
 }
 </style>
+<style lang="scss">
+    .drawerInfo .ivu-drawer-body {
+        padding:0;
+    }
+</style>
+<style>
+    .drawerInfo .ivu-drawer-header{
+        background: rgba(245,250,251,1)
+    }
+    .infoDetail{
+        padding: 0 20px ; 
+    }
+    .imgFlex{
+        display: flex;
+        align-items: center;
+        height: 70px;
+        margin-left: 15px;
+    }
+    .imgAvatar{
+        width: 50px;
+        height: 50px;
+    }
+    .userInfo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 70px;
+        line-height: 26px;
+    }
+    .info{
+        color: #0BB2D4;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 20px 0 10px 2px;
+    }
+    .fontStyle{
+        color: #37474F;
+        font-size: 14px;
+    }
+    .mt10{margin-top: 10px;}
+</style>
+
