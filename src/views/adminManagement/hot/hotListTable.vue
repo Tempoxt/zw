@@ -58,7 +58,7 @@
 					class="dtable"
 					:data="drawerData"
 					:header-cell-style="headerStyle"
-					style="width: 100%;margin-top:30px" 
+					style="width: 100%;margin-top:20px" 
 					max-height="840"
 					show-summary
       				:summary-method="getSummaries"
@@ -76,7 +76,7 @@
 					<el-table-column prop="OffDutyTime2" label="下班2" width="60"></el-table-column>
 					<el-table-column prop="OnDutyTime3" label="上班3" width="60"></el-table-column>
 					<el-table-column prop="OffDutyTime3" label="下班3" width="60"></el-table-column>
-					<el-table-column prop="Remark" label="异常说明" width="120">
+					<el-table-column prop="Remark" label="异常说明" >
 						<template slot-scope="scope">
 							<span :title="scope.row.Remark" style="width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red;cursor:default">{{scope.row.Remark}}</span>
 						</template>
@@ -95,7 +95,40 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px">
-			<dateLap v-model="table_form.dateLap" @change="fetch"/>
+			<div class="flex">
+				<el-select v-model="ctype" style="width:60px" class="dateLap-select">
+					<el-option
+					v-for="item in options"
+					:key="item.value"
+					:label="item.label"
+					:value="item.value">
+            		</el-option>
+				</el-select>
+				<el-date-picker
+					@change="fetch"
+					v-if="ctype==2"
+					:picker-options="pickerOptions"
+					style="width:250px"
+					class="dateLap-date"
+					v-model="table_form.dateLap"
+					type="month"
+					value-format="yyyy-MM"
+					format="yyyy-MM"
+					placeholder="选择月">
+				</el-date-picker>
+				<el-date-picker
+					@change="fetch"
+					v-if="ctype==3"
+					style="width:250px"
+					class="dateLap-date"
+					v-model="table_form.dateLap"
+					type="year"
+					value-format="yyyy"
+					format="yyyy"
+					placeholder="选择年">
+				</el-date-picker> 
+			</div>
+			<!-- <dateLap v-model="table_form.dateLap" @change="fetch"/> -->
 		</div>
     </table-header>
     <el-table
@@ -157,7 +190,13 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			table_topHeight:276,
-
+			options:[{
+                value:'2',
+                label:'月'
+            },{
+                value:'3',
+                label:'年'
+            }],
 			adminList:[],
 			defaultForm,
 			roomAdminList:[],
@@ -173,6 +212,8 @@ export default {
 			emplCode:'',
 			curr:1,
 			page:'',
+			ctype:'2',
+			month:'2019-10',
 			template:{
 				auditStatus(column,row){
 					if(row.auditStatus==-1){
@@ -187,7 +228,13 @@ export default {
 						return  <el-tag size="mini" type="success">已结付</el-tag>
 					}
 				}
-			}
+			},
+			
+			pickerOptions: {
+				disabledDate(time) {
+					return  (time.getTime()>new Date('2019-10-31').getTime())||(time.getTime() < new Date('2019-05-31').getTime());
+				}
+			},
 		};
 	},
 	watch:{
@@ -197,7 +244,15 @@ export default {
 		},
 		'window.innerHeight'(){
 			alert(123)
-		}
+		},
+		ctype(){
+            if(this.ctype == 2){
+                this.table_form.dateLap = dayjs().format('2019-10')
+            }else if(this.ctype == 3){
+                this.table_form.dateLap = dayjs().format('YYYY')
+            }
+            this.fetch()
+        }
 	},
 	methods: {
 		fetch(){
@@ -317,12 +372,16 @@ export default {
 		this.table_actions = action;
 		this.table_config = table
 		this.fetchTableData();
-		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		this.$set(this.table_form,'dateLap',this.month)
 	}
 };
 </script>
 
 <style  lang="scss" scoped>
+.flex{
+    display: flex;
+    align-items: center
+}
     .drawerInfo .ivu-drawer-header{
         background: rgba(245,250,251,1)
     }

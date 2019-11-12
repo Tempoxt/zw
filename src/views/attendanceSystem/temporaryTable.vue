@@ -86,7 +86,7 @@
 			>
 		</el-table-column>
 		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
+		<each-table-column :table_field="table_field" :template="template"/>
     </el-table>
     <table-pagination 
         :total="table_form.total" 
@@ -100,7 +100,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-// const api_resource = api_common.resource("holidaymanager/holidaystat");
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
@@ -116,6 +115,17 @@ export default {
 			openDrawers: false,
 			activeNames: ['0'],
 			reverse: true,
+			template:{
+				payStatus(column,row){
+					if(row.payStatus=='未结付'){
+						return <el-tag size="mini" type="danger">{row.payStatus}</el-tag>
+					}else if(row.payStatus=='已结付'){
+						return <el-tag size="mini" type="success">{row.payStatus}</el-tag>
+					}else{
+						return <span>{row.payStatus}</span>
+					}
+				}
+			}
 		};
 	},
 	watch:{
@@ -126,10 +136,10 @@ export default {
 		url(){
             this.api_resource = api_common.resource(this.url)
 			delete this.table_form.keyword
+			delete this.table_form.sortname
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()
-			// this.fetchTableData();
 		},
 	},
 	methods: {

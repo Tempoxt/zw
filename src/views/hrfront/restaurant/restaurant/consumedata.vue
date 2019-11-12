@@ -11,38 +11,19 @@
 			:data="payData"
 			border
 			show-summary
+			:header-cell-style="headerStyle"
 			:summary-method="getSummaries"
-			style="width: 100%">
-			<el-table-column
-				prop="date"
-				label="日期"
-				width="110">
-			</el-table-column>
-			<el-table-column
-				prop="week"
-				label="星期"
-				width="110">
-			<template slot-scope="scope">
+			style="width: 100%;padding:15px 15px 0">
+			<el-table-column prop="date" label="日期" width="110"></el-table-column>
+			<el-table-column prop="week" label="星期" width="110">
+				<template slot-scope="scope">
 				{{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
-			</template>
+				</template>
 			</el-table-column>
-			
-			<el-table-column
-				prop="lunch"
-				label="午餐(元)">
-			</el-table-column>
-				<el-table-column
-				prop="dinner"
-				label="晚餐(元)">
-			</el-table-column>
-			<el-table-column
-				prop="nightingale"
-				label="夜宵(元)">
-			</el-table-column>
-			<el-table-column
-				prop="total"
-				label="小计">
-			</el-table-column>
+			<el-table-column prop="lunch" label="午餐(元)"></el-table-column>
+			<el-table-column prop="dinner" label="晚餐(元)"></el-table-column>
+			<el-table-column prop="nightingale" label="夜宵(元)"></el-table-column>
+			<el-table-column prop="total" label="小计"></el-table-column>
 		</el-table>
 	</Drawer>
 
@@ -246,6 +227,9 @@ export default {
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
+		},
+		headerStyle(row,rowIndex,column,columnIndex){
+            return "background:#F5F5F5;"
         },
 		getSummaries(param) {
 			const { columns, data } = param;

@@ -68,65 +68,162 @@
         </div>
     </el-dialog>
 
-    <!-- 个税详情 -->
-    <Drawer title="个税详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
-      <div class="flex-title">
-        <p class="title">个税缴纳累计表</p>
-        <div>
-          <el-date-picker
-            v-model="taxdateLap"
-            type="month"
-            size="small"
-            format="yyyy年MM月"
-            value-format="yyyy-MM"
-            placeholder="选择月份">
-          </el-date-picker>
+    <!-- 高温津贴/个税...详情 -->
+    <Drawer :title="drawerTitle" :closable="false" width="840" v-model="openDrawers" class="drawerInfo">
+      <!-- 个税 -->
+      <div v-if="showInfo=='tax'">
+        <div class="flex-title">
+          <p class="title">个税缴纳累计表</p>
+          <div>
+            <el-date-picker
+            style="width:140px"
+              v-model="taxdateLap"
+              type="month"
+              size="small"
+              format="yyyy年MM月"
+              value-format="yyyy-MM"
+              placeholder="选择月份">
+            </el-date-picker>
+          </div>
         </div>
-      </div>
-      <el-table
-        :data="taxAcculData"
-        border
-        show-summary
-        style="width: 100%">
-        <el-table-column prop="date" label="月份"></el-table-column>
-        <el-table-column prop="week" label="社保主体"></el-table-column>
-        <el-table-column prop="week" label="累计收入"></el-table-column>
-        <el-table-column prop="week" label="累计扣除费用"></el-table-column>
-        <el-table-column prop="week" label="累计专项扣除"></el-table-column>
-        <el-table-column prop="week" label="累计专项附加"></el-table-column>
-        <el-table-column prop="week" label="累计应缴纳税所得额"></el-table-column>
-        <el-table-column prop="week" label="累计个税"></el-table-column>
-        <el-table-column prop="week" label="应缴个税"></el-table-column>
-        <el-table-column prop="week" label="实缴个税"></el-table-column>
-        <el-table-column prop="week" label="个税差"></el-table-column>
-      </el-table>
+        <el-table
+        class="taxTable"
+          :data="taxAcculData"
+          border
+          style="width: 100%">
+          <el-table-column prop="date" label="月份" width="80"></el-table-column>
+          <el-table-column prop="week" label="社保主体" width="80"></el-table-column>
+          <el-table-column prop="week" label="累计收入" width="70"></el-table-column>
+          <el-table-column prop="week" label="累计扣除费用" width="80"></el-table-column>
+          <el-table-column prop="week" label="累计专项扣除" width="80"></el-table-column>
+          <el-table-column prop="week" label="累计专项附加" width="80"></el-table-column>
+          <el-table-column prop="week" label="累计应缴纳税所得额" width="90"></el-table-column>
+          <el-table-column prop="week" label="累计个税" width="50"></el-table-column>
+          <el-table-column prop="week" label="应缴个税" width="50"></el-table-column>
+          <el-table-column prop="week" label="实缴个税" width="50"></el-table-column>
+          <el-table-column prop="week" label="个税差"></el-table-column>
+        </el-table>
 
-      <div class="flex-title mt20">
-        <p class="title">个税缴纳明细表</p>
+        <div class="flex-title mt20">
+          <p class="title">个税缴纳明细表</p>
+        </div>
+        <el-table
+          class="taxTable"
+          :data="taxAcculData"
+          border
+          show-summary
+          :summary-method="getSummarTax"
+          style="width: 100%">
+          <el-table-column prop="date" label="月份" width="80"></el-table-column>
+          <el-table-column prop="week" label="社保主体" width="80"></el-table-column>
+          <el-table-column prop="week" label="工资收入" width="70"></el-table-column>
+          <el-table-column prop="week" label="扣除费用" width="80"></el-table-column>
+          <el-table-column prop="week" label="专项扣除">
+            <el-table-column prop="week" label="社保" width="50"></el-table-column>
+            <el-table-column prop="week" label="公积金" width="60"></el-table-column>
+          </el-table-column>
+          <el-table-column prop="week" label="专项附加扣除">
+            <el-table-column prop="week" label="子女教育" width="50"></el-table-column>
+            <el-table-column prop="week" label="赡养老人" width="50"></el-table-column>
+            <el-table-column prop="week" label="住房租金" width="50"></el-table-column>
+            <el-table-column prop="week" label="继续教育" width="50"></el-table-column>
+            <el-table-column prop="week" label="住房贷款利息" width="60"></el-table-column>
+          </el-table-column>
+          <el-table-column prop="week" label="应纳税所得额" width="70"></el-table-column>
+          <el-table-column prop="week" label="实缴个税" width="57"></el-table-column>
+        </el-table>
       </div>
-      <el-table
-        :data="taxAcculData"
-        border
-        show-summary
-        style="width: 100%">
-        <el-table-column prop="date" label="月份"></el-table-column>
-        <el-table-column prop="week" label="社保主体"></el-table-column>
-        <el-table-column prop="week" label="工资收入"></el-table-column>
-        <el-table-column prop="week" label="扣除费用"></el-table-column>
-        <el-table-column prop="week" label="专项扣除">
-          <el-table-column prop="week" label="社保"></el-table-column>
-          <el-table-column prop="week" label="公积金"></el-table-column>
-        </el-table-column>
-        <el-table-column prop="week" label="专项附加扣除">
-          <el-table-column prop="week" label="子女教育"></el-table-column>
-          <el-table-column prop="week" label="赡养老人"></el-table-column>
-          <el-table-column prop="week" label="住房租金"></el-table-column>
-          <el-table-column prop="week" label="继续教育"></el-table-column>
-          <el-table-column prop="week" label="住房贷款利息"></el-table-column>
-        </el-table-column>
-        <el-table-column prop="week" label="应纳税所得额"></el-table-column>
-        <el-table-column prop="week" label="应缴个税"></el-table-column>
-      </el-table>
+
+      <!-- 高温津贴-->
+      <div class="drawer-profile" v-if="showInfo=='highTempture'">
+				<el-table
+          border
+					:header-cell-style="headerStyle"
+					class="dtable"
+					:data="hotData"
+					style="width: 100%;margin-top:20px" 
+					max-height="840"
+					show-summary
+					:cellStyle="drawerStyle"
+          :summary-method="getSummarHigh"
+					>
+					<el-table-column prop="CheckDate" label="日期">
+						<template slot-scope="scope">
+							<span :title="scope.row.CheckDate">{{scope.row.CheckDate.split('-')[2]}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="weekday" label="星期" ></el-table-column>
+					<el-table-column prop="OnDutyTime1" label="上班1" ></el-table-column>
+					<el-table-column prop="OffDutyTime1" label="下班1" ></el-table-column>
+					<el-table-column prop="OnDutyTime2" label="上班2"  ></el-table-column>
+					<el-table-column prop="OffDutyTime2" label="下班2" ></el-table-column>
+					<el-table-column prop="OnDutyTime3" label="上班3"  ></el-table-column>
+					<el-table-column prop="OffDutyTime3" label="下班3" ></el-table-column>
+					<el-table-column prop="Remark" label="异常说明"  >
+						<template slot-scope="scope">
+							<span :title="scope.row.Remark" style="width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red;cursor:default">{{scope.row.Remark}}</span>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+
+      <!-- 餐费详情-->
+      <div v-if="showInfo=='mealFee'">
+        <div class="flex-title mt20">
+          <p class="title">餐费详情表</p>
+        </div>
+        <el-table
+					:header-cell-style="headerStyle"
+          :data="mealData"
+          border
+          show-summary
+          :summary-method="getSummarMeal"
+          style="width: 100%">
+          <el-table-column prop="date" label="日期" width="110"></el-table-column>
+          <el-table-column prop="week" label="星期" width="110">
+            <template slot-scope="scope">
+              {{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="lunch" label="午餐(元)"></el-table-column>
+          <el-table-column prop="dinner" label="晚餐(元)"></el-table-column>
+          <el-table-column prop="nightingale" label="夜宵(元)"></el-table-column>
+          <el-table-column prop="total" label="小计"></el-table-column>
+        </el-table>
+      </div>
+
+      <!-- 补其他 -->
+      <div v-if="showInfo=='otherDec'">
+        <div class="flex-title mt20">
+          <p class="title">补其他详情表</p>
+        </div>
+        <el-table
+          :data="otherData"
+          border
+          show-summary
+          :summary-method="getSummarOther"
+          style="width: 100%">
+          <el-table-column prop="date" label="日期" width="110"></el-table-column>
+          <el-table-column prop="lunch" label="补助项目"></el-table-column>
+          <el-table-column prop="dinner" label="补发奖金"></el-table-column>
+          <el-table-column prop="total" label="数据来源"></el-table-column>
+        </el-table>
+      </div>
+
+      <!-- 扣其他 -->
+      <div v-if="showInfo=='otherDec'">
+        <el-table
+          :data="otherData"
+          border
+          show-summary
+          :summary-method="getSummarOther"
+          style="width: 100%">
+          <el-table-column prop="date" label="日期" width="110"></el-table-column>
+          <el-table-column prop="lunch" label="扣款项目"></el-table-column>
+          <el-table-column prop="dinner" label="扣罚金额"></el-table-column>
+          <el-table-column prop="total" label="数据来源"></el-table-column>
+        </el-table>
+      </div>
     </Drawer>
 
 
@@ -154,7 +251,7 @@
       @sort-change="table_sort_change"
       @cell-click="openDrawer"
       :cell-style="cellStyle"
-      
+		  :cell-class-name="cellName"
     >
     <el-table-column 
       type="selection" 
@@ -238,10 +335,16 @@ export default {
         otWeekday:2
       },
       formData:[],
-      openDrawers:false,//个税侧弹框
+      showInfo:'',//展示某个模块信息
+      drawerTitle:'',//弹框标题
+      openDrawers:false,//侧弹框
       taxdateLap:'',//个税月份
       taxAcculData:[],//个税缴纳累计表
       taxDetailData:[],//个税缴纳明细表
+      hotData:[],//高温津贴
+      mealData:[],//餐费
+      otherData:[],//补其他
+      totalAllo:'',//高温津贴考勤有效天数
     };
   },
   watch:{
@@ -269,16 +372,141 @@ export default {
     }
   },
   methods: {
+    // 个税合计项
+    getSummarTax(){
+
+    },
+    // 高温津贴合计项
+    getSummarHigh(param){
+      const { columns, data } = param;
+			const sums = [];
+			columns.forEach((column, index) => {
+				if(index === 0){
+					sums[index] = this.totalAllo;
+				}
+			});
+			return sums;
+    },
+    //餐费合计项
+    getSummarMeal(param) {
+			const { columns, data } = param;
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}else if(index === 1){
+					sums[index] = '';
+					return;
+				}else{
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+							const value = Number(curr);
+							if (!isNaN(value)) {
+							return prev + curr;
+							} else {
+							return prev;
+							}
+						}, 0);
+						sums[index] = sums[index];
+					} else {
+						sums[index] = '';
+					}
+				}
+			});
+			return sums;
+    },
+    //补其他/扣其他合计项
+    getSummarOther(param) {
+			const { columns, data } = param;
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}else if(index === 2){
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+							const value = Number(curr);
+							if (!isNaN(value)) {
+							return prev + curr;
+							} else {
+							return prev;
+							}
+						}, 0);
+						sums[index] = sums[index];
+					} else {
+						sums[index] = '';
+					}
+				}else{
+          sums[index] = '';
+        }
+			});
+			return sums;
+		},
+    drawerStyle({row,column,rowIndex,columnIndex}){
+			if(row.Remark!=''&&row.Remark!=null){
+				return 'color:red'
+			}else if(column.label=="星期"){
+				if(row.weekday=='六'){
+					return 'background-color:#68f59c;'
+				}
+				if(row.weekday=='日'){
+					return 'background-color:#1cbe57;'
+				}
+			}else if(column.label=="日期"&&row.hotDetail!=''&&row.hotDetail!=null&&row.hotDetail==1){
+				return 'background-color:#0bb2d4;'
+			}
+    },
+    headerStyle(row,rowIndex,column,columnIndex){
+        return "background:#F5F5F5;"
+    },
     async openDrawer(row,column,cell,event){
 			// if(row.tax==event.target.innerText){
-			// 	this.openDrawers = true
-			// }
+      //   this.openDrawers = true
+      //   this.drawerTitle = '个税详情'
+      //   this.showInfo = 'tax'
+      // }
+      // if(row.highTempture==event.target.innerText){
+      //   this.openDrawers = true
+      //   this.drawerTitle = '考勤明细'
+      //   this.showInfo = 'highTempture'
+      // }
+      // if(row.mealFee==event.target.innerText){
+      //   this.openDrawers = true
+      //   this.drawerTitle = '餐费明细'
+      //   this.showInfo = 'mealFee'
+      // }
+      // if(row.otherAdd==event.target.innerText){
+      //   this.openDrawers = true
+      //   this.drawerTitle = '补其他'
+      //   this.showInfo = 'otherAdd'
+      // }
+      // if(row.otherDec==event.target.innerText){
+      //   this.openDrawers = true
+      //   this.drawerTitle = '扣其他'
+      //   this.showInfo = 'otherDec'
+      // }
+      // if(row.roomFee==event.target.innerText){
+      //   this.openDrawers = true
+      //   this.drawerTitle = '宿舍费用明细'
+      //   this.showInfo = 'roomFee'
+      // }
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			// if(column.label == '个税(实际)'){
+			// if(column.label == '个税(实际)'||column.label =="高温津贴" ||column.label =="伙食费"||column.label =="住宿费"||column.label =="补其他"){
 			// 	return 'color:#02B708;cursor:pointer'
+			// }else if(column.label =="扣其他"){
+			// 	return 'color:#FF0000;cursor:pointer'
 			// }else{
-			// 	return  ''
+      //   return ''
+      // }
+    },
+		cellName({row, column, rowIndex, columnIndex}){
+			// if(column.label == '个税(实际)'||column.label =="高温津贴" ||column.label =="伙食费"||column.label =="住宿费"||column.label =="补其他"||column.label =="扣其他"){
+			// 	return 'pointer'
 			// }
 		},
     fetch(){
@@ -340,8 +568,8 @@ export default {
         this.fetchTableData()
         
     },
-     async tabClick(v){
-        this.tab_label  = v.label
+    async tabClick(v){
+      this.tab_label  = v.label
     },
   },
   async created() {
@@ -358,15 +586,22 @@ export default {
     .drawerInfo .ivu-drawer-header{
       background: rgba(245,250,251,1)
     }
+    .drawerInfo .el-table th div{
+      line-height:18px!important;
+    }
+    .taxTable .has-gutter tr th,.taxTable .el-table thead.is-group th{
+      background: #F5F5F5!important;
+    }
+    
     .alignRight{
-        text-align: right;
-        margin-top: 8px;
+      text-align: right;
+      margin-top: 8px;
     }
     .mb10{
-        margin-bottom: 15px;
+      margin-bottom: 15px;
     }
     .mt20{
-        margin-top: 20px;
+      margin-top: 20px;
     }
     .flex-title{
       display: flex;
@@ -377,6 +612,9 @@ export default {
         color: #0BB2D4;
         font-weight: bold;
       }
+    }
+    .pointer span{
+      cursor: pointer!important;
     }
 </style>
 
