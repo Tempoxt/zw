@@ -50,7 +50,7 @@
 			<el-button type="primary" @click="handleForm2Submit">确 定</el-button>
 		</div>
     </el-dialog>
-
+	<!-- max-height="840" -->
 	<div>
 		<Drawer :title="chineseName+'('+emplCode+')考勤明细'" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
 			<div class="drawer-profile">
@@ -59,7 +59,6 @@
 					:data="drawerData"
 					:header-cell-style="headerStyle"
 					style="width: 100%;margin-top:20px" 
-					max-height="840"
 					show-summary
       				:summary-method="getSummaries"
 					:cellStyle="drawerStyle"

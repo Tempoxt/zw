@@ -25,7 +25,7 @@
 					</el-col>
 					<el-col :span="12">
                         <el-form-item label="设备名称">
-                            <el-select v-model="form.device"  multiple placeholder="请选择" filterable style="width:100%">
+                            <el-select v-model="form.device" multiple placeholder="请选择" filterable style="width:100%">
                                 <el-option
                                     v-for="item in nameData"
                                     :key="item.value"
@@ -116,7 +116,9 @@ export default {
     data() {
         return {
             loading: false,
-            form:{},
+            form:{
+                device:[]
+            },
             api_resource,
             queryDialogFormVisible:true,
             table_topHeight:220,
@@ -151,7 +153,7 @@ export default {
         },
         'form.deviceType'(){
             if(this.isInsert){
-                this.form.device = []
+                this.form.device && this.form.device.length == 0
             }
             if(this.form.deviceType!==''&&this.form.deviceType!=undefined){
                 this.getName()

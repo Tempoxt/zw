@@ -258,6 +258,8 @@ export default {
 			this.dialogForm1Visible = true;
 			let row = this.table_selectedRows[0]
 			this.form1 = (await this.api_resource.find(row.id))[0]
+			let exceptionReason = this.form1.exceptionReason.replace(/<[^>]+>/g, "");//去除字符串中的html
+			this.form1.exceptionReason = exceptionReason.replace(/&nbsp;/ig, " ");//去除字符串中的&nbsp;
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
@@ -297,10 +299,13 @@ export default {
 				this.optionDatas = (await api_common.resource('holidaymanager/leavetypelist').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
 				this.optionDatas.unshift({value:'全部',label:'全部'})
 				this.table_form.leaveType = this.status
+				delete this.table_form.exceptionType 
 			}else if(this.m==3){
 				this.attenDatas = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
 				this.table_form.exceptionType = this.status3
+				delete this.table_form.leaveType 
 			}else{
+				delete this.table_form.exceptionType 
 				delete this.table_form.leaveType 
 			}
 			const {rows , total }= await this.api_resource.get(this.table_form);

@@ -70,218 +70,211 @@
 
     <!-- 高温津贴/个税...详情 -->
     <Drawer :title="drawerTitle" :closable="false" width="840" v-model="openDrawers" class="drawerInfo">
-      <!-- 个税 -->
-      <div v-if="showInfo=='tax'">
-        <div class="flex-title">
-          <p class="title">个税缴纳累计表</p>
-          <div>
-            <el-date-picker
-            style="width:140px"
-              v-model="taxdateLap"
-              type="month"
-              size="small"
-              format="yyyy年MM月"
-              value-format="yyyy-MM"
-              placeholder="选择月份">
-            </el-date-picker>
-          </div>
-        </div>
-        <el-table
-        class="taxTable"
-          :data="taxAcculData"
-          border
-          style="width: 100%">
-          <el-table-column prop="date" label="月份" width="80"></el-table-column>
-          <el-table-column prop="week" label="社保主体" width="80"></el-table-column>
-          <el-table-column prop="week" label="累计收入" width="70"></el-table-column>
-          <el-table-column prop="week" label="累计扣除费用" width="80"></el-table-column>
-          <el-table-column prop="week" label="累计专项扣除" width="80"></el-table-column>
-          <el-table-column prop="week" label="累计专项附加" width="80"></el-table-column>
-          <el-table-column prop="week" label="累计应缴纳税所得额" width="90"></el-table-column>
-          <el-table-column prop="week" label="累计个税" width="50"></el-table-column>
-          <el-table-column prop="week" label="应缴个税" width="50"></el-table-column>
-          <el-table-column prop="week" label="实缴个税" width="50"></el-table-column>
-          <el-table-column prop="week" label="个税差"></el-table-column>
-        </el-table>
-
-        <div class="flex-title mt20">
-          <p class="title">个税缴纳明细表</p>
-        </div>
-        <el-table
-          class="taxTable"
-          :data="taxAcculData"
-          border
-          show-summary
-          :summary-method="getSummarTax"
-          style="width: 100%">
-          <el-table-column prop="date" label="月份" width="80"></el-table-column>
-          <el-table-column prop="week" label="社保主体" width="80"></el-table-column>
-          <el-table-column prop="week" label="工资收入" width="70"></el-table-column>
-          <el-table-column prop="week" label="扣除费用" width="80"></el-table-column>
-          <el-table-column prop="week" label="专项扣除">
-            <el-table-column prop="week" label="社保" width="50"></el-table-column>
-            <el-table-column prop="week" label="公积金" width="60"></el-table-column>
-          </el-table-column>
-          <el-table-column prop="week" label="专项附加扣除">
-            <el-table-column prop="week" label="子女教育" width="50"></el-table-column>
-            <el-table-column prop="week" label="赡养老人" width="50"></el-table-column>
-            <el-table-column prop="week" label="住房租金" width="50"></el-table-column>
-            <el-table-column prop="week" label="继续教育" width="50"></el-table-column>
-            <el-table-column prop="week" label="住房贷款利息" width="60"></el-table-column>
-          </el-table-column>
-          <el-table-column prop="week" label="应纳税所得额" width="70"></el-table-column>
-          <el-table-column prop="week" label="实缴个税" width="57"></el-table-column>
-        </el-table>
-      </div>
-
-      <!-- 高温津贴-->
-      <div class="drawer-profile" v-if="showInfo=='highTempture'">
-				<el-table
-          border
-					:header-cell-style="headerStyle"
-					class="dtable"
-					:data="hotData"
-					style="width: 100%;margin-top:20px" 
-					max-height="840"
-					show-summary
-					:cellStyle="drawerStyle"
-          :summary-method="getSummarHigh"
-					>
-					<el-table-column prop="CheckDate" label="日期">
-						<template slot-scope="scope">
-							<span :title="scope.row.CheckDate">{{scope.row.CheckDate.split('-')[2]}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="weekday" label="星期" ></el-table-column>
-					<el-table-column prop="OnDutyTime1" label="上班1" ></el-table-column>
-					<el-table-column prop="OffDutyTime1" label="下班1" ></el-table-column>
-					<el-table-column prop="OnDutyTime2" label="上班2"  ></el-table-column>
-					<el-table-column prop="OffDutyTime2" label="下班2" ></el-table-column>
-					<el-table-column prop="OnDutyTime3" label="上班3"  ></el-table-column>
-					<el-table-column prop="OffDutyTime3" label="下班3" ></el-table-column>
-					<el-table-column prop="Remark" label="异常说明"  >
-						<template slot-scope="scope">
-							<span :title="scope.row.Remark" style="width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red;cursor:default">{{scope.row.Remark}}</span>
-						</template>
-					</el-table-column>
-				</el-table>
+      	<!-- 个税 -->
+      	<div v-if="showInfo=='tax'">
+			<div class="flex-title">
+				<p class="title">个税缴纳累计表</p>
+				<div>
+					<el-date-picker style="width:140px" v-model="taxdateLap" type="month" size="small"
+					format="yyyy年MM月" value-format="yyyy-MM" placeholder="选择月份">
+					</el-date-picker>
+				</div>
 			</div>
+			<el-table
+				class="taxTable"
+				:data="taxAcculData"
+				border
+				style="width: 100%">
+				<el-table-column prop="date" label="月份" width="80"></el-table-column>
+				<el-table-column prop="week" label="社保主体" width="80"></el-table-column>
+				<el-table-column prop="week" label="累计收入" width="70"></el-table-column>
+				<el-table-column prop="week" label="累计扣除费用" width="80"></el-table-column>
+				<el-table-column prop="week" label="累计专项扣除" width="80"></el-table-column>
+				<el-table-column prop="week" label="累计专项附加" width="80"></el-table-column>
+				<el-table-column prop="week" label="累计应缴纳税所得额" width="90"></el-table-column>
+				<el-table-column prop="week" label="累计个税" width="50"></el-table-column>
+				<el-table-column prop="week" label="应缴个税" width="50"></el-table-column>
+				<el-table-column prop="week" label="实缴个税" width="50"></el-table-column>
+				<el-table-column prop="week" label="个税差"></el-table-column>
+			</el-table>
 
-      <!-- 餐费详情-->
-      <div v-if="showInfo=='mealFee'">
-        <div class="flex-title mt20">
-          <p class="title">餐费详情表</p>
-        </div>
-        <el-table
-					:header-cell-style="headerStyle"
-          :data="mealData"
-          border
-          show-summary
-          :summary-method="getSummarMeal"
-          style="width: 100%">
-          <el-table-column prop="date" label="日期" width="110"></el-table-column>
-          <el-table-column prop="week" label="星期" width="110">
-            <template slot-scope="scope">
-              {{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
-            </template>
-          </el-table-column>
-          <el-table-column prop="lunch" label="午餐(元)"></el-table-column>
-          <el-table-column prop="dinner" label="晚餐(元)"></el-table-column>
-          <el-table-column prop="nightingale" label="夜宵(元)"></el-table-column>
-          <el-table-column prop="total" label="小计"></el-table-column>
-        </el-table>
-      </div>
+			<div class="flex-title mt20">
+				<p class="title">个税缴纳明细表</p>
+			</div>
+			<el-table
+				class="taxTable"
+				:data="taxAcculData"
+				border
+				show-summary
+				:summary-method="getSummarTax"
+				style="width: 100%">
+				<el-table-column prop="date" label="月份" width="80"></el-table-column>
+				<el-table-column prop="week" label="社保主体" width="80"></el-table-column>
+				<el-table-column prop="week" label="工资收入" width="70"></el-table-column>
+				<el-table-column prop="week" label="扣除费用" width="80"></el-table-column>
+				<el-table-column prop="week" label="专项扣除">
+					<el-table-column prop="week" label="社保" width="50"></el-table-column>
+					<el-table-column prop="week" label="公积金" width="60"></el-table-column>
+				</el-table-column>
+				<el-table-column prop="week" label="专项附加扣除">
+					<el-table-column prop="week" label="子女教育" width="50"></el-table-column>
+					<el-table-column prop="week" label="赡养老人" width="50"></el-table-column>
+					<el-table-column prop="week" label="住房租金" width="50"></el-table-column>
+					<el-table-column prop="week" label="继续教育" width="50"></el-table-column>
+					<el-table-column prop="week" label="住房贷款利息" width="60"></el-table-column>
+				</el-table-column>
+				<el-table-column prop="week" label="应纳税所得额" width="70"></el-table-column>
+				<el-table-column prop="week" label="实缴个税" width="57"></el-table-column>
+			</el-table>
+      	</div>
 
-      <!-- 补其他 -->
-      <div v-if="showInfo=='otherDec'">
-        <div class="flex-title mt20">
-          <p class="title">补其他详情表</p>
-        </div>
-        <el-table
-          :data="otherData"
-          border
-          show-summary
-          :summary-method="getSummarOther"
-          style="width: 100%">
-          <el-table-column prop="date" label="日期" width="110"></el-table-column>
-          <el-table-column prop="lunch" label="补助项目"></el-table-column>
-          <el-table-column prop="dinner" label="补发奖金"></el-table-column>
-          <el-table-column prop="total" label="数据来源"></el-table-column>
-        </el-table>
-      </div>
+		<!-- 高温津贴-->
+		<div class="drawer-profile" v-if="showInfo=='highTempture'">
+			<el-table
+				border
+				:header-cell-style="headerStyle"
+				class="dtable"
+				:data="hotData"
+				style="width: 100%;margin-top:20px" 
+				show-summary
+				:cellStyle="drawerStyle"
+				:summary-method="getSummarHigh"
+				>
+				<el-table-column prop="CheckDate" label="日期">
+					<template slot-scope="scope">
+						<span :title="scope.row.CheckDate">{{scope.row.CheckDate.split('-')[2]}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="weekday" label="星期" ></el-table-column>
+				<el-table-column prop="OnDutyTime1" label="上班1" ></el-table-column>
+				<el-table-column prop="OffDutyTime1" label="下班1" ></el-table-column>
+				<el-table-column prop="OnDutyTime2" label="上班2"  ></el-table-column>
+				<el-table-column prop="OffDutyTime2" label="下班2" ></el-table-column>
+				<el-table-column prop="OnDutyTime3" label="上班3"  ></el-table-column>
+				<el-table-column prop="OffDutyTime3" label="下班3" ></el-table-column>
+				<el-table-column prop="Remark" label="异常说明"  >
+					<template slot-scope="scope">
+						<span :title="scope.row.Remark" style="width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:red;cursor:default">{{scope.row.Remark}}</span>
+					</template>
+				</el-table-column>
+			</el-table>
+		</div>
 
-      <!-- 扣其他 -->
-      <div v-if="showInfo=='otherDec'">
-        <el-table
-          :data="otherData"
-          border
-          show-summary
-          :summary-method="getSummarOther"
-          style="width: 100%">
-          <el-table-column prop="date" label="日期" width="110"></el-table-column>
-          <el-table-column prop="lunch" label="扣款项目"></el-table-column>
-          <el-table-column prop="dinner" label="扣罚金额"></el-table-column>
-          <el-table-column prop="total" label="数据来源"></el-table-column>
-        </el-table>
-      </div>
+		<!-- 餐费详情-->
+		<div v-if="showInfo=='mealFee'">
+			<div class="flex-title">
+				<p class="title">餐费详情表</p>
+			</div>
+			<el-table
+				:header-cell-style="headerStyle"
+				:data="mealData"
+				border
+				show-summary
+				:summary-method="getSummarMeal"
+				style="width: 100%">
+				<el-table-column prop="date" label="日期" width="110"></el-table-column>
+				<el-table-column prop="week" label="星期" width="110">
+					<template slot-scope="scope">
+					{{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][scope.row.week-1]}}
+					</template>
+				</el-table-column>
+				<el-table-column prop="lunch" label="午餐(元)"></el-table-column>
+				<el-table-column prop="dinner" label="晚餐(元)"></el-table-column>
+				<el-table-column prop="nightingale" label="夜宵(元)"></el-table-column>
+				<el-table-column prop="total" label="小计"></el-table-column>
+			</el-table>
+		</div>
+
+		<!-- 补其他 -->
+		<div v-if="showInfo=='otherAdd'">
+			<div class="flex-title mt20">
+				<p class="title">补其他详情表</p>
+			</div>
+			<el-table
+				:data="otherAddData"
+				border
+				show-summary
+				:summary-method="getSummarOther"
+				style="width: 100%">
+				<el-table-column prop="date" label="日期" width="110"></el-table-column>
+				<el-table-column prop="lunch" label="补助项目"></el-table-column>
+				<el-table-column prop="dinner" label="补发奖金"></el-table-column>
+				<el-table-column prop="total" label="数据来源"></el-table-column>
+			</el-table>
+		</div>
+
+		<!-- 扣其他 -->
+		<div v-if="showInfo=='otherDec'">
+			<el-table
+				:data="otherDecData"
+				border
+				show-summary
+				:summary-method="getSummarOther"
+				style="width: 100%">
+				<el-table-column prop="date" label="日期" width="110"></el-table-column>
+				<el-table-column prop="lunch" label="扣款项目"></el-table-column>
+				<el-table-column prop="dinner" label="扣罚金额"></el-table-column>
+				<el-table-column prop="total" label="数据来源"></el-table-column>
+			</el-table>
+		</div>
     </Drawer>
 
 
     <table-header
-      :table_actions="table_actions"
-      :table_selectedRows="table_selectedRows"
-      @action="handleAction"
-      :table_form.sync="table_form"
-      :table_column="table_field"
-    >
-          <div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetch"/>
-          </div>
+		:table_actions="table_actions"
+		:table_selectedRows="table_selectedRows"
+		@action="handleAction"
+		:table_form.sync="table_form"
+		:table_column="table_field"
+		>
+		<div style="padding-left:10px">
+			<dateLap v-model="table_form.dateLap" @change="fetch"/>
+		</div>
     </table-header>
     <el-table
-      ref="elTable"
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-      @sort-change="table_sort_change"
-      @cell-click="openDrawer"
-      :cell-style="cellStyle"
-		  :cell-class-name="cellName"
-    >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
-      </el-table-column>
-      <el-table-column type="index" :index="indexMethod" width="70" fixed/>
-      <el-table-column prop="month" label="月份" fixed/>
-      <el-table-column prop="signState" label="签收状态" fixed>
-          <template slot-scope="scope">
-            <el-tag size="mini" type="danger" v-if="scope.row.signState==1">未签收</el-tag>
-            <el-tag size="mini" type="success" v-if="scope.row.signState==2">已签收</el-tag>
-            <el-tag size="mini" type="success" v-if="scope.row.signState==3">默认签收</el-tag>
-          </template>
-      </el-table-column>
-      <el-table-column prop="chineseName" label="姓名" fixed>
-          <template slot-scope="scope">
-              <div v-html="scope.row.staff__chineseName"></div>
-          </template>
-      </el-table-column>
-      <el-table-column prop="staff__employeeCode" label="工号" fixed>
-          <template slot-scope="scope">
-              <div v-html="scope.row.staff__employeeCode"></div>
-          </template>
-      </el-table-column>
-      <each-table-column :table_field="table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name))"/>
+		ref="elTable"
+		@selection-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="headerCellStyle"
+		:height="table_height"
+		@header-dragend="table_dragend"
+		@sort-change="table_sort_change"
+		@cell-click="openDrawer"
+		:cell-style="cellStyle"
+		:cell-class-name="cellName"
+		>
+		<el-table-column 
+			type="selection" 
+			width="60" 
+			class-name="table-column-disabled"
+			:selectable="table_disable_selected"
+			>
+		</el-table-column>
+		<el-table-column type="index" :index="indexMethod" width="70" fixed/>
+		<el-table-column prop="month" label="月份" fixed/>
+		<el-table-column prop="signState" label="签收状态" fixed>
+			<template slot-scope="scope">
+				<el-tag size="mini" type="danger" v-if="scope.row.signState==1">未签收</el-tag>
+				<el-tag size="mini" type="success" v-if="scope.row.signState==2">已签收</el-tag>
+				<el-tag size="mini" type="success" v-if="scope.row.signState==3">默认签收</el-tag>
+			</template>
+		</el-table-column>
+		<el-table-column prop="chineseName" label="姓名" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.staff__chineseName"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="staff__employeeCode" label="工号" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.staff__employeeCode"></div>
+			</template>
+		</el-table-column>
+		<each-table-column :table_field="table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name))"/>
     </el-table>
-     <table-pagination 
+    <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
@@ -295,90 +288,71 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("salary");
-const defaultForm = () => {
-    return {
-        estate:1,
-        sort:1
-    }
-}
 export default {
-  mixins: [table_mixin],
-  props:['id'],
-  computed:{
-    count1(){
-      return ['basicWage','overtime','weekendWelfare','welfare','fullAtt','minPerformance','performance'].map(o=>+this.formData[o]).reduce((total,num)=>(
-        total+=num
-      ))||0
-    },
-    count2(){
-      return ['basicWage','overtime','weekendWelfare','welfare','fullAtt','minPerformance','performance'].map(o=>+this.form3[o]).reduce((total,num)=>(
-        total+=num
-      ))||0
-    },
-  },
-  data() {
-    return {
-      loading: true,
-      form:{},
-      api_resource,
-      orgCategory:[],
-      queryDialogFormVisible:true,
+	mixins: [table_mixin],
+	props:['id'],
+	data() {
+		return {
+			loading: true,
+			form:{},
+			api_resource,
+			orgCategory:[],
+			queryDialogFormVisible:true,
+			adminList:[],
+			roomAdminList:[],
+			dormList:[],
+			dialogForm2Visible:false,
+			dialogForm3Visible:false,
+			form2:{},
+			form3:{
+				otWeekday:2
+			},
+			formData:[],
+			showInfo:'',//展示某个模块信息
+			drawerTitle:'',//弹框标题
+			openDrawers:false,//侧弹框
+			taxdateLap:'',//个税月份
+			taxAcculData:[],//个税缴纳累计表
+			taxDetailData:[],//个税缴纳明细表
+			hotData:[],//高温津贴
+			mealData:[],//餐费
+			roomData:[],//宿舍费用
+			otherAddData:[],//补其他
+			otherDecData:[],//扣其他
+			totalAllo:'',//高温津贴考勤有效天数
+		};
+	},
+	watch:{
+		id(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		async 'form3.staff'(staff){
+			const result = await this.$request.get('/basicwage',{params:{staff}})
+			this.formData = result[0]
+			this.form3 = Object.assign({},this.formData,this.form3)
+		},
+		async 'form3.total'(val){
+			if(val>2000){
+				const res = await this.$request.get('basicwage/cal',{
+					params:{
+						wage:val,
+						otWeekday:this.form3.otWeekday
+					}
+				})
+				this.form3 =  Object.assign(this.form3,res)
+				console.log(this.form3)
+			}
+		}
+	},
+	methods: {
+		// 个税合计项
+		getSummarTax(){
 
-      adminList:[],
-      defaultForm,
-      roomAdminList:[],
-      dormList:[],
-      dialogForm2Visible:false,
-      dialogForm3Visible:false,
-      form2:{},
-      form3:{
-        otWeekday:2
-      },
-      formData:[],
-      showInfo:'',//展示某个模块信息
-      drawerTitle:'',//弹框标题
-      openDrawers:false,//侧弹框
-      taxdateLap:'',//个税月份
-      taxAcculData:[],//个税缴纳累计表
-      taxDetailData:[],//个税缴纳明细表
-      hotData:[],//高温津贴
-      mealData:[],//餐费
-      otherData:[],//补其他
-      totalAllo:'',//高温津贴考勤有效天数
-    };
-  },
-  watch:{
-    id(){
-      this.table_form.currentpage = 1
-      this.fetchTableData()
-    },
-    async 'form3.staff'(staff){
-        const result = await this.$request.get('/basicwage',{params:{staff}})
-        this.formData = result[0]
-        this.form3 = Object.assign({},this.formData,this.form3)
-    },
-    async 'form3.total'(val){
-      if(val>2000){
-         const res = await this.$request.get('basicwage/cal',{
-            params:{
-              wage:val,
-              otWeekday:this.form3.otWeekday
-            }
-          })
-         this.form3 =  Object.assign(this.form3,res)
-         console.log(this.form3)
-      }
-     
-    }
-  },
-  methods: {
-    // 个税合计项
-    getSummarTax(){
-
-    },
-    // 高温津贴合计项
-    getSummarHigh(param){
-      const { columns, data } = param;
+		},
+		// 高温津贴合计项
+		getSummarHigh(param){
+			const { columns, data } = param;
 			const sums = [];
 			columns.forEach((column, index) => {
 				if(index === 0){
@@ -386,9 +360,9 @@ export default {
 				}
 			});
 			return sums;
-    },
-    //餐费合计项
-    getSummarMeal(param) {
+		},
+		//餐费合计项
+		getSummarMeal(param) {
 			const { columns, data } = param;
 			const sums = [];
 			columns.forEach((column, index) => {
@@ -404,9 +378,9 @@ export default {
 						sums[index] = values.reduce((prev, curr) => {
 							const value = Number(curr);
 							if (!isNaN(value)) {
-							return prev + curr;
+								return prev + curr;
 							} else {
-							return prev;
+								return prev;
 							}
 						}, 0);
 						sums[index] = sums[index];
@@ -416,9 +390,9 @@ export default {
 				}
 			});
 			return sums;
-    },
-    //补其他/扣其他合计项
-    getSummarOther(param) {
+		},
+		//补其他/扣其他合计项
+		getSummarOther(param) {
 			const { columns, data } = param;
 			const sums = [];
 			columns.forEach((column, index) => {
@@ -431,9 +405,9 @@ export default {
 						sums[index] = values.reduce((prev, curr) => {
 							const value = Number(curr);
 							if (!isNaN(value)) {
-							return prev + curr;
+								return prev + curr;
 							} else {
-							return prev;
+								return prev;
 							}
 						}, 0);
 						sums[index] = sums[index];
@@ -441,12 +415,12 @@ export default {
 						sums[index] = '';
 					}
 				}else{
-          sums[index] = '';
-        }
+					sums[index] = '';
+				}
 			});
 			return sums;
 		},
-    drawerStyle({row,column,rowIndex,columnIndex}){
+		drawerStyle({row,column,rowIndex,columnIndex}){
 			if(row.Remark!=''&&row.Remark!=null){
 				return 'color:red'
 			}else if(column.label=="星期"){
@@ -459,129 +433,159 @@ export default {
 			}else if(column.label=="日期"&&row.hotDetail!=''&&row.hotDetail!=null&&row.hotDetail==1){
 				return 'background-color:#0bb2d4;'
 			}
-    },
-    headerStyle(row,rowIndex,column,columnIndex){
-        return "background:#F5F5F5;"
-    },
-    async openDrawer(row,column,cell,event){
-			// if(row.tax==event.target.innerText){
-      //   this.openDrawers = true
-      //   this.drawerTitle = '个税详情'
-      //   this.showInfo = 'tax'
-      // }
-      // if(row.highTempture==event.target.innerText){
-      //   this.openDrawers = true
-      //   this.drawerTitle = '考勤明细'
-      //   this.showInfo = 'highTempture'
-      // }
-      // if(row.mealFee==event.target.innerText){
-      //   this.openDrawers = true
-      //   this.drawerTitle = '餐费明细'
-      //   this.showInfo = 'mealFee'
-      // }
-      // if(row.otherAdd==event.target.innerText){
-      //   this.openDrawers = true
-      //   this.drawerTitle = '补其他'
-      //   this.showInfo = 'otherAdd'
-      // }
-      // if(row.otherDec==event.target.innerText){
-      //   this.openDrawers = true
-      //   this.drawerTitle = '扣其他'
-      //   this.showInfo = 'otherDec'
-      // }
-      // if(row.roomFee==event.target.innerText){
-      //   this.openDrawers = true
-      //   this.drawerTitle = '宿舍费用明细'
-      //   this.showInfo = 'roomFee'
-      // }
 		},
-		cellStyle({row, column, rowIndex, columnIndex}){
-			// if(column.label == '个税(实际)'||column.label =="高温津贴" ||column.label =="伙食费"||column.label =="住宿费"||column.label =="补其他"){
-			// 	return 'color:#02B708;cursor:pointer'
-			// }else if(column.label =="扣其他"){
-			// 	return 'color:#FF0000;cursor:pointer'
-			// }else{
-      //   return ''
-      // }
-    },
-		cellName({row, column, rowIndex, columnIndex}){
-			// if(column.label == '个税(实际)'||column.label =="高温津贴" ||column.label =="伙食费"||column.label =="住宿费"||column.label =="补其他"||column.label =="扣其他"){
-			// 	return 'pointer'
+		headerStyle(row,rowIndex,column,columnIndex){
+			return "background:#F5F5F5;"
+		},
+		async openDrawer(row,column,cell,event){
+			// if(row.tax==event.target.innerText){
+			// 	this.openDrawers = true
+			// 	this.drawerTitle = '个税详情'
+			// 	this.showInfo = 'tax'
+			// }
+			if(row.highTempture==event.target.innerText){
+				this.openDrawers = true
+				this.drawerTitle = '高温津贴考勤明细'
+				this.showInfo = 'highTempture'
+				const alloData = await this.$request.get('/hot/hotallowrecord?staff_id='+row.staff+'&month='+row.month)
+				this.hotData = alloData.detail
+				this.totalAllo = alloData.total
+			}
+			if(row.mealFee==event.target.innerText){
+				this.openDrawers = true
+				this.drawerTitle = '餐费明细'
+				this.showInfo = 'mealFee'
+				let { rows } = await this.$request.get('restaurant/consumedata/detail',{
+					params:{
+						workcode:row.staff__employeeCode,
+						month:row.month
+					}
+				})
+				this.mealData =  rows
+			}
+			// if(row.otherAdd==event.target.innerText){
+			// 	this.openDrawers = true
+			// 	this.drawerTitle = '补其他'
+			// 	this.showInfo = 'otherAdd'
+			// }
+			// if(row.otherDec==event.target.innerText){
+			// 	this.openDrawers = true
+			// 	this.drawerTitle = '扣其他'
+			// 	this.showInfo = 'otherDec'
+			// }
+			// if(row.roomFee==event.target.innerText){
+			// 	this.openDrawers = true
+			// 	this.drawerTitle = '宿舍费用明细'
+			// 	this.showInfo = 'roomFee'
 			// }
 		},
-    fetch(){
-        this.table_form.currentpage = 1
-        this.fetchTableData()
-    },
-    async set(){
-        this.form2 = await this.$request.get('/hot/recordbasic')
-        this.dialogForm2Visible = true
-    },
-    async handleForm2Submit(){
-        await this.$request.put('/hot/recordbasic',this.form2)
-        this.dialogForm2Visible = false
-    },
-    async handleForm3Submit(){
-      await this.$request.post('basicwage/applysheet',this.form3,{
-        params:{
-          sheetType:2
-        }
-      })
-    
-      this.dialogForm3Visible = false
-    },
-    add(){
-        this.form3 = {
-          otWeekday:2
-        }
-        this.formData = {}
-        this.dialogForm3Visible = true
-    },
-    async edit(){
-      let row = this.table_selectedRows[0]
-      this.form = await api_resource.find(row.id)
-      this.dialogFormVisible = true;
-    },
-    async fetchTableData() {
-     if(!this.id){
-       return
-     }
-     this.table_loading = true;
-     this.table_form.org_id = this.id
-     this.table_form.sheetType = 2
-     const {rows , total }= await api_resource.get(this.table_form);
-      this.table_data  = rows
-       this.table_form.total = total
-      setTimeout(() => {
-        this.table_loading = false;
-      }, 300);
-    },
-    async handleFormSubmit(){
-        let form = Object.assign({},this.form)
-        form.org_id = this.id
-        if(this.isInsert){
-            await api_resource.create(form)
-        }else{
-            await api_resource.update(form.id,form)
-        }
-        this.dialogFormVisible = false
-        this.fetchTableData()
-        
-    },
-    async tabClick(v){
-      this.tab_label  = v.label
-    },
-  },
-  async created() {
-    const { field, action,table } = await api_common.menuInit("salary");
-    this.table_field = field;
-    this.table_actions = action;
-    this.table_config = table
-    this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
-    this.fetchTableData();
-  }
+		cellStyle({row, column, rowIndex, columnIndex}){
+			// ||column.label == '个税(实际)'||column.label =="住宿费"||column.label =="补其他"
+			// else if(column.label =="扣其他"){
+			// 	return 'color:#FF0000;cursor:pointer'
+			// }
+			if(column.label =="高温津贴" ||column.label =="伙食费"){
+				return 'color:#02B708;cursor:pointer'
+			}else{
+		  		return ''
+			}
+		},
+		cellName({row, column, rowIndex, columnIndex}){
+			if(column.label == '个税(实际)'||column.label =="高温津贴" ||column.label =="伙食费"||column.label =="住宿费"||column.label =="补其他"||column.label =="扣其他"){
+				return 'pointer'
+			}
+		},
+		fetch(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+		async set(){
+			this.form2 = await this.$request.get('/hot/recordbasic')
+			this.dialogForm2Visible = true
+		},
+		async handleForm2Submit(){
+			await this.$request.put('/hot/recordbasic',this.form2)
+			this.dialogForm2Visible = false
+		},
+		async handleForm3Submit(){
+			await this.$request.post('basicwage/applysheet',this.form3,{
+				params:{
+					sheetType:2
+				}
+			})
+			this.dialogForm3Visible = false
+		},
+		add(){
+			this.form3 = {
+				otWeekday:2
+			}
+			this.formData = {}
+			this.dialogForm3Visible = true
+		},
+		async edit(){
+			let row = this.table_selectedRows[0]
+			this.form = await api_resource.find(row.id)
+			this.dialogFormVisible = true;
+		},
+		async fetchTableData() {
+			if(!this.id){
+				return
+			}
+			this.table_loading = true;
+			this.table_form.org_id = this.id
+			this.table_form.sheetType = 2
+			const {rows , total }= await api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
+			setTimeout(() => {
+				this.table_loading = false;
+			}, 300);
+		},
+		async handleFormSubmit(){
+			let form = Object.assign({},this.form)
+			form.org_id = this.id
+			if(this.isInsert){
+				await api_resource.create(form)
+			}else{
+				await api_resource.update(form.id,form)
+			}
+			this.dialogFormVisible = false
+			this.fetchTableData()
+		},
+		async tabClick(v){
+			this.tab_label  = v.label
+		},
+  	},
+	async created() {
+		const { field, action,table } = await api_common.menuInit("salary");
+		this.table_field = field;
+		this.table_actions = action;
+		this.table_config = table
+		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
+		this.fetchTableData();
+	}
 };
 </script>
+<style lang="scss" scoped>
+	
+	.theme-0BB2D4 .el-table--small td, .theme-0BB2D4 .el-table--small th{
+		color: red;
+		padding: 1px 0;
+	}
+	.theme-0BB2D4{
+		.dtable{
+			/deep/.cell{
+				font-size:10px;
+			}
+			/deep/td{
+				padding: 0px;
+			}
+			/deep/th{
+				padding: 1px 0;
+			}
+		}
+	}
+</style>
 <style lang="scss">    
     .drawerInfo .ivu-drawer-header{
       background: rgba(245,250,251,1)
