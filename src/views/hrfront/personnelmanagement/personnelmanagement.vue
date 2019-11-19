@@ -135,12 +135,17 @@
                                         <el-col :span="24">
                                             <form-render :type="`branchsubcompany`" :field="{name:'所属公司'}" v-model="form.subCompany"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" :disabled="!isInsert" v-model="form.department"/>
+                                        <el-col :span="24" v-if="isInsert">
+                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany}" v-model="form.department"/>
                                         </el-col>
-                                    
-                                        <el-col :span="24">
-                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team" :disabled="!isInsert"/>
+                                        <el-col :span="24" v-if="!isInsert">
+                                            <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form.subCompany,disable:true}" :disabled="!isInsert" v-model="form.department"/>
+                                        </el-col>
+                                        <el-col :span="24" v-if="isInsert">
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department}" v-model="form.team"/>
+                                        </el-col>
+                                        <el-col :span="24" v-if="!isInsert">
+                                            <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department,disable:true}" v-model="form.team" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render :disabled="!isInsert"
