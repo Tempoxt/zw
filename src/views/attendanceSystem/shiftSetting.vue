@@ -20,17 +20,20 @@
 						<el-col :span="10">
 							<form-render prop="className" :type="`input`" :field="{name:'班次名称'}" v-model="form.className"/>
 						</el-col>
-						<!-- <el-col :span="10" :offset="4">
-							<form-render prop="classDesc" :type="`input`" :field="{name:'班次说明'}" v-model="form.classDesc"/>
-						</el-col> -->
 						<el-col :span="10" :offset="4">
 							<form-render :type="`inputSuffix`" prop="positiveTime" suffix="时" :field="{name:'班次时间'}" v-model="form.positiveTime"/>
 						</el-col>
 						<el-col :span="10">
-							<form-render :type="`inputSuffix`" suffix="时" :field="{name:'考勤加班'}" v-model="form.overTime"/>
+							<form-render :type="`inputSuffix`" suffix="时" :field="{name:'加班'}" v-model="form.overTime"/>
 						</el-col>
 						<el-col :span="10" :offset="4">
-							<form-render :type="`inputSuffix`" suffix="分" :field="{name:'打卡间隔'}" v-model="form.punchCardGap"/>
+							<form-render :type="`radio`" :field="{name:'班次类型',options:[{
+								value:1,
+								label:'白班'
+							},{
+								value:2,
+								label:'夜班'
+							}]}" v-model="form.classType"/>
 						</el-col>
 					</el-row>
 					<el-row class="shift_set">
@@ -41,38 +44,38 @@
 						<el-col :span="17">
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px"  prop="onDutyTime1" :type="`time`" :field="{name:'上班1'}" v-model="form.onDutyTime1"/>
+									<form-render label-width="52px"  prop="onDutyTime1" :type="`time`" :field="{name:'上班1'}" placeholder="上班时间" v-model="form.onDutyTime1"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOnDutyCard1">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" prop="signInStartTime1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" v-model="form.signInStartTime1"/>
+									<form-render class="range_time" prop="signInStartTime1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime1"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" prop="signInEndTime1" :type="`time`" :field="{name:''}" v-model="form.signInEndTime1"/>
+									<form-render class="range_time end_time" prop="signInEndTime1" :type="`time`" placeholder="结束时间" :field="{name:''}" v-model="form.signInEndTime1"/>
 								</el-col>
 							</el-row>
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px" prop="offDutyTime1" :type="`time`" :field="{name:'下班1'}" v-model="form.offDutyTime1"/>
+									<form-render label-width="52px" prop="offDutyTime1" :type="`time`" :field="{name:'下班1'}" placeholder="下班时间" v-model="form.offDutyTime1"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOffDutyCard1">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" prop="signOutStartTime1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" v-model="form.signOutStartTime1"/>
+									<form-render class="range_time" prop="signOutStartTime1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime1"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signOutEndTime1"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime1"/>
 								</el-col>
 							</el-row>
 						</el-col>
 					
-						<el-col :span="5">
-							<div>&nbsp;</div>
-							<el-form-item label="休息时间(分)" label-width="85px">
-								<el-input-number v-model="form.restTime1" :min="0" :max="30"></el-input-number>
+						<el-col :span="5" style="margin-left:15px">
+							<el-form-item class="line-height" label="休息时间" label-width="30px">
+								<el-time-picker v-model="form.restStartTime1" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+								<el-time-picker class="mt17" v-model="form.restEndTime1" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -87,38 +90,38 @@
 						<el-col :span="17">
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px"  prop="onDutyTime2" :type="`time`" :field="{name:'上班2'}" v-model="form.onDutyTime2"/>
+									<form-render label-width="52px"  prop="onDutyTime2" :type="`time`" :field="{name:'上班2'}" placeholder="上班时间" v-model="form.onDutyTime2"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOnDutyCard2">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" prop="signInStartTime2" label-width="90px" :type="`time`" :field="{name:'签到时间'}" v-model="form.signInStartTime2"/>
+									<form-render class="range_time" prop="signInStartTime2" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime2"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signInEndTime2"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime2"/>
 								</el-col>
 							</el-row>
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px" prop="offDutyTime2" :type="`time`" :field="{name:'下班2'}" v-model="form.offDutyTime2"/>
+									<form-render label-width="52px" prop="offDutyTime2" :type="`time`" :field="{name:'下班2'}" placeholder="下班时间" v-model="form.offDutyTime2"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOffDutyCard2">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" prop="signOutStartTime2" label-width="90px" :type="`time`" :field="{name:'签退时间'}" v-model="form.signOutStartTime2"/>
+									<form-render class="range_time" prop="signOutStartTime2" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime2"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signOutEndTime2"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime2"/>
 								</el-col>
 							</el-row>
 						</el-col>
 					
-						<el-col :span="5">
-							<div>&nbsp;</div>
-							<el-form-item label="休息时间(分)" label-width="85px">
-								<el-input-number v-model="form.restTime2" :min="0" :max="30"></el-input-number>
+						<el-col :span="5" style="margin-left:15px">
+							<el-form-item class="line-height" label="休息时间" label-width="30px">
+								<el-time-picker v-model="form.restStartTime2" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+								<el-time-picker class="mt17" v-model="form.restEndTime2" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -133,38 +136,38 @@
 						<el-col :span="17">
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'上班3'}" v-model="form.onDutyTime3"/>
+									<form-render label-width="52px" :type="`time`" :field="{name:'上班3'}" placeholder="上班时间" v-model="form.onDutyTime3"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOnDutyCard3">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" v-model="form.signInStartTime3"/>
+									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime3"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signInEndTime3"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime3"/>
 								</el-col>
 							</el-row>
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'下班3'}" v-model="form.offDutyTime3"/>
+									<form-render label-width="52px" :type="`time`" :field="{name:'下班3'}" placeholder="下班时间" v-model="form.offDutyTime3"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOffDutyCard3">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" v-model="form.signOutStartTime3"/>
+									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime3"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signOutEndTime3"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime3"/>
 								</el-col>
 							</el-row>
 						</el-col>
 					
-						<el-col :span="5">
-							<div>&nbsp;</div>
-							<el-form-item label="休息时间(分)" label-width="85px">
-								<el-input-number v-model="form.restTime3" :min="0" :max="30"></el-input-number>
+						<el-col :span="5" style="margin-left:15px">
+							<el-form-item class="line-height" label="休息时间" label-width="30px">
+								<el-time-picker v-model="form.restStartTime3" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+								<el-time-picker class="mt17" v-model="form.restEndTime3" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -180,38 +183,38 @@
 						<el-col :span="17">
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'上班4'}" v-model="form.onDutyTime4"/>
+									<form-render label-width="52px" :type="`time`" :field="{name:'上班4'}" placeholder="上班时间" v-model="form.onDutyTime4"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOnDutyCard4">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" v-model="form.signInStartTime4"/>
+									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime4"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signInEndTime4"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime4"/>
 								</el-col>
 							</el-row>
 							<el-row>
 								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'下班4'}" v-model="form.offDutyTime4"/>
+									<form-render label-width="52px" :type="`time`" :field="{name:'下班4'}" placeholder="下班时间" v-model="form.offDutyTime4"/>
 								</el-col>
 								<el-col :span="2" class="mt5">
 									<el-checkbox v-model="form.isExcuseOffDutyCard4">免卡</el-checkbox>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" v-model="form.signOutStartTime4"/>
+									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime4"/>
 								</el-col>
 								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" v-model="form.signOutEndTime4"/>
+									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime4"/>
 								</el-col>
 							</el-row>
 						</el-col>
 					
-						<el-col :span="5">
-							<div>&nbsp;</div>
-							<el-form-item label="休息时间(分)" label-width="85px">
-								<el-input-number v-model="form.restTime4" :min="0" :max="30"></el-input-number>
+						<el-col :span="5" style="margin-left:15px">
+							<el-form-item class="line-height" label="休息时间" label-width="30px">
+								<el-time-picker v-model="form.restStartTime4" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+								<el-time-picker class="mt17" v-model="form.restEndTime4" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -323,28 +326,33 @@ export default {
 		const defaultForm  = function(){
 			return {
 				positiveTime: 8,
-				restTime1: 0,
-				restTime2: 0,
-				restTime3: 0,
-				restTime4: 0,
+				classType: 1,//班次类型
+				restStartTime1: '10:00',
+				restEndTime1: '10:10',
+				restStartTime2: "15:00",
+				restEndTime2: '15:10',
+				restStartTime3: '',
+				restEndTime3: '',
+				restStartTime4: '',
+				restEndTime4: '',
 				allowLateTime: 3,
 				allowEarlyTime: 3,
 				allowAbsent: 30,
 				startOverTime: 30,
 				startLeaveTime: 30,
 				className: '',
-				onDutyTime1: '',
-				onDutyTime2: '',
-				offDutyTime1: '',
-				offDutyTime2: '',
-				signInStartTime1: '',//签到开始时间1
-				signInEndTime1: '',//签到结束时间1
-				signOutStartTime1: '',//签退开始时间1
-				signOutEndTime1: '',//签退结束时间1
-				signInStartTime2: '',//签到开始时间2
-				signInEndTime2: '',//签到结束时间2
-				signOutStartTime2: '',//签退开始时间2
-				signOutEndTime2: '',//签退结束时间2
+				onDutyTime1: '08:00',//上班时间1
+				offDutyTime1: '12:00',//下班时间1
+				onDutyTime2: '13:30',//上班时间2
+				offDutyTime2: '17:30',//下班时间2
+				signInStartTime1: '07:30',//签到开始时间1
+				signInEndTime1: '08:30',//签到结束时间1
+				signOutStartTime1: '11:30',//签退开始时间1
+				signOutEndTime1: '12:30',//签退结束时间1
+				signInStartTime2: '13:00',//签到开始时间2
+				signInEndTime2: '14:00',//签到结束时间2
+				signOutStartTime2: '17:00',//签退开始时间2
+				signOutEndTime2: '18:00',//签退结束时间2
 				straight1_2: 0,
 				straight2_3: 0,
 				straight3_4: 0,
@@ -380,24 +388,24 @@ export default {
 				offDutyTime1:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
-				signInStartTime1:[
-					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
-				],
-				signOutStartTime1:[
-					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
-				],
+				// signInStartTime1:[
+				// 	{ required: true, message: '请选择时间', trigger: ['blur','change'] },
+				// ],
+				// signOutStartTime1:[
+				// 	{ required: true, message: '请选择时间', trigger: ['blur','change'] },
+				// ],
 				onDutyTime2:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
 				offDutyTime2:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
-				signInStartTime2:[
-					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
-				],
-				signOutStartTime2:[
-					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
-				],
+				// signInStartTime2:[
+				// 	{ required: true, message: '请选择时间', trigger: ['blur','change'] },
+				// ],
+				// signOutStartTime2:[
+				// 	{ required: true, message: '请选择时间', trigger: ['blur','change'] },
+				// ],
 			},
 			timeSolt1: false,
 			timeSolt2: false,
@@ -407,12 +415,16 @@ export default {
 	},
 	computed:{
 		disableSubmit(){
-			if(this.form.className!=''&&this.form.positiveTime!=''&&this.form.onDutyTime1!=null&&this.form.onDutyTime2!=null&&this.form.offDutyTime1!=null
-			&&this.form.offDutyTime2!=null&&this.timeSolt1==true&&this.timeSolt2==true&&this.form.signInStartTime1!=null&&this.form.signInEndTime1!=null&&this.form.signOutStartTime1!=null
-			&&this.form.signOutEndTime1!=null&&this.form.signInStartTime2!=null&&this.form.signInEndTime2!=null&&this.form.signOutStartTime2!=null&&this.form.signOutEndTime2!=null
-			&&this.form.onDutyTime1!=''&&this.form.onDutyTime2!=''&&this.form.offDutyTime1!=''&&this.form.offDutyTime2!=''&&this.form.signInStartTime1!=''&&this.form.signInEndTime1!=''
-			&&this.form.signOutStartTime1!=''&&this.form.signOutEndTime1!=''&&this.form.signInStartTime2!=''&&this.form.signInEndTime2!=''&&this.form.signOutStartTime2!=''
-			&&this.form.signOutEndTime2!=''){
+			if((this.form.className!=''&&this.form.positiveTime!=''&&this.form.onDutyTime1!=null&&this.form.onDutyTime2!=null&&this.form.offDutyTime1!=null&&this.timeSolt1==true
+			&&this.form.offDutyTime2!=null&&this.timeSolt2==true&&this.form.onDutyTime1!=''&&this.form.onDutyTime2!=''&&this.form.offDutyTime1!=''&&this.form.offDutyTime2!='')
+			&&((this.form.signInStartTime1!=null&&this.form.signInEndTime1!=null&&this.form.signInStartTime1!=''&&this.form.signInEndTime1!='')||this.form.isExcuseOnDutyCard1==true)
+			&&((this.form.signOutStartTime1!=null&&this.form.signOutEndTime1!=null&&this.form.signOutStartTime1!=''&&this.form.signOutEndTime1!='')||this.form.isExcuseOffDutyCard1==true)
+			&&((this.form.signInStartTime2!=null&&this.form.signInEndTime2!=null&&this.form.signInStartTime2!=''&&this.form.signInEndTime2!='')||this.form.isExcuseOnDutyCard2==true)
+			&&((this.form.signOutStartTime2!=null&&this.form.signOutEndTime2!=null&&this.form.signOutStartTime2!=''&&this.form.signOutEndTime2!='')||this.form.isExcuseOffDutyCard2==true)
+			){
+				if(this.form.isExcuseOnDutyCard1==true){
+
+				}
 				return false
 			}
 			return true
@@ -564,8 +576,8 @@ export default {
 				this.$refs['form'].clearValidate()
 			})
 			this.form = this.defaultForm()
-			this.timeSolt1 = false
-			this.timeSolt2 = false
+			this.timeSolt1 = true
+			this.timeSolt2 = true
 			this.timeSolt3 = false
 			this.timeSolt4 = false
 			this.dialogFormVisible = true
@@ -655,13 +667,43 @@ export default {
 				form.isExcuseOffDutyCard4 = +this.form.isExcuseOffDutyCard4
 			}
 
+			if(form.restStartTime1==''||form.restStartTime1==null){
+				delete form.restStartTime1
+			}
+			if(form.restStartTime2==''||form.restStartTime2==null){
+				delete form.restStartTime2
+			}
+			if(form.restStartTime3==''||form.restStartTime3==null){
+				delete form.restStartTime3
+			}
+			if(form.restStartTime4==''||form.restStartTime4==null){
+				delete form.restStartTime4
+			}
+
+			if(form.restEndTime1==''||form.restEndTime1==null){
+				delete form.restEndTime1
+			}
+			if(form.restEndTime2==''||form.restEndTime2==null){
+				delete form.restEndTime2
+			}
+			if(form.restEndTime3==''||form.restEndTime3==null){
+				delete form.restEndTime3
+			}
+			if(form.restEndTime4==''||form.restEndTime4==null){
+				delete form.restEndTime4
+			}
+
+
 			if(this.timeSolt3==true||this.timeSolt4==true){
                 if(this.timeSolt3==true&&this.timeSolt4==false){
-					if(form.onDutyTime3==''||form.onDutyTime3==undefined||form.offDutyTime3==''||form.offDutyTime3==undefined||form.signInStartTime3==''
-					||form.signInEndTime3==undefined||form.signOutStartTime3==''||form.signOutEndTime3==undefined){
+					if(form.onDutyTime3==undefined||form.offDutyTime3==undefined||
+					(form.signInEndTime3==undefined&&form.isExcuseOnDutyCard3==false)||
+					(form.signOutEndTime3==undefined&&form.isExcuseOffDutyCard3==false)){
 						this.$message.error({ message: '请填写时段3的信息'});
 					}else{
-						if(form.onDutyTime4!=null&&form.offDutyTime4!=null&&form.signInStartTime4!=null&&form.signOutStartTime4!=null&&form.signInEndTime4!=null&&form.signOutEndTime4!=null&&this.timeSolt4==false){
+						if(form.onDutyTime4!=null&&form.offDutyTime4!=null&&this.timeSolt4==false&&
+						(form.signInStartTime4!=null&&form.signOutStartTime4!=null||form.isExcuseOnDutyCard4==true)&&
+						(form.signInEndTime4!=null&&form.signOutEndTime4!=null||form.isExcuseOffDutyCard4==true)){
 							this.$message.error({ message: '请勾选时段4'});
 							return
 						}else{
@@ -674,7 +716,8 @@ export default {
 							delete form.isExcuseOnDutyCard4
 							delete form.isExcuseOffDutyCard4
 							delete form.straight3_4
-							delete form.restTime4
+							delete form.restStartTime4
+							delete form.restEndTime4
 							if(this.isInsert){
 								const mes = await api_resource.create(form)
 								this.$message.success({ message: mes})
@@ -690,11 +733,14 @@ export default {
 				}
 
 				if(this.timeSolt4==true&&this.timeSolt3==false){
-					if(form.onDutyTime4==''||form.offDutyTime4==''||form.signInStartTime4==''||form.signOutStartTime4==''||form.onDutyTime4==undefined
-					||form.offDutyTime4==undefined||form.signInEndTime4==undefined||form.signOutEndTime4==undefined){
+					if(form.onDutyTime4==undefined||form.offDutyTime4==undefined||
+					(form.signInEndTime4==undefined&&form.isExcuseOnDutyCard4==false)||
+					(form.signOutEndTime4==undefined&&form.isExcuseOffDutyCard4==false)){
 						this.$message.error({ message: '请填写时段4的信息'});
 					}else{
-						if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&form.signInStartTime3!=null&&form.signOutStartTime3!=null&&form.signInEndTime3!=null&&form.signOutEndTime3!=null&&this.timeSolt3==false){
+						if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&this.timeSolt3==false&&
+						(form.signInStartTime3!=null&&form.signOutStartTime3!=null||form.isExcuseOnDutyCard3==true)&&
+						(form.signInEndTime3!=null&&form.signOutEndTime3!=null||form.isExcuseOffDutyCard3==true)){
 							this.$message.error({ message: '请勾选时段3'});
 							return
 						}else{
@@ -707,7 +753,8 @@ export default {
 							delete form.isExcuseOnDutyCard3
 							delete form.isExcuseOffDutyCard3
 							delete form.straight2_3
-							delete form.restTime3
+							delete form.restStartTime3
+							delete form.restEndTime3
 							if(this.isInsert){
 								const mes = await api_resource.create(form)
 								this.$message.success({ message: mes})
@@ -723,11 +770,13 @@ export default {
 				}
                 
                 if(this.timeSolt3==true&&this.timeSolt4==true){
-                    if(form.onDutyTime3==''||form.onDutyTime3==undefined||form.offDutyTime3==''||form.offDutyTime3==undefined||form.signInStartTime3==''
-					||form.signInEndTime3==undefined||form.signOutStartTime3==''||form.signOutEndTime3==undefined){
+					if(form.onDutyTime3==undefined||form.offDutyTime3==undefined||
+					((form.signInStartTime3==''||form.signInEndTime3==undefined)&&form.isExcuseOnDutyCard3==false)||
+					((form.signOutStartTime3==''||form.signOutEndTime3==undefined)&&form.isExcuseOffDutyCard3==false)){
 						this.$message.error({ message: '请填写时段3的信息'});
-					}else if(form.onDutyTime4==''||form.offDutyTime4==''||form.signInStartTime4==''||form.signOutStartTime4==''||form.onDutyTime4==undefined
-					||form.offDutyTime4==undefined||form.signInEndTime4==undefined||form.signOutEndTime4==undefined){
+					}else if(form.onDutyTime4==undefined||form.offDutyTime4==undefined||
+					(form.signInEndTime4==undefined&&form.isExcuseOnDutyCard4==false)||
+					(form.signOutEndTime4==undefined&&form.isExcuseOffDutyCard4==false)){
 						this.$message.error({ message: '请填写时段4的信息'});
 					}else{
                         if(this.isInsert){
@@ -743,11 +792,15 @@ export default {
                     }
                 }
 			}else{
-				if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&form.signInStartTime3!=null&&form.signOutStartTime3!=null&&form.signInEndTime3!=null&&form.signOutEndTime3!=null&&this.timeSolt3==false){
+				if(form.onDutyTime3!=null&&form.offDutyTime3!=null&&this.timeSolt3==false&&
+				(form.signInStartTime3!=null&&form.signOutStartTime3!=null||form.isExcuseOnDutyCard3==true)&&
+				(form.signInEndTime3!=null&&form.signOutEndTime3!=null||form.isExcuseOffDutyCard3==true)){
 					this.$message.error({ message: '请勾选时段3'});
 					return
 				}
-				if(form.onDutyTime4!=null&&form.offDutyTime4!=null&&form.signInStartTime4!=null&&form.signOutStartTime4!=null&&form.signInEndTime4!=null&&form.signOutEndTime4!=null&&this.timeSolt4==false){
+				if(form.onDutyTime4!=null&&form.offDutyTime4!=null&&this.timeSolt4==false&&
+				(form.signInStartTime4!=null&&form.signOutStartTime4!=null||form.isExcuseOnDutyCard4==true)&&
+				(form.signInEndTime4!=null&&form.signOutEndTime4!=null||form.isExcuseOffDutyCard4==true)){
 					this.$message.error({ message: '请勾选时段4'});
 					return
 				}
@@ -761,7 +814,8 @@ export default {
 					delete form.isExcuseOnDutyCard3
 					delete form.isExcuseOffDutyCard3
 					delete form.straight2_3
-					delete form.restTime3
+					delete form.restStartTime3
+					delete form.restEndTime3
 				}
 				if(this.timeSolt4==false){
 					delete form.onDutyTime4
@@ -773,7 +827,8 @@ export default {
 					delete form.isExcuseOnDutyCard4
 					delete form.isExcuseOffDutyCard4
 					delete form.straight3_4
-					delete form.restTime4
+					delete form.restStartTime4
+					delete form.restEndTime4
 				}
 				if(this.isInsert){
 					try{
@@ -835,9 +890,22 @@ export default {
 	.end_time .el-form-item__content{
 		margin-left: 50px!important;
 	}
+	
+	.line-height{
+		border-left: 1px dotted #B1B9BD;
+		.el-form-item__label{
+			line-height: 15px!important;
+			margin: 12px 16px 0 0;
+			padding-left: 25px;
+		}
+		.el-input{
+			width: 120px!important;
+		}
+	}
 }
 .mt5{margin-top: 5px;}
 .mt10{margin-top: 10px;}
+.mt17{margin-top: 18px;}
 .shift_set{
 	border: 1px solid #E4E4E4;
 	padding: 20px 12px 3px 0;

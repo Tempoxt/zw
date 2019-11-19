@@ -71,10 +71,10 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-show="this.auditStatus==0">
-			<dateLap type="1" v-model="table_form.dateLap" @change="fetch"/>
+			<dateLap type="1" v-model="dateLap1" @change="fetch"/>
 		</div>
 		<div style="padding-left:10px" v-show="this.auditStatus==1">
-			<dateLap type='2' v-model="table_form.dateLap" @change="fetch"/>
+			<dateLap type='2' v-model="dateLap" @change="fetch"/>
 		</div>
     </table-header>
     <el-table
@@ -159,6 +159,7 @@ export default {
 			},
 			html:'',
 			dateLap:'',
+			dateLap1:'',
 			pickerOptions: {
 				disabledDate(time) {
 					return time.getTime() < new Date().getTime() + 3600*1*1000;
@@ -169,12 +170,9 @@ export default {
 	watch:{
 		auditStatus(){
 			delete this.table_form.keyword
+			// delete this.table_form.dateLap
 			this.table_form.currentpage = 1
-			if(this.auditStatus==0){
-				this.table_form.dateLap = dayjs().format('YYYY-MM-DD')
-			}else{
-				this.table_form.dateLap = dayjs().format('YYYY-MM')
-			}
+			
 			this.fetchMenu()
 			this.fetchTableData()
 		},
@@ -247,6 +245,11 @@ export default {
 		async fetchTableData() {
 			this.table_loading = true;
 			this.table_form.auditStatus = this.auditStatus
+			if(this.auditStatus==0){
+				this.table_form.dateLap = this.dateLap1
+			}else{
+				this.table_form.dateLap = this.dateLap
+			}
 			const {rows , total }= await api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
@@ -264,7 +267,7 @@ export default {
 	async created() {
 		this.fetchMenu()
 		this.dateLap = dayjs().format('YYYY-MM')
-		this.table_form.dateLap = dayjs().format('YYYY-MM-DD')
+		this.dateLap1 = dayjs().format('YYYY-MM-DD')
 		this.fetchTableData();
 	}
 };

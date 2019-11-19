@@ -12,9 +12,9 @@
     :picker-options="{
       
     }"
+    :placeholder="$parent.$attrs.placeholder||'选择时间'"
     format="HH:mm"
-    value-format="HH:mm"
-    placeholder="选择时间">
+    value-format="HH:mm">
   </el-time-picker>
   </el-form-item>
 </template>
