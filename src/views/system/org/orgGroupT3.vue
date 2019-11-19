@@ -49,7 +49,7 @@
                   <form-render :type="`input`" placeholder="自动" :field="{name:'小组编号'}" v-model="form.teamcode" prop="teamcode" :disabled="true" />
                 </el-col>
                 <el-col :span="24" v-if="url!=='org/departments'">
-                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org" :disabled="true"/>
+                  <form-render :type="`org`" :field="{name:'上级部门'}" v-model="form.parent_org"/>
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`input`" :field="{name:'小组名称'}" v-model="form.name"  prop="name"/>

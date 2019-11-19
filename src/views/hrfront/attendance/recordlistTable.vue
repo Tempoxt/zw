@@ -38,8 +38,33 @@
       :selectable="table_disable_selected"
       >
       </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"/>
+	  <el-table-column type="index" :index="indexMethod" width="50" fixed/>
+		<el-table-column prop="EmployeeID__EmployeeCode" sortable label="工号" fixed>
+			<template slot-scope="scope">
+				<span v-html="scope.row.EmployeeID__EmployeeCode" :title="scope.row.EmployeeID__EmployeeCode" class="default-span"></span>
+			</template>
+		</el-table-column>
+		<el-table-column prop="EmployeeID__ChineseName" label="姓名" fixed>
+			<template slot-scope="scope">
+				<span v-html="scope.row.EmployeeID__ChineseName" :title="scope.row.EmployeeID__ChineseName" class="default-span"></span>
+			</template>
+		</el-table-column>
+		<el-table-column prop="Farther2" label="部门" fixed>
+			<template slot-scope="scope">
+				<span v-html="scope.row.Farther2" :title="scope.row.Farther2" class="default-span"></span>
+			</template>
+		</el-table-column>
+		<el-table-column prop="EmployeeID__Principalship__Item" label="职位" fixed>
+			<template slot-scope="scope">
+				<span v-html="scope.row.EmployeeID__Principalship__Item" :title="scope.row.EmployeeID__Principalship__Item" class="default-span"></span>
+			</template>
+		</el-table-column>
+		<el-table-column prop="CheckDate" label="日期" fixed>
+			<template slot-scope="scope">
+				<span v-html="scope.row.CheckDate" :title="scope.row.CheckDate" class="default-span"></span>
+			</template>
+		</el-table-column>
+		<each-table-column :table_field="table_field.filter(o=>!['EmployeeID__EmployeeCode','EmployeeID__ChineseName','Farther2','EmployeeID__Principalship__Item','CheckDate'].includes(o.name))"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 

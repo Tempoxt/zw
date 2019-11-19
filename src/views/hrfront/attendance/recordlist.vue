@@ -41,5 +41,12 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+    .default-span{
+        cursor: default!important;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
 
 
