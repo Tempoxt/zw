@@ -6,7 +6,7 @@
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 						<el-row style="padding-bottom:30px;">
 							<el-col :span="12">
-								<reemployee title="无银行卡员工"></reemployee>
+								<reemployee title="无银行卡员工" info="NoBankCard"></reemployee>
 							</el-col>
 						</el-row>
 					</el-scrollbar>

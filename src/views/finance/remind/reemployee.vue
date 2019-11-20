@@ -1,51 +1,68 @@
 <template>
-	<el-card class="box-card">
-	  <div slot="header" class="clearfix">
-		<span class="cardName">{{title}}(3)人</span>
-		<el-button style="float: right; padding: 6px 4px">一键提醒</el-button>
-	  </div>
-		<el-row class="list" v-for="item in 3" :key="item"> 
-			<el-col :span="18">
-				<div class="list-l">
-					<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">
-					<div>
-						<!-- <p>{{o.chineseName}}- {{o.employeeCode}}</p>
-						<span>{{o.department__name}}</span> -->
-						<p>伊尔迷 揍敌客 - 111111</p>
-						<span>杀手</span>
+	<el-card class="box-card scroll">
+		<div slot="header" class="clearfix">
+			<span class="cardName">{{title}}({{total}})人</span>
+			<el-button style="float: right; padding: 6px 4px" @click="remindAll">一键提醒</el-button>
+		</div>
+		<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+			<el-row class="list" v-for="(o,i) in infoData" :key="i"> 
+				<el-col :span="18">
+					<div class="list-l">
+						<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">
+						<div>
+							<p>{{o.chineseName}}- {{o.employeeCode}}</p>
+							<span>{{o.department__name}}</span>
+						</div>
 					</div>
-				</div>
-			</el-col>
-			<el-col :span="6">
-				<div class="list-r">
-					<el-button type="primary" size="mini" @click="remind()">提醒员工</el-button>
-				</div>
-			</el-col>
-		</el-row>
+				</el-col>
+				<el-col :span="6">
+					<div class="list-r">
+						<el-button type="primary" size="mini" @click="remind(o.employeeCode)">提醒员工</el-button>
+					</div>
+				</el-col>
+			</el-row>
+		</el-scrollbar>
 	</el-card>
 	
 </template>
 
 <script>
 export default {
-	props:['title'],
+	props:['title','info'],
 	data() {
 		return {
-			dormitory:[]
+			infoData:[],
+			total:''
 		};
     },
 	methods: {
-		remind(status){
-			// this.$router.push("/adminManagement/dormitory/checklistview?status="+status);
+		async remind(employeeCode){
+			await this.$request.post("wechat/remind",{workcode:employeeCode,msg:this.info});
+			// this.$message.success('提醒成功')
+		},
+		async remindAll(){
+			let codes = this.infoData.map(o=>o.employeeCode)
+			await this.$request.post("wechat/remind",{workcode:codes.join(','),msg:this.info});
+			// this.$message.success('一键提醒成功')
 		}
 	},
 	async created(){
-		this.dormitory = await this.$request.get('dormitory/todocount');
+		if(this.info&&this.info=='NoBankCard'){
+			// this.infoData = await this.$request.get('salary/noBankCard');
+			// this.total = this.infoData.length
+		}
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+.scroll {
+    height: calc(100%);
+	width: 100%;
+	/deep/ .scrollbar-wrapper {
+		overflow-x: hidden;
+	}
+}
 .el-button--mini{
 	padding: 5px!important;
 }

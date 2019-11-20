@@ -16,7 +16,7 @@
 		<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 			<el-row>
 				<el-col :span="12">
-					<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenDatas}" v-model="form.exceptionType"/>
+					<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenDatasEx}" v-model="form.exceptionType"/>
 				</el-col>
 				<el-col :span="12">
 					<form-render prop="exceptionTime" :type="`datetime`" :field="{name:'补打卡时间'}" v-model="form.exceptionTime"/>
@@ -151,6 +151,7 @@ export default {
 			dialogForm1Visible:false,
 			optionDatas: [],
 			attenDatas:[],
+			attenDatasEX:[],
 			status:'全部',
 			status3:'',
 			form:{},
@@ -248,6 +249,7 @@ export default {
 		},
 		add(){
 			this.form={}
+			this.attenDatasEx = this.attenDatas.slice(1)
 			this.result = []
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
