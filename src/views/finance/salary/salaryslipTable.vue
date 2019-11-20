@@ -85,25 +85,25 @@
 				:data="taxAcculData"
 				border
 				style="width: 100%">
-				<el-table-column prop="month" label="月份" width="70"></el-table-column>
-				<el-table-column prop="socialSecurityMain" label="社保主体" width="80">
+				<el-table-column prop="month" label="月份"></el-table-column>
+				<el-table-column prop="socialSecurityMain" label="社保主体">
 					<template slot-scope="scope">
 						<span v-html="scope.row.socialSecurityMain" :title="scope.row.socialSecurityMain"></span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="tSalary" label="累计收入" width="75">
+				<el-table-column prop="tSalary" label="累计收入" >
 					<template slot-scope="scope">
 						<span v-html="scope.row.tSalary" :title="scope.row.tSalary"></span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="tDeduct" label="累计扣除费用" width="80"></el-table-column>
-				<el-table-column prop="tSpec" label="累计专项扣除" width="80"></el-table-column>
-				<el-table-column prop="tSpecAdd" label="累计专项附加" width="70"></el-table-column>
-				<el-table-column prop="taxBase" label="累计应缴纳税所得额" width="90"></el-table-column>
-				<el-table-column prop="tTax" label="累计个税" width="75"></el-table-column>
-				<el-table-column prop="tax" label="应缴个税" width="75"></el-table-column>
-				<el-table-column prop="rTax" label="实缴个税" width="70"></el-table-column>
-				<el-table-column prop="diffTax" label="个税差" width="62"></el-table-column>
+				<el-table-column prop="tDeduct" label="累计扣除费用" ></el-table-column>
+				<el-table-column prop="tSpec" label="累计专项扣除" ></el-table-column>
+				<el-table-column prop="tSpecAdd" label="累计专项附加"  ></el-table-column>
+				<el-table-column prop="taxBase" label="累计应缴纳税所得额"  width="110" ></el-table-column>
+				<el-table-column prop="tTax" label="累计个税"  width="120"></el-table-column>
+				<el-table-column prop="tax" label="应缴个税"  width="120"></el-table-column>
+				<el-table-column prop="rTax" label="实缴个税"   width="120"></el-table-column>
+				<el-table-column prop="diffTax" label="个税差"  ></el-table-column>
 			</el-table>
 
 			<div class="flex-title mt20">
@@ -116,31 +116,31 @@
 				show-summary
 				:summary-method="getSummarMeal"
 				style="width: 100%">
-				<el-table-column prop="month" label="月份" width="70"></el-table-column>
-				<el-table-column prop="socialSecurityMain" label="社保主体" width="80">
+				<el-table-column prop="month" label="月份" ></el-table-column>
+				<el-table-column prop="socialSecurityMain" label="社保主体" >
 					<template slot-scope="scope">
 						<span v-html="scope.row.socialSecurityMain" :title="scope.row.socialSecurityMain"></span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="salary" label="工资收入" width="75">
+				<el-table-column prop="salary" label="工资收入" >
 					<template slot-scope="scope">
 						<span v-html="scope.row.salary" :title="scope.row.salary"></span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="deFee" label="扣除费用" width="80"></el-table-column>
+				<el-table-column prop="deFee" label="扣除费用" ></el-table-column>
 				<el-table-column label="专项扣除">
-					<el-table-column prop="social" label="社保" width="60"></el-table-column>
-					<el-table-column prop="gjj" label="公积金" width="60"></el-table-column>
+					<el-table-column prop="social" label="社保"  ></el-table-column>
+					<el-table-column prop="gjj" label="公积金" ></el-table-column>
 				</el-table-column>
 				<el-table-column label="专项附加扣除">
-					<el-table-column prop="childrenEducation" label="子女教育" width="50"></el-table-column>
-					<el-table-column prop="supportOld" label="赡养老人" width="50"></el-table-column>
-					<el-table-column prop="houseRent" label="住房租金" width="50"></el-table-column>
-					<el-table-column prop="continueEducation" label="继续教育" width="50"></el-table-column>
-					<el-table-column prop="houseLoan" label="住房贷款利息" width="60"></el-table-column>
+					<el-table-column prop="childrenEducation" label="子女教育" ></el-table-column>
+					<el-table-column prop="supportOld" label="赡养老人" ></el-table-column>
+					<el-table-column prop="houseRent" label="住房租金"  ></el-table-column>
+					<el-table-column prop="continueEducation" label="继续教育" ></el-table-column>
+					<el-table-column prop="houseLoan" label="住房贷款利息"  ></el-table-column>
 				</el-table-column>
-				<el-table-column prop="taxBase" label="应纳税所得额" width="70"></el-table-column>
-				<el-table-column prop="tax" label="实缴个税" width="72"></el-table-column>
+				<el-table-column prop="taxBase" label="应纳税所得额" width="130"></el-table-column>
+				<el-table-column prop="tax" label="实缴个税" width="120" ></el-table-column>
 			</el-table>
       	</div>
 
@@ -365,10 +365,6 @@ export default {
 		}
 	},
 	methods: {
-		// 个税合计项
-		getSummarTax(){
-
-		},
 		// 高温津贴合计项
 		getSummarHigh(param){
 			const { columns, data } = param;
@@ -380,7 +376,7 @@ export default {
 			});
 			return sums;
 		},
-		//餐费合计项
+		//个税/餐费合计项
 		getSummarMeal(param) {
 			const { columns, data } = param;
 			const sums = [];
@@ -634,6 +630,7 @@ export default {
 <style lang="scss">    
 	.taxTable .el-table__row .cell{
         cursor: default!important;
+		// white-space: normal!important;
 	}
 	.theme-0BB2D4 .taxTable.el-table--small td{
 		padding: 2px 0!important;

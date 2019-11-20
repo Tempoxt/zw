@@ -173,10 +173,15 @@ export default {
 		}
 	},
 	methods: {
-		// async freeDeduction(){//免扣
-		// 	let rows = this.table_selectedRows.map(row=>row.id)
-		// 	await this.$request.post('staffinsure/alterdeductiontype',{record_id:row.join(',')})
-		// },
+		async freeDeduction(){//免扣
+			let rows = this.table_selectedRows.map(row=>row.id)
+			const mes = await this.$request.post('staffinsure/alterdeductiontype',{record_id:rows.join(',')})
+			this.$message({
+				message: mes,
+				type: 'success'
+			});
+			this.fetchTableData()
+		},
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
