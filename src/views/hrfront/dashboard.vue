@@ -88,7 +88,7 @@
 						</el-col>
 					</el-row>
 						
-					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:60px">
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
 						<el-row class="elCol">
 							<el-col :span="12" class="relative" v-if="staffData.length!=0">
 								<inService
@@ -103,7 +103,7 @@
 								></inService>
 								<div class="totalR" v-if="totalP!=''">总人数:{{totalP}}</div>
 							</el-col>
-							<el-col :span="12" class="padding-left-10" v-if="sexData.length!=0">
+							<el-col :span="12" v-if="sexData.length!=0">
 								<pieChart  
 								:show="checkFullshow"
 								ref="echart2"
@@ -129,7 +129,7 @@
 								:class="{'speech-mode':screenIndex=='3'}"
 								></pieChart>
 							</el-col>
-							<el-col :span="12" class="padding-left-10"  v-if="eachageData.length!=0">
+							<el-col :span="12" v-if="eachageData.length!=0">
 								<barChart 
 								:show="checkFullshow" 
 								ref="echart4" 
@@ -255,6 +255,20 @@
 								></progre>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap6" @change="getovertimeRate()"/>
 							</el-col>
+							<el-col :span="12" class="relative" >
+								<pieChart  
+								:show="checkFullshow"
+								ref="echart13"
+								title="部门工时统计" 
+								id="depart-time"
+								screenIndex='13'
+								@fullScreen="fullScreen"
+								:color="['#4BDB80','#E4D945','#FFAF47','#FF64A2']"
+								:datas="departTimeData"
+								:class="{'speech-mode':screenIndex=='13'}"
+								></pieChart>
+								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap7" @change="getdeparttime()"/>
+							</el-col>
 						</el-row>
 					</el-scrollbar>
 				</div>
@@ -307,6 +321,7 @@
 				manageData:{},//人力资源报表
 				rewarPunish:{},//人员奖惩情况统计
 				overtimeRate:{},//加班比例统计分析
+				departTimeData:[],//部门工时统计
 				orgid:'',
 				input5:'',
 				filterText:'',
@@ -325,6 +340,7 @@
 				dateLap4:'',
 				dateLap5:'',
 				dateLap6:'',
+				dateLap7:'',
 				percentage:30
 			};
 		},
@@ -474,6 +490,9 @@
 			async getovertimeRate(){
 				this.overtimeRate = await this.$request.get('/dataanalysis/overtimeratiostat?dateLap='+this.dateLap6);
 			},
+			async getdeparttime(){
+				this.departTimeData = await this.$request.get('/dataanalysis/departlabourtimestat?dateLap='+this.dateLap7+'&org_id='+this.orgid);
+			},
 			fetchData(){
 				if(this.orgid!=''&&this.orgid!=undefined){
 					this.getstaffData()
@@ -485,6 +504,7 @@
 					this.getleaveReaData()
 					this.getturnRate()
 					this.getmanageData()
+					this.getdeparttime()
 				}
 			}
 		},
@@ -533,6 +553,7 @@
 			this.dateLap4 = dayjs().format('YYYY-MM')
 			this.dateLap5 = dayjs().format('YYYY-MM')
 			this.dateLap6 = dayjs().format('YYYY-MM')
+			this.dateLap7 = dayjs().format('YYYY-MM')
 			this.fetchData()
 			this.getleaveData()
 			this.getmemberData()

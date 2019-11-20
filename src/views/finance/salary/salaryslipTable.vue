@@ -69,14 +69,14 @@
     </el-dialog>
 
     <!-- 高温津贴/个税...详情 -->
-    <Drawer :title="drawerTitle" :closable="false" width="840" v-model="openDrawers" class="drawerInfo">
+    <Drawer :title="drawerTitle" :closable="false" width="860" v-model="openDrawers" class="drawerInfo">
       	<!-- 个税 -->
       	<div v-if="showInfo=='tax'">
 			<div class="flex-title">
-				<p class="title">个税缴纳累计表</p>
+				<p class="title-info">个税缴纳累计表</p>
 				<div>
 					<el-date-picker style="width:140px" v-model="taxdateLap" type="month" size="small"
-					format="yyyy年MM月" value-format="yyyy-MM" placeholder="选择月份">
+					format="yyyy年MM月" value-format="yyyy-MM" placeholder="选择月份" @change="changeTax">
 					</el-date-picker>
 				</div>
 			</div>
@@ -85,46 +85,62 @@
 				:data="taxAcculData"
 				border
 				style="width: 100%">
-				<el-table-column prop="date" label="月份" width="80"></el-table-column>
-				<el-table-column prop="week" label="社保主体" width="80"></el-table-column>
-				<el-table-column prop="week" label="累计收入" width="70"></el-table-column>
-				<el-table-column prop="week" label="累计扣除费用" width="80"></el-table-column>
-				<el-table-column prop="week" label="累计专项扣除" width="80"></el-table-column>
-				<el-table-column prop="week" label="累计专项附加" width="80"></el-table-column>
-				<el-table-column prop="week" label="累计应缴纳税所得额" width="90"></el-table-column>
-				<el-table-column prop="week" label="累计个税" width="50"></el-table-column>
-				<el-table-column prop="week" label="应缴个税" width="50"></el-table-column>
-				<el-table-column prop="week" label="实缴个税" width="50"></el-table-column>
-				<el-table-column prop="week" label="个税差"></el-table-column>
+				<el-table-column prop="month" label="月份" width="70"></el-table-column>
+				<el-table-column prop="socialSecurityMain" label="社保主体" width="80">
+					<template slot-scope="scope">
+						<span v-html="scope.row.socialSecurityMain" :title="scope.row.socialSecurityMain"></span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="tSalary" label="累计收入" width="70">
+					<template slot-scope="scope">
+						<span v-html="scope.row.tSalary" :title="scope.row.tSalary"></span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="tDeduct" label="累计扣除费用" width="80"></el-table-column>
+				<el-table-column prop="tSpec" label="累计专项扣除" width="80"></el-table-column>
+				<el-table-column prop="tSpecAdd" label="累计专项附加" width="70"></el-table-column>
+				<el-table-column prop="taxBase" label="累计应缴纳税所得额" width="90"></el-table-column>
+				<el-table-column prop="tTax" label="累计个税" width="75"></el-table-column>
+				<el-table-column prop="tax" label="应缴个税" width="75"></el-table-column>
+				<el-table-column prop="rTax" label="实缴个税" width="70"></el-table-column>
+				<el-table-column prop="diffTax" label="个税差" width="67"></el-table-column>
 			</el-table>
 
 			<div class="flex-title mt20">
-				<p class="title">个税缴纳明细表</p>
+				<p class="title-info">个税缴纳明细表</p>
 			</div>
 			<el-table
 				class="taxTable"
-				:data="taxAcculData"
+				:data="taxDetailData"
 				border
 				show-summary
 				:summary-method="getSummarTax"
 				style="width: 100%">
-				<el-table-column prop="date" label="月份" width="80"></el-table-column>
-				<el-table-column prop="week" label="社保主体" width="80"></el-table-column>
-				<el-table-column prop="week" label="工资收入" width="70"></el-table-column>
-				<el-table-column prop="week" label="扣除费用" width="80"></el-table-column>
-				<el-table-column prop="week" label="专项扣除">
-					<el-table-column prop="week" label="社保" width="50"></el-table-column>
-					<el-table-column prop="week" label="公积金" width="60"></el-table-column>
+				<el-table-column prop="month" label="月份" width="70"></el-table-column>
+				<el-table-column prop="socialSecurityMain" label="社保主体" width="80">
+					<template slot-scope="scope">
+						<span v-html="scope.row.socialSecurityMain" :title="scope.row.socialSecurityMain"></span>
+					</template>
 				</el-table-column>
-				<el-table-column prop="week" label="专项附加扣除">
-					<el-table-column prop="week" label="子女教育" width="50"></el-table-column>
-					<el-table-column prop="week" label="赡养老人" width="50"></el-table-column>
-					<el-table-column prop="week" label="住房租金" width="50"></el-table-column>
-					<el-table-column prop="week" label="继续教育" width="50"></el-table-column>
-					<el-table-column prop="week" label="住房贷款利息" width="60"></el-table-column>
+				<el-table-column prop="salary" label="工资收入" width="70">
+					<template slot-scope="scope">
+						<span v-html="scope.row.salary" :title="scope.row.salary"></span>
+					</template>
 				</el-table-column>
-				<el-table-column prop="week" label="应纳税所得额" width="70"></el-table-column>
-				<el-table-column prop="week" label="实缴个税" width="57"></el-table-column>
+				<el-table-column prop="deFee" label="扣除费用" width="80"></el-table-column>
+				<el-table-column label="专项扣除">
+					<el-table-column prop="social" label="社保" width="60"></el-table-column>
+					<el-table-column prop="gjj" label="公积金" width="60"></el-table-column>
+				</el-table-column>
+				<el-table-column label="专项附加扣除">
+					<el-table-column prop="childrenEducation" label="子女教育" width="50"></el-table-column>
+					<el-table-column prop="supportOld" label="赡养老人" width="50"></el-table-column>
+					<el-table-column prop="houseRent" label="住房租金" width="50"></el-table-column>
+					<el-table-column prop="continueEducation" label="继续教育" width="50"></el-table-column>
+					<el-table-column prop="houseLoan" label="住房贷款利息" width="60"></el-table-column>
+				</el-table-column>
+				<el-table-column prop="taxBase" label="应纳税所得额" width="70"></el-table-column>
+				<el-table-column prop="tax" label="实缴个税" width="77"></el-table-column>
 			</el-table>
       	</div>
 
@@ -163,7 +179,7 @@
 		<!-- 餐费详情-->
 		<div v-if="showInfo=='mealFee'">
 			<div class="flex-title">
-				<p class="title">餐费详情表</p>
+				<p class="title-info">餐费详情表</p>
 			</div>
 			<el-table
 				:header-cell-style="headerStyle"
@@ -188,7 +204,7 @@
 		<!-- 补其他 -->
 		<div v-if="showInfo=='otherAdd'">
 			<div class="flex-title mt20">
-				<p class="title">补其他详情表</p>
+				<p class="title-info">补其他详情表</p>
 			</div>
 			<el-table
 				:data="otherAddData"
@@ -205,6 +221,9 @@
 
 		<!-- 扣其他 -->
 		<div v-if="showInfo=='otherDec'">
+			<div class="flex-title mt20">
+				<p class="title-info">扣其他详情表</p>
+			</div>
 			<el-table
 				:data="otherDecData"
 				border
@@ -437,12 +456,32 @@ export default {
 		headerStyle(row,rowIndex,column,columnIndex){
 			return "background:#F5F5F5;"
 		},
+		async changeTax(){
+			let taxInfo = await this.$request.get('salary/taxDetail',{
+				params:{
+					staffid:this.staffid,
+					month:this.taxdateLap
+				}
+			})
+			this.taxAcculData = taxInfo.stack
+			this.taxDetailData = taxInfo.detail
+		},
 		async openDrawer(row,column,cell,event){
-			// if(row.tax==event.target.innerText){
-			// 	this.openDrawers = true
-			// 	this.drawerTitle = '个税详情'
-			// 	this.showInfo = 'tax'
-			// }
+			if(row.tax==event.target.innerText){
+				this.openDrawers = true
+				this.drawerTitle = '个税详情'
+				this.showInfo = 'tax'
+				this.taxdateLap = row.month
+				this.staffid = row.staff
+				let taxInfo = await this.$request.get('salary/taxDetail',{
+					params:{
+						staffid:row.staff,
+						month:row.month
+					}
+				})
+				this.taxAcculData = taxInfo.stack
+				this.taxDetailData = taxInfo.detail
+			}
 			if(row.highTempture==event.target.innerText){
 				this.openDrawers = true
 				this.drawerTitle = '高温津贴考勤明细'
@@ -480,11 +519,11 @@ export default {
 			// }
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			// ||column.label == '个税(实际)'||column.label =="住宿费"||column.label =="补其他"
+			// ||column.label =="住宿费"||column.label =="补其他"
 			// else if(column.label =="扣其他"){
 			// 	return 'color:#FF0000;cursor:pointer'
 			// }
-			if(column.label =="高温津贴" ||column.label =="伙食费"){
+			if(column.label =="高温津贴" ||column.label =="伙食费"||column.label == '个税(实际)'){
 				return 'color:#02B708;cursor:pointer'
 			}else{
 		  		return ''
@@ -587,6 +626,12 @@ export default {
 	}
 </style>
 <style lang="scss">    
+	.taxTable .el-table__row .cell{
+        cursor: default!important;
+	}
+	.theme-0BB2D4 .taxTable.el-table--small td{
+		padding: 2px 0!important;
+	}
     .drawerInfo .ivu-drawer-header{
       background: rgba(245,250,251,1)
     }
@@ -612,7 +657,8 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding-bottom: 20px;
-      .title{
+      .title-info{
+	  	font-size:12px;
         color: #0BB2D4;
         font-weight: bold;
       }
