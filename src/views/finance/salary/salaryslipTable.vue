@@ -91,7 +91,7 @@
 						<span v-html="scope.row.socialSecurityMain" :title="scope.row.socialSecurityMain"></span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="tSalary" label="累计收入" width="70">
+				<el-table-column prop="tSalary" label="累计收入" width="75">
 					<template slot-scope="scope">
 						<span v-html="scope.row.tSalary" :title="scope.row.tSalary"></span>
 					</template>
@@ -103,7 +103,7 @@
 				<el-table-column prop="tTax" label="累计个税" width="75"></el-table-column>
 				<el-table-column prop="tax" label="应缴个税" width="75"></el-table-column>
 				<el-table-column prop="rTax" label="实缴个税" width="70"></el-table-column>
-				<el-table-column prop="diffTax" label="个税差" width="67"></el-table-column>
+				<el-table-column prop="diffTax" label="个税差" width="62"></el-table-column>
 			</el-table>
 
 			<div class="flex-title mt20">
@@ -114,7 +114,7 @@
 				:data="taxDetailData"
 				border
 				show-summary
-				:summary-method="getSummarTax"
+				:summary-method="getSummarMeal"
 				style="width: 100%">
 				<el-table-column prop="month" label="月份" width="70"></el-table-column>
 				<el-table-column prop="socialSecurityMain" label="社保主体" width="80">
@@ -122,7 +122,7 @@
 						<span v-html="scope.row.socialSecurityMain" :title="scope.row.socialSecurityMain"></span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="salary" label="工资收入" width="70">
+				<el-table-column prop="salary" label="工资收入" width="75">
 					<template slot-scope="scope">
 						<span v-html="scope.row.salary" :title="scope.row.salary"></span>
 					</template>
@@ -140,7 +140,7 @@
 					<el-table-column prop="houseLoan" label="住房贷款利息" width="60"></el-table-column>
 				</el-table-column>
 				<el-table-column prop="taxBase" label="应纳税所得额" width="70"></el-table-column>
-				<el-table-column prop="tax" label="实缴个税" width="77"></el-table-column>
+				<el-table-column prop="tax" label="实缴个税" width="72"></el-table-column>
 			</el-table>
       	</div>
 
@@ -332,7 +332,186 @@ export default {
 			openDrawers:false,//侧弹框
 			taxdateLap:'',//个税月份
 			taxAcculData:[],//个税缴纳累计表
-			taxDetailData:[],//个税缴纳明细表
+			taxDetailData:[
+				{
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },
+    {
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },{
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    },{
+     childrenEducation: 0,
+     continueEducation: 0,
+     deFee: 5000,
+     gjj: 110,
+     houseLoan: 0,
+     houseRent: 0,
+     month: "2019-09",
+     salary: 5962.49,
+     social: 218.79,
+     socialSecurityMain: "松岗总公司",
+     supportOld: 0,
+     tax: 19.01,
+     taxBase: 633.7,
+    }
+			],//个税缴纳明细表
 			hotData:[],//高温津贴
 			mealData:[],//餐费
 			roomData:[],//宿舍费用
@@ -402,7 +581,13 @@ export default {
 								return prev;
 							}
 						}, 0);
-						sums[index] = sums[index];
+						var stand = String(sums[index]).indexOf('.')+1
+						var num = String(sums[index]).length - stand
+						if(num>2&&stand!=0){
+							sums[index] = (sums[index]).toFixed(2);
+						}else{
+							sums[index] = sums[index];
+						}
 					} else {
 						sums[index] = '';
 					}
@@ -480,7 +665,7 @@ export default {
 					}
 				})
 				this.taxAcculData = taxInfo.stack
-				this.taxDetailData = taxInfo.detail
+				// this.taxDetailData = taxInfo.detail
 			}
 			if(row.highTempture==event.target.innerText){
 				this.openDrawers = true

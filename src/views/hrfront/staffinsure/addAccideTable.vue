@@ -173,6 +173,10 @@ export default {
 		}
 	},
 	methods: {
+		// async freeDeduction(){//免扣
+		// 	let rows = this.table_selectedRows.map(row=>row.id)
+		// 	await this.$request.post('staffinsure/alterdeductiontype',{record_id:row.join(',')})
+		// },
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
