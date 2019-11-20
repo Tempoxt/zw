@@ -486,7 +486,7 @@ export default {
 					}
 				})
 				this.taxAcculData = taxInfo.stack
-				// this.taxDetailData = taxInfo.detail
+				this.taxDetailData = taxInfo.detail
 			}
 			if(row.highTempture==event.target.innerText){
 				this.openDrawers = true
