@@ -31,12 +31,7 @@ export default {
 		reemployee,
 	},
     methods: {
-		async fetchData(){
-			// const analysis = await this.$request.get('/restaurant/quitstaffstat?dateLap='+this.dateLap);
-			// this.bookmeal = analysis.rows.bookmeal
-			// this.dinnermeal = analysis.rows.dinnermeal;
-			// this.userpay = analysis.rows.userpay
-		}
+		
     },
 	async created(){
     }

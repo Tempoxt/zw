@@ -215,7 +215,7 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
 		},
-		async getDa(){
+		async getResult(){
 			if(this.statusk!=0){
 				this.val = await this.$request.get('commission/valueIncrease/resetresult',{alert:false})
 				if(this.val=='已完成'){
@@ -248,7 +248,7 @@ export default {
 			const mes = await this.$request.post('commission/valueIncrease/reset',{dateLap:this.form.dateLap})
 			this.$message.success({message: mes})
 			this.timer = setInterval(()=>{
-				this.getDa()
+				this.getResult()
 			},10000)
 		},
 		async reset(){

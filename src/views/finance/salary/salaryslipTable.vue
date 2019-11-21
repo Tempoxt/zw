@@ -69,7 +69,7 @@
     </el-dialog>
 
     <!-- 高温津贴/个税...详情 -->
-    <Drawer :title="drawerTitle" :closable="false" width="880" v-model="openDrawers" class="drawerInfo">
+    <Drawer :title="drawerTitle" :closable="false" width="880" v-model="openDrawers" class="taxInfo">
       	<!-- 个税 -->
       	<div v-if="showInfo=='tax'">
 			<div class="flex-title">
@@ -99,7 +99,11 @@
 				<el-table-column prop="tTax" label="累计个税"  width="85"></el-table-column>
 				<el-table-column prop="tax" label="应缴个税"  width="85"></el-table-column>
 				<el-table-column prop="rTax" label="实缴个税"   width="85"></el-table-column>
-				<el-table-column prop="diffTax" label="个税差"  ></el-table-column>
+				<el-table-column prop="diffTax" label="个税差"  >
+					<template slot-scope="scope">
+						<span v-html="scope.row.diffTax" :title="scope.row.diffTax" style="color:#F2353C"></span>
+					</template>
+				</el-table-column>
 			</el-table>
 
 			<div class="flex-title mt20">
@@ -110,7 +114,7 @@
 				:data="taxDetailData"
 				border
 				show-summary
-				:summary-method="getSummarMeal"
+				:summary-method="getSummarTax"
 				style="width: 100%">
 				<el-table-column prop="month" label="月份"  width="70"></el-table-column>
 				<el-table-column prop="salary" label="工资收入"  width="85">
@@ -131,7 +135,11 @@
 					<el-table-column prop="houseLoan" label="住房贷款利息"   width="65"></el-table-column>
 				</el-table-column>
 				<el-table-column prop="taxBase" label="应纳税所得额" width="75"></el-table-column>
-				<el-table-column prop="tax" label="实缴个税" width="87"></el-table-column>
+				<el-table-column prop="tax" label="实缴个税" width="87">
+					<template slot-scope="scope">
+						<span v-html="scope.row.tax" :title="scope.row.tax" style="color:#F2353C"></span>
+					</template>
+				</el-table-column>
 			</el-table>
       	</div>
 
@@ -367,7 +375,40 @@ export default {
 			});
 			return sums;
 		},
-		//个税/餐费合计项
+		//个税合计项
+		getSummarTax(param) {
+			const { columns, data } = param;
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}else{
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+							const value = Number(curr);
+							if (!isNaN(value)) {
+								return prev + curr;
+							} else {
+								return prev;
+							}
+						}, 0);
+						var stand = String(sums[index]).indexOf('.')+1
+						var num = String(sums[index]).length - stand
+						if(num>2&&stand!=0){
+							sums[index] = (sums[index]).toFixed(2);
+						}else{
+							sums[index] = sums[index];
+						}
+					} else {
+						sums[index] = '';
+					}
+				}
+			});
+			return sums;
+		},
+		//餐费合计项
 		getSummarMeal(param) {
 			const { columns, data } = param;
 			const sums = [];
@@ -626,10 +667,10 @@ export default {
 	.theme-0BB2D4 .taxTable.el-table--small td{
 		padding: 2px 0!important;
 	}
-    .drawerInfo .ivu-drawer-header{
+    .taxInfo .ivu-drawer-header{
       background: rgba(245,250,251,1)
     }
-    .drawerInfo .el-table th div{
+    .taxInfo .el-table th div{
       line-height:18px!important;
     }
     .taxTable .has-gutter tr th,.taxTable .el-table thead.is-group th{

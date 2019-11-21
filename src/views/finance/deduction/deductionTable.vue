@@ -307,7 +307,7 @@ export default {
 					type: 'success'
 				});
 				this.timer = setInterval(()=>{
-					this.getDa()
+					this.getResult()
 					this.s++;
 				},5000)
 			} catch (error) {
@@ -321,7 +321,7 @@ export default {
 				})
 			}
     	},
-		async getDa(){
+		async getResult(){
 			if(this.statusk!=0&&this.s<=12){
 				if(this.s==12){
 					this.$message.error({ message: '导入失败,请重试'})

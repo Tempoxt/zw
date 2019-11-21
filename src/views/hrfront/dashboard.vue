@@ -155,7 +155,7 @@
 								></inService>
 								<div class="totalR" v-if="totalP1!=''">人数比: {{totalP1}}</div>
 							</el-col>
-							<el-col :span="12" class="relative" v-if="leaveData.length!=0">
+							<el-col :span="12" class="relative">
 								<inService
 								id="ring-leave"
 								title="请假情况统计表"  
@@ -170,7 +170,6 @@
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
 								<div class="totalR" v-if="totalP2!=''">总人数:{{totalP2}}</div>
 							</el-col>
-							<!-- v-if="leaveAcountData" -->
 							<el-col :span="12" class="relative" >
 								<pieChart  
 								:show="checkFullshow"
@@ -268,6 +267,7 @@
 								:class="{'speech-mode':screenIndex=='13'}"
 								></pieChart>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap7" @change="getdeparttime()"/>
+								<div class="totalR" v-if="totalP7!=''">总工时: {{totalP7}}</div>
 							</el-col>
 						</el-row>
 					</el-scrollbar>
@@ -332,6 +332,7 @@
 				totalP1:'',
 				totalP2:'',
 				totalP3:'',
+				totalP7:'',
 				personnel:[],
 				one:[],
 				dateLap1:'',
@@ -492,6 +493,12 @@
 			},
 			async getdeparttime(){
 				this.departTimeData = await this.$request.get('/dataanalysis/departlabourtimestat?dateLap='+this.dateLap7+'&org_id='+this.orgid);
+				if(this.departTimeData.length!=0){
+					let per7 = this.departTimeData.map(o=>o.value)
+					if(this.pre7!==[]){
+						this.totalP7 = per7.reduce((tem,item,index)=>tem+item)
+					}
+				}
 			},
 			fetchData(){
 				if(this.orgid!=''&&this.orgid!=undefined){
@@ -523,6 +530,7 @@
 			})
 			window.addEventListener('keyup', function (e) {
 				if (_this.fulltype) {
+					// console.log(e.keyCode,'eeeeee')
 					if (e.keyCode==38) {
 						if (_this.speechIndex>1) {
 							_this.speechIndex=parseInt(_this.speechIndex)-1;
@@ -535,7 +543,7 @@
 						}
 					}
 					if (e.keyCode==40) {
-						if (_this.speechIndex<12) {
+						if (_this.speechIndex<13) {
 							_this.speechIndex=parseInt(_this.speechIndex)+1;
 							_this.speechSwitch(_this.speechIndex)
 						} else{
@@ -547,20 +555,14 @@
 					}
 				}
 			})
-			this.dateLap1 = dayjs().format('YYYY-MM')
-			this.dateLap2 = dayjs().format('YYYY-MM')
-			this.dateLap3 = dayjs().format('YYYY-MM')
-			this.dateLap4 = dayjs().format('YYYY-MM')
-			this.dateLap5 = dayjs().format('YYYY-MM')
-			this.dateLap6 = dayjs().format('YYYY-MM')
-			this.dateLap7 = dayjs().format('YYYY-MM')
+			this.dateLap1 = this.dateLap2 = this.dateLap3 =this.dateLap4 =this.dateLap5 = this.dateLap6=this.dateLap7 =dayjs().format('YYYY-MM')
 			this.fetchData()
 			this.getleaveData()
 			this.getmemberData()
 			this.getovertimeRate()
 		},
 		async created(){
-			this.data2 = await this.$request.get('org');
+			this.data2 = await this.$request.get('org/tree');
 			let defaultMenuid = this.data2[0].orgid
 			this.$refs.tree2.setCurrentKey(defaultMenuid);
 			this.orgid = defaultMenuid;
@@ -653,10 +655,10 @@
 	top: 23px;
 }
 .el-row .el-col:nth-child(n) .dateLap{
-	right: 100px!important;
+	right: 20px!important;
 }
 .el-row .el-col:nth-child(2n) .dateLap{
-	right: 90px!important;
+	right: 20px!important;
 }
 </style>
 

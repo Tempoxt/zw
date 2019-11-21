@@ -171,7 +171,7 @@ export default {
 				console.log(err)
 			}
 		},
-		async getDa(){
+		async getResult(){
 			if(this.statusk!=0){
 				if(this.a=='1'){
 					this.val = await this.$request.get('prodpropelplan/materialsexware/resetresult')
@@ -198,7 +198,7 @@ export default {
 				this.$message.success({message: mes})
 			}
 			this.timer = setInterval(()=>{
-				this.getDa()
+				this.getResult()
 			},10000)
 		},
 		async reset(){

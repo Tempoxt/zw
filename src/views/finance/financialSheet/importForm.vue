@@ -31,7 +31,7 @@ import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
 export default {
-	props:['importUploadUrl','downloadUrl','namie','getData'],
+	props:['importUploadUrl','downloadUrl','namie','resourJudge'],
 	data() {
 		return {
 			importForm:{
@@ -47,7 +47,7 @@ export default {
     },
 	methods: {
         async handleImportChange(ev){
-            if(this.getData&&this.getData==1){
+            if(this.resourJudge&&this.resourJudge==1){
                 this.importForm.dateLap = this.dateLap
                 delete  this.importForm.month
             }else{
@@ -76,9 +76,9 @@ export default {
                     message: mes,
                     type: 'success'
                 });
-                if(this.getData&&this.getData==1){
+                if(this.resourJudge&&this.resourJudge==1){
                     this.timer = setInterval(()=>{
-                        this.getDa()
+                        this.getResult()
                         this.s++;
                     },5000)
                 }else{
@@ -96,7 +96,7 @@ export default {
                 })
             }
         },
-        async getDa(){
+        async getResult(){
 			if(this.statusk!=0&&this.s<=12){
 				if(this.s==12){
 					this.$message.error({ message: '导入失败,请重试'})

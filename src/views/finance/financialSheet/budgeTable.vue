@@ -83,7 +83,7 @@ export default {
 	methods: {
 		import(){
 			MessageBox.alert(
-				<importForm importUploadUrl={this.importUploadUrl} getData='1'
+				<importForm importUploadUrl={this.importUploadUrl} resourJudge='1'
 				on={{fetchData:()=>{this.fetch()}}}/>
 				, '选择文件导入', {
 				showConfirmButton:false,

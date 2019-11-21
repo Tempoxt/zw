@@ -123,7 +123,7 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
 		},
-		async getDa(){
+		async getResult(){
 			if(this.statusk!=0){
 				this.val = await this.$request.get('prodpropelplan/mobuleprod/resetresult',{alert:false})
 				if(this.val=='重置成功'){
@@ -141,7 +141,7 @@ export default {
 			const mes = await this.$request.post('prodpropelplan/mobuleprod/list/reset',{dateLap:this.form.dateLap})
 			this.$message.success({message: mes})
 			this.timer = setInterval(()=>{
-				this.getDa()
+				this.getResult()
 			},10000)
 		},
 		async reset(){
