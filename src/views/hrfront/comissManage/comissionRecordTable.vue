@@ -251,7 +251,7 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-		async getDa(){
+		async getResult(){
 			if(this.statusk!=0){
 				this.val = await this.$request.get('commission/resetresult?restUrl='+this.resultUrl,{alert:false})
 				if(this.val==1){
@@ -281,7 +281,7 @@ export default {
 					const mes = await this.$request.post(this.resultUrl,{dateLap:this.table_form.dateLap})
 					this.$message.success({message: mes})
 					this.timer = setInterval(()=>{
-						this.getDa()
+						this.getResult()
 					},10000)
 				}
 			}else{
