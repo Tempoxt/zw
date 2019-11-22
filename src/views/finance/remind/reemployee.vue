@@ -38,18 +38,18 @@ export default {
 	methods: {
 		async remind(employeeCode){
 			await this.$request.post("wechat/remind",{workcode:employeeCode,msg:this.info});
-			// this.$message.success('提醒成功')
+			this.$message.success('提醒成功')
 		},
 		async remindAll(){
 			let codes = this.infoData.map(o=>o.employeeCode)
 			await this.$request.post("wechat/remind",{workcode:codes.join(','),msg:this.info});
-			// this.$message.success('一键提醒成功')
+			this.$message.success('一键提醒成功')
 		}
 	},
 	async created(){
 		if(this.info&&this.info=='NoBankCard'){
-			// this.infoData = await this.$request.get('salary/noBankCard');
-			// this.total = this.infoData.length
+			this.infoData = await this.$request.get('salary/noBankCard');
+			this.total = this.infoData.length
 		}
 	},
 }

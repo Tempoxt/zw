@@ -1047,7 +1047,7 @@
             <div style="padding-left:10px">
                 <DateLapRange v-model="table_form.dateLap" @change="fetch"/>
             <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
-          </div>
+            </div>
         </table-header>
         <el-table
             ref="elTable"
@@ -1079,8 +1079,9 @@
                 </template>
             </el-table-column>
             <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
-                <!-- <each-table-column :table_field="table_field"/> -->
         </el-table>
+
+        <!-- <div style="position:absolute;bottom:20px;left:35%;">男:{{maleCount}}人  &nbsp;&nbsp;&nbsp;  女:{{femaleCount}}人</div> -->
         <table-pagination 
             :total="table_form.total" 
             :pagesize.sync="table_form.pagesize"
@@ -1144,6 +1145,8 @@ export default {
             socialSecuritiesData:[],
             list:[],
             index:null,
+            femaleCount:'',
+            maleCount:'',
             rules:{
                 chineseName: [
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -1244,6 +1247,7 @@ export default {
             alledulevels:[],
             Aledulevels:[],
             eduType:[],
+            table_modal:false,
             pickerOptions1: {
 				disabledDate:time=> {
                     if (this.education.eduEndTime) {
@@ -1269,7 +1273,7 @@ export default {
             if(this.form.subCompany){
                 this.fetchDepartment()
             }
-        }
+        },
     },
     computed: {
         isDisabled() {
@@ -1635,9 +1639,11 @@ export default {
             this.table_loading = true;
             this.table_form.orgid = this.orgid
             // const {rows , total }= await api_resource.get(this.table_form);
-            const {rows , total }= await this.$request.get('/hrm/v2/staff',{params:this.table_form})
+            const {rows , total,femaleCount,maleCount }= await this.$request.get('/hrm/v2/staff',{params:this.table_form})
             this.table_data  = rows
             this.table_form.total = total
+            this.femaleCount = femaleCount
+            this.maleCount = maleCount
             setTimeout(() => {
                 this.table_loading = false;
             }, 300);

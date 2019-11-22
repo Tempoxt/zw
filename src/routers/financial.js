@@ -1,13 +1,13 @@
 export default [
-    // {
-    //     path: '',
-    //     name: '/cw',
-    //     component: () =>
-    //         import ('@/views/finance/finance'),
-    //     meta: {
-    //         title: '财务'
-    //     }
-    // },
+    {
+        path: '',
+        name: '/cw',
+        component: () =>
+            import ('@/views/finance/finance'),
+        meta: {
+            title: '财务'
+        }
+    },
     {
         name: 'basicwageList',
         component: () =>
