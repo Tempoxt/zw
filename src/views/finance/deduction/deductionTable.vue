@@ -390,8 +390,13 @@ export default {
 			this.dialogForm2Visible = true
 		},
 		async handleForm2Submit(){
-			this.form2.ids = this.table_selectedRows.map(o=>o.id).join(',')
-			await this.$request.get('/deduction/audit',{params:this.form2})
+			this.form2.ids = this.table_selectedRows.map(o=>o.id)
+			// console.log(this.form2.ids,'ids')
+			await this.$request.post('/deduction/audit',{ids:this.form2.ids},{params:{
+				dateLap:this.form2.dateLap,
+				remark:this.form2.remark,
+				flag:this.form2.flag
+			}})
 			this.$message.success({message:'结算成功'})
 			this.dialogForm2Visible = false
 			this.fetchTableData()

@@ -35,37 +35,37 @@
 		</div>
 	</el-dialog>
     <table-header
-      :table_actions="table_actions"
-      :table_selectedRows="table_selectedRows"
-      @action="handleAction"
-      :table_form.sync="table_form"
-      :table_column="table_field"
-    >
+		:table_actions="table_actions"
+		:table_selectedRows="table_selectedRows"
+		@action="handleAction"
+		:table_form.sync="table_form"
+		:table_column="table_field"
+		>
           <div style="padding-left:10px">
             <dateLap v-model="table_form.dateLap" @change="fetch"/>
           </div>
     </table-header>
     <el-table
         ref="elTable"
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-      @sort-change="table_sort_change"
-      :cell-style="cellStyle"
-    >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
-      </el-table-column>
-	  <el-table-column type="index" :index="indexMethod" width="50" fixed/>
+		@selection-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="headerCellStyle"
+		:height="table_height"
+		@header-dragend="table_dragend"
+		@sort-change="table_sort_change"
+		:cell-style="cellStyle"
+    	>
+		<el-table-column 
+			type="selection" 
+			width="60" 
+			class-name="table-column-disabled"
+			:selectable="table_disable_selected"
+		>
+      	</el-table-column>
+		<el-table-column type="index" :index="indexMethod" width="50" fixed/>
 		<el-table-column prop="staff__employeeCode" sortable label="工号" fixed>
 			<template slot-scope="scope">
 				<span v-html="scope.row.staff__employeeCode" :title="scope.row.staff__employeeCode" class="default-span"></span>
