@@ -348,7 +348,8 @@ export default {
 			this.dialogFormVisible = true
 		},
 		async edit(){
-			this.attenDatas = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
+			this.attenDatas = this.attenDatas.slice(1)
+			// this.attenDatas = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
 			this.dialogForm1Visible = true;
 			let row = this.table_selectedRows[0]
 			this.form1 = (await this.api_resource.find(row.id))[0]

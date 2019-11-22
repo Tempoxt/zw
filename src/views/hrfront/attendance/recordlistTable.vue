@@ -6,7 +6,34 @@
    class="mini-table"
   >
 
+	<el-dialog
+		title="请选择月份"
+		:visible.sync="dialogForm1Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="520px"
+		>
+		<el-form ref="form1" :model="form1">
+			<el-row>
+				<el-col :span="24" style="padding:20px;">
+					<el-date-picker
+					   	:clearable="false"
+						v-model="form1.month"
+						type="month"
+						size="small"
+						format="yyyy年MM月"
+						value-format="yyyy-MM"
+						placeholder="选择月份">
+					</el-date-picker>
+				</el-col>
+			</el-row>
+		</el-form>
 
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm1Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled1">确 定</el-button>
+		</div>
+	</el-dialog>
     <table-header
       :table_actions="table_actions"
       :table_selectedRows="table_selectedRows"
@@ -39,32 +66,32 @@
       >
       </el-table-column>
 	  <el-table-column type="index" :index="indexMethod" width="50" fixed/>
-		<el-table-column prop="EmployeeID__EmployeeCode" sortable label="工号" fixed>
+		<el-table-column prop="staff__employeeCode" sortable label="工号" fixed>
 			<template slot-scope="scope">
-				<span v-html="scope.row.EmployeeID__EmployeeCode" :title="scope.row.EmployeeID__EmployeeCode" class="default-span"></span>
+				<span v-html="scope.row.staff__employeeCode" :title="scope.row.staff__employeeCode" class="default-span"></span>
 			</template>
 		</el-table-column>
-		<el-table-column prop="EmployeeID__ChineseName" label="姓名" fixed>
+		<el-table-column prop="staff__chineseName" label="姓名" fixed>
 			<template slot-scope="scope">
-				<span v-html="scope.row.EmployeeID__ChineseName" :title="scope.row.EmployeeID__ChineseName" class="default-span"></span>
+				<span v-html="scope.row.staff__chineseName" :title="scope.row.staff__chineseName" class="default-span"></span>
 			</template>
 		</el-table-column>
-		<el-table-column prop="Farther2" label="部门" fixed>
+		<el-table-column prop="staff__department__name" label="部门" fixed>
 			<template slot-scope="scope">
-				<span v-html="scope.row.Farther2" :title="scope.row.Farther2" class="default-span"></span>
+				<span v-html="scope.row.staff__department__name" :title="scope.row.staff__department__name" class="default-span"></span>
 			</template>
 		</el-table-column>
-		<el-table-column prop="EmployeeID__Principalship__Item" label="职位" fixed>
+		<el-table-column prop="staff__principalship__name" label="职位" fixed>
 			<template slot-scope="scope">
-				<span v-html="scope.row.EmployeeID__Principalship__Item" :title="scope.row.EmployeeID__Principalship__Item" class="default-span"></span>
+				<span v-html="scope.row.staff__principalship__name" :title="scope.row.staff__principalship__name" class="default-span"></span>
 			</template>
 		</el-table-column>
-		<el-table-column prop="CheckDate" label="日期" fixed>
+		<el-table-column prop="CheckDateSub" label="日期" fixed>
 			<template slot-scope="scope">
-				<span v-html="scope.row.CheckDate" :title="scope.row.CheckDate" class="default-span"></span>
+				<span v-html="scope.row.CheckDateSub" :title="scope.row.CheckDateSub" class="default-span"></span>
 			</template>
 		</el-table-column>
-		<each-table-column :table_field="table_field.filter(o=>!['EmployeeID__EmployeeCode','EmployeeID__ChineseName','Farther2','EmployeeID__Principalship__Item','CheckDate'].includes(o.name))"/>
+		<each-table-column :table_field="table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department__name','staff__principalship__name','CheckDateSub'].includes(o.name))"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -90,9 +117,21 @@ export default {
 			api_resource,
 			queryDialogFormVisible:true,
             table_topHeight:210,
-			importUploadUrl:"/attendance/record"
+			importUploadUrl:"/attendance/record",
+			dialogForm1Visible:false,
+			form1:{
+				month:''
+			}
 		};
-    },
+	},
+	computed:{
+		disabled1(){
+			if(this.form1.month!==''&&this.form1.month!==undefined){
+                return false
+            }
+            return true
+		},
+	},
     watch:{
 		id(){
 			this.table_form.currentpage = 1
@@ -100,6 +139,16 @@ export default {
 		},
     },
     methods: {
+		async reset(){
+			this.form1.month = ''
+			this.dialogForm1Visible = true
+		},
+		async handleForm1Submit(){
+			this.dialogForm1Visible = false
+			const mes = await this.$request.post('attendance/recordlist/syndata',{month:this.form1.month})
+			this.$message.success({message: mes,duration:4000})
+			this.fetchTableData()
+		},
       	fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
