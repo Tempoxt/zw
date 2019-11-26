@@ -7,7 +7,7 @@
   >
 
 	<el-dialog
-		title="请选择月份"
+		:title="titleInfo"
 		:visible.sync="dialogForm1Visible"
 		class="public-dialog"
 		v-el-drag-dialog
@@ -15,7 +15,7 @@
 		>
 		<el-form ref="form1" :model="form1">
 			<el-row>
-				<el-col :span="24" style="padding:20px;">
+				<el-col :span="24" style="padding:20px 20px 10px;">
 					<el-date-picker
 					   	:clearable="false"
 						v-model="form1.month"
@@ -27,6 +27,7 @@
 					</el-date-picker>
 				</el-col>
 			</el-row>
+			<p v-if="this.clickType=='disableModify'" class="freeze-info">注: 冻结后将无法进行重置,请谨慎操作!</p>
 		</el-form>
 
 		<div slot="footer" class="dialog-footer">
@@ -46,6 +47,7 @@
           </div>
     </table-header>
     <el-table
+		class="attendance-table"
         ref="elTable"
 		@selection-change="handleChangeSelection"
 		:data="table_data"
@@ -105,23 +107,26 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("attendance/recordlist");
 import dayjs from 'dayjs'
-
 export default {
     mixins: [table_mixin],
-    props:['id'],
+	props:['id','url','a'],
     data() {
 		return {
 			loading: true,
-			api_resource,
+			api_resource: api_common.resource(this.url),
 			queryDialogFormVisible:true,
-            table_topHeight:210,
+            table_topHeight:278,
 			importUploadUrl:"/attendance/record",
 			dialogForm1Visible:false,
 			form1:{
 				month:''
-			}
+			},
+			timer:'',
+			statusk:1,
+			val:'',
+			clickType:'',
+			titleInfo:''
 		};
 	},
 	computed:{
@@ -137,17 +142,65 @@ export default {
 			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
+		url(){
+            this.api_resource = api_common.resource(this.url)
+			delete this.table_form.keyword
+			this.table_form.currentpage = 1
+			this.table_form.query.query= []
+			this.fetchMenu()
+		}
     },
     methods: {
-		async reset(){
+		disableModify(){//冻结
+			this.titleInfo = '请选择冻结月份'
 			this.form1.month = ''
 			this.dialogForm1Visible = true
+			this.clickType = 'disableModify'
+		},
+		enableModify(){//解冻
+			this.titleInfo = '请选择解冻月份'
+			this.form1.month = ''
+			this.dialogForm1Visible = true
+			this.clickType = 'enableModify'
+		},
+		async getResult(){
+			if(this.statusk!=0){
+				this.val = await this.$request.get(this.url+'/result',{alert:false})
+				if(this.val=='重置成功'){
+					this.statusk = 0
+					this.$message.success({ message: this.val})
+					this.fetchTableData()
+				}else{
+					this.statusk = 0
+					this.$message.error({ message: '重置失败,请重试'})
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
+		async reset(){
+			this.titleInfo = '请选择重置月份'
+			this.form1.month = ''
+			this.dialogForm1Visible = true
+			this.clickType = 'reset'
 		},
 		async handleForm1Submit(){
 			this.dialogForm1Visible = false
-			const mes = await this.$request.post('attendance/recordlist/syndata',{month:this.form1.month})
-			this.$message.success({message: mes,duration:4000})
-			this.fetchTableData()
+			if(this.clickType=='reset'){
+				const mes = await this.$request.post(this.url+'/syndata',{month:this.form1.month})
+				this.$message.success({message: mes,duration:4000})
+				this.timer = setInterval(()=>{
+					this.getResult()
+				},10000)
+			}else if(this.clickType=='disableModify'){
+				const mes = await this.$request.post('attendance/recordlist/freeze',{month:this.form1.month})
+				this.$message.success({message: mes})
+				this.fetchTableData()
+			}else if(this.clickType=='enableModify'){
+				const mes = await this.$request.post('attendance/recordlist/unfreeze',{month:this.form1.month})
+				this.$message.success({message: mes})
+				this.fetchTableData()
+			}
 		},
       	fetch(){
 			this.table_form.currentpage = 1
@@ -186,22 +239,24 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			this.table_form.sheetType = 2
-			const {rows , total }= await api_resource.get(this.table_form);
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
 		},
+		async fetchMenu(){
+			const { field, action,table } = await api_common.menuInit(this.url);
+			this.table_field = field;
+			this.table_actions = action;
+			this.table_config = table
+			this.fetchTableData()
+		}
     },
     async created() {
-		const { field, action,table } = await api_common.menuInit("attendance/recordlist");
-		this.table_field = field;
-		this.table_actions = action;
-		this.table_config = table
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
-		this.fetchTableData();
+		await this.fetchMenu()
     }
 };
 </script>

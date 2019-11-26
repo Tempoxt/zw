@@ -1081,7 +1081,7 @@
             <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
         </el-table>
 
-        <!-- <div style="position:absolute;bottom:20px;left:35%;">男:{{maleCount}}人  &nbsp;&nbsp;&nbsp;  女:{{femaleCount}}人</div> -->
+        <div style="position:absolute;bottom:20px;left:35%;" v-if="maleCount&&femaleCount">男:{{maleCount}}人  &nbsp;&nbsp;&nbsp;  女:{{femaleCount}}人</div>
         <table-pagination 
             :total="table_form.total" 
             :pagesize.sync="table_form.pagesize"

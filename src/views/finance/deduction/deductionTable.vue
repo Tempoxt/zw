@@ -311,7 +311,6 @@ export default {
 					this.s++;
 				},5000)
 			} catch (error) {
-				console.log(error)
 				this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:4000})
 			}finally{
 				this.importLoading = false
@@ -391,7 +390,6 @@ export default {
 		},
 		async handleForm2Submit(){
 			this.form2.ids = this.table_selectedRows.map(o=>o.id)
-			// console.log(this.form2.ids,'ids')
 			await this.$request.post('/deduction/audit',{ids:this.form2.ids},{params:{
 				dateLap:this.form2.dateLap,
 				remark:this.form2.remark,

@@ -231,8 +231,8 @@ export default {
 .flexSpace:hover .icon-lajitong,.flexSpace:hover .icon-bianji,.flexSpace:active .icon-lajitong,.flexSpace:active .icon-bianji{
     color: #CCD5DB
 }
-.theme-0BB2D4 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-lajitong,
-.theme-0BB2D4 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-bianji{
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-lajitong,
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .icon-bianji{
     color: #CCD5DB
 }
 .addIcon{

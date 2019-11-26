@@ -640,31 +640,27 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	
-	.theme-0BB2D4 .el-table--small td, .theme-0BB2D4 .el-table--small th{
+	.drawer-profile .el-table--small td,.drawer-profile .el-table--small th{
 		color: red;
 		padding: 1px 0;
 	}
-	.theme-0BB2D4{
-		.dtable{
-			/deep/.cell{
-				font-size:10px;
-			}
-			/deep/td{
-				padding: 0px;
-			}
-			/deep/th{
-				padding: 1px 0;
-			}
+	.dtable{
+		/deep/.cell{
+			font-size:10px;
+		}
+		/deep/td{
+			padding: 0px!important;
+		}
+		/deep/th{
+			padding: 1px 0!important;
 		}
 	}
 </style>
 <style lang="scss">    
 	.taxTable .el-table__row .cell{
         cursor: default!important;
-		// white-space: normal!important;
 	}
-	.theme-0BB2D4 .taxTable.el-table--small td{
+	.taxTable.el-table--small td{
 		padding: 2px 0!important;
 	}
     .taxInfo .ivu-drawer-header{

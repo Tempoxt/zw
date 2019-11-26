@@ -866,8 +866,8 @@ export default {
 };
 </script>
 <style lang="scss">
-.theme-0BB2D4 .shift_form {
-	.el-date-editor.el-input, .theme-0BB2D4 .shift_form .el-date-editor.el-input__inner{
+.shift_form {
+	.el-date-editor.el-input,.shift_form .el-date-editor.el-input__inner{
 		width: 150px!important;
 	}
 	.range_time .el-date-editor.el-input{

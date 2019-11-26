@@ -377,33 +377,33 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-.flex{
-    display: flex;
-    align-items: center
-}
+	.flex{
+		display: flex;
+		align-items: center
+	}
     .drawerInfo .ivu-drawer-header{
         background: rgba(245,250,251,1)
     }
 	.drawer-profile{
 		padding-left: 10px;
 	}
-	.theme-0BB2D4 .el-table--small td, .theme-0BB2D4 .el-table--small th{
-		color: red;
-		padding: 1px 0;
+	.drawer-profile .el-table--small td,.drawer-profile .el-table--small th{
+		color: red!important;
+		padding: 1px 0!important;
 	}
-	.theme-0BB2D4{
-		.dtable{
-			/deep/.cell{
-				font-size:10px;
-			}
-			/deep/td{
-				padding: 0px;
-			}
-			/deep/th{
-				padding: 1px 0;
-			}
+
+	.dtable{
+		/deep/.cell{
+			font-size:10px!important;
+		}
+		/deep/td{
+			padding: 0px!important;
+		}
+		/deep/th{
+			padding: 1px 0!important;
 		}
 	}
+
 </style>
 
 

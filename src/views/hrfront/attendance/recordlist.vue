@@ -1,6 +1,6 @@
 <template>
 
-<!-- 考勤明细 -->
+<!-- 考勤明细2 -->
  <el-row class="h-full">
     <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
       <div class=" h-full">
@@ -9,12 +9,21 @@
 
     </el-col>
     <el-col :span="20">
-        <recordlistTable :id="orgid" />
+        <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
+            <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
+        </el-tabs>
+        <div v-if="view_activeName==='审核列表'">
+            <recordlistTable url="attendance/recordlist" a='1' :id="orgid"/>
+        </div>
+        <div v-if="view_activeName==='差异列表'">
+            <recordlistTable url="attendance/recorddifflist" a='2' :id="orgid"/>
+        </div>
     </el-col>
   </el-row>
 </template>
 <script>
 import org from '@/views/public/org'
+import { getTabs } from '@/api/common'
 import recordlistTable from './recordlistTable'
 export default {
     components:{
@@ -32,12 +41,22 @@ export default {
             orgid:'',
             data2:[],
             filterText:'',
+            view_activeName:'',
+            menu:[],
         }
     },
     methods:{
         changeOrg(orgid){
             this.orgid = orgid
         },
+        handleClick(val){
+
+        },
+    },
+    async created() {
+        const { menu } = await getTabs(this.$route.query.menuid)
+        this.menu = menu
+        this.view_activeName = menu[0].name;
     }
 }
 </script>
@@ -46,6 +65,14 @@ export default {
         cursor: default!important;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+    .attendance-table.el-table--small td, .attendance-table.el-table--small th{
+        padding: 0!important;
+    }
+    .freeze-info{
+        font-size: 12px;
+        margin-left:20px;
+        color:#F2353C
     }
 </style>
 

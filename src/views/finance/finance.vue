@@ -6,7 +6,16 @@
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 						<el-row style="padding-bottom:30px;">
 							<el-col :span="12">
-								<!-- <reemployee title="无银行卡员工" info="NoBankCard"></reemployee> -->
+								<reemployee title="无银行卡员工" info="NoBankCard"></reemployee>
+							</el-col>
+							<el-col :span="12">
+								<reemployee title="工薪单未签名员工" info="PayrollUnsign"></reemployee>
+							</el-col>
+							<el-col :span="12">
+								<reemployee title="入职工薪单未提交员工" info="PayrollUnsubmit"></reemployee>
+							</el-col>
+							<el-col :span="12">
+								<reemployee title="工资未签收员工" info="SalaryUnsign"></reemployee>
 							</el-col>
 						</el-row>
 					</el-scrollbar>
@@ -20,7 +29,7 @@ import * as api_common from "@/api/common";
 import * as api_org from "@/api/org";
 import table_mixin from "@c/Table/table_mixin";
 import screenfull from "screenfull";
-import reemployee from "./remind/reemployee"
+import reemployee from "./remind/reemployee";
 export default {
     data() {
       return {
@@ -82,6 +91,9 @@ export default {
 	height: 0;
 	display: flex;
 	justify-content: center
+}
+.dashboard .el-row .el-col:nth-child(2n){
+	padding-left: 10px;
 }
 </style>
 

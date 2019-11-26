@@ -16,7 +16,7 @@
 		<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 			<el-row>
 				<el-col :span="12">
-					<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenDatas}" v-model="form.exceptionType"/>
+					<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenData}" v-model="form.exceptionType"/>
 				</el-col>
 				<el-col :span="12">
 					<form-render prop="exceptionTime" :type="`datetime`" :field="{name:'补打卡时间'}" v-model="form.exceptionTime"/>
@@ -49,7 +49,7 @@
 						<form-render :type="`input`" :field="{name:'员工'}" v-model="form1.staff__chineseName" disabled/>
 					</el-col>
 					<el-col :span="17" :offset="3">
-						<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenDatas}" v-model="form1.exceptionType"/>
+						<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenData}" v-model="form1.exceptionType"/>
 					</el-col>
 					<el-col :span="17" :offset="3">
 						<form-render prop="exceptionTime" :type="`datetime`" :field="{name:'补打卡时间'}" v-model="form1.exceptionTime"/>
@@ -209,6 +209,7 @@ export default {
 			dialogForm5Visible:false,
 			optionDatas: [],
 			attenDatas:[],
+			attenData:[],
 			status:'全部',
 			status3:'',
 			form:{},
@@ -337,10 +338,11 @@ export default {
 
 			}
 		},
-		add(){
+		async add(){
 			this.form={}
-			let attend = this.attenDatas.slice(1)
-			this.attenDatas = attend
+			this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
+			let attend = this.attenData.slice(1)
+			this.attenData = attend
 			this.result = []
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
@@ -348,8 +350,9 @@ export default {
 			this.dialogFormVisible = true
 		},
 		async edit(){
-			this.attenDatas = this.attenDatas.slice(1)
-			// this.attenDatas = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
+			this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
+			let attend = this.attenData.slice(1)
+			this.attenData = attend
 			this.dialogForm1Visible = true;
 			let row = this.table_selectedRows[0]
 			this.form1 = (await this.api_resource.find(row.id))[0]

@@ -647,7 +647,7 @@
 	right: 40px;
 	top: 30px;
 }
-.el-row .el-col:nth-child(2n){
+.dashboard .el-row .el-col:nth-child(2n){
 	padding-left: 10px;
 }
 .dateLap{

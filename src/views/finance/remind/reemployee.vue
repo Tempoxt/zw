@@ -1,23 +1,42 @@
 <template>
-	<el-card class="box-card scroll">
+	<el-card class="box-card scroll" v-if="infoData.length!=0">
 		<div slot="header" class="clearfix">
-			<span class="cardName">{{title}}({{total}})人</span>
+			<span class="cardName">{{title}}({{infoData.length}})人</span>
 			<el-button style="float: right; padding: 6px 4px" @click="remindAll">一键提醒</el-button>
 		</div>
 		<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 			<el-row class="list" v-for="(o,i) in infoData" :key="i"> 
-				<el-col :span="18">
+				<el-col :span="12">
 					<div class="list-l">
 						<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">
 						<div>
-							<p>{{o.chineseName}}- {{o.employeeCode}}</p>
-							<span>{{o.department__name}}</span>
+							<p>{{o.staff__chineseName}}- {{o.staff__employeeCode}}</p>
+							<span>{{o.staff__department}}</span>
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="6">
+				<el-col :span="12" v-if="info&&info=='PayrollUnsign'">
+					<el-row>
+						<el-col :span="6">
+							<div class="list-r">
+								{{o.sheetType_desc}}
+							</div>
+						</el-col>
+						<el-col :span="10">
+							<div class="list-r">
+								已审核通过：{{o.days}}天
+							</div>
+						</el-col>
+						<el-col :span="8">
+							<div class="list-r">
+								<el-button type="primary" size="mini" @click="remind(o.staff__employeeCode)">提醒员工</el-button>
+							</div>
+						</el-col>
+					</el-row>
+				</el-col>
+				<el-col :span="12" v-else>
 					<div class="list-r">
-						<el-button type="primary" size="mini" @click="remind(o.employeeCode)">提醒员工</el-button>
+						<el-button type="primary" size="mini" @click="remind(o.staff__employeeCode)">提醒员工</el-button>
 					</div>
 				</el-col>
 			</el-row>
@@ -49,7 +68,12 @@ export default {
 	async created(){
 		if(this.info&&this.info=='NoBankCard'){
 			this.infoData = await this.$request.get('salary/noBankCard');
-			this.total = this.infoData.length
+		}else if(this.info&&this.info=='PayrollUnsign'){
+			this.infoData = await this.$request.get('salary/unsignworksalarylist');
+		}else if(this.info&&this.info=='PayrollUnsubmit'){
+			this.infoData = await this.$request.get('salary/unsubmitdutyworksalary');
+		}else if(this.info&&this.info=='SalaryUnsign'){
+			this.infoData = await this.$request.get('salary/salarynosign');
 		}
 	},
 }
