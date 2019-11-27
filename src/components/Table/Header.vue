@@ -109,9 +109,6 @@
           <el-button icon="icon iconfont icon-lie" size="small"  slot="reference"   :disabled="!(showColumnfilter && table_column && table_column.length)"></el-button>
         </el-popover>
 
-        
-                                                                                                               
-
         <!-- <el-tooltip class="item" effect="dark" content="设置列" placement="bottom">
           <el-button icon="icon iconfont icon-lie" size="small"></el-button>
         </el-tooltip> -->
@@ -146,6 +143,9 @@ export default {
         }
         if (code === "delete") {
           return len >= 1;
+        }
+        if (code === "disableModify1" ||code === "enableModify1") {
+          return len < 0;
         }
         
         if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit','cancelAudit'].indexOf(code)!==-1) {

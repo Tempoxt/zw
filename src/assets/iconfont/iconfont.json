@@ -1054,6 +1054,13 @@
       "font_class": "kaoqinji",
       "unicode": "e69a",
       "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "11987930",
+      "name": "zuofei",
+      "font_class": "zuofei",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
     }
   ]
 }

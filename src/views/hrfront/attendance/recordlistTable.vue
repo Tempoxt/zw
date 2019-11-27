@@ -126,7 +126,8 @@ export default {
 			statusk:1,
 			val:'',
 			clickType:'',
-			titleInfo:''
+			titleInfo:'',
+			freezeStatus:false
 		};
 	},
 	computed:{
@@ -192,19 +193,25 @@ export default {
 				this.timer = setInterval(()=>{
 					this.getResult()
 				},10000)
-			}else if(this.clickType=='disableModify'){
-				const mes = await this.$request.post('attendance/recordlist/freeze',{month:this.form1.month})
-				this.$message.success({message: mes})
-				this.fetchTableData()
-			}else if(this.clickType=='enableModify'){
-				const mes = await this.$request.post('attendance/recordlist/unfreeze',{month:this.form1.month})
-				this.$message.success({message: mes})
-				this.fetchTableData()
+			}else{
+				if(this.clickType=='disableModify'){
+					const mes = await this.$request.post('attendance/recordlist/freeze',{month:this.form1.month})
+					this.$message.success({message: mes})
+					this.freezeStatus = await this.$request.get('attendance/recordlist/freezestatus',{params:{month:this.table_form.dateLap}})
+					this.fetchMenu()
+				}else if(this.clickType=='enableModify'){
+					const mes = await this.$request.post('attendance/recordlist/unfreeze',{month:this.form1.month})
+					this.$message.success({message: mes})
+					this.freezeStatus = await this.$request.get('attendance/recordlist/freezestatus',{params:{month:this.table_form.dateLap}})
+					this.fetchMenu()
+				}
 			}
 		},
-      	fetch(){
+      	async fetch(){
 			this.table_form.currentpage = 1
-			this.fetchTableData()
+			this.freezeStatus = await this.$request.get('attendance/recordlist/freezestatus',{params:{month:this.table_form.dateLap}})
+			// this.fetchTableData()
+			this.fetchMenu()
 		},
       	cellStyle({row,column,rowIndex,columnIndex}){
         	if(row.Remark!=''&&row.Remark!=null){
@@ -249,6 +256,22 @@ export default {
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit(this.url);
 			this.table_field = field;
+			// this.table_actions = action;
+			action.map(o=>{
+				if(this.freezeStatus==true){
+					if (o.code=='enableModify') {
+						o.code = 'enableModify'
+					}else if (o.code=='disableModify') {
+						o.code='enableModify1'
+					}
+				}else{
+					if (o.code=='enableModify') {
+						o.code='disableModify1'
+					}else if (o.code=='disableModify') {
+						o.code='disableModify'
+					}
+				}
+			})
 			this.table_actions = action;
 			this.table_config = table
 			this.fetchTableData()
@@ -256,6 +279,7 @@ export default {
     },
     async created() {
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		this.freezeStatus = await this.$request.get('attendance/recordlist/freezestatus',{params:{month:this.table_form.dateLap}})
 		await this.fetchMenu()
     }
 };
