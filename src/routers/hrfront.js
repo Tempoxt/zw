@@ -273,5 +273,12 @@ export default [{
         meta: {
             title: '调休管理'
         }
+    },{
+        name: 'classesManager',
+        component: () =>
+            import ('@/views/attendanceSystem/classManage'),
+        meta: {
+            title: '排班管理'
+        }
     },
 ]

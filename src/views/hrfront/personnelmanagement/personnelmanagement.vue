@@ -370,12 +370,13 @@
                                     <i class="icon iconfont icon-tianjia"></i>
                                     <span>添加</span>
                                 </el-button>
-                                <!-- <el-button type="button" class="el-button el-button--default el-button--small" @click="editContract" :disabled="!isDisabled">
-                                    <i class="icon iconfont icon-bianji"></i>
-                                    <span>编辑</span>
-                                </el-button> -->
+                                <el-button type="button" class="el-button el-button--default el-button--small" @click="voidContract" :disabled="!isDisabled">
+                                    <i class="icon iconfont icon-zuofei"></i>
+                                    <span>作废</span>
+                                </el-button>
 
                                 <el-table
+                                    @selection-change="handleChangeSelect"
                                     :data="contractData"
                                     height="350px"
                                     :header-cell-style="headerStyle"
@@ -1278,10 +1279,10 @@ export default {
     computed: {
         isDisabled() {
             let len = this.selections.length;
-            if(len!==1){
-                return false
+            if(len>0){
+                return true
             }
-            return true
+            return false
         },
         Disabled() {
             let len = this.checkList.length;
@@ -1319,6 +1320,12 @@ export default {
         }
     },
     methods: {
+        async voidContract(){
+            let rows = this.selections.map(row=>row.id)
+            let mes = await this.$request.post('/hrm/staff/contract/statu',{ids:rows.join(','),contractTag:0})
+            this.$message.success({message: mes})
+            this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
+        },
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
