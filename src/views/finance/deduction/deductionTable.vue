@@ -6,6 +6,80 @@
   
   >
   
+
+  	<el-dialog
+		title="导入"
+		:visible.sync="importDialog"
+		class="public-dialog"
+		v-el-drag-dialog
+		>
+      		<el-form ref="importForm" :model="importForm"  label-width="100px"  :rules="rules">
+				<el-row >
+					
+					<el-col :span="12">
+						<form-render :type="`select`" prop="type" :field="{name:'分类',options:dedulist}" v-model="importForm.type"/>
+					</el-col>
+				
+					<el-col :span="12">
+						<form-render :type="`select`" prop="program" :field="{name:'补扣项目',options:programList}" v-model="importForm.program" />
+					</el-col>
+				
+					<el-col :span="12">
+						<el-form-item label="扣款月份" prop="recordate">
+							<el-date-picker
+								v-model="importForm.recordate"
+								type="month"
+								style="width:100%"
+								format="yyyy-MM"
+								value-format="yyyy-MM"
+								placeholder="选择月份">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<form-render :type="`input`" prop="reason" :field="{name:'补扣原因'}" v-model="importForm.reason"/>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="补扣附件" >
+							<el-upload
+								class="upload-demo"
+								ref="upload"
+								action="www"
+								:file-list="fileList1"
+								:on-change="changeFormImportFiles"
+								:auto-upload="false">
+						    <el-button slot="trigger" size="small" type="primary">选取文件</el-button></el-upload>
+						</el-form-item>
+						
+						
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="其他补扣款文件" >
+							<el-upload
+								class="upload-demo"
+								ref="upload"
+								action="www"
+								:file-list="fileList2"
+								:on-change="changeFormImportFiles2"
+								:auto-upload="false">
+						    <el-button slot="trigger" size="small" type="primary">选取文件</el-button></el-upload>
+						</el-form-item>
+						
+						
+					</el-col>
+				</el-row>
+
+			</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="importDialog = false">取 消</el-button>
+			<el-button type="primary" @click="handleImportFormSubmit">确 定</el-button>
+		</div>
+    </el-dialog>
+
+
+
+
+
   	<el-dialog
 		:title="dialogStatus==='insert'?'添加补扣款':'编辑'"
 		:visible.sync="dialogFormVisible"
@@ -22,7 +96,7 @@
 					</el-col>
 				
 					<el-col :span="12">
-						<form-render :type="`input`" prop="itemName" :field="{name:'补扣项目'}" v-model="form.itemName" />
+						<form-render :type="`select`" prop="program" :field="{name:'补扣项目',options:programList}" v-model="form.program" />
 					</el-col>
 					<el-col :span="12">
 						<form-render :type="`input`" prop="amount" :field="{name:'补扣金额'}" v-model="form.amount"/>
@@ -40,7 +114,21 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<form-render :type="`input`" prop="remark" :field="{name:'补扣原因'}" v-model="form.remark"/>
+						<form-render :type="`input`" prop="reason" :field="{name:'补扣原因'}" v-model="form.reason"/>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="补扣附件" >
+							<el-upload
+								class="upload-demo"
+								ref="upload"
+								action="www"
+								:file-list="fileList"
+								:on-change="changeFormUploadFiles"
+								:auto-upload="false">
+						    <el-button slot="trigger" size="small" type="primary">选取文件</el-button></el-upload>
+						</el-form-item>
+						
+						
 					</el-col>
 				</el-row>
 
@@ -192,6 +280,10 @@ export default {
 			queryDialogFormVisible:true,
 			dialogForm2Visible:false,
 			table_topHeight:276,
+			fileList:[],
+			fileList1:[],
+			fileList2:[],
+			programList:[],
 			rules:{
 				type:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
@@ -234,7 +326,9 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
-			s:1
+			s:1,
+			importDialog:false,
+			importForm:{}
 		};
 	},
 	computed:{
@@ -272,20 +366,66 @@ export default {
 		}
 	},
 	methods: {
-		import(){
-			let {
-				handleImportChange,
-			} = this
-			MessageBox.alert(
-				<el-button-group class="table-import-upload" ref="import">
-					<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
-					<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
-					<el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
-				</el-button-group>
-				, '选择文件导入', {
-				showConfirmButton:false,
-				center:true
+		changeFormUploadFiles(file, fileList){
+			this.form.annex = file.raw
+			console.log(file)
+		},
+		changeFormImportFiles(file){
+			this.importForm.annex = file.raw
+		},
+		changeFormImportFiles2(file){
+			this.importForm.the_file = file.raw
+		},
+		async handleImportFormSubmit(){
+			var formData = new FormData();
+			Object.keys(this.importForm).forEach(k=>{
+				formData.append(k,this.importForm[k])
+			})
+
+			let mes = await this.$request.post('/deduction/upload',formData)
+			this.importDialog = false
+			this.$message({
+				message: mes,
+				type: 'success'
 			});
+			this.fetchTableData()
+		},
+		handlePreview(){
+			
+		},
+		async import(){
+			this.importForm = {}
+			this.$nextTick(()=>{
+				this.$refs['importForm'].clearValidate()
+			})
+			try {
+				this.fileList1 = []
+				this.fileList2 = []
+			} catch (error) {
+				
+			}
+			this.importDialog = true
+			this.dedulist = await api_common.getTag('deduction')
+		
+			this.programList = (await this.$request.get('/deduction/program')).map(o=>{
+				return {
+					label:o.selectname,
+					value:o.id
+				}
+			})
+			// let {
+			// 	handleImportChange,
+			// } = this
+			// MessageBox.alert(
+			// 	<el-button-group class="table-import-upload" ref="import">
+			// 		<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+			// 		<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+			// 		<el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
+			// 	</el-button-group>
+			// 	, '选择文件导入', {
+			// 	showConfirmButton:false,
+			// 	center:true
+			// });
 		},
 		async handleImportChange(ev){
 			const files = ev.target.files;
@@ -355,10 +495,22 @@ export default {
 		async add(){
 			this.result = []
 			this.dialogFormVisible = true
+			try {
+				this.fileList = []
+			} catch (error) {
+				
+			}
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})
-        	this.dedulist = await api_common.getTag('deduction')
+			this.dedulist = await api_common.getTag('deduction')
+		
+			this.programList = (await this.$request.get('/deduction/program')).map(o=>{
+				return {
+					label:o.selectname,
+					value:o.id
+				}
+			})
 		},
 		async handleFormSubmit(){
             await this.form_validate()
@@ -367,7 +519,12 @@ export default {
 				this.form.ids = workcodeid
 				if(this.form.ids!=''){
 					let form = Object.assign({},this.form)
-					await api_resource.create(form)
+					console.log(form,'form')
+					var formData = new FormData();
+					Object.keys(form).forEach(k=>{
+						formData.append(k,form[k])
+					})
+					await api_resource.create(formData)
 					this.dialogFormVisible = false
 					this.fetchTableData()
 				}else{
