@@ -730,6 +730,26 @@
                             <span class="labelCon promp">{{profileData.bankAccount}}</span>
                         </el-col>
                     </el-row>
+                    <br>
+                    <!-- 银行卡修改记录 -->
+                    <div v-if="profileData.forwardBankRecords&&profileData.forwardBankRecords.length>0" >
+                        <el-row>
+                            <el-col :span="12" style="margin-left:46px;font-weight:bold">
+                                <span class="labelCon">作废银行卡记录</span>
+                                <span class="labelCon promp">&nbsp;</span>
+                            </el-col>
+                        </el-row>
+                        <el-row v-for="item in profileData.forwardBankRecords" :key="item.bankAccount">
+                            <el-col :span="12">
+                                <span class="labelCon">银行：</span>
+                                <span class="labelCon promp">{{item.bank}}</span>
+                            </el-col>
+                            <el-col :span="12">
+                                <span class="labelCon">作废卡号：</span>
+                                <span class="labelCon promp">{{item.bankAccount}}</span>
+                            </el-col>
+                        </el-row>
+                    </div> 
                 </div>
                 <Divider v-if="profileData.cardRecords!=''" />
                 <p class="info" v-if="profileData.cardRecords!=''">证件管理 <i @click="showCardInfo" class="icon iconfont icon-bianji editIcon"></i></p>
@@ -1343,7 +1363,7 @@ export default {
             })
         },
         table_disable(row){
-            return !row.lockstate
+            return !row.lockstate&&row.contractStatus!='作废'&&row.contractTypeShow!='新签'
         },
         table_disable_edu(row){
             return !row.lockstate
@@ -1464,9 +1484,9 @@ export default {
             let allImgs = this.profileData.cardRecords.map(o=>o.cardConnects)||[]
             this.list = []
             allImgs.forEach(o=>{
-                 o.forEach((url)=>{
-                     this.list.push(url)
-                 })
+                o.forEach((url)=>{
+                    this.list.push(url)
+                })
             })
             this.index = this.list.indexOf(img)
             this.dialogForm3Visible = true
