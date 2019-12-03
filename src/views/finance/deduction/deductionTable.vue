@@ -417,6 +417,8 @@ export default {
 			
 		},
 		async import(){
+			
+			this.statusk = 1
 			this.importForm = {}
 			this.$nextTick(()=>{
 				this.$refs['importForm'].clearValidate()
