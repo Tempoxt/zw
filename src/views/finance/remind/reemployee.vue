@@ -73,7 +73,7 @@ export default {
 		}else if(this.info&&this.info=='PayrollUnsubmit'){
 			this.infoData = await this.$request.get('salary/unsubmitdutyworksalary');
 		}else if(this.info&&this.info=='SalaryUnsign'){
-			this.infoData = await this.$request.get('salary/salarynosign');
+			// this.infoData = await this.$request.get('salary/salarynosign');
 		}
 	},
 }

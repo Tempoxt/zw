@@ -5,7 +5,6 @@
   @query="querySubmit"
   
   >
-  
 
   	<el-dialog
 		title="导入"
@@ -13,7 +12,7 @@
 		class="public-dialog"
 		v-el-drag-dialog
 		>
-      		<el-form ref="importForm" :model="importForm"  label-width="100px"  :rules="rules">
+      		<el-form ref="importForm" :model="importForm"  label-width="100px"  :rules="rules3">
 				<el-row >
 					
 					<el-col :span="12">
@@ -50,11 +49,9 @@
 								:auto-upload="false">
 						    <el-button slot="trigger" size="small" type="primary">选取文件</el-button></el-upload>
 						</el-form-item>
-						
-						
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="其他补扣款文件" >
+						<el-form-item label="其他补扣款文件">
 							<el-upload
 								class="upload-demo"
 								ref="upload"
@@ -71,14 +68,11 @@
 
 			</el-form>
 		<div slot="footer" class="dialog-footer">
+			<el-button @click="downLoad">下载模板</el-button>
 			<el-button @click="importDialog = false">取 消</el-button>
 			<el-button type="primary" @click="handleImportFormSubmit">确 定</el-button>
 		</div>
     </el-dialog>
-
-
-
-
 
   	<el-dialog
 		:title="dialogStatus==='insert'?'添加补扣款':'编辑'"
@@ -127,11 +121,8 @@
 								:auto-upload="false">
 						    <el-button slot="trigger" size="small" type="primary">选取文件</el-button></el-upload>
 						</el-form-item>
-						
-						
 					</el-col>
 				</el-row>
-
 			</el-form>
 
 			<OrgSelect :result="result" v-model="form.ids" ref="OrgSelect" v-if="dialogFormVisible&&isInsert"/>
@@ -197,8 +188,6 @@
 			<el-button type="primary" @click="handleForm2Submit" :disabled="disabled2">确 定</el-button>
 		</div>
 	</el-dialog>
-
-
 
     <table-header
       :table_actions="table_actions"
@@ -292,12 +281,27 @@ export default {
 					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 				],
 				amount:[
+					{ required: true, message: '请输入', trigger:  ['blur', 'change']},
 					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
 				recordate:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change']},
 				],
-				remark:[
+				reason:[
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+				],
+			},
+			rules3:{
+				type:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+				],
+				program:[
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+				],
+				recordate:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change']},
+				],
+				reason:[
 					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 				],
 			},
@@ -366,6 +370,22 @@ export default {
 		}
 	},
 	methods: {
+        importForm_validate(){
+            return new Promise((resolve,reject)=>{
+                this.$refs.importForm.validate((valid) => {
+                if(valid){
+                    resolve()
+                }else{
+                    reject()
+                    return false
+                }
+                })
+            })
+        },
+		downLoad(){
+			this.handleDownloadChange()
+			this.importDialog = false
+		},
 		changeFormUploadFiles(file, fileList){
 			this.form.annex = file.raw
 			console.log(file)
@@ -377,18 +397,21 @@ export default {
 			this.importForm.the_file = file.raw
 		},
 		async handleImportFormSubmit(){
+			await this.importForm_validate()
 			var formData = new FormData();
 			Object.keys(this.importForm).forEach(k=>{
 				formData.append(k,this.importForm[k])
 			})
-
 			let mes = await this.$request.post('/deduction/upload',formData)
 			this.importDialog = false
 			this.$message({
 				message: mes,
 				type: 'success'
 			});
-			this.fetchTableData()
+			this.timer = setInterval(()=>{
+				this.getResult()
+				this.s++;
+			},5000)
 		},
 		handlePreview(){
 			
