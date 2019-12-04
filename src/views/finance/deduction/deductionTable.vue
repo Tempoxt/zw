@@ -490,10 +490,16 @@ export default {
 				if(this.s==12){
 					this.$message.error({ message: '导入失败,请重试'})
 				}
-				this.val = await this.$request.get('/deduction/upload',{alert:false})
-				this.statusk = 0
-				this.$message.success({ message: this.val,duration:3000})
-				this.fetchTableData()
+				try{
+					this.val = await this.$request.get('/deduction/upload',{alert:false})
+					this.statusk = 0
+					this.$message.success({ message: this.val,duration:3000})
+					this.fetchTableData()
+					clearInterval(this.timer)
+					this.s=0
+				}catch(err){
+
+				}
 			}else{
 				clearInterval(this.timer)
 				this.s=0

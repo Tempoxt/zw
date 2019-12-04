@@ -6,7 +6,7 @@
   >
 
 	<el-dialog
-		:title="dialogStatus==='insert'?'添加':'编辑'"
+		:title="dialogStatus==='insert'?'添加排班':'修改排班'"
 		:visible.sync="dialogFormVisible"
 		class="public-dialog"
 		v-el-drag-dialog
@@ -15,6 +15,21 @@
 
 		<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 			<el-row>
+				<el-col :span="19">
+						<el-form-item label="已选员工">
+							<div>
+								<el-tag
+									style="margin-right:10px"
+									v-for="tag in selectedRow"
+									:key="tag.staff_id"
+									closable
+									@close="handleClose(tag)"
+									type="info">
+									{{tag.chineseName}}
+								</el-tag>
+							</div>
+						</el-form-item>
+					</el-col>
 				<el-col :span="19">
 					<el-form-item label="使用班次" prop="class_id">
 						<el-select v-model="form.class_id" placeholder="请选择" filterable style="width:100%">
@@ -62,71 +77,9 @@
 			</el-row>
 		</el-form>
 
-      	<OrgSelect :result="result" v-model="form.ids" activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
-
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
 			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-		</div>
-    </el-dialog>
-
-	<el-dialog
-		title='修改排班'
-		:visible.sync="dialogForm1Visible"
-		class="public-dialog"
-		v-el-drag-dialog
-		width="800px"
-		>
-		<div>
-			<el-form ref="form1" :model="form1" label-width="110px" :rules="rule1">
-				<el-row :gutter="20">
-					<el-col :span="19" :offset="2">
-						<el-form-item label="已选员工">
-							<div>
-								<el-tag
-									style="margin-right:10px"
-									v-for="tag in selectedRow"
-									:key="tag.staff_id"
-									closable
-									@close="handleClose(tag)"
-									type="info">
-									{{tag.chineseName}}
-								</el-tag>
-							</div>
-						</el-form-item>
-					</el-col>
-					<el-col :span="19" :offset="2">
-						<el-form-item label="使用班次" prop="class_id">
-                            <el-select v-model="form1.class_id" placeholder="请选择" filterable style="width:100%">
-                                <el-option
-                                    v-for="item in classData"
-                                    :key="item.id"
-                                    :label="item.className"
-                                    :value="item.id">
-                                    <span >{{item.className}}
-                                        <span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
-                                        <span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
-                                        <span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
-                                        <span v-if="item.onDutyTime4!=null&&item.offDutyTime4!=null">,  &nbsp;&nbsp;{{item.onDutyTime4}} - {{item.offDutyTime4}}</span>
-                                    </span>
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-					</el-col>
-					
-					<el-col :span="19" :offset="2">
-						<form-render prop="start_date" :type="`day`" :field="{name:'开始日期'}" v-model="form1.start_date"/>
-					</el-col>
-					<el-col :span="19" :offset="2">
-						<form-render prop="end_date" :type="`day`" :field="{name:'结束日期'}" v-model="form1.end_date"/>
-					</el-col>
-				</el-row>
-			</el-form>
-		</div>
-
-		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogForm1Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled1">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -228,14 +181,10 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
 	props:['id','url','m'],
-	components:{
-		OrgSelect
-	},
 	data() {
 		return {
 			loading: true,
@@ -243,7 +192,6 @@ export default {
 			table_topHeight:276,
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
-			dialogForm1Visible:false,
 			dialogForm3Visible:false,
 			dialogForm4Visible:false,
 			dialogForm5Visible:false,
@@ -263,14 +211,6 @@ export default {
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
 				],
 			},
-			rule1:{
-				class_id:[
-					{ required: true, message: '请选择', trigger: ['blur','change'] },
-				],
-				start_date:[
-					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
-				],
-			},
 			rule3:{
 				classes_id:[
 					{ required: true, message: '请选择', trigger: ['blur','change'] },
@@ -284,6 +224,7 @@ export default {
 					return time.getTime() < Date.now() - 8.64e7;
 				}
 			},
+			dialogStatus:'insert',
 		};
 	},
 	computed:{
@@ -293,12 +234,6 @@ export default {
 			}
 			return true
 		},
-		disabled1(){
-			if(this.form1.class_id!=null&&this.form1.start_date!=null){
-				return false
-			}
-			return true
-		}
 	},
 	watch:{
 		id(){
@@ -324,75 +259,74 @@ export default {
 			this.table_form.currentpage = 1
 			this.fetchMenu()
 		},
-		async add(){
+		async schedule(){
+			this.dialogStatus = 'insert'
 			this.form={}
-            this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
-			this.result = []
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})
+			this.selectedRow = this.table_selectedRows.map(row=>row)
+            this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
 			this.dialogFormVisible = true
-		},
-		async handleFormSubmit(){
-			await this.form_validate()
-			let ids = this.$refs.OrgSelect.getIdsResult()
-			this.form.ids = ids;
-			if(this.form.ids!==''){
-				try{
-					let mes = await this.api_resource.create(this.form)
-					this.$message.success({message:mes});
-					this.dialogFormVisible = false
-					this.fetchTableData()
-				}catch(err){
-					
-				}
-			}else{
-				this.$message.error('请选择要添加的人员');
-			}
 		},
 		handleClose(tag){
 			this.selectedRow.splice(this.selectedRow.indexOf(tag), 1);
 		},
 		async editClass(){
-			this.form1 = {}
+			this.dialogStatus = 'edit'
+			this.form = {}
 			this.$nextTick(()=>{
-				this.$refs['form1'].clearValidate()
+				this.$refs['form'].clearValidate()
 			})
 			this.selectedRow = this.table_selectedRows.map(row=>row)
             this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
-			this.dialogForm1Visible = true;
+			this.dialogFormVisible = true;
 		},
-		async handleForm1Submit(){
-			let staff_id = this.selectedRow.map(row=>row.staff_id)
+		async handleFormSubmit(){
+			await this.form_validate()
 			if(this.selectedRow.length!=0){
-				this.form1.ids = staff_id.join(',')
-				let form1 = Object.assign({},this.form1)
-				await this.$request.put('attendance/classmanager/already',form1)
-				this.dialogForm1Visible = false
-				this.fetchTableData()
+				let staff_id = this.selectedRow.map(row=>row.staff_id)
+				this.form.ids = staff_id.join(',')
+				let form = Object.assign({},this.form)
+				if(this.dialogStatus == 'insert'){
+					try{
+						let mes = await this.api_resource.create(form)
+						this.$message.success({message:mes});
+						this.dialogFormVisible = false
+						this.fetchTableData()
+					}catch(err){
+
+					}
+				}else{
+					await this.$request.put('attendance/classmanager/already',form)
+					this.dialogFormVisible = false
+					this.fetchTableData()
+				}
 			}else{
-				this.$message.error('请选择人员');
+				this.$message.error('请选择要添加的人员');
 			}
 		},
 		async editSchedule(row,column,cell,event){//已排班修改单条记录
-			if(this.m==2&&column.type!='index'&&column.label!='工号'&&column.label!='姓名'&&column.label!='部门'&&column.label!='小组'){
-				if(event.target.innerHTML.indexOf('red')==-1&&event.target.style.color!='red'&&event.target.innerText!='	'){
+			if(this.m==2&&column.type!='index'&&column.type!="selection"&&column.label!='工号'&&column.label!='姓名'&&column.label!='部门'&&column.label!='小组'){
+				let day = column.property.split('day')[1]
+				let date = this.table_form.dateLap+'-'+day
+				if(new Date(date)<new Date()){
+					if(event.target.innerHTML.indexOf('red')==-1&&event.target.style.color!='red'&&event.target.innerText!='	'&&event.target.innerText!=''){
 					
-				}else{
-					this.form3 = {}
-					this.$nextTick(()=>{
-						this.$refs['form3'].clearValidate()
-					})
-					this.dialogForm3Visible = true
-            		this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
-					let day = column.property.split('day')[1]
-					let date = this.table_form.dateLap+'-'+day	
-					this.form3 = (await this.$request.get('attendance/classmanager/already/single',{
-						params:{
-							staff_id: row.staff_id,
-							class_date: date
-						}
-					}))[0]
+					}else{
+						this.form3 = {}
+						this.$nextTick(()=>{
+							this.$refs['form3'].clearValidate()
+						})
+						this.dialogForm3Visible = true
+						this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
+						this.form3 = (await this.$request.get('attendance/classmanager/already/single',{
+							params:{
+								staff_id: row.staff_id,
+								class_date: date
+							}
+						}))[0]
+					}
 				}
 			}
 		},
