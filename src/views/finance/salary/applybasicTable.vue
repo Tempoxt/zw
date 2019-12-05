@@ -59,7 +59,7 @@
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">备注：</span></el-col><el-col :span="14"><span class="text-value">{{Detail.remark}}</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
                 <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">&nbsp;</span></el-col><el-col :span="14"><span class="text-value">&nbsp;</span></el-col></el-row>
-                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">签名：</span></el-col><el-col :span="14" style="margin-top:-8px"><span><img :src="Static_Url+Detail.signImage" alt="" style="width:120x;height:40px"></span></el-col></el-row>
+                <el-row class="text-row"><el-col :span="10" class="text-right "><span class="text-label">签名：</span></el-col><el-col :span="14" style="margin-top:-8px"><span><img :src="Static_Url+Detail.signImage" alt="" style="width:200x;height:100px"></span></el-col></el-row>
             </el-col>
            
           </el-row>
