@@ -81,7 +81,10 @@ export default {
         if(this.template&&this.template[this.column.name]){
             return this.template[this.column.name].call(this,this.column,this.row)
         }
-        return <span domPropsInnerHTML={this.row[this.column.name]} title={this.row[this.column.name]} style="cursor:default"></span>
+        if(this.row[this.column.name]!=undefined){
+            let title = String(this.row[this.column.name]).replace(/<[^>]+>/g, "");
+            return <span domPropsInnerHTML={this.row[this.column.name]} title={title} style="cursor:default"></span>
+        }
     }
 }
 </script>

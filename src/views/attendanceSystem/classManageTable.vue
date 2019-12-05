@@ -16,20 +16,20 @@
 		<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 			<el-row>
 				<el-col :span="19">
-						<el-form-item label="已选员工">
-							<div>
-								<el-tag
-									style="margin-right:10px"
-									v-for="tag in selectedRow"
-									:key="tag.staff_id"
-									closable
-									@close="handleClose(tag)"
-									type="info">
-									{{tag.chineseName}}
-								</el-tag>
-							</div>
-						</el-form-item>
-					</el-col>
+					<el-form-item label="已选员工">
+						<div>
+							<el-tag
+								style="margin-right:10px"
+								v-for="tag in selectedRow"
+								:key="tag.staff_id"
+								closable
+								@close="handleClose(tag)"
+								type="info">
+								{{tag.chineseName}}
+							</el-tag>
+						</div>
+					</el-form-item>
+				</el-col>
 				<el-col :span="19">
 					<el-form-item label="使用班次" prop="class_id">
 						<el-select v-model="form.class_id" placeholder="请选择" filterable style="width:100%">
@@ -159,14 +159,26 @@
 			>
 		</el-table-column>
 		 <el-table-column type="index" :index="indexMethod" fixed/>
-            <el-table-column prop="employeeCode" sortable label="工号" fixed/>
-            <el-table-column prop="chineseName" label="姓名" fixed>
+			<el-table-column prop="employeeCode" label="工号" fixed>
                 <template slot-scope="scope">
-                    <div v-html="scope.row.chineseName"></div>
+                    <div v-html="scope.row.employeeCode" :title="scope.row.employeeCode"></div>
                 </template>
             </el-table-column>
-            <el-table-column prop="department_name" sortable label="部门" fixed/>
-            <el-table-column prop="team_name" sortable label="小组" fixed/>
+            <el-table-column prop="chineseName" label="姓名" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.chineseName" :title="scope.row.chineseName"></div>
+                </template>
+            </el-table-column>
+			<el-table-column prop="department_name" label="部门" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.department_name" :title="scope.row.department_name"></div>
+                </template>
+            </el-table-column>
+			<el-table-column prop="team_name" label="小组" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.team_name" :title="scope.row.team_name"></div>
+                </template>
+            </el-table-column>
 		<each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName','department_name','team_name'].includes(o.name))"/>
     </el-table>
     <table-pagination 

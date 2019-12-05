@@ -280,5 +280,12 @@ export default [{
         meta: {
             title: '排班管理'
         }
+    },{
+        name: 'attRecordSheet',
+        component: () =>
+            import ('@/views/attendanceSystem/attendanceRecord'),
+        meta: {
+            title: '考勤记录'
+        }
     },
 ]
