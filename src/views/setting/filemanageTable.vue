@@ -118,7 +118,7 @@ export default {
 		},
 		async edit(){
 			let row = this.table_selectedRows[0]
-			this.form = await api_resource.find(row.id)
+			this.form = (await api_resource.find(row.id))[0]
 			this.dialogFormVisible = true;
 		},
 		async delete(){
