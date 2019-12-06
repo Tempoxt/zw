@@ -20,7 +20,7 @@
 					</el-col>
 				
 					<el-col :span="12">
-						<form-render :type="`select`" prop="program" :field="{name:'补扣项目',options:programList}" v-model="importForm.program" />
+						<form-render :type="`select`" prop="program" :field="{name:'补扣项目',options:programList2}" v-model="importForm.program" />
 					</el-col>
 				
 					<el-col :span="12">
@@ -336,6 +336,13 @@ export default {
 		};
 	},
 	computed:{
+		programList2(){
+			return this.importForm.type 
+			? 
+			this.importForm.type  == 98?this.programList['补助']:this.programList['扣款']
+			:
+			[]
+		},
 		disabled2(){
 			if(this.form2.dateLap!==''&&this.form2.flag!==''){
 				if(this.form2.flag==1){
@@ -431,7 +438,6 @@ export default {
 			}
 			this.importDialog = true
 			this.dedulist = await api_common.getTag('deduction')
-		
 			this.programList = (await this.$request.get('/deduction/program')).map(o=>{
 				return {
 					label:o.selectname,
