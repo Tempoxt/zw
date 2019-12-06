@@ -38,7 +38,7 @@
 								:key="item.id"
 								:label="item.className"
 								:value="item.id">
-								<span >{{item.className}}
+								<span>[{{item.id}}]  &nbsp;{{item.className}}
 									<span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
 									<span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
 									<span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
@@ -108,7 +108,7 @@
 								:key="item.id"
 								:label="item.className"
 								:value="item.id">
-								<span >{{item.className}}
+								<span>[{{item.id}}]  &nbsp;{{item.className}}
 									<span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
 									<span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
 									<span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
@@ -158,27 +158,27 @@
 			:selectable="table_disable_selected"
 			>
 		</el-table-column>
-		 <el-table-column type="index" :index="indexMethod" fixed/>
-			<el-table-column prop="employeeCode" label="工号" fixed>
-                <template slot-scope="scope">
-                    <div v-html="scope.row.employeeCode" :title="scope.row.employeeCode"></div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="chineseName" label="姓名" fixed>
-                <template slot-scope="scope">
-                    <div v-html="scope.row.chineseName" :title="scope.row.chineseName"></div>
-                </template>
-            </el-table-column>
-			<el-table-column prop="department_name" label="部门" fixed>
-                <template slot-scope="scope">
-                    <div v-html="scope.row.department_name" :title="scope.row.department_name"></div>
-                </template>
-            </el-table-column>
-			<el-table-column prop="team_name" label="小组" fixed>
-                <template slot-scope="scope">
-                    <div v-html="scope.row.team_name" :title="scope.row.team_name"></div>
-                </template>
-            </el-table-column>
+		<el-table-column type="index" :index="indexMethod" fixed/>
+		<el-table-column prop="employeeCode" label="工号" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.employeeCode" :title="scope.row.employeeCode"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="chineseName" label="姓名" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.chineseName" :title="scope.row.chineseName"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="department_name" label="部门" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.department_name" :title="scope.row.department_name"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="team_name" label="小组" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.team_name" :title="scope.row.team_name"></div>
+			</template>
+		</el-table-column>
 		<each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName','department_name','team_name'].includes(o.name))"/>
     </el-table>
     <table-pagination 

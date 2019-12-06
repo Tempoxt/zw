@@ -18,7 +18,7 @@
 				<el-row style="margin-top:15px;">
 					<el-col :span="19" :offset="2" v-for="item in classData" :key="item.id">
 						<el-radio :label="item.id" style="margin-bottom: 18px;">
-							<span style="margin-right:30px">{{item.className}}</span>
+							<span style="margin-right:30px">[{{item.id}}]  &nbsp;{{item.className}}</span>
 							<span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
 							<span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
 							<span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
@@ -76,14 +76,26 @@
 			>
 		</el-table-column>
 		 <el-table-column type="index" :index="indexMethod" fixed/>
-            <el-table-column prop="staff__employeeCode" sortable label="工号" fixed/>
-            <el-table-column prop="staff__chineseName" label="姓名" fixed>
-                <template slot-scope="scope">
-                    <div v-html="scope.row.staff__chineseName"></div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="staff__department_name" sortable label="部门" fixed/>
-            <el-table-column prop="staff__team_name" sortable label="小组" fixed/>
+		 <el-table-column prop="staff__employeeCode" label="工号" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.staff__employeeCode" :title="scope.row.staff__employeeCode"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="staff__chineseName" label="姓名" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.staff__chineseName" :title="scope.row.staff__chineseName"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="staff__department_name" label="部门" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.staff__department_name" :title="scope.row.staff__department_name"></div>
+			</template>
+		</el-table-column>
+		<el-table-column prop="staff__team_name" label="小组" fixed>
+			<template slot-scope="scope">
+				<div v-html="scope.row.staff__team_name" :title="scope.row.staff__team_name"></div>
+			</template>
+		</el-table-column>
 		<each-table-column :table_field="table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name))"/>
     </el-table>
     <table-pagination 
