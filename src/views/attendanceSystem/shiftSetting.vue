@@ -226,8 +226,8 @@
 									value: 0,
 									label: '0'
 								},{
-									value: 3,
-									label: '3'
+									value: 1,
+									label: '1'
 								},{
 									value: 60,
 									label: '60'
@@ -243,8 +243,8 @@
 									value: 0,
 									label: '0'
 								},{
-									value: 3,
-									label: '3'
+									value: 1,
+									label: '1'
 								},{
 									value: 60,
 									label: '60'

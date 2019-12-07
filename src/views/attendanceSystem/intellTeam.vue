@@ -70,14 +70,14 @@
                                 <el-option
                                     v-for="item in classData"
                                     :key="item.id"
-                                    :label="item.className"
+                                    :label="item.ret_str"
                                     :value="item.id">
-                                    <span >{{item.className}}
+                                    <!-- <span >{{item.className}}
                                         <span class="mr5" v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}},</span>
                                         <span class="mr5" v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">{{item.onDutyTime2}} - {{item.offDutyTime2}},</span>
                                         <span class="mr5" v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">{{item.onDutyTime3}} - {{item.offDutyTime3}},</span>
                                         <span v-if="item.onDutyTime4!=null&&item.offDutyTime4!=null">{{item.onDutyTime4}} - {{item.offDutyTime4}}</span>
-                                    </span>
+                                    </span> -->
                                 </el-option>
                             </el-select>
                         </el-form-item>

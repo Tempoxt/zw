@@ -222,18 +222,31 @@ export default {
 	}
 };
 </script>
-<style>
+<style  lang="scss">
 .click{
 	height:90px;
 }
-.el-table-calendar th[data-v-55be3324]:first-child,.el-table-calendar th[data-v-55be3324]:last-child{
-	color:  #F2353C
-}
-.el-table-calendar th[data-v-55be3324]{
-	background:  #F5F5F5
-}
-.el-date-table-calendar tbody tr th{
-	background:  #F5F5F5
+.calendar{
+	.el-table-calendar th[data-v-55be3324]:first-child,.calendar .el-table-calendar th[data-v-55be3324]:last-child{
+		color:  #F2353C
+	}
+	.el-table-calendar th[data-v-55be3324]{
+		background:  #F5F5F5
+	}
+	.el-date-table-calendar tbody tr th{
+		background:  #F5F5F5
+	}
+	.el-date-picker-calendar__header{
+		font-size: 15px;
+	}
+	.el-date-table-calendar td.current[data-v-55be3324]:not(.disabled){
+		background:#f2f8fe;
+		color: #1989FA;
+	}
+	.el-date-table-calendar td.current:not(.disabled){
+		background:#f2f8fe;
+		color: #1989FA;
+	}
 }
 .prev-month,.next-month{
 	height:90px;
@@ -242,17 +255,6 @@ export default {
 	font-size:14px;
 	text-align: left;
 	margin: 8px 0 0 20px;
-}
-.el-date-picker-calendar__header{
-	font-size: 15px;
-}
-.el-date-table-calendar td.current[data-v-55be3324]:not(.disabled){
-	background:#f2f8fe;
-	color: #1989FA;
-}
-.el-date-table-calendar td.current:not(.disabled){
-	background:#f2f8fe;
-	color: #1989FA;
 }
 .titleC{
 	font-size: 16px;

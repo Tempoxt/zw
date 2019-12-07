@@ -12,21 +12,28 @@
 		v-el-drag-dialog
 		width="800px"
 		>
-
-		<el-form ref="form" :model="form" label-width="100px">
-			<el-radio-group v-model="form.class_id">
-				<el-row style="margin-top:15px;">
-					<el-col :span="19" :offset="2" v-for="item in classData" :key="item.id">
-						<el-radio :label="item.id" style="margin-bottom: 18px;">
-							<span style="margin-right:30px">[{{item.id}}]  &nbsp;{{item.className}}</span>
-							<span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
-							<span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
-							<span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
-							<span v-if="item.onDutyTime4!=null&&item.offDutyTime4!=null">,  &nbsp;&nbsp;{{item.onDutyTime4}} - {{item.offDutyTime4}}</span>
-						</el-radio>
-					</el-col>
-				</el-row>
-			</el-radio-group>
+		<el-form ref="form" :model="form" label-width="110px" :rules="rule">
+			<el-row>
+				<el-col :span="17">
+					<el-form-item label="打卡记录">
+						<div style="margin-left:7px;">
+							<span v-show="form&&form.attendance_record" style="margin-right:15px;font-size:12px" v-for="item in form.attendance_record" :key="item.id">{{item}}</span>
+						</div>
+					</el-form-item>
+				</el-col>
+				<el-col :span="17">
+					<el-form-item label="当前班次" prop="classes_id">
+						<el-select v-model="form.classes_id" placeholder="请选择" filterable style="width:100%">
+							<el-option
+								v-for="item in classData"
+								:key="item.id"
+								:label="item.ret_str"
+								:value="item.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+			</el-row>
 		</el-form>
 
 		<div slot="footer" class="dialog-footer">
@@ -67,6 +74,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+      	:cell-style="cellStyle"
+		@cell-click="editSchedule"
     	>
 		<el-table-column 
 			type="selection" 
@@ -126,6 +135,11 @@ export default {
 			},
 			classData:[],//班次列表
 			optionDatas:[],
+			rule:{
+				classes_id:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+			},
 		};
 	},
 	computed:{
@@ -171,17 +185,42 @@ export default {
 			// this.dialogFormVisible = false
 			// this.fetchTableData()
 		},
+		cellStyle({row,column,rowIndex,columnIndex}){
+			if(column.label=="星期"){
+				var fields = JSON.parse(row.fieldStyle)
+				if(fields.weekDay==1){
+					return 'background-color:#7ae8ff;'
+				}else if(fields.weekDay==2){
+					return 'background-color:#ffccff;'
+				}else{
+					return ''
+				}
+			}
+		},
+		async editSchedule(row,column,cell,event){//日考勤记录修改班次
+			if(this.m==1&&column.label=='班次'){
+				if(event.target.innerHTML.indexOf('red')!=-1||event.target.style.color=='red'||event.target.innerText=='	'||event.target.innerText==''){
+					this.form = {}
+					this.$nextTick(()=>{
+						this.$refs['form'].clearValidate()
+					})
+					this.dialogFormVisible = true
+					this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
+					this.form = (await this.$request.get('attendance/classmanager/already/single',{
+						params:{
+							staff_id: row.staff,
+							class_date: row.checkDate
+						}
+					}))[0]
+				}
+			}
+		},
 		async fetchTableData() {
 			if(!this.id){
 				return
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			if(this.m==1){
-				var options = await api_common.resource('attendance/dailystatefields').get()
-				this.optionDatas = options.map(o=>{return {label:o.name,value:o.code}});
-				this.table_form.dailystate = options[0].code
-			}
 			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
@@ -205,6 +244,11 @@ export default {
 	},
 	async created() {
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		if(this.m==1){
+			var options = await api_common.resource('attendance/dailystatefields').get()
+			this.optionDatas = options.map(o=>{return {label:o.name,value:o.code}});
+			this.table_form.dailystate = options[0].code
+		}
 		await this.fetchMenu()
 	}
 };

@@ -16,10 +16,18 @@
 			<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 				<el-row :gutter="20">
 					<el-col :span="22">
-						<form-render :type="`input`" prop="department" :field="{name:'部门编号'}" v-model="form.department"/>
+						<form-render :type="`depart`" prop="department" :field="{name:'部门编号'}" v-model="form.department"/>
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`input`" prop="file_suffix" :field="{name:'文件后缀'}" v-model="form.file_suffix"/>
+						<form-render :type="`select`" prop="file_suffix" :field="{name:'文件后缀',options:[
+							{
+								value: '.pdf',
+								label: 'pdf'
+							},{
+								value: '.xlsx',
+								label: 'xlsx'
+							}
+						]}" v-model="form.file_suffix"/>
 					</el-col>
 					<el-col :span="22">
 						<form-render :type="`input`" prop="fileName" :field="{name:'文件名'}" v-model="form.fileName"/>
@@ -87,17 +95,19 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{},
+			form:{
+				department:''
+			},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			rule:{
 				department:[
-					{ required: true, message: '请输入', trigger: ['blur','change'] },
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
 				],
 				file_suffix:[
-					{ required: true, message: '请输入', trigger: ['blur','change'] },
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
 				],
 				fileName:[
 					{ required: true, message: '请输入', trigger: ['blur','change'] },
@@ -113,7 +123,13 @@ export default {
 	},
 	methods: {
 		add(){
-			this.form={}
+			this.form = {}
+			this.form = {
+				department:''
+			}
+			this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+			})
 			this.dialogFormVisible = true
 		},
 		async edit(){
@@ -141,6 +157,7 @@ export default {
 			}, 300);
 		},
 		async handleFormSubmit(){
+			await this.form_validate()
 			let form = Object.assign({},this.form)
 			form.main = this.id
 			if(this.isInsert){

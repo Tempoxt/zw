@@ -36,14 +36,8 @@
 							<el-option
 								v-for="item in classData"
 								:key="item.id"
-								:label="item.className"
+								:label="item.ret_str"
 								:value="item.id">
-								<span>[{{item.id}}]  &nbsp;{{item.className}}
-									<span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
-									<span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
-									<span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
-									<span v-if="item.onDutyTime4!=null&&item.offDutyTime4!=null">,  &nbsp;&nbsp;{{item.onDutyTime4}} - {{item.offDutyTime4}}</span>
-								</span>
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -106,14 +100,8 @@
 							<el-option
 								v-for="item in classData"
 								:key="item.id"
-								:label="item.className"
+								:label="item.ret_str"
 								:value="item.id">
-								<span>[{{item.id}}]  &nbsp;{{item.className}}
-									<span v-if="item.onDutyTime1!=null&&item.offDutyTime1!=null">{{item.onDutyTime1}} - {{item.offDutyTime1}}</span>
-									<span v-if="item.onDutyTime2!=null&&item.offDutyTime2!=null">,  &nbsp;&nbsp;{{item.onDutyTime2}} - {{item.offDutyTime2}}</span>
-									<span v-if="item.onDutyTime3!=null&&item.offDutyTime3!=null">,  &nbsp;&nbsp;{{item.onDutyTime3}} - {{item.offDutyTime3}}</span>
-									<span v-if="item.onDutyTime4!=null&&item.offDutyTime4!=null">,  &nbsp;&nbsp;{{item.onDutyTime4}} - {{item.offDutyTime4}}</span>
-								</span>
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -323,9 +311,7 @@ export default {
 				let day = column.property.split('day')[1]
 				let date = this.table_form.dateLap+'-'+day
 				if(new Date(date)<new Date()){
-					if(event.target.innerHTML.indexOf('red')==-1&&event.target.style.color!='red'&&event.target.innerText!='	'&&event.target.innerText!=''){
-					
-					}else{
+					if(event.target.innerHTML.indexOf('red')!=-1||event.target.style.color=='red'||event.target.innerText=='	'||event.target.innerText==''){
 						this.form3 = {}
 						this.$nextTick(()=>{
 							this.$refs['form3'].clearValidate()
@@ -334,7 +320,7 @@ export default {
 						this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
 						this.form3 = (await this.$request.get('attendance/classmanager/already/single',{
 							params:{
-								staff_id: row.staff_id,
+								staff_id: row.employeeCode,
 								class_date: date
 							}
 						}))[0]

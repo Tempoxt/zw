@@ -43,7 +43,7 @@
 		width="800px"
 		>
 		<div>
-			<el-form ref="form1" :model="form1" label-width="110px" :rules="rule1">
+			<el-form ref="form1" :model="form1" label-width="110px" :rules="rule">
 				<el-row :gutter="20">
 					<el-col :span="17" :offset="3">
 						<form-render :type="`input`" :field="{name:'员工'}" v-model="form1.staff__chineseName" disabled/>
@@ -75,22 +75,42 @@
 		width="800px"
 		>
 
-		<el-form ref="form" :model="form3" label-width="110px" :rules="rule">
+		<el-form ref="form" :model="form3" label-width="110px" :rules="rule3">
 			<el-row>
 				<el-col :span="12">
-					<form-render prop="temporaryDate" :type="`day`" :field="{name:'调休日期'}" v-model="form3.temporaryDate"/>
+					<el-form-item label="调休日期" prop="fallsDate">
+						<el-date-picker
+							:picker-options="pickerOptions1"
+							v-model="form3.fallsDate"
+							type="date"
+							format="yyyy-MM-dd"
+							value-format="yyyy-MM-dd"
+							style="width:100%"
+							placeholder="选择日期">
+						</el-date-picker>
+					</el-form-item>
 				</el-col>
 				<el-col :span="12">
-					<form-render prop="temporaryOverDate" :type="`day`" :field="{name:'调休加班日期'}" v-model="form3.temporaryOverDate"/>
+					<el-form-item label="调休加班日期" prop="fallsWorkDate">
+						<el-date-picker
+							:picker-options="pickerOptions2"
+							v-model="form3.fallsWorkDate"
+							type="date"
+							format="yyyy-MM-dd"
+							value-format="yyyy-MM-dd"
+							style="width:100%"
+							placeholder="选择日期">
+						</el-date-picker>
+					</el-form-item>
 				</el-col>
 			</el-row>
 		</el-form>
 
-      	<OrgSelect :result="result" v-model="form3.ids" ref="OrgSelect3" v-if="dialogForm3Visible"/>
+      	<OrgSelect :result="result" v-model="form3.ids" ref="OrgSelect3" :activeNam="this.judge?'':'first'" v-if="dialogForm3Visible"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm3Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm3Submit">确 定</el-button>
+			<el-button type="primary" @click="handleForm3Submit" :disabled="disabled3">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -102,16 +122,36 @@
 		width="800px"
 		>
 		<div>
-			<el-form ref="form4" :model="form4" label-width="110px" :rules="rule4">
+			<el-form ref="form4" :model="form4" label-width="110px" :rules="rule3">
 				<el-row :gutter="20">
 					<el-col :span="17" :offset="3">
-						<form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form4.chineseName" disabled/>
+						<form-render :type="`input`" :field="{name:'员工姓名'}" v-model="form4.staff__chineseName" disabled/>
 					</el-col>
 					<el-col :span="17" :offset="3">
-						<form-render prop="temporaryDate" :type="`day`"  :field="{name:'调休日期'}" v-model="form4.temporaryDate"/>
+						<el-form-item label="调休日期" prop="fallsDate">
+							<el-date-picker
+								:picker-options="pickerOptions1"
+								v-model="form4.fallsDate"
+								type="date"
+								format="yyyy-MM-dd"
+								value-format="yyyy-MM-dd"
+								style="width:100%"
+								placeholder="选择日期">
+							</el-date-picker>
+						</el-form-item>
 					</el-col>
 					<el-col :span="17" :offset="3">
-						<form-render prop="temporaryOverDate" :type="`day`" :field="{name:'调休加班日期'}" v-model="form4.temporaryOverDate"/>
+						<el-form-item label="调休加班日期" prop="fallsWorkDate">
+							<el-date-picker
+								:picker-options="pickerOptions3"
+								v-model="form4.fallsWorkDate"
+								type="date"
+								format="yyyy-MM-dd"
+								value-format="yyyy-MM-dd"
+								style="width:100%"
+								placeholder="选择日期">
+							</el-date-picker>
+						</el-form-item>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -219,8 +259,8 @@ export default {
 			},
 			form3:{},
 			form4:{
-				temporaryDate: null,
-				temporaryOverDate: null
+				fallsDate: null,
+				fallsWorkDate: null
 			},
 			form5:{},
 			result:[],
@@ -232,30 +272,38 @@ export default {
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
 				],
 			},
-			rule1:{
-				exceptionType:[
-					{ required: true, message: '请选择', trigger: ['blur','change'] },
-				],
-				exceptionTime:[
-					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
-				],
-			},
 			rule3:{
-				temporaryDate:[
+				fallsDate:[
 					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
 				],
-				temporaryOverDate:[
+				fallsWorkDate:[
 					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
 				]
 			},
-			rule4:{
-				temporaryDate:[
-					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
-				],
-				temporaryOverDate:[
-					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
-				]
-			}
+			pickerOptions1: {
+				disabledDate(time) {
+					return time.getTime() < new Date().getTime() + 3600*1*1000;
+				}
+			},
+            pickerOptions2: {
+				disabledDate:time=> {
+                    if (this.form3.fallsDate) {
+                        return time.getTime() < new Date(this.form3.fallsDate).getTime();
+                    }else{
+						return time.getTime() < new Date().getTime() + 3600*1*1000
+					}
+				}
+			},
+            pickerOptions3: {
+				disabledDate:time=> {
+                    if (this.form4.fallsDate) {
+                        return time.getTime() < new Date(this.form4.fallsDate).getTime();
+                    }else{
+						return time.getTime() < new Date().getTime() + 3600*1*1000
+					}
+				}
+			},
+			judge:false
 		};
 	},
 	computed:{
@@ -265,8 +313,14 @@ export default {
 			}
 			return true
 		},
+		disabled3(){
+			if (this.form3.fallsDate!=null&&this.form3.fallsWorkDate!=null) {
+				return false
+			}
+			return true
+		},
 		disabled4(){
-			if (this.form4.temporaryDate!=null&&this.form4.temporaryOverDate!=null) {
+			if (this.form4.fallsDate!=null&&this.form4.fallsWorkDate!=null) {
 				return false
 			}
 			return true
@@ -330,34 +384,48 @@ export default {
 		},
 		async delete(){
 			let rows = this.table_selectedRows.map(row=>row.id)
-			try{
-				let mes = await this.$request.post('/attendance/exception/exceptiondelete',{ids:rows.join(',')})
-				this.$message.success(mes)
-				this.fetchTableData()
-			}catch(e){
-
+			if(this.m==3){
+				var mes = await this.$request.post('/attendance/exception/exceptiondelete',{ids:rows.join(',')})
+			}else if(this.m==4){
+				var mes = await this.$request.get('holidaymanager/currentmonthfalls/bluk',{params:{ids:rows.join(',')}})
 			}
+			this.$message.success(mes)
+			this.fetchTableData()
 		},
 		async add(){
-			this.form={}
-			this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
-			let attend = this.attenData.slice(1)
-			this.attenData = attend
 			this.result = []
-			this.$nextTick(()=>{
-				this.$refs['form'].clearValidate()
-			})
-			this.dialogFormVisible = true
+			if(this.m==3){
+				this.form={}
+				this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
+				let attend = this.attenData.slice(1)
+				this.attenData = attend
+				this.$nextTick(()=>{
+					this.$refs['form'].clearValidate()
+				})
+				this.dialogFormVisible = true
+			}else if(this.m==4){
+				this.form3={}
+				this.$nextTick(()=>{
+					this.$refs['form3'].clearValidate()
+				})
+				this.dialogForm3Visible = true
+				this.judge = await this.$request.get('holidaymanager/currentmonthfalls/judge')
+			}
 		},
 		async edit(){
-			this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
-			let attend = this.attenData.slice(1)
-			this.attenData = attend
-			this.dialogForm1Visible = true;
 			let row = this.table_selectedRows[0]
-			this.form1 = (await this.api_resource.find(row.id))[0]
-			let exceptionReason = this.form1.exceptionReason.replace(/<[^>]+>/g, "");//去除字符串中的html
-			this.form1.exceptionReason = exceptionReason.replace(/&nbsp;/ig, " ");//去除字符串中的&nbsp;
+			if(this.m==3){
+				this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
+				let attend = this.attenData.slice(1)
+				this.attenData = attend
+				this.dialogForm1Visible = true;
+				this.form1 = (await this.api_resource.find(row.id))[0]
+				let exceptionReason = this.form1.exceptionReason.replace(/<[^>]+>/g, "");//去除字符串中的html
+				this.form1.exceptionReason = exceptionReason.replace(/&nbsp;/ig, " ");//去除字符串中的&nbsp;
+			}else if(this.m==4){
+				this.form4 = await this.api_resource.find(row.id)
+				this.dialogForm4Visible = true
+			}
 		},
 		async handleFormSubmit(){
 			await this.form_validate()
@@ -392,8 +460,8 @@ export default {
 			this.form3.ids = ids3;
 			if(this.form3.ids!==''){
 				try{
-					// let mes = await this.api_resource.create(this.form)
-					// this.$message.success({message:mes});
+					let mes = await this.api_resource.create(this.form3)
+					this.$message.success({message:mes});
 					this.dialogForm3Visible = false
 					this.fetchTableData()
 				}catch(err){
@@ -404,7 +472,15 @@ export default {
 			}
 		},
 		async handleForm4Submit(){
-
+			let form4 = Object.assign({},this.form4)
+			try{
+				await this.api_resource.update(form4.id,form4,{alert:false})
+				this.$message.success('修改成功')
+				this.dialogForm4Visible = false
+				this.fetchTableData()
+			}catch(err){
+				this.$message.error(err.response.data);
+			}
 		},
 		async fetchTableData() {
 			if(!this.id){

@@ -20,6 +20,9 @@
         <div v-if="view_activeName==='补卡记录'">
             <exceptionTable url="attendance/exception" m="3" :id="orgid"/>
         </div>
+        <div v-if="view_activeName==='当月调休'">
+            <exceptionTable url="holidaymanager/currentmonthfalls" m="4" :id="orgid"/>
+        </div>
     </el-col>
   </el-row>
 </template>
