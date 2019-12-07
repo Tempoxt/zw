@@ -339,7 +339,17 @@ export default {
 		programList2(){
 			return this.importForm.type 
 			? 
-			this.importForm.type  == 98?this.programList['补助']:this.programList['扣款']
+			this.importForm.type  == 98?this.programList['补助'].map(o=>{
+				return {
+					label:o.selectname,
+					value:o.id
+				}
+			}):this.programList['扣款'].map(o=>{
+				return {
+					label:o.selectname,
+					value:o.id
+				}
+			})
 			:
 			[]
 		},
@@ -438,12 +448,13 @@ export default {
 			}
 			this.importDialog = true
 			this.dedulist = await api_common.getTag('deduction')
-			this.programList = (await this.$request.get('/deduction/program')).map(o=>{
-				return {
-					label:o.selectname,
-					value:o.id
-				}
-			})
+			this.programList =await this.$request.get('/deduction/program')
+			//  ().map(o=>{
+			// 	return {
+			// 		label:o.selectname,
+			// 		value:o.id
+			// 	}
+			// })
 			// let {
 			// 	handleImportChange,
 			// } = this
