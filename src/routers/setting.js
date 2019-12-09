@@ -11,5 +11,11 @@ export default  [
     meta:{
       title:'远程文件管理'
     }
+  },{
+    name: 'IPList',
+    component: () => import('@/views/setting/ipListTable'),
+    meta:{
+      title:'IP列表'
+    }
   },
 ]

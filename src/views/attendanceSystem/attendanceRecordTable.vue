@@ -131,7 +131,7 @@ export default {
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			form:{
-				class_id:''
+				classes_id:''
 			},
 			classData:[],//班次列表
 			optionDatas:[],
@@ -140,11 +140,12 @@ export default {
 					{ required: true, message: '请选择', trigger: ['blur','change'] },
 				],
 			},
+			dailyReportID:''
 		};
 	},
 	computed:{
 		disabled(){
-			if(this.form.class_id!=null&&this.form.class_id!=''){
+			if(this.form.classes_id!=''){
 				return false
 			}
 			return true
@@ -165,6 +166,13 @@ export default {
 		}
 	},
 	methods: {
+		table_disable_selected(row){
+			if(this.m=='1'&&row.auditStatus==1){
+				return false
+			}else{
+				return true
+			}
+		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchMenu()
@@ -174,29 +182,6 @@ export default {
 			await this.$request.put('attendance/dailyreportaudit',{ids:rows.join(',')})
 			this.fetchTableData()
 		},
-		async edit(){
-			this.form = {}
-            this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
-			this.dialogFormVisible = true;
-		},
-		async handleFormSubmit(){
-			console.log(this.form,'ffff')
-			// await this.$request.put('attendance/classmanager/already',form)
-			// this.dialogFormVisible = false
-			// this.fetchTableData()
-		},
-		cellStyle({row,column,rowIndex,columnIndex}){
-			if(column.label=="星期"){
-				var fields = JSON.parse(row.fieldStyle)
-				if(fields.weekDay==1){
-					return 'background-color:#7ae8ff;'
-				}else if(fields.weekDay==2){
-					return 'background-color:#ffccff;'
-				}else{
-					return ''
-				}
-			}
-		},
 		async editSchedule(row,column,cell,event){//日考勤记录修改班次
 			if(this.m==1&&column.label=='班次'){
 				if(event.target.innerHTML.indexOf('red')!=-1||event.target.style.color=='red'||event.target.innerText=='	'||event.target.innerText==''){
@@ -205,13 +190,34 @@ export default {
 						this.$refs['form'].clearValidate()
 					})
 					this.dialogFormVisible = true
+					this.dailyReportID = row.id
 					this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
 					this.form = (await this.$request.get('attendance/classmanager/already/single',{
 						params:{
-							staff_id: row.staff,
+							staff_id: row.staff__employeeCode,
 							class_date: row.checkDate
 						}
 					}))[0]
+				}
+			}
+		},
+		async handleFormSubmit(){
+			this.form.dailyReportID = this.dailyReportID
+			let form = Object.assign({},this.form)
+			let mes = await this.$request.post('attendance/dailyreportclassmodify',form)
+			this.$message.success({message:mes});
+			this.dialogFormVisible = false
+			this.fetchTableData()
+		},
+		cellStyle({row,column,rowIndex,columnIndex}){
+			if(column.label=="星期"&&row.fieldStyle){
+				var fields = JSON.parse(row.fieldStyle)
+				if(fields.weekDay==1){
+					return 'background-color:#7ae8ff;'
+				}else if(fields.weekDay==2){
+					return 'background-color:#ffccff;'
+				}else{
+					return ''
 				}
 			}
 		},
@@ -227,12 +233,6 @@ export default {
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
-		},
-		getMonthDays(year,month){
-			var stratDate = new Date(year,month-1,1),
-			endData = new Date(year,month,1);
-			this.days = (endData -stratDate)/(1000*60*60*24);
-			return this.days;
 		},
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit(this.url);
