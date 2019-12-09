@@ -111,7 +111,7 @@
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm3Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm3Submit">确 定</el-button>
+			<el-button type="primary" @click="handleForm3Submit" :disabled="disabled3">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -234,6 +234,12 @@ export default {
 			}
 			return true
 		},
+		disabled3(){
+			if(this.form3.classes_id!=''){
+				return false
+			}
+			return true
+		},
 	},
 	watch:{
 		id(){
@@ -313,9 +319,6 @@ export default {
 				if(new Date(date)<new Date()){
 					if(event.target.innerHTML.indexOf('red')!=-1||event.target.style.color=='red'||event.target.innerText=='	'||event.target.innerText==''){
 						this.form3 = {}
-						this.$nextTick(()=>{
-							this.$refs['form3'].clearValidate()
-						})
 						this.dialogForm3Visible = true
 						this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
 						this.form3 = (await this.$request.get('attendance/classmanager/already/single',{
@@ -324,6 +327,9 @@ export default {
 								class_date: date
 							}
 						}))[0]
+						this.$nextTick(()=>{
+							this.$refs['form3'].clearValidate()
+						})
 					}
 				}
 			}

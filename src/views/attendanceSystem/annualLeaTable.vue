@@ -183,8 +183,6 @@ export default {
     .drawerInfo .ivu-drawer-body {
         padding:0;
     }
-</style>
-<style>
     .drawerInfo .ivu-drawer-header{
         background: rgba(245,250,251,1)
     }
@@ -214,10 +212,10 @@ export default {
         font-weight: bold;
         margin: 20px 0 10px 2px;
     }
-    .el-collapse-item__header{
+    .drawerInfo .el-collapse-item__header{
         position: relative;
     }
-    .el-collapse-item__header .el-collapse-item__arrow{
+    .drawerInfo .el-collapse-item__header .el-collapse-item__arrow{
         position: absolute;
         left: 65px;
     }

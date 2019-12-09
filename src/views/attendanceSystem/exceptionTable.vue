@@ -163,6 +163,40 @@
 		</div>
     </el-dialog>
 
+	<el-dialog
+		title="添加"
+		:visible.sync="dialogForm5Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="800px"
+		>
+
+		<el-form ref="form" :model="form5" label-width="110px" :rules="rule3">
+			<el-row>
+				<el-col :span="12">
+					<el-form-item label="放休开始日期" prop="fallsDate">
+						<el-date-picker
+							:picker-options="pickerOptions1"
+							v-model="form5.fallsDate"
+							type="date"
+							format="yyyy-MM-dd"
+							value-format="yyyy-MM-dd"
+							style="width:100%"
+							placeholder="选择日期">
+						</el-date-picker>
+					</el-form-item>
+				</el-col>
+			</el-row>
+		</el-form>
+
+      	<OrgSelect :result="result" v-model="form5.ids" ref="OrgSelect5" :activeNam="this.judge?'':'first'" v-if="dialogForm5Visible"/>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm5Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm5Submit" :disabled="disabled3">确 定</el-button>
+		</div>
+    </el-dialog>
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -480,6 +514,22 @@ export default {
 				this.fetchTableData()
 			}catch(err){
 				this.$message.error(err.response.data);
+			}
+		},
+		async handleForm5Submit(){
+			let ids5 = this.$refs.OrgSelect5.getIdsResult()
+			this.form5.ids = ids5;
+			if(this.form5.ids!==''){
+				try{
+					let mes = await this.api_resource.create(this.form5)
+					this.$message.success({message:mes});
+					this.dialogForm5Visible = false
+					this.fetchTableData()
+				}catch(err){
+					
+				}
+			}else{
+				this.$message.error('请选择要添加的人员');
 			}
 		},
 		async fetchTableData() {

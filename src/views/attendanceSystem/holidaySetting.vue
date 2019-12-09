@@ -171,11 +171,6 @@ export default {
 						this.form.workType = ''
 					}else{
 						this.form.workType = Number(this.form.workType)
-						// if(this.form.workType==2){
-						// 	this.rest = true
-						// }else if(this.form.workType==1){
-						// 	this.work = true
-						// }
 					}
 					this.showHoliday = true
 				}else{
@@ -203,9 +198,6 @@ export default {
 			this.work = false
 		},
 		async handleFormSubmit(){
-			// if(this.rest == false&&this.work == false){
-			// 	this.form.workType = ''
-			// }
 			const mes = await this.$request.post('holidaymanager/holidaydatesetlist/'+this.form.id,this.form)
 			this.$message.success({message: mes})
 			this.showHoliday = false
@@ -227,7 +219,8 @@ export default {
 	height:90px;
 }
 .calendar{
-	.el-table-calendar th[data-v-55be3324]:first-child,.calendar .el-table-calendar th[data-v-55be3324]:last-child{
+	margin: 20px;
+	.el-table-calendar th[data-v-55be3324]:first-child,.el-table-calendar th[data-v-55be3324]:last-child{
 		color:  #F2353C
 	}
 	.el-table-calendar th[data-v-55be3324]{
@@ -247,54 +240,51 @@ export default {
 		background:#f2f8fe;
 		color: #1989FA;
 	}
-}
-.prev-month,.next-month{
-	height:90px;
-}
-.fs15{
-	font-size:14px;
-	text-align: left;
-	margin: 8px 0 0 20px;
-}
-.titleC{
-	font-size: 16px;
-	font-weight: bold;
-	padding:0 0 20px 0px;
-	/* border-bottom: 1px solid #E4EAEC; */
-	/* margin:0 0 0px 0px; */
-}
-.calendar{
-	margin: 20px;
-}
-.calendar .el-calendar__header{
-	border:0;
-}
-.el-calendar-table thead, .el-table-calendar th{
-    background:rgba(245,245,245,1);
-}
-.el-calendar-table thead th,.el-table-calendar th{
-    border-right:1px solid rgba(234,234,234,1);
-}
-.el-calendar__title{
-    font-size:16px;
-}
-.restWork{
-	display:flex;justify-content:space-between;margin:23px 10px 0 8px;
-}
-.calType{
-	font-size:12px;width:36px;height:22px;line-height:22px;border-radius:4px;text-align:center;font-weight:normal
-}
-.rest{
-	background-color:rgba(244,122,36,.2);
-	color:#F47A24;
-}
-.work{
-	background-color:rgba(31,211,97,.2);
-	color:#1FD361;
-}
-.holid{
-	color: #F2353C;
-	background-color:rgba(242,53,60,.2)
+	.el-calendar__header{
+		border:0;
+	}
+	.el-calendar-table thead, .el-table-calendar th{
+		background:rgba(245,245,245,1);
+	}
+	.el-calendar-table thead th,.el-table-calendar th{
+		border-right:1px solid rgba(234,234,234,1);
+	}
+	.el-calendar__title{
+		font-size:16px;
+	}
+	.prev-month,.next-month{
+		height:90px;
+	}
+	.fs15{
+		font-size:14px;
+		text-align: left;
+		margin: 8px 0 0 20px;
+	}
+	.titleC{
+		font-size: 16px;
+		font-weight: bold;
+		padding:0 0 20px 0px;
+		/* border-bottom: 1px solid #E4EAEC; */
+		/* margin:0 0 0px 0px; */
+	}
+	.restWork{
+		display:flex;justify-content:space-between;margin:23px 10px 0 8px;
+	}
+	.calType{
+		font-size:12px;width:36px;height:22px;line-height:22px;border-radius:4px;text-align:center;font-weight:normal
+	}
+	.rest{
+		background-color:rgba(244,122,36,.2);
+		color:#F47A24;
+	}
+	.work{
+		background-color:rgba(31,211,97,.2);
+		color:#1FD361;
+	}
+	.holid{
+		color: #F2353C;
+		background-color:rgba(242,53,60,.2)
+	}
 }
 </style>
 

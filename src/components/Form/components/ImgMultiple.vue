@@ -217,10 +217,10 @@ export default {
    margin-bottom: 8px;
    display: flex;
    justify-content: space-between;
-   align-items: center
- }
- .icon-guanbi1{
-  margin-right: 10px;
+   align-items: center;
+  .icon-guanbi1{
+    margin-right: 10px;
+  }
  }
  .imgItem .icon-qiyong{
    color: #1FD361;margin-right: 10px;
