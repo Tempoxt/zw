@@ -570,7 +570,7 @@
 		}
   };
 </script>
-<style>
+<style lang="scss">
 .outside{
 	height: 790px;
 	background: #F5FAFB;
@@ -578,101 +578,61 @@
 .maxheight{
 	height: 500px;
 }
-.dashboard .el-card__header{
-	padding: 15px 20px;
-}
-.dashboard .el-card__body{
-	padding: 0 20px 20px!important;
-}
-.dashboard .selectdate .el-date-editor{
-    width: 120px;
-}
-.dashboard .el-calendar-table .el-calendar-day {
-    height: 25px;
-}
-.dashboard .el-calendar-table thead th {
-    padding: 6px 0;
-}
-.dashboard .el-calendar__body {
-    padding: 8px 20px 35px;
-}
-.dashboard .el-calendar__header {
-    padding: 6px 20px;
-}
-.dashboard .el-card__body {
-	height: 360px;
-}
-.dashboard .speech-mode .el-card__body{
-	height: 100%;
-}
-
-.dashboard .speech-mode .el-card__body .box-card-c{
-	height: 100%;
-}
-.totalR{
-	font-size: 16px;
-	font-weight: bold;
-	position: absolute;
-	bottom: 40px;
-	left: 0;
-	right: 0;
-	height: 0;
-	display: flex;
-	justify-content: center;
-}
-.relative{
-	position: relative;
-}
-.depart{
-	color: #4C5D66;
-	text-align: center;
-	margin-top: 5px;
-}
-.flexProg{
-	display: flex;
-	flex-wrap: wrap;
-}
-.title{
-	font-family: 'Microsoft YaHei';
-	font-size:18px;
-	font-weight: bold;
-	color: #303133;
-	padding-bottom: 30px;
-}
-.mr60{
-	margin-right:60px
-}
-.iconAbso{
-	position: absolute;
-	right: 40px;
-	top: 30px;
-}
-.dashboard .el-row .el-col:nth-child(2n){
-	padding-left: 10px;
-}
-.dateLap{
-	position: absolute;
-	top: 23px;
-}
-.el-row .el-col:nth-child(n) .dateLap{
-	right: 20px!important;
-}
-.el-row .el-col:nth-child(2n) .dateLap{
-	right: 20px!important;
+.dashboard{
+	.el-card__header{
+		padding: 15px 20px;
+	}
+	.el-card__body{
+		padding: 0 20px 20px!important;
+	}
+	.selectdate{
+		.el-date-editor{
+			width: 120px;
+		}
+	}
+	.el-calendar-table{
+		.el-calendar-day {
+			height: 25px;
+		}
+		thead th {
+			padding: 6px 0;
+		}
+	}
+	.el-calendar__body {
+		padding: 8px 20px 35px;
+	}
+	.el-calendar__header {
+		padding: 6px 20px;
+	}
+	.el-card__body {
+		height: 360px;
+	}
+	.speech-mode .el-card__body{
+		height: 100%;
+		.box-card-c{
+			height: 100%;
+		}
+	}
+	.el-row .el-col:nth-child(2n){
+		padding-left: 10px;
+	}
+	.el-row .el-col:nth-child(n) .dateLap{
+		right: 20px!important;
+	}
 }
 </style>
 
 <style lang="scss" scoped>
 .box-card {
 	width: 100%;
-  margin-top: 10px;
-  padding-top: 15px;
+	margin-top: 10px;
+	padding-top: 15px;
 	.box-card-c.box-card-c2{
 		height: 100%;
 	}
-  .box-card-c {
-    height: 350px;
-  }
+	.box-card-c {
+		height: 350px;
+	}
 }
 .el-tabs__content{
 	background: #F5FAFB!important;
@@ -709,6 +669,24 @@
 		z-index: 99;
 		width: 100%;
 		height: 100%;
+	}
+	.dateLap{
+		position: absolute;
+		top: 23px;
+	}
+	.relative{
+		position: relative;
+	}
+	.totalR{
+		font-size: 16px;
+		font-weight: bold;
+		position: absolute;
+		bottom: 40px;
+		left: 0;
+		right: 0;
+		height: 0;
+		display: flex;
+		justify-content: center;
 	}
 }
 	

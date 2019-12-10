@@ -142,7 +142,7 @@ export default {
 	}
 };
 </script>
-<style>
+<style lang="scss">
 	.blance{
 		font-size:18px;text-align:center;font-weight:bold;padding:13px 0;line-height:30px;background:#EBF6F8;color:#0BB2D4
 	}

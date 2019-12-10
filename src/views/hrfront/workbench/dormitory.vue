@@ -4,7 +4,7 @@
 		<span class="cardName">宿舍任务管理</span>
 		<!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
 	  </div>
-		<el-row class="list" v-for="item in dormitory" :key="item"> 
+		<el-row class="list" v-for="(item,i) in dormitory" :key="i"> 
 			<el-col :span="18">
 				<div class="list-l">
 					<span v-if="item.selectState==1" class="icon iconfont icon-emizhifeiji"></span>

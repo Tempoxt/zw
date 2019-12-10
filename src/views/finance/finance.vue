@@ -46,7 +46,7 @@ export default {
     }
   };
 </script>
-<style>
+<style lang="scss">
 .outside{
 	height: 790px;
 	background: #F5FAFB;
@@ -54,46 +54,55 @@ export default {
 .maxheight{
 	height: 500px;
 }
-.dashboard .el-card__header{
-	padding: 15px 20px;
-}
-.dashboard .el-card__body{
-	padding: 0 20px 20px!important;
-}
-.dashboard .el-calendar-table .el-calendar-day {
-    height: 25px;
-}
-.dashboard .el-calendar-table thead th {
-    padding: 6px 0;
-}
-.dashboard .el-calendar__body {
-    padding: 8px 20px 35px;
-}
-.dashboard .el-calendar__header {
-    padding: 6px 20px;
-}
-.dashboard .el-card__body {
-	height: 360px;
-}
-.dashboard .speech-mode .el-card__body{
-	height: 100%;
-}
-.dashboard .speech-mode .el-card__body .box-card-c{
-	height: 100%;
-}
-.totalR{
-	font-size: 16px;
-	font-weight: bold;
-	position: relative;
-	bottom: 40px;
-	left: 0;
-	right: 0;
-	height: 0;
-	display: flex;
-	justify-content: center
-}
-.dashboard .el-row .el-col:nth-child(2n){
-	padding-left: 10px;
+.dashboard{
+	.el-card__header{
+		padding: 15px 20px;
+	}
+	.el-card__body{
+		padding: 0 20px 20px!important;
+	}
+	.selectdate{
+		.el-date-editor{
+			width: 120px;
+		}
+	}
+	.el-calendar-table{
+		.el-calendar-day {
+			height: 25px;
+		}
+		thead th {
+			padding: 6px 0;
+		}
+	}
+	.el-calendar__body {
+		padding: 8px 20px 35px;
+	}
+	.el-calendar__header {
+		padding: 6px 20px;
+	}
+	.el-card__body {
+		height: 360px;
+	}
+	.speech-mode .el-card__body{
+		height: 100%;
+		.box-card-c{
+			height: 100%;
+		}
+	}
+	.totalR{
+		font-size: 16px;
+		font-weight: bold;
+		position: relative;
+		bottom: 40px;
+		left: 0;
+		right: 0;
+		height: 0;
+		display: flex;
+		justify-content: center
+	}
+	.el-row .el-col:nth-child(2n){
+		padding-left: 10px;
+	}
 }
 </style>
 

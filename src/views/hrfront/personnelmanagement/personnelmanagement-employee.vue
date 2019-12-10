@@ -65,106 +65,113 @@ export default {
         }
     }
 </style>
-<style>
-    .drawerInfo .ivu-drawer-body{
-        padding:0;
+<style lang="scss">
+    .drawerInfo{
+        .ivu-drawer-body{
+            padding:0;
+        }
+        .ivu-drawer-header{
+            background: rgba(245,250,251,1)
+        }
+        .line-boxs{
+            margin-top: 20px;
+        }
+        .info{
+            color: #0BB2D4;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 17px 0 24px 20px;
+        }
+        .labelCon{
+            display: inline-block;
+            width: 112px;
+            text-align: right;
+            font-size: 12px;
+            color: #4C5D66;
+        }
+        .promp{
+            color: #A3AFB7;
+            text-align: left;
+            width: auto;
+        }
+        .ivu-col{
+            margin-bottom: 8px;
+        }
+        .addr{
+            width: 215px;
+            word-wrap:break-word;
+        }
+        .alignStart{
+            display: flex;
+            align-items: flex-start
+        }
+        .ivu-row{
+            margin-left: -27px;
+            margin-bottom: -8px;
+        }
+        .posti{
+            width: 107px;
+            height: 65px;
+            margin-bottom: 3px;
+        }
+        .mt20{margin-top: 20px;}
+        .mb20{margin-bottom: 20px;}
+        .flexImg{
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+        .flexImg>div{
+            width: 140px;
+            min-height: 176px;
+            background: #F5FAFB;
+            margin-right: 10px;
+            text-align: center;
+            padding-top: 7px;
+        }
+        .diploma{
+            width: 107px
+        }
+        .imgInfo{
+            font-size: 12px;
+            color: #4C5D66;
+            margin-bottom: 5px;
+        }
+        .editIcon{
+            color:#CCD5DB;
+            width: 16px;
+            height: 14px;
+            font-weight: normal;
+            margin-left: 22px;
+        }
+        .search-text{
+            height: 30px;
+            line-height: 30px;
+            margin-left: 18px;
+            padding-left: 5px;
+        }
+        .imgInfo{
+            .el-checkbox__label{
+                display: none;
+            }
+        }
+        .bankCard{
+            width: 40%;
+            height: 200px;
+        }
+        .preview{
+            .el-dialog{
+                width:35%
+            }
+            .el-dialog__header{
+                line-height: 0;
+                background: transparent
+            }
+        }
+        .drawer-profile .el-col-12{
+            margin-bottom: 8px;
+        }
     }
-    .drawerInfo .ivu-drawer-header{
-        background: rgba(245,250,251,1)
-    }
-    .line-boxs{
-        margin-top: 20px;
-    }
-    .info{
-        color: #0BB2D4;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 17px 0 24px 20px;
-    }
-    .labelCon{
-        display: inline-block;
-        width: 112px;
-        text-align: right;
-        font-size: 12px;
-        color: #4C5D66;
-    }
-    .promp{
-        color: #A3AFB7;
-        text-align: left;
-        width: auto;
-    }
-    .ivu-col{
-        margin-bottom: 8px;
-    }
-    .addr{
-        width: 215px;
-        word-wrap:break-word;
-    }
-    .alignStart{
-        display: flex;
-        align-items: flex-start
-    }
-    .ivu-row{
-        margin-left: -27px;
-        margin-bottom: -8px;
-    }
-    .posti{
-        width: 107px;
-        height: 65px;
-        margin-bottom: 3px;
-    }
-    .mt20{margin-top: 20px;}
-    .mb20{margin-bottom: 20px;}
-    .flexImg{
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-    .flexImg>div{
-        width: 140px;
-        min-height: 176px;
-        background: #F5FAFB;
-        margin-right: 10px;
-        text-align: center;
-        padding-top: 7px;
-    }
-    .diploma{
-        width: 107px
-    }
-    .imgInfo{
-        font-size: 12px;
-        color: #4C5D66;
-        margin-bottom: 5px;
-    }
-    .editIcon{
-        color:#CCD5DB;
-        width: 16px;
-        height: 14px;
-        font-weight: normal;
-        margin-left: 22px;
-    }
-    .search-text{
-        height: 30px;
-        line-height: 30px;
-        margin-left: 18px;
-        padding-left: 5px;
-    }
-    .imgInfo .el-checkbox__label{
-        display: none;
-    }
-    .bankCard{
-        width: 40%;
-        height: 200px;
-    }
-    .preview .el-dialog{
-        width:35%
-    }
-    .preview .el-dialog__header{
-        line-height: 0;
-        background: transparent
-    }
-    .drawer-profile .el-col-12{
-        margin-bottom: 8px;
-    }
+    
 </style>
 

@@ -345,44 +345,44 @@ export default {
 }
 </style>
 <style lang="scss">
-    .drawerInfo .ivu-drawer-body {
-        padding:0;
-    }
-</style>
-<style>
-    .drawerInfo .ivu-drawer-header{
-        background: rgba(245,250,251,1)
-    }
-    .infoDetail{
-        padding: 0 20px ; 
-    }
-    .imgFlex{
-        display: flex;
-        align-items: center;
-        height: 70px;
-        margin-left: 15px;
-    }
-    .imgAvatar{
-        width: 50px;
-        height: 50px;
-    }
-    .userInfo{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 70px;
-        line-height: 26px;
-    }
-    .info{
-        color: #0BB2D4;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 20px 0 10px 2px;
-    }
-    .fontStyle{
-        color: #37474F;
-        font-size: 14px;
-    }
-    .mt10{margin-top: 10px;}
+    .drawerInfo{
+		.ivu-drawer-body {
+			padding:0;
+		}
+		.ivu-drawer-header{
+			background: rgba(245,250,251,1)
+		}
+		.infoDetail{
+			padding: 0 20px ; 
+		}
+		.imgFlex{
+			display: flex;
+			align-items: center;
+			height: 70px;
+			margin-left: 15px;
+		}
+		.imgAvatar{
+			width: 50px;
+			height: 50px;
+		}
+		.userInfo{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			height: 70px;
+			line-height: 26px;
+		}
+		.info{
+			color: #0BB2D4;
+			font-size: 16px;
+			font-weight: bold;
+			margin: 20px 0 10px 2px;
+		}
+		.fontStyle{
+			color: #37474F;
+			font-size: 14px;
+		}
+		.mt10{margin-top: 10px;}
+	}
 </style>
 

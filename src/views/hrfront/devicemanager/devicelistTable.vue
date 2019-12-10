@@ -241,11 +241,11 @@ export default {
     },
 };
 </script>
-<style>
+<style lang="scss">
     .checkbox_finger{
         margin-right: -16px;
-    }
-    .checkbox_finger .el-checkbox__label{
-        padding-left: 4px
+        .el-checkbox__label{
+            padding-left: 4px
+        }
     }
 </style>
