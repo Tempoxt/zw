@@ -109,5 +109,12 @@ export default [{
         meta: {
             title: '入住待处理清单'
         }
-    }, 
+    }, {
+        name: 'dormdailyrecord',
+        component: () =>
+            import ('@/views/hrfront/dormitory/dormdailyrecord'),
+        meta: {
+            title: '入住异常管理'
+        }
+    },
  ]

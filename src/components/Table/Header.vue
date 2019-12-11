@@ -148,7 +148,8 @@ export default {
           return len < 0;
         }
         
-        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit','cancelAudit','editClass','schedule'].indexOf(code)!==-1) {
+        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit',
+        'cancelAudit','editClass','schedule','warehouse','inventory'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;
