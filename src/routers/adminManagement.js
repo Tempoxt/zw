@@ -116,13 +116,19 @@ export default [{
         meta: {
             title: '入住异常管理'
         }
+    },{
+        name: 'inventory',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/itemList'),
+        meta: {
+            title: '物品清单'
+        }
+    }, {
+        name: 'standardDose',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/standardDose'),
+        meta: {
+            title: '标准用量'
+        }
     },
-    // {
-    //     name: 'standardDose',
-    //     component: () =>
-    //         import ('@/views/hrfront/dormitory/dormdailyrecord'),
-    //     meta: {
-    //         title: '标准用量'
-    //     }
-    // },
  ]
