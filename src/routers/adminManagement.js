@@ -117,4 +117,12 @@ export default [{
             title: '入住异常管理'
         }
     },
+    // {
+    //     name: 'standardDose',
+    //     component: () =>
+    //         import ('@/views/hrfront/dormitory/dormdailyrecord'),
+    //     meta: {
+    //         title: '标准用量'
+    //     }
+    // },
  ]

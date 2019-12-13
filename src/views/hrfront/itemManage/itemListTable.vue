@@ -276,24 +276,14 @@ export default {
     methods: {
         async getUrl(){
 			if(this.statusk!=0){
-				try{
-					this.url = await this.$request.get('toolstationery/inventory/download',{alert:false})
-					if(this.url!=''){
-						const res = download(baseUri+'/'+this.url)
-						this.statusk = 0
-					}
-				}catch(err){
-					// clearInterval(this.timer)
-				}
+                this.url = await this.$request.get('toolstationery/inventory/download',{alert:false})
+                if(this.url!=''){
+                    const res = download(baseUri+'/'+this.url)
+                    this.statusk = 0
+                }
 			}else{
 				clearInterval(this.timer)
 			}
-		},
-		ab2str(u,f) {
-			var b = new Blob([u]);
-			var r = new FileReader();
-			r.readAsText(b, 'utf-8');
-			r.onload = function (){if(f)f.call(null,r.result)}
 		},
 		async download(){
 			this.statusk = 1
@@ -303,13 +293,6 @@ export default {
 			try{
                 let mes = await this.$request.post('toolstationery/inventory/download')
                 this.$message.success(mes);
-				// const { data,name,contentType} =  await this.api_resource.export(this.table_form,{
-				// 	responseType:'arraybuffer'
-				// })
-				// var that = this
-				// this.ab2str(data,function(str){
-				// 	that.$message.success({ message: str,duration:5000});
-				// });
 				this.timer = setInterval(()=>{
 					this.getUrl()
 				}, 10000)
@@ -341,7 +324,6 @@ export default {
 		},
         async getType(){
             this.typeList = (await this.$request.get('toolstationery/type')).map(o=>{return {label:o.title,value:o.id}});
-            
             this.sizeList = this.typeList
         },
         setStandard(row){
@@ -383,18 +365,18 @@ export default {
         },
         async delete(){
             let rows = this.table_selectedRows.map(row=>row.id)
-            const mes = await this.$request.get('/attendance/intelligentteam/list/classes/bluk?ids='+rows.join(','));
+            const mes = await this.$request.get('/toolstationery/inventory/bluk?ids='+rows.join(','));
             this.$message.success({message:mes});
             this.fetchTableData();
         },
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
+            if(this.form.image==undefined||this.form.image==''){
+                this.$message.error('请上传图片');
+                return
+            }
             if(this.dialogStatus=='insert'){
-                if(this.form.image==undefined||this.form.image==''){
-                    this.$message.error('请上传图片');
-                    return
-                }
                 let mess = await api_resource.create(form)
                 this.$message.success(mess);
                 this.fetch()

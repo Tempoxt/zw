@@ -422,6 +422,8 @@ export default {
 				var mes = await this.$request.post('/attendance/exception/exceptiondelete',{ids:rows.join(',')})
 			}else if(this.m==4){
 				var mes = await this.$request.get('holidaymanager/currentmonthfalls/bluk',{params:{ids:rows.join(',')}})
+			}else if(this.m==5){
+				var mes = await this.$request.get('holidaymanager/outoffmanager/bluk',{params:{ids:rows.join(',')}})
 			}
 			this.$message.success(mes)
 			this.fetchTableData()

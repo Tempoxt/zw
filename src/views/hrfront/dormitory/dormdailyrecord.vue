@@ -1,90 +1,131 @@
-  <template>
-  <ui-table ref="table" 
-	:table_column="table_field" 
-	:table_query.sync="table_form.query"
-	@query="querySubmit"
-	>
-
-    <table-header
-		:table_actions="table_actions"
-		:table_selectedRows="table_selectedRows"
-		@action="handleAction"
-		:table_form.sync="table_form"
-		:table_column="table_field"
-		>
-		<div style="padding-left:10px">
-            <dateLap v-model="table_form.dateLap" @change="fetch"/>
-        </div>
-    </table-header>
-    <el-table
-        ref="elTable"
-		@selection-change="handleChangeSelection"
-		:data="table_data"
-		border
-		style="width: 100%"
-		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
-		:height="table_height"
-		@header-dragend="table_dragend"
-		@sort-change="table_sort_change"
-		>
-		<el-table-column 
-			type="selection" 
-			width="60" 
-			class-name="table-column-disabled"
-			:selectable="table_disable_selected"
-			>
-		</el-table-column>
-		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
-    </el-table>
-     <table-pagination 
-        :total="table_form.total" 
-        :pagesize.sync="table_form.pagesize"
-        :currentpage.sync="table_form.currentpage"
-        @change="fetchTableData"
-        :table_config="table_config"
-    />
-  </ui-table>
+<template>
+   	<el-row class="h-full">
+    	<el-col :span="4" class="h-full">
+      		<div class="page-side h-full">
+     
+        		<div class="h-full">
+					<div class="side-header">
+						<el-input placeholder="快速查找" v-model="filterText" class="input">
+							<i slot="suffix" class="el-input__icon el-icon-search"></i>
+						</el-input>
+					</div>
+          
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+						<el-tree
+							class="tree"
+							:data="data2"
+							:props="{children: 'subs', label: 'dormName' }"
+							default-expand-all
+							node-key="id"
+							:filter-node-method="filterNode"
+							ref="tree2"
+							:highlight-current="true"
+							:check-on-click-node="false"
+							@node-click="handleChangeNode"
+							:expand-on-click-node="false"
+						>
+							<span slot-scope="{ node, data }" style="display:flex;justify-content: space-between;width: 100%;">
+								<template v-if="!data.roomName">
+									<div >
+										<span class="icon iconfont icon-zonggongsi"></span>
+										&nbsp;
+										<span>{{ node.label||data.name }} </span>
+									</div>
+									<span style="padding-right:10px">({{data.totalBeds}} - {{data.usedBeds}})</span>
+								</template>
+								<template v-else>
+									<div>
+										<span class="icon iconfont icon-nv" v-if="data.dormType===0" style="color:rgba(255, 52, 160, 1)"></span>
+										<span class="icon iconfont icon-nan" v-if="data.dormType===1" style="color:rgba(11, 178, 212, 1)"></span>
+										&nbsp;
+										<span>{{ data.roomName||data.name }} </span>
+									</div>
+									<span style="padding-right:10px" v-if="data.totalBeds">
+										( {{data.totalBeds+' - '}}
+										<span style="color:red" v-if="data.totalBeds-data.usedBeds">{{data.usedBeds}}</span>
+										<span style="color:rgba(0, 187, 69, 1)" v-else>住满</span>
+										)
+									</span>
+								</template>
+							</span>
+						</el-tree>
+					</el-scrollbar>
+				</div>
+      		</div>
+   		</el-col>
+		<el-col :span="20">
+			<div style="overflow: hidden;">
+				<div>
+					<dormdailyrecordTable :id="current_id" :data="current_data" :type="current_t"/>
+				</div>
+			</div>
+		</el-col>
+  	</el-row>
 </template>
 <script>
 import * as api_common from "@/api/common";
-import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("dormitory/dormdailyrecordsheet");
-import dayjs from 'dayjs'
+const api_restaurant = api_common.resource('restaurant')
+import dormdailyrecordTable from './dormdailyrecordTable'
 export default {
-	mixins: [table_mixin],
-	data() {
+    provide () {
 		return {
-			loading: true,
-			api_resource,
-			queryDialogFormVisible:true,
-		};
-	},
-	methods: {
-		fetch(){
-			this.table_form.currentpage = 1
-			this.fetchTableData()
+			$side:this
+		}
+    },
+    components:{
+		dormdailyrecordTable,
+    },
+    watch:{
+		tabActive(val){
+			
 		},
-		async fetchTableData() {
-			this.table_loading = true;
-			const {rows , total }= await api_resource.get(this.table_form);
-			this.table_data  = rows
-			this.table_form.total = total
-			setTimeout(() => {
-				this.table_loading = false;
-			}, 300);
+		filterText(val) {
+			this.$refs.tree2.filter(val);
+		}
+    },
+    data(){
+        return {
+            filterText:'',
+            data2:[],
+            currentMenuid:0,
+            current_id:'',
+            current_type:'room',
+            current_t:"",
+            current_data:{}
+        }
+    },
+    methods:{
+		filterNode(value, data) {
+			if (!value) return true;
+			return (data.dormName && data.dormName.indexOf(value) !== -1) || (data.roomName && data.roomName.indexOf(value) !== -1)
 		},
-	},
-	async created() {
-		const { field, action,table } = await api_common.menuInit("dormitory/dormdailyrecordsheet");
-		this.table_field = field;
-		this.table_actions = action;
-		this.table_config = table
-		this.table_form.dateLap = dayjs().format('YYYY-MM')
-		this.fetchTableData();
-	}
-};
+		async handleChangeNode(data,node){
+			const { roomId,dormId } = data
+			this.current_id = roomId||dormId
+			this.current_t =  data.name?'start':(data.roomName?'room':'dorm')
+			this.current_data = data
+		},
+		async getTree(){
+			this.data2 =  [await api_common.resource('dormitory/dormtree/front').get()];
+			this.data2[0].id = 0
+			this.$nextTick(()=>{
+				this.$refs.tree2.setCurrentKey(this.data2[0].id)
+			})
+		}
+    },
+    async created(){
+        this.getTree()
+    }
+}
 </script>
+<style lang="scss" scoped>
 
+.scroll {
+  height: calc(100% - 30px);
+  width: 100%;
+ /deep/ .scrollbar-wrapper {
+    overflow-x: hidden;
+  }
+}
+</style>
 
