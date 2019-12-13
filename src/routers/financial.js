@@ -168,4 +168,12 @@ export default [
             title: '模具关系制造费用'
         }
     },
+    {
+        name: 'ExtraOvertime',
+        component: () =>
+            import ('@/views/finance/salary/extraOver'),
+        meta: {
+            title: '额外加班费'
+        }
+    },
 ]

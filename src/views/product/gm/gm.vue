@@ -131,7 +131,6 @@ export default {
             this.dialogFormVisible = true;
             let row = this.table_selectedRows[0];
             this.form = await this.$request.get('/productrecheck/gmscanrecord/'+row.id)
-            console.log(this.form,'fff')
         },
         async delete(){
             let row = this.table_selectedRows[0];

@@ -287,12 +287,5 @@ export default [{
         meta: {
             title: '考勤记录'
         }
-    },{
-        name: 'inventory',
-        component: () =>
-            import ('@/views/hrfront/itemManage/itemList'),
-        meta: {
-            title: '物品清单'
-        }
     },
 ]
