@@ -337,7 +337,10 @@ export default {
 					}
 				}
 			},
-			judge:false
+			judge:false,
+			timer:'',
+			statusk:1,
+			val:'',
 		};
 	},
 	computed:{

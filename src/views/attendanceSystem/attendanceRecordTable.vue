@@ -140,7 +140,10 @@ export default {
 					{ required: true, message: '请选择', trigger: ['blur','change'] },
 				],
 			},
-			dailyReportID:''
+			dailyReportID:'',
+			timer:'',
+			statusk:1,
+			val:'',
 		};
 	},
 	computed:{
@@ -166,6 +169,30 @@ export default {
 		}
 	},
 	methods: {
+		async reset(){
+			this.statusk = 1
+			let mes = await this.$request.post('attendance/dailyreport/rest',this.table_form)
+			this.$message.success(mes);
+			this.timer = setInterval(()=>{
+				this.getResult()
+			},10000)
+		},
+		async getResult(){//获取异步结果
+			if(this.statusk!=0){
+				this.val = await this.$request.get('attendance/dailyreport/restresult',{alert:false})
+				if(this.val==0){
+					this.$message.success({ message: '当前无重置任务'})
+					clearInterval(this.timer)
+				}
+				if(this.val==2){
+					this.statusk = 0
+					this.$message.success({ message: '重置成功'})
+					this.fetchTableData()
+				}
+			}else{
+				clearInterval(this.timer)
+			}
+		},
 		table_disable_selected(row){
 			if(this.m=='1'&&row.auditStatus==1){
 				return false
@@ -198,6 +225,9 @@ export default {
 							class_date: row.checkDate
 						}
 					}))[0]
+					this.$nextTick(()=>{
+						this.$refs['form'].clearValidate()
+					})
 				}
 			}
 		},

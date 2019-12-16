@@ -79,7 +79,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-show="this.m==1">
-			<dateLap type="1" v-model="dateLap1" @change="fetch" :disabled="true"/>
+			<dateLap type="1" v-model="dateLap1" @change="fetch"/>
 		</div>
 		<div style="padding-left:10px" v-show="this.m==2">
 			<dateLap type="2" v-model="dateLap2" @change="fetch" :disabled="true"/>

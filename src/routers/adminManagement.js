@@ -143,7 +143,7 @@ export default [{
     //     component: () =>
     //         import ('@/views/adminManagement/itemManage/personLedger'),
     //     meta: {
-    //         title: '流转记录'
+    //         title: '个人台账'
     //     }
     // },
  ]
