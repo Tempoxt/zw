@@ -175,5 +175,12 @@ export default [
         meta: {
             title: '额外加班费'
         }
+    },{
+        name: 'salaryquestion',
+        component: () =>
+            import ('@/views/finance/salary/salaryquestion'),
+        meta: {
+            title: '工薪疑问单'
+        }
     },
 ]

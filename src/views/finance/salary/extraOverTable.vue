@@ -108,7 +108,7 @@
 			>
 		</el-table-column>
 		 <el-table-column type="index" :index="indexMethod" fixed/>
-		<each-table-column :table_field="table_field"/>
+		<each-table-column :table_field="table_field" :template="template"/>
     </el-table>
     <table-pagination 
         :total="table_form.total" 
@@ -155,6 +155,22 @@ export default {
 			dateLap3:'',
 			result:[],
 			fileList:[],
+			template:{
+				audit(row,column){
+					if(column.audit=='已审核'){
+						return <span style="color:#1FD361">{column.audit}</span>
+					}else{
+						return <span>{column.audit}</span>
+					}
+				},
+				pay(row,column){
+					if(column.pay=='未结算'){
+						return <span style="color:#F2353C">{column.pay}</span>
+					}else{
+						return <span>{column.pay}</span>
+					}
+				}
+			}
 		};
 	},
 	components:{

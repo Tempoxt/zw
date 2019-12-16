@@ -68,7 +68,6 @@
       :header-cell-style="headerCellStyle"
       :height="table_height"
       @header-dragend="table_dragend"
-      ref="elTable"
       @sort-change="table_sort_change"
     >
     <el-table-column 
