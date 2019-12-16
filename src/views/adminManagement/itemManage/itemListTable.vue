@@ -117,16 +117,30 @@
             v-el-drag-dialog
 		    width="800px"
             >
-           	<div>
-                <el-form ref="form2" :model="form2" label-width="70px">
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <form-render :type="`input`" :field="{name:'名称'}" :disabled="true" v-model="form2.title"/>
-                        </el-col>
-                        <el-col :span="12">
-                            <form-render :type="`select`" :field="{name:'规格',options:sizeList}" :disabled="true" v-model="form2.size"/>
-                        </el-col>
-                    </el-row>
+           	<div class="h-full">
+                <el-form ref="form2" :model="form2" label-width="110px" class="h-full" style="height:630px;margin:0 10px;">
+                    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> 
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <form-render :type="`input`" :field="{name:'名称'}" :disabled="true" v-model="form2.title"/>
+                            </el-col>
+                            <el-col :span="12">
+                                <form-render :type="`select`" :field="{name:'规格',options:sizeList}" v-model="form2.size"/>
+                            </el-col>
+                        </el-row>
+                        <div style="border-top: 1px solid #E4E4E4;padding-top: 30px;">
+                            <el-row :gutter="10">
+                                <el-col :span="12" v-for="(depart,i) in form2.depart_info" :key="i" >
+                                    <el-form-item
+                                        :prop="'depart_info.' + i + '.dose'"
+                                        :label="depart.depart_name"
+                                        >
+                                        <el-input v-model="depart.dose"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </el-scrollbar>
                 </el-form>
             </div>
 
@@ -471,10 +485,10 @@ export default {
         },
         async handleForm2Submit(){
             let form2 = Object.assign({},this.form2)
-            // let mess = await this.$request.post('toolstationery/inventory/setstandard',form2)
-            // this.$message.success(mess);
-            // this.fetch()
-            // this.dialogForm1Visible = false
+            let mess = await this.$request.post('toolstationery/inventory/setstandard',form2)
+            this.$message.success(mess);
+            this.fetch()
+            this.dialogForm2Visible = false
         },
         async fetchTableData() {
             if(this.org_id==''){

@@ -130,5 +130,20 @@ export default [{
         meta: {
             title: '标准用量'
         }
+    },{
+        name: 'moveRecord',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/moveRecord'),
+        meta: {
+            title: '流转记录'
+        }
     },
+    // {
+    //     name: 'personLedger',
+    //     component: () =>
+    //         import ('@/views/adminManagement/itemManage/personLedger'),
+    //     meta: {
+    //         title: '流转记录'
+    //     }
+    // },
  ]
