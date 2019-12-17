@@ -109,33 +109,8 @@ export default {
             margin-left: -27px;
             margin-bottom: -8px;
         }
-        .posti{
-            width: 107px;
-            height: 65px;
-            margin-bottom: 3px;
-        }
-        .mt20{margin-top: 20px;}
-        .mb20{margin-bottom: 20px;}
-        .flexImg{
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-        .flexImg>div{
-            width: 140px;
-            min-height: 176px;
-            background: #F5FAFB;
-            margin-right: 10px;
-            text-align: center;
-            padding-top: 7px;
-        }
         .diploma{
             width: 107px
-        }
-        .imgInfo{
-            font-size: 12px;
-            color: #4C5D66;
-            margin-bottom: 5px;
         }
         .editIcon{
             color:#CCD5DB;
@@ -150,27 +125,54 @@ export default {
             margin-left: 18px;
             padding-left: 5px;
         }
-        .imgInfo{
-            .el-checkbox__label{
-                display: none;
-            }
+    }
+    .imgInfo{
+        font-size: 12px;
+        color: #4C5D66;
+        margin-bottom: 5px;
+    }
+    .imgInfo{
+        .el-checkbox__label{
+            display: none;
         }
-        .bankCard{
-            width: 40%;
-            height: 200px;
+    }
+    .posti{
+        width: 107px;
+        height: 65px;
+        margin-bottom: 3px;
+    }
+    .bankCard{
+        width: 40%;
+        height: 200px;
+    }
+    .preview{
+        .el-dialog{
+            width:35%
         }
-        .preview{
-            .el-dialog{
-                width:35%
-            }
-            .el-dialog__header{
-                line-height: 0;
-                background: transparent
-            }
+        .el-dialog__header{
+            line-height: 0;
+            background: transparent
         }
-        .drawer-profile .el-col-12{
-            margin-bottom: 8px;
-        }
+    }
+    .drawer-profile .el-col-12{
+        margin-bottom: 8px;
+    }
+    
+    .mt20{margin-top: 20px;}
+    .mb20{margin-bottom: 20px;}
+     .flexImg{
+        margin-left: 10px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    .flexImg>div{
+        width: 140px;
+        min-height: 176px;
+        background: #F5FAFB;
+        margin-right: 10px;
+        text-align: center;
+        padding-top: 7px;
     }
     
 </style>

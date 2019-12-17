@@ -135,7 +135,7 @@ export default {
         if (code === "add") {
           return len <= 1;
         }
-        if (code === "edit") {
+        if (code === "edit"||code==='warehouse'||code==='inventory') {
           return len === 1;
         }
         if(code === "settlement") {
@@ -149,7 +149,7 @@ export default {
         }
         
         if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit',
-        'cancelAudit','editClass','schedule','warehouse','inventory'].indexOf(code)!==-1) {
+        'cancelAudit','editClass','schedule',].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;

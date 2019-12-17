@@ -15,7 +15,7 @@
             <attendanceRecordTable url="attendance/dailyreport" m="1" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='月统计记录'">
-            <!-- <attendanceRecordTable url="attendance/classmanager/already" m="2" :id="orgid"/> -->
+            <attendanceRecordTable url="attendance/monthcollect" m="2" :id="orgid"/>
         </div>
     </el-col>
   </el-row>

@@ -171,7 +171,7 @@ export default {
 	methods: {
 		async reset(){
 			this.statusk = 1
-			let mes = await this.$request.post('attendance/dailyreport/rest',this.table_form)
+			let mes = await this.$request.post(this.url+'/rest',this.table_form)
 			this.$message.success(mes);
 			this.timer = setInterval(()=>{
 				this.getResult()
@@ -179,7 +179,7 @@ export default {
 		},
 		async getResult(){//获取异步结果
 			if(this.statusk!=0){
-				this.val = await this.$request.get('attendance/dailyreport/restresult',{alert:false})
+				this.val = await this.$request.get(this.url+'/restresult',{alert:false})
 				if(this.val==0){
 					this.$message.success({ message: '当前无重置任务'})
 					clearInterval(this.timer)
