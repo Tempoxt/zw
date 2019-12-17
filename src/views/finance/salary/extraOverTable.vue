@@ -176,14 +176,6 @@ export default {
 	components:{
 		OrgSelect
 	},
-	computed:{
-		disabled(){
-			if(this.form.classes_id!=''){
-				return false
-			}
-			return true
-		},
-	},
 	watch:{
 		url(){
             this.api_resource = api_common.resource(this.url)
@@ -191,7 +183,7 @@ export default {
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			if(this.m==1){
-				this.dateLap1 = dayjs().format('YYYY-MM-DD')
+				// this.dateLap1 = dayjs().format('YYYY-MM-DD')
 			}else if(this.m==2){
 				this.dateLap2 = dayjs().format('YYYY-MM')
 			}else{

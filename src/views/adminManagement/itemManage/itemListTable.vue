@@ -15,10 +15,10 @@
                 <el-form ref="form" :model="form" label-width="70px" :rules="rules">
                         <el-row :gutter="20">
                             <el-col :span="16" :offset="4">
-                                <form-render :type="`select`" prop="type_id" :field="{name:'物品类别',options:typeList}" v-model="form.type_id"/>
+                                <form-render :type="`select`" prop="type_id" :field="{name:'物品类别',options:typeList}" v-model="form.type_id" :disabled="!isInsert"/>
                             </el-col>
                             <el-col :span="16" :offset="4">
-                                <form-render :type="`input`" prop="title" :field="{name:'物品名称'}" v-model="form.title"/>
+                                <form-render :type="`input`" prop="title" :field="{name:'物品名称'}" v-model="form.title" :disabled="!isInsert"/>
                             </el-col>
                             <el-col :span="16" :offset="4">
                                 <form-render :type="`input`" prop="unit" :field="{name:'物品单位'}" v-model="form.unit"/>
@@ -35,7 +35,7 @@
                                         label="规格"
                                         :rules="{ required: true, message: '请输入', trigger: 'blur' }"
                                         >
-                                        <el-input v-model="suk.size"></el-input>
+                                        <el-input v-model="suk.size" :disabled="!isInsert&&suk.lock==true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="7">
@@ -236,9 +236,8 @@ export default {
             dialogForm1Visible:false,
             dialogForm2Visible:false,
             form1:{
-                size:'',
-                num:'',
-                num1:''
+               add_number:'',
+               check_number:''
             },
             form2:{},
             deviceData:[],
@@ -293,17 +292,19 @@ export default {
     },
     computed:{
         disabled1(){
-            // if(this.dialogStatus=='warehouse'){
-            //     if(this.form1.size!=''&&this.form1.add_number!=''){
-            //         return false
-            //     }
-            //     return true
-            // }else if(this.dialogStatus=='inventory'){
-            //     if(this.form1.size!=''&&this.form1.check_number!=''){
-            //         return false
-            //     }
-            //     return true
-            // }
+            if(this.dialogStatus=='warehouse'){
+                if(this.form1.add_number!=''&&this.form1.add_number!=undefined){
+                    return false
+                }else{
+                    return true
+                }
+            }else if(this.dialogStatus=='inventory'){
+                if(this.form1.check_number!=''&&this.form1.check_number!=undefined){
+                    return false
+                }else{
+                    return true
+                }
+            }
         }
     },
     watch:{
@@ -399,10 +400,15 @@ export default {
             }
         },
         deleteSku(item) {
-            var index = this.form.sku_info.indexOf(item)
-            if (index !== -1) {
-                this.form.sku_info.splice(index, 1)
+            if(item.lock==true){
+                this.$message.error('当前物品的规格已被领用，不可删除')
+            }else{
+                var index = this.form.sku_info.indexOf(item)
+                if (index !== -1) {
+                    this.form.sku_info.splice(index, 1)
+                }
             }
+          
         },
         async delete(){
             let rows = this.table_selectedRows.map(row=>row.id)
@@ -440,7 +446,6 @@ export default {
             this.getSize()
             delete this.form1.add_number
             delete this.form1.check_number
-            this.form1.size = ''
 			this.$nextTick(()=>{
 				this.$refs['form1'].clearValidate()
 			})
@@ -455,7 +460,6 @@ export default {
             this.getSize()
             delete this.form1.add_number
             delete this.form1.check_number
-            this.form1.size = ''
 			this.$nextTick(()=>{
 				this.$refs['form1'].clearValidate()
 			})

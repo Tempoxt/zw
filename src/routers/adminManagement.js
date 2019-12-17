@@ -138,12 +138,12 @@ export default [{
             title: '流转记录'
         }
     },
-    // {
-    //     name: 'personLedger',
-    //     component: () =>
-    //         import ('@/views/adminManagement/itemManage/personLedger'),
-    //     meta: {
-    //         title: '个人台账'
-    //     }
-    // },
+    {
+        name: 'personLedger',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/personLedger'),
+        meta: {
+            title: '个人台账'
+        }
+    },
  ]

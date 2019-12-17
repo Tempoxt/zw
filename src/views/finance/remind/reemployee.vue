@@ -29,14 +29,14 @@
 						</el-col>
 						<el-col :span="8">
 							<div class="list-r">
-								<el-button type="primary" size="mini" @click="remind(o.staff__employeeCode)">提醒员工</el-button>
+								<el-button type="primary" size="mini" @click="remind(o.staff__employeeCode)">提醒</el-button>
 							</div>
 						</el-col>
 					</el-row>
 				</el-col>
 				<el-col :span="12" v-else>
 					<div class="list-r">
-						<el-button type="primary" size="mini" @click="remind(o.staff__employeeCode)">提醒员工</el-button>
+						<el-button type="primary" size="mini" @click="remind(o.staff__employeeCode)">提醒</el-button>
 					</div>
 				</el-col>
 			</el-row>
