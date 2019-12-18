@@ -183,6 +183,7 @@ export default {
 				if(this.val==0){
 					this.$message.success({ message: '当前无重置任务'})
 					clearInterval(this.timer)
+					return 
 				}
 				if(this.val==2){
 					this.statusk = 0

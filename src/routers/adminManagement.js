@@ -145,5 +145,12 @@ export default [{
         meta: {
             title: '个人台账'
         }
+    },{
+        name: 'wareStat',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/warestat'),
+        meta: {
+            title: '仓库统计表'
+        }
     },
  ]
