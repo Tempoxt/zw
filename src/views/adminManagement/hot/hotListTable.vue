@@ -178,9 +178,9 @@ const defaultForm = () => {
 export default {
 	mixins: [table_mixin],
 	props:['id'],
-	components:{
-		OrgSelect
-	},
+	// components:{
+	// 	OrgSelect
+	// },
 	data() {
 		return {
 			loading: true,

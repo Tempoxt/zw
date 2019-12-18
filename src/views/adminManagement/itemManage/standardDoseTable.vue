@@ -22,7 +22,7 @@
                         </el-col>
                         <el-col :span="16" :offset="4" v-if="isInsert">
                             <el-form-item prop="title" label="物品名称" >
-                                <el-select v-model="form.title" placeholder="请选择" :disabled="!isInsert" style="width:100%">
+                                <el-select v-model="form.title" placeholder="请搜索或选择" :disabled="!isInsert" style="width:100%" filterable>
                                     <el-option v-for="item in titleList" :key="item.id" :label="item.title" :value="item.title"></el-option>
                                 </el-select>
                             </el-form-item>

@@ -106,15 +106,10 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import { setTimeout } from 'timers';
-import OrgSelect from '@/components/Org/OrgSelect'
 const api_resource = api_common.resource("devicemanager/devicemechine");
 export default {
     mixins: [table_mixin],
     props:['id'],
-    components:{
-        OrgSelect
-    },
     data() {
         const defaultForm  = function(){
             return {

@@ -106,7 +106,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogForm1Visible = false">取 消</el-button>
-                <el-button type="primary" @click="handleForm1Submit" :disabled="disabled1">确 定</el-button>
+                <el-button type="primary" @click="handleForm1Submit" :disabled="disabled">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -290,23 +290,6 @@ export default {
             title:'',
         };
     },
-    computed:{
-        disabled1(){
-            if(this.dialogStatus=='warehouse'){
-                if(this.form1.add_number!=''&&this.form1.add_number!=undefined){
-                    return false
-                }else{
-                    return true
-                }
-            }else if(this.dialogStatus=='inventory'){
-                if(this.form1.check_number!=''&&this.form1.check_number!=undefined){
-                    return false
-                }else{
-                    return true
-                }
-            }
-        }
-    },
     watch:{
         org_id(){
             this.table_form.currentpage = 1
@@ -316,6 +299,16 @@ export default {
             if(this.changes==true){
                 this.table_form.currentpage = 1
                 this.fetchTableData()
+            }
+        }
+    },
+    computed:{
+        disabled(){
+            if((this.dialogStatus=='warehouse'&&this.form1.add_number!=''&&this.form1.add_number!=undefined)||
+            (this.dialogStatus=='inventory'&&this.form1.check_number!=''&&this.form1.check_number!=undefined)){
+                return false
+            }else{
+                return true
             }
         }
     },
@@ -517,6 +510,7 @@ export default {
     },
 };
 </script>
+
 <style lang="scss" scoped>
 .scroll {
   height: calc(100%);

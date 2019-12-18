@@ -41,12 +41,10 @@
     </el-row>
 </template>
 <script>
-import org from '@/views/public/org.vue'
 import standardDoseTable from './standardDoseTable'
 export default {
     components:{
         standardDoseTable,
-        org
     },
     data(){
         return {

@@ -1061,6 +1061,27 @@
       "font_class": "zuofei",
       "unicode": "e69b",
       "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "12247880",
+      "name": "物品",
+      "font_class": "wupin",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "12247881",
+      "name": "入库",
+      "font_class": "ruku",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "12247890",
+      "name": "盘点",
+      "font_class": "pandian",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
     }
   ]
 }

@@ -5,29 +5,45 @@
         @query="querySubmit"
         >
         <!-- 物品流转追溯 -->
-        <!-- <div>
+        <div>
             <Drawer title="物品流转追溯" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
-                <div style="background: #f8f8f8;">
+                <div style="padding:20px">
                     <el-row :gutter="20">
-                        <el-col :span="3" class="imgFlex">
-                            <img src="@/assets/avatar.png" alt="" srcset="" class="imgAvatar">
+                        <el-col :span="6">
+                            <p>名称: {{articleTitle}}</p>
                         </el-col>
-                        <el-col :span="6" class="userInfo">
-                            <p>姓名: {{info.chineseName}}</p>
-                            <p>工号: {{info.employeeCode}}</p>
-                        </el-col>
-                        <el-col :span="6" class="userInfo">
-                            <p>部门: {{info.department_name}}</p>
-                            <p>职位: {{info.job_name}}</p>
-                        </el-col>
-                        <el-col :span="6" class="userInfo">
-                            <p>&nbsp;</p>
-                            <p>入职日期: {{info.onDutyTime}}</p>
+                        <el-col :span="6">
+                            <p>规格: {{articleSize}}</p>
                         </el-col>
                     </el-row>
+                    <el-table
+                        class="dtable"
+                        :data="articleData"
+                        :header-cell-style="headerStyle"
+                        style="margin-top:20px"
+                        >
+                        <el-table-column type="index" :index="indexMethods"/>
+                        <el-table-column prop="flowDate" label="流转日期"></el-table-column>
+                        <el-table-column prop="giveChineseName" label="发出人" >
+                            <template slot-scope="scope">
+                                <span>{{scope.row.giveChineseName}} / {{scope.row.giveEmployeeCode}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="receiveChineseName" label="接收人" >
+                            <template slot-scope="scope">
+                                <span>{{scope.row.receiveChineseName}} / {{scope.row.receiveEmployeeCode}}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!-- <table-pagination 
+                        :total="form.total" 
+                        :pagesize.sync="form.page"
+                        :currentpage.sync="form.currentp"
+                        @change="fetchToolData"
+                    /> -->
                 </div>
             </Drawer>
-        </div> -->
+        </div>
 
         <table-header
             :table_actions="table_actions"
@@ -60,6 +76,7 @@
             <el-table-column type="index" :index="indexMethod"/>
             <each-table-column :table_field="table_field"/>
         </el-table>
+        <div style="margin:10px 0 0 10px;">总金额：{{total_price}}元</div>
         <table-pagination 
             :total="table_form.total" 
             :pagesize.sync="table_form.pagesize"
@@ -86,14 +103,24 @@ export default {
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:220,
-            form:{},
+            table_topHeight:240,
+            form:{
+                page:100,
+                currentp:1,
+            },
 			timer:'',
 			url:'',
             statusk:1,
             moveData:[],
             status:'',
-            articleData:{},
+            articleData:[],
+            importUploadUrl:'/toolstationery/personledger/upload',
+            downloadUrl:'/toolstationery/personledger/upload',
+            openDrawers:false,
+            articleTitle:'',
+            articleSize:'',
+            articleType:'',
+            total_price:'',
         };
     },
     watch:{
@@ -103,6 +130,12 @@ export default {
         },
     },
     methods: {
+		indexMethods(i){
+            return (i+1)+(this.form.currentp-1)*this.form.page
+		},
+        headerStyle(row,rowIndex,column,columnIndex){
+            return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
+        },
         async getUrl(){
 			if(this.statusk!=0){
                 this.url = await this.$request.get('toolstationery/moverecord/download',{alert:false})
@@ -135,12 +168,23 @@ export default {
 				console.log(err)
 			}
         },
+        async fetchToolData(){
+            this.articleData = await this.$request.get('toolstationery/personledger/history',
+                {params:{
+                    articleType: this.articleType,
+                    articleTitle: this.articleTitle,
+                    articleSize: this.articleSize
+                }}
+            )
+        },
         async openDrawer(row,column,cell,event){
-			// if(row.articleTitle==event.target.innerText){
-			// 	this.openDrawers = true
-			// 	this.articleData = await this.$request.get('holidaymanager/holidaystat/'+row.employeeCode)
-			// 	this.info = this.holidayData[0]
-			// }
+			if(row.articleTitle==event.target.innerText){
+                this.openDrawers = true
+                this.articleTitle = row.articleTitle
+                this.articleSize = row.articleSize
+                this.articleType = row.articleType
+                this.fetchToolData()
+			}
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
 			if(column.label == '物品名称'){
@@ -159,9 +203,10 @@ export default {
             }
             this.table_loading = true;
             this.table_form.org_id  = this.orgid
-            const {rows , total }= await api_resource.get(this.table_form);
+            const {rows , total, total_price}= await api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
+            this.total_price = total_price
             setTimeout(() => {
                 this.table_loading = false;
             }, 300);
@@ -176,6 +221,16 @@ export default {
     },
 };
 </script>
+<style lang="scss">
+    .drawerInfo{
+        .ivu-drawer-body {
+            padding:0;
+        }
+        .ivu-drawer-header{
+            background: rgba(245,250,251,1)
+        }
+    }
+</style>
 <style lang="scss" scoped>
     .scroll {
         height: calc(100%);

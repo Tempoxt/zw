@@ -41,6 +41,7 @@
 					<el-col :span="16" :offset="3">
 						<el-form-item label="补扣月份" prop="dateLap">
 							<el-date-picker
+								:disabled="true"
 								v-model="form1.dateLap"
 								type="month"
 								style="width:100%"
@@ -193,6 +194,13 @@ export default {
 		}
 	},
 	methods: {
+		table_disable_selected(row){
+			if(this.m=='2'&&row.audit&&row.audit!='未申请'){
+				return false
+			}else{
+				return true
+			}
+		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
@@ -214,8 +222,10 @@ export default {
 			this.$nextTick(()=>{
 				this.$refs['form1'].clearValidate()
 			})
+			let row = this.table_selectedRows[0]
 			let rows = this.table_selectedRows.map(row=>row.workcode)
 			this.form1.workcodes = rows.join(',')
+			this.form1.dateLap = row.month
 			this.dialogForm1Visible = true 
 		},
         form1_validate(){
