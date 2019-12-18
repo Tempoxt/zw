@@ -22,8 +22,11 @@
 								<el-col :span="12">
 									<accident></accident>
 								</el-col>
-								<el-col class="padding-left-10" :span="12" v-show="personnel.length>0">
+								<el-col :span="12" v-if="personnel.length>0">
 									<personnel :datas="personnel" title="待转正员工"></personnel>
+								</el-col>
+								<el-col :span="12" v-if="payAdjust.length>0">
+									<payAdjust :datas="payAdjust" title="调薪员工"></payAdjust>
 								</el-col>
 							</el-row>
 					</el-scrollbar>
@@ -284,6 +287,8 @@
 	import dateLap from '@/components/Table/DateLap'
 	import accident from "./workbench/accident"
 	import personnel from "./workbench/personnel"
+	import payAdjust from "./workbench/payAdjust"
+
 	import inService from "./dataAnalysis/inService"
 	import pieChart from "./dataAnalysis/pieChart"
 	import barChart from "./dataAnalysis/barChart"
@@ -342,7 +347,8 @@
 				dateLap5:'',
 				dateLap6:'',
 				dateLap7:'',
-				percentage:30
+				percentage:30,
+				payAdjust:[]
 			};
 		},
 		components:{
@@ -356,10 +362,11 @@
 			inService,
 			pieChart,
 			barChart,
-			histogram,
+			// histogram,
 			singlehisto,
 			posnegBar,
 			progre,
+			payAdjust,
 			// sunbrust,
 		},
 		watch:{
@@ -567,6 +574,7 @@
 			this.$refs.tree2.setCurrentKey(defaultMenuid);
 			this.orgid = defaultMenuid;
 			this.personnel = await this.$request.get('hrm/staffautoshiftremind');
+			this.payAdjust = (await this.$request.get('protal/notice')).rows;
 		}
   };
 </script>

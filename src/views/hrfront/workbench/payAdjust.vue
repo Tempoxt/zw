@@ -6,19 +6,19 @@
 		</div>
 		<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 			<el-row class="list" v-for="(o,i) in datas" :key="i" style="margin-right:13px">
-				<el-col :span="12">
+				<el-col :span="8">
 					<div class="list-l">
 						<img src="http://cdn.admui.com/demo/pjax/2.0.0/images/avatar.svg" alt="" srcset="">
 						<div>
-							<p>{{o.chineseName}}- {{o.employeeCode}}</p>
-							<span>{{o.department__name}}</span>
+							<p>{{o.name}}- {{o.gongh}}</p>
+							<span>{{o.department}}</span>
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="12">
-					<div class="list-r" v-if="title=='待转正员工'">
-						<span >转正时间: {{o.approvalTime}}</span>
-						<el-tag type="danger" class="tag" effect="plain">待转正</el-tag>
+				<el-col :span="16">
+					<div class="list-r">
+						<span>{{o.selectname}}</span>
+						<el-tag type="danger" class="tag" effect="plain" @click="view">查看</el-tag>
 					</div>
 				</el-col>
 			</el-row>
@@ -36,7 +36,9 @@ export default {
 		}
     },
 	methods: {
-		
+		view(){
+			this.$router.push("/hrfront/personnelmanagement?menuid=105");
+		}
 	},
 	async created(){
 	},

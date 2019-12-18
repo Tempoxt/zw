@@ -160,6 +160,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.box-card{
+	height: 431px;
+	margin-top: 10px;
+}
 .el-button--mini{
 	padding: 5px!important;
 }
