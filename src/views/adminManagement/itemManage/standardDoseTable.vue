@@ -17,6 +17,19 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" :field="{name:'部门'}" v-model="name" :disabled="true"/>
                         </el-col>
+                        <el-col :span="16" :offset="4">
+                            <el-form-item label="月份" prop="month">
+                                <el-date-picker
+                                    :disabled="!isInsert"
+                                    v-model="form.month"
+                                    type="month"
+                                    style="width:100%"
+                                    format="yyyy-MM"
+                                    value-format="yyyy-MM"
+                                    placeholder="选择月份">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="16" :offset="4" v-if="isInsert">
                             <form-render :type="`select`" prop="type_id" :field="{name:'类别',options:typeList}" v-model="form.type_id"/>
                         </el-col>
@@ -62,7 +75,11 @@
             @action="handleAction"
             :table_form.sync="table_form"
             :table_column="table_field"
-        ></table-header>
+        >
+            <div style="padding-left:10px">
+                <dateLap v-model="table_form.dateLap" @change="fetch" :disabled="true"/>
+            </div>
+        </table-header>
         <el-table
             ref="elTable"
             @selection-change="handleChangeSelection"
@@ -97,6 +114,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+import dayjs from 'dayjs'
 const api_resource = api_common.resource("toolstationery/standarddose");
 let baseUrl = process.env.VUE_APP_STATIC
 let baseUri = process.env.VUE_APP_BASEAPI
@@ -106,9 +124,9 @@ export default {
     props:['orgid','name'],
     data() {
         var checkNumber = (rule, value, callback)=>{
-			if (!value) {
+			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+			}else if (!(/^[0-9]*[0-9][0-9]*$/.test(value))) {
 				callback(new Error('请输入正整数'));
 			}else{
 				callback();
@@ -138,6 +156,9 @@ export default {
                     { validator: checkNumber, trigger: 'blur' }
                 ],
                 type__title:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                month:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
             },
@@ -201,7 +222,7 @@ export default {
 				clearInterval(this.timer)
 			}
 			try{
-                let mes = await this.$request.post('toolstationery/standarddose/download')
+                let mes = await this.$request.post('toolstationery/standarddose/download',{dateLap:this.table_form.dateLap})
                 this.$message.success(mes);
 				this.timer = setInterval(()=>{
 					this.getUrl()
@@ -274,6 +295,7 @@ export default {
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table
+		this.table_form.dateLap = dayjs().format('YYYY-MM') 
         this.fetchTableData();
     },
 };

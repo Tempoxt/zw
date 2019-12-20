@@ -215,9 +215,9 @@ export default {
             }
         }
         var checkNumber2 = (rule, value, callback)=>{
-			if (!value) {
+			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+			}else if (!(/^[0-9]*[0-9][0-9]*$/.test(value))) {
 				callback(new Error('请输入正整数'));
 			}else{
 				callback();
@@ -340,7 +340,7 @@ export default {
 			}
 		},
         checkNumber(rule, value, callback){
-			if (!value) {
+			if (value==='') {
 				return callback(new Error('请输入'));
 			}else if (!(/^\d+(\.\d{1,2})?$/.test(value))) {
 				callback(new Error('请输入精度为两位小数以内的正数'));
@@ -349,9 +349,9 @@ export default {
 			}
 		},
         checkNumber1(rule, value, callback){
-			if (!value) {
+			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^[0-9]*[1-9][0-9]*$/.test(value))) {
+			}else if (!(/^[0-9]*[0-9][0-9]*$/.test(value))) {
 				callback(new Error('请输入正整数'));
 			}else{
 				callback();

@@ -76,7 +76,7 @@
             <el-table-column type="index" :index="indexMethod"/>
             <each-table-column :table_field="table_field"/>
         </el-table>
-        <div style="margin:10px 0 0 10px;">总金额：{{total_price}}元</div>
+        <div style="margin:10px 0 0 10px;" v-if="total_price">总金额：{{total_price}}元</div>
         <table-pagination 
             :total="table_form.total" 
             :pagesize.sync="table_form.pagesize"

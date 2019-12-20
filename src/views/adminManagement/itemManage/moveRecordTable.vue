@@ -148,7 +148,7 @@ export default {
 			this.fetchTableData()
 		},
         async fetchTableData() {
-            if(this.orgid==''){
+            if(this.orgid==''||this.status===''){
                 return 
             }
             this.table_loading = true;
@@ -170,10 +170,7 @@ export default {
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
         this.moveData = (await this.$request.get('toolstationery/moverecord/movetype')).map(o=>{return {label:o.type_title,value:o.type_id}});
         this.status = this.moveData[0].value
-        this.table_form.moveType = this.status
-        setTimeout(()=>{
-            this.fetchTableData();
-        },500)
+        await this.fetchTableData();
     },
 };
 </script>
