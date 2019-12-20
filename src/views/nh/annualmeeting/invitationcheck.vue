@@ -136,7 +136,7 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
-            console.log(form,'dddd')
+            // console.log(form,'dddd')
 			let mess = await api_resource.create(form)
 			this.$message.success(mess);
 			this.fetch()

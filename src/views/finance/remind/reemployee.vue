@@ -47,10 +47,9 @@
 
 <script>
 export default {
-	props:['title','info'],
+	props:['title','info','infoData'],
 	data() {
 		return {
-			infoData:[],
 			total:''
 		};
     },
@@ -66,15 +65,15 @@ export default {
 		}
 	},
 	async created(){
-		if(this.info&&this.info=='NoBankCard'){
-			this.infoData = await this.$request.get('salary/noBankCard');
-		}else if(this.info&&this.info=='PayrollUnsign'){
-			this.infoData = await this.$request.get('salary/unsignworksalarylist');
-		}else if(this.info&&this.info=='PayrollUnsubmit'){
-			this.infoData = await this.$request.get('salary/unsubmitdutyworksalary');
-		}else if(this.info&&this.info=='SalaryUnsign'){
-			this.infoData = await this.$request.get('salary/salarynosign');
-		}
+		// if(this.info&&this.info=='NoBankCard'){
+		// 	this.infoData = await this.$request.get('salary/noBankCard');
+		// }else if(this.info&&this.info=='PayrollUnsign'){
+		// 	this.infoData = await this.$request.get('salary/unsignworksalarylist');
+		// }else if(this.info&&this.info=='PayrollUnsubmit'){
+		// 	// this.infoData = await this.$request.get('salary/unsubmitdutyworksalary');
+		// }else if(this.info&&this.info=='SalaryUnsign'){
+		// 	this.infoData = await this.$request.get('salary/salarynosign');
+		// }
 	},
 }
 </script>
