@@ -24,6 +24,18 @@
                                 <form-render :type="`input`" prop="unit" :field="{name:'物品单位'}" v-model="form.unit"/>
                             </el-col>
                             <el-col :span="16" :offset="4">
+                                <form-render :type="`radio`" prop="is_fee" :field="{name:'是否扣费',options:[
+                                    {
+                                        value: 1,
+                                        label: '是'
+                                    },
+                                    {
+                                        value: 0,
+                                        label: '否'
+                                    }
+                                ]}" v-model="form.is_fee"/>
+                            </el-col>
+                            <el-col :span="16" :offset="4">
                                 <form-render :type="`img`" prop="image" :data="{'upload_msg':'article_photo'}" :field="{name:'图片'}" v-model="form.image"/>
                             </el-col>
                         </el-row>
@@ -212,6 +224,7 @@ export default {
                     price:'',
                     allStock:''
                 }],
+                is_fee: 1
             }
         }
         var checkNumber2 = (rule, value, callback)=>{
@@ -254,6 +267,9 @@ export default {
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
                 image:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                is_fee:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
             },
@@ -412,7 +428,9 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
-            if(this.form.image==undefined||this.form.image==''){
+            // form.is_fee = Boolean(this.form.is_fee)
+            console.log(form,'dddd')
+            if(form.image==undefined||form.image==''){
                 this.$message.error('请上传图片');
                 return
             }

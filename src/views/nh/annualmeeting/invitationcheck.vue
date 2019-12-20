@@ -5,6 +5,50 @@
 		@query="querySubmit"
 		>
 
+		 <el-dialog
+            :title="dialogStatus==='insert'?'添加受邀人':'编辑受邀人'"
+            :visible.sync="dialogFormVisible"
+            class="public-dialog"
+            v-el-drag-dialog
+		    width="800px"
+            >
+           	<div>
+                <el-form ref="form" :model="form" label-width="70px" :rules="rules">
+                        <el-row :gutter="20">
+                            <el-col :span="16" :offset="4">
+                                <form-render :type="`input`" prop="company" :field="{name:'受邀单位'}" v-model="form.company"/>
+                            </el-col>
+                            <el-col :span="16" :offset="4">
+                                <form-render :type="`input`" prop="name" :field="{name:'受邀人'}" v-model="form.name"/>
+                            </el-col>
+                            <el-col :span="16" :offset="4">
+                                <form-render :type="`input`" prop="job" :field="{name:'职位'}" v-model="form.job"/>
+                            </el-col>
+                            <el-col :span="16" :offset="4">
+                                <form-render :type="`input`" prop="tel" :field="{name:'手机号码'}" v-model="form.tel"/>
+                            </el-col>
+                            <el-col :span="16" :offset="4">
+                                <form-render :type="`radio`" prop="sex" :field="{name:'性别',options:[
+                                    {
+                                        value: 1,
+                                        label: '男'
+                                    },
+                                    {
+                                        value: 0,
+                                        label: '女'
+                                    }
+                                ]}" v-model="form.sex"/>
+                            </el-col>
+                        </el-row>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+            </div>
+        </el-dialog>
+
 		<table-header
 			:table_actions="table_actions"
 			:table_selectedRows="table_selectedRows"
@@ -45,13 +89,59 @@ const api_resource = api_common.resource("annualmeeting/invitationcheck");
 export default {
 	mixins: [table_mixin],
 	data() {
+        var checkPhone = (rule, value, callback)=>{
+			if (value==='') {
+				return callback(new Error('请输入'));
+			}else if (!(/^1\d{10}$/.test(value))) {
+				callback(new Error('请输入11位手机号'));
+			}else{
+				callback();
+			}
+		}
 		return {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
+			dialogFormVisible:false,
+			form:{},
+            rules:{
+                company:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
+                name:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
+                job:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
+                tel:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                    { validator: checkPhone, trigger: 'blur' }
+                ],
+                sex:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+            },
 		};
 	},
 	methods: {
+		fetch(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
+        add(){
+            this.form = {}
+            this.dialogFormVisible = true
+        },
+        async handleFormSubmit(){
+            await this.form_validate()
+            let form = Object.assign({},this.form)
+            console.log(form,'dddd')
+			let mess = await api_resource.create(form)
+			this.$message.success(mess);
+			this.fetch()
+			this.dialogFormVisible = false
+        },
 		async fetchTableData() {
 			this.table_loading = true;
 			const {rows , total }= await api_resource.get(this.table_form);
