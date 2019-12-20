@@ -216,8 +216,8 @@
 								></singlehisto>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
 							</el-col>
-							<el-col :span="12" v-if="leaveEduData.length!=0">
-								<progre
+							<el-col :span="12">
+								<!-- <progre
 								id="turn-rate"
 								title="员工流失率"  
 								:show="checkFullshow" 
@@ -227,7 +227,18 @@
 								:color="['#FF5454']"
 								@fullScreen="fullScreen"
 								:class="{'speech-mode':screenIndex=='10'}"
-								></progre>
+								></progre> -->
+								<single
+								id="turn-rate"
+								title="员工流失率"  
+								:show="checkFullshow" 
+								:datas = turnRate
+								ref="echart10" 
+								screenIndex='10'
+								:color="['#40CDE9']"
+								@fullScreen="fullScreen"
+								:class="{'speech-mode':screenIndex=='10'}"
+								></single>
 							</el-col>
 							<el-col :span="12" class="relative"  v-if="manageData.length!=0">
 								<posnegBar 
@@ -294,6 +305,7 @@
 	import barChart from "./dataAnalysis/barChart"
 	import histogram from "./dataAnalysis/histogram"
 	import singlehisto from "./dataAnalysis/singlehisto"
+	import single from "./dataAnalysis/single"
 	import posnegBar from "./dataAnalysis/posnegBar"
 	import progre from "./dataAnalysis/progre"
 	// import sunbrust from "./dataAnalysis/sunbrust"
@@ -364,6 +376,7 @@
 			barChart,
 			// histogram,
 			singlehisto,
+			single,
 			posnegBar,
 			progre,
 			payAdjust,

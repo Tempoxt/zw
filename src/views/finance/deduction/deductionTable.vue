@@ -24,7 +24,7 @@
 					</el-col>
 				
 					<el-col :span="12">
-						<el-form-item label="扣款月份" prop="recordate">
+						<el-form-item label="补扣月份" prop="recordate">
 							<el-date-picker
 								v-model="importForm.recordate"
 								type="month"
