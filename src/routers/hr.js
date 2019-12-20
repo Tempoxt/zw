@@ -60,13 +60,6 @@ export default [
       title:'职位管理'
     }
   },
-  {
-    name: 'invitation',
-    component: () => import('@/views/hr/annualmeeting/invitationcheck'),
-    meta:{
-      title:'邀请函名单'
-    }
-  }
 
 
 ]

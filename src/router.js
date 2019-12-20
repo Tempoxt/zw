@@ -11,6 +11,7 @@ import productrecheck from './routers/productrecheck'
 import cost from './routers/cost'
 import setting from './routers/setting'
 import device from './routers/device'
+import nh from './routers/nh'
 import adminManagement from './routers/adminManagement'
 Vue.use(Router)
 
@@ -23,7 +24,8 @@ let asyncRoutes = [
     ...adminManagement,
     ...productrecheck,
     ...cost,
-    ...device
+    ...device,
+    ...nh
 ]
 
 let router = new Router({
