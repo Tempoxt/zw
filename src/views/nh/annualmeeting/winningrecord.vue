@@ -49,6 +49,8 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
+			importUploadUrl:'annualmeeting/winningrecord/upload',
+            downloadUrl:'annualmeeting/winningrecord/upload',
 		};
 	},
 	methods: {

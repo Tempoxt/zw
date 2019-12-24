@@ -277,7 +277,7 @@ export default {
             template:{
                 image(row,column){
                     if(column.image!=''&&column.image!=undefined){
-                        return <img src={baseUrl+column.image} width="50" height="50"></img>
+                        return <img src={baseUrl+column.image} width="30" height="30"></img>
                     }
                 }
             },

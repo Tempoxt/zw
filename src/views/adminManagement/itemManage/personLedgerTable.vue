@@ -121,6 +121,7 @@ export default {
             articleSize:'',
             articleType:'',
             total_price:'',
+            employeeCode:'',
         };
     },
     watch:{
@@ -174,7 +175,8 @@ export default {
                 {params:{
                     articleType: this.articleType,
                     articleTitle: this.articleTitle,
-                    articleSize: this.articleSize
+                    articleSize: this.articleSize,
+                    employeeCode: this.employeeCode
                 }}
             )
         },
@@ -184,6 +186,7 @@ export default {
                 this.articleTitle = row.articleTitle
                 this.articleSize = row.articleSize
                 this.articleType = row.articleType
+                this.employeeCode = row.employeeCode
                 this.fetchToolData()
 			}
 		},
