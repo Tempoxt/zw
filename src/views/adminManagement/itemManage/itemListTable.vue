@@ -137,7 +137,7 @@
                                 <form-render :type="`input`" :field="{name:'名称'}" :disabled="true" v-model="form2.title"/>
                             </el-col>
                             <el-col :span="12">
-                                <form-render :type="`select`" :field="{name:'规格',options:sizeList}" v-model="form2.size"/>
+                                <form-render :type="`input`" :field="{name:'规格'}" :disabled="true" v-model="form2.size"/>
                             </el-col>
                         </el-row>
                         <div style="border-top: 1px solid #E4E4E4;padding-top: 30px;">
@@ -428,8 +428,6 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
-            // form.is_fee = Boolean(this.form.is_fee)
-            console.log(form,'dddd')
             if(form.image==undefined||form.image==''){
                 this.$message.error('请上传图片');
                 return
@@ -495,7 +493,7 @@ export default {
             this.form2 = await this.$request.get('toolstationery/inventory/setstandard?article_id='+row.id)
             this.type_id = this.form2.type_id
             this.title = this.form2.title
-            this.getSize()
+            // this.getSize()
             this.dialogForm2Visible = true
         },
         async handleForm2Submit(){
@@ -506,9 +504,9 @@ export default {
             this.dialogForm2Visible = false
         },
         async fetchTableData() {
-            if(this.org_id==''){
-                return 
-            }
+            // if(this.org_id==''){
+            //     return 
+            // }
             this.table_loading = true;
             this.table_form.org_id  = this.org_id
             const {rows , total }= await api_resource.get(this.table_form);

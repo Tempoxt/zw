@@ -46,9 +46,6 @@ export default {
         'icon'(){
             return <i class={this.row[this.column.name]}></i>
         },
-        'image'(){
-            return <img src={baseUrl+this.row.image} width="50" height="50"></img>
-        },
         'signImage'(){
             if(this.row.signImage!=''&&this.row.signImage!=null){
                 return <img src={baseUrl+this.row.signImage} width="50" height="50"></img>

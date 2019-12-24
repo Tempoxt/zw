@@ -134,7 +134,7 @@
       >
       </el-table-column>
     <el-table-column type="index" :index="indexMethod" />
-    <each-table-column :table_field="table_field"/>
+    <each-table-column :table_field="table_field" :template="template"/>
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -149,6 +149,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("workclothes/list");
+let baseUrl = process.env.VUE_APP_STATIC
 const defaultForm = () => {
     return {
         estate:0,
@@ -175,7 +176,12 @@ export default {
       clothesDepData:[],
       clothesSexData:[],
       clothesJobData:[],
-      clothesModelData:[]
+      clothesModelData:[],
+      template:{
+        'image'(){
+            return <img src={baseUrl+this.row.image} width="50" height="50"></img>
+        },
+      }
     };
   },
   watch:{

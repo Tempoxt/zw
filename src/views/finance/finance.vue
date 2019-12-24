@@ -11,11 +11,11 @@
 							<el-col :span="12" v-if="infoData2.length!=0">
 								<reemployee title="工薪单未签名员工" info="PayrollUnsign" :infoData="infoData2"></reemployee>
 							</el-col>
-							<el-col :span="12" v-if="infoData3.length!=0">
-								<reemployee title="入职工薪单未提交员工" info="PayrollUnsubmit" :infoData="infoData3"></reemployee>
-							</el-col>
 							<el-col :span="12" v-if="infoData4.length!=0">
 								<reemployee title="工资未签收员工" info="SalaryUnsign" :infoData="infoData4"></reemployee>
+							</el-col>
+							<el-col :span="12" v-if="infoData3.length!=0">
+								<reemployee title="入职工薪单未提交员工" info="PayrollUnsubmit" :infoData="infoData3"></reemployee>
 							</el-col>
 						</el-row>
 					</el-scrollbar>
@@ -47,15 +47,10 @@ export default {
 		
     },
 	async created(){
-		// if(this.info&&this.info=='NoBankCard'){
-			this.infoData1 = await this.$request.get('salary/noBankCard');
-		// }else if(this.info&&this.info=='PayrollUnsign'){
-			this.infoData2 = await this.$request.get('salary/unsignworksalarylist');
-		// }else if(this.info&&this.info=='PayrollUnsubmit'){
-			this.infoData3 = await this.$request.get('salary/unsubmitdutyworksalary');
-		// }else if(this.info&&this.info=='SalaryUnsign'){
-			this.infoData4 = await this.$request.get('salary/salarynosign');
-		// }
+		this.infoData1 = await this.$request.get('salary/noBankCard');
+		this.infoData2 = await this.$request.get('salary/unsignworksalarylist');
+		this.infoData4 = await this.$request.get('salary/salarynosign');
+		this.infoData3 = await this.$request.get('salary/unsubmitdutyworksalary');
     }
   };
 </script>

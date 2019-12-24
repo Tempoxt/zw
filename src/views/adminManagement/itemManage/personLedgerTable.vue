@@ -91,15 +91,15 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("toolstationery/personledger");
 let baseUrl = process.env.VUE_APP_STATIC
-// let baseUri = process.env.VUE_APP_BASEAPI
-// const download = require('downloadjs')
+let baseUri = process.env.VUE_APP_BASEAPI
+const download = require('downloadjs')
 export default {
     mixins: [table_mixin],
     props:['orgid'],
     data() {
         return {
             baseUrl,
-            // baseUri,
+            baseUri,
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
@@ -138,10 +138,11 @@ export default {
         },
         async getUrl(){
 			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/moverecord/download',{alert:false})
+                this.url = await this.$request.get('toolstationery/personledger/download',{alert:false})
                 if(this.url!=''){
                     const res = download(baseUri+'/'+this.url)
                     this.statusk = 0
+                    this.fetch()
                 }
 			}else{
 				clearInterval(this.timer)
@@ -155,7 +156,7 @@ export default {
 			try{
                 delete this.table_form.pagesize
                 delete this.table_form.currentpage
-                let mes = await this.$request.post('toolstationery/moverecord/download?dateLap='+this.table_form.dateLap+'&moveType='+this.status+'&org_id='+this.orgid,{
+                let mes = await this.$request.post('toolstationery/personledger/download?dateLap='+this.table_form.dateLap+'&org_id='+this.orgid,{
                     dateLap: this.table_form.dateLap,
                     moveType: this.status,
                     org_id:this.orgid
