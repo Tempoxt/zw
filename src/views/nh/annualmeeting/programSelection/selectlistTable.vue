@@ -176,7 +176,7 @@
 			
             <el-table-column label="投票/打分通道">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini">打开</el-button>
+					<el-switch v-model="scope.row.switchStatus" :name="scope.row.programName" @change="open(scope.row)"></el-switch>
                 </template>
             </el-table-column>
 		</el-table>
@@ -217,6 +217,7 @@ export default {
 		return {
 			loading: true,
 			api_resource,
+            table_topHeight:280,
 			queryDialogFormVisible:true,
 			form:{},
 			defaultForm1,
@@ -248,6 +249,7 @@ export default {
 			startTime: 1,
 			endTime: 1,
 			vote: 2,
+			openVote:false,
 		};
 	},
 	computed:{
@@ -259,23 +261,32 @@ export default {
 		}
 	},
 	methods: {
+		async open(row){
+			await this.$request.put('annualmeeting/programswitch',{programID:row.id,switchStatus:Number(row.switchStatus)})
+            this.fetchTableData();
+		},
 		async settingRule(){
 			let form1 = await this.$request.get('annualmeeting/ruleset?year='+ this.table_form.dateLap)
 			if(form1[0]&&form1[0].id!=undefined){
-				this.form1 = form1
+				this.form1 = form1[0]
 			}else{
 				this.form1 = this.defaultForm1()
 			}
+			this.$nextTick(()=>{
+				this.$refs['form1'].clearValidate()
+			})
             this.dialogForm1Visible = true
 		},
         async handleForm1Submit(){
-			this.form1.year = this.table_form.dateLap
 			if(this.form1.id!=undefined){
-				await this.$request.put('annualmeeting/ruleset/'+this.form1.id,this.form1)
+				await this.$request.put('annualmeeting/ruleset/'+this.form1.id,this.form1,{alert:false})
+				this.$message.success({message:'修改成功'});
 			}else{
-				let mes = await this.$request.post('annualmeeting/ruleset',this.form1)
-				this.$message.success({message:mes});
+				this.form1.year = this.table_form.dateLap
+				let mes = await this.$request.post('annualmeeting/ruleset',this.form1,{alert:false})
+				this.$message.success({message:'创建成功'});
 			}
+            this.dialogForm1Visible = false
             this.fetchTableData();
         },
 		fetch(){

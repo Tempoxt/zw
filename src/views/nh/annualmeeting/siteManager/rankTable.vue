@@ -4,86 +4,62 @@
         :table_query.sync="table_form.query"
         @query="querySubmit"
         >
+       
         <el-dialog
-            :title="dialogStatus==='insert'?'添加物品':'编辑物品'"
+            :title="dialogStatus==='insert'?'批量分配':'编辑'"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
-		    width="800px"
+            width="750px"
             >
-           	<div>
-                <el-form ref="form" :model="form" label-width="70px" :rules="rules">
-                        <el-row :gutter="20">
-                            <el-col :span="16" :offset="4">
-                                <form-render :type="`select`" prop="type_id" :field="{name:'物品类别',options:typeList}" v-model="form.type_id" :disabled="!isInsert"/>
-                            </el-col>
-                            <el-col :span="16" :offset="4">
-                                <form-render :type="`input`" prop="title" :field="{name:'物品名称'}" v-model="form.title" :disabled="!isInsert"/>
-                            </el-col>
-                            <el-col :span="16" :offset="4">
-                                <form-render :type="`input`" prop="unit" :field="{name:'物品单位'}" v-model="form.unit"/>
-                            </el-col>
-                            <el-col :span="16" :offset="4">
-                                <form-render :type="`radio`" prop="is_fee" :field="{name:'是否扣费',options:[
-                                    {
-                                        value: 1,
-                                        label: '是'
-                                    },
-                                    {
-                                        value: 0,
-                                        label: '否'
-                                    }
-                                ]}" v-model="form.is_fee"/>
-                            </el-col>
-                            <el-col :span="16" :offset="4">
-                                <form-render :type="`img`" prop="image" :data="{'upload_msg':'article_photo'}" :field="{name:'图片'}" v-model="form.image"/>
-                            </el-col>
-                        </el-row>
-                        <div style="border-top: 1px solid #E4E4E4;padding-top: 30px;">
-                            <el-row v-for="(suk,i) in form.sku_info" :key="i" :gutter="10">
-                                <el-col :span="7">
-                                    <el-form-item
-                                        :prop="'sku_info.' + i + '.size'"
-                                        label="规格"
-                                        :rules="{ required: true, message: '请输入', trigger: 'blur' }"
-                                        >
-                                        <el-input v-model="suk.size" :disabled="!isInsert&&suk.lock==true"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="7">
-                                    <el-form-item
-                                        :prop="'sku_info.' + i + '.price'"
-                                        label="单价/元"
-                                        :rules="[
-                                            { required: true, validator: checkNumber, trigger: 'blur' }
-                                        ]"
-                                        >
-                                        <el-input v-model="suk.price"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="7">
-                                    <el-form-item
-                                        :prop="'sku_info.' + i + '.allStock'"
-                                        label="初始库存"
-                                        :rules="[
-                                            { required: true, validator: checkNumber1, trigger: 'blur' }
-                                        ]"
-                                        >
-                                        <el-input v-model="suk.allStock" :disabled="!isInsert&&suk.disabled!=false"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="3">
-                                    <el-button icon="el-icon-plus" circle @click="addSku" v-if="i==0"></el-button>
-                                    <el-button icon="el-icon-minus" circle @click="deleteSku(suk)" v-else></el-button>
-                                </el-col>
-                            </el-row>
-                        </div>
+            <div style="width:710px;margin:0 auto">
+                <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+                    <el-row>
+                        <el-col :span="12">
+                            <form-render :type="`select`" prop="staffType" :field="{name:'类型',options:typeData}" v-model="form.staffType" :disabled="!isInsert"/>
+                        </el-col>
+                        <el-col :span="12">
+                            <form-render :type="`select`" prop="deckCode" :field="{name:'类型',options:deckData}" v-model="form.deckCode" :disabled="!isInsert"/>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <!-- <el-col :span="24">
+                            <el-transfer
+                                style="text-align: left; display: inline-block"
+                                v-model="checked"
+                                filterable
+                                :titles="['待排位人员', '已排位人员']"
+                                :props="{
+                                    key: 'id',
+                                }"
+                                :format="{
+                                    noChecked: '${total}',
+                                    hasChecked: '${checked}/${total}'
+                                }"
+                                :data="rankData"
+                                :filter-method="filterMethod"
+                                >
+                                <span slot-scope="{ option }">{{ option.employeeCode }}  {{ option.chineseName }} {{ option.department }} </span>
+                                <div slot="right-footer" class="transfer-footer">
+                                    <span>房号</span>
+                                    <span>{{data.roomName}}</span>
+                                    <span>{{data.totalBeds}}</span>
+                                    <span>-</span>
+                                    <span>{{data.totalBeds-(data.totalBeds - checked.length)}} </span>
+                                    <div style="color:red;font-size:12px" v-if="checked.length>data.totalBeds">超出床位数</div>
+
+                                </div>
+                                <el-button class="transfer-footer" slot="titles" size="small">操作</el-button>
+                            </el-transfer>
+                        </el-col> -->
+                    </el-row>
                 </el-form>
             </div>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+                <!-- <el-button type="primary" @click="handleFormSubmit" :disabled="checked.length>data.totalBeds">确 定</el-button> -->
+                <el-button type="primary" @click="handleFormSubmit" >确 定</el-button>
             </div>
         </el-dialog>
 
@@ -132,7 +108,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-// const api_resource = api_common.resource("invitation/sitemanager/rank");
 let baseUrl = process.env.VUE_APP_STATIC
 let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
@@ -141,55 +116,23 @@ export default {
     mixins: [table_mixin],
     props:['org_id','url'],
     data() {
-        const defaultForm = () => {
-            return {
-                sku_info: [{
-                    size: '',
-                    price:'',
-                    allStock:''
-                }],
-                is_fee: 1
-            }
-        }
         return {
             baseUrl,
             baseUri,
             loading: false,
             form:{},
-            defaultForm,
             api_resource: api_common.resource(this.url),
             queryDialogFormVisible:true,
             table_topHeight:280,
             dialogFormVisible:false,
-            dialogForm1Visible:false,
-            dialogForm2Visible:false,
-            form1:{
-               add_number:'',
-               check_number:''
-            },
-            form2:{},
-            deviceData:[],
-            nameData:[],
-            typew:'',
             rules:{
                 type_id:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
-                title:[
+                deckCode:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
             },
-            checkList:[],
-            template:{
-                image(row,column){
-                    if(column.image!=''&&column.image!=undefined){
-                        return <img src={baseUrl+column.image} width="30" height="30"></img>
-                    }
-                }
-            },
-            typeList:[],
-            dialogStatus:'',
-            sizeList:[],
 			timer:'',
 			uri:'',
             statusk:1,
@@ -197,6 +140,20 @@ export default {
             downloadUrl:'/toolstationery/inventory/upload',
             type_id:'',
             title:'',
+            checked: [],
+            template:{
+                signDesc(row,column){
+                    if(column.signDesc=='未到场'){
+                        return <el-tag size="mini" type="warning">{column.signDesc}</el-tag>
+                    }else{
+                        return <el-tag size="mini" type="success">{column.signDesc}</el-tag>
+                    }
+                }
+            },
+            alRank:[],
+            deckData:[],
+            typeData:[],
+            rankData:[]
         };
     },
     watch:{
@@ -209,25 +166,23 @@ export default {
 			delete this.table_form.keyword
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
-			this.fetchMenu()
+            this.fetchMenu()
         }
     },
     computed:{
-        disabled(){
-            if((this.dialogStatus=='warehouse'&&this.form1.add_number!=''&&this.form1.add_number!=undefined)||
-            (this.dialogStatus=='inventory'&&this.form1.check_number!=''&&this.form1.check_number!=undefined)){
-                return false
-            }else{
-                return true
-            }
-        }
+        // disabled(){
+            
+        // }
     },
     methods: {
+		filterMethod(query, item){
+			return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
+		},
         async getUrl(){
 			if(this.statusk!=0){
-                this.url = await this.$request.get('invitation/sitemanager/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
+                this.uri = await this.$request.get('invitation/sitemanager/download',{alert:false})
+                if(this.uri!=''){
+                    const res = download(baseUri+'/'+this.uri)
                     this.statusk = 0
                 }
 			}else{
@@ -258,18 +213,21 @@ export default {
 			this.table_form.currentpage = 1
 			this.fetchTableData()
 		},
-        async getSize(){
-            this.sizeList = (await this.$request.get('toolstationery/inventory/pulldownbytitle?type_id='+this.type_id+'&title='+this.title))
-            .map(o=>{return {label:o.size,value:o.id}});
+		async getType(){
+ 			this.typeData = (await this.$request.get('invitation/sitemanager/siteset/stafftypelist')).map(o=>{return {label:o.staffTypeDesc,value:o.staffType}})
+		},
+        async add(){
+            // this.getType()
+			// let { rows } = await this.$request.get('dormitory/checkinemp',{params:{dormType:1}})
+			// let { rows : rows2 } = await this.$request.get('dormitory/alreadycheckinemp',{params:{roomId:8}})
+			// rows2.forEach(o=>o.disabled = true)
+			// this.checked = rows2.map(o=>o.id)
+			// this.alRank = rows2
+			// rows = rows.concat(rows2)
+			// this.distributionData = rows
+			// this.dialogLoading = false
+            // this.dialogFormVisible = true
         },
-        async getType(){
-            this.typeList = (await this.$request.get('toolstationery/type')).map(o=>{return {label:o.title,value:o.id}});
-        },
-        // add(){
-        //     this.getType()
-        //     this.form = this.defaultForm()
-        //     this.dialogFormVisible = true
-        // },
         // async edit(){
         //     this.getType()
         //     let row = this.table_selectedRows[0];
@@ -286,7 +244,6 @@ export default {
                 this.dialogFormVisible = false
             }else{
                 await this.api_resource.update(form.id,form)
-                // await this.$request.put('toolstationery/inventory',form)
                 this.fetch()
                 this.dialogFormVisible = false
             }

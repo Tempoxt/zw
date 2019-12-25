@@ -71,7 +71,7 @@
 			>
 			<el-table-column  type="selection" width="60" class-name="table-column-disabled" :selectable="table_disable_selected"></el-table-column>
 			<el-table-column type="index" :index="indexMethod" />
-			<each-table-column :table_field="table_field"/>
+			<each-table-column :table_field="table_field" :template="template"/>
 		</el-table>
 		<table-pagination 
 			:total="table_form.total" 
@@ -121,7 +121,25 @@ export default {
                 sex:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
-            },
+			},
+			template:{
+				status(row,column){
+					if(column.status=='已确认'){
+						return <el-tag size="mini" type="success">{column.status}</el-tag>
+					}else{
+						return <span>{column.status}</span>
+					}
+				},
+				arrivestatus(row,column){
+					if(column.arrivestatus=='已回复'){
+						return <el-tag size="mini" type="warning">{column.arrivestatus}</el-tag>
+					}else if(column.arrivestatus=='已邀请'){
+						return <el-tag size="mini">{column.arrivestatus}</el-tag>
+					}else if(column.arrivestatus=='已到场'){
+						return <el-tag size="mini" type="success">{column.arrivestatus}</el-tag>
+					}
+				},
+			}
 		};
 	},
 	methods: {

@@ -77,6 +77,7 @@ export default {
 			queryDialogFormVisible:true,
 			form:{},
 			result:[],
+            table_topHeight:280,
 			dialogFormVisible:false
 		};
 	},

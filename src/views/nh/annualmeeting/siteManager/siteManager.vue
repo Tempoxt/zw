@@ -24,15 +24,7 @@
 							<form-render :type="`year`" prop="year" :field="{name:'年份'}" v-model="form.year"/>
 						</el-col>
 						<el-col :span="16" :offset="4">
-							<form-render :type="`select`" prop="zone" :field="{name:'区域',options:[
-								{label:'A',value:'A'},
-								{label:'B',value:'B'},
-								{label:'C',value:'C'},
-								{label:'D',value:'D'},
-								{label:'E',value:'E'},
-								{label:'F',value:'F'},
-								{label:'G',value:'G'}
-							]}" v-model="form.zone"/>
+							<form-render :type="`input`" prop="zone" :field="{name:'区域'}" v-model="form.zone"/>
 						</el-col>
 						<el-col :span="16" :offset="4">
 							<form-render :type="`select`" prop="staffType" :field="{name:'类型',options:typeData}" v-model="form.staffType"/>

@@ -60,6 +60,20 @@ export default {
         filterText(val) {
             this.$refs.tree2.filter(val);
         },
+        async view_activeName(){
+            this.filterText = ''
+            if(this.view_activeName=='员工排位'){
+                this.data2 = await this.$request.get('invitation/tablelist?page_tag=1');
+            }else{
+                this.orgid = ''
+                this.data2 = await this.$request.get('invitation/tablelist?page_tag=2');
+            }
+            let defaultId = this.data2[0].deckCode
+            this.org_id = defaultId
+            this.$nextTick(()=>{
+                this.$refs.tree2.setCurrentKey(defaultId)
+            })
+        },
     },
     data(){
         return {
@@ -83,22 +97,13 @@ export default {
         },
         filterNode(value, data) {
             if (!value) return true;
-            return data.title && data.title.indexOf(value) !== -1;
+            return data.deckCodeDesc && data.deckCodeDesc.indexOf(value) !== -1;
         },
-        async fetch(){
-            this.data2 = await this.$request.get('invitation/tablelist');
-            let defaultId = this.data2[0].deckCode
-            this.org_id = defaultId
-            this.$nextTick(()=>{
-                this.$refs.tree2.setCurrentKey(defaultId)
-            })
-        }
     },
     async created(){
         const { menu } = await getTabs(this.$route.query.menuid)
         this.menu = menu
         this.view_activeName = menu[0].name;
-        this.fetch()
     }
 }
 </script>
