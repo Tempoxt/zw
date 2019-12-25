@@ -132,7 +132,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("invitation/sitemanager/rank");
+// const api_resource = api_common.resource("invitation/sitemanager/rank");
 let baseUrl = process.env.VUE_APP_STATIC
 let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
@@ -157,7 +157,7 @@ export default {
             loading: false,
             form:{},
             defaultForm,
-            api_resource,
+            api_resource: api_common.resource(this.url),
             queryDialogFormVisible:true,
             table_topHeight:280,
             dialogFormVisible:false,
@@ -205,8 +205,11 @@ export default {
             this.fetchTableData()
         },
         url(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
+            this.api_resource = api_common.resource(this.url)
+			delete this.table_form.keyword
+			this.table_form.currentpage = 1
+			this.table_form.query.query= []
+			this.fetchMenu()
         }
     },
     computed:{
@@ -220,6 +223,32 @@ export default {
         }
     },
     methods: {
+        async getUrl(){
+			if(this.statusk!=0){
+                this.url = await this.$request.get('invitation/sitemanager/download',{alert:false})
+                if(this.url!=''){
+                    const res = download(baseUri+'/'+this.url)
+                    this.statusk = 0
+                }
+			}else{
+				clearInterval(this.timer)
+			}
+		},
+		async download(){
+			this.statusk = 1
+			if(this.timer!=''){
+				clearInterval(this.timer)
+			}
+			try{
+                let mes = await this.$request.post('invitation/sitemanager/download',{dateLap:this.table_form.dateLap})
+                this.$message.success(mes);
+				this.timer = setInterval(()=>{
+					this.getUrl()
+				}, 10000)
+			}catch(err){
+				console.log(err)
+			}
+		},
         async reset(){
             let mes = await this.$request.post('invitation/sitemanager/reset',{year:this.table_form.dateLap})
             this.$message.success({message:mes});
@@ -236,33 +265,28 @@ export default {
         async getType(){
             this.typeList = (await this.$request.get('toolstationery/type')).map(o=>{return {label:o.title,value:o.id}});
         },
-        add(){
-            this.getType()
-            this.form = this.defaultForm()
-            this.dialogFormVisible = true
-        },
-        async edit(){
-            this.getType()
-            let row = this.table_selectedRows[0];
-            this.form = (await api_resource.find(row.id))[0]
-            this.dialogFormVisible = true
-        },
-        async delete(){
-            let rows = this.table_selectedRows.map(row=>row.id)
-            const mes = await this.$request.get('/toolstationery/inventory/bluk?ids='+rows.join(','));
-            this.$message.success({message:mes});
-            this.fetchTableData();
-        },
+        // add(){
+        //     this.getType()
+        //     this.form = this.defaultForm()
+        //     this.dialogFormVisible = true
+        // },
+        // async edit(){
+        //     this.getType()
+        //     let row = this.table_selectedRows[0];
+        //     this.form = (await api_resource.find(row.id))[0]
+        //     this.dialogFormVisible = true
+        // },
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
             if(this.dialogStatus=='insert'){
-                let mess = await api_resource.create(form)
+                let mess = await this.api_resource.create(form)
                 this.$message.success(mess);
                 this.fetch()
                 this.dialogFormVisible = false
             }else{
-                await this.$request.put('toolstationery/inventory',form)
+                await this.api_resource.update(form.id,form)
+                // await this.$request.put('toolstationery/inventory',form)
                 this.fetch()
                 this.dialogFormVisible = false
             }
@@ -270,21 +294,24 @@ export default {
         async fetchTableData() {
             this.table_loading = true;
             this.table_form.org_id  = this.org_id
-            const {rows , total }= await api_resource.get(this.table_form);
+            const {rows , total }= await this.api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
             setTimeout(() => {
                 this.table_loading = false;
             }, 300);
         },
+		async fetchMenu(){
+			const { field, action,table } = await api_common.menuInit(this.url);
+			this.table_field = field;
+			this.table_actions = action;
+			this.table_config = table
+			this.fetchTableData()
+		}
     },
     async created() {
-        const { field, action,table } = await api_common.menuInit(this.url);
-        this.table_field = field;
-        this.table_actions = action;
-        this.table_config = table
 		this.table_form.dateLap = dayjs().format('YYYY')
-        this.fetchTableData();
+		await this.fetchMenu()
     },
 };
 </script>

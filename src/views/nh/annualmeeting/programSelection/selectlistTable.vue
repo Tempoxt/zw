@@ -146,8 +146,6 @@
             </div>
         </el-dialog>
 
-
-
 		<table-header
 			:table_actions="table_actions"
 			:table_selectedRows="table_selectedRows"
@@ -175,6 +173,12 @@
 			<el-table-column  type="selection" width="60" class-name="table-column-disabled" :selectable="table_disable_selected"></el-table-column>
 			<el-table-column type="index" :index="indexMethod" />
 			<each-table-column :table_field="table_field" :template="template"/>
+			
+            <el-table-column label="投票/打分通道">
+                <template slot-scope="scope">
+                    <el-button type="primary" size="mini">打开</el-button>
+                </template>
+            </el-table-column>
 		</el-table>
 		<table-pagination 
 			:total="table_form.total" 
@@ -255,12 +259,24 @@ export default {
 		}
 	},
 	methods: {
-		settingRule(){
-			this.form1 = this.defaultForm1()
+		async settingRule(){
+			let form1 = await this.$request.get('annualmeeting/ruleset?year='+ this.table_form.dateLap)
+			if(form1[0]&&form1[0].id!=undefined){
+				this.form1 = form1
+			}else{
+				this.form1 = this.defaultForm1()
+			}
             this.dialogForm1Visible = true
 		},
         async handleForm1Submit(){
-            
+			this.form1.year = this.table_form.dateLap
+			if(this.form1.id!=undefined){
+				await this.$request.put('annualmeeting/ruleset/'+this.form1.id,this.form1)
+			}else{
+				let mes = await this.$request.post('annualmeeting/ruleset',this.form1)
+				this.$message.success({message:mes});
+			}
+            this.fetchTableData();
         },
 		fetch(){
 			this.table_form.currentpage = 1

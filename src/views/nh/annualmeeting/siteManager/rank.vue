@@ -22,9 +22,9 @@
                         @node-click="handleChangeNode"
                         :expand-on-click-node="false"
                         >
-                        <div slot-scope="{ node }">
+                        <div slot-scope="{ node,data }">
                             <div>
-                                <span class="icon iconfont icon-wenjian"></span>&nbsp;<span>{{ node.label }}</span>
+                                <span class="icon iconfont icon-wenjian" v-if="data.deckCodeDesc==0"></span>&nbsp;<span>{{ node.label }}</span>
                             </div>
                         </div>
                     </el-tree>
@@ -36,10 +36,10 @@
                 <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
             </el-tabs>
             <div v-if="view_activeName==='员工排位'">
-                <rankTable url="invitation/sitemanager/rank" m="1" :org_id="this.org_id"/>
+                <rankTable url="invitation/sitemanager/rank" :org_id="this.org_id"/>
             </div>
             <div v-if="view_activeName==='预留排位'">
-                
+                <rankTable url="invitation/departdraw/reserved" :org_id="this.org_id"/>
             </div>
         </el-col>
     </el-row>
