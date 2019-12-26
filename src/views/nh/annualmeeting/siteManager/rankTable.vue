@@ -39,14 +39,13 @@
                                 }"
                                 :data="rankData"
                                 :filter-method="filterMethod"
-                                @left-check-change = "leftCheckChange"
                                 @change = "handleChange"
                                 >
                                 <span slot-scope="{ option }">{{ option.employeeCode }}  {{ option.chineseName }} &nbsp;&nbsp;{{ option.peopleCount }} 人</span>
                                 <div slot="right-footer" class="transfer-footer">
                                     <span>已分配</span>
-                                    <span>10 - {{peopleCount1}}</span>
-                                    <div style="margin-left:8px;color:red;font-size:12px" v-if="peopleCount1>10">超出坐席数</div>
+                                    <span>{{deckCount}} - {{peopleCount1}}</span>
+                                    <div style="margin-left:8px;color:red;font-size:12px" v-if="peopleCount1>deckCount">超出坐席数</div>
                                 </div>
                             </el-transfer>
                         </el-col>
@@ -56,8 +55,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleFormSubmit" :disabled="peopleCount1>10">确 定</el-button>
-                <!-- <el-button type="primary" @click="handleFormSubmit" >确 定</el-button> -->
+                <el-button type="primary" @click="handleFormSubmit" :disabled="peopleCount1>deckCount">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -111,7 +109,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 let baseUrl = process.env.VUE_APP_STATIC
 let baseUri = process.env.VUE_APP_BASEAPI
-const download = require('downloadjs')
+const downloads = require('downloadjs')
 import dayjs from 'dayjs'
 export default {
     mixins: [table_mixin],
@@ -163,7 +161,8 @@ export default {
             peopleCount:[],
             allRank:[],
             all:[],
-            peopleCount1:0
+            peopleCount1:0,
+            deckCount:10
         };
     },
     watch:{
@@ -197,6 +196,12 @@ export default {
         },
     },
     methods: {
+        ab2str(u,f) {
+            var b = new Blob([u]);
+            var r = new FileReader();
+            r.readAsText(b, 'utf-8');
+            r.onload = function (){if(f)f.call(null,r.result)}
+        },
         handleChange(value, direction, movedKeys) {
             this.all = []
             if(this.checked!=[]){
@@ -209,17 +214,33 @@ export default {
             let peopleCount = this.all.map(o=>o.peopleCount);
             this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
         },
-        leftCheckChange(){
-
-        },
 		filterMethod(query, item){
 			return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
-		},
+        },
+        async downloadDrawList(){
+            let drawlist = await this.$request.post('invitation/departdraw/drawlist',{dateLap:this.table_form.dateLap})
+            downloads(baseUri+'/'+drawlist)
+            // try{
+                
+            //     // await this.$request.get('invitation/departdraw/stafftypelist')
+            //     // downloads()
+            //     // const { data,name,contentType} = await this.$request.post('invitation/departdraw/drawlist',{
+            //     //     dateLap:this.table_form.dateLap
+            //     // },{ responseType:'arraybuffer',alert:false})
+            //     this.$message.success('下载成功');
+            //     // downloads(data,'抽奖名单',contentType)
+            // }catch(err){
+            //     var that = this;
+			// 	that.ab2str(err.error.response.data,function(str){
+			// 		that.$message.error({ message: str ,duration:5000});
+			// 	});
+            // }
+        },
         async getUrl(){
 			if(this.statusk!=0){
                 this.uri = await this.$request.get('invitation/sitemanager/download',{alert:false})
                 if(this.uri!=''){
-                    const res = download(baseUri+'/'+this.uri)
+                    const res = downloads(baseUri+'/'+this.uri)
                     this.statusk = 0
                 }
 			}else{
@@ -227,10 +248,10 @@ export default {
 			}
 		},
 		async download(){
-			this.statusk = 1
 			if(this.timer!=''){
 				clearInterval(this.timer)
 			}
+			this.statusk = 1
 			try{
                 let mes = await this.$request.post('invitation/sitemanager/download',{dateLap:this.table_form.dateLap})
                 this.$message.success(mes);
@@ -269,6 +290,7 @@ export default {
             this.rankData = rows
         },
         async add(){
+            this.peopleCount1 = 0;
             this.form = {}
             this.getType()
             this.rankData = []

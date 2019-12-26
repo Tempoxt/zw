@@ -15,6 +15,9 @@
                 <el-form ref="form" :model="form" label-width="70px" :rules="rules">
 					<el-row :gutter="20">
 						<el-col :span="16" :offset="4">
+							<form-render :type="`input`" prop="programOrder" :field="{name:'节目顺序'}" v-model="form.programOrder"/>
+						</el-col>
+						<el-col :span="16" :offset="4">
 							<form-render :type="`input`" prop="programName" :field="{name:'节目名称'}" v-model="form.programName"/>
 						</el-col>
 						<el-col :span="16" :offset="4">
@@ -213,7 +216,16 @@ export default {
 				audienceMaxPoint: 6,
 				isAudienceDeprtPoint: false,
             }
-        }
+		}
+        var checkNumber = (rule, value, callback)=>{
+			if(value==undefined){
+				callback();
+			}else if (!(/^[0-9|\s]*$/.test(value))) {
+				callback(new Error('请输入正整数'));
+			}else{
+				callback();
+			}
+		}
 		return {
 			loading: true,
 			api_resource,
@@ -225,8 +237,8 @@ export default {
                 programName:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
 				],
-				department:[
-                    { required: true, message: '请选择', trigger: ['blur','change'] },
+				programOrder:[
+                    { validator: checkNumber, trigger: 'blur' }
 				],
 			},
             rules1:{
