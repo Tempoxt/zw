@@ -230,7 +230,7 @@ export default {
         var checkNumber2 = (rule, value, callback)=>{
 			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^[0-9]*[0-9][0-9]*$/.test(value))) {
+			}else if (!(/^[1-9]\d*$/.test(value))) {
 				callback(new Error('请输入正整数'));
 			}else{
 				callback();
@@ -367,7 +367,7 @@ export default {
         checkNumber1(rule, value, callback){
 			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^[0-9]*[0-9][0-9]*$/.test(value))) {
+			}else if (!(/^[1-9]\d*$/.test(value))) {
 				callback(new Error('请输入正整数'));
 			}else{
 				callback();
