@@ -2,7 +2,7 @@
 	<div class="dashboard" >
 		<el-tabs v-model="activeName">
 			<el-tab-pane label="工作台" name="workbench">
-				<div class="outside">
+				<div class="outside" :style="`height:${height}px`" ref="outside">
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 						<el-row style="padding-bottom:30px;">
 							<el-col :span="12" v-if="infoData1.length!=0">
@@ -38,6 +38,7 @@ export default {
 		infoData2:[],
 		infoData3:[],
 		infoData4:[],
+		height:800
       };
     },
 	components:{
@@ -51,7 +52,10 @@ export default {
 		this.infoData2 = await this.$request.get('salary/unsignworksalarylist');
 		this.infoData4 = await this.$request.get('salary/salarynosign');
 		this.infoData3 = await this.$request.get('salary/unsubmitdutyworksalary');
-    }
+	},
+	mounted(){
+		this.height = document.body.clientHeight-149
+	}
   };
 </script>
 <style lang="scss">
