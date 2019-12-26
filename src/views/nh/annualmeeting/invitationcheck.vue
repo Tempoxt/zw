@@ -123,11 +123,11 @@ export default {
                 ],
 			},
 			template:{
-				status(row,column){
-					if(column.status=='已确认'){
-						return <el-tag size="mini" type="success">{column.status}</el-tag>
+				STATUS(row,column){
+					if(column.STATUS=='已确认'){
+						return <el-tag size="mini" type="success">{column.STATUS}</el-tag>
 					}else{
-						return <span>{column.status}</span>
+						return <el-tag size="mini" type="warning">{column.STATUS}</el-tag>
 					}
 				},
 				arrivestatus(row,column){
