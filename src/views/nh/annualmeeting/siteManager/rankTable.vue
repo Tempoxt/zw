@@ -10,20 +10,21 @@
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
-            width="750px"
+            width="800px"
             >
-            <div style="width:710px;margin:0 auto">
-                <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+            <div style="margin:0 auto">
+                <el-form ref="form" :model="form" label-width="55px" :rules="rules">
                     <el-row>
-                        <el-col :span="12">
-                            <form-render :type="`select`" prop="staffType" :field="{name:'类型',options:typeData}" v-model="form.staffType" :disabled="!isInsert"/>
+                        <el-col :span="10">
+                            <form-render :type="`select`" prop="staffTypeId" :field="{name:'类型',options:typeData}" v-model="form.staffTypeId"/>
                         </el-col>
-                        <el-col :span="12">
-                            <form-render :type="`select`" prop="deckCode" :field="{name:'类型',options:deckData}" v-model="form.deckCode" :disabled="!isInsert"/>
+                        <el-col :span="10" :offset="3">
+                            <form-render :type="`select`" prop="deckCode" :field="{name:'桌号',options:deckData}" v-model="form.deckCode" filterable/>
                         </el-col>
                     </el-row>
+                    <el-divider></el-divider>
                     <el-row :gutter="20">
-                        <!-- <el-col :span="24">
+                        <el-col :span="24" class="transfer">
                             <el-transfer
                                 style="text-align: left; display: inline-block"
                                 v-model="checked"
@@ -33,33 +34,30 @@
                                     key: 'id',
                                 }"
                                 :format="{
-                                    noChecked: '${total}',
-                                    hasChecked: '${checked}/${total}'
+                                    noChecked: '',
+                                    hasChecked: ''
                                 }"
                                 :data="rankData"
                                 :filter-method="filterMethod"
+                                @left-check-change = "leftCheckChange"
+                                @change = "handleChange"
                                 >
-                                <span slot-scope="{ option }">{{ option.employeeCode }}  {{ option.chineseName }} {{ option.department }} </span>
+                                <span slot-scope="{ option }">{{ option.employeeCode }}  {{ option.chineseName }} &nbsp;&nbsp;{{ option.peopleCount }} 人</span>
                                 <div slot="right-footer" class="transfer-footer">
-                                    <span>房号</span>
-                                    <span>{{data.roomName}}</span>
-                                    <span>{{data.totalBeds}}</span>
-                                    <span>-</span>
-                                    <span>{{data.totalBeds-(data.totalBeds - checked.length)}} </span>
-                                    <div style="color:red;font-size:12px" v-if="checked.length>data.totalBeds">超出床位数</div>
-
+                                    <span>已分配</span>
+                                    <span>10 - {{peopleCount1}}</span>
+                                    <div style="margin-left:8px;color:red;font-size:12px" v-if="peopleCount1>10">超出坐席数</div>
                                 </div>
-                                <el-button class="transfer-footer" slot="titles" size="small">操作</el-button>
                             </el-transfer>
-                        </el-col> -->
+                        </el-col>
                     </el-row>
                 </el-form>
             </div>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <!-- <el-button type="primary" @click="handleFormSubmit" :disabled="checked.length>data.totalBeds">确 定</el-button> -->
-                <el-button type="primary" @click="handleFormSubmit" >确 定</el-button>
+                <el-button type="primary" @click="handleFormSubmit" :disabled="peopleCount1>10">确 定</el-button>
+                <!-- <el-button type="primary" @click="handleFormSubmit" >确 定</el-button> -->
             </div>
         </el-dialog>
 
@@ -96,6 +94,9 @@
             <el-table-column type="index" :index="indexMethod"/>
             <each-table-column :table_field="table_field" :template="template"/>
         </el-table>
+        <div v-if="this.url=='invitation/sitemanager/rank'" style="margin:10px 0 0 10px;">
+            <span>总到场：{{total_sign}}&nbsp;&nbsp;&nbsp;已到场：{{early_sign}}&nbsp;&nbsp;&nbsp;未到场：{{wait_sign}}</span>
+        </div>
         <table-pagination 
             :total="table_form.total" 
             :pagesize.sync="table_form.pagesize"
@@ -123,10 +124,10 @@ export default {
             form:{},
             api_resource: api_common.resource(this.url),
             queryDialogFormVisible:true,
-            table_topHeight:280,
+            table_topHeight:300,
             dialogFormVisible:false,
             rules:{
-                type_id:[
+                staffTypeId:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
                 deckCode:[
@@ -153,7 +154,16 @@ export default {
             alRank:[],
             deckData:[],
             typeData:[],
-            rankData:[]
+            rankData:[],
+            total_sign:'',
+            wait_sign:'',
+            early_sign:'',
+            al:'0',
+            ai:'0',
+            peopleCount:[],
+            allRank:[],
+            all:[],
+            peopleCount1:0
         };
     },
     watch:{
@@ -163,18 +173,45 @@ export default {
         },
         url(){
             this.api_resource = api_common.resource(this.url)
-			delete this.table_form.keyword
+            delete this.table_form.keyword
+            delete this.table_form.sortname
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
             this.fetchMenu()
-        }
-    },
-    computed:{
-        // disabled(){
-            
-        // }
+        },
+        'form.staffTypeId'(){
+            if(this.form.staffTypeId!=''&&this.form.staffTypeId!=null&&this.form.deckCode!=''&&this.form.deckCode!=null){
+                this.getRankData()
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate()
+                })
+            }
+        },
+        'form.deckCode'(){
+            if(this.form.staffTypeId!=''&&this.form.staffTypeId!=null&&this.form.deckCode!=''&&this.form.deckCode!=null){
+                this.getRankData()
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate()
+                })
+            }
+        },
     },
     methods: {
+        handleChange(value, direction, movedKeys) {
+            this.all = []
+            if(this.checked!=[]){
+                value.concat(this.checked)
+            }
+            value.forEach(o=>{
+                let curr = this.rankData.filter(k=>k.id==o)
+                this.all.push(curr[0])
+            })
+            let peopleCount = this.all.map(o=>o.peopleCount);
+            this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
+        },
+        leftCheckChange(){
+
+        },
 		filterMethod(query, item){
 			return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
 		},
@@ -214,46 +251,64 @@ export default {
 			this.fetchTableData()
 		},
 		async getType(){
- 			this.typeData = (await this.$request.get('invitation/sitemanager/siteset/stafftypelist')).map(o=>{return {label:o.staffTypeDesc,value:o.staffType}})
-		},
-        async add(){
-            // this.getType()
-			// let { rows } = await this.$request.get('dormitory/checkinemp',{params:{dormType:1}})
-			// let { rows : rows2 } = await this.$request.get('dormitory/alreadycheckinemp',{params:{roomId:8}})
-			// rows2.forEach(o=>o.disabled = true)
-			// this.checked = rows2.map(o=>o.id)
-			// this.alRank = rows2
-			// rows = rows.concat(rows2)
-			// this.distributionData = rows
-			// this.dialogLoading = false
-            // this.dialogFormVisible = true
+            this.typeData = (await this.$request.get('invitation/departdraw/stafftypelist')).map(o=>{return {label:o.staffTypeTitle,value:o.staffTypeId}})
+            this.deckData = (await this.$request.get('invitation/departdraw/reservedtable')).map(o=>{return {label:o.deckCodeDesc,value:o.deckCode}})
         },
-        // async edit(){
-        //     this.getType()
-        //     let row = this.table_selectedRows[0];
-        //     this.form = (await api_resource.find(row.id))[0]
-        //     this.dialogFormVisible = true
-        // },
+        async getRankData(){
+            let rows  = await this.$request.get('invitation/departdraw/getstaffbytype',{params:{staffTypeId:this.form.staffTypeId}})
+            this.allRank = rows
+			let rows2 = await this.$request.get('invitation/departdraw/getstaffbytable',{params:{deckCode:this.form.deckCode}})
+			rows2.forEach(o=>o.disabled = true)
+            this.checked = rows2.map(o=>o.id)
+            if(rows2.length!=0){
+                this.peopleCount = rows2.map(o=>o.peopleCount)
+                this.peopleCount1 = this.peopleCount.reduce((pre,next)=>pre+next)
+            }
+			this.alRank = rows2
+			rows = rows.concat(rows2)
+            this.rankData = rows
+        },
+        async add(){
+            this.form = {}
+            this.getType()
+            this.rankData = []
+            this.dialogFormVisible = true
+        },
+        async edit(){
+            this.rankData = []
+            let row = this.table_selectedRows[0];
+            this.getType()
+            this.form = {
+                staffTypeId: row.deckType,
+                deckCode: row.deckCodeNumber
+            }
+            this.getRankData()
+            this.$nextTick(()=>{
+                this.$refs['form'].clearValidate()
+            })
+            this.dialogFormVisible = true
+        },
         async handleFormSubmit(){
             await this.form_validate()
+            this.form.ids = this.checked.filter(id=>{
+				return  !this.alRank.map(o=>o.id).includes(id)
+			}).join(',')
             let form = Object.assign({},this.form)
-            if(this.dialogStatus=='insert'){
-                let mess = await this.api_resource.create(form)
-                this.$message.success(mess);
-                this.fetch()
-                this.dialogFormVisible = false
-            }else{
-                await this.api_resource.update(form.id,form)
-                this.fetch()
-                this.dialogFormVisible = false
-            }
+            let mess = await this.$request.post('invitation/departdraw/reserved',form)
+            this.$message.success(mess);
+            this.fetch()
+            this.dialogFormVisible = false
         },
         async fetchTableData() {
+            this.table_topHeight = this.url=='invitation/sitemanager/rank'?300:280
             this.table_loading = true;
             this.table_form.org_id  = this.org_id
-            const {rows , total }= await this.api_resource.get(this.table_form);
+            const {rows , total ,total_sign,wait_sign,early_sign }= await this.api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
+            this.total_sign = total_sign
+            this.wait_sign = wait_sign
+            this.early_sign = early_sign
             setTimeout(() => {
                 this.table_loading = false;
             }, 300);
@@ -272,7 +327,12 @@ export default {
     },
 };
 </script>
-
+<style>
+.transfer .el-transfer-panel .el-transfer-panel__header .el-checkbox .el-checkbox__label span{
+    color: transparent;
+    display: none;
+}
+</style>
 <style lang="scss" scoped>
 .scroll {
   height: calc(100%);
@@ -281,5 +341,24 @@ export default {
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
+}
+.transfer-footer {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    span {
+        padding-left: 6px;
+    }
+}
+.public-dialog {
+    /deep/ .el-transfer-panel {
+        width: 330px;
+    }
+    /deep/ .el-transfer-panel__body {
+        height: 370px;
+    }
+    /deep/ .el-transfer-panel__list.is-filterable {
+        height: 320px !important;
+    }
 }
 </style>

@@ -63,9 +63,10 @@ export default {
         async view_activeName(){
             this.filterText = ''
             if(this.view_activeName=='员工排位'){
+                this.orgid = 0
                 this.data2 = await this.$request.get('invitation/tablelist?page_tag=1');
             }else{
-                this.orgid = ''
+                this.orgid = 0
                 this.data2 = await this.$request.get('invitation/tablelist?page_tag=2');
             }
             let defaultId = this.data2[0].deckCode
