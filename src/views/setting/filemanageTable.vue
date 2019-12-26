@@ -15,8 +15,11 @@
 		<div>
 			<el-form ref="form" :model="form" label-width="100px" :rules="rule">
 				<el-row :gutter="20">
-					<el-col :span="22">
-						<form-render :type="`depart`" prop="department" :field="{name:'部门编号',disable:true}" v-model="form.department" :disabled="!isInsert"/>
+					<el-col :span="22" v-if="isInsert">
+						<form-render :type="`depart`" prop="department" :field="{name:'归属部门'}" v-model="form.department"/>
+					</el-col>
+					<el-col :span="22" v-if="!isInsert">
+						<form-render :type="`depart`" prop="department" :field="{name:'归属部门',disable:true}" v-model="form.department" :disabled="!isInsert"/>
 					</el-col>
 					<el-col :span="22">
 						<form-render :type="`select`" prop="file_suffix" :field="{name:'文件后缀',options:[
