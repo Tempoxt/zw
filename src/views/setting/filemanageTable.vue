@@ -29,6 +29,9 @@
 							},{
 								value: '.xlsx',
 								label: 'xlsx'
+							},{
+								value: '.xls',
+								label: 'xls'
 							}
 						]}" v-model="form.file_suffix"/>
 					</el-col>
