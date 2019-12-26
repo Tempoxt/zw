@@ -63,9 +63,12 @@ export default {
 		async fetchData(){
 			this.data2 = [(await api_common.resource('org/branchdepartment').get({id:1}))];
 		},
-		findDataName() {
+		async findDataName() {
 			if (this.data === undefined) {
 				return;
+			}
+			if(this.data2.length==0){
+				this.data2 = [(await api_common.resource('org/branchdepartment').get({id:1}))];
 			}
 			let orgid = this.data;
 			let info = {};
