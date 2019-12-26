@@ -5,49 +5,6 @@
 	@query="querySubmit"
   >
 
-  	<el-dialog
-		:title="dialogStatus==='insert'?'添加':'编辑'"
-		:visible.sync="dialogFormVisible"
-		class="public-dialog"
-		v-el-drag-dialog
-		width="800px"
-    	>
-		<div>
-			<el-form ref="form" :model="form" label-width="100px" :rules="rule">
-				<el-row :gutter="20">
-					<el-col :span="22">
-						<form-render :type="`depart`" prop="department" :field="{name:'部门编号'}" v-model="form.department"/>
-					</el-col>
-					<el-col :span="22">
-						<form-render :type="`select`" prop="file_suffix" :field="{name:'文件后缀',options:[
-							{
-								value: '.pdf',
-								label: 'pdf'
-							},{
-								value: '.xlsx',
-								label: 'xlsx'
-							}
-						]}" v-model="form.file_suffix"/>
-					</el-col>
-					<el-col :span="22">
-						<form-render :type="`input`" prop="fileName" :field="{name:'文件名'}" v-model="form.fileName"/>
-					</el-col>
-					<el-col :span="22">
-						<form-render :type="`input`" prop="menu" :field="{name:'文件目录'}" v-model="form.menu"/>
-					</el-col>
-					<el-col :span="22">
-						<form-render :type="`input`" prop="barcode" :field="{name:'条码'}" v-model="form.barcode"/>
-					</el-col>
-				</el-row>
-			</el-form>
-		</div>
-
-		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
-		</div>
-    </el-dialog>
-
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -95,58 +52,13 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{
-				department:''
-			},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
-			rule:{
-				department:[
-					{ required: true, message: '请选择', trigger: ['blur','change'] },
-				],
-				file_suffix:[
-					{ required: true, message: '请选择', trigger: ['blur','change'] },
-				],
-				fileName:[
-					{ required: true, message: '请输入', trigger: ['blur','change'] },
-				],
-				menu:[
-					{ required: true, message: '请输入', trigger: ['blur','change'] },
-				],
-				barcode:[
-					{ required: true, message: '请输入', trigger: ['blur','change'] },
-				],
-			},
 		};
 	},
 	methods: {
-		add(){
-			this.form = {}
-			this.form = {
-				department:''
-			}
-			this.$nextTick(()=>{
-				this.$refs['form'].clearValidate()
-			})
-			this.dialogFormVisible = true
-		},
-		async edit(){
-			let row = this.table_selectedRows[0]
-			this.form = (await api_resource.find(row.id))[0]
-			this.dialogFormVisible = true;
-		},
-		async delete(){
-			let rows = this.table_selectedRows.map(row=>row.id)
-			try{
-				let mes = await this.$request.get('removefiles/fileBluk',{params:{ids:rows.join(',')}})
-				this.$message.success(mes)
-				this.fetchTableData()
-			}catch(e){
-
-			}
-		},
 		async fetchTableData() {
 			this.table_loading = true;
 			const {rows , total }= await api_resource.get(this.table_form);

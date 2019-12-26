@@ -1,6 +1,6 @@
 <template>
      <el-form-item :label="field.name" v-bind="$parent.$attrs"  v-on="$parent.$listeners">
-        <el-popover ref="popover" placement="bottom" width="300" trigger="click" v-model="visible" transition="el-zoom-in-top">
+        <el-popover ref="popover" placement="bottom" width="300" trigger="click" v-model="visible" transition="el-zoom-in-top" :disabled="field.disable&&field.disable==true">
 			<el-input placeholder="搜索部门" class="input" v-model="filterText"></el-input>
 			<el-scrollbar ref="scrollContainer" class="scroll-container" >
 				<el-tree
