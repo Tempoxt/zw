@@ -124,10 +124,5 @@ export default {
 	}
 };
 </script>
-<style>
-	.vote .el-form-item__label{
-		color:#A3AFB7
-	}
-</style>
 
 

@@ -47,7 +47,7 @@
             v-el-drag-dialog
 		    width="800px"
             >
-           	<div>
+           	<div class="setRule">
                 <el-form ref="form1" :model="form1" label-width="120px" :rules="rules1">
 					<el-row :gutter="20">
 						<el-col :span="24"  style="border-bottom:1px solid #E4E4E4">
@@ -87,7 +87,7 @@
 								</el-col>
 							</el-row>
 						</el-col>
-						<p style="color:#A3AFB7;font-size:12px;margin:0 0 10px 53px"> <span>评委打分</span> </p>
+						<p style="color:#A3AFB7;font-size:12px;margin:0 0 10px 70px"> <span>评委打分</span> </p>
 						<el-col :span="24">
 							<form-render :type="`inputSuffix`" suffix="%" :field="{name:'评委打分占比'}" v-model="form1.juryRate" style="width:40%!important"/>
 						</el-col>
@@ -359,7 +359,7 @@ export default {
 };
 </script>
 <style>
-	.vote .el-form-item__label{
+	.setRule .vote .el-form-item__label{
 		color:#A3AFB7
 	}
 </style>

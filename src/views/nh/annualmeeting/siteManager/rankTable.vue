@@ -16,10 +16,10 @@
                 <el-form ref="form" :model="form" label-width="55px" :rules="rules">
                     <el-row>
                         <el-col :span="10">
-                            <form-render :type="`select`" prop="staffTypeId" :field="{name:'类型',options:typeData}" v-model="form.staffTypeId"/>
+                            <form-render :type="`select`" prop="staffTypeId" :field="{name:'类型',options:typeData}" v-model="form.staffTypeId" :disabled="!isInsert"/>
                         </el-col>
                         <el-col :span="10" :offset="3">
-                            <form-render :type="`select`" prop="deckCode" :field="{name:'桌号',options:deckData}" v-model="form.deckCode" filterable/>
+                            <form-render :type="`select`" prop="deckCode" :field="{name:'桌号',options:deckData}" v-model="form.deckCode" filterable :disabled="!isInsert"/>
                         </el-col>
                     </el-row>
                     <el-divider></el-divider>
@@ -40,6 +40,7 @@
                                 :data="rankData"
                                 :filter-method="filterMethod"
                                 @change = "handleChange"
+                                ref="rankTransfer"
                                 >
                                 <span slot-scope="{ option }">{{ option.employeeCode }}  {{ option.chineseName }} &nbsp;&nbsp;{{ option.peopleCount }} 人</span>
                                 <div slot="right-footer" class="transfer-footer">
@@ -159,7 +160,7 @@ export default {
             al:'0',
             ai:'0',
             peopleCount:[],
-            allRank:[],
+            noRank:[],
             all:[],
             peopleCount1:0,
             deckCount:10
@@ -179,16 +180,19 @@ export default {
             this.fetchMenu()
         },
         'form.staffTypeId'(){
-            if(this.form.staffTypeId!=''&&this.form.staffTypeId!=null&&this.form.deckCode!=''&&this.form.deckCode!=null){
-                this.getRankData()
+            if(this.form.staffTypeId!=''&&this.form.staffTypeId!=null){
+                this.alRank = []
+                this.getLeft()
                 this.$nextTick(()=>{
                     this.$refs['form'].clearValidate()
                 })
             }
         },
         'form.deckCode'(){
-            if(this.form.staffTypeId!=''&&this.form.staffTypeId!=null&&this.form.deckCode!=''&&this.form.deckCode!=null){
-                this.getRankData()
+            if(this.form.deckCode!=''&&this.form.deckCode!=null){
+                this.alRank = []
+                this.getLeft()
+                this.getRight()
                 this.$nextTick(()=>{
                     this.$refs['form'].clearValidate()
                 })
@@ -203,16 +207,37 @@ export default {
             r.onload = function (){if(f)f.call(null,r.result)}
         },
         handleChange(value, direction, movedKeys) {
-            this.all = []
-            if(this.checked!=[]){
-                value.concat(this.checked)
+            if(direction=='right'){
+                this.all = []
+                if(this.checked!=[]){
+                    value.concat(this.checked)
+                }
+                value.forEach(o=>{
+                    let curr = this.rankData.filter(k=>k.id==o)
+                    this.all.push(curr[0])
+                })
+                let obj1 = {}
+                this.all = this.all.reduce((item, next) => {
+                    obj1[next.id] ? '' : obj1[next.id] = true && item.push(next)
+                        return item
+                }, [])
+                this.alRank = this.all
+            }else{
+                var a = movedKeys.map(o=>o)
+                this.alRank.forEach((item, index) => {
+                    if(a.indexOf(item.id)!==-1){
+                        delete this.alRank[index]
+                    }
+                })
+                this.alRank = this.alRank.filter(o=>o!=undefined)
             }
-            value.forEach(o=>{
-                let curr = this.rankData.filter(k=>k.id==o)
-                this.all.push(curr[0])
-            })
-            let peopleCount = this.all.map(o=>o.peopleCount);
-            this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
+            this.checked = this.alRank.map(o=>o.id)
+            let peopleCount = this.alRank.map(o=>o.peopleCount);
+            if(this.alRank.length!=0){
+                this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
+            }else{
+                this.peopleCount1 = 0
+            }
         },
 		filterMethod(query, item){
 			return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
@@ -220,21 +245,6 @@ export default {
         async downloadDrawList(){
             let drawlist = await this.$request.post('invitation/departdraw/drawlist',{dateLap:this.table_form.dateLap})
             downloads(baseUri+'/'+drawlist)
-            // try{
-                
-            //     // await this.$request.get('invitation/departdraw/stafftypelist')
-            //     // downloads()
-            //     // const { data,name,contentType} = await this.$request.post('invitation/departdraw/drawlist',{
-            //     //     dateLap:this.table_form.dateLap
-            //     // },{ responseType:'arraybuffer',alert:false})
-            //     this.$message.success('下载成功');
-            //     // downloads(data,'抽奖名单',contentType)
-            // }catch(err){
-            //     var that = this;
-			// 	that.ab2str(err.error.response.data,function(str){
-			// 		that.$message.error({ message: str ,duration:5000});
-			// 	});
-            // }
         },
         async getUrl(){
 			if(this.statusk!=0){
@@ -275,28 +285,40 @@ export default {
             this.typeData = (await this.$request.get('invitation/departdraw/stafftypelist')).map(o=>{return {label:o.staffTypeTitle,value:o.staffTypeId}})
             this.deckData = (await this.$request.get('invitation/departdraw/reservedtable')).map(o=>{return {label:o.deckCodeDesc,value:o.deckCode}})
         },
-        async getRankData(){
-            let rows  = await this.$request.get('invitation/departdraw/getstaffbytype',{params:{staffTypeId:this.form.staffTypeId}})
-            this.allRank = rows
-			let rows2 = await this.$request.get('invitation/departdraw/getstaffbytable',{params:{deckCode:this.form.deckCode}})
-			rows2.forEach(o=>o.disabled = true)
+        async getLeft(){
+            this.checked = []
+            var rows  = await this.$request.get('invitation/departdraw/getstaffbytype',{params:{staffTypeId:this.form.staffTypeId}})
+            this.noRank = rows
+            if(this.noRank!=[]){
+                rows = this.noRank.concat(this.alRank)
+                this.rankData = rows
+                let obj = {}
+                this.rankData = this.rankData.reduce((item, next) => {
+                    obj[next.id] ? '' : obj[next.id] = true && item.push(next)
+                        return item
+                }, [])
+            }
+        },
+        async getRight(){
+            var rows2 = await this.$request.get('invitation/departdraw/getstaffbytable',{params:{deckCode:this.form.deckCode}})
+            if(this.dialogStatus=='insert'){
+                rows2.forEach(o=>o.disabled = true)
+            }
             this.checked = rows2.map(o=>o.id)
             if(rows2.length!=0){
                 this.peopleCount = rows2.map(o=>o.peopleCount)
                 this.peopleCount1 = this.peopleCount.reduce((pre,next)=>pre+next)
             }
-			this.alRank = rows2
-			rows = rows.concat(rows2)
-            this.rankData = rows
-        },
-        async add(){
-            this.peopleCount1 = 0;
-            this.form = {}
-            this.getType()
-            this.rankData = []
-            this.dialogFormVisible = true
+            this.alRank = rows2
+            if(this.noRank!=[]){
+                this.rankData = this.noRank.concat(rows2)
+            }
         },
         async edit(){
+            if(this.$refs.rankTransfer){              
+                this.$refs.rankTransfer.$children["0"]._data.query = '';
+                this.$refs.rankTransfer.$children["3"]._data.query = '';
+            }
             this.rankData = []
             let row = this.table_selectedRows[0];
             this.getType()
@@ -304,17 +326,29 @@ export default {
                 staffTypeId: row.deckType,
                 deckCode: row.deckCodeNumber
             }
-            this.getRankData()
+            this.getLeft()
+            this.getRight()
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
             })
             this.dialogFormVisible = true
         },
+        async add(){
+            if(this.$refs.rankTransfer){              
+                this.$refs.rankTransfer.$children["0"]._data.query = '';
+                this.$refs.rankTransfer.$children["3"]._data.query = '';
+            }
+            this.peopleCount1 = 0;
+            this.form = {}
+            this.getType()
+            this.rankData = []
+            this.noRank = []
+            this.alRank = []
+            this.dialogFormVisible = true
+        },
         async handleFormSubmit(){
             await this.form_validate()
-            this.form.ids = this.checked.filter(id=>{
-				return  !this.alRank.map(o=>o.id).includes(id)
-			}).join(',')
+            this.form.ids = this.checked.join(',')
             let form = Object.assign({},this.form)
             let mess = await this.$request.post('invitation/departdraw/reserved',form)
             this.$message.success(mess);
@@ -377,7 +411,7 @@ export default {
         width: 330px;
     }
     /deep/ .el-transfer-panel__body {
-        height: 370px;
+        height: 390px;
     }
     /deep/ .el-transfer-panel__list.is-filterable {
         height: 320px !important;
