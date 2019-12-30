@@ -494,7 +494,7 @@
                                     >
                                     </el-table-column>
                                     <el-table-column
-                                        prop="eduExp"
+                                        prop="enduExp"
                                         label="学校">
                                     </el-table-column>
                                     <el-table-column
@@ -502,18 +502,18 @@
                                         label="所学专业">
                                     </el-table-column>
                                     <el-table-column
-                                        prop="eduLevel__name"
+                                        prop="enduPeriod"
                                         label="教育阶段">
                                     </el-table-column>
                                     <el-table-column
-                                        prop="eduStartTime"
+                                        prop="enduStartTime"
                                         label="起止时间" width="180">
                                         <template slot-scope="scope">
-                                            <span :title="scope.row.eduStartTime+'-'+scope.row.eduEndTime">{{scope.row.eduStartTime}} - {{scope.row.eduEndTime}}</span>
+                                            <span :title="scope.row.enduStartTime+'-'+scope.row.enduTime">{{scope.row.enduStartTime}} - {{scope.row.enduTime}}</span>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
-                                        prop="eduCardName"
+                                        prop="enduCardName"
                                         label="证书名称">
                                     </el-table-column>
                                 </el-table>
@@ -733,7 +733,7 @@
                                 <span class="labelCon promp">&nbsp;</span>
                             </el-col>
                         </el-row>
-                        <el-row v-for="item in profileData.forwardBankRecords" :key="item.bankAccount">
+                        <el-row v-for="(item,index) in profileData.forwardBankRecords" :key="index">
                             <el-col :span="12">
                                 <span class="labelCon">银行：</span>
                                 <span class="labelCon promp">{{item.bank}}</span>
@@ -790,11 +790,11 @@
                     <el-row class="mb20" v-for="item in profileData.educationRecords" :key="item.id">
                         <el-col :span="12">
                             <span class="labelCon">学校：</span>
-                            <span class="labelCon promp">{{item.eduExp}}</span>
+                            <span class="labelCon promp">{{item.enduExp}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">起止时间：</span>
-                            <span class="labelCon promp">{{item.startEndTimeShow}}</span>
+                            <span class="labelCon promp">{{item.enduStartTime}} &nbsp;- &nbsp;{{item.enduTime}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">所学专业：</span>
@@ -802,11 +802,11 @@
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">证书名称：</span>
-                            <span class="labelCon promp">{{item.eduCardName}}</span>
+                            <span class="labelCon promp">{{item.enduCardName}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelCon">教育阶段：</span>
-                            <span class="labelCon promp">{{item.eduLevel__name}}</span>
+                            <span class="labelCon promp">{{item.enduPeriod}}</span>
                         </el-col>
                     </el-row>
                 </div>
@@ -978,13 +978,13 @@
                             <el-col :span="12">
                                 <el-row :gutter="0">
                                     <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'学校'}" v-model="education.eduExp"/>
+                                        <form-render :type="`input`" :field="{name:'学校'}" v-model="education.enduExp"/>
                                     </el-col>
                                     <el-col :span="24">
                                         <form-render :type="`input`" :field="{name:'所学专业'}" v-model="education.major"/>
                                     </el-col>
                                     <el-col :span="24">
-                                    <form-render :type="`select`" :field="{name:'教育阶段',options:eduType}" v-model="education.eduLevel"/>
+                                    <form-render :type="`select`" :field="{name:'教育阶段',options:eduType}" v-model="education.enduPeriod"/>
                                     </el-col>   
                                 </el-row>
                             </el-col>
@@ -994,7 +994,7 @@
                                         <el-form-item label="开始时间">
                                             <el-date-picker
                                                 :picker-options="pickerOptions1"
-                                                v-model="education.eduStartTime"
+                                                v-model="education.enduStartTime"
                                                 type="date"
                                                 format="yyyy-MM-dd"
                                                 value-format="yyyy-MM-dd"
@@ -1008,7 +1008,7 @@
                                         <el-form-item label="结束时间">
                                             <el-date-picker
                                                 :picker-options="pickerOptions2"
-                                                v-model="education.eduEndTime"
+                                                v-model="education.enduTime"
                                                 type="date"
                                                 format="yyyy-MM-dd"
                                                 value-format="yyyy-MM-dd"
@@ -1019,7 +1019,7 @@
                                         <!-- <form-render type="day" :field="{name:'结束时间'}" v-model="education.eduEndTime"/> -->
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render type="input" :field="{name:'证书名称'}" v-model="education.eduCardName"/>
+                                        <form-render type="input" :field="{name:'证书名称'}" v-model="education.enduCardName"/>
                                     </el-col>
                                 </el-row>
                             </el-col>
