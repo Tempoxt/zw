@@ -11,7 +11,11 @@
 			@action="handleAction"
 			:table_form.sync="table_form"
 			:table_column="table_field"
-		></table-header>
+		>
+			<div style="padding-left:10px">
+                <dateLap type="3" v-model="table_form.dateLap" @change="fetch" :disabled="true"/>
+            </div>
+		</table-header>
 		<el-table
 			ref="elTable"
 			@selection-change="handleChangeSelection"
@@ -42,6 +46,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("annualmeeting/winningrecord");
+import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
 	data() {
@@ -54,6 +59,10 @@ export default {
 		};
 	},
 	methods: {
+		fetch(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
 		async fetchTableData() {
 			this.table_loading = true;
 			const {rows , total }= await api_resource.get(this.table_form);
@@ -69,6 +78,7 @@ export default {
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
+		this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
 		this.fetchTableData();
 	}
 };

@@ -81,7 +81,7 @@ export default {
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
-		this.table_form.dateLap = dayjs().format('YYYY')
+		this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
 		this.fetchTableData();
 	}
 };

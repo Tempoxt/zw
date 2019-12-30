@@ -16,7 +16,7 @@
                 <el-form ref="form" :model="form" label-width="55px" :rules="rules">
                     <el-row>
                         <el-col :span="10">
-                            <form-render :type="`select`" prop="staffTypeId" :field="{name:'类型',options:typeData}" v-model="form.staffTypeId" :disabled="!isInsert"/>
+                            <form-render :type="`select`" prop="staffTypeId" :field="{name:'类型',options:typeData}" v-model="form.staffTypeId"/>
                         </el-col>
                         <el-col :span="10" :offset="3">
                             <form-render :type="`select`" prop="deckCode" :field="{name:'桌号',options:deckData}" v-model="form.deckCode" filterable :disabled="!isInsert"/>
@@ -183,6 +183,7 @@ export default {
             if(this.form.staffTypeId!=''&&this.form.staffTypeId!=null){
                 this.alRank = []
                 this.getLeft()
+                this.getRight()
                 this.$nextTick(()=>{
                     this.$refs['form'].clearValidate()
                 })
@@ -219,7 +220,7 @@ export default {
                 let obj1 = {}
                 this.all = this.all.reduce((item, next) => {
                     obj1[next.id] ? '' : obj1[next.id] = true && item.push(next)
-                        return item
+                    return item
                 }, [])
                 this.alRank = this.all
             }else{
@@ -233,11 +234,12 @@ export default {
             }
             this.checked = this.alRank.map(o=>o.id)
             let peopleCount = this.alRank.map(o=>o.peopleCount);
-            if(this.alRank.length!=0){
-                this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
-            }else{
-                this.peopleCount1 = 0
-            }
+            this.peopleCount1 = this.alRank.length!=0 ? peopleCount.reduce((pre,next)=>pre+next) : 0
+            // if(this.alRank.length!=0){
+            //     this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
+            // }else{
+            //     this.peopleCount1 = 0
+            // }
         },
 		filterMethod(query, item){
 			return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
@@ -287,31 +289,35 @@ export default {
         },
         async getLeft(){
             this.checked = []
-            var rows  = await this.$request.get('invitation/departdraw/getstaffbytype',{params:{staffTypeId:this.form.staffTypeId}})
-            this.noRank = rows
+            if(this.form.staffTypeId!=''&&this.form.staffTypeId!=undefined){
+                var rows  = await this.$request.get('invitation/departdraw/getstaffbytype',{params:{staffTypeId:this.form.staffTypeId}})
+                this.noRank = rows
+            }
             if(this.noRank!=[]){
                 rows = this.noRank.concat(this.alRank)
                 this.rankData = rows
                 let obj = {}
                 this.rankData = this.rankData.reduce((item, next) => {
                     obj[next.id] ? '' : obj[next.id] = true && item.push(next)
-                        return item
+                    return item
                 }, [])
             }
         },
         async getRight(){
-            var rows2 = await this.$request.get('invitation/departdraw/getstaffbytable',{params:{deckCode:this.form.deckCode}})
-            if(this.dialogStatus=='insert'){
-                rows2.forEach(o=>o.disabled = true)
-            }
-            this.checked = rows2.map(o=>o.id)
-            if(rows2.length!=0){
-                this.peopleCount = rows2.map(o=>o.peopleCount)
-                this.peopleCount1 = this.peopleCount.reduce((pre,next)=>pre+next)
-            }
-            this.alRank = rows2
-            if(this.noRank!=[]){
-                this.rankData = this.noRank.concat(rows2)
+            if(this.form.deckCode!=''&&this.form.deckCode!=undefined){
+                var rows2 = await this.$request.get('invitation/departdraw/getstaffbytable',{params:{deckCode:this.form.deckCode}})
+                if(this.dialogStatus=='insert'){
+                    rows2.forEach(o=>o.disabled = true)
+                }
+                this.checked = rows2.map(o=>o.id)
+                if(rows2.length!=0){
+                    this.peopleCount = rows2.map(o=>o.peopleCount)
+                    this.peopleCount1 = this.peopleCount.reduce((pre,next)=>pre+next)
+                }
+                this.alRank = rows2
+                if(this.noRank!=[]){
+                    this.rankData = this.noRank.concat(rows2)
+                }
             }
         },
         async edit(){
@@ -323,10 +329,12 @@ export default {
             let row = this.table_selectedRows[0];
             this.getType()
             this.form = {
-                staffTypeId: row.deckType,
+                staffTypeId: row.staffType,
                 deckCode: row.deckCodeNumber
             }
-            this.getLeft()
+            if(this.form.staffTypeId!=''){
+                this.getLeft()
+            }
             this.getRight()
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
@@ -378,7 +386,7 @@ export default {
 		}
     },
     async created() {
-		this.table_form.dateLap = dayjs().format('YYYY')
+		this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
 		await this.fetchMenu()
     },
 };
