@@ -189,7 +189,11 @@ export default {
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
-		this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
+		if(new Date()<new Date('2020-01-01 00:00:00')){
+			this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
+		}else{
+			this.table_form.dateLap = dayjs().format('YYYY')
+		}
 		this.fetchTableData();
 	}
 };

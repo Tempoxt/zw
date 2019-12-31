@@ -201,12 +201,6 @@ export default {
         },
     },
     methods: {
-        ab2str(u,f) {
-            var b = new Blob([u]);
-            var r = new FileReader();
-            r.readAsText(b, 'utf-8');
-            r.onload = function (){if(f)f.call(null,r.result)}
-        },
         handleChange(value, direction, movedKeys) {
             if(direction=='right'){
                 this.all = []
@@ -235,11 +229,6 @@ export default {
             this.checked = this.alRank.map(o=>o.id)
             let peopleCount = this.alRank.map(o=>o.peopleCount);
             this.peopleCount1 = this.alRank.length!=0 ? peopleCount.reduce((pre,next)=>pre+next) : 0
-            // if(this.alRank.length!=0){
-            //     this.peopleCount1 = peopleCount.reduce((pre,next)=>pre+next)
-            // }else{
-            //     this.peopleCount1 = 0
-            // }
         },
 		filterMethod(query, item){
 			return (item.employeeCode+'').indexOf(query) > -1|| (item.chineseName+'').indexOf(query) > -1;
@@ -386,7 +375,11 @@ export default {
 		}
     },
     async created() {
-		this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
+		if(new Date()<new Date('2020-01-01 00:00:00')){
+			this.table_form.dateLap = dayjs().add(1,'year').format('YYYY')
+		}else{
+			this.table_form.dateLap = dayjs().format('YYYY')
+		}
 		await this.fetchMenu()
     },
 };
