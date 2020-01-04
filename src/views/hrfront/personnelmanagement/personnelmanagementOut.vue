@@ -224,7 +224,7 @@
                     </el-col>
                     <el-col :span="12">
                         <span class="labelCon">起止时间：</span>
-                        <span class="labelCon promp">{{item.startEndTimeShow}}</span>
+                        <span class="labelCon promp">{{item.enduStartTime}} &nbsp;- &nbsp;{{item.enduTime}}</span>
                     </el-col>
                     <el-col :span="12">
                         <span class="labelCon">所学专业：</span>

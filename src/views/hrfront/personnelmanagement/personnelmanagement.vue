@@ -1344,18 +1344,6 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-        contract_validate(){
-            return new Promise((resolve,reject)=>{
-                this.$refs.contract.validate((valid) => {
-                if(valid){
-                    resolve()
-                }else{
-                    reject()
-                    return false
-                }
-                })
-            })
-        },
         table_disable(row){
             return !row.lockstate&&row.contractStatus!='作废'&&row.contractTypeShow!='新签'
         },
@@ -1455,7 +1443,7 @@ export default {
             this.dialogContractFormVisible = true
         },
         async handleContractFormSubmit(){
-            await this.contract_validate()
+            await this.form_validate('contract')
             this.contract.emID = this.staffId;
             let contract = Object.assign({},this.contract)
             let row = this.selections[0];
