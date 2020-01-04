@@ -228,20 +228,8 @@ export default {
 			this.form1.dateLap = row.month
 			this.dialogForm1Visible = true 
 		},
-        form1_validate(){
-            return new Promise((resolve,reject)=>{
-                this.$refs.form1.validate((valid) => {
-                if(valid){
-                    resolve()
-                }else{
-                    reject()
-                    return false
-                }
-                })
-            })
-        },
 		async handleForm1Submit(){
-			await this.form1_validate()
+			await this.form_validate('form1')
 			let form1 = Object.assign({},this.form1)
 			var formData = new FormData();
 			Object.keys(form1).forEach(k=>{

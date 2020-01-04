@@ -182,5 +182,12 @@ export default [
         meta: {
             title: '工薪疑问单'
         }
+    },{
+        name: 'guaranteed',
+        component: () =>
+            import ('@/views/finance/salary/guaranteed'),
+        meta: {
+            title: '保底名单'
+        }
     },
 ]

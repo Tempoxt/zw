@@ -342,20 +342,8 @@ export default {
 			this.dialogFormVisible = false
 			this.fetchTableData()
 		},
-		form1_validate(form = 'form1'){
-			return new Promise((resolve,reject)=>{
-				this.$refs[form].validate((valid) => {
-				if(valid){
-					resolve()
-				}else{
-					reject()
-					return false
-				}
-				})
-			})
-		},
 		async handleForm1Submit(){
-			await this.form1_validate()
+			await this.form_validate('form1')
             let form = Object.assign({},this.form1)
             await this.$request.put('/commission/commissionSet/customer/update/'+form.id,form)
 			this.dialogForm1Visible = false

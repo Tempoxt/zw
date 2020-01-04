@@ -183,18 +183,6 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-		invioce_validate(){
-            return new Promise((resolve,reject)=>{
-                this.$refs.form2.validate((valid) => {
-                if(valid){
-                    resolve()
-                }else{
-                    reject()
-                    return false
-                }
-                })
-            })
-        },
 		changeStatus(val){
 			this.status = val
 			this.table_form.invoiceType = val
@@ -250,7 +238,7 @@ export default {
             this.fetchTableData()
 		},
 		async submitInvoice(){
-			await this.invioce_validate()
+			await this.form_validate('form2')
 			
             let form2 = Object.assign({},this.form2)
 			if(form2.invoiceType&&form2.invoiceCode!=''){

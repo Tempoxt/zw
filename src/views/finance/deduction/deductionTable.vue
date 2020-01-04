@@ -90,7 +90,7 @@
 					</el-col>
 				
 					<el-col :span="12">
-						<form-render :type="`select`" prop="program" :field="{name:'补扣项目',options:programList}" v-model="form.program" />
+						<form-render :type="`select`" prop="program" :field="{name:'补扣项目',options:programList1}" v-model="form.program" />
 					</el-col>
 					<el-col :span="12">
 						<form-render :type="`input`" prop="amount" :field="{name:'补扣金额'}" v-model="form.amount"/>
@@ -353,6 +353,23 @@ export default {
 			:
 			[]
 		},
+		programList1(){
+			return this.form.type 
+			? 
+			this.form.type  == 98?this.programList['补助'].map(o=>{
+				return {
+					label:o.selectname,
+					value:o.id
+				}
+			}):this.programList['扣款'].map(o=>{
+				return {
+					label:o.selectname,
+					value:o.id
+				}
+			})
+			:
+			[]
+		},
 		disabled2(){
 			if(this.form2.dateLap!==''&&this.form2.flag!==''){
 				if(this.form2.flag==1){
@@ -384,21 +401,15 @@ export default {
 		},
 		'form2.status'(){
 			this.form2.remark = ''
+		},
+		'form.type'(){
+			this.form.program = ''
+		},
+		'importForm.type'(){
+			this.importForm.program = ''
 		}
 	},
 	methods: {
-        importForm_validate(){
-            return new Promise((resolve,reject)=>{
-                this.$refs.importForm.validate((valid) => {
-                if(valid){
-                    resolve()
-                }else{
-                    reject()
-                    return false
-                }
-                })
-            })
-        },
 		downLoad(){
 			this.handleDownloadChange()
 			this.importDialog = false
@@ -414,7 +425,7 @@ export default {
 			this.importForm.the_file = file.raw
 		},
 		async handleImportFormSubmit(){
-			await this.importForm_validate()
+			await this.form_validate('importForm')
 			var formData = new FormData();
 			Object.keys(this.importForm).forEach(k=>{
 				formData.append(k,this.importForm[k])
@@ -434,7 +445,6 @@ export default {
 			
 		},
 		async import(){
-			
 			this.statusk = 1
 			this.importForm = {}
 			this.$nextTick(()=>{
@@ -553,14 +563,16 @@ export default {
 			})
 			this.dedulist = await api_common.getTag('deduction')
 		
-			this.programList = (await this.$request.get('/deduction/program')).map(o=>{
-				return {
-					label:o.selectname,
-					value:o.id
-				}
-			})
+			this.programList = (await this.$request.get('/deduction/program'))
+			// .map(o=>{
+			// 	return {
+			// 		label:o.selectname,
+			// 		value:o.id
+			// 	}
+			// })
 		},
 		async handleFormSubmit(){
+			console.log(this.form,'form')
             await this.form_validate()
 			if(this.isInsert){
 				let workcodeid = this.$refs.OrgSelect.getIdsResult()
