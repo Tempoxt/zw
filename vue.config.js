@@ -33,6 +33,7 @@ class HelloWorldPlugin {
   }
 }
 
+
 module.exports = {
   lintOnSave:false,
   productionSourceMap:false,
@@ -68,7 +69,7 @@ module.exports = {
           jQuery: 'jquery',
           'window.jQuery': 'jquery'
         }),
-        new HelloWorldPlugin({ setting: true })
+        new HelloWorldPlugin()
       ]
     }
     if (process.env.NODE_ENV === 'production') {
