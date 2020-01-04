@@ -214,6 +214,14 @@
 								:datas="leaveReaData"
 								:class="{'speech-mode':screenIndex=='9'}"
 								></singlehisto>
+								<el-select v-model="leaveRea" placeholder="请选择" class="absoSelect" @change="getleaveReaData()">
+									<el-option
+									v-for="item in leaveReason"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+									</el-option>
+								</el-select>
 								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
 							</el-col>
 							<el-col :span="12">
@@ -360,7 +368,20 @@
 				dateLap6:'',
 				dateLap7:'',
 				percentage:30,
-				payAdjust:[]
+				payAdjust:[],
+				leaveReason:[
+					{
+						value: '无',
+						label: '全部'
+					},{
+						value: '1',
+						label: '直接人员'
+					},{
+						value: '0',
+						label: '间接人员'
+					},
+				],
+				leaveRea:'无'
 			};
 		},
 		components:{
@@ -500,7 +521,7 @@
 				this.leaveEduData = await this.$request.get('/dataanalysis/outdutyedutionstat?dateLap='+this.dateLap3+'&org_id='+this.orgid);
 			},
 			async getleaveReaData(){
-				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4+'&org_id='+this.orgid);
+				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4+'&org_id='+this.orgid+'&main_filter='+this.leaveRea);
 			},
 			async getturnRate(){
 				this.turnRate = await this.$request.get('/dataanalysis/numberloseratiostat?org_id='+this.orgid);
@@ -694,6 +715,15 @@
 	.dateLap{
 		position: absolute;
 		top: 23px;
+	}
+	.absoSelect{
+		position: absolute;
+		top: 23px;
+		right: 240px;
+		width: 20%;
+		.el-input__inner{
+			border-radius: 0;
+		}
 	}
 	.relative{
 		position: relative;
