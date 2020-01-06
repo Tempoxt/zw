@@ -152,5 +152,19 @@ export default [{
         meta: {
             title: '仓库统计表'
         }
+    },{
+        name: 'departLedger',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/departLedger'),
+        meta: {
+            title: '部门台账'
+        }
+    },{
+        name: 'idleFixedAssets',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/idleAssets'),
+        meta: {
+            title: '闲置固定资产'
+        }
     },
  ]

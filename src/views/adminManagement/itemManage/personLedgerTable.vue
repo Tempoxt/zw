@@ -12,7 +12,7 @@
                         <el-col :span="6">
                             <p>名称: {{articleTitle}}</p>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="14">
                             <p>规格: {{articleSize}}</p>
                         </el-col>
                     </el-row>
