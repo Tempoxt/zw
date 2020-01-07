@@ -1088,7 +1088,7 @@
                 fixed="left"
             >
             </vxe-table-column>
-            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="40"/>
+            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
             <vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="80">
                 <template slot-scope="scope">
                     <div @click="openDrawer(scope.row)" style="color:#0BB2D4;cursor:pointer" v-html="scope.row.employeeCode"></div>

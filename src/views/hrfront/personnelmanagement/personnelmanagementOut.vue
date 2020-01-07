@@ -397,7 +397,7 @@
         class-name="table-column-disabled"
         :selectable="table_disable_selected"
       ></vxe-table-column>
-      <vxe-table-column type="index" :index="indexMethod" fixed />
+      <vxe-table-column type="index" :index="indexMethod" fixed width="80"/>
       <vxe-table-column
         field="employeeCode"
         sortable
