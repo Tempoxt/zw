@@ -25,6 +25,12 @@ import Fragment from 'vue-fragment'
 import VueAMap from 'vue-amap';
 Vue.use(Fragment.Plugin)
 // import '@assets/style/theme/test/index.css'
+
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
+Vue.use(VXETable)
+
 sync(store, router)
 Vue.use(iView)
 Vue.directive("elDragDialog",elDragDialog)

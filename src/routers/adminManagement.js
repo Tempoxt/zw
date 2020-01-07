@@ -124,6 +124,14 @@ export default [{
             title: '物品清单'
         }
     }, {
+    },{
+        name: 'purchaseRequest',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/purchaseRequest'),
+        meta: {
+            title: '物品请购'
+        }
+    }, {
         name: 'standardDose',
         component: () =>
             import ('@/views/adminManagement/itemManage/standardDose'),
