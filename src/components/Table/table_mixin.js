@@ -41,7 +41,12 @@ export default {
     },
     table_data:{
       handler(){
-        this.$refs.elTable&&this.$refs.elTable.doLayout()
+        this.$refs.elTable&&this.$refs.elTable.doLayout&&this.$refs.elTable.doLayout()
+        this.$nextTick(()=>{
+          this.$refs.elTable&&this.$refs.elTable.recalculate&&this.$refs.elTable.recalculate()
+          this.$refs.elTable&&this.$refs.elTable.refreshColumn&&this.$refs.elTable.refreshColumn()
+        })
+        
       },
       deep:true
     }

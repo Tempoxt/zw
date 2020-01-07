@@ -1064,37 +1064,44 @@
             <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
             </div>
         </table-header>
-        <el-table
+        <vxe-table
+            class="public-vxe-table"
             ref="elTable"
+            resizable
+            show-overflow
+            highlight-hover-row
             @selection-change="handleChangeSelection"
             :data="table_data"
             border
             style="width: 100%"
             v-loading="table_loading"
-            :header-cell-style="headerCellStyle"
+            :header-cell-style="headerStyle"
             :height="table_height"
-            @header-dragend="table_dragend"
+            @resizable-change="table_dragend"
             @sort-change="table_sort_change"
-            @cell-click="openDrawer"
-            :cell-style="cellStyle"
             >
-            <el-table-column 
+            <vxe-table-column 
                 type="selection" 
                 width="60" 
                 class-name="table-column-disabled"
                 :selectable="table_disable_selected"
-                fixed
+                fixed="left"
             >
-            </el-table-column>
-            <el-table-column type="index" :index="indexMethod" fixed/>
-            <el-table-column prop="employeeCode" sortable label="工号" fixed/>
-            <el-table-column prop="chineseName" label="姓名" fixed>
+            </vxe-table-column>
+            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="40"/>
+            <vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="80">
+                <template slot-scope="scope">
+                    <div @click="openDrawer(scope.row)" style="color:#0BB2D4;cursor:pointer" v-html="scope.row.employeeCode"></div>
+                </template>
+            </vxe-table-column>
+            <vxe-table-column field="chineseName" title="姓名" fixed="left" width="120">
                 <template slot-scope="scope">
                     <div v-html="scope.row.chineseName"></div>
                 </template>
-            </el-table-column>
-            <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/>
-        </el-table>
+            </vxe-table-column>
+            <vxe-table-column v-for="field in table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+            <!-- <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/> -->
+        </vxe-table>
 
         <div style="position:absolute;bottom:20px;left:35%;" v-if="maleCount&&femaleCount">男:{{maleCount}}人  &nbsp;&nbsp;&nbsp;  女:{{femaleCount}}人</div>
         <table-pagination 
@@ -1105,9 +1112,11 @@
             :table_config="table_config"
         />
     </ui-table>
+    
 </template>
 <script>
 import * as api_common from "@/api/common";
+const api_pagemanager = api_common.resource('pagemanager/field')
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hrm/v2/staff");
 import Device from '@/utils/zk_sdk/baseISSOnline.js'
@@ -1136,6 +1145,7 @@ export default {
         }
         return {
             baseUrl,
+            headerStyle:{background:'#F5FAFB',color:'#37474F'},
             width:'40%',
             height:200,
             openDrawers: false,
@@ -1344,6 +1354,24 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
+        table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+            console.log($rowIndex, column, columnIndex, $columnIndex, fixed, isHidden, '130')
+            let row = this.table_field.find(field=>field.showname===column.title)
+            console.log(row, '140')
+            var isEnd = false
+            this.table_field.forEach((item,i)=>{
+                if(item==row&&i==this.table_field.length-2){
+                isEnd = true
+                }
+            })
+            var newWidth = column.resizeWidth
+            row.width = newWidth
+            row.menuid = row.menuid_id
+            api_pagemanager.update(row.id,{
+                width:newWidth,
+                menuid:row.menuid_id
+            },{alert:false})
+        },
         table_disable(row){
             return !row.lockstate&&row.contractStatus!='作废'&&row.contractTypeShow!='新签'
         },
@@ -1351,6 +1379,7 @@ export default {
             return !row.lockstate
         },
         handleChangeSelect(val) {
+            console.log(val,'val')
             this.selections = val
         },
         handleEducationSelect(val) {
@@ -1518,22 +1547,22 @@ export default {
             this.activeName = "sixth"
             this.getDialog()
         },
-        cellStyle({row, column, rowIndex, columnIndex}){
-            if(column.label == '工号'){
-                return 'color:#0BB2D4;cursor:pointer'
-            }else{
-                return  ''
-            }
-        },
+        // cellStyle({row, column, rowIndex, columnIndex}){
+        //     if(column.label == '工号'){
+        //         return 'color:#0BB2D4;cursor:pointer'
+        //     }else{
+        //         return  ''
+        //     }
+        // },
         async openDrawer(row,column,cell,event){
             this.staffId = row.id;
-            if(row.employeeCode==event.target.innerText){
+            // if(row.employeeCode==event.target.innerText){
                 this.openDrawers = true
                 this.fetchProfileData()
                 this.connect = await api_common.resource('hrm/staff/contact').find(row.id)
                 this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
                 this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
-            }
+            // }
         },
         async tabClick(v){
             this.tab_label  = v.label

@@ -31,6 +31,27 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 Vue.use(VXETable)
 
+// import XEUtils from 'xe-utils'
+// import {
+//   VXETable,
+//   Column,
+//   Checkbox,
+//   Tooltip,
+//   Loading,
+//   Resize,
+//   Table
+// } from 'vxe-table'
+
+// [VXETable,
+//   Column,
+//   Checkbox,
+//   Tooltip,
+//   Loading,
+//   Resize,
+//   Table].forEach(c=>{
+//     Vue.use(c)
+//   })
+
 sync(store, router)
 Vue.use(iView)
 Vue.directive("elDragDialog",elDragDialog)
