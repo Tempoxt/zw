@@ -380,12 +380,13 @@
       class="public-vxe-table"
       resizable
       show-overflow
+      highlight-hover-row
       @select-change="handleChangeSelection"
       :data="table_data"
       border
       style="width: 100%"
       v-loading="table_loading"
-      :header-cell-style="headerStyle"
+      :header-cell-style="vxeHeaderStyle"
       :height="table_height"
       @resizable-change="table_dragend"
       @sort-change="table_sort_change"
@@ -446,7 +447,7 @@ export default {
   data() {
     return {
       loading: true,
-      headerStyle:{background:'#F5FAFB',color:'#37474F'},
+      vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
       baseUrl,
       form: {},
       api_resource,

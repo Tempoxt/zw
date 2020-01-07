@@ -1075,7 +1075,7 @@
             border
             style="width: 100%"
             v-loading="table_loading"
-            :header-cell-style="headerStyle"
+            :header-cell-style="vxeHeaderStyle"
             :height="table_height"
             @resizable-change="table_dragend"
             @sort-change="table_sort_change"
@@ -1145,7 +1145,7 @@ export default {
         }
         return {
             baseUrl,
-            headerStyle:{background:'#F5FAFB',color:'#37474F'},
+            vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
             width:'40%',
             height:200,
             openDrawers: false,
