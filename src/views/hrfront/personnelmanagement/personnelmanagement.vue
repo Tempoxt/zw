@@ -1070,6 +1070,7 @@
             resizable
             show-overflow
             highlight-hover-row
+            @select-all="handleChangeSelection"
             @select-change="handleChangeSelection"
             :data="table_data"
             border
@@ -1344,7 +1345,7 @@ export default {
         }
     },
     methods: {
-        handleChangeSelection({selection:val}){
+        handleChangeSelection({selection:val}){ // 单选
               this.table_selectedRowsInfo = val
               this.table_selectedRows = val
               this.$emit("update:table_selectedRows",val)
