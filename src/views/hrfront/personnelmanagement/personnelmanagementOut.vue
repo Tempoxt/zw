@@ -381,6 +381,7 @@
       resizable
       show-overflow
       highlight-hover-row
+      @select-all="handleChangeSelection"
       @select-change="handleChangeSelection"
       :data="table_data"
       border
@@ -486,10 +487,10 @@ export default {
       this.openDrawers = true;
       this.fetchProfileData();
     },
-    handleChangeSelection({selection}) {
-      this.table_selectedRowsInfo = selection
-      this.table_selectedRows = selection
-      this.$emit("update:table_selectedRows",selection)
+    handleChangeSelection({selection:val}) {
+      this.table_selectedRowsInfo = val
+      this.table_selectedRows = val
+      this.$emit("update:table_selectedRows",val)
     },
     table_dragend({
       $rowIndex,
