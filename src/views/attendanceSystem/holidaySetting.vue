@@ -105,9 +105,11 @@ export default {
 							<div style="display:inline-block;color:#F2353C;line-height:15px;text-align:left;width:88%">{data.defvalue.value.holidayTitle} 
 								<span style="color:#606266;font-weight:normal">{data.defvalue.value.remake}</span>
 							</div>
-							<div v-show={data.defvalue.value.workType==2} class="calType rest">休</div>
 							<div v-show={data.defvalue.value.workType==1} class="calType work">班</div>
+							<div v-show={data.defvalue.value.workType==2} class="calType rest">休</div>
 							<div v-show={data.defvalue.value.workType==3} class="calType holid">假</div>
+							<div v-show={data.defvalue.value.workType==4} class="calType saturday">周六</div>
+							<div v-show={data.defvalue.value.workType==5} class="calType sunday">周日</div>
 						</div>
 					</div>) : <div class="fs15">{data.defvalue.text}</div>
 				)
@@ -264,8 +266,6 @@ export default {
 		font-size: 16px;
 		font-weight: bold;
 		padding:0 0 20px 0px;
-		/* border-bottom: 1px solid #E4EAEC; */
-		/* margin:0 0 0px 0px; */
 	}
 	.restWork{
 		display:flex;justify-content:space-between;margin:23px 10px 0 8px;
@@ -284,6 +284,14 @@ export default {
 	.holid{
 		color: #F2353C;
 		background-color:rgba(242,53,60,.2)
+	}
+	.saturday{
+		color: #0B55D4;
+		background-color:rgba(11,85,212,.2)
+	}
+	.sunday{
+		color: #6E00DB;
+		background-color:rgba(110,0,219,.2)
 	}
 }
 </style>

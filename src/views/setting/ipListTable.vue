@@ -5,6 +5,32 @@
 	@query="querySubmit"
   >
 
+    <el-dialog
+		:title="dialogStatus==='insert'?'添加':'编辑'"
+		:visible.sync="dialogFormVisible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="500px"
+		>
+		<div>
+			<el-form ref="form" :model="form" label-width="100px" :rules="rules">
+				<el-row :gutter="20">
+					<el-col :span="22">
+						<form-render :type="`member`" :field="{name:'操作人',defaultName:form.serverUser}" v-model="form.emID" />
+					</el-col>
+					<el-col :span="22">
+						<form-render :type="`input`" :field="{name:'服务器IP'}" v-model="form.serverIP"/>
+					</el-col>
+				</el-row>
+			</el-form>
+		</div>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+		</div>
+    </el-dialog>
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -56,7 +82,27 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
+			form:{
+				emID:'',
+				serverIP:''
+			},
+            rules:{
+                emID:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                serverIP:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
+            },
 		};
+	},
+	computed:{
+		disabled(){
+			if(this.form.emID!=''&&this.form.serverIP!=''){
+				return false
+			}
+			return true
+		}
 	},
 	methods: {
 		async fetchTableData() {
@@ -68,10 +114,27 @@ export default {
 				this.table_loading = false;
 			}, 300);
 		},
+		add(){
+			this.form = {
+				emID:'',
+				serverIP:''
+			}
+			this.dialogFormVisible = true
+		},
+		async edit(){
+			let row = this.table_selectedRows[0];
+			this.form = (await api_resource.find(row.id))[0]
+			this.dialogFormVisible = true
+		},
+		async delete(){
+			let rows = this.table_selectedRows.map(row=>row.id);
+			let mes = await this.$request.get('removefiles/ipbulk?ids='+rows.join(','))
+			this.$message.success({message:mes});
+            this.fetchTableData();
+		},
 		async handleFormSubmit(){
 			await this.form_validate()
 			let form = Object.assign({},this.form)
-			form.main = this.id
 			if(this.isInsert){
 				await api_resource.create(form)
 			}else{
