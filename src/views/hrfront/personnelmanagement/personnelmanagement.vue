@@ -1070,7 +1070,8 @@
             resizable
             show-overflow
             highlight-hover-row
-            @selection-change="handleChangeSelection"
+            @select-all="handleChangeSelection"
+            @select-change="handleChangeSelection"
             :data="table_data"
             border
             style="width: 100%"
@@ -1344,6 +1345,11 @@ export default {
         }
     },
     methods: {
+        handleChangeSelection({selection:val}){ // 单选
+              this.table_selectedRowsInfo = val
+              this.table_selectedRows = val
+              this.$emit("update:table_selectedRows",val)
+        },
         async voidContract(){
             let rows = this.selections.map(row=>row.id)
             let mes = await this.$request.post('/hrm/staff/contract/statu',{ids:rows.join(','),contractTag:0})

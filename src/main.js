@@ -26,31 +26,31 @@ import VueAMap from 'vue-amap';
 Vue.use(Fragment.Plugin)
 // import '@assets/style/theme/test/index.css'
 
-import 'xe-utils'
-import VXETable from 'vxe-table'
+// import 'xe-utils'
+// import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
-Vue.use(VXETable)
+// Vue.use(VXETable)
 
-// import XEUtils from 'xe-utils'
-// import {
-//   VXETable,
-//   Column,
-//   Checkbox,
-//   Tooltip,
-//   Loading,
-//   Resize,
-//   Table
-// } from 'vxe-table'
+import XEUtils from 'xe-utils'
+import {
+  VXETable,
+  Column,
+  Checkbox,
+  Tooltip,
+  Loading,
+  Resize,
+  Table
+} from 'vxe-table'
 
-// [VXETable,
-//   Column,
-//   Checkbox,
-//   Tooltip,
-//   Loading,
-//   Resize,
-//   Table].forEach(c=>{
-//     Vue.use(c)
-//   })
+[VXETable,
+  Column,
+  Checkbox,
+  Tooltip,
+  Loading,
+  Resize,
+  Table].forEach(c=>{
+    Vue.use(c)
+  })
 
 sync(store, router)
 Vue.use(iView)
