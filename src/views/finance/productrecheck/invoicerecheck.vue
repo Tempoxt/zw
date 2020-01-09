@@ -144,7 +144,7 @@ export default {
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
-          table_topHeight:236,
+          table_topHeight:234,
           optionData:[],
 		  dialogForm2Visible:false,
 		  dialogFormVisible:false,

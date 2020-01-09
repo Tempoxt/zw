@@ -274,7 +274,7 @@ export default {
 		return {
 			loading: true,
 			api_resource:api_common.resource(this.url),
-			table_topHeight:276,
+			table_topHeight:293,
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			dialogForm1Visible:false,

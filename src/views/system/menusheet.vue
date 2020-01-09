@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs">
+    <el-tabs v-model="view_activeName" class="table-tabs public-table-container" ref="tabs">
       <el-tab-pane :label="getViewData('1').name" :name="getViewData('1').url" v-if="getViewData('1')" lazy>
         <menusheet position="1"/>
       </el-tab-pane>

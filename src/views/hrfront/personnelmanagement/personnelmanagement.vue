@@ -1158,7 +1158,7 @@ export default {
             orgCategory:[],
             queryDialogFormVisible:true,
             dialogForm3Visible:false,
-            table_topHeight:276,
+            table_topHeight:293,
             nationData:[],
             nativeplacesData:[],
             workGroupData:[],

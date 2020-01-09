@@ -1,5 +1,6 @@
 <template>
-    <ui-table 
+    <ui-table
+    class="public-table-container"
     ref="table" 
     :table_query.sync="table_form.query"
      :table_column="table_field" 

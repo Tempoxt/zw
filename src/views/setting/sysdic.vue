@@ -1,5 +1,5 @@
 <template>
-   	<el-row class="h-full">
+   	<el-row class="h-full public-table-container">
 		<el-col :span="4" class="h-full">
 			<el-dialog
 				:title="dialogStatus==='insert'?'添加':'编辑'"
@@ -30,7 +30,7 @@
 
 			<div class="page-side h-full">
 				<div style="" class="h-full">
-					<div class="side-header" style="margin-bottom:0">
+					<div class="side-header">
 						<el-input placeholder="快速查找" v-model="filterText" class="input">
 						<i slot="suffix" class="el-input__icon el-icon-search"></i>
 						</el-input>

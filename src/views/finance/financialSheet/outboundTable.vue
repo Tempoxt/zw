@@ -102,7 +102,7 @@ export default {
 			form:{
 				dateLap:''
 			},
-			table_topHeight:276,
+			table_topHeight:293,
 			dialogFormVisible:false,
 			timer:'',
 			statusk:1,

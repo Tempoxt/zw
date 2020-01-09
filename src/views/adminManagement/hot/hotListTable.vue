@@ -188,7 +188,7 @@ export default {
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			table_topHeight:276,
+			table_topHeight:293,
 			options:[{
                 value:'2',
                 label:'月'

@@ -167,7 +167,7 @@ export default {
 			form:{},
 			form1:{},
 			api_resource,
-			table_topHeight:226,
+			table_topHeight:234,
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,

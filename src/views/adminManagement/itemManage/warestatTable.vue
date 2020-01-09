@@ -64,7 +64,7 @@ export default {
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:280,
+            table_topHeight:293,
 			timer:'',
 			uri:'',
             statusk:1,

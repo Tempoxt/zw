@@ -109,7 +109,7 @@ export default {
 			loading: true,
 			api_resource:api_common.resource(this.url),
 			queryDialogFormVisible:true,
-			table_topHeight:276,
+			table_topHeight:293,
 			visible:false,
 			shiftData: {},
 			openDrawers: false,

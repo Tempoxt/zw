@@ -119,7 +119,7 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
-			table_topHeight:236,
+			table_topHeight:234,
 			form:{
 				year:'',
 				lastYearCount:'',

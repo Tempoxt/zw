@@ -1,5 +1,5 @@
 <template>
-  	<el-row class="h-full">
+  	<el-row class="h-full public-table-container">
 		<el-dialog title="添加功能" :visible.sync="dialogFormVisible" class="public-dialog">
 			<div>
 				<el-form ref="form" :model="categoryForm" label-width="80px" label-position="left">
