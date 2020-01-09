@@ -154,7 +154,7 @@ export default {
 				dateLap:''
 			},
 			queryDialogFormVisible:true,
-			table_topHeight:276,
+			table_topHeight:293,
 			dialogFormVisible:false,
 			dialogForm1Visible:false,
 			quarter:[],

@@ -1,5 +1,6 @@
   <template>
-  <ui-table ref="table" 
+  <ui-table 
+  ref="table" 
   :table_column="table_field" 
   :table_query.sync="table_form.query"
   @query="querySubmit"
@@ -74,7 +75,7 @@ export default {
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_topHeight:236,
+      table_topHeight:234,
       current:'',
       template:{
 				auditStatus_display(column,row){

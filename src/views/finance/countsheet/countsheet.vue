@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model="activeName" class="table-tabs">
+    <el-tabs v-model="activeName" class="table-tabs public-table-container">
             <el-tab-pane label="爱心基金汇总" name="second">
                 <inexpendsummTable />
             </el-tab-pane>

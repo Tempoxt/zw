@@ -116,7 +116,7 @@ export default {
 			loading: true,
 			api_resource: api_common.resource(this.url),
 			queryDialogFormVisible:true,
-            table_topHeight:278,
+            table_topHeight:293,
 			importUploadUrl:"/attendance/record",
 			dialogForm1Visible:false,
 			form1:{

@@ -48,7 +48,7 @@ export default {
       api_resource:api_common.resource(this.$route.query.module),
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_topHeight:236,
+      table_topHeight:234,
     };
   },
   watch:{

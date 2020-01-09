@@ -268,7 +268,7 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogForm2Visible:false,
-			table_topHeight:276,
+			table_topHeight:293,
 			fileList:[],
 			fileList1:[],
 			fileList2:[],

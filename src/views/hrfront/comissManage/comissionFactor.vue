@@ -1,5 +1,7 @@
   <template>
-	<ui-table ref="table" 
+	<ui-table 
+		class="public-table-container"
+		ref="table" 
 		:table_column="table_field" 
 		:table_query.sync="table_form.query"
 		@query="querySubmit"
@@ -170,7 +172,7 @@ export default {
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			table_topHeight:236,
+			table_topHeight:234,
 			dialogFormVisible:false,
 			dialogForm1Visible:false,
 			allIds:[],

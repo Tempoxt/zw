@@ -142,7 +142,7 @@ export default {
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			dialogForm1Visible:false,
-			table_topHeight:276,
+			table_topHeight:293,
 			form:{},
 			result:[],
 			rule:{

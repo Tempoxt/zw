@@ -266,7 +266,7 @@ export default {
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  // padding: 0 20px;
   margin-bottom: 10px;
   
   /deep/.iconfont{

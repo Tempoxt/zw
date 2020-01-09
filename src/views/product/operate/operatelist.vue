@@ -76,7 +76,7 @@ export default {
             form:{},
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:226,
+            table_topHeight:234,
             dialogFormVisible:false,
             customId:'',
             customData:[],

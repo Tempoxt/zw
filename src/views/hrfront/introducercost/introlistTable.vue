@@ -62,7 +62,7 @@ export default {
 			loading: true,
 			api_resource: api_common.resource("introducercost/allrecordbystatus"),
 			queryDialogFormVisible:true,
-			table_topHeight:286,
+			table_topHeight:293,
 			template:{
 				tollPayStatusDisPlay(column,row){
 					switch(row.tollPayStatus){
