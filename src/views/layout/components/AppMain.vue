@@ -6,6 +6,7 @@
         <router-view :key="key"/>
       </keep-alive>
     </transition>
+    
   </section>
 </template>
 
@@ -30,6 +31,8 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
+  border: 1px solid transparent;
+  background: #F4F9FA;
   /* overflow: hidden; */
 }
 </style>

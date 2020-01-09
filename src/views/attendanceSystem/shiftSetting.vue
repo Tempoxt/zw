@@ -1,319 +1,324 @@
   <template>
-  <ui-table ref="table" 
+
+	<ui-table
+	class="public-table-container"
+	ref="table" 
 	:table_column="table_field" 
 	:table_query.sync="table_form.query"
 	@query="querySubmit"
 	>
 
-	<el-dialog
-		:title="dialogStatus==='insert'?'新增班次':'编辑班次'"
-		:visible.sync="dialogFormVisible"
-		class="public-dialog"
-		v-el-drag-dialog
-		width="960px"
-		>
-		<div class="h-full">
-			<el-form ref="form" :model="form" label-width="70px" :rules="rule"  class="h-full shift_form" style="height:630px;margin:0 10px;">
-				<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> 
-					<p class="shift_time" style="color:#0BB2D4;margin:12px 0 25px 0px;font-weight:bold">班次时间</p>
-					<el-row>
-						<el-col :span="10">
-							<form-render prop="className" :type="`input`" :field="{name:'班次名称'}" v-model="form.className"/>
-						</el-col>
-						<el-col :span="10" :offset="4">
-							<form-render :type="`inputSuffix`" prop="positiveTime" suffix="时" :field="{name:'班次时间'}" v-model="form.positiveTime"/>
-						</el-col>
-						<el-col :span="10">
-							<form-render :type="`inputSuffix`" suffix="时" :field="{name:'加班'}" v-model="form.overTime"/>
-						</el-col>
-						<el-col :span="10" :offset="4">
-							<form-render :type="`radio`" :field="{name:'班次类型',options:[{
-								value:1,
-								label:'白班'
-							},{
-								value:2,
-								label:'夜班'
-							}]}" v-model="form.classType"/>
-						</el-col>
-					</el-row>
-					<el-row class="shift_set">
-						<el-col :span="1" style="margin-left:10px" class="mt10">
-							<div>&nbsp;</div>
-							<el-checkbox v-model="timeSolt1"></el-checkbox>
-						</el-col>
-						<el-col :span="17">
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px"  prop="onDutyTime1" :type="`time`" :field="{name:'上班1'}" placeholder="上班时间" v-model="form.onDutyTime1"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOnDutyCard1">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" prop="signInStartTime1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime1"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" prop="signInEndTime1" :type="`time`" placeholder="结束时间" :field="{name:''}" v-model="form.signInEndTime1"/>
-								</el-col>
-							</el-row>
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px" prop="offDutyTime1" :type="`time`" :field="{name:'下班1'}" placeholder="下班时间" v-model="form.offDutyTime1"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOffDutyCard1">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" prop="signOutStartTime1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime1"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime1"/>
-								</el-col>
-							</el-row>
-						</el-col>
-					
-						<el-col :span="5" style="margin-left:15px">
-							<el-form-item class="line-height" label="休息时间" label-width="30px">
-								<el-time-picker v-model="form.restStartTime1" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
-								<el-time-picker class="mt17" v-model="form.restEndTime1" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row class="straight">
-						<el-col :span="24"><el-checkbox v-model="form.straight1_2" @change="cstraight1_2">直通</el-checkbox></el-col>
-					</el-row>
-					<el-row class="shift_set">
-						<el-col :span="1" style="margin-left:10px" class="mt10">
-							<div>&nbsp;</div>
-							<el-checkbox v-model="timeSolt2"></el-checkbox>
-						</el-col>
-						<el-col :span="17">
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px"  prop="onDutyTime2" :type="`time`" :field="{name:'上班2'}" placeholder="上班时间" v-model="form.onDutyTime2"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOnDutyCard2">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" prop="signInStartTime2" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime2"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime2"/>
-								</el-col>
-							</el-row>
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px" prop="offDutyTime2" :type="`time`" :field="{name:'下班2'}" placeholder="下班时间" v-model="form.offDutyTime2"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOffDutyCard2">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" prop="signOutStartTime2" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime2"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime2"/>
-								</el-col>
-							</el-row>
-						</el-col>
-					
-						<el-col :span="5" style="margin-left:15px">
-							<el-form-item class="line-height" label="休息时间" label-width="30px">
-								<el-time-picker v-model="form.restStartTime2" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
-								<el-time-picker class="mt17" v-model="form.restEndTime2" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row class="straight">
-						<el-col :span="24"><el-checkbox v-model="form.straight2_3" @change="cstraight2_3">直通</el-checkbox></el-col>
-					</el-row>
-					<el-row class="shift_set">
-						<el-col :span="1" style="margin-left:10px" class="mt10">
-							<div>&nbsp;</div>
-							<el-checkbox v-model="timeSolt3"></el-checkbox>
-						</el-col>
-						<el-col :span="17">
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'上班3'}" placeholder="上班时间" v-model="form.onDutyTime3"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOnDutyCard3">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime3"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime3"/>
-								</el-col>
-							</el-row>
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'下班3'}" placeholder="下班时间" v-model="form.offDutyTime3"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOffDutyCard3">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime3"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime3"/>
-								</el-col>
-							</el-row>
-						</el-col>
-					
-						<el-col :span="5" style="margin-left:15px">
-							<el-form-item class="line-height" label="休息时间" label-width="30px">
-								<el-time-picker v-model="form.restStartTime3" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
-								<el-time-picker class="mt17" v-model="form.restEndTime3" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row class="straight">
-						<el-col :span="24"><el-checkbox v-model="form.straight3_4" @change="cstraight3_4">直通</el-checkbox></el-col>
-					</el-row>
-					
-					<el-row class="shift_set">
-						<el-col :span="1" style="margin-left:10px" class="mt10">
-							<div>&nbsp;</div>
-							<el-checkbox v-model="timeSolt4"></el-checkbox>
-						</el-col>
-						<el-col :span="17">
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'上班4'}" placeholder="上班时间" v-model="form.onDutyTime4"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOnDutyCard4">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime4"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime4"/>
-								</el-col>
-							</el-row>
-							<el-row>
-								<el-col :span="9">
-									<form-render label-width="52px" :type="`time`" :field="{name:'下班4'}" placeholder="下班时间" v-model="form.offDutyTime4"/>
-								</el-col>
-								<el-col :span="2" class="mt5">
-									<el-checkbox v-model="form.isExcuseOffDutyCard4">免卡</el-checkbox>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime4"/>
-								</el-col>
-								<el-col :span="6">
-									<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime4"/>
-								</el-col>
-							</el-row>
-						</el-col>
-					
-						<el-col :span="5" style="margin-left:15px">
-							<el-form-item class="line-height" label="休息时间" label-width="30px">
-								<el-time-picker v-model="form.restStartTime4" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
-								<el-time-picker class="mt17" v-model="form.restEndTime4" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<p class="shift_time" style="color:#0BB2D4;margin:30px 0 25px 0px;font-weight:bold">班次规则</p>
-					<el-row class="position_left">
-						<el-col :span="11">
-							<form-render label-width="180px" :type="`select`" :field="{name:'迟到时间在(分)内不计',options:[
-								{
-									value: 0,
-									label: '0'
-								},{
-									value: 1,
-									label: '1'
-								},{
-									value: 60,
-									label: '60'
-								}
-							]}" v-model="form.allowLateTime"/>
-							<!-- <el-form-item label="迟到时间在(分)内不计" label-width="180px">
-								<el-input-number v-model="form.allowLateTime" :min="0"></el-input-number>
-							</el-form-item> -->
-						</el-col>
-						<el-col :span="7" :offset="5">
-							<form-render label-width="180px" :type="`select`" :field="{name:'早退时间在(分)内不计',options:[
-								{
-									value: 0,
-									label: '0'
-								},{
-									value: 1,
-									label: '1'
-								},{
-									value: 60,
-									label: '60'
-								}
-							]}" v-model="form.allowEarlyTime"/>
-						</el-col>
-						<el-col :span="11">
-							<el-form-item label="迟到早退时间在(分)不计旷工" label-width="180px">
-								<el-input-number v-model="form.allowAbsent" :min="0" :disabled="true"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :span="7" :offset="5">
-							<el-form-item label="加班计算起始(分)" label-width="180px">
-								<el-input-number v-model="form.startOverTime" :min="0" :disabled="true"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :span="11">
-							<el-form-item label="请假计算起始(分)" label-width="180px">
-								<el-input-number v-model="form.startLeaveTime" :min="0" :disabled="true"></el-input-number>
-							</el-form-item>
-						</el-col>
-					</el-row>
-				</el-scrollbar>
-			</el-form>
-		</div>
-		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit" :disabled="disableSubmit">确 定</el-button>
-		</div>
-    </el-dialog>
-
-    <table-header
-		:table_actions="table_actions"
-		:table_selectedRows="table_selectedRows"
-		@action="handleAction"
-		:table_form.sync="table_form"
-		:table_column="table_field"
-		>
-    </table-header>
-    <el-table
-        ref="elTable"
-		@selection-change="handleChangeSelection"
-		:data="table_data"
-		border
-		style="width: 100%"
-		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
-		:height="table_height"
-		@header-dragend="table_dragend"
-		@sort-change="table_sort_change"
-    	>
-		<el-table-column 
-			type="selection" 
-			width="60" 
-			class-name="table-column-disabled"
-			:selectable="table_disable_selected"
+		<el-dialog
+			:title="dialogStatus==='insert'?'新增班次':'编辑班次'"
+			:visible.sync="dialogFormVisible"
+			class="public-dialog"
+			v-el-drag-dialog
+			width="960px"
 			>
-		</el-table-column>
-		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
-    </el-table>
-    <table-pagination 
-        :total="table_form.total" 
-        :pagesize.sync="table_form.pagesize"
-        :currentpage.sync="table_form.currentpage"
-        @change="fetchTableData"
-        :table_config="table_config"
-    />
-  </ui-table>
+			<div class="h-full">
+				<el-form ref="form" :model="form" label-width="70px" :rules="rule"  class="h-full shift_form" style="height:630px;margin:0 10px;">
+					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> 
+						<p class="shift_time" style="color:#0BB2D4;margin:12px 0 25px 0px;font-weight:bold">班次时间</p>
+						<el-row>
+							<el-col :span="10">
+								<form-render prop="className" :type="`input`" :field="{name:'班次名称'}" v-model="form.className"/>
+							</el-col>
+							<el-col :span="10" :offset="4">
+								<form-render :type="`inputSuffix`" prop="positiveTime" suffix="时" :field="{name:'班次时间'}" v-model="form.positiveTime"/>
+							</el-col>
+							<el-col :span="10">
+								<form-render :type="`inputSuffix`" suffix="时" :field="{name:'加班'}" v-model="form.overTime"/>
+							</el-col>
+							<el-col :span="10" :offset="4">
+								<form-render :type="`radio`" :field="{name:'班次类型',options:[{
+									value:1,
+									label:'白班'
+								},{
+									value:2,
+									label:'夜班'
+								}]}" v-model="form.classType"/>
+							</el-col>
+						</el-row>
+						<el-row class="shift_set">
+							<el-col :span="1" style="margin-left:10px" class="mt10">
+								<div>&nbsp;</div>
+								<el-checkbox v-model="timeSolt1"></el-checkbox>
+							</el-col>
+							<el-col :span="17">
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px"  prop="onDutyTime1" :type="`time`" :field="{name:'上班1'}" placeholder="上班时间" v-model="form.onDutyTime1"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOnDutyCard1">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" prop="signInStartTime1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime1"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" prop="signInEndTime1" :type="`time`" placeholder="结束时间" :field="{name:''}" v-model="form.signInEndTime1"/>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px" prop="offDutyTime1" :type="`time`" :field="{name:'下班1'}" placeholder="下班时间" v-model="form.offDutyTime1"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOffDutyCard1">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" prop="signOutStartTime1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime1"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime1"/>
+									</el-col>
+								</el-row>
+							</el-col>
+						
+							<el-col :span="5" style="margin-left:15px">
+								<el-form-item class="line-height" label="休息时间" label-width="30px">
+									<el-time-picker v-model="form.restStartTime1" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+									<el-time-picker class="mt17" v-model="form.restEndTime1" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row class="straight">
+							<el-col :span="24"><el-checkbox v-model="form.straight1_2" @change="cstraight1_2">直通</el-checkbox></el-col>
+						</el-row>
+						<el-row class="shift_set">
+							<el-col :span="1" style="margin-left:10px" class="mt10">
+								<div>&nbsp;</div>
+								<el-checkbox v-model="timeSolt2"></el-checkbox>
+							</el-col>
+							<el-col :span="17">
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px"  prop="onDutyTime2" :type="`time`" :field="{name:'上班2'}" placeholder="上班时间" v-model="form.onDutyTime2"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOnDutyCard2">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" prop="signInStartTime2" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime2"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime2"/>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px" prop="offDutyTime2" :type="`time`" :field="{name:'下班2'}" placeholder="下班时间" v-model="form.offDutyTime2"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOffDutyCard2">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" prop="signOutStartTime2" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime2"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime2"/>
+									</el-col>
+								</el-row>
+							</el-col>
+						
+							<el-col :span="5" style="margin-left:15px">
+								<el-form-item class="line-height" label="休息时间" label-width="30px">
+									<el-time-picker v-model="form.restStartTime2" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+									<el-time-picker class="mt17" v-model="form.restEndTime2" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row class="straight">
+							<el-col :span="24"><el-checkbox v-model="form.straight2_3" @change="cstraight2_3">直通</el-checkbox></el-col>
+						</el-row>
+						<el-row class="shift_set">
+							<el-col :span="1" style="margin-left:10px" class="mt10">
+								<div>&nbsp;</div>
+								<el-checkbox v-model="timeSolt3"></el-checkbox>
+							</el-col>
+							<el-col :span="17">
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px" :type="`time`" :field="{name:'上班3'}" placeholder="上班时间" v-model="form.onDutyTime3"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOnDutyCard3">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime3"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime3"/>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px" :type="`time`" :field="{name:'下班3'}" placeholder="下班时间" v-model="form.offDutyTime3"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOffDutyCard3">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime3"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime3"/>
+									</el-col>
+								</el-row>
+							</el-col>
+						
+							<el-col :span="5" style="margin-left:15px">
+								<el-form-item class="line-height" label="休息时间" label-width="30px">
+									<el-time-picker v-model="form.restStartTime3" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+									<el-time-picker class="mt17" v-model="form.restEndTime3" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row class="straight">
+							<el-col :span="24"><el-checkbox v-model="form.straight3_4" @change="cstraight3_4">直通</el-checkbox></el-col>
+						</el-row>
+						
+						<el-row class="shift_set">
+							<el-col :span="1" style="margin-left:10px" class="mt10">
+								<div>&nbsp;</div>
+								<el-checkbox v-model="timeSolt4"></el-checkbox>
+							</el-col>
+							<el-col :span="17">
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px" :type="`time`" :field="{name:'上班4'}" placeholder="上班时间" v-model="form.onDutyTime4"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOnDutyCard4">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime4"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime4"/>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="9">
+										<form-render label-width="52px" :type="`time`" :field="{name:'下班4'}" placeholder="下班时间" v-model="form.offDutyTime4"/>
+									</el-col>
+									<el-col :span="2" class="mt5">
+										<el-checkbox v-model="form.isExcuseOffDutyCard4">免卡</el-checkbox>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime4"/>
+									</el-col>
+									<el-col :span="6">
+										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime4"/>
+									</el-col>
+								</el-row>
+							</el-col>
+						
+							<el-col :span="5" style="margin-left:15px">
+								<el-form-item class="line-height" label="休息时间" label-width="30px">
+									<el-time-picker v-model="form.restStartTime4" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
+									<el-time-picker class="mt17" v-model="form.restEndTime4" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<p class="shift_time" style="color:#0BB2D4;margin:30px 0 25px 0px;font-weight:bold">班次规则</p>
+						<el-row class="position_left">
+							<el-col :span="11">
+								<form-render label-width="180px" :type="`select`" :field="{name:'迟到时间在(分)内不计',options:[
+									{
+										value: 0,
+										label: '0'
+									},{
+										value: 1,
+										label: '1'
+									},{
+										value: 60,
+										label: '60'
+									}
+								]}" v-model="form.allowLateTime"/>
+								<!-- <el-form-item label="迟到时间在(分)内不计" label-width="180px">
+									<el-input-number v-model="form.allowLateTime" :min="0"></el-input-number>
+								</el-form-item> -->
+							</el-col>
+							<el-col :span="7" :offset="5">
+								<form-render label-width="180px" :type="`select`" :field="{name:'早退时间在(分)内不计',options:[
+									{
+										value: 0,
+										label: '0'
+									},{
+										value: 1,
+										label: '1'
+									},{
+										value: 60,
+										label: '60'
+									}
+								]}" v-model="form.allowEarlyTime"/>
+							</el-col>
+							<el-col :span="11">
+								<el-form-item label="迟到早退时间在(分)不计旷工" label-width="180px">
+									<el-input-number v-model="form.allowAbsent" :min="0" :disabled="true"></el-input-number>
+								</el-form-item>
+							</el-col>
+							<el-col :span="7" :offset="5">
+								<el-form-item label="加班计算起始(分)" label-width="180px">
+									<el-input-number v-model="form.startOverTime" :min="0" :disabled="true"></el-input-number>
+								</el-form-item>
+							</el-col>
+							<el-col :span="11">
+								<el-form-item label="请假计算起始(分)" label-width="180px">
+									<el-input-number v-model="form.startLeaveTime" :min="0" :disabled="true"></el-input-number>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</el-scrollbar>
+				</el-form>
+			</div>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisible = false">取 消</el-button>
+				<el-button type="primary" @click="handleFormSubmit" :disabled="disableSubmit">确 定</el-button>
+			</div>
+		</el-dialog>
+
+		<table-header
+			:table_actions="table_actions"
+			:table_selectedRows="table_selectedRows"
+			@action="handleAction"
+			:table_form.sync="table_form"
+			:table_column="table_field"
+			>
+		</table-header>
+		<el-table
+			ref="elTable"
+			@selection-change="handleChangeSelection"
+			:data="table_data"
+			border
+			style="width: 100%"
+			v-loading="table_loading"
+			:header-cell-style="headerCellStyle"
+			:height="table_height"
+			@header-dragend="table_dragend"
+			@sort-change="table_sort_change"
+			>
+			<el-table-column 
+				type="selection" 
+				width="60" 
+				class-name="table-column-disabled"
+				:selectable="table_disable_selected"
+				>
+			</el-table-column>
+			<el-table-column type="index" :index="indexMethod" width="70"/>
+			<each-table-column :table_field="table_field"/>
+		</el-table>
+		<table-pagination 
+			:total="table_form.total" 
+			:pagesize.sync="table_form.pagesize"
+			:currentpage.sync="table_form.currentpage"
+			@change="fetchTableData"
+			:table_config="table_config"
+		/>
+	</ui-table>
+  
+  
 </template>
 <script>
 import * as api_common from "@/api/common";

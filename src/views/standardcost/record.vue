@@ -1,5 +1,6 @@
 <template>
-    <ui-table ref="table" 
+    <ui-table
+        ref="table" 
         :table_column="table_field" 
         :table_query.sync="table_form.query"
         @query="querySubmit"

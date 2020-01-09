@@ -82,7 +82,7 @@ export default {
   },
   computed: {
     table_height(){ 
-      return (this.window_innerHeight||window.innerHeight) - (this.table_topHeight||220)
+      return (this.window_innerHeight||window.innerHeight) - (this.table_topHeight||230)
     },
     isInsert() {
       return this.dialogStatus === 'insert'
