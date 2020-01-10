@@ -353,7 +353,7 @@ export default {
             this.dialogFormVisible = false
         },
         async fetchTableData() {
-            this.table_topHeight = this.url=='invitation/sitemanager/rank'?300:280
+            this.table_topHeight = this.url=='invitation/sitemanager/rank'?325:305
             this.table_loading = true;
             this.table_form.org_id  = this.org_id
             const {rows , total ,total_sign,wait_sign,early_sign }= await this.api_resource.get(this.table_form);

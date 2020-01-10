@@ -111,6 +111,7 @@ export default {
       actionsList:[],
       actionsModel:[],
       dialog_loading:true,
+      table_topHeight:260,
       api_resource
     };
   },

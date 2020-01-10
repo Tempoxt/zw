@@ -97,7 +97,7 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
-      		table_topHeight:286,
+      		table_topHeight:295,
 			template:{
 				staff__outDutyTime(column,row){
 					if(row.expire){

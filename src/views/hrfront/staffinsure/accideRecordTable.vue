@@ -75,7 +75,7 @@ export default {
       api_resource,
       orgCategory:[],
       queryDialogFormVisible:true,
-      table_topHeight:234,
+      table_topHeight:235,
       current:'',
       template:{
 				auditStatus_display(column,row){

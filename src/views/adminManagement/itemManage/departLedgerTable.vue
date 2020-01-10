@@ -57,7 +57,7 @@ export default {
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:230,
+            table_topHeight:265,
             total_price:'',
         };
     },

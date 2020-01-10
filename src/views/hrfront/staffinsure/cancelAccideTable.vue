@@ -124,7 +124,7 @@ export default {
 			form2:{
 				dateLap:''
 			},
-			table_topHeight:286,
+			table_topHeight:295,
 			dialogForm1Visible:false,
 			dialogForm2Visible:false,
 			template:{
