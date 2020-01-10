@@ -72,7 +72,7 @@ const generateRoutes = (menu, base) => {
             let r = {
                 component: Layout,
                 path: router.url||Math.random()+'',
-                children: []
+                children: [],
             }
             if (router.subs && router.subs.length) {
                 
@@ -92,11 +92,12 @@ const generateRoutes = (menu, base) => {
                 // console.error('找不到路由' + router.name + '' + router.unieCode)
             }
             let r = {
-                meta: {},
+                meta:{},
                 ...c,
                 path: router.url ? base + '/' + router.url : Math.random() + '',
             }
             r.meta.title = router.name
+            
             if (router.subs && router.subs.length) {
                 res.push(...generateRoutes(router.subs, base))
                     // r.children = generateRoutes(router.subs,base)

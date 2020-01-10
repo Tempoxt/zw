@@ -4,7 +4,7 @@ export default [{
         component: () =>
             import ('@/views/hrfront/dashboard'),
         meta: {
-            title: '人力资源'
+            title: '人事'
         }
     },
     {

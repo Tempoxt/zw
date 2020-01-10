@@ -17,7 +17,7 @@
         :router="true"
         :unique-opened="true"
       >
-        <span style="display:block;height:40px;color:#A3AFB7;font-size:12px;line-height:40px;padding-left:23px;background:#2F3D43;">人事</span>
+        <!-- <span style="display:block;height:40px;color:#A3AFB7;font-size:12px;line-height:40px;padding-left:23px;background:#2F3D43;">{{$route.meta.title}}</span> -->
          <transition-group name="el-fade-in">
             <template v-if="isShow">
                 <sidebar-item
