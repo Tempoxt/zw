@@ -270,6 +270,7 @@ export default {
       loading: true,
       table_form:{},
       api_resource,
+      table_topHeight:260,
       template:{
         connect(column,row){
           return <span>{['当前创窗口','新窗口/新标签','弹出窗口','弹出浏览器窗口'][row.connect-1]}</span>

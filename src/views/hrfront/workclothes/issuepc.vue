@@ -65,7 +65,7 @@ export default {
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			activeName:'first',
-			table_topHeight:286,
+			table_topHeight:295,
 		};
 	},
 	watch:{

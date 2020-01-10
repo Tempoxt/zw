@@ -1,5 +1,4 @@
 <template>
-<div>
     <el-row class="h-full public-table-container">
         <el-col :span="4" class="h-full">
             <div class="h-full" id="srceenFull">
@@ -43,7 +42,6 @@
             <devicelistTable :id="id"/>
         </el-col>
     </el-row>
-</div>
     
 </template>
 <script>
@@ -57,19 +55,9 @@ export default {
         devicelistTable
     },
     watch: {
-        'screenHeight': function (val) { // 监听屏幕高度变化
-            var oIframe = document.getElementById('srceenFull')
-            oIframe.style.height = (Number(val) - 40) + 'px'
-        },
         filterText(val) {
             this.$refs.tree2.filter(val);
         },
-    },
-    mounted () {
-        var _this = this
-        window.onresize = function () { // 定义窗口大小变更通知事件
-            _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
-        }
     },
     computed:{
         disabeld(){

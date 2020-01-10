@@ -244,7 +244,7 @@ export default {
             defaultForm,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:220,
+            table_topHeight:235,
             dialogFormVisible:false,
             dialogForm1Visible:false,
             dialogForm2Visible:false,

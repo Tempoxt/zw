@@ -130,7 +130,7 @@ export default {
             form:{},
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:220,
+            table_topHeight:230,
             dialogFormVisible:false,
             customId:'',
             deviceData:[],

@@ -138,7 +138,7 @@ export default {
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:220,
+            table_topHeight:235,
             dialogFormVisible:false,
             form:{},
             rules:{

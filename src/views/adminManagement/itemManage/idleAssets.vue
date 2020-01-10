@@ -57,7 +57,7 @@ export default {
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:230,
+            table_topHeight:235,
             importUploadUrl:'toolstationery/idlefixedassets/upload',
             downloadUrl:'toolstationery/idlefixedassets/upload',
         };

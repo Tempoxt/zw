@@ -103,7 +103,7 @@ export default {
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:240,
+            table_topHeight:265,
             form:{
                 page:100,
                 currentp:1,
