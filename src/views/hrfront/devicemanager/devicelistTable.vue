@@ -57,41 +57,47 @@
             :table_form.sync="table_form"
             :table_column="table_field"
         ></table-header>
-        <el-table
+        <vxe-table
+            class="public-vxe-table"
             ref="elTable"
-            @selection-change="handleChangeSelection"
+            resizable
+            show-overflow
+            highlight-hover-row
+            @select-all="handleChangeSelection"
+            @select-change="handleChangeSelection"
             :data="table_data"
             border
             style="width: 100%"
             v-loading="table_loading"
-            :header-cell-style="headerCellStyle"
+            :header-cell-style="vxeHeaderStyle"
             :height="table_height"
-            @header-dragend="table_dragend"
+            @resizable-change="table_dragend"
             @sort-change="table_sort_change"
             >
-            <el-table-column 
+            <vxe-table-column 
                 type="selection" 
                 width="60" 
                 class-name="table-column-disabled"
                 :selectable="table_disable_selected"
                 >
-            </el-table-column>
+            </vxe-table-column>
             
-            <el-table-column type="index" :index="indexMethod"/>
-            <each-table-column :table_field="table_field"/>
-            <el-table-column label="指纹索引" width="420px">
+            <vxe-table-column type="index" :index="indexMethod"/>
+            <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+            <!-- <each-table-column :table_field="table_field"/> -->
+            <vxe-table-column label="指纹索引" width="420px">
                 <template slot-scope="scope">
                     <el-checkbox-group v-model="scope.row.list">
                         <el-checkbox v-for="(item,index) in scope.row.finger_info" :key="index" :label="item.finger__tempIndex" :disabled="item.id==0" class="checkbox_finger"></el-checkbox>
                     </el-checkbox-group>
                 </template>
-            </el-table-column>
-            <el-table-column label="操作" fixed="right">
+            </vxe-table-column>
+            <vxe-table-column label="操作" fixed="right" width="74">
                 <template slot-scope="scope">
                     <el-button @click="deleteFinger(scope.row)" type="text" size="small">删除指纹</el-button>
                 </template>
-            </el-table-column>
-        </el-table>
+            </vxe-table-column>
+        </vxe-table>
         <table-pagination 
             :total="table_form.total" 
             :pagesize.sync="table_form.pagesize"
@@ -115,6 +121,7 @@ export default {
     },
     data() {
         return {
+            vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
             loading: false,
             form:{
                 device:[]
@@ -161,6 +168,11 @@ export default {
         }
     },
     methods: {
+        handleChangeSelection({selection:val}){ // 单选
+              this.table_selectedRowsInfo = val
+              this.table_selectedRows = val
+              this.$emit("update:table_selectedRows",val)
+        },
         async deleteFinger(row){
             this.checkList =[]
             row.list.map(o=>{

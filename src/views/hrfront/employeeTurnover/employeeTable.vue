@@ -56,7 +56,7 @@ export default {
             api_resource:api_common.resource(this.url),
             orgCategory:[],
             queryDialogFormVisible:true,
-            table_topHeight:276,
+            table_topHeight:293,
             template:{
 				shiftTime(column,row){
                     if(row.color!==undefined){ 

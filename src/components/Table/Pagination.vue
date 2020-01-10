@@ -61,6 +61,6 @@ export default {
 .pagination {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
+  padding: 8px 0px;
 }
 </style>

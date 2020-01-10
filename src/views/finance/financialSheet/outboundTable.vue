@@ -1,5 +1,6 @@
   <template>
-  <ui-table ref="table" 
+  <ui-table 
+  	ref="table" 
 	:table_column="table_field" 
 	:table_query.sync="table_form.query"
 	@query="querySubmit"
@@ -101,7 +102,7 @@ export default {
 			form:{
 				dateLap:''
 			},
-			table_topHeight:276,
+			table_topHeight:293,
 			dialogFormVisible:false,
 			timer:'',
 			statusk:1,

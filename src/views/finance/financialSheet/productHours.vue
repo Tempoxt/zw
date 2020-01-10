@@ -1,6 +1,6 @@
 <template>
 <!-- 组件产品基准工时 -->
- <el-row class="h-full">
+ <el-row class="h-full public-table-container">
     <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
         <div class="h-full">
 			<div style="padding:20px" class="h-full">

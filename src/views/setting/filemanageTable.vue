@@ -1,5 +1,7 @@
   <template>
-  <ui-table ref="table" 
+  <ui-table 
+  	class="public-table-container"
+	ref="table" 
 	:table_column="table_field" 
 	:table_query.sync="table_form.query"
 	@query="querySubmit"
@@ -19,7 +21,7 @@
 						<form-render :type="`depart`" prop="department" :field="{name:'归属部门',disable:!isInsert}" v-model="form.department" :disabled="!isInsert"/>
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`select`" prop="file_suffix" :field="{name:'文件后缀',options:[
+						<form-render :type="`select`" prop="file_suffix" multiple :field="{name:'文件后缀',options:[
 							{
 								value: '.pdf',
 								label: 'pdf'
@@ -138,6 +140,7 @@ export default {
 		async edit(){
 			let row = this.table_selectedRows[0]
 			this.form = (await api_resource.find(row.id))[0]
+			this.form.file_suffix = this.form.file_suffix.split(',')
 			this.dialogFormVisible = true;
 		},
 		async delete(){
@@ -162,6 +165,7 @@ export default {
 		async handleFormSubmit(){
 			await this.form_validate()
 			let form = Object.assign({},this.form)
+			form.file_suffix = form.file_suffix.join(',')
 			form.main = this.id
 			if(this.isInsert){
 				await api_resource.create(form)

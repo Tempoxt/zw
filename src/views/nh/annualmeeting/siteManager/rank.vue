@@ -1,5 +1,5 @@
 <template>
-    <el-row class="h-full">
+    <el-row class="h-full public-table-container">
          <el-col :span="4" class="h-full">
             <div style="padding:20px" class="h-full">
                 <div class="side-header">

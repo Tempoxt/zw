@@ -43,7 +43,9 @@ export default {
 .ui-table {
   width: 100%;
   height: 100%;
-  padding-top: 20px;
+  padding: 20px;
+  padding-bottom: 0;
+  box-sizing: border-box;
   .table-top {
     display: flex;
     justify-content: space-between;
