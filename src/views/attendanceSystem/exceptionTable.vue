@@ -75,7 +75,7 @@
 		width="800px"
 		>
 
-		<el-form ref="form" :model="form3" label-width="110px" :rules="rule3">
+		<el-form ref="form3" :model="form3" label-width="110px" :rules="rule3">
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="调休日期" prop="fallsDate">
@@ -164,36 +164,42 @@
     </el-dialog>
 
 	<el-dialog
-		title="添加"
+		:title="dialogStatus=='letoffAdd'?'添加':'编辑'"
 		:visible.sync="dialogForm5Visible"
 		class="public-dialog"
 		v-el-drag-dialog
 		width="800px"
 		>
-
-		<el-form ref="form" :model="form5" label-width="110px" :rules="rule3">
+		<el-form ref="form5" :model="form5" label-width="110px" :rules="rule3">
+			<el-row v-if="dialogStatus=='letoffEdit'">
+				<el-col :span="12">
+					<form-render :type="`input`" :field="{name:'姓名'}" disabled v-model="form5.staff__chineseName"/>
+				</el-col>
+				<el-col :span="12">
+					<form-render :type="`input`" :field="{name:'工号'}" disabled v-model="form5.staff__employeeCode"/>
+				</el-col>
+			</el-row>
 			<el-row>
 				<el-col :span="12">
-					<el-form-item label="放休开始日期" prop="fallsDate">
-						<el-date-picker
-							:picker-options="pickerOptions1"
-							v-model="form5.fallsDate"
-							type="date"
-							format="yyyy-MM-dd"
-							value-format="yyyy-MM-dd"
-							style="width:100%"
-							placeholder="选择日期">
-						</el-date-picker>
-					</el-form-item>
+					<form-render prop="letOffStartDate" :type="`day`" :field="{name:'放休开始日期'}" v-model="form5.letOffStartDate"/>
+				</el-col>
+				<el-col :span="12">
+					<form-render prop="letOffEndDate" :type="`day`" :field="{name:'放休结束日期'}" v-model="form5.letOffEndDate"/>
+				</el-col>
+				<el-col :span="12">
+					<form-render prop="letOffDay" :type="`inputSuffix`" placeholder="系统自动计算" suffix="小时" :field="{name:'放休工时'}" disabled v-model="letOffDay"/>
+				</el-col>
+				<el-col :span="12">
+					<form-render prop="lefOffReason" :type="`textarea`" :field="{name:'放休原因'}" v-model="form5.lefOffReason"/>
 				</el-col>
 			</el-row>
 		</el-form>
 
-      	<OrgSelect :result="result" v-model="form5.ids" ref="OrgSelect5" :activeNam="this.judge?'':'first'" v-if="dialogForm5Visible"/>
+      	<OrgSelect :result="result" v-model="form5.ids" ref="OrgSelect5" :activeNam="this.judge?'':'first'" v-if="dialogForm5Visible&&dialogStatus=='letoffAdd'"/>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm5Visible = false">取 消</el-button>
-			<el-button type="primary" @click="handleForm5Submit" :disabled="disabled3">确 定</el-button>
+			<el-button type="primary" @click="handleForm5Submit">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -296,7 +302,10 @@ export default {
 				fallsDate: null,
 				fallsWorkDate: null
 			},
-			form5:{},
+			form5:{
+				letOffStartDate:'',
+				letOffEndDate:'',
+			},
 			result:[],
 			rule:{
 				exceptionType:[
@@ -305,14 +314,21 @@ export default {
 				exceptionTime:[
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
 				],
+
 			},
 			rule3:{
-				fallsDate:[
+				letOffStartDate:[
 					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
 				],
-				fallsWorkDate:[
+				letOffEndDate:[
 					{ required: true, message: '请选择日期', trigger: ['blur','change'] },
-				]
+				],
+				// letOffDay:[
+				// 	{ required: true, message: '请输入', trigger: ['blur','change'] },
+				// ],
+				lefOffReason:[
+					{ required: true, message: '请输入', trigger: ['blur','change'] },
+				],
 			},
 			pickerOptions1: {
 				disabledDate(time) {
@@ -341,6 +357,7 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
+			letOffDay:''
 		};
 	},
 	computed:{
@@ -361,7 +378,7 @@ export default {
 				return false
 			}
 			return true
-		}
+		},
 	},
 	watch:{
 		id(){
@@ -374,9 +391,24 @@ export default {
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()
+		},
+		'form5.letOffStartDate'(){
+			this.getComputeDay()
+		},
+		'form5.letOffEndDate'(){
+			this.getComputeDay()
 		}
 	},
 	methods: {
+		async getComputeDay(){
+			if(this.form5.letOffStartDate!==''&&this.form5.letOffEndDate!==''&&this.form5.letOffStartDate!==undefined&&this.form5.letOffEndDate!==undefined){
+				const {day,hour} = await this.$request.get('holidaymanager/outoffmanager/computeday',{params:{
+					letOffStartDate:this.form5.letOffStartDate,
+					letOffEndDate:this.form5.letOffEndDate,
+				}})
+				this.letOffDay = hour
+			}
+		},
 		table_disable_selected(row){
 			if(this.m=='3'&&row.creator&&row.creator=='OA'){
 				return false
@@ -449,6 +481,15 @@ export default {
 				})
 				this.dialogForm3Visible = true
 				this.judge = await this.$request.get('holidaymanager/currentmonthfalls/judge')
+			}else if(this.m==5){
+				this.dialogStatus = 'letoffAdd'
+				this.letOffDay = ''
+				this.form5={}
+				this.$nextTick(()=>{
+					this.$refs['form5'].clearValidate()
+				})
+				this.dialogForm5Visible = true
+				this.judge = await this.$request.get('holidaymanager/currentmonthfalls/judge')
 			}
 		},
 		async edit(){
@@ -464,6 +505,10 @@ export default {
 			}else if(this.m==4){
 				this.form4 = await this.api_resource.find(row.id)
 				this.dialogForm4Visible = true
+			}else if(this.m==5){
+				this.form5 = (await this.api_resource.find(row.id))[0]
+				this.dialogStatus = 'letoffEdit'
+				this.dialogForm5Visible = true
 			}
 		},
 		async handleFormSubmit(){
@@ -484,6 +529,7 @@ export default {
 			}
 		},
 		async handleForm1Submit(){
+			await this.form_validate('form1')
 			let form1 = Object.assign({},this.form1)
 			try{
 				await this.api_resource.update(form1.id,form1,{alert:false})
@@ -495,6 +541,7 @@ export default {
 			}
 		},
 		async handleForm3Submit(){
+			await this.form_validate('form3')
 			let ids3 = this.$refs.OrgSelect3.getIdsResult()
 			this.form3.ids = ids3;
 			if(this.form3.ids!==''){
@@ -511,6 +558,7 @@ export default {
 			}
 		},
 		async handleForm4Submit(){
+			await this.form_validate('form4')
 			let form4 = Object.assign({},this.form4)
 			try{
 				await this.api_resource.update(form4.id,form4,{alert:false})
@@ -522,19 +570,28 @@ export default {
 			}
 		},
 		async handleForm5Submit(){
-			let ids5 = this.$refs.OrgSelect5.getIdsResult()
-			this.form5.ids = ids5;
-			if(this.form5.ids!==''){
-				try{
-					let mes = await this.api_resource.create(this.form5)
-					this.$message.success({message:mes});
-					this.dialogForm5Visible = false
-					this.fetchTableData()
-				}catch(err){
-					
+			await this.form_validate('form5')
+			if(this.dialogStatus=='letoffAdd'){
+				let ids5 = this.$refs.OrgSelect5.getIdsResult()
+				this.form5.ids = ids5;
+				let form5 = Object.assign({},this.form5)
+				if(form5.ids!==''){
+					try{
+						let mes = await this.api_resource.create(form5)
+						this.$message.success({message:mes});
+						this.dialogForm5Visible = false
+						this.fetchTableData()
+					}catch(err){
+						
+					}
+				}else{
+					this.$message.error('请选择要添加的人员');
 				}
 			}else{
-				this.$message.error('请选择要添加的人员');
+				let form5 = Object.assign({},this.form5)
+				let mes = await this.api_resource.update(form5.id,form5)
+				this.dialogForm5Visible = false
+				this.fetchTableData()
 			}
 		},
 		async fetchTableData() {

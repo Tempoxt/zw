@@ -142,7 +142,7 @@ export default {
 		},
 		async apply(){
 			let ids = this.table_selectedRows.map(o=>o.id)
-			let mes = await this.$request.post('/salary/guaranteed/workflow',{ids:ids})
+			let mes = await this.$request.post('/salary/guaranteed/workflow',{ids:ids.join(',')})
 			this.$message.success(mes);
 			this.fetchTableData()
 		},
