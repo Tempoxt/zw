@@ -16,19 +16,19 @@ export default {
 		}
 	},
 	mounted() {
-		// if(this.datas!=''){
-			this.$nextTick(function() {
-				this.init(this.id,this.datas)
-			})
-	    // }
+		$(".box-card-c").width(parseInt($(".box-card-c").parent().width()));
+		$(".box-card-c").height(parseInt($(".box-card-c").parent().height()));
+		this.init(this.id,this.datas)
 	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				// if(this.datas!=''){
+				if(this.datas!=''){
 					this.datas = newVal
-					this.init(this.id,newVal)
-				// }
+					this.$nextTick(()=>{
+						this.init(this.id,newVal)
+					})	
+				}
 			},
 			immediate: true,
 			deep: true

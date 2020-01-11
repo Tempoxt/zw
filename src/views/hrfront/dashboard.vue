@@ -32,268 +32,8 @@
 					</el-scrollbar>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="数据分析" name="dataAnalysis">
-				<div class="outside">
-					<el-row>
-						<el-form ref="form" :model="form" label-width="90px">
-							<el-col :span="12">
-								<el-popover
-									popper-class="maxheight"
-									placement="bottom"
-									width="300"
-									style="height:500px"
-									trigger="click"
-									v-model="visible"
-									>
-									<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-										<div style="padding:20px">
-											<div class="side-header">
-												<el-input placeholder="快速查找" v-model="filterText" class="input">
-													<i slot="suffix" class="el-input__icon el-icon-search"></i>
-												</el-input>
-											</div>
-											<el-tree
-												class="tree"
-												:data="data2"
-												:props="{children: 'subs', label: 'name' }"
-												default-expand-all
-												node-key="orgid"
-												:filter-node-method="filterNode"
-												ref="tree2"
-												:highlight-current="true"
-												:check-on-click-node="false"
-												@node-click="handleChangeNode"
-												:expand-on-click-node="false"
-											>
-												<span slot-scope="{ node, data }">
-													<span v-if="data.org_type === 1" class="icon iconfont icon-zonggongsi"></span>
-													<span v-if="data.org_type === 2" class="icon iconfont icon-fengongsi"></span>
-													<span v-if="data.org_type === 3" class="icon iconfont icon-fenbumen"></span>
-													&nbsp;
-													<span>{{ node.label }}</span>
-												</span>
-											</el-tree>
-										</div>
-									</el-scrollbar>
-									<el-input 
-										slot="reference"
-										size="small"
-										style="width: 240px;"
-										placeholder="深圳市兆威机电股份有限公司"
-										:value="input5"
-										suffix-icon="el-icon-caret-bottom">
-									</el-input>
-								</el-popover>
-							</el-col>
-						</el-form>
-						<el-col :span="12" class="operating-btn">
-							<el-button plain icon="el-icon-video-play" @click="speechMode(speechIndex)">演讲模式</el-button>
-						</el-col>
-					</el-row>
-						
-					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll" style="padding-bottom:30px">
-						<el-row class="elCol">
-							<el-col :span="12" class="relative" v-if="staffData.length!=0">
-								<inService
-								id="ring-diagram"
-								title="在职人数统计"  
-								:show="checkFullshow" 
-								:datas = staffData
-								ref="echart1" 
-								screenIndex='1'
-								@fullScreen="fullScreen"
-								:class="{'speech-mode':screenIndex=='1'}"
-								></inService>
-								<div class="totalR" v-if="totalP!=''">总人数:{{totalP}}</div>
-							</el-col>
-							<el-col :span="12" v-if="sexData.length!=0">
-								<pieChart  
-								:show="checkFullshow"
-								ref="echart2"
-								title="男女比例统计" 
-								id="men-and-women"
-								screenIndex='2'
-								@fullScreen="fullScreen"
-								:color="['#5A8BFC','#FF23AE']"
-								:datas="sexData"
-								:class="{'speech-mode':screenIndex=='2'}"
-								></pieChart>
-							</el-col>
-							<el-col :span="12" v-if="eduLevelData.length!=0">
-								<pieChart
-								:show="checkFullshow"
-								ref="echart3"
-								title="学历分布统计" 
-								id="education"
-								:color="['#6556FF','#5A8BFC','#5CACFC','#40CDE9','#58D8BE','#4BDB80','#7DD453','#84EBFF','#B392FF','#FFAA7E','#FF8D8D','#E4D945','#F3D044','#FFAF47','#FF8D53','#FE68D1']"
-								screenIndex='3'
-								@fullScreen="fullScreen"
-								:datas="eduLevelData"
-								:class="{'speech-mode':screenIndex=='3'}"
-								></pieChart>
-							</el-col>
-							<el-col :span="12" v-if="eachageData.length!=0">
-								<barChart 
-								:show="checkFullshow" 
-								ref="echart4" 
-								title="各年龄段男女占比统计" 
-								screenIndex='4'
-								@fullScreen="fullScreen"
-								id="ege-data"
-								:datas="eachageData"
-								:class="{'speech-mode':screenIndex=='4'}"
-								></barChart>
-							</el-col>
-							<el-col :span="12" class="relative" v-if="memberData&&memberData.length!=0">
-								<inService
-								id="ring-member"
-								title="直接/间接人员人数及比列"  
-								:show="checkFullshow" 
-								:datas = memberData
-								:color="['#40CDE9','#FF8D53']"
-								ref="echart5" 
-								screenIndex='5'
-								@fullScreen="fullScreen"
-								:class="{'speech-mode':screenIndex=='5'}"
-								></inService>
-								<div class="totalR" v-if="totalP1!=''">人数比: {{totalP1}}</div>
-							</el-col>
-							<el-col :span="12" class="relative">
-								<inService
-								id="ring-leave"
-								title="请假情况统计表"  
-								:show="checkFullshow" 
-								:datas = leaveData
-								ref="echart6" 
-								screenIndex='6'
-								:color="['#FF7676','#40CDE9','#FF64A2','#C858FF','#FF8D53','#84EBFF','#FE68D1','#E4D945','#5A8BFC','#4BDB80','#FF8D8D']"
-								@fullScreen="fullScreen"
-								:class="{'speech-mode':screenIndex=='6'}"
-								></inService>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap1" @change="getleaveData()"/>
-								<div class="totalR" v-if="totalP2!=''">总人数:{{totalP2}}</div>
-							</el-col>
-							<el-col :span="12" class="relative" >
-								<pieChart  
-								:show="checkFullshow"
-								ref="echart7"
-								title="离职人数统计" 
-								id="leave-account"
-								screenIndex='7'
-								@fullScreen="fullScreen"
-								:color="['#40CDE9','#84EBFF','#FF64A2','#996EFF']"
-								:datas="leaveAcountData"
-								:class="{'speech-mode':screenIndex=='7'}"
-								></pieChart>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap2" @change="getleaveAcountData()"/>
-								<div class="totalR" v-if="totalP3!=''">离职人数:{{totalP3}}</div>
-							</el-col>
-							<el-col :span="12" class=" relative" v-if="leaveEduData.length!=0">
-								<singlehisto 
-								:show="checkFullshow" 
-								ref="echart8" 
-								title="离职学历分析表" 
-								screenIndex='8'
-								:color="['#996EFF']"
-								@fullScreen="fullScreen"
-								id="leave-edu"
-								:datas="leaveEduData"
-								:class="{'speech-mode':screenIndex=='8'}"
-								></singlehisto>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap3" @change="getleaveEduData()"/>
-							</el-col>
-							<el-col :span="12" class="relative" v-if="leaveReaData.length!=0">
-								<singlehisto 
-								:show="checkFullshow" 
-								ref="echart9" 
-								title="离职原因分析表" 
-								screenIndex='9'
-								:color="['#5A8BFC']"
-								@fullScreen="fullScreen"
-								id="leave-reason"
-								:datas="leaveReaData"
-								:class="{'speech-mode':screenIndex=='9'}"
-								></singlehisto>
-								<el-select v-model="leaveRea" placeholder="请选择" class="absoSelect" @change="getleaveReaData()">
-									<el-option
-									v-for="item in leaveReason"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-									</el-option>
-								</el-select>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap4" @change="getleaveReaData()"/>
-							</el-col>
-							<el-col :span="12">
-								<!-- <progre
-								id="turn-rate"
-								title="员工流失率"  
-								:show="checkFullshow" 
-								:datas = turnRate
-								ref="echart10" 
-								screenIndex='10'
-								:color="['#FF5454']"
-								@fullScreen="fullScreen"
-								:class="{'speech-mode':screenIndex=='10'}"
-								></progre> -->
-								<single
-								id="turn-rate"
-								title="员工流失率"  
-								:show="checkFullshow" 
-								:datas = turnRate
-								ref="echart10" 
-								screenIndex='10'
-								:color="['#40CDE9']"
-								@fullScreen="fullScreen"
-								:class="{'speech-mode':screenIndex=='10'}"
-								></single>
-							</el-col>
-							<el-col :span="12" class="relative"  v-if="manageData.length!=0">
-								<posnegBar 
-								:show="checkFullshow" 
-								ref="echart11" 
-								title="人力资源报表" 
-								screenIndex='11'
-								:color="['#FF7676','#84EBFF','#40CDE9']"
-								@fullScreen="fullScreen"
-								id="manage-data"
-								:datas="manageData"
-								:class="{'speech-mode':screenIndex=='11'}"
-								></posnegBar>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap5" @change="getmanageData()"/>
-							</el-col>
-							<el-col :span="12" class="relative" v-if="overtimeRate.length!=0">
-								<progre
-								:show="checkFullshow" 
-								ref="echart12" 
-								title="加班比率统计分析" 
-								screenIndex='12'
-								@fullScreen="fullScreen"
-								id="overtime-rate"
-								:datas="overtimeRate"
-								:color="['#58D8BE']"
-								:class="{'speech-mode':screenIndex=='12'}"
-								></progre>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap6" @change="getovertimeRate()"/>
-							</el-col>
-							<el-col :span="12" class="relative" >
-								<pieChart  
-								:show="checkFullshow"
-								ref="echart13"
-								title="部门工时统计" 
-								id="depart-time"
-								screenIndex='13'
-								@fullScreen="fullScreen"
-								:color="['#4BDB80','#E4D945','#FFAF47','#FF64A2']"
-								:datas="departTimeData"
-								:class="{'speech-mode':screenIndex=='13'}"
-								></pieChart>
-								<dateLap class="dateLap" width="140px" itemsD="1" v-model="dateLap7" @change="getdeparttime()"/>
-								<div class="totalR" v-if="totalP7!=''">总工时: {{totalP7}}</div>
-							</el-col>
-						</el-row>
-					</el-scrollbar>
-				</div>
+			<el-tab-pane label="数据分析" lazy name="dataAnalysis">
+				<dashboardReport/>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -303,6 +43,9 @@
 	// import workSchedule from "./workbench/workSchedule"
 	// import leaveList from "./workbench/leaveList"
 	// import supplement from "./workbench/supplement"
+
+	import dashboardReport from "./dashboard-report"
+
 	import dateLap from '@/components/Table/DateLap'
 	import accident from "./workbench/accident"
 	import personnel from "./workbench/personnel"
@@ -386,24 +129,33 @@
 		},
 		components:{
 			dateLap,
+			dashboardReport,
 			// quickEntry,
 			// workSchedule,
 			// leaveList,
 			// supplement,
 			accident,
 			personnel,
-			inService,
-			pieChart,
-			barChart,
+			// inService,
+			// pieChart,
+			// barChart,
 			// histogram,
-			singlehisto,
-			single,
-			posnegBar,
-			progre,
+			// singlehisto,
+			// single,
+			// posnegBar,
+			// progre,
 			payAdjust,
 			// sunbrust,
 		},
 		watch:{
+			activeName(val) {
+				if(val=="dataAnalysis"){
+					setTimeout(()=>{
+						var myEvent = new Event('resize')
+						window.dispatchEvent(myEvent)
+					},1000)
+				}
+			},
 			orgid(){
 				this.fetchData()
 				this.visible = false
@@ -602,13 +354,8 @@
 			this.getmemberData()
 			this.getovertimeRate()
 		},
-		async created(){
-			this.data2 = await this.$request.get('org/tree');
-			let defaultMenuid = this.data2[0].orgid
-			this.$refs.tree2.setCurrentKey(defaultMenuid);
-			this.orgid = defaultMenuid;
-			this.personnel = await this.$request.get('hrm/staffautoshiftremind');
-			this.payAdjust = (await this.$request.get('protal/notice')).rows;
+		created(){
+
 		}
   };
 </script>
