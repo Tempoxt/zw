@@ -189,5 +189,12 @@ export default [
         meta: {
             title: '保底名单'
         }
+    },{
+        name: 'taxs',
+        component: () =>
+            import ('@/views/finance/salary/tax'),
+        meta: {
+            title: '个税缴纳累计'
+        }
     },
 ]
