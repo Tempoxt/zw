@@ -1696,6 +1696,11 @@ export default {
            this.profileData =await this.$request.get('hrm/detailmsg/'+this.staffId)
         },
     },
+    activated(){
+        this.$nextTick(()=>{
+            this.$refs['elTable'].recalculate()
+       })
+    },
     async created() {
         const { field, action,table } = await api_common.menuInit("hrm/staff");
         this.table_field = field;

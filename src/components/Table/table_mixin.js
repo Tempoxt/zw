@@ -14,6 +14,17 @@ import DateLapRange from '@/components/Table/DateLapRange'
 import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
+function debounce(func, delay) {
+  let timer;
+  return function (...args) {
+    if (timer) {
+        clearTimeout(timer);    
+　　}
+    timer = setTimeout(() => {
+        func.apply(this, args); 
+    }, delay)
+  }
+}
 export default {
   props:{
     resource:String,
@@ -110,12 +121,13 @@ export default {
       return func.apply(null, args);
     }
   },
-  mounted(){
+  created(){
     let _onresize = window.onresize
-    window.onresize = () => {
+    window.onresize = debounce(() => {
       _onresize && _onresize()
       this.window_innerHeight = window.innerHeight
-    }
+      this.onTableResize && this.onTableResize()
+    },300)
     
   },
   methods: {
