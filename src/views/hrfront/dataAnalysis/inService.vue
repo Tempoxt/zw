@@ -16,20 +16,17 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!=[]&&this.datas!=''){
-			this.$nextTick(function() {
-				this.init(this.id,this.datas)
-			})
-		}
+		this.init(this.id,this.datas)
 	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-			// console.log(this.datas,'inservice')
-			// console.log(this.datas[0].name,'this.datas[0].name')
 				if(this.datas!=[]&&this.datas!=''){
 					this.datas = newVal
-					this.init(this.id,newVal)
+					this.$nextTick(()=>{
+						this.init(this.id,this.datas)
+					})
+					
 				}
 			},
 			immediate: true,
