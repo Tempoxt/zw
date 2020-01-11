@@ -144,16 +144,17 @@ export default {
     watch: {
         'screenHeight': function (val) { // 监听屏幕高度变化
             var oIframe = document.getElementById('srceenFull')
-            oIframe.style.height = (Number(val) - 40) + 'px'
+            oIframe && (oIframe.style.height = (Number(val) - 40) + 'px')
         }
     },
     mounted () {
-        var _this = this
-        window.onresize = function () { // 定义窗口大小变更通知事件
-            _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
-        }
+
     },
     methods:{
+        onTableResize(){
+            var _this = this
+            _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
+        },
         handleClick(val){
             
         },

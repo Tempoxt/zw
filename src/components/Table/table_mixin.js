@@ -123,11 +123,11 @@ export default {
   },
   created(){
     let _onresize = window.onresize
-    window.onresize = debounce(() => {
+    window.onresize = () => {
       _onresize && _onresize()
       this.window_innerHeight = window.innerHeight
       this.onTableResize && this.onTableResize()
-    },300)
+    }
     
   },
   methods: {
