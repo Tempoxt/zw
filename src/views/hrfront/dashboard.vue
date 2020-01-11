@@ -293,20 +293,20 @@
 					}
 				}
 			},
-			fetchData(){
-				if(this.orgid!=''&&this.orgid!=undefined){
-					this.getstaffData()
-					this.getsexData()
-					this.geteduLevelData()
-					this.geteachageData()
-					this.getleaveAcountData()
-					this.getleaveEduData()
-					this.getleaveReaData()
-					this.getturnRate()
-					this.getmanageData()
-					this.getdeparttime()
-				}
-			}
+			// fetchData(){
+			// 	if(this.orgid!=''&&this.orgid!=undefined){
+			// 		this.getstaffData()
+			// 		this.getsexData()
+			// 		this.geteduLevelData()
+			// 		this.geteachageData()
+			// 		this.getleaveAcountData()
+			// 		this.getleaveEduData()
+			// 		this.getleaveReaData()
+			// 		this.getturnRate()
+			// 		this.getmanageData()
+			// 		this.getdeparttime()
+			// 	}
+			// }
 		},
 		async mounted() {
 			let _this = this;

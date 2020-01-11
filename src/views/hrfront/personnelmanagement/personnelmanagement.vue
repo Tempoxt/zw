@@ -1361,9 +1361,7 @@ export default {
             this.fetchTableData()
         },
         table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
-            console.log($rowIndex, column, columnIndex, $columnIndex, fixed, isHidden, '130')
             let row = this.table_field.find(field=>field.showname===column.title)
-            console.log(row, '140')
             var isEnd = false
             this.table_field.forEach((item,i)=>{
                 if(item==row&&i==this.table_field.length-2){

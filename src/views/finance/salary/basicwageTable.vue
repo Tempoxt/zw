@@ -64,31 +64,36 @@
             <dateLap v-model="table_form.dateLap" itemsD="1" @change="fetch"/>
           </div>
     </table-header>
-    <el-table
-        ref="elTable"
-      @selection-change="handleChangeSelection"
+    <vxe-table
+      class="public-vxe-table"  
+      ref="elTable"
+      resizable
+      show-overflow
+      highlight-hover-row
+      @select-all="handleChangeSelection"
+      @select-change="handleChangeSelection"
       :data="table_data"
       border
       style="width: 100%"
       v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
+      :header-cell-style="vxeHeaderStyle"
       :height="table_height"
-      @header-dragend="table_dragend"
+      @resizable-change="table_dragend"
       @sort-change="table_sort_change"
       
     >
-      <el-table-column 
+      <vxe-table-column 
         type="selection" 
         width="60" 
         class-name="table-column-disabled"
         :selectable="table_disable_selected"
         >
-      </el-table-column>
-      <el-table-column type="index" :index="indexMethod" width="70" fixed/>
-      <el-table-column prop="staff__employeeCode" sortable label="工号" fixed/>
-      <el-table-column prop="staff__chineseName" label="姓名" fixed/>
-      <each-table-column :table_field="table_field.filter(o=>!['staff__employeeCode','staff__chineseName'].includes(o.name))"/>
-    </el-table>
+      </vxe-table-column>
+      <vxe-table-column type="index" :index="indexMethod" width="80" fixed/>
+      <vxe-table-column field="staff__employeeCode" sortable title="工号" width="80" fixed/>
+      <vxe-table-column field="staff__chineseName" title="姓名" width="120" fixed/>
+      <vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+    </vxe-table>
      <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -100,6 +105,7 @@
 </template>
 <script>
 import * as api_common from "@/api/common";
+const api_pagemanager = api_common.resource('pagemanager/field')
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("basicwage");
 import dayjs from 'dayjs'
@@ -114,6 +120,7 @@ export default {
   props:['id'],
   data() {
     return {
+      vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
       loading: true,
       form:{},
       api_resource,
@@ -135,6 +142,27 @@ export default {
     }
   },
   methods: {
+    handleChangeSelection({selection:val}){ // 单选
+          this.table_selectedRowsInfo = val
+          this.table_selectedRows = val
+          this.$emit("update:table_selectedRows",val)
+    },
+    table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+        let row = this.table_field.find(field=>field.showname===column.title)
+        var isEnd = false
+        this.table_field.forEach((item,i)=>{
+            if(item==row&&i==this.table_field.length-2){
+            isEnd = true
+            }
+        })
+        var newWidth = column.resizeWidth
+        row.width = newWidth
+        row.menuid = row.menuid_id
+        api_pagemanager.update(row.id,{
+            width:newWidth,
+            menuid:row.menuid_id
+        },{alert:false})
+    },
     fetch(){
         this.table_form.currentpage = 1
         this.fetchTableData()
@@ -182,6 +210,7 @@ export default {
   async created() {
     const { field, action,table } = await api_common.menuInit("basicwage");
     this.table_field = field;
+    this.table_field.find(o=> o.name=='bank').width = 70
     var socialSecurityMain = this.table_field.filter(o=>['staff__socialSecurityMain'].includes(o.name))[0].sourcefrom.choice
     var social = socialSecurityMain.map(item=>item)
     this.social = social.map(o=>{return {label:o[0],value:o[1]}})
