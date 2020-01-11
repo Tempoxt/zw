@@ -90,8 +90,8 @@ export default {
         var checkNumber = (rule, value, callback)=>{
 			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^-?\d+$/.test(value))) {
-				callback(new Error('请输入整数'));
+			}else if (!(/^\d+$/.test(value))) {
+				callback(new Error('请输入正整数'));
 			}else{
 				callback();
 			}
