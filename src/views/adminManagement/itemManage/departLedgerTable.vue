@@ -36,7 +36,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+                <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
             </div>
         </el-dialog>
         <table-header
@@ -115,14 +115,6 @@ export default {
             },
         };
     },
-    computed:{
-        disabled(){
-            if(this.form.take_number!=''&&this.form.take_number!=undefined){
-                return false
-            }
-            return true
-        }
-    },
     watch:{
         orgid(){
             this.table_form.currentpage = 1
@@ -141,6 +133,7 @@ export default {
             this.dialogFormVisible = true
         },
         async handleFormSubmit(){
+            await this.form_validate()
             let form = Object.assign({},this.form)
             let mess = await this.$request.post('toolstationery/departledger/takestock',form)
             this.$message.success(mess);
