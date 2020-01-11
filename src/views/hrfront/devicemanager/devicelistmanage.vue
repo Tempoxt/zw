@@ -61,17 +61,14 @@ export default {
     watch: {
         'screenHeight': function (val) { // 监听屏幕高度变化
             var oIframe = document.getElementById('srceenFull')
-            oIframe.style.height = (Number(val) - 40) + 'px'
+            oIframe && (oIframe.style.height = (Number(val) - 40) + 'px')
         },
         filterText(val) {
             this.$refs.tree2.filter(val);
         },
     },
     mounted () {
-        var _this = this
-        window.onresize = function () { // 定义窗口大小变更通知事件
-            _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
-        }
+      
     },
     computed:{
         disable(){
@@ -98,6 +95,10 @@ export default {
         }
     },
     methods:{
+        onTableResize(){
+             var _this = this
+             _this.screenHeight = document.body.clientHeight-170+'px'// 窗口高度
+        },
         handleClick(val){
             
         },
@@ -109,7 +110,6 @@ export default {
             return data.name && data.name.indexOf(value) !== -1;
         },
     },
-    
     async created(){
         this.data2 = await this.$request.get('devicemanager/devicelistmanage/getdevicemenu');
         let defaultId = this.data2[0].id
