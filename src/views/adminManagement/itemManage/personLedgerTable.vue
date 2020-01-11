@@ -117,9 +117,9 @@ export default {
             importUploadUrl:'/toolstationery/personledger/upload',
             downloadUrl:'/toolstationery/personledger/upload',
             openDrawers:false,
-            articleTitle:'',
+            materialCode:'',
             articleSize:'',
-            articleType:'',
+            articleTitle:'',
             total_price:'',
             employeeCode:'',
         };
@@ -173,9 +173,7 @@ export default {
         async fetchToolData(){
             this.articleData = await this.$request.get('toolstationery/personledger/history',
                 {params:{
-                    articleType: this.articleType,
-                    articleTitle: this.articleTitle,
-                    articleSize: this.articleSize,
+                    materialCode: this.materialCode,
                     employeeCode: this.employeeCode
                 }}
             )
@@ -185,7 +183,7 @@ export default {
                 this.openDrawers = true
                 this.articleTitle = row.articleTitle
                 this.articleSize = row.articleSize
-                this.articleType = row.articleType
+                this.materialCode = row.materialCode
                 this.employeeCode = row.employeeCode
                 this.fetchToolData()
 			}

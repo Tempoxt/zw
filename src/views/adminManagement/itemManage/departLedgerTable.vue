@@ -4,6 +4,41 @@
         :table_query.sync="table_form.query"
         @query="querySubmit"
         >
+
+         <el-dialog
+            title="盘点"
+            :visible.sync="dialogFormVisible"
+            class="public-dialog"
+            v-el-drag-dialog
+		    width="800px"
+            >
+           	<div>
+                <el-form ref="form" :model="form" label-width="70px" :rules="rules">
+                    <el-row :gutter="20">
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="materialCode" :field="{name:'物料代码'}" :disabled="true" v-model="form.materialCode"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="articleType" :field="{name:'类别'}" :disabled="true" v-model="form.articleType"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="articleTitle" :field="{name:'名称'}" :disabled="true" v-model="form.articleTitle"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="articleSize" :field="{name:'规格'}" :disabled="true" v-model="form.articleSize"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="take_number" :field="{name:'账面库存'}" v-model="form.take_number"/>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+            </div>
+        </el-dialog>
         <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -52,14 +87,41 @@ export default {
     mixins: [table_mixin],
     props:['orgid'],
     data() {
+        var checkNumber = (rule, value, callback)=>{
+			if (value==='') {
+				return callback(new Error('请输入'));
+			}else if (!(/^-?\d+$/.test(value))) {
+				callback(new Error('请输入整数'));
+			}else{
+				callback();
+			}
+		}
         return {
-            baseUrl,
+            baseUrl, 
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
             table_topHeight:265,
             total_price:'',
+            form:{
+               take_number: '' 
+            },
+            dialogFormVisible: false,
+            rules:{
+                take_number:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                    { validator: checkNumber, trigger: 'blur' }
+                ],
+            },
         };
+    },
+    computed:{
+        disabled(){
+            if(this.form.take_number!=''&&this.form.take_number!=undefined){
+                return false
+            }
+            return true
+        }
     },
     watch:{
         orgid(){
@@ -68,6 +130,23 @@ export default {
         },
     },
     methods: {
+        inventory(){
+            this.form.take_number = ''
+            this.$nextTick(()=>{
+				this.$refs['form'].clearValidate()
+            })
+            let row = this.table_selectedRows[0];
+            this.form = row
+            this.form.ledger_id = row.id
+            this.dialogFormVisible = true
+        },
+        async handleFormSubmit(){
+            let form = Object.assign({},this.form)
+            let mess = await this.$request.post('toolstationery/departledger/takestock',form)
+            this.$message.success(mess);
+            this.fetch()
+            this.dialogFormVisible = false
+        },
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()

@@ -41,16 +41,25 @@
                         </el-row>
                         <div style="border-top: 1px solid #E4E4E4;padding-top: 30px;">
                             <el-row v-for="(suk,i) in form.sku_info" :key="i" :gutter="10">
-                                <el-col :span="7">
+                                <el-col :span="6">
+                                    <el-form-item
+                                        :prop="'sku_info.' + i + '.materialCode'"
+                                        label="物料编码"
+                                        :rules="{ required: true, message: '请输入', trigger: 'blur' }"
+                                        >
+                                        <el-input v-model="suk.materialCode" :disabled="!isInsert&&suk.lock==true"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
                                     <el-form-item
                                         :prop="'sku_info.' + i + '.size'"
                                         label="规格"
                                         :rules="{ required: true, message: '请输入', trigger: 'blur' }"
                                         >
-                                        <el-input v-model="suk.size" :disabled="!isInsert&&suk.lock==true"></el-input>
+                                        <el-input v-model="suk.size"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="7">
+                                <el-col :span="6">
                                     <el-form-item
                                         :prop="'sku_info.' + i + '.price'"
                                         label="单价/元"
@@ -61,7 +70,7 @@
                                         <el-input v-model="suk.price"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="7">
+                                <el-col :span="5">
                                     <el-form-item
                                         :prop="'sku_info.' + i + '.allStock'"
                                         label="初始库存"
@@ -72,7 +81,7 @@
                                         <el-input v-model="suk.allStock" :disabled="!isInsert&&suk.disabled!=false"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="3">
+                                <el-col :span="1">
                                     <el-button icon="el-icon-plus" circle @click="addSku" v-if="i==0"></el-button>
                                     <el-button icon="el-icon-minus" circle @click="deleteSku(suk)" v-else></el-button>
                                 </el-col>
@@ -378,7 +387,7 @@ export default {
 			this.fetchTableData()
 		},
         async getType(){
-            this.typeList = (await this.$request.get('toolstationery/type')).map(o=>{return {label:o.title,value:o.id}});
+            this.typeList = (await this.$request.get('toolstationery/type/selectlist')).map(o=>{return {label:o.title,value:o.id}});
         },
         add(){
             this.getType()
@@ -428,10 +437,6 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
-            if(form.image==undefined||form.image==''){
-                this.$message.error('请上传图片');
-                return
-            }
             if(this.dialogStatus=='insert'){
                 let mess = await api_resource.create(form)
                 this.$message.success(mess);
