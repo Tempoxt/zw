@@ -94,7 +94,7 @@
             </vxe-table-column>
             <vxe-table-column label="操作" fixed="right" width="74">
                 <template slot-scope="scope">
-                    <el-button @click="deleteFinger(scope.row)" type="text" size="small">删除指纹</el-button>
+                    <el-button @click="deleteFinger(scope.row)" type="text" size="small" style="padding-top:1px;padding-bottom:1px">删除指纹</el-button>
                 </template>
             </vxe-table-column>
         </vxe-table>
