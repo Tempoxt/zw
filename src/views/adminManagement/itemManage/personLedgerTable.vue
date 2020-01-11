@@ -26,12 +26,12 @@
                         <el-table-column prop="flowDate" label="流转日期"></el-table-column>
                         <el-table-column prop="giveChineseName" label="发出人" >
                             <template slot-scope="scope">
-                                <span>{{scope.row.giveChineseName}} / {{scope.row.giveEmployeeCode}}</span>
+                                <span>{{scope.row.giveChineseName}} <span>{{scope.row.giveEmployeeCode!=null?'/'+scope.row.giveEmployeeCode:''}}</span></span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="receiveChineseName" label="接收人" >
                             <template slot-scope="scope">
-                                <span>{{scope.row.receiveChineseName}} / {{scope.row.receiveEmployeeCode}}</span>
+                                <span>{{scope.row.receiveChineseName}} <span>{{scope.row.receiveEmployeeCode!=null?'/'+scope.row.receiveEmployeeCode:''}}</span></span>
                             </template>
                         </el-table-column>
                     </el-table>
