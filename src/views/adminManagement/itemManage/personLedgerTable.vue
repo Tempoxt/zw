@@ -26,12 +26,12 @@
                         <el-table-column prop="flowDate" label="流转日期"></el-table-column>
                         <el-table-column prop="giveChineseName" label="发出人" >
                             <template slot-scope="scope">
-                                <span>{{scope.row.giveChineseName}} / {{scope.row.giveEmployeeCode}}</span>
+                                <span>{{scope.row.giveChineseName}} <span>{{scope.row.giveEmployeeCode!=null?'/'+scope.row.giveEmployeeCode:''}}</span></span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="receiveChineseName" label="接收人" >
                             <template slot-scope="scope">
-                                <span>{{scope.row.receiveChineseName}} / {{scope.row.receiveEmployeeCode}}</span>
+                                <span>{{scope.row.receiveChineseName}} <span>{{scope.row.receiveEmployeeCode!=null?'/'+scope.row.receiveEmployeeCode:''}}</span></span>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -117,9 +117,9 @@ export default {
             importUploadUrl:'/toolstationery/personledger/upload',
             downloadUrl:'/toolstationery/personledger/upload',
             openDrawers:false,
-            articleTitle:'',
+            materialCode:'',
             articleSize:'',
-            articleType:'',
+            articleTitle:'',
             total_price:'',
             employeeCode:'',
         };
@@ -173,9 +173,7 @@ export default {
         async fetchToolData(){
             this.articleData = await this.$request.get('toolstationery/personledger/history',
                 {params:{
-                    articleType: this.articleType,
-                    articleTitle: this.articleTitle,
-                    articleSize: this.articleSize,
+                    materialCode: this.materialCode,
                     employeeCode: this.employeeCode
                 }}
             )
@@ -185,7 +183,7 @@ export default {
                 this.openDrawers = true
                 this.articleTitle = row.articleTitle
                 this.articleSize = row.articleSize
-                this.articleType = row.articleType
+                this.materialCode = row.materialCode
                 this.employeeCode = row.employeeCode
                 this.fetchToolData()
 			}

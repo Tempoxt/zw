@@ -30,31 +30,19 @@
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="16" :offset="4" v-if="isInsert">
-                            <form-render :type="`select`" prop="type_id" :field="{name:'类别',options:typeList}" v-model="form.type_id"/>
-                        </el-col>
-                        <el-col :span="16" :offset="4" v-if="isInsert">
-                            <el-form-item prop="title" label="物品名称" >
-                                <el-select v-model="form.title" placeholder="请搜索或选择" :disabled="!isInsert" style="width:100%" filterable>
-                                    <el-option v-for="item in titleList" :key="item.id" :label="item.title" :value="item.title"></el-option>
+                        <el-col :span="16" :offset="4">
+                            <el-form-item label="物料编码" prop="articleId">
+                                <el-select v-model="form.articleId" placeholder="请搜索或选择" filterable style="width:100%"
+                                    :disabled="!isInsert">
+                                    <el-option
+                                        v-for="item in typeList"
+                                        :key="item.articleId"
+                                        :label="'['+item.materialCode+']'+' '+item.title+' '+item.size"
+                                        :value="item.articleId">
+                                        <span >[{{item.materialCode}}]&nbsp;{{item.title}} {{item.size}}</span>
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
-                        </el-col>
-                        <el-col :span="16" :offset="4" v-if="isInsert">
-                            <el-form-item prop="size" label="规格">
-                                <el-select v-model="form.size" placeholder="请选择" :disabled="!isInsert" style="width:100%">
-                                    <el-option v-for="item in sizeList" :key="item.id" :label="item.size" :value="item.size"></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="16" :offset="4" v-if="!isInsert">
-                            <form-render :type="`input`" prop="type__title" :field="{name:'类别'}" v-model="form.type__title" :disabled="true"/>
-                        </el-col>
-                        <el-col :span="16" :offset="4" v-if="!isInsert">
-                            <form-render :type="`input`" prop="title" :field="{name:'物品名称'}" v-model="form.title" :disabled="!isInsert"/>
-                        </el-col>
-                        <el-col :span="16" :offset="4" v-if="!isInsert">
-                            <form-render :type="`input`" prop="size" :field="{name:'规格'}" v-model="form.size" :disabled="!isInsert"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" prop="dose" :field="{name:'标准用量'}" v-model="form.dose"/>
@@ -141,22 +129,16 @@ export default {
             table_topHeight:235,
             dialogFormVisible:false,
             form:{},
+            form1:{
+                take_number:''
+            },
             rules:{
-                type_id:[
-                    { required: true, message: '请选择', trigger: ['blur','change'] },
-                ],
-                title:[
-                    { required: true, message: '请选择', trigger: ['blur','change'] },
-                ],
-                size:[
+                articleId:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
                 dose:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                     { validator: checkNumber, trigger: 'blur' }
-                ],
-                type__title:[
-                    { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
                 month:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
@@ -183,25 +165,6 @@ export default {
         orgid(){
             this.table_form.currentpage = 1
             this.fetchTableData()
-        },
-        'form.type_id'(){
-            if(this.form.type_id!=''&&this.form.type_id!=null&&this.dialogStatus=='insert'){
-                this.getTitle()
-                delete this.form.title
-                delete this.form.size
-                this.$nextTick(()=>{
-                    this.$refs['form'].clearValidate()
-                })
-            }
-        },
-        'form.title'(){
-            if(this.form.title!=''&&this.form.title!=null&&this.dialogStatus=='insert'){
-                this.getSize()
-                delete this.form.size
-                this.$nextTick(()=>{
-                    this.$refs['form'].clearValidate()
-                })
-            }
         },
     },
     methods: {
@@ -236,13 +199,7 @@ export default {
 			this.fetchTableData()
 		},
         async getType(){
-            this.typeList = (await this.$request.get('toolstationery/type')).map(o=>{return {label:o.title,value:o.id}});
-        },
-        async getTitle(){
-            this.titleList = await this.$request.get('toolstationery/inventory/pulldownbytype?type_id='+this.form.type_id)
-        },
-        async getSize(){
-            this.sizeList = await this.$request.get('toolstationery/inventory/pulldownbytitle?type_id='+this.form.type_id+'&title='+this.form.title)
+            this.typeList = await this.$request.get('toolstationery/standarddose/materiallist?department_id='+this.orgid);
         },
         async add(){
             await this.$request.get('toolstationery/standarddose/checkorg?org_id='+this.orgid)
@@ -258,6 +215,7 @@ export default {
         async edit(){
             let row = this.table_selectedRows[0];
             this.form = (await api_resource.find(row.id))[0]
+            this.getType()
             this.dialogFormVisible = true
             this.name = this.form.department__name
         },

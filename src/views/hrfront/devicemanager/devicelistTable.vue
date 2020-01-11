@@ -248,6 +248,11 @@ export default {
             }
         }
     },
+    activated(){
+       this.$nextTick(()=>{
+          this.$refs['elTable'].recalculate()
+       })
+    },
     async created() {
         const { field, action,table } = await api_common.menuInit("devicemanager/devicelistmanage");
         this.table_field = field;
