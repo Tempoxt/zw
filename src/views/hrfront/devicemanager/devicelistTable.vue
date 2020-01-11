@@ -126,6 +126,7 @@ export default {
             form:{
                 device:[]
             },
+            elTableHeight: '',
             api_resource,
             queryDialogFormVisible:true,
             table_topHeight:235,
@@ -154,6 +155,9 @@ export default {
         }
     }, 
     watch:{
+        elTableHeight() {
+            this.$refs['elTable'].recalculate()
+        },
         id(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -250,6 +254,7 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
+        this.elTableHeight = this.$refs['elTable'].height
     },
 };
 </script>
