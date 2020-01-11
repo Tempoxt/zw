@@ -15,13 +15,16 @@
 		width="500px"
 		>
 		<div>
-			<el-form ref="form" :model="form" label-width="100px" :rules="rules">
+			<el-form ref="form" :model="form" label-width="100px">
 				<el-row :gutter="20">
 					<el-col :span="22">
 						<form-render :type="`member`" :field="{name:'操作人',defaultName:form.serverUser}" v-model="form.emID" />
 					</el-col>
 					<el-col :span="22">
 						<form-render :type="`input`" :field="{name:'服务器IP'}" v-model="form.serverIP"/>
+					</el-col>
+					<el-col :span="22">
+						<form-render :type="`input`" :field="{name:'密钥'}" v-model="form.password"/>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -100,7 +103,7 @@ export default {
 	},
 	computed:{
 		disabled(){
-			if(this.form.emID!=''&&this.form.serverIP!=''){
+			if(this.form.emID!=''&&this.form.serverIP!=''&&this.form.password!=''){
 				return false
 			}
 			return true
