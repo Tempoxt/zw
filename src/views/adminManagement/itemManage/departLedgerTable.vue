@@ -66,7 +66,7 @@
                 >
             </el-table-column>
             <el-table-column type="index" :index="indexMethod"/>
-            <each-table-column :table_field="table_field"/>
+            <each-table-column :table_field="table_field" :template="template"/>
         </el-table>
         <div style="margin:10px 0 0 10px;" v-if="total_price">总金额：{{total_price}}元</div>
         <table-pagination 
@@ -113,6 +113,13 @@ export default {
                     { validator: checkNumber, trigger: 'blur' }
                 ],
             },
+            template:{
+                articleImage(row,column){
+                    if(column.articleImage!=''&&column.articleImage!=undefined){
+                        return <img src={baseUrl+column.articleImage} width="30" height="30"></img>
+                    }
+                }
+            }
         };
     },
     watch:{
