@@ -81,47 +81,52 @@
             <dateLap v-model="table_form.dateLap" @change="fetch"/>
           </div>
     </table-header>
-    <el-table
-        ref="elTable"
-      @selection-change="handleChangeSelection"
+    <vxe-table
+      ref="elTable"
+      resizable
+      show-overflow
+      highlight-hover-row
+      @select-all="handleChangeSelection"
+      @select-change="handleChangeSelection"
       :data="table_data"
       border
       style="width: 100%"
       v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
+      :header-cell-style="vxeHeaderStyle"
       :height="table_height"
-      @header-dragend="table_dragend"
+      @resizable-change="table_dragend"
       @sort-change="table_sort_change"
       
     >
-    <el-table-column 
+    <vxe-table-column 
       type="selection" 
       width="60" 
       class-name="table-column-disabled"
       :selectable="table_disable_selected"
       >
-      </el-table-column>
-      <el-table-column type="index" :index="indexMethod" width="70" fixed/>
-      <el-table-column prop="month" label="月份" fixed/>
-      <el-table-column prop="signState" label="签收状态" fixed>
+      </vxe-table-column>
+      <vxe-table-column type="index" :index="indexMethod" width="70" fixed/>
+      <vxe-table-column prop="month" label="月份" fixed/>
+      <vxe-table-column prop="signState" label="签收状态" fixed>
           <template slot-scope="scope">
             <el-tag size="mini" type="danger" v-if="scope.row.signState==1">未签收</el-tag>
             <el-tag size="mini" type="success" v-if="scope.row.signState==2">已签收</el-tag>
             <el-tag size="mini" type="success" v-if="scope.row.signState==3">默认签收</el-tag>
           </template>
-      </el-table-column>
-      <el-table-column prop="chineseName" label="姓名" fixed>
+      </vxe-table-column>
+      <vxe-table-column prop="chineseName" label="姓名" fixed>
           <template slot-scope="scope">
               <div v-html="scope.row.staff__chineseName"></div>
           </template>
-      </el-table-column>
-      <el-table-column prop="staff__employeeCode" label="工号" fixed>
+      </vxe-table-column>
+      <vxe-table-column prop="staff__employeeCode" label="工号" fixed>
           <template slot-scope="scope">
               <div v-html="scope.row.staff__employeeCode"></div>
           </template>
-      </el-table-column>
-      <each-table-column :table_field="table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name))"/>
-    </el-table>
+      </vxe-table-column>
+      <vxe-table-column v-for="field in table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <!-- <each-table-column :table_field="table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name))"/> -->
+    </vxe-table>
      <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -159,6 +164,7 @@ export default {
   },
   data() {
     return {
+      vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
       loading: true,
       form:{},
       api_resource,
@@ -203,11 +209,31 @@ export default {
     }
   },
   methods: {
-    
-        fetch(){
-            this.table_form.currentpage = 1
-            this.fetchTableData()
-        },
+    handleChangeSelection({selection:val}){ // 单选
+        this.table_selectedRowsInfo = val
+        this.table_selectedRows = val
+        this.$emit("update:table_selectedRows",val)
+    },
+    table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+        let row = this.table_field.find(field=>field.showname===column.title)
+        var isEnd = false
+        this.table_field.forEach((item,i)=>{
+            if(item==row&&i==this.table_field.length-2){
+            isEnd = true
+            }
+        })
+        var newWidth = column.resizeWidth
+        row.width = newWidth
+        row.menuid = row.menuid_id
+        api_pagemanager.update(row.id,{
+            width:newWidth,
+            menuid:row.menuid_id
+        },{alert:false})
+    },
+    fetch(){
+        this.table_form.currentpage = 1
+        this.fetchTableData()
+    },
     async set(){
         this.form2 = await this.$request.get('/hot/recordbasic')
         this.dialogForm2Visible = true

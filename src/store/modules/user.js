@@ -22,9 +22,14 @@ const user = {
             return 
         },
         async getUserInfo({ commit, state }){
-           const userInfo =  await api_user.getUserInfo()
-           commit('setUserInfo',userInfo)
-           return userInfo
+           try {
+                const userInfo =  await api_user.getUserInfo()
+                commit('setUserInfo',userInfo)
+                return userInfo
+           } catch (error) {
+                auth.removeToken()
+                window.location.reload()
+           }
         }
     }
 }
