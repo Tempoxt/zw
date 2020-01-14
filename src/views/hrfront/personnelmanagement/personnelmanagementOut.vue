@@ -454,7 +454,7 @@ export default {
       api_resource,
       orgCategory: [],
       queryDialogFormVisible: true,
-      table_topHeight: 276,
+      table_topHeight: 296,
       profileData: {},
       openDrawers: false,
       dialogForm3Visible: false,

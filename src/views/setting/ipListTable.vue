@@ -13,6 +13,7 @@
 		class="public-dialog"
 		v-el-drag-dialog
 		width="500px"
+		:close-on-click-modal="false"
 		>
 		<div>
 			<el-form ref="form" :model="form" label-width="100px">
@@ -21,10 +22,10 @@
 						<form-render :type="`member`" :field="{name:'操作人',defaultName:form.serverUser}" v-model="form.emID" />
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`input`" :field="{name:'服务器IP'}" v-model="form.serverIP"/>
+						<form-render :type="`input`" :field="{name:'服务器IP'}" v-model.trim="form.serverIP"/>
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`input`" :field="{name:'密钥'}" v-model="form.password"/>
+						<form-render :type="`input`" :field="{name:'密钥'}" v-model.trim="form.password"/>
 					</el-col>
 				</el-row>
 			</el-form>

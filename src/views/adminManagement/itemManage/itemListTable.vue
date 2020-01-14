@@ -367,8 +367,8 @@ export default {
         checkNumber(rule, value, callback){
 			if (value==='') {
 				return callback(new Error('请输入'));
-			}else if (!(/^\d+(\.\d{1,2})?$/.test(value))) {
-				callback(new Error('请输入精度为两位小数以内的正数'));
+			}else if (!(/^\d+(\.\d{1,3})?$/.test(value))) {
+				callback(new Error('请输入精度为3位小数以内的正数'));
 			}else{
 				callback();
 			}

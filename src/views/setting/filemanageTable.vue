@@ -13,6 +13,7 @@
 		class="public-dialog"
 		v-el-drag-dialog
 		width="800px"
+		:close-on-click-modal="false"
     >
 		<div>
 			<el-form ref="form" :model="form" label-width="100px" :rules="rule">
@@ -35,13 +36,13 @@
 						]}" v-model="form.file_suffix"/>
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`input`" prop="fileName" :field="{name:'文件名'}" v-model="form.fileName"/>
+						<form-render :type="`input`" prop="fileName" :field="{name:'文件名'}" v-model.trim="form.fileName"/>
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`input`" prop="menu" :field="{name:'文件目录'}" v-model="form.menu"/>
+						<form-render :type="`input`" prop="menu" :field="{name:'文件目录'}" v-model.trim="form.menu"/>
 					</el-col>
 					<el-col :span="22">
-						<form-render :type="`input`" prop="barcode" :field="{name:'条码'}" v-model="form.barcode"/>
+						<form-render :type="`input`" prop="barcode" :field="{name:'条码'}" v-model.trim="form.barcode"/>
 					</el-col>
 				</el-row>
 			</el-form>
