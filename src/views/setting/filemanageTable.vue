@@ -127,6 +127,14 @@ export default {
 			},
 		};
 	},
+	watch:{
+		'form.department'(){
+		
+			if(this.form.department==20 && this.isInsert && !this.form.menu){
+				this.form.menu = `\\\\192.168.0.216\\工程部\\6 ,日常管理\\5检测\\模具检测报告\\扫描档零件报告\\2020`
+			}
+		}
+	},
 	methods: {
 		add(){
 			this.form = {}

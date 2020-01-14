@@ -28,8 +28,8 @@ body {
   -webkit-border-radius: 0; /*滚动条的圆角宽度*/
 }
 ::-webkit-scrollbar {
-  width: 12px; /*滚动条的宽度*/
-  height: 8px; /*滚动条的高度*/
+  width: 16px; /*滚动条的宽度*/
+  height: 12px; /*滚动条的高度*/
 }
 ::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
   height: 50px;
