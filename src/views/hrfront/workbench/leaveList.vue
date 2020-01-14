@@ -51,7 +51,7 @@
 			<el-col :span="12">
 				<div class="list-r">
 					12/15  08:00 - 12/15  18:40
-					<el-tag  effect="plain" class="tag">事假</el-tag>
+					<el-tag  effect="plain" class="tag">事假</el-tag>box-card
 				</div>
 			</el-col>
 		</el-row>
@@ -69,7 +69,8 @@ export default {
 <style lang="scss" scoped>
 .box-card{
 	height: 460px;
-	margin-top: 10px;
+	padding-top: 0;
+	margin: 0;
 }
 .cardName{
 	color: #37474F;

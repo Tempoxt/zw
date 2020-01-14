@@ -373,10 +373,6 @@
   </div>
 </template>
 <script>
-// import quickEntry from "./workbench/quickEntry"
-// import workSchedule from "./workbench/workSchedule"
-// import leaveList from "./workbench/leaveList"
-// import supplement from "./workbench/supplement"
 import dateLap from "@/components/Table/DateLap";
 import accident from "./workbench/accident";
 import personnel from "./workbench/personnel";
@@ -463,10 +459,6 @@ export default {
   },
   components: {
     dateLap,
-    // quickEntry,
-    // workSchedule,
-    // leaveList,
-    // supplement,
     accident,
     personnel,
     inService,
@@ -745,51 +737,14 @@ export default {
 .maxheight {
   height: 500px;
 }
-.dashboard {
-  .el-card__header {
-    padding: 15px 20px;
-  }
-  .el-card__body {
-    padding: 0 20px 20px !important;
-  }
-  .selectdate {
-    .el-date-editor {
-      width: 120px;
-    }
-  }
-  .el-calendar-table {
-    .el-calendar-day {
-      height: 25px;
-    }
-    thead th {
-      padding: 6px 0;
-    }
-  }
-  .el-calendar__body {
-    padding: 8px 20px 35px;
-  }
-  .el-calendar__header {
-    padding: 6px 20px;
-  }
-  .el-card__body {
-    height: 360px;
-  }
-  .speech-mode .el-card__body {
-    height: 100%;
-    .box-card-c {
-      height: 100%;
-    }
-  }
-  .el-row .el-col:nth-child(2n) {
-    padding-left: 10px;
-  }
-  .el-row .el-col:nth-child(n) .dateLap {
-    right: 20px !important;
-  }
-}
+
 </style>
 
 <style lang="scss" scoped>
+	.el-row .el-col:nth-child(2n){
+		padding-left: 10px;
+	}
+
 .box-card {
   width: 100%;
   margin-top: 10px;

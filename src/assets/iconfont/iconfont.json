@@ -1082,6 +1082,118 @@
       "font_class": "pandian",
       "unicode": "e69e",
       "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "12787369",
+      "name": "纸飞机-通用",
+      "font_class": "zhifeiji-tongyong",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "12787370",
+      "name": "设置3",
+      "font_class": "shezhi",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "12787470",
+      "name": "年会",
+      "font_class": "nianhui",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "12787568",
+      "name": "logo-中午",
+      "font_class": "logo-zhongwu",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "12787569",
+      "name": "logo-英文",
+      "font_class": "logo-yingwen",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "12813517",
+      "name": "多云",
+      "font_class": "duoyun",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "12813518",
+      "name": "晴天",
+      "font_class": "qingtian",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "12813519",
+      "name": "雪",
+      "font_class": "xue",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "12813520",
+      "name": "阴天",
+      "font_class": "yintian",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "12813521",
+      "name": "雨",
+      "font_class": "yu",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "12820391",
+      "name": "系统消息",
+      "font_class": "xitongxiaoxi",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "12820392",
+      "name": "我的考勤",
+      "font_class": "wodekaoqin",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "12820393",
+      "name": "便利贴",
+      "font_class": "bianlitie",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
+      "icon_id": "12820396",
+      "name": "提醒",
+      "font_class": "tixing",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "12820399",
+      "name": "工作日程",
+      "font_class": "gongzuoricheng",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "12820407",
+      "name": "待办事项",
+      "font_class": "daibanshixiang",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
     }
   ]
 }
