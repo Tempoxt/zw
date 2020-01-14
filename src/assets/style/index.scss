@@ -15,7 +15,11 @@ body {
     padding: 0;
     overflow: hidden;
 }
-
+ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
 /* 滚动条 */
 ::-webkit-scrollbar-thumb:horizontal { /*水平滚动条的样式*/
@@ -343,6 +347,16 @@ $space-width: 18px;
   }
 }
 
+.clearfix{
+  *zoom: 1;
+}
+.clearfix:after{
+  display: block;
+  content: ' ';
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
 
 .table-import-upload {
   position: relative;

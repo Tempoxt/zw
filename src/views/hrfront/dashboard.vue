@@ -4,15 +4,27 @@
 			<el-tab-pane label="工作台" name="workbench">
 				<div class="outside">
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-							<el-row>
-								<el-col :span="12">
+							<el-row :gutter="10">
+								<el-col :span="16">
 									<backlog></backlog>
 								</el-col>
-								<el-col :span="12">
+								<el-col :span="8">
+									<weater></weater>
+								</el-col>
+								<el-col :span="16">
+									<workSchedule></workSchedule>
+								</el-col>
+								<el-col :span="8">
 									<quickEntry></quickEntry>
 								</el-col>
-								<el-col :span="12">
-									<workSchedule></workSchedule>
+								<el-col :span="8">
+									<stickyNote></stickyNote>
+								</el-col>
+								<el-col :span="8">
+									<attendanceManagement></attendanceManagement>
+								</el-col>
+								<el-col :span="8">
+									<systemMessages></systemMessages>
 								</el-col>
 								<!-- <el-col :span="12">
 									<leaveList></leaveList>
@@ -43,6 +55,10 @@
 </template>
 <script>
 	import backlog from "./workbench/backlog"
+	import attendanceManagement from "./workbench/attendanceManagement"
+	import stickyNote from "./workbench/stickyNote"
+	import systemMessages from "./workbench/systemMessages"
+	import weater from "./workbench/weater"
 	import quickEntry from "./workbench/quickEntry"
 	import workSchedule from "./workbench/workSchedule"
 	import leaveList from "./workbench/leaveList"
@@ -136,6 +152,10 @@
 			dashboardReport,
 			quickEntry,
 			backlog,
+			attendanceManagement,
+			systemMessages,
+			stickyNote,
+			weater,
 			workSchedule,
 			leaveList,
 			supplement,
@@ -373,8 +393,28 @@
 	height: 500px;
 }
 .dashboard{
+	.iconfont{
+		margin-right: 10px;
+		margin-top: -2px;
+	}
+	.box-card{
+		margin-bottom: 15px;
+		.box-card-header{
+			padding: 10px 0;
+			border-bottom: 1px solid #CCD5DB;
+		}
+	}
+	.cardName{
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		color: #37474F;
+		font-size: 16px;
+		font-weight: bold
+	}
 	.el-card__header{
-		padding: 15px 20px;
+		border: none;
+		padding: 0 20px;
 	}
 	.el-card__body{
 		padding: 0 20px 20px!important;
@@ -407,9 +447,9 @@
 			height: 100%;
 		}
 	}
-	.el-row .el-col:nth-child(2n){
-		padding-left: 10px;
-	}
+	// .el-row .el-col:nth-child(2n){
+	// 	padding-left: 10px;
+	// }
 	.el-row .el-col:nth-child(n) .dateLap{
 		right: 20px!important;
 	}
@@ -419,8 +459,8 @@
 <style lang="scss" scoped>
 .box-card {
 	width: 100%;
-	margin-top: 10px;
 	padding-top: 15px;
+	margin-top: 10px;
 	.box-card-c.box-card-c2{
 		height: 100%;
 	}
@@ -436,9 +476,11 @@
 }
 .scroll {
     height: calc(100% - 30px);
-	width: 100%;
 	/deep/ .scrollbar-wrapper {
 		overflow-x: hidden;
+	}
+	/deep/ .el-scrollbar__view{
+		width: calc(100% - 5px);
 	}
 }
 .dashboard{

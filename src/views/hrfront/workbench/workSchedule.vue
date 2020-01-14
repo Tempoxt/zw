@@ -1,23 +1,20 @@
 <template>
-  <div>
+  <div id="scheduleMarage">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span class="cardName">工作日程</span>
-        <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
-      </div>
-
       <el-row>
-        <el-col :span="14">
+        <el-col class="borR" :span="14">
+          <div class="cardHead">
+            <div class="cardName"><i class="iconfont icon-gongzuoricheng date_icon"></i><span>工作日程</span></div>
+          </div>
           <div class="list-l">
             <el-calendar v-model="value"></el-calendar>
           </div>
         </el-col>
-        <el-col :span="10">
+        <el-col class="padd0" :span="10">
+          <div class="cardHead">
+            <div class="cardName"><i class="iconfont icon-tixing tip_icon"></i><span>今日提醒</span></div>
+          </div>
           <div class="list-r">
-            <div class="list-r-h">
-              <span>日程表</span>
-              <el-button icon="el-icon-plus" @click="addSchedule" size="mini"></el-button>
-            </div>
             <div class="list-r-b">
               <NoData msg="暂无任务"></NoData>
             </div>
@@ -107,6 +104,7 @@
 <script>
 import NoData from "./NoData";
 export default {
+  name: 'scheduleMarage',
   data() {
     return {
       value: new Date(),
@@ -164,50 +162,84 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 .list-r-h .el-button--mini {
   padding: 7px 7px !important;
   float: right;
 }
+#scheduleMarage{
+  .el-card__body{
+    height: 100%;
+    padding: 0 !important;
+  }
+  .el-calendar__header{
+    border: 0;
+  }
+  .el-calendar-table .el-calendar-day{
+    height: 31px;
+    box-sizing: border-box;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
-.box-card {
-  height: 370px;
-  margin-left: 10px;
-}
-.add-form{
-  width: 450px;
-  margin: 0 auto;
-  .add-type{
-    width: 350px;
+#scheduleMarage{
+  .heightMax{
+    height: 100%;
+  }
+  .padd0{
+    padding: 0;
+  }
+  .borR{
+    border-right: 1px solid #E4E4E4;
   }
 
-}
-.continuously-added{
-    float: left;
+  .box-card {
+    height: 370px;
   }
-.cardName {
-  color: #37474f;
-  font-size: 16px;
-  font-weight: bold;
-}
-.list-l {
-  height: 240px;
-  border-right: 1px solid rgba(228, 228, 228, 1);
-}
-.list-r {
-  padding-left: 10px;
-  .list-r-h {
-    font-size: 16px;
-    font-weight: bold;
-    border-bottom: 1px solid rgba(245, 245, 245, 1);
-    padding-bottom: 15px;
+  .add-form{
+    width: 450px;
+    margin: 0 auto;
+    .add-type{
+      width: 350px;
+    }
+
   }
-  .list-r-b {
+  .continuously-added{
+      float: left;
+    }
+  .cardHead{
     width: 100%;
-    height: 190px;
-    position: relative;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    .cardName {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid #E4EAEC;
+      .icon-gongzuoricheng,.icon-tixing{
+        font-size: 16px;
+      }
+    }
   }
+  
+  .list-r {
+    padding-left: 10px;
+    .list-r-h {
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(245, 245, 245, 1);
+      padding-bottom: 15px;
+    }
+    .list-r-b {
+      width: 100%;
+      height: 190px;
+      position: relative;
+    }
+  }
+  
 }
+
 </style>
