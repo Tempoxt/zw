@@ -4,21 +4,24 @@
 			<el-tab-pane label="工作台" name="workbench">
 				<div class="outside">
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
-							<!-- <el-row>
+							<el-row>
+								<el-col :span="12">
+									<backlog></backlog>
+								</el-col>
 								<el-col :span="12">
 									<quickEntry></quickEntry>
 								</el-col>
 								<el-col :span="12">
 									<workSchedule></workSchedule>
 								</el-col>
-								<el-col :span="12">
+								<!-- <el-col :span="12">
 									<leaveList></leaveList>
 								</el-col>
 								<el-col :span="12">
 									<supplement></supplement>
-								</el-col>
-							</el-row> -->
-							<el-row style="padding-bottom:30px;">
+								</el-col> -->
+							</el-row>
+							<!-- <el-row style="padding-bottom:30px;">
 								<el-col :span="12">
 									<accident></accident>
 								</el-col>
@@ -28,7 +31,7 @@
 								<el-col :span="12" v-if="payAdjust.length>0">
 									<payAdjust :datas="payAdjust" title="调薪员工"></payAdjust>
 								</el-col>
-							</el-row>
+							</el-row> -->
 					</el-scrollbar>
 				</div>
 			</el-tab-pane>
@@ -39,10 +42,11 @@
 	</div>
 </template>
 <script>
-	// import quickEntry from "./workbench/quickEntry"
-	// import workSchedule from "./workbench/workSchedule"
-	// import leaveList from "./workbench/leaveList"
-	// import supplement from "./workbench/supplement"
+	import backlog from "./workbench/backlog"
+	import quickEntry from "./workbench/quickEntry"
+	import workSchedule from "./workbench/workSchedule"
+	import leaveList from "./workbench/leaveList"
+	import supplement from "./workbench/supplement"
 
 	import dashboardReport from "./dashboard-report"
 
@@ -130,10 +134,11 @@
 		components:{
 			dateLap,
 			dashboardReport,
-			// quickEntry,
-			// workSchedule,
-			// leaveList,
-			// supplement,
+			quickEntry,
+			backlog,
+			workSchedule,
+			leaveList,
+			supplement,
 			accident,
 			personnel,
 			// inService,
@@ -157,7 +162,7 @@
 				}
 			},
 			orgid(){
-				this.fetchData()
+				// this.fetchData()
 				this.visible = false
 				this.findDataName()
 			},
@@ -349,7 +354,7 @@
 				}
 			})
 			this.dateLap1 = this.dateLap2 = this.dateLap3 =this.dateLap4 =this.dateLap5 = this.dateLap6=this.dateLap7 =dayjs().format('YYYY-MM')
-			this.fetchData()
+			// this.fetchData()
 			this.getleaveData()
 			this.getmemberData()
 			this.getovertimeRate()
@@ -393,9 +398,9 @@
 	.el-calendar__header {
 		padding: 6px 20px;
 	}
-	.el-card__body {
-		height: 360px;
-	}
+	// .el-card__body {
+	// 	height: 360px;
+	// }
 	.speech-mode .el-card__body{
 		height: 100%;
 		.box-card-c{
