@@ -5,7 +5,7 @@
         @query="querySubmit"
         >
 
-         <el-dialog
+        <el-dialog
             title="盘点"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
@@ -39,6 +39,34 @@
                 <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog
+            :title="dialogStatus==='insert'?'添加部门管理员':'编辑部门管理员'"
+            :visible.sync="dialogForm1Visible"
+            class="public-dialog"
+            v-el-drag-dialog
+		    width="600px"
+            >
+           	<div>
+                <el-form ref="form1" :model="form1" label-width="70px" :rules="rules1">
+                    <el-row :gutter="20">
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`depart`" prop="departmentId" :field="{name:'部门',disable:!isInsert}" :disable="!isInsert" v-model="form1.departmentId"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`member`" prop="staff_id" :field="{name:'员工',defaultName:form1.chineseName}" v-model="form1.staff_id"/>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogForm1Visible = false">取 消</el-button>
+                <el-button type="primary" @click="handleForm1Submit" :disabled="disabled">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
         <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -81,11 +109,10 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("toolstationery/departledger");
 let baseUrl = process.env.VUE_APP_STATIC
 export default {
     mixins: [table_mixin],
-    props:['orgid'],
+    props:['orgid','url'],
     data() {
         var checkNumber = (rule, value, callback)=>{
 			if (value==='') {
@@ -99,9 +126,9 @@ export default {
         return {
             baseUrl, 
             loading: false,
-            api_resource,
+			api_resource :api_common.resource(this.url),
             queryDialogFormVisible:true,
-            table_topHeight:265,
+            table_topHeight: 300,
             total_price:'',
             form:{
                take_number: '' 
@@ -119,16 +146,70 @@ export default {
                         return <img src={baseUrl+column.articleImage} width="30" height="30"></img>
                     }
                 }
+            },
+            dialogForm1Visible: false,
+            form1:{},
+            importUploadUrl:'toolstationery/departledgermanager/upload',
+            downloadUrl:'toolstationery/departledgermanager/upload',
+            rules1:{
+                departmentId:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                staff_id:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
             }
         };
+    },
+    computed:{
+        disabled(){
+            if(this.form1.departmentId!=''&&this.form1.staff_id!=''&&this.form1.departmentId!=undefined&&this.form1.staff_id!=undefined){
+                return false
+            }
+            return true
+        }
     },
     watch:{
         orgid(){
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
+		url(){
+            this.api_resource = api_common.resource(this.url)
+			delete this.table_form.keyword
+			delete this.table_form.sortname
+			this.table_form.currentpage = 1
+			this.table_form.query.query= []
+			this.fetchMenu()
+		}
     },
     methods: {
+        add(){
+            this.dialogForm1Visible = true
+            this.form1 = {
+                departmentId:'',
+                staff_id:''
+            }
+            this.$nextTick(()=>{
+				this.$refs['form1'].clearValidate()
+			})
+        },
+        async edit(){
+            this.dialogForm1Visible = true
+            let row = this.table_selectedRows[0]
+            this.form1 = (await this.api_resource.find(row.id))[0]
+        },
+        async handleForm1Submit(){
+            await this.form_validate('form1')
+            let form1 = Object.assign({},this.form1)
+            if(this.isInsert){
+				await this.api_resource.create(form1)
+			}else{
+				await this.api_resource.update(form1.id,form1)
+			}
+			this.dialogForm1Visible = false
+			this.fetchTableData()
+        },
         inventory(){
             this.form.take_number = ''
             this.$nextTick(()=>{
@@ -155,9 +236,10 @@ export default {
             if(this.orgid==''){
                 return 
             }
+            this.table_topHeight = this.url=='toolstationery/departledgermanager'?300:325
             this.table_loading = true;
             this.table_form.org_id  = this.orgid
-            const {rows , total, total_price}= await api_resource.get(this.table_form);
+            const {rows , total, total_price}= await this.api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
             this.total_price = total_price
@@ -165,13 +247,16 @@ export default {
                 this.table_loading = false;
             }, 300);
         },
+		async fetchMenu(){
+			const { field, action,table } = await api_common.menuInit(this.url);
+			this.table_field = field;
+			this.table_actions = action;
+			this.table_config = table
+			this.fetchTableData()
+		},
     },
     async created() {
-        const { field, action,table } = await api_common.menuInit("toolstationery/departledger");
-        this.table_field = field;
-        this.table_actions = action;
-        this.table_config = table
-        this.fetchTableData();
+        this.fetchMenu();
     },
 };
 </script>
