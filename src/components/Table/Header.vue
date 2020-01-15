@@ -52,7 +52,7 @@
         </el-select><el-input
           style="width:180px"
           placeholder="快速查找"
-          v-model="table_form.keyword"
+          v-model.trim="table_form.keyword"
           class="actions-input"
           @keyup.enter.native="search()"
           clearable
