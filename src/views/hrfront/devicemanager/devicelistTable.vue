@@ -73,6 +73,7 @@
             :height="table_height"
             @resizable-change="table_dragend"
             @sort-change="table_sort_change"
+		    :seq-config="{seqMethod: VxeIndexMethod}"
             >
             <vxe-table-column 
                 type="selection" 
