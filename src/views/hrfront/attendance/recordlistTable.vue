@@ -46,55 +46,62 @@
             <dateLap v-model="table_form.dateLap" @change="fetch"/>
           </div>
     </table-header>
-    <el-table
-		class="attendance-table"
-        ref="elTable"
-		@selection-change="handleChangeSelection"
+	<vxe-table
+		class="public-vxe-table"
+		ref="elTable"
+		resizable
+		show-overflow
+		highlight-hover-row
+		@select-all="handleChangeSelection"
+		@select-change="handleChangeSelection"
 		:data="table_data"
 		border
 		style="width: 100%"
 		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
+		:header-cell-style="vxeHeaderStyle"
 		:height="table_height"
-		@header-dragend="table_dragend"
+		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
-		:cell-style="cellStyle"
-    	>
-		<el-table-column 
+      	:cell-class-name="cellClassName"
+		:seq-config="{seqMethod: VxeIndexMethod}"
+		>
+		<vxe-table-column 
 			type="selection" 
 			width="60" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
+			fixed="left"
 		>
-      	</el-table-column>
-		<el-table-column type="index" :index="indexMethod" width="50" fixed/>
-		<el-table-column prop="staff__employeeCode" sortable label="工号" fixed>
+		</vxe-table-column>
+        <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
+		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="80">
 			<template slot-scope="scope">
-				<span v-html="scope.row.staff__employeeCode" :title="scope.row.staff__employeeCode" class="default-span"></span>
+				<div v-html="scope.row.staff__employeeCode"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="staff__chineseName" label="姓名" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="100">
 			<template slot-scope="scope">
-				<span v-html="scope.row.staff__chineseName" :title="scope.row.staff__chineseName" class="default-span"></span>
+				<div v-html="scope.row.staff__chineseName"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="staff__department__name" label="部门" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="staff__principalship__name" title="职位" fixed="left" width="100">
 			<template slot-scope="scope">
-				<span v-html="scope.row.staff__department__name" :title="scope.row.staff__department__name" class="default-span"></span>
+				<div v-html="scope.row.staff__principalship__name"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="staff__principalship__name" label="职位" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="staff__department__name" title="部门" fixed="left" width="100">
 			<template slot-scope="scope">
-				<span v-html="scope.row.staff__principalship__name" :title="scope.row.staff__principalship__name" class="default-span"></span>
+				<div v-html="scope.row.staff__department__name"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="CheckDateSub" label="日期" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="CheckDateSub" title="日期" fixed="left" width="100">
 			<template slot-scope="scope">
-				<span v-html="scope.row.CheckDateSub" :title="scope.row.CheckDateSub" class="default-span"></span>
+				<div v-html="scope.row.CheckDateSub"></div>
 			</template>
-		</el-table-column>
-		<each-table-column :table_field="table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department__name','staff__principalship__name','CheckDateSub'].includes(o.name))"/>
-    </el-table>
+		</vxe-table-column>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__principalship__name','staff__department__name','CheckDateSub'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
+			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+	</vxe-table>
      <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -105,6 +112,7 @@
   </ui-table>
 </template>
 <script>
+const api_pagemanager = api_common.resource('pagemanager/field')
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
@@ -114,6 +122,7 @@ export default {
     data() {
 		return {
 			loading: true,
+			vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			api_resource: api_common.resource(this.url),
 			queryDialogFormVisible:true,
             table_topHeight:293,
@@ -152,6 +161,27 @@ export default {
 		}
     },
     methods: {
+		handleChangeSelection({selection:val}){ // 单选
+			this.table_selectedRowsInfo = val
+			this.table_selectedRows = val
+			this.$emit("update:table_selectedRows",val)
+        },
+        table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+            let row = this.table_field.find(field=>field.showname===column.title)
+            var isEnd = false
+            this.table_field.forEach((item,i)=>{
+                if(item==row&&i==this.table_field.length-2){
+                isEnd = true
+                }
+            })
+            var newWidth = column.resizeWidth
+            row.width = newWidth
+            row.menuid = row.menuid_id
+            api_pagemanager.update(row.id,{
+                width:newWidth,
+                menuid:row.menuid_id
+            },{alert:false})
+        },
 		disableModify(){//冻结
 			this.titleInfo = '请选择冻结月份'
 			this.form1.month = ''
@@ -213,33 +243,33 @@ export default {
 			// this.fetchTableData()
 			this.fetchMenu()
 		},
-      	cellStyle({row,column,rowIndex,columnIndex}){
-        	if(row.Remark!=''&&row.Remark!=null){
-          		return 'color:red'
-        	}else if(column.label=="星期"){
+		cellClassName ({ row, column }) {
+			if(row.Remark!=''&&row.Remark!=null){
+          		return 'col-red'
+        	}else if(column.title=="星期"){
           		if(row.weekday=='六'||row.weekday=='日'){
-            		return 'background-color:rgb(245, 250, 251);'
+            		return 'col-bag-gray'
           		}
-        	}else if(column.label=="假日"){
+        	}else if(column.title=="假日"){
           		if(row.RestType=='1'){
-            		return 'background-color:#f2353c;'
+            		return 'col-bag-one'
           		}else if(row.RestType=='2'){
-					return 'background-color:#1fd361;'
+					return 'col-bag-two'
 				}else if(row.RestType=='3'){
-					return 'background-color:#0bb2d4;'
+					return 'col-bag-three'
 				}else if(row.RestType=='4'){
-					return 'background-color:#ff5698;'
+					return 'col-bag-four'
 				}else if(row.RestType=='5'){
-					return 'background-color:#f4af24;'
+					return 'col-bag-four'
 				}else if(row.RestType=='6'){
-					return 'background-color:#f47a24;'
+					return 'col-bag-six'
 				}else if(row.RestType=='9'){
-					return 'background-color:#68f59c;'
+					return 'col-bag-nine'
 				}else if(row.RestType=='10'){
-					return 'background-color:#1cbe57;'
+					return 'col-bag-ten'
 				}
         	}
-      	},
+		},
 		async fetchTableData() {
 			if(!this.id){
 				return
@@ -256,7 +286,6 @@ export default {
 		async fetchMenu(){
 			const { field, action,table } = await api_common.menuInit(this.url);
 			this.table_field = field;
-			// this.table_actions = action;
 			action.map(o=>{
 				if(this.freezeStatus==true){
 					if (o.code=='enableModify') {

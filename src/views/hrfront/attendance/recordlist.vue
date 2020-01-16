@@ -74,6 +74,36 @@ export default {
         margin-left:20px;
         color:#F2353C
     }
+    .col-red{
+        color: red
+    }
+    .col-bag-gray{
+        background-color: rgb(245,250,251)
+    }
+    .col-bag-one{
+        background-color: #f2353c
+    }
+    .col-bag-two{
+        background-color:#1fd361;
+    }
+    .col-bag-three{
+        background-color:#0bb2d4;;
+    }
+    .col-bag-four{
+        background-color:#ff5698;
+    }
+    .col-bag-five{
+        background-color:#f4af24;
+    }
+    .col-bag-six{
+        background-color:#f47a24;
+    }
+    .col-bag-nine{
+        background-color:#68f59c;
+    }
+    .col-bag-ten{
+        background-color:#1cbe57;
+    }
 </style>
 
 

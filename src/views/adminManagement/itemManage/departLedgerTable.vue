@@ -51,7 +51,7 @@
                 <el-form ref="form1" :model="form1" label-width="70px" :rules="rules1">
                     <el-row :gutter="20">
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`depart`" prop="departmentId" :field="{name:'部门',disable:!isInsert}" :disable="!isInsert" v-model="form1.departmentId"/>
+                            <form-render :type="`depart`" prop="departmentId" :field="{name:'部门',disable:!isInsert}" :disabled="!isInsert" v-model="form1.departmentId"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
                             <form-render :type="`member`" prop="staff_id" :field="{name:'员工',defaultName:form1.chineseName}" v-model="form1.staff_id"/>
