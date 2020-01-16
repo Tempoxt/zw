@@ -82,6 +82,7 @@
 		@sort-change="table_sort_change"
 		@cell-click="cellClickEvent"
       	:cell-class-name="cellClassName"
+		:seq-config="{seqMethod: VxeIndexMethod}"
 		>
 		<vxe-table-column 
 			type="selection" 
@@ -91,33 +92,28 @@
 			fixed="left"
 		>
 		</vxe-table-column>
-		<vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
-		<vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="80">
+        <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
+		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="80">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__employeeCode"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="chineseName" title="姓名" fixed="left" width="120">
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="120">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__chineseName"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="chineseName" title="部门" fixed="left" width="120">
+		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="120">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__department_name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="chineseName" title="小组" fixed="left" width="100">
+		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="100">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__team_name"></div>
 			</template>
 		</vxe-table-column>
-		<!-- <vxe-table-column field="chineseName" title="班次" fixed="left" width="120">
-			<template slot-scope="scope">
-				<div v-html="scope.row.attendanceClass__id"></div>
-			</template>
-		</vxe-table-column> -->
-		<vxe-table-column type="html" v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
+		<vxe-table-column  type="html" v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
 			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
 	</vxe-table>
     <table-pagination 
@@ -205,18 +201,6 @@ export default {
 				}
 			}
 		},
-		// cellStyle({row,column,rowIndex,columnIndex}){
-		// 	if(column.label=="星期"&&row.fieldStyle){
-		// 		var fields = JSON.parse(row.fieldStyle)
-		// 		if(fields.weekDay==1){
-		// 			return 'background-color:#7ae8ff;'
-		// 		}else if(fields.weekDay==2){
-		// 			return 'background-color:#ffccff;'
-		// 		}else{
-		// 			return ''
-		// 		}
-		// 	}
-		// },
         handleChangeSelection({selection:val}){ // 单选
 			this.table_selectedRowsInfo = val
 			this.table_selectedRows = val
