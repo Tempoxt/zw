@@ -17,10 +17,10 @@
 								<el-col :span="8">
 									<quickEntry></quickEntry>
 								</el-col> -->
-								<!-- <el-col :span="8">
+								<el-col :span="8">
 									<stickyNote></stickyNote>
 								</el-col>
-								<el-col :span="8">
+								<!-- <el-col :span="8">
 									<attendanceManagement></attendanceManagement>
 								</el-col>
 								<el-col :span="8">
