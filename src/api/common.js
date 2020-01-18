@@ -51,8 +51,8 @@ export function resource (url) {
         params
       })
     },
-    create (data) {
-      return request.post(`${url}`, data)
+    create (data,config) {
+      return request.post(`${url}`, data,config)
     },
     update (pk, data,config) {
       return request.put(`/${url}/` + pk, data,config)

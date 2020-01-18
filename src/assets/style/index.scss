@@ -15,7 +15,7 @@ body {
     padding: 0;
     overflow: hidden;
 }
-ul{
+ul,li{
   margin: 0;
   padding: 0;
   list-style: none;
@@ -59,6 +59,7 @@ ul{
 a {
     text-decoration: none;
 }
+
 .white {
     color:#fff;
 }
@@ -390,4 +391,58 @@ $space-width: 18px;
   , .vxe-table .vxe-footer--column.col--ellipsis, .vxe-table .vxe-header--column.col--ellipsis{
       height: 26px;
   }
+}
+
+// flex
+.flex{
+  display: flex;
+}
+.flex_wrap{
+  flex-wrap: wrap;
+}
+.flex_noWrap{
+  flex-wrap: nowrap;
+}
+
+.flex_r_ec{
+  justify-content: end;
+}
+.flex_r_bc{
+  justify-content: space-between;
+}
+.flex_r_sc,.flex_r_ec,.flex_r_bc{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.flex_r_ss,.flex_r_es,.flex_r_bs{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.flex_c_ec{
+  justify-content: end;
+}
+.flex_c_bc{
+  justify-content: space-between;
+}
+.flex_c_sc,.flex_c_ec,.flex_c_bc{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.flex_c_ss,.flex_c_es,.flex_c_bs{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.flex_r_bs{
+  justify-content: space-between;
+}
+.flex_r_bs{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }

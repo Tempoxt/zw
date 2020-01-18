@@ -109,7 +109,7 @@ i{
                         width: 12px;
                         height: 14px;
                         margin-right: 10px;
-                        background: url('../../../assets/style/workbench_img/location_icon.png');
+                        background: url('~@imgs/workbench-img/icon_location.png');
                         background-size: cover;
                     }
                 }

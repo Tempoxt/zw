@@ -50,9 +50,12 @@ i{
 }
 
 #backlog{
-    .icon-daibanshixiang{
-        font-size: 16px;
+    .cardName{
+        .icon-daibanshixiang{
+            font-size: 16px;
+        }
     }
+    
     .num{
         color: #37474F;
         font-size: 16px;

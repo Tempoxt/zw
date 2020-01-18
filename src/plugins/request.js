@@ -16,7 +16,8 @@ const service = axios.create({
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
     },
-    transformRequest: [function (data) {
+    transformRequest: [function (data,config) {
+        if(config['Content-Type']== "application/json")  return JSON.stringify(data)
         if(isFormData(data))return data
         return qs.stringify(data,{arrayFormat: 'brackets'})
     }],
