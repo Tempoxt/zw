@@ -6,7 +6,7 @@
           <i class="iconfont icon-bianlitie"></i><span>便利贴</span>
         </div>
       </div>
-      <div class="container">
+      <div class="container" style="margin-top:14px;margin-bottom:14px">
         <div class="container_head flex_r_bc">
           <div class="container_head_l flex_r_sc">
             <span>共：{{total}}条</span>
@@ -18,7 +18,7 @@
         </div>
         <div class="container_content flex_r_ss">
           
-            <div class="container_content_l flex_c_ss">
+            <div class="container_content_l flex_c_ss" style="width: 180px;">
               <el-scrollbar style="width:100%;height: 100%;">
                 <div @click="chooseTabs(item.id)" v-for="item in noteTabs" :key="item.id" class="noteTabs flex_c_ss" :class="activeId == item.id?'activeTab':''">
                   <div class="flex_c_ss">
@@ -30,19 +30,28 @@
 
             </div>            
 
-          <div class="container_content_r">
-            <div class="titleInput">
-              <el-input @change="changeNote" v-model="noteInput" placeholder="请输入内容"></el-input>
-            </div>
-            <div class="contentInput">
-              <el-input
-                type="textarea"
-                resize="none"
-                @change="changeNote"
-                v-model="noteTextarea"
-                placeholder="请输入内容"
-              ></el-input>
-            </div>            
+          <div class="container_content_r" style="height:100%">
+            <template v-if="noteTabs.length">
+             <div class="titleInput">
+                  <el-input @change="changeNote" v-model="noteInput" placeholder="请输入内容"></el-input>
+                </div>
+                <div class="contentInput">
+                  <el-input
+                    ref="textarea"
+                    type="textarea"
+                    resize="none"
+                    @change="changeNote"
+                    v-model="noteTextarea"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </div>
+            </template>       
+            <div v-else style="    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;">
+               <span>请先添加便签。</span>  
+            </div>     
           </div>
 
         </div>
@@ -74,13 +83,13 @@ export default {
       noteTextarea: "",
       isAdd: false,
       noteTabs: [],
-      noteData: {}
+      noteData: {},
     };
   },
   computed: {
     activeObj() {
-      this.activeId == '' && (this.activeId = this.noteData.rows[0].id)
-      if(this.noteData.rows){
+      this.activeId == '' &&this.noteData.rows.length &&  (this.activeId = this.noteData.rows[0].id)
+      if(this.noteData.rows.length){
         return this.noteData.rows.find(o=>o.id==this.activeId)        
       }else{
         return {}
@@ -99,8 +108,12 @@ export default {
       this.noteTextarea = this.activeObj.text || ''
     },
     async changeNote() {
+       (this.noteInput!=this.activeObj.title || this.noteTextarea!=this.activeObj.text) && 
+        await this.api_resource.update(this.activeObj.id,{title: this.noteInput, text: this.noteTextarea})
+        this.getData()
+
+        return
       if(this.isAdd){
-        await this.api_resource.create({title: this.noteInput, text: this.noteTextarea},{alert:false})
         this.getData()
         this.isAdd = false
       }else{
@@ -109,20 +122,19 @@ export default {
         this.getData()
       }
     },
-    addNote() {
+    async addNote() {
       this.isAdd = true
       let now = dayjs().format('M月D日 HH-mm')
-      this.noteTabs.unshift({id: 0, title: '新建便利贴', text: ''})
-      this.$set(this, 'noteTabs', this.noteTabs)
+      await this.api_resource.create({title: '新建便利贴'+(this.noteData.rows.length+1), text: ''},{alert:false})
+      await this.getData()
       this.chooseTabs(0)
-      console.log(now, 8888)
+      this.$refs.textarea.focus()
     },
     async getData() {
-      this.noteData =  await this.api_resource.get()
-      this.$set(this, 'noteTabs', this.noteData.rows)
-
-      this.activeId = ''
-
+      this.noteData =  (await this.api_resource.get())
+      this.noteData.rows = this.noteData.rows.reverse()
+      this.noteTabs = this.noteData.rows
+  
       this.total = this.noteData.total || 0
       this.noteInput = this.activeObj.title
       this.noteTextarea = this.activeObj.text
@@ -147,16 +159,16 @@ export default {
 
   .titleInput{
         .el-input__inner{
-            padding: 10px 0 10px 10px;
+            padding: 10px 0 10px 5px;
             border: none;
             border-bottom: 1px solid #F5F5F5;
             font-size: 14px;
         }
     }
    .contentInput{
-        padding: 7px 0 7px 10px;
+        padding: 0px 0 0px 3px;
         .el-textarea__inner{
-            height: 120px;
+            height: 158px;
             padding: 0;
             border: none;
             font-size: 12px;
@@ -242,6 +254,10 @@ i {
           .noteName{
             font-size: 12px;
             color: #37474F;
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
           .noteTime{
             display: inline-block;
