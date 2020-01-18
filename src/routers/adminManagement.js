@@ -174,5 +174,12 @@ export default [{
         meta: {
             title: '闲置固定资产'
         }
+    },{
+        name: 'departLedgerManager',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/departLedger'),
+        meta: {
+            title: '部门台账管理'
+        }
     },
  ]

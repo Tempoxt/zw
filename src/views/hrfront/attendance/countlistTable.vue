@@ -17,28 +17,35 @@
 			<dateLap v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
-    <el-table
-        ref="elTable"
-		@selection-change="handleChangeSelection"
-		:data="table_data"
-		border
-		style="width: 100%"
-		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
-		:height="table_height"
-		@header-dragend="table_dragend"
-		@sort-change="table_sort_change"
-    	>
-		<el-table-column 
-			type="selection" 
-			width="60" 
-			class-name="table-column-disabled"
-			:selectable="table_disable_selected"
-			>
-		</el-table-column>
-		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
-    </el-table>
+	 <vxe-table
+      class="public-vxe-table"  
+      ref="elTable"
+      resizable
+      show-overflow
+      highlight-hover-row
+      @select-all="handleChangeSelection"
+      @select-change="handleChangeSelection"
+      :data="table_data"
+      border
+      style="width: 100%"
+      v-loading="table_loading"
+      :header-cell-style="vxeHeaderStyle"
+      :height="table_height"
+      @resizable-change="table_dragend"
+      @sort-change="table_sort_change"
+	  :seq-config="{seqMethod: VxeIndexMethod}"
+      
+    >
+      <vxe-table-column 
+        type="selection" 
+        width="60" 
+        class-name="table-column-disabled"
+        :selectable="table_disable_selected"
+        >
+      </vxe-table-column>
+      <vxe-table-column type="index" width="50" fixed/>
+      <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+    </vxe-table>
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -49,6 +56,7 @@
   </ui-table>
 </template>
 <script>
+const api_pagemanager = api_common.resource('pagemanager/field')
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("attendance/countlist");
@@ -58,6 +66,7 @@ export default {
 	props:['id'],
 	data() {
 		return {
+			vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
@@ -71,6 +80,27 @@ export default {
 		},
 	},
 	methods: {
+		handleChangeSelection({selection:val}){ // 单选
+			this.table_selectedRowsInfo = val
+			this.table_selectedRows = val
+			this.$emit("update:table_selectedRows",val)
+        },
+        table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+            let row = this.table_field.find(field=>field.showname===column.title)
+            var isEnd = false
+            this.table_field.forEach((item,i)=>{
+                if(item==row&&i==this.table_field.length-2){
+                isEnd = true
+                }
+            })
+            var newWidth = column.resizeWidth
+            row.width = newWidth
+            row.menuid = row.menuid_id
+            api_pagemanager.update(row.id,{
+                width:newWidth,
+                menuid:row.menuid_id
+            },{alert:false})
+        },
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()

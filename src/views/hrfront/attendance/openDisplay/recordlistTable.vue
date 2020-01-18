@@ -17,29 +17,36 @@
 			<dateLap v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
-    <el-table
-        ref="elTable"
-      @selection-change="handleChangeSelection"
+	<vxe-table
+      class="public-vxe-table"  
+      ref="elTable"
+      resizable
+      show-overflow
+      highlight-hover-row
+      @select-all="handleChangeSelection"
+      @select-change="handleChangeSelection"
       :data="table_data"
       border
       style="width: 100%"
       v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
+      :header-cell-style="vxeHeaderStyle"
       :height="table_height"
-      @header-dragend="table_dragend"
+      @resizable-change="table_dragend"
       @sort-change="table_sort_change"
-      :cell-style="cellStyle"
+      	:cell-class-name="cellClassName"
+	  :seq-config="{seqMethod: VxeIndexMethod}"
+      
     >
-		<el-table-column 
-			type="selection" 
-			width="60" 
-			class-name="table-column-disabled"
-			:selectable="table_disable_selected"
-		>
-      	</el-table-column>
-		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field"/>
-    </el-table>
+      <vxe-table-column 
+        type="selection" 
+        width="60" 
+        class-name="table-column-disabled"
+        :selectable="table_disable_selected"
+        >
+      </vxe-table-column>
+      <vxe-table-column type="index" width="50" fixed/>
+      <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+    </vxe-table>
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -50,6 +57,7 @@
   </ui-table>
 </template>
 <script>
+const api_pagemanager = api_common.resource('pagemanager/field')
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("attendance/refakelist");
@@ -63,6 +71,7 @@ export default {
 	props:['id'],
 	data() {
 		return {
+			vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			baseUrl,
 			baseUri,
 			loading: true,
@@ -82,6 +91,33 @@ export default {
 		}
 	},
 	methods: {
+		cellClassName ({ row, column }) {
+			if(row.Remark!=''&&row.Remark!=null){
+          		return 'col-red'
+        	}else if(column.title=="星期"){
+          		if(row.weekday=='六'||row.weekday=='日'){
+            		return 'col-bag-gray'
+          		}
+        	}else if(column.title=="假日"){
+          		if(row.RestType=='1'){
+            		return 'col-bag-one'
+          		}else if(row.RestType=='2'){
+					return 'col-bag-two'
+				}else if(row.RestType=='3'){
+					return 'col-bag-three'
+				}else if(row.RestType=='4'){
+					return 'col-bag-four'
+				}else if(row.RestType=='5'){
+					return 'col-bag-four'
+				}else if(row.RestType=='6'){
+					return 'col-bag-six'
+				}else if(row.RestType=='9'){
+					return 'col-bag-nine'
+				}else if(row.RestType=='10'){
+					return 'col-bag-ten'
+				}
+        	}
+		},
 		async getUrl(){
 			if(this.statusk!=0){
 				try{
@@ -126,33 +162,6 @@ export default {
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
-		},
-		cellStyle({row,column,rowIndex,columnIndex}){
-			if(row.Remark!=''&&row.Remark!=null){
-				return 'color:red'
-			}else if(column.label=="星期"){
-				if(row.weekday=='六'||row.weekday=='日'){
-				return 'background-color:rgb(245, 250, 251);'
-				}
-			}else if(column.label=="假日"){
-				if(row.RestType=='1'){
-					return 'background-color:#f2353c;'
-				}else if(row.RestType=='2'){
-					return 'background-color:#1fd361;'
-				}else if(row.RestType=='3'){
-					return 'background-color:#0bb2d4;'
-				}else if(row.RestType=='4'){
-					return 'background-color:#ff5698;'
-				}else if(row.RestType=='5'){
-					return 'background-color:#f4af24;'
-				}else if(row.RestType=='6'){
-					return 'background-color:#f47a24;'
-				}else if(row.RestType=='9'){
-					return 'background-color:#68f59c;'
-				}else if(row.RestType=='10'){
-					return 'background-color:#1cbe57;'
-				}
-			}
 		},
 		async fetchTableData() {
 			if(!this.id){

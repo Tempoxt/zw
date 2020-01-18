@@ -63,50 +63,59 @@
 			<dateLap v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
-    <el-table
-        ref="elTable"
-		@selection-change="handleChangeSelection"
+
+	<vxe-table
+		class="public-vxe-table"
+		ref="elTable"
+		resizable
+		show-overflow
+		highlight-hover-row
+		@select-all="handleChangeSelection"
+		@select-change="handleChangeSelection"
 		:data="table_data"
 		border
 		style="width: 100%"
 		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
+		:header-cell-style="vxeHeaderStyle"
 		:height="table_height"
-		@header-dragend="table_dragend"
+		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
-      	:cell-style="cellStyle"
-		@cell-click="editSchedule"
-    	>
-		<el-table-column 
+		@cell-click="cellClickEvent"
+      	:cell-class-name="cellClassName"
+		:seq-config="{seqMethod: VxeIndexMethod}"
+		>
+		<vxe-table-column 
 			type="selection" 
 			width="60" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
-			>
-		</el-table-column>
-		 <el-table-column type="index" :index="indexMethod" fixed/>
-		 <el-table-column prop="staff__employeeCode" label="工号" fixed>
+			fixed="left"
+		>
+		</vxe-table-column>
+        <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
+		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="80">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__employeeCode" :title="scope.row.staff__employeeCode"></div>
+				<div v-html="scope.row.staff__employeeCode"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="staff__chineseName" label="姓名" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="120">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__chineseName" :title="scope.row.staff__chineseName"></div>
+				<div v-html="scope.row.staff__chineseName"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="staff__department_name" label="部门" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="120">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__department_name" :title="scope.row.staff__department_name"></div>
+				<div v-html="scope.row.staff__department_name"></div>
 			</template>
-		</el-table-column>
-		<el-table-column prop="staff__team_name" label="小组" fixed>
+		</vxe-table-column>
+		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="100">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__team_name" :title="scope.row.staff__team_name"></div>
+				<div v-html="scope.row.staff__team_name"></div>
 			</template>
-		</el-table-column>
-		<each-table-column :table_field="table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name))"/>
-    </el-table>
+		</vxe-table-column>
+		<vxe-table-column  type="html" v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
+			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+	</vxe-table>
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -117,6 +126,7 @@
   </ui-table>
 </template>
 <script>
+const api_pagemanager = api_common.resource('pagemanager/field')
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
@@ -126,8 +136,10 @@ export default {
 	data() {
 		return {
 			loading: true,
-			api_resource:api_common.resource(this.url),
-			table_topHeight:293,
+			vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
+			width:'40%',
+			api_resource :api_common.resource(this.url),
+			table_topHeight: 303,
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			form:{
@@ -169,6 +181,47 @@ export default {
 		}
 	},
 	methods: {
+		cellClassName ({ row, rowIndex, column, columnIndex }) {
+			if(row.fieldStyle){
+				var obj = JSON.parse(row.fieldStyle)
+				for(var key in obj){
+					if(key == column.property){
+						if(column.title!="星期"){
+							return 'col-red'
+						}else{
+							if(obj.weekDay==1){
+								return 'col-bag-blue'
+							}else if(obj.weekDay==2){
+								return 'col-bag-pink'
+							}else{
+								return ''
+							}
+						}
+					}
+				}
+			}
+		},
+        handleChangeSelection({selection:val}){ // 单选
+			this.table_selectedRowsInfo = val
+			this.table_selectedRows = val
+			this.$emit("update:table_selectedRows",val)
+        },
+        table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+            let row = this.table_field.find(field=>field.showname===column.title)
+            var isEnd = false
+            this.table_field.forEach((item,i)=>{
+                if(item==row&&i==this.table_field.length-2){
+                isEnd = true
+                }
+            })
+            var newWidth = column.resizeWidth
+            row.width = newWidth
+            row.menuid = row.menuid_id
+            api_pagemanager.update(row.id,{
+                width:newWidth,
+                menuid:row.menuid_id
+            },{alert:false})
+        },
 		async reset(){
 			this.statusk = 1
 			let mes = await this.$request.post(this.url+'/rest',this.table_form)
@@ -210,9 +263,10 @@ export default {
 			await this.$request.put('attendance/dailyreportaudit',{ids:rows.join(',')})
 			this.fetchTableData()
 		},
-		async editSchedule(row,column,cell,event){//日考勤记录修改班次
-			if(this.m==1&&column.label=='班次'){
-				if(event.target.innerHTML.indexOf('red')!=-1||event.target.style.color=='red'||event.target.innerText=='	'||event.target.innerText==''){
+		async cellClickEvent({row, rowIndex, column, columnIndex},event){//日考勤记录修改班次
+			if(this.m==1&&column.title=='班次'&&row.fieldStyle){
+				var obj = JSON.parse(row.fieldStyle)
+				if(obj.attendanceClass__id==10){
 					this.form = {}
 					this.$nextTick(()=>{
 						this.$refs['form'].clearValidate()
@@ -240,18 +294,6 @@ export default {
 			this.dialogFormVisible = false
 			this.fetchTableData()
 		},
-		cellStyle({row,column,rowIndex,columnIndex}){
-			if(column.label=="星期"&&row.fieldStyle){
-				var fields = JSON.parse(row.fieldStyle)
-				if(fields.weekDay==1){
-					return 'background-color:#7ae8ff;'
-				}else if(fields.weekDay==2){
-					return 'background-color:#ffccff;'
-				}else{
-					return ''
-				}
-			}
-		},
 		async fetchTableData() {
 			if(!this.id){
 				return
@@ -273,6 +315,11 @@ export default {
 			this.fetchTableData()
 		}
 	},
+    activated(){
+        this.$nextTick(()=>{
+            this.$refs['elTable'].recalculate()
+       })
+    },
 	async created() {
 		this.table_form.dateLap = dayjs().format('YYYY-MM')
 		if(this.m==1){
@@ -284,3 +331,14 @@ export default {
 	}
 };
 </script>
+<style lang="scss">
+	.col-red{
+		color: red
+	}
+	.col-bag-blue{
+		background-color:#7ae8ff
+	}
+	.col-bag-pink{
+		background-color:#ffccff
+	}
+</style>

@@ -1,5 +1,5 @@
 <template>
-     <el-form-item :label="field.name">
+     <el-form-item :label="field.name" v-bind="$parent.$attrs"  v-on="$parent.$listeners">
         <el-popover ref="popover" placement="bottom" width="auto" trigger="click" v-model="visible" transition="el-zoom-in-top">
          <el-input
           placeholder="搜索姓名或工号"
