@@ -17,14 +17,19 @@
           </div>
         </div>
         <div class="container_content flex_r_ss">
-          <div class="container_content_l flex_c_ss">
-            <div @click="chooseTabs(item.id)" v-for="item in noteTabs" :key="item.id" class="noteTabs flex_c_ss" :class="activeId == item.id?'activeTab':''">
-              <div class="flex_c_ss">
-                <span class="noteName">{{item.title}}</span>
-                <span class="noteTime">1月17日 18:40</span>
-              </div>
-            </div>
-          </div>
+          
+            <div class="container_content_l flex_c_ss">
+              <el-scrollbar style="width:100%;height: 100%;">
+                <div @click="chooseTabs(item.id)" v-for="item in noteTabs" :key="item.id" class="noteTabs flex_c_ss" :class="activeId == item.id?'activeTab':''">
+                  <div class="flex_c_ss">
+                    <span class="noteName">{{item.title}}</span>
+                    <span class="noteTime">1月17日 18:40</span>
+                  </div>
+                </div>
+              </el-scrollbar>
+
+            </div>            
+
           <div class="container_content_r">
             <div class="titleInput">
               <el-input @change="changeNote" v-model="noteInput" placeholder="请输入内容"></el-input>
@@ -83,9 +88,9 @@ export default {
     }
   },
   methods: {
-    del() {
+    async del() {
       this.dialogVisible = false;
-      this.api_resource.remove(this.activeObj+'')
+      await this.api_resource.remove(this.activeObj.id)
       this.getData()
     },
     chooseTabs(id) {
@@ -106,7 +111,7 @@ export default {
     },
     addNote() {
       this.isAdd = true
-      let now = dayjs(new Date()).format('M月D日 HH-MM')
+      let now = dayjs().format('M月D日 HH-mm')
       this.noteTabs.unshift({id: 0, title: '新建便利贴', text: ''})
       this.$set(this, 'noteTabs', this.noteTabs)
       this.chooseTabs(0)
@@ -221,12 +226,12 @@ i {
         height: 100%;
         border-right: 1px solid #E4E4E4;
         box-sizing: border-box;
-        overflow-y: scroll;
         .noteTabs{
           width: 100%;
           padding: 9px 10px 0px 10px;
           box-sizing: border-box;
           &>div{
+            width: 100%;
             padding-bottom: 9px;
             border-bottom: 1px solid #F5F5F5;
           }

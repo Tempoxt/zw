@@ -13,13 +13,13 @@
 		<el-dialog title="常用快捷入口" :visible.sync="dialogFormVisible">
 			<div class="dialogContainer">
 				<div class="dialogFormVisible_hear">
-					<span>已选择 <span>({{ableList.length}})</span></span>
+					<span>已选择 <span>({{addList.length}})</span></span>
 					<div class="chooseList">
 						<ul class="chooseList_son flex_r_ss flex_wrap">
-							<li v-for="item in ableList" :key="item.Eid">
+							<li v-for="(item,index) in addList" :key="item.Eid">
 								<div class="li_box flex_r_sc flex_noWrap">
 									<span class="menuName">{{item.Ename}}</span>
-									<span class="iconBox"><span class="iconfont icon-guanbi1"></span></span>
+									<span @click="delMenuLi(index)" class="iconBox"><span class="iconfont icon-guanbi1"></span></span@>
 								</div>
 							</li>
 						</ul>						
@@ -30,9 +30,9 @@
 					<el-tabs v-model="activeNameAll" @tab-click="handleClick">
 						<el-tab-pane class="chooseList" v-for="(item,index) in menu_all" :key="item.id" :label="item.name" :name="index+''">
 							<ul class="chooseList_son flex_r_ss flex_wrap">
-								<li v-for="(ss,i) in item.subs.map(o=>o.subs.length?o.subs:[o]).flat()" :key="ss.id">
-									<div class="li_box flex_noWrap" :class="chooseList.map(o=>o.id).includes(ss.id)?'disabled':''">
-										<span @click="getMenuLi(ss,item.url)" class="menuName">{{ss.name}}</span>
+								<li v-for="ss in item.subs.map(o=>o.subs.length?o.subs:[o]).flat()" :key="ss.id">
+									<div class="li_box flex_noWrap" :class="{'disabled':addList.map(o=>o.Eid).includes(ss.id)}">
+										<span @click="addMenuLi(ss,item,'add')" class="menuName">{{ss.name}}</span>
 									</div>
 								</li>
 							</ul>
@@ -61,33 +61,54 @@ export default {
 			menu_all: [],
 			menu_s: [],
 			menu_length: 0,
-			activeName: '43',
 			activeNameAll: '0',
 			ableList: [],
-			chooseList: [],
+			addList: [],
 			disabled: true
 		}
 	},
 	methods: {
-		submit() {
-			this.api_resource.create({enterRecord: this.chooseList},{
+		async submit() {
+			this.addList.length>0 && await this.api_resource.create({enterRecord: this.addList},{
 				 headers: {
 					 'Content-Type':'application/json'
 				 }
-				
 			})
+			this.dialogFormVisible = false
+			this.getMenu()
 		},
-		getMenuLi(obj,fUrl) {
-			this.chooseList.push({
-				Eid: obj.id,
-				Ename: obj.name,
-				url: `${fUrl}/${obj.url}?menuid=${obj.id}`
+		addMenuLi(obj,ff) {
+			let arr = []
+	
+			let f = this.menu_all.find(o=>o.id==ff.id).subs.flat()
+			
+			let fIndex = 0
+
+			f.map(o=>o.subs).forEach(oo=> {
+				if(oo.length>0){
+					fIndex = oo.findIndex(ooo=>{
+						return ooo.id == obj.id
+					})
+				}
 			})
 
+			if(!this.addList.map(o=>o.Eid).includes(obj.id) && this.addList.length<9){
+				this.addList.push({
+					Eid: obj.id,
+					Ename: obj.name,
+					url: obj.menutype==3?`${ff.url}/${f[fIndex].url}/?menuid=${f[fIndex].id}`:`${ff.url}/${obj.url}?menuid=${obj.id}`
+				})					
+			}
+			
+		},
+		delMenuLi(index) {
+			this.addList.splice(index,1)
 		},
 		async getMenu(values=[]) {
 			let { menu } = await api_common.getMenu(1)
 			this.menu_all = menu
+			let menuLength = 0
+
 			// ~function f(menu){
 			// 	menu.forEach(o=>{
 			// 		if(o.subs && o.subs.length){
@@ -98,9 +119,21 @@ export default {
 			// 	values = values.concat(menu)
 			// }(menu)
 
+			this.menu_all.map(o=>{
+				if(o.subs.length){
+					o.subs.map(oo=>{
+						if(oo.subs.length){
+							this.menu_length+= oo.subs.length
+						}else{
+							this.menu_length++
+						}
+					})
+				}
+			})
+
 
 			this.ableList = await this.api_resource.get()
-			console.log(this.chooseList, 1550)
+			this.addList = [...this.ableList]
 			
 		},
 		
@@ -109,7 +142,7 @@ export default {
 		}
 	},
 	created() {
-		this.getMenu(this.choose)
+		this.getMenu()
 	}
 }
 </script>
@@ -215,12 +248,17 @@ export default {
 						border-radius: 4px;
 						font-size: 12px;
 						&.disabled{
+							color: #4C5D66 !important;
+							background: rgba(76,93,102,0.1) !important;
 							&>span,.iconfont{
 								opacity: 0.6;
 								cursor: no-drop;								
 							}
 						}
-						
+						&.active{
+							color: #0BB2D4;
+							background: rgba(11, 178, 212, 0.1);
+						}
 					}
 				}
 			}

@@ -5,19 +5,19 @@
 				<div class="outside">
 					<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
 							<el-row :gutter="10">
-								<el-col :span="16">
+								<!-- <el-col :span="16">
 									<backlog></backlog>
 								</el-col>
 								<el-col :span="8">
 									<weater></weater>
-								</el-col>
-								<el-col :span="16">
+								</el-col> -->
+								<!-- <el-col :span="16">
 									<workSchedule></workSchedule>
 								</el-col>
 								<el-col :span="8">
 									<quickEntry></quickEntry>
-								</el-col>
-								<el-col :span="8">
+								</el-col> -->
+								<!-- <el-col :span="8">
 									<stickyNote></stickyNote>
 								</el-col>
 								<el-col :span="8">
@@ -25,7 +25,7 @@
 								</el-col>
 								<el-col :span="8">
 									<systemMessages></systemMessages>
-								</el-col>
+								</el-col> -->
 								<!-- <el-col :span="12">
 									<leaveList></leaveList>
 								</el-col>
