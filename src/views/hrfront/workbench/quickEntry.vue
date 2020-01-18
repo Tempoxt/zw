@@ -96,7 +96,7 @@ export default {
 				this.addList.push({
 					Eid: obj.id,
 					Ename: obj.name,
-					url: obj.menutype==3?`${ff.url}/${f[fIndex].url}/?menuid=${f[fIndex].id}`:`${ff.url}/${obj.url}?menuid=${obj.id}`
+					url: obj.menutype==3?`${ff.url}/${f[fIndex].url}?menuid=${f[fIndex].id}`:`${ff.url}/${obj.url}?menuid=${obj.id}`
 				})					
 			}
 			
