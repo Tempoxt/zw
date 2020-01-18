@@ -16,7 +16,7 @@
               <quickEntry></quickEntry>
             </el-col> -->
             <el-col :span="8">
-              <stickyNote></stickyNote>
+              <stickyNote style="min-width:450px"></stickyNote>
             </el-col>
             <!-- <el-col :span="8">
               <attendanceManagement></attendanceManagement>
