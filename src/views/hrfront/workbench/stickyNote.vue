@@ -23,7 +23,7 @@
                 <div @click="chooseTabs(item.id)" v-for="item in noteTabs" :key="item.id" class="noteTabs flex_c_ss" :class="activeId == item.id?'activeTab':''">
                   <div class="flex_c_ss">
                     <span class="noteName">{{item.title}}</span>
-                    <span class="noteTime">1月17日 18:40</span>
+                    <span class="noteTime">{{item.created | noteDate}}</span>
                   </div>
                 </div>
               </el-scrollbar>
@@ -94,13 +94,20 @@ export default {
       }else{
         return {}
       }
+    },
+    
+  },
+  filters: {
+    noteDate(val) {
+      return dayjs(val).format('M月D日 HH-mm')
     }
   },
   methods: {
     async del() {
       this.dialogVisible = false;
       await this.api_resource.remove(this.activeObj.id)
-      this.getData()
+      await this.getData()
+      this.chooseTabs(this.noteTabs[0].id)
     },
     chooseTabs(id) {
       this.activeId = id
@@ -124,8 +131,8 @@ export default {
     },
     async addNote() {
       this.isAdd = true
-      let now = dayjs().format('M月D日 HH-mm')
-      await this.api_resource.create({title: '新建便利贴'+(this.noteData.rows.length+1), text: ''},{alert:false})
+      // let now = dayjs().format('M月D日 HH-mm')
+      await this.api_resource.create({title: '新建便利贴', text: '', created: new Date()},{alert:false})
       await this.getData()
       this.chooseTabs(0)
       this.$refs.textarea.focus()
@@ -136,8 +143,8 @@ export default {
       this.noteTabs = this.noteData.rows
   
       this.total = this.noteData.total || 0
-      this.noteInput = this.activeObj.title
-      this.noteTextarea = this.activeObj.text
+      this.noteInput = this.activeObj && this.activeObj.title
+      this.noteTextarea = this.activeObj && this.activeObj.text
     }
   },
   created() {
