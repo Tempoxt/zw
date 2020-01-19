@@ -196,5 +196,12 @@ export default [
         meta: {
             title: '个税缴纳累计'
         }
+    },{
+        name: 'salary/bonus',
+        component: () =>
+            import ('@/views/finance/salary/bonus'),
+        meta: {
+            title: '年度奖金'
+        }
     },
 ]
