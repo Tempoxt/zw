@@ -52,9 +52,9 @@
           <el-tag size="mini" type="success" v-if="scope.row.signState==3">默认签收</el-tag>
         </template>
     </vxe-table-column>
-    <vxe-table-column prop="signImage" label="签名">
-        <template slot-scope="scope">
-          <img v-if="scope.row.image!=undefined&&scope.row.image!=''" :src="baseUrl+scope.row.image" width="30" height="30"/>
+    <vxe-table-column prop="signImage" label="签名" width="100">
+        <template v-slot="{ row }">
+          <img v-if="row.signImage!=undefined&&row.signImage!=''" :src="baseUrl+row.signImage" width="70" height="30"/>
         </template>
     </vxe-table-column>
     </vxe-table>
@@ -135,7 +135,7 @@ export default {
     this.table_field = field;
     this.table_actions = action;
     this.table_config = table
-    this.$set(this.table_form,'dateLap',dayjs().format('YYYY'))
+    this.$set(this.table_form,'dateLap',dayjs().subtract(1,'year').format('YYYY'))
     this.fetchTableData();
   }
 };
