@@ -132,7 +132,6 @@ export default {
        (this.noteInput!=this.activeObj.title || this.noteTextarea!=this.activeObj.text) && 
         await this.api_resource.update(this.activeObj.id,{title: this.noteInput, text: this.noteTextarea})
         this.getData()
-
         return
       if(this.isAdd){
         this.getData()
@@ -155,7 +154,6 @@ export default {
       this.noteData =  (await this.api_resource.get())
       this.noteData.rows = this.noteData.rows.reverse()
       this.noteTabs = this.noteData.rows
-  
       this.total = this.noteData.total || 0
       this.noteInput = this.activeObj && this.activeObj.title
       this.noteTextarea = this.activeObj && this.activeObj.text
