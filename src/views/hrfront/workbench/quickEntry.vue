@@ -1,13 +1,19 @@
 <template>
 	<div id="quickEntry">
-		<el-card class="box-card">
+		<el-card class="box-card" style="position:relative">
 			<div slot="header" class="box-card-header flex_r_bc">
 				<div class="cardName"><i class="iconfont icon-zhifeiji-tongyong"></i><span>常用快捷入口</span></div>
 				<i @click="dialogFormVisible=true" class="icon_set"></i>
 			</div>
-			<router-link v-for="o in ableList" :key="o.Eid" class="text item" :to="o.url">
-				<div><span class="icon_link"></span><span class="linkName">{{o.Ename}}</span></div>
-			</router-link>
+
+			<div v-if="ableList.length>0">
+				<router-link v-for="o in ableList" :key="o.Eid" class="text item" :to="o.url">
+					<div><span class="icon_link"></span><span class="linkName">{{o.Ename}}</span></div>
+				</router-link>				
+			</div>
+
+
+			<NoData v-if="ableList.length==0" msg="暂无入口"></NoData>
 		</el-card>
 
 		<el-dialog title="常用快捷入口" :visible.sync="dialogFormVisible">
@@ -19,7 +25,7 @@
 							<li v-for="(item,index) in addList" :key="item.Eid">
 								<div class="li_box flex_r_sc flex_noWrap">
 									<span class="menuName">{{item.Ename}}</span>
-									<span @click="delMenuLi(index)" class="iconBox"><span class="iconfont icon-guanbi1"></span></span@>
+									<span @click="delMenuLi(index)" class="iconBox"><span class="iconfont icon-guanbi1"></span></span>
 								</div>
 							</li>
 						</ul>						
@@ -51,6 +57,7 @@
 
 <script>
 import * as api_common from '@/api/common'
+import NoData from "./NoData";
 
 export default {
 	name: 'quickEntry',
@@ -67,9 +74,10 @@ export default {
 			disabled: true
 		}
 	},
+	components: {NoData},
 	methods: {
 		async submit() {
-			this.addList.length>0 && await this.api_resource.create({enterRecord: this.addList},{
+			await this.api_resource.create({enterRecord: this.addList},{
 				 headers: {
 					 'Content-Type':'application/json'
 				 }
@@ -84,11 +92,9 @@ export default {
 			
 			let fIndex = 0
 
-			f.map(o=>o.subs).forEach(oo=> {
-				if(oo.length>0){
-					fIndex = oo.findIndex(ooo=>{
-						return ooo.id == obj.id
-					})
+			fIndex = f.map(o=>o.subs).findIndex(oo=> {
+				if(oo.length > 0 && oo.find(ooo=>ooo.id == obj.id)){
+					return oo.find(ooo=>ooo.id == obj.id).id == obj.id
 				}
 			})
 
@@ -99,7 +105,7 @@ export default {
 					url: obj.menutype==3?`${ff.url}/${f[fIndex].url}?menuid=${f[fIndex].id}`:`${ff.url}/${obj.url}?menuid=${obj.id}`
 				})					
 			}
-			
+			console.log(fIndex, 88888)
 		},
 		delMenuLi(index) {
 			this.addList.splice(index,1)
@@ -166,7 +172,7 @@ export default {
 <style lang="scss" scoped>
 #quickEntry{
 	.box-card{
-		height: 370px;
+		height: 360px;
 		padding-top: 0;
 		margin-bottom: 15px;
 	}

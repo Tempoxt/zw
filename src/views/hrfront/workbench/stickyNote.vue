@@ -17,9 +17,8 @@
           </div>
         </div>
         <div class="container_content flex_r_ss">
-          
             <div class="container_content_l flex_c_ss" style="width: 180px;">
-              <el-scrollbar style="width:100%;height: 100%;">
+              <el-scrollbar ref="scrollbar" style="width:100%;height: 100%;">
                 <div @click="chooseTabs(item.id)" v-for="item in noteTabs" :key="item.id" class="noteTabs flex_c_ss" :class="activeId == item.id?'activeTab':''">
                   <div class="flex_c_ss">
                     <span class="noteName">{{item.title}}</span>
@@ -99,20 +98,35 @@ export default {
   },
   filters: {
     noteDate(val) {
-      return dayjs(val).format('M月D日 HH-mm')
+      return dayjs(val).format('M月D日 HH:mm')
     }
   },
   methods: {
     async del() {
+      let preId = ''
       this.dialogVisible = false;
+      let actIndex = await this.noteTabs.findIndex(o=>this.activeObj.id == o.id)
       await this.api_resource.remove(this.activeObj.id)
       await this.getData()
-      this.chooseTabs(this.noteTabs[0].id)
+      preId = actIndex>0?this.noteTabs[actIndex-1].id:''
+      
+      if(preId){
+        this.chooseTabs(preId)
+        this.$refs['scrollbar'].wrap.scrollTop = this.$refs['scrollbar'].wrap.scrollTop-5
+      }
+
+      (actIndex==0 && this.noteTabs.length>0) && this.chooseTabs(this.noteTabs[0].id)
+
     },
-    chooseTabs(id) {
+    goScroll(num) {
+      this.$refs['scrollbar'].wrap.scrollTop = num
+    },
+    chooseTabs(id,goTop) {
       this.activeId = id
       this.noteInput = this.activeObj.title || ''
       this.noteTextarea = this.activeObj.text || ''
+      
+      goTop && this.goScroll(0)
     },
     async changeNote() {
        (this.noteInput!=this.activeObj.title || this.noteTextarea!=this.activeObj.text) && 
@@ -132,9 +146,9 @@ export default {
     async addNote() {
       this.isAdd = true
       // let now = dayjs().format('M月D日 HH-mm')
-      await this.api_resource.create({title: '新建便利贴', text: '', created: new Date()},{alert:false})
+      await this.api_resource.create({title: '新建便利贴', text: ''},{alert:false})
       await this.getData()
-      this.chooseTabs(0)
+      this.chooseTabs(this.noteTabs[0].id, true)
       this.$refs.textarea.focus()
     },
     async getData() {
@@ -166,16 +180,16 @@ export default {
 
   .titleInput{
         .el-input__inner{
-            padding: 10px 0 10px 5px;
+            padding: 10px 0 10px 10px;
             border: none;
             border-bottom: 1px solid #F5F5F5;
             font-size: 14px;
         }
     }
    .contentInput{
-        padding: 0px 0 0px 3px;
+        padding: 10px 0 0px 10px;
         .el-textarea__inner{
-            height: 158px;
+            height: 148px;
             padding: 0;
             border: none;
             font-size: 12px;

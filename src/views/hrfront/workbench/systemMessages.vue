@@ -39,6 +39,17 @@ export default {
 };
 </script>
 
+<style lang="scss">
+#systemMessages{
+  .box-card{
+    .el-card__body{
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }    
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .mb10{
     margin-bottom: 10px;
@@ -54,7 +65,6 @@ export default {
   }
 
   .box-card-header{
-      margin-bottom: 13px;
   }
   .cardName {
     .icon-xitongxiaoxi {
@@ -63,7 +73,7 @@ export default {
   }
   .container {
     position: relative;
-    height: 250px;
+    height: 239px;
     .dataList{
         li{
             padding-bottom: 15px;

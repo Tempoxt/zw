@@ -6,6 +6,7 @@
                 <div class="choosen_date"><i class="iconfont icon-icon_date"></i><span>{{attendanceMonth | timefilter}}</span></div>
                 <el-date-picker
                     class="attendanceMonth"
+                    @change="changeDate"
                     v-model="attendanceMonth"
                     :clearable="false"
                     type="month"
@@ -13,16 +14,20 @@
                 </el-date-picker>
             </div>
             <div class="container">
-                <ul>
-                    <li class="flex_r_sc">
+                <el-scrollbar style="width:100%;height: 100%;">
+                    <div class="dataList flex_r_bc" v-for="item in dataList.rows" :key="item.id">
                         <div class="li_l flex_r_sc">
-                            <span><span class="icon_zhiwen"></span>1月13日&nbsp;星期一</span>
+                            <span><span class="icon_zhiwen"></span>{{item.checkMonth}}月{{item.checkDay}}日&nbsp;{{item.weekDay}}</span>
                         </div>
                         <div class="li_r flex_r_sc">
-                            <span>打卡时间&nbsp;&nbsp;&nbsp;<span class="time_start">&nbsp;&nbsp;&nbsp;07:56-12:02</span><span class="time_end color_orange">&nbsp;&nbsp;&nbsp;13:30-19:09</span></span>
+                            <span class="clockIn" v-if="item['checktime'+count][0]&&item['checktime'+count][1]" v-for="count in 3" :key="count">
+                                <span :class="`${item.exception.includes('OnDutyTime'+(count))?'color_orange':''}`">{{item['checktime'+count][0].substring(0,6).trim()}}</span>
+                                -
+                                <span :class="`${item.exception.includes('OffDutyTime'+(count))?'color_orange':''}`">{{item['checktime'+count][1].substring(0,6).trim()}}</span>
+                            </span>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </el-scrollbar>
             </div>
         </el-card>
     </div>
@@ -30,28 +35,45 @@
 
 <script>
 import dayjs from 'dayjs'
+import * as api_common from "@/api/common";
 
 export default {
     name: 'attendanceManagement',
     data() {
         return {
+            dataList: [],
+            api_resource: api_common.resource('workbench/cardcheck'),
             attendanceMonth: dayjs()
         }
     },
     filters: {
         timefilter(val) {
-            console.log(val, 119)
-            let time
-            time = dayjs(val).format('YYYY年MM月')
-            return time
+            return dayjs(val).format('YYYY年MM月')
         }
+    },
+    methods: {
+        async getData(params) {
+            this.dataList = params ? await this.api_resource.get({datelap: params}) : await this.api_resource.get()
+        },
+        changeDate(val) {
+            this.getData(dayjs(val).format('YYYY-MM'))
+        },
+    },
+    
+    created() {
+        this.getData()
     }
 }
 </script>
 
 <style lang="scss">
 #attendanceManagement{
-
+    .box-card{
+        .el-card__body{
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    }
 }
 </style>
 
@@ -82,7 +104,7 @@ export default {
     }
 
     .box-card-header{
-        position: relative;
+        position: relative;;
         .attendanceMonth{
             position: absolute;
             top: 5px;
@@ -94,31 +116,35 @@ export default {
 
     .container{
         position: relative;
-        height: 250px;
-        ul{
-            li{
-                padding: 15px 0;
-                border-bottom: 1px solid #F5F5F5;
-                .icon_zhiwen{
+        height: 239px;
+        .dataList{
+            padding: 15px 0;
+            border-bottom: 1px solid #F5F5F5;
+            .icon_zhiwen{
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                margin-right: 10px;
+                margin-bottom: -3px;
+                background: url('~@imgs/workbench-img/icon_zhiwen.png');
+                background-size: cover;
+            }
+            .li_l{
+                // margin-right: 10%;
+                font-size: 14px;
+                color: #4C5D66;
+            }
+            .li_r{
+                font-size: 12px;
+                color: #A3AFB7;
+                &>span{
                     display: inline-block;
-                    width: 16px;
-                    height: 16px;
+                }
+                .clockIn:not(:last-child){
                     margin-right: 10px;
-                    margin-bottom: -3px;
-                    background: url('~@imgs/workbench-img/icon_zhiwen.png');
-                    background-size: cover;
                 }
-                .li_l{
-                    margin-right: 10%;
-                    font-size: 14px;
-                    color: #4C5D66;
-                }
-                .li_r{
-                    font-size: 12px;
-                    color: #A3AFB7;
-                    .color_orange{
-                        color: #F47A24;
-                    }
+                .color_orange{
+                    color: #F47A24;
                 }
             }
         }
