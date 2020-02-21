@@ -85,7 +85,11 @@ export default {
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
-		},
+        },
+        lookImg(url) {
+            window.open(process.env.VUE_APP_STATIC+url)
+        }
+        
     },
     async created() {
 		const { field, action,table } = await api_common.menuInit("hrm/backgroundCheck");
@@ -96,9 +100,7 @@ export default {
 		this.fetchTableData();
     },
     
-    lookImg(url) {
-        window.open(process.env.VUE_APP_STATIC+url)
-    }
+    
 }
 </script>
 
