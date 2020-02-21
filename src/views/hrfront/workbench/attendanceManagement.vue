@@ -93,6 +93,8 @@ export default {
     }
     .choosen_date{
         span{
+            display: inline-block;
+            width: 80px;
             font-size: 14px;
             color: #A3AFB7;
         }

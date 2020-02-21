@@ -127,6 +127,14 @@ export default [{
         }
     },
     {
+        name: 'Onboarding',
+        component: () =>
+            import ('@/views/hrfront/personnelmanagement/backgroundCheck'),
+        meta: {
+            title: '新入职登记'
+        }
+    },
+    {
         name: 'clothesList',
         component: () =>
             import ('@/views/hrfront/workclothes/list'),

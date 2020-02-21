@@ -139,7 +139,7 @@ export default {
 
 
 			this.ableList = await this.api_resource.get()
-			this.addList = [...this.ableList]
+			this.addList = JSON.parse(JSON.stringify(this.ableList))
 			
 		},
 		
