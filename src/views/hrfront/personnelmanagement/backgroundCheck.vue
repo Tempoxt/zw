@@ -34,7 +34,19 @@
                     >
                 </el-table-column>
                 <el-table-column type="index" :index="indexMethod" />
-                <each-table-column :table_field="table_field" :template="template"/>
+                
+                <each-table-column :table_field="table_field.filter(o=>!['annexUrl','signature'].includes(o.name))" :template="template"/>
+
+                <el-table-column prop="annexUrl" label="证明资料附件">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="lookImg(scope.row.annexUrl)">查看附件</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="signature" label="签名附件">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="lookImg(scope.row.signature)">查看附件</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <table-pagination 
                 :total="table_form.total" 
@@ -59,6 +71,9 @@ export default {
     data() {
         return {
             table_loading: false,
+            template:{
+                
+            }
         }
     },
     methods: {
@@ -79,7 +94,11 @@ export default {
 		this.table_config = table
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
 		this.fetchTableData();
-	}
+    },
+    
+    lookImg(url) {
+        window.open(process.env.VUE_APP_STATIC+url)
+    }
 }
 </script>
 
