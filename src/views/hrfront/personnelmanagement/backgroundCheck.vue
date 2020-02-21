@@ -76,6 +76,11 @@ export default {
             }
         }
     },
+    computed: {
+        table_height(){ 
+            return (this.window_innerHeight||window.innerHeight) - 220
+        },
+    },
     methods: {
         async fetchTableData() {
 			this.table_loading = true;
@@ -97,7 +102,8 @@ export default {
 		this.table_actions = action;
 		this.table_config = table
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
-		this.fetchTableData();
+        this.fetchTableData();
+        
     },
     
     
