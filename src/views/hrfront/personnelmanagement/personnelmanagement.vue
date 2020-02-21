@@ -1060,8 +1060,8 @@
             :table_column="table_field"
             >
             <div style="padding-left:10px">
-                <DateLapRange v-model="table_form.dateLap" @change="fetch"/>
-            <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
+                <!-- <DateLapRange v-model="table_form.dateLap" @change="fetch"/> -->
+            <dateLap v-model="table_form.dateLap" @change="fetch" type="1"/>
             </div>
         </table-header>
         <vxe-table
@@ -1706,7 +1706,7 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
-        this.$set(this.table_form,'dateLap','')
+        this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM-DD'))
  
         this.Device = new Device()
         var vm =  this
