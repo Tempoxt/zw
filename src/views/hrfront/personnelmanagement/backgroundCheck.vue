@@ -62,7 +62,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("hrm/backgroundCheck");
 import dayjs from 'dayjs'
 
 export default {
@@ -71,6 +70,7 @@ export default {
     data() {
         return {
             table_loading: false,
+            api_resource: api_common.resource("hrm/backgroundCheck"),
             template:{
                 
             }
@@ -84,7 +84,7 @@ export default {
     methods: {
         async fetchTableData() {
 			this.table_loading = true;
-			const {rows , total }= await api_resource.get(this.table_form);
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
