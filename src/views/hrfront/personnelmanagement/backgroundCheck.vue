@@ -35,8 +35,19 @@
                 </el-table-column>
                 <el-table-column type="index" :index="indexMethod" />
                 
-                <each-table-column :table_field="table_field.filter(o=>!['annexUrl','signature'].includes(o.name))" :template="template"/>
+                <each-table-column :table_field="table_field.filter(o=>!['annexUrl','signature','idCardPositive','idCardReverse'].includes(o.name))" :template="template"/>
 
+                
+                <el-table-column prop="annexUrl" label="身份证正面">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="lookImg(scope.row.idCardPositive)">查看附件</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="annexUrl" label="身份证反面">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="lookImg(scope.row.idCardReverse)">查看附件</el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="annexUrl" label="证明资料附件">
                     <template slot-scope="scope">
                         <el-button type="text" @click="lookImg(scope.row.annexUrl)">查看附件</el-button>
@@ -92,7 +103,13 @@ export default {
 			}, 300);
         },
         lookImg(url) {
-            window.open(process.env.VUE_APP_STATIC+url)
+            let urls = url.split(';')
+           
+            urls.forEach(o=>{
+                window.open(process.env.VUE_APP_STATIC+o)
+            })
+            
+            
         }
         
     },
