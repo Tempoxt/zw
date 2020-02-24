@@ -33,9 +33,8 @@
                     :selectable="table_disable_selected"
                     >
                 </el-table-column>
-                <el-table-column type="index" :index="indexMethod" />
-                
-    
+
+                <el-table-column fixed type="index" :index="indexMethod" />
                 <el-table-column fixed prop="name" label="姓名"/>
                 <el-table-column fixed prop="department" label="应聘部门"/>
                 <el-table-column fixed prop="job" label="应聘岗位"/>
