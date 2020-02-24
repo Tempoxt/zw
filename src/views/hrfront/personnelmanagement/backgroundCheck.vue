@@ -35,8 +35,16 @@
                 </el-table-column>
                 <el-table-column type="index" :index="indexMethod" />
                 
-                <each-table-column :table_field="table_field.filter(o=>!['annexUrl','signature','idCardPositive','idCardReverse'].includes(o.name))" :template="template"/>
+    
+                <el-table-column fixed prop="name" label="姓名"/>
+                <el-table-column fixed prop="department" label="应聘部门"/>
+                <el-table-column fixed prop="job" label="应聘岗位"/>
+                <el-table-column fixed prop="census" label="户籍"/>
+                <el-table-column fixed prop="idCard" label="身份证号"/>
+                <el-table-column fixed prop="age" label="年龄"/>
+                <el-table-column fixed prop="sex" label="性别"/>
 
+                <each-table-column :table_field="table_field.filter(o=>!['name','department','job','census','idCard','age','sex','annexUrl','signature','idCardPositive','idCardReverse'].includes(o.name))" :template="template"/>
                 
                 <el-table-column prop="annexUrl" label="身份证正面">
                     <template slot-scope="scope">
@@ -66,7 +74,9 @@
                 @change="fetchTableData"
                 :table_config="table_config"
             />
+
         </ui-table>
+        
     </div>
 </template>
 
@@ -106,7 +116,7 @@ export default {
             let urls = url.split(';')
            
             urls.forEach(o=>{
-                window.open(process.env.VUE_APP_STATIC+o)
+                window.open(process.env.VUE_APP_STATIC+o.replace('.tencent','.png').replace('.android','.png'))
             })
             
             
