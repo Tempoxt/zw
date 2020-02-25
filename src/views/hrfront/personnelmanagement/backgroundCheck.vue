@@ -41,7 +41,7 @@
                 <el-table-column fixed prop="census" label="户籍"/>
                 <el-table-column fixed prop="idCard" label="身份证号"/>
                 <el-table-column fixed prop="age" label="年龄"/>
-                <el-table-column fixed prop="sex" label="性别"/>
+                <el-table-column sortable fixed prop="sex" label="性别"/>
 
                 <each-table-column :table_field="table_field.filter(o=>!['name','department','job','census','idCard','age','sex','annexUrl','signature','idCardPositive','idCardReverse'].includes(o.name))" :template="template"/>
                 
