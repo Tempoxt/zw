@@ -34,14 +34,14 @@
                     >
                 </el-table-column>
 
-                <el-table-column fixed type="index" :index="indexMethod" />
-                <el-table-column fixed prop="name" label="姓名"/>
-                <el-table-column fixed prop="department" label="应聘部门"/>
-                <el-table-column fixed prop="job" label="应聘岗位"/>
-                <el-table-column fixed prop="census" label="户籍"/>
-                <el-table-column fixed prop="idCard" label="身份证号"/>
-                <el-table-column fixed prop="age" label="年龄"/>
-                <el-table-column sortable fixed prop="sex" label="性别"/>
+                <el-table-column type="index" :index="indexMethod" fixed/>
+                <el-table-column prop="name" label="姓名" fixed/>
+                <el-table-column prop="department" label="应聘部门" fixed/>
+                <el-table-column prop="job" label="应聘岗位" fixed/>
+                <el-table-column prop="census" label="户籍" fixed/>
+                <el-table-column prop="idCard" label="身份证号" fixed/>
+                <el-table-column prop="age" label="年龄" fixed/>
+                <el-table-column prop="sex" label="性别" sortable fixed/>
 
                 <each-table-column :table_field="table_field.filter(o=>!['name','department','job','census','idCard','age','sex','annexUrl','signature','idCardPositive','idCardReverse'].includes(o.name))" :template="template"/>
                 
@@ -128,9 +128,12 @@ export default {
 		this.table_actions = action;
 		this.table_config = table
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
-        this.fetchTableData();
+        
         
     },
+    mounted() {
+        this.fetchTableData();
+    }
     
     
 }

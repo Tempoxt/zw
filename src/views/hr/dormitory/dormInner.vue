@@ -151,6 +151,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("dormitory/dorm");
+import { MessageBox } from 'element-ui';
 const defaultForm = () => {
     return {
         estate:1
@@ -162,6 +163,8 @@ export default {
   data() {
     let vm = this
     return {
+      downloadUrl: '/dormitory/import/room',
+      importUploadUrl: '/dormitory/import/room',
       loading: true,
       form:{},
       api_resource,
@@ -207,6 +210,22 @@ export default {
             }
         })
         this.dialogFormVisible = true
+    },
+    import(){
+     
+      let {
+        handleImportChange,
+      } = this
+        MessageBox.alert(
+          <el-button-group class="table-import-upload" ref="import">
+            <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+            <input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+            <el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
+          </el-button-group>
+          , '选择文件导入', {
+          showConfirmButton:false,
+          center:true
+        });
     },
     async handleFormSubmit(){
         let form = Object.assign({},this.form)
