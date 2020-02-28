@@ -210,6 +210,7 @@ export default {
             let ids = this.table_selectedRows.map(o=>o.id)
             this.form.ids = ids.join(',')
             await this.$request.put('/hrm/backgroundCheck/audit',this.form)
+            this.dialogFormVisible = false
         },
         async fetchTableData() {
 			this.table_loading = true;
