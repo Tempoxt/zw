@@ -211,6 +211,7 @@ export default {
             this.form.ids = ids.join(',')
             await this.$request.put('/hrm/backgroundCheck/audit',this.form)
             this.dialogFormVisible = false
+            this.fetchTableData()
         },
         async fetchTableData() {
 			this.table_loading = true;
