@@ -1061,7 +1061,7 @@
             >
             <div style="padding-left:10px">
                 <!-- <DateLapRange v-model="table_form.dateLap" @change="fetch"/> -->
-            <dateLap v-model="table_form.dateLap" @change="fetch" type="1"/>
+                <dateLap v-model="table_form.dateLap" @change="fetch" type="1"/>
             </div>
         </table-header>
         <vxe-table
@@ -1288,7 +1288,8 @@ export default {
                         return time.getTime() < new Date(this.education.eduStartTime).getTime();
                     }
 				}
-			},
+            },
+            maxOnDuty: '',
         };
     },
     watch:{
@@ -1301,6 +1302,11 @@ export default {
                 this.fetchDepartment()
             }
         },
+        maxOnDuty(){
+            if(this.maxOnDuty){
+                this.$set(this.table_form,'dateLap',this.maxOnDuty)
+            }
+        }
     },
     computed: {
         isDisabled() {
@@ -1682,11 +1688,13 @@ export default {
             this.table_loading = true;
             this.table_form.orgid = this.orgid
             // const {rows , total }= await api_resource.get(this.table_form);
-            const {rows , total,femaleCount,maleCount }= await this.$request.get('/hrm/v2/staff',{params:this.table_form})
+            const {rows , total,femaleCount,maleCount,maxOnDuty }= await this.$request.get('/hrm/v2/staff',{params:this.table_form})
             this.table_data  = rows
             this.table_form.total = total
             this.femaleCount = femaleCount
             this.maleCount = maleCount
+            this.maxOnDuty = maxOnDuty
+            
             setTimeout(() => {
                 this.table_loading = false;
             }, 300);
@@ -1706,8 +1714,6 @@ export default {
         this.table_actions = action;
         this.table_config = table
         this.fetchTableData();
-        this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM-DD'))
- 
         this.Device = new Device()
         var vm =  this
         Device.createISSonlineDevice({
