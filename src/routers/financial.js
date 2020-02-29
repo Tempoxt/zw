@@ -105,6 +105,14 @@ export default [
         }
     },
     {
+        name: 'basedataset',
+        component: () =>
+            import ('@/views/hrfront/comissManage/baseDataSet'),
+        meta: {
+            title: '基础参数设置'
+        }
+    },
+    {
         name: 'commFactor',
         component: () =>
             import ('@/views/hrfront/comissManage/comissionFactor'),
