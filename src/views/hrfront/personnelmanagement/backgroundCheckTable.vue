@@ -175,6 +175,7 @@ export default {
         flag(){
 			this.table_form.query.query = []
 			this.table_form.currentpage = 1
+            this.fetchMenu()
             this.fetchTableData()
         }
     },
@@ -230,15 +231,16 @@ export default {
             urls.forEach(o=>{
                 window.open(process.env.VUE_APP_STATIC+o.replace('.tencent','.png').replace('.android','.png'))
             })
-            
-            
+        },
+        async fetchMenu(){
+            const { field, action,table } = await api_common.menuInit("backgroundCheck"+this.flag);
+            this.table_field = field;
+            this.table_actions = action;
+            this.table_config = table
         }
     },
     async created() {
-		const { field, action,table } = await api_common.menuInit("backgroundCheck0");
-		this.table_field = field;
-		this.table_actions = action;
-		this.table_config = table
+        this.fetchMenu()
     },
     mounted() {
 		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM-DD'))

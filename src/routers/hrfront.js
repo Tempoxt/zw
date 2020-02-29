@@ -133,6 +133,13 @@ export default [{
         meta: {
             title: '新入职登记'
         }
+    },{
+        name: 'applyResume',
+        component: () =>
+            import ('@/views/hrfront/personnelmanagement/applyResume'),
+        meta: {
+            title: '应聘履历表'
+        }
     },
     {
         name: 'clothesList',
