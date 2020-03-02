@@ -111,6 +111,13 @@ export default [
         meta: {
             title: '基础参数设置'
         }
+    },{
+        name: 'customerprofile',
+        component: () =>
+            import ('@/views/hrfront/comissManage/customerProfile'),
+        meta: {
+            title: '客户档案'
+        }
     },
     {
         name: 'commFactor',
