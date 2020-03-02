@@ -51,7 +51,7 @@
 
             <!-- 人员档案的信息预览 -->
             <div>
-                <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo" v-if="profileData.main">
+                <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo applyInfo" v-if="profileData.main">
                     <p class="info">基本信息</p>
                     <div class="drawer-profile">
                         <el-row>
@@ -436,6 +436,16 @@ export default {
 </script>
 
 <style lang="scss">
+    .applyInfo{
+        .info{
+            color: #0BB2D4;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 10px 0 10px 10px;
+            background: #F5F5F5;
+            padding: 8px 20px
+        }
+    }
     .drawerInfo{
         .ivu-drawer-body{
             padding:0;
@@ -445,14 +455,6 @@ export default {
         }
         .line-boxs{
             margin-top: 20px;
-        }
-        .info{
-            color: #0BB2D4;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 10px 0 10px 10px;
-            background: #F5F5F5;
-            padding: 8px 20px
         }
         .labelCon{
             display: inline-block;

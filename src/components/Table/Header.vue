@@ -149,7 +149,7 @@ export default {
         }
         
         if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit',
-        'cancelAudit','editClass','schedule',].indexOf(code)!==-1) {
+        'cancelAudit','editClass','schedule','purchase'].indexOf(code)!==-1) {
           return len >= 1;
         }
         return true;

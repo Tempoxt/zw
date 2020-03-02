@@ -181,5 +181,12 @@ export default [{
         meta: {
             title: '部门台账管理'
         }
+    },{
+        name: 'ArticlePurchase',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/articlePurchase'),
+        meta: {
+            title: '物品请购'
+        }
     },
  ]
