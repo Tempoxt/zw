@@ -7,10 +7,10 @@
             <baseDataSetTable url="commission/productyearsview" m="1"/>
         </div>
         <div v-if="view_activeName==='计提金额系数'">
-            <baseDataSetTable url="" m="2"/>
+            <baseDataSetTable url="commission/shippingratio" m="2"/>
         </div>
         <div v-if="view_activeName==='阶梯提成系数'">
-            <baseDataSetTable url="" m="3"/>
+            <baseDataSetTable url="commission/stepcommission" m="3"/>
         </div>
     </div>
 </template>
