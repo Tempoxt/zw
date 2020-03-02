@@ -51,7 +51,7 @@
 
             <!-- 人员档案的信息预览 -->
             <div>
-                <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+                <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo" v-if="profileData.main">
                     <p class="info">基本信息</p>
                     <div class="drawer-profile">
                         <el-row>
@@ -354,9 +354,6 @@ export default {
         }
     },
     computed: {
-        // table_height(){ 
-        //     return (this.window_innerHeight||window.innerHeight) - 220
-        // },
         disabled(){
 			if(this.form.audit!==''){
 				if(this.form.audit==1){
@@ -388,9 +385,6 @@ export default {
             if(row.name==event.target.innerText){
                 this.openDrawers = true
                 this.profileData = await api_common.resource('hrm/applyResume').find(row.id)
-                // this.connect = await api_common.resource('hrm/staff/contact').find(row.id)
-                // this.contractData = await api_common.resource("hrm/staff/contract").get({emID:this.staffId});
-                // this.cardInfo = await api_common.resource("hrm/staff/card").get({emID:this.staffId});
             }
         },
         audit(){

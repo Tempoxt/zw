@@ -49,6 +49,21 @@
                 </div>
             </el-dialog>
 
+            <el-dialog
+                title="入职码"
+                :visible.sync="dialogForm1Visible"
+                class="public-dialog-gener"
+                v-el-drag-dialog
+                width="520px"
+                @close="closeCode"
+                >
+                <div class="codeInfo">
+                    <div id="qrcode" ref="qrcode" style="width: 100px;margin: 0 auto;"></div>
+                    <div style="margin:10px 0 6px;">姓名：{{personInfo.name}}</div>
+                    <div>部门：{{personInfo.department}}</div>
+                </div>
+            </el-dialog>
+
             <table-header
                 :table_actions="table_actions"
                 :table_selectedRows="table_selectedRows"
@@ -122,6 +137,11 @@
                         <el-button type="text" @click="lookImg(scope.row.signature)">查看附件</el-button>
                     </template>
                 </el-table-column>
+                <el-table-column prop="signature" label="生成入职码" v-if="this.flag==1">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="generCode(scope.row)">生成入职码</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <table-pagination 
                 :total="table_form.total" 
@@ -140,6 +160,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
+import QRCode from 'qrcodejs2'
 
 export default {
     mixins: [table_mixin],
@@ -151,7 +172,9 @@ export default {
             api_resource: api_common.resource("hrm/backgroundCheck"),
             table_topHeight: 300,
             dialogFormVisible: false,
+            dialogForm1Visible: false,
             form: {},
+            form1: {},
 			rules:{
 				audit:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
@@ -166,9 +189,11 @@ export default {
                     label: '职员'
                 },
             ],
+            personInfo: {},
             template:{
                 
-            }
+            },
+            qrcode: '',
         }
     },
     watch:{
@@ -202,6 +227,24 @@ export default {
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
+        },
+        generCode(row){ // 展示入职码
+            this.dialogForm1Visible = true
+            this.personInfo = row
+            this.qrcode = 'https://www.baidu.com/'
+            this.$nextTick(() => {
+                this.crateQrcode();
+            });
+        },
+        crateQrcode() {
+            this.qr = new QRCode("qrcode", {
+                width: 100, // 二维码宽度，单位像素
+                height: 100, // 二维码高度，单位像素
+                text: this.qrcode // 生成二维码的链接
+            });
+        },
+        closeCode () {
+            this.$refs.qrcode.innerHTML = ''
         },
         audit(){
             this.dialogFormVisible = true
@@ -252,8 +295,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #backgroundCheck{
 
+}
+.public-dialog-gener{
+    .el-dialog__header{
+        background: #fff;
+        text-align: center;
+    }
+    .codeInfo{
+        text-align: center;    
+    }
 }
 </style>

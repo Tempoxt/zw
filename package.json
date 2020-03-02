@@ -21,6 +21,7 @@
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^3.1.5",
     "jquery": "^3.3.1",
+    "qrcodejs2": "^0.0.2",
     "qs": "^6.6.0",
     "scp2": "^0.5.0",
     "screenfull": "^3.3.3",
