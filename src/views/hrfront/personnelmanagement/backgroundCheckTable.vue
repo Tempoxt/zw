@@ -137,11 +137,11 @@
                         <el-button type="text" @click="lookImg(scope.row.signature)">查看附件</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="signature" label="生成入职码" v-if="this.flag==1">
+                <!-- <el-table-column prop="signature" label="生成入职码" v-if="this.flag==1">
                     <template slot-scope="scope">
                         <el-button type="text" @click="generCode(scope.row)">生成入职码</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <table-pagination 
                 :total="table_form.total" 
