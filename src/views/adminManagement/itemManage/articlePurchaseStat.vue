@@ -27,10 +27,7 @@
                             <form-render :type="`input`" prop="articleUnit" :field="{name:'单位'}" v-model="form.articleUnit" :disabled="true"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`input`" prop="nextStdDose" :field="{name:'标准用量'}" v-model="form.nextStdDose" :disabled="true"/>
-                        </el-col>
-                        <el-col :span="16" :offset="4">
-                            <form-render :type="`input`" prop="purchaseNumber" :field="{name:'请购数量'}" v-model="form.purchaseNumber"/>
+                            <form-render :type="`input`" prop="purchaseNumber" :field="{name:'请购数量'}" v-model="form.purchaseNumber" :disabled="true"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
                             <form-render :type="`textarea`" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
@@ -91,7 +88,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
-const api_resource = api_common.resource("toolstationery/purchase/detail");
+const api_resource = api_common.resource("toolstationery/purchase/stat");
 let baseUrl = process.env.VUE_APP_STATIC
 let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
@@ -128,12 +125,6 @@ export default {
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
                 articleUnit:[
-                    { required: true, message: '请输入', trigger: ['blur','change'] },
-                ],
-                dose:[
-                    { required: true, message: '请输入', trigger: ['blur','change'] },
-                ],
-                nextStdDose:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
                 purchaseNumber:[
@@ -177,14 +168,14 @@ export default {
 				return true
 			}
 		},
-        async purchase(){
+        async purchaseList(){
             let row = this.table_selectedRows.map(row=>row.id)
-            await this.$request.post('toolstationery/purchase/detail',{recordIds:row.join(',')})
+            await this.$request.post('toolstationery/purchase/stat',{recordIds:row.join(',')})
             this.fetch()
         },
         async getUrl(){
 			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/purchase/detail/download',{alert:false})
+                this.url = await this.$request.get('toolstationery/purchase/stat/download',{alert:false})
                 if(this.url!=''){
                     const res = download(baseUri+'/'+this.url)
                     this.statusk = 0
@@ -199,7 +190,7 @@ export default {
 				clearInterval(this.timer)
 			}
 			try{
-                let mes = await this.$request.post('toolstationery/purchase/detail/download',{dateLap:this.table_form.dateLap})
+                let mes = await this.$request.post('toolstationery/purchase/stat/download',{dateLap:this.table_form.dateLap})
                 this.$message.success(mes);
 				this.timer = setInterval(()=>{
 					this.getUrl()
@@ -240,7 +231,7 @@ export default {
         }
     },
     async created() {
-        const { field, action,table } = await api_common.menuInit("toolstationery/purchase/detail");
+        const { field, action,table } = await api_common.menuInit("toolstationery/purchase/stat");
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table

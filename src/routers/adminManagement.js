@@ -188,5 +188,12 @@ export default [{
         meta: {
             title: '物品请购'
         }
+    },{
+        name: 'ArticlePurchaseStat',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/articlePurchaseStat'),
+        meta: {
+            title: '请购汇总'
+        }
     },
  ]
