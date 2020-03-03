@@ -49,6 +49,169 @@
                 </div>
             </el-dialog>
 
+             <el-dialog
+                title="确认入职"
+                :visible.sync="dialogForm1Visible"
+                class="public-dialog"
+                v-el-drag-dialog
+            >
+            <div>
+                <el-form ref="form1" :model="form1" label-width="100px" :rules="rules1">
+                    <div class="line-boxs">
+                        <el-row :gutter="40">
+                            <el-col :span="12">
+                                <el-row :gutter="20">
+                                    <el-col :span="24">
+                                        <form-render :type="`branchsubcompany`" prop="subCompany" :field="{name:'所属公司'}" v-model="form1.subCompany"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form1.subCompany,disable:!isInsert}" v-model="form1.department"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render :type="`branchteam`" :field="{name:'所属小组',id:form1.department,disable:!isInsert}" v-model="form1.workShop"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render :disabled="!isInsert"
+                                            filterable
+                                            placeholder="请搜索或选择"
+                                            prop="principalship"
+                                            :type="`select`"
+                                            :field="{name:'所任职务',options:jobtitlesData}"
+                                            v-model="form1.principalship"
+                                        />
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render
+                                            prop="teamID"
+                                            :type="`select`"
+                                            :field="{name:'智能班组',options:teamidData}"
+                                            v-model="form1.teamID"
+                                        />
+                                    </el-col>
+                                    <el-col :span="24">
+                                    <form-render 
+                                            prop="workGroup"
+                                            :type="`select`"
+                                            :field="{name:'工作地点',options:workGroupData}"
+                                            v-model="form1.workGroup"
+                                        />
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-row :gutter="20">
+                                    <el-col :span="24">
+                                        <form-render
+                                            :type="`select`" prop="workNature"
+                                            :field="{name:'工作性质',options:[{
+                                                value: 1,
+                                                label: '全职'
+                                            },{
+                                                value: 2,
+                                                label: '实习'
+                                            },{
+                                                value: 3,
+                                                label: '兼职'
+                                            },{
+                                                value: 4,
+                                                label: '返聘'
+                                            }]}"
+                                            v-model="form1.workNature"
+                                        />
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render :type="`day`" prop="onDutyTime" :field="{name:'入职日期'}" v-model="form1.onDutyTime"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                    <form-render
+                                            :type="`select`" prop="trialTime"
+                                            :field="{name:'试用期限',options:[{
+                                                value: 1,
+                                                label: '1个月'
+                                            },{
+                                                value: 2,
+                                                label: '2个月'
+                                            },{
+                                                value: 3,
+                                                label: '3个月'
+                                            },{
+                                                value: 0,
+                                                label: '无试用期'
+                                            }]}"
+                                            v-model="form1.trialTime"
+                                        />
+                                    </el-col>
+                                    <el-col :span="24">
+                                    <form-render
+                                            :type="`select`"
+                                            prop="contractTime"
+                                            :field="{name:'合同年限',options:[{
+                                                value: 1,
+                                                label: '一年半'
+                                            },{
+                                                value: 2,
+                                                label: '两年'
+                                            },{
+                                                value: 3,
+                                                label: '三年'
+                                            },{
+                                                value: 4,
+                                                label: '四年'
+                                            },{
+                                                value: 5,
+                                                label: '五年'
+                                            },{
+                                                value: 6,
+                                                label: '无限期'
+                                            },{
+                                                value: 7,
+                                                label: '不签合同'
+                                            }]}"
+                                            v-model="form1.contractTime"
+                                        />
+                                    </el-col>
+                                    <el-col :span="24">
+                                    <form-render
+                                            :type="`select`" prop="checkWorkType"
+                                            :field="{name:'考勤方案',options:[{
+                                                value: 0,
+                                                label: '需考勤'
+                                            },{
+                                                value: 1,
+                                                label: '不需考勤'
+                                            }]}"
+                                            v-model="form1.checkWorkType"
+                                        />
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render prop="fileType"
+                                            :type="`radio`"
+                                            :field="{name:'工作状态',options:[{
+                                                value: 400,
+                                                label: '试用'
+                                            },{
+                                                value: 401,
+                                                label: '正式'
+                                            }]}"
+                                            v-model="form1.fileType"
+                                        />
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <div>
+                    <el-button @click="dialogForm1Visible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleForm1Submit">确 定</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
+
             <!-- 人员档案的信息预览 -->
             <div>
                 <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo applyInfo" v-if="profileData.main">
@@ -318,31 +481,42 @@ export default {
     name: 'applyResume',
     props:['flag'],
     data() {
+        const defaultForm  = function(){
+            return {
+                trialTime: 2,
+                contractTime: 1,
+                checkWorkType: 0,
+                fileType: 400,
+                workNature: 1,
+                subCompany: 1,
+                workGroup: 1,
+                department: null,
+                onDutyTime: dayjs().add(1,'day').format('YYYY-MM-DD'),
+            }
+        }
         return {
+            defaultForm,
             table_loading: false,
             api_resource: api_common.resource("hrm/applyResume"),
             table_topHeight: 300,
             dialogFormVisible: false,
+            dialogForm1Visible: false,
             form: {},
+            form1: {},
 			rules:{
 				audit:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
 				],
             },
-            jobTypes: [
-                {
-                    value: '0',
-                    label: '员工'
-                }, {
-                    value: '1',
-                    label: '职员'
-                },
-            ],
+			rules1:{
+				
+            },
             profileData: {},
             openDrawers: false,
-            template:{
-                
-            }
+            template:{},
+            jobtitlesData:[],
+            workGroupData:[],
+            teamidData:[],
         }
     },
     watch:{
@@ -370,6 +544,16 @@ export default {
 		}
     },
     methods: {
+        async getSelectOption(){
+            this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
+            this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
+        },
+        ensure(){
+            this.dialogForm1Visible = true
+            this.getSelectOption()
+            this.form1 = this.defaultForm()
+        },
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -392,10 +576,18 @@ export default {
             this.form = {}
         },
         async handleFormSubmit(){
-            let ids = this.table_selectedRows.map(o=>o.id)//hrm/applyResume/id
+            let ids = this.table_selectedRows.map(o=>o.id)
             this.form.ids = ids.join(',')
             await this.$request.put('hrm/applyResume/audit',this.form)
             this.dialogFormVisible = false
+            this.fetchTableData()
+        },
+        async handleForm1Submit(){
+            let ids = this.table_selectedRows.map(o=>o.id)
+            this.form1.ids = ids.join(',')
+            let form = Object.assign({},this.form1)
+            await this.$request.put('hrm/applyResume/ensure',this.form1)
+            this.dialogForm1Visible = false
             this.fetchTableData()
         },
         async fetchTableData() {
@@ -445,6 +637,9 @@ export default {
             background: #F5F5F5;
             padding: 8px 20px
         }
+        .el-row{
+            margin-left: 20px
+        }
     }
     .drawerInfo{
         .ivu-drawer-body{
@@ -458,8 +653,7 @@ export default {
         }
         .labelCon{
             display: inline-block;
-            width: 112px;
-            text-align: right;
+            text-align: left;
             font-size: 12px;
             color: #4C5D66;
         }

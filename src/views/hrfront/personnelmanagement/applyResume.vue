@@ -12,6 +12,9 @@
         <div v-if="view_activeName==='审核未通过'">
             <applyResumeTable  :flag="2"/>
         </div>
+        <div v-if="view_activeName==='确认入职'">
+            <applyResumeTable  :flag="3"/>
+        </div>
     </div>
 </template>
 <script>

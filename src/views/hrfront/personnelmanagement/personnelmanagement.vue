@@ -91,7 +91,7 @@
                                             <form-render :type="`input`" v-if="!isInsert" :field="{name:'签发机关'}" v-model="form.qfjg"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :type="`input`" :field="{name:'住址'}" v-model="form.contactAddr" prop="contactAddr"/>
+                                            <form-render :type="`input`" :field="{name:'身份证地址'}" v-model="form.contactAddr" prop="contactAddr"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
