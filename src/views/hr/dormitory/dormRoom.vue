@@ -134,7 +134,9 @@ export default {
       adminList:[],
       defaultForm,
       roomAdminList:[],
-      roomList:[]
+      roomList:[],
+      downloadUrl: '/dormitory/import/room',
+      importUploadUrl: '/dormitory/import/room',
     };
   },
   watch:{

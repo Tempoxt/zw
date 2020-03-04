@@ -163,6 +163,8 @@ export default {
       defaultForm,
       roomAdminList:[],
       dormList:[],
+      downloadUrl: '/dormitory/import/room',
+      importUploadUrl: '/dormitory/import/room',
     };
   },
   watch:{
