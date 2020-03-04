@@ -1713,6 +1713,10 @@ export default {
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table
+        if(window.localStorage['curr_table_column'] && window.localStorage['curr_table_column']!=undefined){
+            let fr = JSON.parse(window.localStorage['curr_table_column'])
+            this.table_field = fr.filter(item=>!item.fed_isvisiable)
+        }
         this.fetchTableData();
         this.Device = new Device()
         var vm =  this

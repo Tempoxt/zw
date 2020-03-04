@@ -231,6 +231,8 @@ export default {
             
           }
       })
+      
+      window.localStorage['curr_table_column'] = JSON.stringify(this.table_column)
     }
   },
   created(){
