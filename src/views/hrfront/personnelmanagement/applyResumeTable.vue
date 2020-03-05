@@ -49,7 +49,7 @@
                 </div>
             </el-dialog>
 
-             <el-dialog
+            <el-dialog
                 title="确认入职"
                 :visible.sync="dialogForm1Visible"
                 class="public-dialog"

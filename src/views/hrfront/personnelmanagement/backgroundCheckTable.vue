@@ -11,11 +11,20 @@
                 :visible.sync="dialogFormVisible"
                 class="public-dialog"
                 v-el-drag-dialog
-                width="520px"
+                width="780px"
                 >
 
-                <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+                <el-form ref="form" :model="form" label-width="150px" :rules="rules">
                     <el-row>
+                        <el-col :span="24">
+                            <form-render :type="`day`" :field="{name:'我方安排的开始隔离日期（或入住时间）'}" v-model="form.assignationStart" prop="assignationStart"/>
+                        </el-col>
+                        <el-col :span="24">
+                            <form-render :type="`input`" :field="{name:'标准隔离天数'}" v-model="form.assignationDays" prop="assignationDays"/>
+                        </el-col>
+                        <el-col :span="24">
+                            <form-render :type="`day`" :field="{name:'隔离结束日期'}" v-model="form.assignationEnd" prop="assignationEnd" :disabled="true"/>
+                        </el-col>
                         <el-col :span="24">
                             <form-render
                                 :type="`radio`"
@@ -36,7 +45,7 @@
                                 :autosize="{ minRows: 2, maxRows: 4}"
                                 prop="remark"
                                 filterable
-                                :field="{name:'不通过原因'}"
+                                :field="{name:'备注'}"
                                 v-model="form.remark"
                             />
                         </el-col>
@@ -70,7 +79,7 @@
                 @action="handleAction"
                 :table_form.sync="table_form"
                 :table_column="table_field"
-            >
+                >
                 <div style="padding-left:10px">
                     <el-select v-model="table_form.jobType" clearable @change="fetch" placeholder="请选择员工或职员">
                         <el-option
@@ -167,6 +176,15 @@ export default {
     name: 'backgroundCheck',
     props:['flag'],
     data() {
+        var checkNumber = (rule, value, callback)=>{
+			if (value==='') {
+				return callback(new Error('请输入'));
+			}else if (!(/^[1-9]\d*$/.test(value))) {
+				callback(new Error('请输入大于0的正整数'));
+			}else{
+				callback();
+			}
+		}
         return {
             table_loading: false,
             api_resource: api_common.resource("hrm/backgroundCheck"),
@@ -176,9 +194,19 @@ export default {
             form: {},
             form1: {},
 			rules:{
+				assignationStart:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+                ],
+				assignationEnd:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+                ],
 				audit:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
-				],
+                ],
+                assignationDays:[
+					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
+                    { validator: checkNumber, trigger: 'blur' }
+                ],
             },
             jobTypes: [],
             personInfo: {},
@@ -194,14 +222,17 @@ export default {
 			this.table_form.currentpage = 1
             this.fetchMenu()
             this.fetchTableData()
-        }
+        },
+        'form.assignationStart'(){
+            this.getEndDate()
+        },
+        'form.assignationDays'(){
+            this.getEndDate()
+        },
     },
     computed: {
-        // table_height(){ 
-        //     return (this.window_innerHeight||window.innerHeight) - 220
-        // },
         disabled(){
-			if(this.form.audit!==''){
+			if(this.form.audit!==''&&this.form.assignationStart!=''&&this.form.assignationEnd!=''&&this.form.assignationDays!=''){
 				if(this.form.audit==1){
 					return false
 				}else if(this.form.audit==2){
@@ -213,9 +244,16 @@ export default {
 				}
 			}
 			return true
-		}
+        }
     },
     methods: {
+        getEndDate(){
+            var odate = new Date(this.form.assignationStart)
+            odate = odate.valueOf()
+            odate = odate + (Number(this.form.assignationDays)) * 24 * 60 * 60 * 1000
+            odate = new Date(odate)
+            this.form.assignationEnd = odate.getFullYear() + "-" + (odate.getMonth() + 1) + "-" + odate.getDate()
+        },
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -241,8 +279,16 @@ export default {
         audit(){
             this.dialogFormVisible = true
             this.form = {}
+            this.$nextTick(()=>{
+                this.$refs['form'].clearValidate()
+            })
+            if(this.flag==1){
+                this.form = this.table_selectedRows[0]
+                this.form.audit = this.flag
+            }
         },
         async handleFormSubmit(){
+            await this.form_validate()
             let ids = this.table_selectedRows.map(o=>o.id)
             this.form.ids = ids.join(',')
             await this.$request.put('/hrm/backgroundCheck/audit',this.form)
