@@ -180,15 +180,7 @@ export default {
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
 				],
             },
-            jobTypes: [
-                {
-                    value: '0',
-                    label: '员工'
-                }, {
-                    value: '1',
-                    label: '职员'
-                },
-            ],
+            jobTypes: [],
             personInfo: {},
             template:{
                 
@@ -283,6 +275,7 @@ export default {
         }
     },
     async created() {
+        this.jobTypes = (await this.$request.get('/hrm/jobtype')).map(o=>{return {label:o.title,value:o.value}})
         this.fetchMenu()
     },
     mounted() {

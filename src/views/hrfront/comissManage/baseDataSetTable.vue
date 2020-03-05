@@ -100,33 +100,33 @@
 						<el-row v-for="(item,i) in form2.data" :key="i" :gutter="10">
 							<el-col :span="7">
 								<el-form-item label-width="80px"
-									:prop="'data.' + i + '.shipStart'"
+									:prop="'data.' + i + '.dispatchStart'"
 									label="起始金额"
 									:rules="[
 										{ required: true, validator: checkNumber, trigger: 'blur' }
 									]"
 									>
-									<el-input v-model="item.shipStart" placeholder="输入正整数"></el-input>
+									<el-input v-model="item.dispatchStart" placeholder="输入正整数"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="7">
 								<el-form-item label-width="80px"
-									:prop="'data.' + i + '.shipEnd'"
+									:prop="'data.' + i + '.dispatchEnd'"
 									label="结束金额"
 									:rules="[
 										{ required: true, validator: checkNumber, trigger: 'blur' }
 									]"
 									>
-									<el-input v-model="item.shipEnd" placeholder="输入正整数"></el-input>
+									<el-input v-model="item.dispatchEnd" placeholder="输入正整数"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
 								<el-form-item
-									:prop="'data.' + i + '.shipRatio'"
+									:prop="'data.' + i + '.dispatchRatio'"
 									label="产品阶梯系数"
 									:rules="{ required: true, message: '请输入', trigger: 'blur' }"
 									>
-									<el-input v-model="item.shipRatio" placeholder="请输入"></el-input>
+									<el-input v-model="item.dispatchRatio" placeholder="请输入"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="1">
@@ -153,16 +153,16 @@
     	<el-form ref="form3" :model="form3"  label-width="120px" :rules="rules3">
 				<el-row >
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="shipStart" :field="{name:'起始金额'}" v-model="form3.shipStart" />
+						<form-render :type="`input`" prop="dispatchStart" :field="{name:'起始金额'}" v-model="form3.dispatchStart" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="shipEnd" :field="{name:'结束金额'}" v-model="form3.shipEnd" />
+						<form-render :type="`input`" prop="dispatchEnd" :field="{name:'结束金额'}" v-model="form3.dispatchEnd" />
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" prop="shipStep" disabled :field="{name:'产品出货阶梯金额'}" v-model="form3.shipStep" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="shipRatio" :field="{name:'产品阶梯系数'}" v-model="form3.shipRatio" />
+						<form-render :type="`input`" prop="dispatchRatio" :field="{name:'产品阶梯系数'}" v-model="form3.dispatchRatio" />
 					</el-col>
 				</el-row>
 			</el-form>
@@ -326,9 +326,9 @@ export default {
         const defaultForm2 = () => {
             return {
                 data:[{
-					shipStart: '',
-					shipEnd: '',
-					shipRatio: '',
+					dispatchStart: '',
+					dispatchEnd: '',
+					dispatchRatio: '',
 				}]
             }
         }
@@ -386,15 +386,15 @@ export default {
                 ],
             },
             rules3:{
-                shipStart:[
+                dispatchStart:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                     { validator: checkNumber2, trigger: 'blur' }
                 ],
-                shipEnd:[
+                dispatchEnd:[
                     { required: true, message: '请输入', trigger: ['blur','change'], },
                     { validator: checkNumber2, trigger: 'blur' }
                 ],
-                shipRatio:[
+                dispatchRatio:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
                 shipStep:[
@@ -440,11 +440,11 @@ export default {
 			this.table_form.query.query= []
 			this.fetchMenu()
 		},
-		'form3.shipStart'(){
-			this.form3.shipStep = this.form3.shipEnd - this.form3.shipStart
+		'form3.dispatchStart'(){
+			this.form3.shipStep = this.form3.dispatchEnd - this.form3.dispatchStart
 		},
-		'form3.shipEnd'(){
-			this.form3.shipStep = this.form3.shipEnd - this.form3.shipStart
+		'form3.dispatchEnd'(){
+			this.form3.shipStep = this.form3.dispatchEnd - this.form3.dispatchStart
 		},
 		'form5.commissionStart'(){
 			this.form5.commissionStep = this.form5.commissionEnd - this.form5.commissionStart
@@ -482,9 +482,9 @@ export default {
         },
 		addShipRatio(){
 			this.form2.data.push({
-				shipStart: '',
-				shipEnd: '',
-				shipRatio: '',
+				dispatchStart: '',
+				dispatchEnd: '',
+				dispatchRatio: '',
 			});
         },
         deleteShipRatio(item) {
