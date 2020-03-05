@@ -116,6 +116,9 @@
                                         <el-col :span="24" style="position: relative;">
                                             <el-button style="position: absolute;right:10px;" @click="ZK_start">读取身份证</el-button>
                                         </el-col>
+                                        <el-col :span="24" style="position: relative;" v-if="!isInsert">
+                                            <el-button style="position: absolute;right:10px;top:52px" @click="identifyCard">识别身份证信息</el-button>
+                                        </el-col>
                                     </el-row>
                                 </el-col>
 
@@ -1352,10 +1355,29 @@ export default {
         }
     },
     methods: {
+        async identifyCard(){
+            let card = (this.cardInfo.filter(o=>o.cardType==1))[0].images
+            let frontUrl = card[0].cardConnect//'employee_card/employee_card85085db0-7c2a-11e9-af41-286ed48a39b2.png'||
+            let backUrl = card[1].cardConnect//'employee_card/employee_card8a12bd5a-7c2a-11e9-af41-286ed48a39b2.png'||
+            let {back, front}= await this.$request.get('http://192.168.0.192:7000/hrm/entry/getBaiduApiOcrIDCard?frontUrl='+baseUrl+frontUrl+'&backUrl='+baseUrl+backUrl)
+            if(back.error_code&&back.error_code==216201 || (back.image_status&&back.image_status!='normal')){
+                this.$message.error('身份证信息识别失败');
+                return 
+            }
+            let nation = front.words_result['民族'].words
+            this.form.nation = this.nationData.find(o=>o.label===nation+'族').value
+            let stayBegin = back.words_result['签发日期'].words
+            this.form.stayBegin = stayBegin.slice(0,4)+'-'+stayBegin.slice(4,-2)+'-'+stayBegin.slice(-2)
+            let stayEnd = back.words_result['失效日期'].words
+            this.form.stayEnd = stayEnd.slice(0,4)+'-'+stayEnd.slice(4,-2)+'-'+stayEnd.slice(-2)
+            this.form.qfjg = back.words_result['签发机关'].words
+            this.form.contactAddr = front.words_result['住址'].words
+            this.form.sex = front.words_result['性别'].words=='男'?1:2
+        },
         handleChangeSelection({selection:val}){ // 单选
-              this.table_selectedRowsInfo = val
-              this.table_selectedRows = val
-              this.$emit("update:table_selectedRows",val)
+            this.table_selectedRowsInfo = val
+            this.table_selectedRows = val
+            this.$emit("update:table_selectedRows",val)
         },
         async voidContract(){
             let rows = this.selections.map(row=>row.id)
