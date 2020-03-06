@@ -17,15 +17,6 @@
                 <el-form ref="form" :model="form" label-width="150px" :rules="rules">
                     <el-row>
                         <el-col :span="24">
-                            <form-render :type="`day`" :field="{name:'我方安排的开始隔离日期（或入住时间）'}" v-model="form.assignationStart" prop="assignationStart"/>
-                        </el-col>
-                        <el-col :span="24">
-                            <form-render :type="`input`" :field="{name:'标准隔离天数'}" v-model="form.assignationDays" prop="assignationDays"/>
-                        </el-col>
-                        <el-col :span="24">
-                            <form-render :type="`day`" :field="{name:'隔离结束日期'}" v-model="form.assignationEnd" prop="assignationEnd" :disabled="true"/>
-                        </el-col>
-                        <el-col :span="24">
                             <form-render
                                 :type="`radio`"
                                 :field="{name:'是否通过',options:[{
@@ -39,6 +30,27 @@
                                 prop="audit"
                             />
                         </el-col>
+                        <div v-if="this.form.audit==1">
+                            <el-col :span="24">
+                                <form-render :type="`day`" :field="{name:'我方安排的开始隔离日期（或入住时间）'}" v-model="form.assignationStart" prop="assignationStart"/>
+                            </el-col>
+                            <el-col :span="24">
+                                <form-render :type="`input`" :field="{name:'标准隔离天数'}" v-model="form.assignationDays" prop="assignationDays"/>
+                            </el-col>
+                            <el-col :span="24">
+                                <form-render :type="`day`" :field="{name:'隔离结束日期'}" v-model="form.assignationEnd" prop="assignationEnd" :disabled="true"/>
+                            </el-col>
+                            <el-col :span="24">
+                                <form-render
+                                    :type="`textarea`"
+                                    :autosize="{ minRows: 2, maxRows: 4}"
+                                    prop="remark"
+                                    filterable
+                                    :field="{name:'备注'}"
+                                    v-model="form.remark"
+                                />
+                            </el-col>
+                        </div>
                         <el-col :span="24" v-if="this.form.audit==2">
                             <form-render
                                 :type="`textarea`"
@@ -177,13 +189,13 @@ export default {
     props:['flag'],
     data() {
         var checkNumber = (rule, value, callback)=>{
-			if (value==='') {
-				return callback(new Error('请输入'));
-			}else if (!(/^[1-9]\d*$/.test(value))) {
-				callback(new Error('请输入大于0的正整数'));
-			}else{
-				callback();
-			}
+            if(value!==''&&value!=undefined){
+                if (!(/^[1-9]\d*$/.test(value))) {
+                    callback(new Error('请输入大于0的正整数'));
+                }else{
+                    callback();
+                }
+            }
 		}
         return {
             table_loading: false,
@@ -194,19 +206,18 @@ export default {
             form: {},
             form1: {},
 			rules:{
-				assignationStart:[
-					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
-                ],
-				assignationEnd:[
-					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
-                ],
 				audit:[
 					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
                 ],
                 assignationDays:[
-					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
                     { validator: checkNumber, trigger: 'blur' }
                 ],
+				// assignationStart:[
+				// 	{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+                // ],
+				// assignationEnd:[
+				// 	{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+                // ],
             },
             jobTypes: [],
             personInfo: {},
@@ -232,7 +243,7 @@ export default {
     },
     computed: {
         disabled(){
-			if(this.form.audit!==''&&this.form.assignationStart!=''&&this.form.assignationEnd!=''&&this.form.assignationDays!=''){
+			if(this.form.audit!==''){
 				if(this.form.audit==1){
 					return false
 				}else if(this.form.audit==2){
@@ -276,19 +287,20 @@ export default {
         closeCode () {
             this.$refs.qrcode.innerHTML = ''
         },
+        edit(){
+            this.form = this.table_selectedRows[0]
+            this.form.audit = this.flag
+            this.dialogFormVisible = true
+        },
         audit(){
             this.dialogFormVisible = true
             this.form = {}
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
             })
-            if(this.flag==1){
-                this.form = this.table_selectedRows[0]
-                this.form.audit = this.flag
-            }
         },
         async handleFormSubmit(){
-            await this.form_validate()
+            // await this.form_validate()
             let ids = this.table_selectedRows.map(o=>o.id)
             this.form.ids = ids.join(',')
             await this.$request.put('/hrm/backgroundCheck/audit',this.form)
@@ -335,9 +347,6 @@ export default {
 </script>
 
 <style lang="scss">
-#backgroundCheck{
-
-}
 .public-dialog-gener{
     .el-dialog__header{
         background: #fff;
