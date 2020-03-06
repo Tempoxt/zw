@@ -40,7 +40,8 @@ export default {
 			let _this=this;
 			this.option = {
 				title: {
-					text: ""
+					text: "",
+        			subtext: '',
 				},
 				tooltip: {
 					trigger: "axis"
@@ -91,6 +92,8 @@ export default {
 			};
 			if(data!=undefined){
 				this.option.title.text = data.article_title+'-'+data.article_size;
+				this.option.title.subtext = data.material_code;
+
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(this.id));
 				myChart.setOption(this.option);

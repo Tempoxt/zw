@@ -62,11 +62,9 @@ export default {
     data() {
         return {
             api_resource,
-            dateLap6: dayjs().subtract(1,'month').format('YYYY-MM'),
             allData: [],
             formData: {},
             checkFullshow: true,
-            fullscreenLoading: false
         };
     },
     watch:{
