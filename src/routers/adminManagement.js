@@ -195,5 +195,12 @@ export default [{
         meta: {
             title: '请购汇总'
         }
+    },{
+        name: 'departWareStat',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/departWareStat'),
+        meta: {
+            title: '部门仓库统计'
+        }
     },
  ]
