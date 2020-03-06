@@ -30,27 +30,25 @@
                                 prop="audit"
                             />
                         </el-col>
-                        <div v-if="this.form.audit==1">
-                            <el-col :span="24">
-                                <form-render :type="`day`" :field="{name:'我方安排的开始隔离日期（或入住时间）'}" v-model="form.assignationStart" prop="assignationStart"/>
-                            </el-col>
-                            <el-col :span="24">
-                                <form-render :type="`input`" :field="{name:'标准隔离天数'}" v-model="form.assignationDays" prop="assignationDays"/>
-                            </el-col>
-                            <el-col :span="24">
-                                <form-render :type="`day`" :field="{name:'隔离结束日期'}" v-model="form.assignationEnd" prop="assignationEnd" :disabled="true"/>
-                            </el-col>
-                            <el-col :span="24">
-                                <form-render
-                                    :type="`textarea`"
-                                    :autosize="{ minRows: 2, maxRows: 4}"
-                                    prop="remark"
-                                    filterable
-                                    :field="{name:'备注'}"
-                                    v-model="form.remark"
-                                />
-                            </el-col>
-                        </div>
+                        <el-col :span="24" v-if="this.form.audit==1">
+                            <form-render :type="`day`" :field="{name:'我方安排的开始隔离日期（或入住时间）'}" v-model="form.assignationStart" prop="assignationStart"/>
+                        </el-col>
+                        <el-col :span="24" v-if="this.form.audit==1">
+                            <form-render :type="`input`" :field="{name:'标准隔离天数'}" v-model="form.assignationDays" prop="assignationDays"/>
+                        </el-col>
+                        <el-col :span="24" v-if="this.form.audit==1">
+                            <form-render :type="`day`" :field="{name:'隔离结束日期'}" v-model="form.assignationEnd" prop="assignationEnd" :disabled="true"/>
+                        </el-col>
+                        <el-col :span="24" v-if="this.form.audit==1">
+                            <form-render
+                                :type="`textarea`"
+                                :autosize="{ minRows: 2, maxRows: 4}"
+                                prop="remark"
+                                filterable
+                                :field="{name:'备注'}"
+                                v-model="form.remark"
+                            />
+                        </el-col>
                         <el-col :span="24" v-if="this.form.audit==2">
                             <form-render
                                 :type="`textarea`"
@@ -203,7 +201,9 @@ export default {
             table_topHeight: 300,
             dialogFormVisible: false,
             dialogForm1Visible: false,
-            form: {},
+            form: {
+                audit: ''
+            },
             form1: {},
 			rules:{
 				audit:[
@@ -288,9 +288,9 @@ export default {
             this.$refs.qrcode.innerHTML = ''
         },
         edit(){
-            this.form = this.table_selectedRows[0]
-            this.form.audit = this.flag
             this.dialogFormVisible = true
+            let form = this.table_selectedRows[0]
+            this.form = form
         },
         audit(){
             this.dialogFormVisible = true
@@ -341,8 +341,6 @@ export default {
         this.table_form.jobType = '0'
         this.fetchTableData();
     }
-    
-    
 }
 </script>
 
