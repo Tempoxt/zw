@@ -181,6 +181,11 @@ export default {
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()
+            if(this.url=='toolstationery/departledgermanager'){
+                this.importUploadUrl = this.downloadUrl =  'toolstationery/departledgermanager/upload'
+            }else{
+                this.importUploadUrl = this.downloadUrl =  'toolstationery/departledger/upload'
+            }
 		}
     },
     methods: {

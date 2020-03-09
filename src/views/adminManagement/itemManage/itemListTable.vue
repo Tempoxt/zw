@@ -15,10 +15,10 @@
                 <el-form ref="form" :model="form" label-width="70px" :rules="rules">
                         <el-row :gutter="20">
                             <el-col :span="16" :offset="4">
-                                <form-render :type="`select`" prop="type_id" :field="{name:'物品类别',options:typeList}" v-model="form.type_id" :disabled="!isInsert"/>
+                                <form-render :type="`select`" prop="type_id" :field="{name:'物品类别',options:typeList}" v-model="form.type_id"/>
                             </el-col>
                             <el-col :span="16" :offset="4">
-                                <form-render :type="`input`" prop="title" :field="{name:'物品名称'}" v-model="form.title" :disabled="!isInsert"/>
+                                <form-render :type="`input`" prop="title" :field="{name:'物品名称'}" v-model="form.title"/>
                             </el-col>
                             <el-col :span="16" :offset="4">
                                 <form-render :type="`input`" prop="unit" :field="{name:'物品单位'}" v-model="form.unit"/>
