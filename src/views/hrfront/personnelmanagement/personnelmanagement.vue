@@ -10,7 +10,8 @@
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
-       
+            :before-close = "beforeClose"
+            :close-on-click-modal="false"
             >
             <div>
                 <el-form ref="form" :model="form" label-width="100px" v-loading="loading2" :rules="rules">
@@ -529,8 +530,8 @@
 
             <div slot="footer" class="dialog-footer">
                 <div>
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+                    <el-button :disabled="isRequest" @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button :disabled="isRequest" type="primary" @click="handleFormSubmit">确 定</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -1293,6 +1294,7 @@ export default {
 				}
             },
             maxOnDuty: '',
+            isRequest: false
         };
     },
     watch:{
@@ -1355,7 +1357,14 @@ export default {
         }
     },
     methods: {
+        beforeClose(){
+            if(this.isRequest == false){
+                this.dialogFormVisible = false
+            }
+        },
         async identifyCard(){
+            this.loading2 = true
+            this.isRequest = true
             let card = (this.cardInfo.filter(o=>o.cardType==1))[0].images
             let frontUrl = card[0].cardConnect//'employee_card/employee_card85085db0-7c2a-11e9-af41-286ed48a39b2.png'||
             let backUrl = card[1].cardConnect//'employee_card/employee_card8a12bd5a-7c2a-11e9-af41-286ed48a39b2.png'||
@@ -1363,6 +1372,8 @@ export default {
 
             try {
                 let { back, front } = await new Promise(async (resolve,reject)=>{
+                    this.isRequest = false
+                    this.loading2 = false
                     try {
                         let {back, front}= await this.$request.get('http://192.168.0.192:7000/hrm/entry/getBaiduApiOcrIDCard?frontUrl='+baseUrl+frontUrl+'&backUrl='+baseUrl+backUrl)
                         if(back.error_code&&back.error_code==216201 || (back.image_status&&back.image_status!='normal')){
@@ -1392,6 +1403,9 @@ export default {
 
             } catch (error) {
                  this.$message.error(error);
+            }finally {
+                this.isRequest = false
+                this.loading2 = false
             }
 
 
@@ -1658,6 +1672,8 @@ export default {
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
+            this.loading2 = false
+            this.isRequest = false
             this.dialogFormVisible = true
             this.width = 250
             this.height = 200
