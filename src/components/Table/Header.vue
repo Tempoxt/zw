@@ -231,12 +231,14 @@ export default {
             
           }
       })
-      
-      window.localStorage['curr_table_column'] = JSON.stringify(this.table_column)
+      if(this.$route.query.menuid==105){
+        window.localStorage['curr_table_column'] = JSON.stringify(this.table_column)
+      }
     }
   },
   created(){
     setTimeout(()=>{
+      // window.localStorage.clear('curr_table_column');
         // console.log(this.table_column,'table_column')
     },2000)
   }
