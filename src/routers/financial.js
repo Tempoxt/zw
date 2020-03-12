@@ -144,6 +144,14 @@ export default [
         }
     },
     {
+        name: 'commissionDemo',
+        component: () =>
+            import ('@/views/hrfront/comissManage/commissionDemo'),
+        meta: {
+            title: '数据模拟'
+        }
+    },
+    {
         name: 'prodPropelPlan',
         component: () =>
             import ('@/views/finance/financialSheet/productPlan'),

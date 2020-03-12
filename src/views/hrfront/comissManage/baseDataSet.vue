@@ -12,6 +12,9 @@
         <div v-if="view_activeName==='阶梯提成系数'">
             <baseDataSetTable url="commission/stepcommission" m="3"/>
         </div>
+        <div v-if="view_activeName==='考核系数'">
+            <baseDataSetTable url="commission/assessmentratio" m="4"/>
+        </div>
     </div>
 </template>
 <script>
