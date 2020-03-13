@@ -51,7 +51,7 @@
 					</el-row>
 					<el-row v-for="(item,i) in CommissionStepRatio" :key="i">
 						<el-col :span="8">
-							<form-render :type="`input`" :field="{name:''}" :disabled="item.commissionStart==0" @blur="commissionStartBlur(item)" v-model="item.commissionStart"/>
+							<form-render :type="`input`" :field="{name:''}" :disabled="item.disabled&&item.commissionStart==0" @blur="commissionStartBlur(item)" v-model="item.commissionStart"/>
 						</el-col>
 						<el-col :span="8">
 							<form-render :type="`input`" :field="{name:''}" v-model="item.commissionEnd" @blur="commissionEndBlur(item)"/>
@@ -73,7 +73,7 @@
 					</el-row>
 					<el-row v-for="(item,i) in DispatchRatio" :key="i">
 						<el-col :span="4">
-							<form-render :type="`input`" :field="{name:''}" :disabled="item.dispatchStart==0" @blur="dispatchStartBlur(item)" v-model="item.dispatchStart"/>
+							<form-render :type="`input`" :field="{name:''}" :disabled="item.disabled&&item.dispatchStart==0" @blur="dispatchStartBlur(item)" v-model="item.dispatchStart"/>
 						</el-col>
 						<el-col :span="5">
 							<form-render :type="`input`" :field="{name:''}" v-model="item.dispatchEnd" @blur="dispatchEndBlur(item)"/>
@@ -489,6 +489,7 @@ export default {
 		},
 
 		getDispatchSum(o){ //计算产品出货阶梯金额
+			this.allAmount = []
 			let filterData = this.DispatchRatio.filter(r => (r.dispatchStart<=o.collectionAmount))
 			filterData.forEach(r => {
 				var dispaEnd = r.dispatchEnd
@@ -506,7 +507,6 @@ export default {
 		},
 
 		getCommissionSum(sum){ //计算提成金额阶梯系数
-			var allAmounts = []
 			this.allAmount = []
 			let filterData = this.CommissionStepRatio.filter(r => (r.commissionStart<=sum))
 			filterData.forEach(r => {
@@ -532,9 +532,8 @@ export default {
 			})
 			let sumAmount = allAmounts.reduce((tem, item, index) => Number(tem) + Number(item))
 			let sum  = this.getCommissionSum(sumAmount)
-			console.log(sum,'sum')
+			console.log(sum)
 			this.commissionTotalAmount = (sum * (this.AssessmentRatio.assessmentRatio)).toFixed(4)
-			console.log(this.commissionTotalAmount)
 		},
 
 		async updateBasicData(){ //统一更新基础参数表
@@ -563,6 +562,7 @@ export default {
 				this.$message.error('工号不能为空');
 				return 
 			}
+			this.table_loading = true
 			await this.updateBasicData()
 			this.table_form.dateLap = this.dateLap
 			const { AssessmentRatio,CommissionDetailData }= await api_resource.get(this.table_form);
@@ -571,7 +571,6 @@ export default {
 			this.AssessmentRatio = AssessmentRatio
 			setTimeout(() => {
 				this.table_loading = false;
-                this.$refs.elTable.doLayout()
 			}, 300);
 			
 			this.changeCaculat() //页面初始化计算数据
@@ -618,9 +617,6 @@ export default {
 		this.table_config = table
 		this.dateLap = dayjs().subtract(1,'month').format('YYYY-MM') 
 		this.table_loading = false;
-		setTimeout(() => {
-			this.$refs.elTable.doLayout()
-		}, 300);
 	}
 };
 </script>
@@ -634,7 +630,6 @@ export default {
 	.setParams{
 		padding-bottom: 20px;
 		.basicParams{
-			// border-right: 0;
 			.el-form-item{
 				margin:0 auto;
 				width: 80%;
