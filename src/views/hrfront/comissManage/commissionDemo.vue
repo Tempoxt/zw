@@ -213,18 +213,21 @@ export default {
 			this.table_data.forEach(o=>{
 				if(this.caculation==1){
 					this.ProductYearsRatio.forEach(r=>{
-						if((r.productStart < o.productYears) && (o.productYears <= r.productEnd)){
+						let productYears = o.productYears
+						if(productYears==0){
+							productYears = 0.1
+						}
+						if((r.productStart < productYears) && (productYears <= r.productEnd)){
 							let amount = o.collectionAmount * o.commissionRatio / 100 * o.increaseRatio * r.productRatio
 							this.$set(o,'productRatio',r.productRatio)
-							this.$set(o,'commissionAmount',amount)
+							this.$set(o,'commissionAmount',amount.toFixed(4))
 							this.allAmount.push(amount)
 						}
 					})
 				}else{
 					let totalAmount = this.getDispatchSum(o) // 单一产品实收款的产品出货阶梯金额
 					let commiss = totalAmount * o.commissionRatio / 100 * o.increaseRatio * o.productRatio
-					this.$set(o,'commissionAmount',commiss)//.toFixed(4)
-					// this.getDispatch()
+					this.$set(o,'commissionAmount',commiss.toFixed(4))
 				}
 			})
 			this.caculatSum()
@@ -456,12 +459,16 @@ export default {
 			}
 			this.table_data.forEach(o=>{
 				//判断产品年限在哪个范围
-				if((item.productStart<o.productYears)&&(o.productYears<=item.productEnd)){
+				let productYears = o.productYears
+				if(productYears==0){
+					productYears = 0.1
+				}
+				if((item.productStart < productYears) && (productYears <= item.productEnd)){
 					//单一产品实收款 * 业务提成系数 * 产品增值率系数 * 产品交易年限系数
 					let caculatAmount = this.caculation == 1 ? o.collectionAmount : this.getDispatchSum(o)
 					let amount = caculatAmount * o.commissionRatio / 100 * o.increaseRatio * item.productRatio
 					this.$set(o,'productRatio',item.productRatio)
-					this.$set(o,'commissionAmount',amount)
+					this.$set(o,'commissionAmount',amount.toFixed(4))
 					this.allAmount.push(amount)
 				}
 			})
@@ -476,7 +483,7 @@ export default {
 			this.table_data.forEach(o => {
 				let totalAmount = this.getDispatchSum(o) // 单一产品实收款的产品出货阶梯金额
 				let commiss = totalAmount * o.commissionRatio / 100 * o.increaseRatio * o.productRatio
-				this.$set(o,'commissionAmount',commiss)//.toFixed(4)
+				this.$set(o,'commissionAmount',commiss.toFixed(4))
 			})
 			this.caculatSum()
 		},
@@ -523,11 +530,10 @@ export default {
 			this.table_data.forEach(o => {
 				allAmounts.push(o.commissionAmount)
 			})
-			let sumAmount = allAmounts.reduce((tem, item, index) => tem + item)
+			let sumAmount = allAmounts.reduce((tem, item, index) => Number(tem) + Number(item))
 			let sum  = this.getCommissionSum(sumAmount)
 			console.log(sum,'sum')
-			this.commissionTotalAmount = sum * (this.AssessmentRatio.assessmentRatio || 1)
-			console.log(this.AssessmentRatio.assessmentRatio)
+			this.commissionTotalAmount = (sum * (this.AssessmentRatio.assessmentRatio)).toFixed(4)
 			console.log(this.commissionTotalAmount)
 		},
 
@@ -538,16 +544,13 @@ export default {
 			}
 			this.ProductYearsRatio.forEach( async o=>{
 				await this.$request.put('commission/productyearsview/'+o.id,o,{alert:false})
-                // this.getProduct()
 			})
 			this.DispatchRatio.forEach( async o=>{o
 				await this.$request.put('commission/shippingratio/'+o.id,o,{alert:false})
-                // this.getDispatch()
 			})
 			this.CommissionStepRatio.forEach( async o=>{
 				o.productYearsType = o.productYearsType=='一年以内'?1:2
 				await this.$request.put('commission/stepcommission/'+o.id,o,{alert:false})
-                // this.getCommissionStep()
 			})
 		},
 
@@ -562,9 +565,8 @@ export default {
 			}
 			await this.updateBasicData()
 			this.table_form.dateLap = this.dateLap
-			const {ProductYearsRatio ,DispatchRatio, CommissionStepRatio,AssessmentRatio,CommissionDetailData }= await api_resource.get(this.table_form);
+			const { AssessmentRatio,CommissionDetailData }= await api_resource.get(this.table_form);
 			this.table_data  = CommissionDetailData.rows
-			this.commissionTotalAmount = CommissionDetailData.commissionTotalAmount
 			this.table_form.total = CommissionDetailData.total
 			this.AssessmentRatio = AssessmentRatio
 			setTimeout(() => {
