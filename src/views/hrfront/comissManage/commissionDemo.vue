@@ -101,8 +101,11 @@
 						</el-radio-group>
 					</el-form-item>
 				</el-row>
-				<el-row  style="margin:0 0 17px 24px">
+				<el-row  style="margin:0 0 8px 24px">
 					合计提成金额 = &nbsp;&nbsp;所有产品合计提成金额*提成金额阶梯系数*考核系数
+				</el-row>
+				<el-row  style="margin:0 0 15px 12px">
+					产品增值率系数 = 产品实际增值率/标准增值率 
 				</el-row>
 			</div>
 		</el-form>
@@ -118,8 +121,12 @@
 		<div style="padding-left:10px">
 			<dateLap v-model="dateLap" @change="fetchTableData"/>
 		</div>
-		<div style="padding-left:10px;">
+		<div style="padding-left:10px;" class="setRate">
 			业务员考核系数：<el-input v-model="AssessmentRatio.assessmentRatio" style="width:40%" @blur="assessRatioBlur"></el-input>
+		</div>
+		<div style="padding-left:10px;">
+			标准增值率设定：<el-input v-model="appreRate" style="width:40%" @blur="appreRateBlur">
+				<i slot="suffix" class="el-input__icon">%</i></el-input> 
 		</div>
     </table-header>
     <el-table
@@ -180,7 +187,7 @@ export default {
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			table_topHeight: 765,
+			table_topHeight: 775,
 			dialogFormVisible:false,
 			kaohe: '',
 			rules:{},
@@ -197,6 +204,7 @@ export default {
 			isProductErr: false,
 			isComissionErr: false,
 			isDispatchErr: false,
+			appreRate: '45', //标准增值率系数暂定为45%
 		}
 	},
 	computed:{
@@ -218,7 +226,7 @@ export default {
 							productYears = 0.1
 						}
 						if((r.productStart < productYears) && (productYears <= r.productEnd)){
-							let amount = o.collectionAmount * o.commissionRatio / 100 * o.increaseRatio * r.productRatio
+							let amount = o.collectionAmount * (o.commissionRatio).split('%')[0] / 100 * o.increaseRatio * r.productRatio
 							this.$set(o,'productRatio',r.productRatio)
 							this.$set(o,'commissionAmount',amount.toFixed(4))
 							this.allAmount.push(amount)
@@ -226,7 +234,7 @@ export default {
 					})
 				}else{
 					let totalAmount = this.getDispatchSum(o) // 单一产品实收款的产品出货阶梯金额
-					let commiss = totalAmount * o.commissionRatio / 100 * o.increaseRatio * o.productRatio
+					let commiss = totalAmount * (o.commissionRatio).split('%')[0] / 100 * o.increaseRatio * o.productRatio
 					this.$set(o,'commissionAmount',commiss.toFixed(4))
 				}
 			})
@@ -352,6 +360,35 @@ export default {
 			}
 		},
 
+		appreRateBlur(){ //编辑标准增值率系数
+			let appreRate = this.appreRate
+			if (appreRate==='') {
+				this.$message.error('标准增值率不能为空');
+			}else if (appreRate == 0) {
+				this.$message.error('标准增值率不能为0');
+			}else if (!(/^\d+(\.\d{1,2})?$/.test(appreRate))) {
+				this.$message.error('标准增值率精度为两位小数');
+			}else{
+				this.updateAppreRate()
+			}
+		},
+
+		updateAppreRate(){ //更新标准增值率和 增值率系数
+			this.table_data.forEach(o => {
+				if(String(o.commissionRatio).indexOf('%')==-1){
+					this.$set(o,'commissionRatio',o.commissionRatio + '%')
+				}
+				if(String(o.increaseRate).indexOf('%')==-1){
+					this.$set(o,'increaseRate',(o.increaseRate*100).toFixed(2) + '%')
+				}
+				this.$set(o,'stdIncreaseRate',this.appreRate + '%') //设定标准增值率
+				//计算出增值率系数 产品增值率系数=产品实际增值率/标准增值率increaseRate
+				let increaseRatio = (o.increaseRate).split('%')[0] / this.appreRate
+				this.$set(o,'increaseRatio',Number(increaseRatio).toFixed(4)) //设定标准增值率
+			})
+			this.changeCaculat()
+		},
+
 		async updateAssess(){ //更新考核系数
 			await this.$request.put('commission/assessmentratio/'+this.AssessmentRatio.id,{
 				assessmentRatio: this.AssessmentRatio.assessmentRatio
@@ -466,7 +503,7 @@ export default {
 				if((item.productStart < productYears) && (productYears <= item.productEnd)){
 					//单一产品实收款 * 业务提成系数 * 产品增值率系数 * 产品交易年限系数
 					let caculatAmount = this.caculation == 1 ? o.collectionAmount : this.getDispatchSum(o)
-					let amount = caculatAmount * o.commissionRatio / 100 * o.increaseRatio * item.productRatio
+					let amount = caculatAmount * (o.commissionRatio).split('%')[0] / 100 * o.increaseRatio * item.productRatio
 					this.$set(o,'productRatio',item.productRatio)
 					this.$set(o,'commissionAmount',amount.toFixed(4))
 					this.allAmount.push(amount)
@@ -482,7 +519,7 @@ export default {
 			}
 			this.table_data.forEach(o => {
 				let totalAmount = this.getDispatchSum(o) // 单一产品实收款的产品出货阶梯金额
-				let commiss = totalAmount * o.commissionRatio / 100 * o.increaseRatio * o.productRatio
+				let commiss = totalAmount * (o.commissionRatio).split('%')[0] / 100 * o.increaseRatio * o.productRatio
 				this.$set(o,'commissionAmount',commiss.toFixed(4))
 			})
 			this.caculatSum()
@@ -528,7 +565,7 @@ export default {
 			this.allAmount = []
 			var allAmounts = []
 			this.table_data.forEach(o => {
-				allAmounts.push(o.commissionAmount)
+				allAmounts.push(Number(o.commissionAmount))
 			})
 			let sumAmount = allAmounts.reduce((tem, item, index) => Number(tem) + Number(item))
 			let sum  = this.getCommissionSum(sumAmount)
@@ -565,15 +602,23 @@ export default {
 			this.table_loading = true
 			await this.updateBasicData()
 			this.table_form.dateLap = this.dateLap
-			const { AssessmentRatio,CommissionDetailData }= await api_resource.get(this.table_form);
-			this.table_data  = CommissionDetailData.rows
-			this.table_form.total = CommissionDetailData.total
-			this.AssessmentRatio = AssessmentRatio
+			try{
+				const { AssessmentRatio,CommissionDetailData }= await api_resource.get(this.table_form);
+				this.table_data  = CommissionDetailData.rows
+				this.table_form.total = CommissionDetailData.total
+				this.AssessmentRatio = AssessmentRatio
+			}catch(err){
+				this.commissionTotalAmount = ''
+				this.table_data = []
+				this.AssessmentRatio = ''
+				this.table_form.total = 0
+			}
 			setTimeout(() => {
 				this.table_loading = false;
+				this.$refs.elTable.doLayout()
 			}, 300);
-			
-			this.changeCaculat() //页面初始化计算数据
+
+			this.updateAppreRate() //页面初始化 更新标准增值率 计算增值率系数
 		},
 		
 		async getProduct(){ //获取产品年限系数
@@ -617,6 +662,9 @@ export default {
 		this.table_config = table
 		this.dateLap = dayjs().subtract(1,'month').format('YYYY-MM') 
 		this.table_loading = false;
+		setTimeout(() => {
+			this.$refs.elTable.doLayout()
+		}, 300);
 	}
 };
 </script>
@@ -701,5 +749,8 @@ export default {
 		padding: 8px 0 0 7px;
 		font-size: 16px;
 		font-weight: bold;
+	}
+	.setRate .el-input{
+		width: 20%;
 	}
 </style>
