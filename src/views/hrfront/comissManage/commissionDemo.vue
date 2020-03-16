@@ -90,24 +90,6 @@
 					</el-row>
 				</el-col>
 			</el-row>
-
-			<p class="paramTitle mt20">计算公式</p>
-			<div class="caculation">
-				<el-row>
-					<el-form-item label="单一产品提成金额 =">
-						<el-radio-group v-model="caculation" @change="changeCaculat">
-							<el-radio label="1" style="margin-bottom:8px">单一产品实收款*业务提成系数*产品增值率系数*产品交易年限系数</el-radio><br>
-							<el-radio label="2">单一产品实收款阶梯出货计提金额*业务提成系数*产品增值率系数*产品交易年限系数</el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</el-row>
-				<el-row  style="margin:0 0 8px 24px">
-					合计提成金额 = &nbsp;&nbsp;所有产品合计提成金额*提成金额阶梯系数*考核系数
-				</el-row>
-				<el-row  style="margin:0 0 15px 12px">
-					产品增值率系数 = 产品实际增值率/标准增值率 
-				</el-row>
-			</div>
 		</el-form>
 	</div>
 	<p class="paramTitle">计算结果</p>
@@ -140,6 +122,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+    	show-summary
+      	:summary-method="getSummaries"
       
     >
 		<el-table-column 
@@ -155,6 +139,7 @@
     <div class="amountDemo"><span style="color:#37474F">合计提成：</span>
 		<span style="color:#F2353C">{{commissionTotalAmount}}元</span>
 	</div>
+	<span style="white-space:pre;position:fixed;bottom:180px;left:405px" v-if="this.process!=''"> = {{process}}</span>
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -162,6 +147,31 @@
         @change="fetchTableData"
         :table_config="table_config"
     />
+
+	<p class="paramTitle">计算公式</p>
+	<div class="caculation">
+		<el-form>
+			<el-row>
+				<el-col :span="12">
+					<el-form-item label="单一产品提成金额 =">
+						<el-radio-group v-model="caculation" @change="changeCaculat">
+							<el-radio label="1" style="margin-bottom:8px">单一产品实收款*业务提成系数*产品增值率系数*产品交易年限系数</el-radio><br>
+							<el-radio label="2">单一产品实收款阶梯出货计提金额*业务提成系数*产品增值率系数*产品交易年限系数</el-radio>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-row  style="margin:0 0 8px 24px">
+						合计提成金额 = &nbsp;&nbsp;产品提成金额合计*提成金额阶梯系数*考核系数
+					</el-row>
+					<el-row  style="margin:0 0 15px 12px">
+						产品增值率系数 = 产品实际增值率/标准增值率 
+					</el-row>
+				</el-col>
+			</el-row>
+		</el-form>
+		
+	</div>
   </ui-table>
 </template>
 <script>
@@ -187,14 +197,16 @@ export default {
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
-			table_topHeight: 775,
+			table_topHeight: 710,
 			dialogFormVisible:false,
 			kaohe: '',
 			rules:{},
 			ProductYearsRatio: {},
 			DispatchRatio: {},
 			CommissionStepRatio: {},
-			AssessmentRatio: {},
+			AssessmentRatio: {
+				assessmentRatio: ''
+			},
 			CommissionDetailData: {},
 			caculation: '1',
 			commissionTotalAmount: '',
@@ -205,6 +217,7 @@ export default {
 			isComissionErr: false,
 			isDispatchErr: false,
 			appreRate: '45', //标准增值率系数暂定为45%
+			process:''
 		}
 	},
 	computed:{
@@ -213,6 +226,36 @@ export default {
 		}
 	},
 	methods: {
+		getSummaries(param) { //合计实收款 和产品提成金额
+			const { columns, data } = param;
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}
+				if(column.label=='实收款' || column.label=='产品提成金额'){
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+							const value = Number(curr);
+							if (!isNaN(value)) {
+								return prev + curr;
+							} else {
+								return prev;
+							}
+						}, 0);
+						sums[index] = sums[index];
+						if(!isNaN(sums[index])){
+							sums[index] = sums[index].toFixed(4)
+						}
+					} else {
+						sums[index] = '';
+					}      
+				}
+			});
+			return sums;
+		},
 		changeCaculat(){//切换计算公式
 			this.allAmount = []
 			if(this.table_data.length==0){
@@ -544,16 +587,21 @@ export default {
 		},
 
 		getCommissionSum(sum){ //计算提成金额阶梯系数
+			this.process = ''
 			this.allAmount = []
 			let filterData = this.CommissionStepRatio.filter(r => (r.commissionStart<=sum))
-			filterData.forEach(r => {
+			let addSymbol = ''
+			filterData.forEach((r,i) => {
 				var commissEnd = r.commissionEnd
 				if(r.commissionEnd > sum){
 					commissEnd = sum
 				}
 				let amount = (commissEnd - r.commissionStart) * r.commissionStepRatio
 				this.allAmount.push(amount)
+				addSymbol = this.process==''?'':'+'
+				this.process +=  ''+addSymbol+ Number((commissEnd -  r.commissionStart)).toFixed(4) +'*'+ r.commissionStepRatio
 			})
+			this.process ='('+this.process + ')*' +this.AssessmentRatio.assessmentRatio
 			if(this.allAmount.length > 0) {
 				return this.allAmount.reduce((tem, item, index) => tem + item)
 			}else{
@@ -733,17 +781,7 @@ export default {
 				height: 33px;
 			}
 		}
-		.caculation{
-			padding: 15px 0 0 20px;
-			border: 0;
-			border: 1px dotted #B9C2C8;
-			.el-form-item__label{
-				line-height: 19px;
-			}
-		}
-		.mt20{
-			margin-top: 20px;
-		}
+		
 	}
 	.amountDemo{
 		padding: 8px 0 0 7px;
@@ -752,5 +790,16 @@ export default {
 	}
 	.setRate .el-input{
 		width: 20%;
+	}
+	.caculation{
+		padding: 15px 0 0 20px;
+		border: 0;
+		border: 1px dotted #B9C2C8;
+		.el-form-item__label{
+			line-height: 19px;
+		}
+	}
+	.mt20{
+		margin-top: 20px;
 	}
 </style>
