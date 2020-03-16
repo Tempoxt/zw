@@ -179,21 +179,12 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("commission/demo");
-const defaultForm = () => {
-    return {
-      assessBase:'',
-      unAssessBase:'',
-	  totalBonus:'',
-	  ids:''
-    }
-}
 export default {
 	mixins: [table_mixin],
 	data() {
 		return {
 			form:{},
 			loading: false,
-			defaultForm,
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -660,6 +651,7 @@ export default {
 				this.table_data = []
 				this.AssessmentRatio = ''
 				this.table_form.total = 0
+				this.process = ''
 			}
 			setTimeout(() => {
 				this.table_loading = false;
