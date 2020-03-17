@@ -144,6 +144,14 @@ export default [
         }
     },
     {
+        name: 'dispatchCollection',
+        component: () =>
+            import ('@/views/hrfront/comissManage/dispatchCollRecord'),
+        meta: {
+            title: '出货收款记录'
+        }
+    },
+    {
         name: 'commissionDemo',
         component: () =>
             import ('@/views/hrfront/comissManage/commissionDemo'),
