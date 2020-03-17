@@ -87,7 +87,7 @@
 					<form-render :type="`select`" :field="{name:'入住员工',options:memberList}" filterable  v-model="distribution_form.empId"/>
 				</el-col>
 				<el-col :span="24">
-					<form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="distribution_form.remark" placeholder="请输入"/>
+					<form-render :type="`textarea`" autosize :row="1" :field="{name:'备注/说明'}" v-model="distribution_form.remark" placeholder="请输入"/>
 				</el-col>
 			</el-row>
 		</el-form>

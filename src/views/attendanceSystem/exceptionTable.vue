@@ -190,7 +190,7 @@
 					<form-render prop="letOffDay" :type="`inputSuffix`" placeholder="系统自动计算" suffix="小时" :field="{name:'放休工时'}" disabled v-model="letOffDay"/>
 				</el-col>
 				<el-col :span="12">
-					<form-render prop="lefOffReason" :type="`textarea`" :field="{name:'放休原因'}" v-model="form5.lefOffReason"/>
+					<form-render prop="lefOffReason" :type="`textarea`"  autosize :row="1" :field="{name:'放休原因'}" v-model="form5.lefOffReason"/>
 				</el-col>
 			</el-row>
 		</el-form>

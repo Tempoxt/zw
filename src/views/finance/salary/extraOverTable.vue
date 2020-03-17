@@ -18,7 +18,7 @@
 					<form-render prop="dateLap" :type="`day`" :field="{name:'加班日期'}" v-model="form.dateLap"/>
 				</el-col>
 				<el-col :span="16" :offset="3">
-					<form-render prop="reason" :type="`textarea`" :field="{name:'加班原因'}" v-model="form.reason"/>
+					<form-render prop="reason" :type="`textarea`" autosize :row="1" :field="{name:'加班原因'}" v-model="form.reason"/>
 				</el-col>
 			</el-row>
 			<OrgSelect :result="result" v-model="form.workcodes" activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
