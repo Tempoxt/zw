@@ -93,7 +93,9 @@
       <vxe-table-column type="index" :index="indexMethod" width="80" fixed/>
       <vxe-table-column field="staff__employeeCode" sortable title="工号" width="80" fixed/>
       <vxe-table-column field="staff__chineseName" title="姓名" width="120" fixed/>
-      <vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+        filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+        :width="field.width=='auto'?'': parseInt(field.width)"/>
     </vxe-table>
      <table-pagination 
         :total="table_form.total" 

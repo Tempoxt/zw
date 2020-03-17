@@ -44,7 +44,7 @@
       </vxe-table-column>
       <vxe-table-column type="index" :index="indexMethod" width="70" fixed/>
       <vxe-table-column v-for="field in table_field.filter(o=>!['signState','signImage'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" 
-        :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+        :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
       <vxe-table-column prop="signState" label="签收状态">
         <template slot-scope="scope">
           <el-tag size="mini" type="danger" v-if="scope.row.signState==1">未签收</el-tag>

@@ -99,8 +99,9 @@
 				<div v-html="scope.row.CheckDateSub"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__principalship__name','staff__department__name','CheckDateSub'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
-			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__principalship__name','staff__department__name',
+			'CheckDateSub'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
+			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
 	</vxe-table>
      <table-pagination 
         :total="table_form.total" 

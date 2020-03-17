@@ -124,7 +124,9 @@
               <div v-html="scope.row.staff__employeeCode"></div>
           </template>
       </vxe-table-column>
-      <vxe-table-column v-for="field in table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <vxe-table-column v-for="field in table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name)).
+        filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" 
+        :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
       <!-- <each-table-column :table_field="table_field.filter(o=>!['month','signState','staff__chineseName','staff__employeeCode'].includes(o.name))"/> -->
     </vxe-table>
      <table-pagination 

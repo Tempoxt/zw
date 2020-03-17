@@ -415,7 +415,7 @@
           ></div>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="chineseName" title="姓名" fixed width="120" />>
+      <vxe-table-column field="chineseName" title="姓名" fixed width="120" />
       <vxe-table-column
         v-for="field in table_field
           .filter(o => !['employeeCode', 'chineseName'].includes(o.name))
@@ -424,7 +424,7 @@
         :key="field.name"
         :field="field.name"
         :title="field.showname"
-        :width="field.width == 'auto' ? '' : parseInt(field.width)"
+        :width="field.width == 'auto' ? '' : parseInt(field.width)" :sortable="field.issort" 
       />
     </vxe-table>
     <table-pagination
