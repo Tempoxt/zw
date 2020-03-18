@@ -198,6 +198,14 @@ export default [{
         }
     },
     {
+        name: 'FieldParams',
+        component: () =>
+            import ('@/views/hrfront/recruitment/fieldParams'),
+        meta: {
+            title: '招聘字段设置'
+        }
+    },
+    {
         name: 'introducercost',
         component: () =>
             import ('@/views/hrfront/introducercost/introlist'),

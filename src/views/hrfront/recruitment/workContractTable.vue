@@ -36,14 +36,6 @@
                 ></el-table-column>
                 <el-table-column type="index" :index="indexMethod" />
                 <each-table-column :table_field="table_field"/>
-                    <!-- <el-table-column
-                fixed="right"
-                label="操作"
-                width="100">
-                <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">应聘名单</el-button>
-                </template>
-                </el-table-column> -->
         </el-table>
         <table-pagination 
         :total="table_form.total" 
@@ -58,6 +50,8 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("hrm/workwechat/list");
+import dayjs from 'dayjs'
+
 export default {
     props:['flag'],
     mixins: [table_mixin],
@@ -91,7 +85,7 @@ export default {
             },300)
         },
         async fetchMenu(){
-            const { field, action,table } = await api_common.menuInit('hrm/workwechat/list');
+            const { field, action,table } = await api_common.menuInit('hrm/workwechat/list'+this.flag);
             this.table_field = field;
             this.table_actions = action;
             this.table_config = table
@@ -100,6 +94,7 @@ export default {
     },
     
     async created() {
+		this.$set(this.table_form,'dateLap',dayjs().format('YYYY-MM'))
         this.fetchMenu()
     }
 }

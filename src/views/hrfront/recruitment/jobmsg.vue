@@ -65,26 +65,32 @@
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
-                                                :type="`input`"
-                                                prop="needTips"
+                                                :type="`textarea`"
+                                                autosize
+                                                :rows='1'
+                                                prop="jobResponsibility"
+                                                :field="{name:'岗位职责'}"
+                                                v-model="form.jobResponsibility"
+                                            /> 
+                                        </el-col>
+                                        <el-col :span="24">
+                                            <form-render
+                                                :type="`select`"
+                                                prop="newjobtype"
                                                 filterable
-                                                :field="{name:'需求说明'}"
-                                                v-model="form.needTips"
+                                                :field="{name:'招聘类型',options:jobtitlesData}"
+                                                v-model="form.newjobtype"
                                             /> 
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
                                                 :type="`textarea`"
-                                                autosize
-                                                :rows='1'
-                                                prop="jobResponsibility"
-                                                filterable
-                                                :field="{name:'岗位职责'}"
-                                                v-model="form.jobResponsibility"
+                                                :autosize="{ minRows: 4, maxRows: 4}"
+                                                prop="responsibilities"
+                                                :field="{name:'工作职责'}"
+                                                v-model="form.responsibilities"
                                             /> 
                                         </el-col>
-                                        
-                                       
                                         <!-- <el-col :span="24">
                                             <form-render
                                                 :type="`select`"
@@ -143,6 +149,15 @@
                                                 :type="`select`"
                                                 :field="{name:'智能班组',options:teamIDData}"
                                                 v-model="form.teamID"
+                                            /> 
+                                        </el-col>
+                                        <el-col :span="24">
+                                            <form-render
+                                                :type="`textarea`"
+                                                :autosize="{ minRows: 4, maxRows: 4}"
+                                                prop="qualifications"
+                                                :field="{name:'任职资格'}"
+                                                v-model="form.qualifications"
                                             /> 
                                         </el-col>
                                     </el-row>
@@ -228,7 +243,7 @@
                                                 <form-render
                                                     autosize
                                                     :rows='1'
-                                                    :type="`textarea`"
+                                                    :type="`textarea`" 
                                                     :field="{name:'经验要求'}"
                                                     v-model="form.needWorkExp"
                                                 /> 
@@ -287,13 +302,23 @@
                 </div>
             </el-dialog>
             <table-header
-            :table_actions="table_actions"
-            :table_selectedRows="table_selectedRows"
-            :table_form.sync="table_form"
-            :table_column="table_field"
-            @action="handleAction"
-            
-            ></table-header>
+                :table_actions="table_actions"
+                :table_selectedRows="table_selectedRows"
+                :table_form.sync="table_form"
+                :table_column="table_field"
+                @action="handleAction"
+                >
+                <div style="padding-left:10px">
+                    <el-select v-model="table_form.value" @change="fetch" placeholder="请选择" v-if="this.url=='recruit/jobmsg'">
+                        <el-option
+                            v-for="item in jobtitles"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+            </table-header>
             <el-table 
                 ref="elTable"
                 @selection-change="handleChangeSelection"
@@ -357,11 +382,9 @@ export default {
         },
         url(){
 			this.table_form.query.query = []
-            // this.table_form.keyword = ''
             this.table_form.currentpage = 1
             this.api_resource = api_common.resource(this.url)
             this.fetchMenu()
-            this.fetchTableData()
         }
     },
     methods:{
@@ -404,9 +427,16 @@ export default {
             }
             this.dialogFormVisible = true
         },
+        fetch(){
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
         async fetchTableData() {
             if(!this.id){
                 return
+            }
+            if(this.url!='recruit/jobmsg'){
+                delete this.table_form.value
             }
             this.table_loading = true
 			this.table_form.org_id = this.id
@@ -420,6 +450,7 @@ export default {
         },
         async handleFormSubmit(){
             await this.form_validate()
+            this.form.needTips = '123'
             let form = Object.assign({},this.form)
             if(this.isInsert){
                 await this.api_resource.create(form)
@@ -430,12 +461,16 @@ export default {
             this.fetchTableData()
         },
         async fetchMenu(){
-            const { field, action,table } = await api_common.menuInit(
-               this.url,
-            );
+            const { field, action,table } = await api_common.menuInit(this.url);
             this.table_field = field;
             this.table_actions = action;
             this.table_config = table
+            if(this.url=='recruit/jobmsg'){
+                this.jobtitles =  await this.$request.get('/hrm/jobtype?tag=RecruitmentType')
+                this.jobtitlesData = this.jobtitles.map(o=>{return {label:o.title,value:o.value}})
+            }
+            this.table_form.value = 'society'
+            this.fetchTableData();
         }
     },
     data(){
@@ -448,6 +483,8 @@ export default {
             api_resource:api_common.resource(this.url),
             principalshipData:[],
             teamIDData:[],
+            jobtitlesData: [],
+            jobtitles: [],
             rules:{
                 department: [
                     { required: true, message: '请选择', trigger: 'change' },
@@ -479,7 +516,10 @@ export default {
                 needNumber:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ], 
-                needTips:[
+                responsibilities:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                qualifications:[
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 jobResponsibility:[
@@ -487,6 +527,9 @@ export default {
                 ],
                 dutyRequirement:[
                     { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                newjobtype:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
             },
             workNatureData:[
@@ -615,7 +658,6 @@ export default {
     
     async created() {
         this.fetchMenu()
-        this.fetchTableData()
     }
 }
 </script>
