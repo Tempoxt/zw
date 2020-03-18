@@ -30,7 +30,7 @@
                             <form-render :type="`input`" prop="purchaseNumber" :field="{name:'请购数量'}" v-model="form.purchaseNumber" :disabled="true"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`textarea`" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
+                            <form-render :type="`textarea`" autosize :row="1" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
                         </el-col>
                     </el-row>
                 </el-form>

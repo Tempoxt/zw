@@ -66,6 +66,47 @@
             </div>
         </el-dialog>
 
+        <el-dialog
+            :title="dialogStatus==='insert'?'添加组长':'编辑组长'"
+            :visible.sync="dialogForm2Visible"
+            class="public-dialog"
+            v-el-drag-dialog
+		    width="600px"
+            >
+           	<div>
+                <el-form ref="form2" :model="form2" label-width="100px" :rules="rules2">
+                    <el-row :gutter="20">
+                        <el-col :span="16" :offset="4">
+                            <el-form-item label="请选择员工">         
+                                <el-select
+                                    style="width:100%"
+                                    v-model="form2.staff"
+                                    filterable
+                                    clearable
+                                    remote
+                                    reserve-keyword
+                                    placeholder="请输入关键词"
+                                    :remote-method="remoteMethod"
+                                    >
+                                    <el-option
+                                        v-for="item in introducerData"
+                                        :key="item.value"
+                                        :label="item.chineseName +`(${item.employeeCode})`"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogForm2Visible = false">取 消</el-button>
+                <el-button type="primary" @click="handleForm2Submit" :disabled="disabled2">确 定</el-button>
+            </div>
+        </el-dialog>
+
 
         <table-header
             :table_actions="table_actions"
@@ -109,6 +150,8 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+import { MessageBox } from 'element-ui';
+const download = require('downloadjs')
 let baseUrl = process.env.VUE_APP_STATIC
 export default {
     mixins: [table_mixin],
@@ -158,7 +201,17 @@ export default {
                 staff_id:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
-            }
+            },
+            form2: {},
+            dialogForm2Visible: false,
+            introducerData: [],
+            downloadStock: 'toolstationery/departledger/bulkstack',
+            importUploadStock: 'toolstationery/departledger/bulkstack',
+            rules2: {
+                staff: [
+                    { required: true, message: '请选择', trigger: ['blur','change'] }
+                ],
+            },
         };
     },
     computed:{
@@ -167,7 +220,13 @@ export default {
                 return false
             }
             return true
-        }
+        },
+        disabled2(){
+            if(this.form2.staff!=''&&this.form2.staff!=undefined){
+                return false
+            }
+            return true
+        },
     },
     watch:{
         orgid(){
@@ -180,24 +239,111 @@ export default {
 			delete this.table_form.sortname
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
-			this.fetchMenu()
-            if(this.url=='toolstationery/departledgermanager'){
-                this.importUploadUrl = this.downloadUrl =  'toolstationery/departledgermanager/upload'
-            }else{
-                this.importUploadUrl = this.downloadUrl =  'toolstationery/departledger/upload'
-            }
+            this.fetchMenu()
+            this.importUploadUrl = this.downloadUrl = this.url+'/upload'
 		}
     },
     methods: {
-        add(){
-            this.dialogForm1Visible = true
-            this.form1 = {
-                departmentId:'',
-                staff_id:''
+        async handleImportChangeStock(ev){
+            const files = ev.target.files;
+            this.importForm.the_file = files[0]
+            if (!files) return;
+            const { importForm } = this
+            var form = new FormData();
+            Object.keys(importForm).forEach(key=>{
+                form.append(key,importForm[key])  
+            })
+            this.importLoading = true
+            MessageBox.close()
+            MessageBox.alert(
+                <div v-loading={true}><br /></div>, '导入中', {
+                showConfirmButton:false,
+                center:true
+            });
+            try {
+                const mes = await this.$request.post(this.importUploadStock,form,{alert:false})
+                this.fetch()
+                this.$message({
+                    message: mes,
+                    type: 'success'
+                });
+            } catch (error) {
+                this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:6000})
+            }finally{
+                this.importLoading = false
+                MessageBox.close()
+                this.$nextTick(()=>{
+                    this.$refs.importInput.value = null
+                    ev.target.value = null
+                    this.fetch()
+                })
             }
-            this.$nextTick(()=>{
-				this.$refs['form1'].clearValidate()
-			})
+        },
+        async handleDownloadChangeStock(){
+            try {
+                if(this.downloadStock){
+                    const  { data,name,contentType } = await this.$request.get(this.downloadStock,{
+                        responseType:'arraybuffer'
+                    })
+                    download(data,name||this.$route.meta.title,contentType)
+                    this.$message({
+                        message: '下载成功',
+                        type: 'success'
+                    });
+                }
+            } catch (error) {
+                
+            }finally{
+                MessageBox.close()
+            }
+        },
+        bulk_take_stock(){
+            let {
+                handleImportChangeStock,
+            } = this
+            MessageBox.alert(
+                <el-button-group class="table-import-upload" ref="import">
+                    <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+                    <input type="file" ref="input" class="input" on-change={handleImportChangeStock} ref="importInput"></input>
+                    <el-button type="" style="margin-left:20px" onClick={()=>{this.handleDownloadChangeStock()}}>下载模板</el-button>
+                </el-button-group>
+                , '选择文件导入', {
+                showConfirmButton:false,
+                center:true
+            });
+        },
+        async add(){
+            if(this.url=='toolstationery/departledgermanager'){
+                await this.$request.get('toolstationery/standarddose/checkorg?org_id='+this.orgid)
+                this.dialogForm1Visible = true
+                this.form1 = {
+                    staff_id:''
+                }
+                this.$nextTick(()=>{
+                    this.$refs['form1'].clearValidate()
+                })
+            }else if(this.url=='toolstationery/special'){
+                this.dialogForm2Visible = true
+                this.form2 = {
+                    staff:''
+                }
+            }
+        },
+        async remoteMethod(query){
+            if (query !== '') {
+                this.introducerData = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
+                    keyword:query,
+                    pagesize:10
+                })
+            } 
+        },
+         async handleForm2Submit(){
+            await this.form_validate('form2')
+            let form2 = Object.assign({},this.form2)
+			await this.api_resource.create(form2)
+			this.dialogForm2Visible = false
+			this.fetch()
         },
         async edit(){
             this.dialogForm1Visible = true
@@ -213,7 +359,7 @@ export default {
 				await this.api_resource.update(form1.id,form1)
 			}
 			this.dialogForm1Visible = false
-			this.fetchTableData()
+			this.fetch()
         },
         inventory(){
             this.form.take_number = ''
@@ -241,7 +387,7 @@ export default {
             if(this.orgid==''){
                 return 
             }
-            this.table_topHeight = this.url=='toolstationery/departledgermanager'?300:325
+            this.table_topHeight = this.url != 'toolstationery/departledger'? 295: 320
             this.table_loading = true;
             this.table_form.org_id  = this.orgid
             const {rows , total, total_price}= await this.api_resource.get(this.table_form);
