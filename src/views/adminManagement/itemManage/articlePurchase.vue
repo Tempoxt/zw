@@ -74,7 +74,7 @@ export default {
 		},
     },
     async created(){
-        this.data2 = await this.$request.get('org/tree');
+        this.data2 = await this.$request.get('toolstationery/standarddose/tree?showoffice=1');
         let that = this;
 		(function f(data) {
 			data.some(row => {
