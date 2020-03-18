@@ -75,13 +75,13 @@ export default {
 						return <span style="color:#18CC72" title={column.paidAmount}>{column.paidAmount}</span>
 					}
 				},
-				// paidAmount(row,column){ //分配金额  人民币无税出货金额 - 分配金额 !=0
-				// 	if(column.unpaidAmount - column.paidAmount != 0 ){
-				// 		return <span style="color:#F2353C" title={column.paidAmount}>{column.paidAmount}</span>
-				// 	}else{
-				// 		return <span style="color:#18CC72" title={column.paidAmount}>{column.paidAmount}</span>
-				// 	}
-				// }
+				dispatch__paidAmount(row,column){ //分配金额  人民币无税出货金额 - 分配金额 !=0
+					if(column.dispatch__natDispatchMoney - column.dispatch__paidAmount != 0 ){
+						return <span style="color:#F2353C" title={column.dispatch__paidAmount}>{column.dispatch__paidAmount}</span>
+					}else{
+						return <span style="color:#18CC72" title={column.dispatch__paidAmount}>{column.dispatch__paidAmount}</span>
+					}
+				}
 			}
 		};
 	},

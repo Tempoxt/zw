@@ -10,7 +10,7 @@
             <dispatchCollRecordTable url="commission/collectiondetail" m="2"/>
         </div>
         <div v-if="view_activeName==='收款分配记录'">
-            <dispatchCollRecordTable url="commission/collectionmatch" m="3"/>
+            <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="3"/>
         </div>
     </div>
 </template>
