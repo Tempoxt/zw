@@ -62,16 +62,26 @@
                             <el-col :span="12">
                                 <el-row :gutter="20">
                                     <el-col :span="24">
-                                        <form-render :type="`branchsubcompany`" prop="subCompany" :field="{name:'所属公司'}" v-model="form1.subCompany"/>
+                                        <form-render
+                                            filterable
+                                            placeholder="请搜索或选择"
+                                            prop="recruitJob"
+                                            :type="`select`"
+                                            :field="{name:'需求岗位',options:needJobs}"
+                                            v-model="form1.recruitJob"
+                                        />
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form1.subCompany,disable:!isInsert}" v-model="form1.department"/>
+                                        <form-render :type="`branchsubcompany`" prop="subCompany" :field="{name:'所属公司',disable:true}" :disabled="true" v-model="form1.subCompany"/>
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render :type="`branchteam`" :field="{name:'所属小组',id:form1.department,disable:!isInsert}" v-model="form1.workShop"/>
+                                        <form-render prop="department" :type="`department`" :field="{name:'所属部门',id:form1.subCompany,disable:true}" :disabled="true" v-model="form1.department"/>
                                     </el-col>
                                     <el-col :span="24">
-                                        <form-render :disabled="!isInsert"
+                                        <form-render :type="`branchteam`" :field="{name:'所属小组',id:form1.department}" v-model="form1.workShop"/>
+                                    </el-col>
+                                    <!-- <el-col :span="24">
+                                        <form-render :disabled="true"
                                             filterable
                                             placeholder="请搜索或选择"
                                             prop="principalship"
@@ -79,7 +89,7 @@
                                             :field="{name:'所任职务',options:jobtitlesData}"
                                             v-model="form1.principalship"
                                         />
-                                    </el-col>
+                                    </el-col> -->
                                     <el-col :span="24">
                                         <form-render
                                             prop="teamID"
@@ -509,14 +519,21 @@ export default {
 				],
             },
 			rules1:{
-				
+				recruitJob:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+				],
+				onDutyTime:[
+					{ required: true, message: '请选择', trigger:  ['blur', 'change'] },
+				],
             },
             profileData: {},
             openDrawers: false,
-            template:{},
-            jobtitlesData:[],
-            workGroupData:[],
-            teamidData:[],
+            template: {},
+            jobtitlesData: [],
+            workGroupData :[],
+            teamidData: [],
+            needJobs: [],
+            allData: [],
         }
     },
     watch:{
@@ -525,6 +542,14 @@ export default {
 			this.table_form.currentpage = 1
             this.fetchMenu()
             this.fetchTableData()
+        },
+        'form1.recruitJob'(){
+            if(this.form1.recruitJob!='' && this.form1.recruitJob!=undefined){
+                let f = (this.allData.filter(o=>o.id==this.form1.recruitJob))[0]
+                this.form1 = f
+                this.form1.recruitJob = f.id
+                this.form1.fileType = this.form.fileType==null? 400 :this.form.fileType
+            }
         }
     },
     computed: {
@@ -549,10 +574,13 @@ export default {
             this.teamidData = (await api_common.resource('hrm/teamid').get()).map(o=>{return {label:o.name,value:o.id}})
             this.jobtitlesData =  (await api_common.resource('basicdata/jobtitles').get()).map(o=>{return {label:o.name,value:o.id}})
         },
-        ensure(){
+        async ensure(){
+            this.form1 = {}
             this.dialogForm1Visible = true
             this.getSelectOption()
-            this.form1 = this.defaultForm()
+            this.allData = await this.$request.get('recruit/minijobmsg')
+            this.needJobs = this.allData.map(o=>{return {label:o.principalshipShow,value:o.id}})
+            console.log(this.form1,'1111111111')
         },
         fetch(){
             this.table_form.currentpage = 1
@@ -583,6 +611,7 @@ export default {
             this.fetchTableData()
         },
         async handleForm1Submit(){
+            await this.form_validate('form1')
             let ids = this.table_selectedRows.map(o=>o.id)
             this.form1.ids = ids.join(',')
             let form = Object.assign({},this.form1)
