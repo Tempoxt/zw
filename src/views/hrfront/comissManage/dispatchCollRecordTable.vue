@@ -27,6 +27,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+    	show-summary
+      	:summary-method="getSummaries"
 		>
 			<el-table-column 
 				type="selection" 
@@ -82,7 +84,8 @@ export default {
 						return <span style="color:#18CC72" title={column.dispatch__paidAmount}>{column.dispatch__paidAmount}</span>
 					}
 				}
-			}
+			},
+			selectRows: [],
 		};
 	},
 	watch:{
@@ -95,6 +98,40 @@ export default {
 		}
 	},
 	methods: {
+		handleChangeSelection(val){
+			this.selectRows = val
+		},
+		getSummaries(param) { //合计金额
+			let { columns, data } = param;
+			data = this.selectRows.length == 0 ? data : this.selectRows
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}
+				if(column.label=='人民币无税出货金额' || column.label=='已收款金额' || column.label=='未收款金额'|| column.label=='本币收款金额'|| column.label=='分配金额'){
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+							const value = Number(curr);
+							if (!isNaN(value)) {
+								return prev + curr;
+							} else {
+								return prev;
+							}
+						}, 0);
+						sums[index] = sums[index];
+						if(!isNaN(sums[index])){
+							sums[index] = sums[index].toFixed(6)
+						}
+					} else {
+						sums[index] = '';
+					}      
+				}
+			});
+			return sums;
+		},
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -106,6 +143,7 @@ export default {
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
+				this.$refs.elTable.doLayout()
 			}, 300);
     	},
 		async fetchMenu(){
@@ -119,6 +157,9 @@ export default {
 	async created() {
 		this.table_form.dateLap = dayjs().subtract(1,'month').format('YYYY-MM') 
 		await this.fetchMenu()
+		setTimeout(() => {
+			this.$refs.elTable.doLayout()
+		}, 300);
 	}
 };
 </script>
