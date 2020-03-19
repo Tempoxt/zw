@@ -195,9 +195,6 @@ export default {
             importUploadUrl:'toolstationery/departledgermanager/upload',
             downloadUrl:'toolstationery/departledgermanager/upload',
             rules1:{
-                departmentId:[
-                    { required: true, message: '请选择', trigger: ['blur','change'] },
-                ],
                 staff_id:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
@@ -216,7 +213,7 @@ export default {
     },
     computed:{
         disabled(){
-            if(this.form1.departmentId!=''&&this.form1.staff_id!=''&&this.form1.departmentId!=undefined&&this.form1.staff_id!=undefined){
+            if(this.form1.staff_id!=''&&this.form1.staff_id!=undefined){
                 return false
             }
             return true

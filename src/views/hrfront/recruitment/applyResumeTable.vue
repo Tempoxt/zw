@@ -580,7 +580,6 @@ export default {
             this.getSelectOption()
             this.allData = await this.$request.get('recruit/minijobmsg')
             this.needJobs = this.allData.map(o=>{return {label:o.principalshipShow,value:o.id}})
-            console.log(this.form1,'1111111111')
         },
         fetch(){
             this.table_form.currentpage = 1
