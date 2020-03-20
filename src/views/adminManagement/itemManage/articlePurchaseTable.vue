@@ -170,6 +170,10 @@ export default {
         },
     },
     methods: {
+        async reset(){
+            let mes = await this.$request.get('toolstationery/purchase/reset')
+            this.$message.success(mes)
+        },
 		table_disable_selected(row){
 			if(row.status==2||row.status==3){
 				return false
