@@ -202,5 +202,12 @@ export default [{
         meta: {
             title: '部门仓库统计'
         }
+    },{
+        name: 'exWareHouseRecord',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/outboundRecord'),
+        meta: {
+            title: '出库记录'
+        }
     },
  ]
