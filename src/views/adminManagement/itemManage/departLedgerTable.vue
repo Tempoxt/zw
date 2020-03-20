@@ -349,9 +349,11 @@ export default {
         },
         async handleForm1Submit(){
             await this.form_validate('form1')
+            this.form1.org_id = this.orgid
             let form1 = Object.assign({},this.form1)
             if(this.isInsert){
-				await this.api_resource.create(form1)
+                let mes = await this.api_resource.create(form1)
+                this.$message.success(mes)
 			}else{
 				await this.api_resource.update(form1.id,form1)
 			}
