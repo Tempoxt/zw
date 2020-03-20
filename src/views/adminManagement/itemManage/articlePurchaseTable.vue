@@ -173,6 +173,7 @@ export default {
         async reset(){
             let mes = await this.$request.get('toolstationery/purchase/reset')
             this.$message.success(mes)
+            this.fetch()
         },
 		table_disable_selected(row){
 			if(row.status==2||row.status==3){
@@ -248,7 +249,7 @@ export default {
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table
-		this.table_form.dateLap = dayjs().format('YYYY-MM') 
+		this.table_form.dateLap = dayjs().add(1,'month').format('YYYY-MM') 
         this.fetchTableData();
     },
 };
