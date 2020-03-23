@@ -92,7 +92,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     乙方签名：
-                                    <img :src="baseUrl+contractInfo.sign" class="imgBtn" style="width:30px"/>
+                                    <img :src="baseUrl+contractInfo.sign" class="imgBtn" style="width:120px"/>
                                 </el-col>
                             </el-row>
                             <el-row type="flex" justify="space-between" align="center">
@@ -100,7 +100,7 @@
                                     法人代表：{{contractInfo.corporation}}
                                 </el-col>
                                 <el-col :span="12">
-                                    <span></span>
+                                    <span>&nbsp;</span>
                                 </el-col>
                             </el-row>
                             <el-row type="flex" justify="space-between" align="center">
@@ -217,10 +217,11 @@ export default {
             if(this.flag==1 && row.employeeCode==event.target.innerText){
                 this.openDrawers = true
                 this.contractInfo = await this.$request.get('hrm/workwechat/contact?workcode='+row.employeeCode)
-                this.startDay = this.contractInfo.ContractRecord__contractStart.split('-')
-                this.endDay = this.contractInfo.ContractRecord__contractEnd.split('-')
+                this.startDay = this.contractInfo.ContractRecord__contractStart != null? this.contractInfo.ContractRecord__contractStart.split('-'): ''
+                this.endDay = this.contractInfo.ContractRecord__contractEnd != null? this.contractInfo.ContractRecord__contractEnd.split('-'): ''
                 let created = this.contractInfo.created
-                this.contractDay = new Date(created).getFullYear() +'年'+ (new Date(created).getMonth()+1)+'月'+new Date(created).getDate()+ '日'
+                this.contractDay = created!=''&&created!=undefined? dayjs(created).year()+'年'+  dayjs(created).month()+1+'月'+ dayjs(created).date()+'日':''
+                // this.contractDay = new Date(created).getFullYear() +'年'+ (new Date(created).getMonth()+1)+'月'+new Date(created).getDate()+ '日'
             }
         },
         fetch(){
