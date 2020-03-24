@@ -152,6 +152,8 @@ export default {
 			timer:'',
 			url:'',
             statusk:1,
+            importUploadUrl:'toolstationery/purchase/stat/upload',
+            downloadUrl:'toolstationery/purchase/stat/upload',
         };
     },
     watch:{
