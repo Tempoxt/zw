@@ -51,15 +51,12 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 let api_resource = api_common.resource('toolstationery/exware')
-const download = require('downloadjs')
-let baseUri = process.env.VUE_APP_BASEAPI
 import dayjs from 'dayjs'
 export default {
     mixins: [table_mixin],
     props:['orgid'],
     data() {
         return {
-            baseUri ,
             loading: false,
 			api_resource ,
             queryDialogFormVisible:true,
@@ -74,9 +71,6 @@ export default {
                     }
                 }
             },
-            timer:'',
-			url:'',
-            statusk:1,
         };
     },
     watch:{
@@ -86,32 +80,6 @@ export default {
         },
     },
     methods: {
-        async getUrl(){
-			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/exware/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
-                    this.statusk = 0
-                }
-			}else{
-				clearInterval(this.timer)
-			}
-		},
-		async download(){
-			this.statusk = 1
-			if(this.timer!=''){
-				clearInterval(this.timer)
-			}
-			try{
-                let mes = await this.$request.post('toolstationery/exware/download',{dateLap:this.table_form.dateLap})
-                this.$message.success(mes);
-				this.timer = setInterval(()=>{
-					this.getUrl()
-				}, 10000)
-			}catch(err){
-				console.log(err)
-			}
-		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()

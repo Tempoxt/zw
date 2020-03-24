@@ -90,7 +90,6 @@ import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("toolstationery/purchase/stat");
 let baseUrl = process.env.VUE_APP_STATIC
-let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
 export default {
     mixins: [table_mixin],
@@ -107,7 +106,6 @@ export default {
 		}
         return {
             baseUrl,
-            baseUri,
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
@@ -149,9 +147,6 @@ export default {
                     }
                 }
             },
-			timer:'',
-			url:'',
-            statusk:1,
             importUploadUrl:'toolstationery/purchase/stat/upload',
             downloadUrl:'toolstationery/purchase/stat/upload',
         };
@@ -175,32 +170,7 @@ export default {
             await this.$request.post('toolstationery/purchase/stat',{recordIds:row.join(',')})
             this.fetch()
         },
-        async getUrl(){
-			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/purchase/stat/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
-                    this.statusk = 0
-                }
-			}else{
-				clearInterval(this.timer)
-			}
-		},
-		async download(){
-			this.statusk = 1
-			if(this.timer!=''){
-				clearInterval(this.timer)
-			}
-			try{
-                let mes = await this.$request.post('toolstationery/purchase/stat/download',{dateLap:this.table_form.dateLap})
-                this.$message.success(mes);
-				this.timer = setInterval(()=>{
-					this.getUrl()
-				}, 10000)
-			}catch(err){
-				console.log(err)
-			}
-		},
+       
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()

@@ -220,7 +220,6 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("toolstationery/inventory");
 let baseUrl = process.env.VUE_APP_STATIC
-let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
 export default {
     mixins: [table_mixin],
@@ -247,7 +246,6 @@ export default {
 		}
         return {
             baseUrl,
-            baseUri,
             loading: false,
             form:{},
             defaultForm,
@@ -306,9 +304,6 @@ export default {
                 ],
             },
             sizeList:[],
-			timer:'',
-			url:'',
-            statusk:1,
             importUploadUrl:'/toolstationery/inventory/upload',
             downloadUrl:'/toolstationery/inventory/upload',
             type_id:'',
@@ -338,32 +333,6 @@ export default {
         }
     },
     methods: {
-        async getUrl(){
-			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/inventory/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
-                    this.statusk = 0
-                }
-			}else{
-				clearInterval(this.timer)
-			}
-		},
-		async download(){
-			this.statusk = 1
-			if(this.timer!=''){
-				clearInterval(this.timer)
-			}
-			try{
-                let mes = await this.$request.post('toolstationery/inventory/download')
-                this.$message.success(mes);
-				this.timer = setInterval(()=>{
-					this.getUrl()
-				}, 10000)
-			}catch(err){
-				console.log(err)
-			}
-		},
         checkNumber(rule, value, callback){
 			if (value==='') {
 				return callback(new Error('请输入'));
