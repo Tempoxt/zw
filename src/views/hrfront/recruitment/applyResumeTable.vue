@@ -156,6 +156,9 @@
                                             :type="`select`"
                                             prop="contractTime"
                                             :field="{name:'合同年限',options:[{
+                                                value: 0,
+                                                label: '一年'
+                                            },{
                                                 value: 1,
                                                 label: '一年半'
                                             },{

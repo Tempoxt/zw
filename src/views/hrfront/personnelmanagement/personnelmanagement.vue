@@ -221,6 +221,9 @@
                                         <form-render
                                                 :type="`select`"
                                                 :field="{name:'合同年限',options:[{
+                                                value: 0,
+                                                label: '一年'
+                                                },{
                                                 value: 1,
                                                 label: '一年半'
                                                 },{
@@ -890,23 +893,26 @@
                                         
                                     <form-render :type="`select`" prop="contractTime"
                                         :field="{name:'合同年限',options:[{
-                                        value: 1,
-                                        label: '一年半'
+                                            value: 0,
+                                            label: '一年'
                                         },{
-                                        value: 2,
-                                        label: '两年'
+                                            value: 1,
+                                            label: '一年半'
                                         },{
-                                        value: 3,
-                                        label: '三年'
+                                            value: 2,
+                                            label: '两年'
                                         },{
-                                        value: 4,
-                                        label: '四年'
+                                            value: 3,
+                                            label: '三年'
                                         },{
-                                        value: 5,
-                                        label: '五年'
+                                            value: 4,
+                                            label: '四年'
                                         },{
-                                        value: 6,
-                                        label: '无限期'
+                                            value: 5,
+                                            label: '五年'
+                                        },{
+                                            value: 6,
+                                            label: '无限期'
                                         }]}" v-model="contract.contractTime"/>
                                     </el-col>   
                                 </el-row>

@@ -577,6 +577,10 @@ export default {
             ],
             contractTimeData:[
                 {
+                    value: 0,
+                    label: '一年'
+                },
+                {
                     value: 1,
                     label: '一年半'
                 },{
