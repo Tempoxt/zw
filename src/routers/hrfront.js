@@ -204,6 +204,13 @@ export default [{
         meta: {
             title: '招聘字段设置'
         }
+    },{
+        name: 'InterviewMsg',
+        component: () =>
+            import ('@/views/hrfront/recruitment/interview'),
+        meta: {
+            title: '部门岗位面试设置'
+        }
     },
     {
         name: 'introducercost',
