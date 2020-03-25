@@ -16,30 +16,56 @@
 			收款日期：<dateLap v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
-    <el-table
-        ref="elTable"
-		@selection-change="handleChangeSelection"
+	<vxe-table
+		class="public-vxe-table"
+		ref="xTable"
+		resizable
+		show-overflow
+		highlight-hover-row
+		@select-all="handleChangeSelection"
+		@select-change="handleChangeSelection"
 		:data="table_data"
 		border
 		style="width: 100%"
 		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
+		:header-cell-style="vxeHeaderStyle"
 		:height="table_height"
-		@header-dragend="table_dragend"
+		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
-    	show-summary
-      	:summary-method="getSummaries"
+		:seq-config="{seqMethod: VxeIndexMethod}"
+        show-footer
+        :footer-method="footerMethod"
 		>
-			<el-table-column 
-				type="selection" 
-				width="60" 
-				class-name="table-column-disabled"
-				:selectable="table_disable_selected"
-			>
-			</el-table-column>
-			<el-table-column type="index" :index="indexMethod" width="70"/>
-			<each-table-column :table_field="table_field" :template="template"/>
-	</el-table>
+		<vxe-table-column 
+			type="selection" 
+			width="60" 
+			class-name="table-column-disabled"
+			:selectable="table_disable_selected"
+			fixed="left"
+		>
+		</vxe-table-column>
+		<vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['unpaidAmount','paidAmount','dispatch__paidAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+			:width="field.width=='auto'?'': parseInt(field.width)"/>	
+		<vxe-table-column field="paidAmount" title="已收款金额" width="110" v-if="this.m==1">
+			<template slot-scope="scope">
+				<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':'#18CC72'}" v-html="scope.row.paidAmount"></div>
+			</template>
+		</vxe-table-column>	
+		<vxe-table-column field="unpaidAmount" title="未收款金额" width="110" v-if="this.m==1">
+			<template slot-scope="scope">
+				<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':''}"  v-html="scope.row.unpaidAmount"></div>
+			</template>
+		</vxe-table-column>
+		<vxe-table-column field="dispatch__paidAmount" title="分配金额" width="110" v-if="this.m==3">
+			<template slot-scope="scope">
+				<div :style="{color:scope.row.dispatch__natDispatchMoney-scope.row.dispatch__paidAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.dispatch__paidAmount">
+					{{scope.row.dispatch__paidAmount}}
+				</div>
+			</template>
+		</vxe-table-column>
+	</vxe-table>
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -59,32 +85,10 @@ export default {
 	data() {
 		return {
 			loading: true,
+            vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			api_resource: api_common.resource(this.url),
 			queryDialogFormVisible: true,
 			table_topHeight: 293,
-			template: {
-				unpaidAmount(row,column){ //未收款金额
-					if(column.unpaidAmount != 0 ){
-						return <span style="color:#F2353C" title={column.unpaidAmount}>{column.unpaidAmount}</span>
-					}else{
-						return <span title={column.unpaidAmount}>{column.unpaidAmount}</span>
-					}
-				},
-				paidAmount(row,column){ //已收款金额
-					if(column.unpaidAmount != 0 ){
-						return <span style="color:#F2353C" title={column.paidAmount}>{column.paidAmount}</span>
-					}else{
-						return <span style="color:#18CC72" title={column.paidAmount}>{column.paidAmount}</span>
-					}
-				},
-				dispatch__paidAmount(row,column){ //分配金额  人民币无税出货金额 - 分配金额 !=0
-					if(column.dispatch__natDispatchMoney - column.dispatch__paidAmount != 0 ){
-						return <span style="color:#F2353C" title={column.dispatch__paidAmount}>{column.dispatch__paidAmount}</span>
-					}else{
-						return <span style="color:#18CC72" title={column.dispatch__paidAmount}>{column.dispatch__paidAmount}</span>
-					}
-				}
-			},
 			selectRows: [],
 		};
 	},
@@ -98,40 +102,60 @@ export default {
 		}
 	},
 	methods: {
-		handleChangeSelection(val){
-			this.selectRows = val
-		},
-		getSummaries(param) { //合计金额
-			let { columns, data } = param;
-			data = this.selectRows.length == 0 ? data : this.selectRows
+		footerMethod ({ columns, data }) {
 			const sums = [];
-			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = '合计';
-					return;
-				}
-				if(column.label=='人民币无税出货金额' || column.label=='已收款金额' || column.label=='未收款金额'|| column.label=='本币收款金额'|| column.label=='分配金额'){
-					const values = data.map(item => Number(item[column.property]));
-					if (!values.every(value => isNaN(value))) {
-						sums[index] = values.reduce((prev, curr) => {
-							const value = Number(curr);
-							if (!isNaN(value)) {
-								return prev + curr;
-							} else {
-								return prev;
+			data = this.selectRows.length == 0 ? data : this.selectRows
+			return [
+				columns.map((column, columnIndex) => {
+					if (columnIndex === 0) {
+						return '合计'
+					}
+					if (['natDispatchMoney', 'paidAmount','unpaidAmount','natCollectionAmount','dispatch__paidAmount','dispatch__natDispatchMoney'].includes(column.property)) {
+						const values = data.map(item => Number(item[column.property]));
+						if (!values.every(value => isNaN(value))) {
+							sums[columnIndex] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+								if (!isNaN(value)) {
+									return prev + curr;
+								} else {
+									return prev;
+								}
+							}, 0);
+							sums[columnIndex] = sums[columnIndex];
+							if(!isNaN(sums[columnIndex])){
+								return sums[columnIndex].toFixed(6)
 							}
-						}, 0);
-						sums[index] = sums[index];
-						if(!isNaN(sums[index])){
-							sums[index] = sums[index].toFixed(6)
-						}
-					} else {
-						sums[index] = '';
-					}      
-				}
-			});
-			return sums;
+						} else {
+							return '';
+						}  
+					}    
+				})
+			]
 		},
+        table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+            let row = this.table_field.find(field=>field.showname===column.title)
+            var isEnd = false
+            this.table_field.forEach((item,i)=>{
+                if(item==row&&i==this.table_field.length-2){
+                	isEnd = true
+                }
+            })
+            var newWidth = column.resizeWidth
+            row.width = newWidth
+            row.menuid = row.menuid_id
+            api_pagemanager.update(row.id,{
+                width:newWidth,
+                menuid:row.menuid_id
+            },{alert:false})
+        },
+		handleChangeSelection({selection:val}){ // 单选
+            this.table_selectedRowsInfo = val
+            this.table_selectedRows = val
+			this.selectRows = val
+			this.$emit("update:table_selectedRows",val)
+			let xTable = this.$refs.xTable
+            xTable.updateFooter()
+        },
         fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -143,7 +167,6 @@ export default {
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
-				this.$refs.elTable.doLayout()
 			}, 300);
     	},
 		async fetchMenu(){
@@ -157,9 +180,6 @@ export default {
 	async created() {
 		this.table_form.dateLap = dayjs().subtract(1,'month').format('YYYY-MM') 
 		await this.fetchMenu()
-		setTimeout(() => {
-			this.$refs.elTable.doLayout()
-		}, 300);
 	}
 };
 </script>
