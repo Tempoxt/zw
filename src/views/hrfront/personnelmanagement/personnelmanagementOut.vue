@@ -395,16 +395,16 @@
     >
       <vxe-table-column
         type="selection"
-        width="60"
+        width="60" fixed="left"
         class-name="table-column-disabled"
         :selectable="table_disable_selected"
       ></vxe-table-column>
-      <vxe-table-column type="index" :index="indexMethod" fixed width="80"/>
+      <vxe-table-column type="index" :index="indexMethod" fixed="left" width="80"/>
       <vxe-table-column
         field="employeeCode"
         sortable
         title="工号"
-        fixed
+        fixed="left"
         width="80"
       >
         <template slot-scope="scope">
@@ -415,7 +415,7 @@
           ></div>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="chineseName" title="姓名" fixed width="120" />
+      <vxe-table-column field="chineseName" title="姓名" fixed="left" width="120" />
       <vxe-table-column
         v-for="field in table_field
           .filter(o => !['employeeCode', 'chineseName'].includes(o.name))
