@@ -101,6 +101,13 @@ export default [{
         meta: {
             title: '注销登记'
         }
+    },{
+        name: 'talented',
+        component: () =>
+            import ('@/views/hrfront/dormitory/talentManager'),
+        meta: {
+            title: '人才公寓管理'
+        }
     },
     {
         name: 'checklistview',

@@ -311,7 +311,7 @@ export default {
         },
         async add(){
             if(this.url=='toolstationery/departledgermanager'){
-                await this.$request.get('toolstationery/standarddose/checkorg?org_id='+this.orgid)
+                await this.$request.get('toolstationery/departledgermanager/checkorg?org_id='+this.orgid)
                 this.dialogForm1Visible = true
                 this.form1 = {
                     staff_id:''
