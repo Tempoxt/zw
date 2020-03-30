@@ -45,7 +45,7 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['unpaidAmount','paidAmount','dispatch__paidAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+		<vxe-table-column v-for="field in table_field.filter(o=>!['unpaidAmount','paidAmount','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
 			:width="field.width=='auto'?'': parseInt(field.width)"/>	
 		<vxe-table-column field="paidAmount" title="已收款金额" width="110" v-if="this.m==1">
@@ -58,10 +58,10 @@
 				<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':''}"  v-html="scope.row.unpaidAmount"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="dispatch__paidAmount" title="分配金额" width="110" v-if="this.m==3">
+		<vxe-table-column field="matchAmount" title="分配金额" width="110" v-if="this.m==3">
 			<template slot-scope="scope">
-				<div :style="{color:scope.row.dispatch__natDispatchMoney-scope.row.dispatch__paidAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.dispatch__paidAmount">
-					{{scope.row.dispatch__paidAmount}}
+				<div :style="{color:scope.row.dispatch__natDispatchMoney-scope.row.matchAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.matchAmount">
+					{{scope.row.matchAmount}}
 				</div>
 			</template>
 		</vxe-table-column>
@@ -110,7 +110,7 @@ export default {
 					if (columnIndex === 0) {
 						return '合计'
 					}
-					if (['natDispatchMoney', 'paidAmount','unpaidAmount','natCollectionAmount','dispatch__paidAmount','dispatch__natDispatchMoney'].includes(column.property)) {
+					if (['natDispatchMoney', 'paidAmount','unpaidAmount','natCollectionAmount','dispatch__paidAmount','dispatch__natDispatchMoney','matchAmount'].includes(column.property)) {
 						const values = data.map(item => Number(item[column.property]));
 						if (!values.every(value => isNaN(value))) {
 							sums[columnIndex] = values.reduce((prev, curr) => {
