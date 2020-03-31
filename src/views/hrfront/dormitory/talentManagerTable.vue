@@ -283,7 +283,7 @@ export default {
 			pickerOptions: {
                 disabledDate:time=> {
                     if (this.form1.checkin_date) {
-                        return time.getTime() < Date.now() - 8.64e7;
+                        return time.getTime() < new Date(this.form1.checkin_date).getTime() - 8.64e7;
                     }
 				}
 			},
