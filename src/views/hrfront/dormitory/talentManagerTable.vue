@@ -384,9 +384,9 @@ export default {
             }
             let form = Object.assign({},this.form)
             if(this.isCheckIn){
-                await this.$request.post('dormitory/checkinout/v1/checkinout',form)
+                await this.$request.post('dormitory/checkinout/v1/checkin',form)
             }else{
-                await this.$request.put('dormitory/checkinout/v1/checkinout',form)
+                await this.$request.put('dormitory/checkinout/v1/checkin',form)
             }
             this.dialogFormVisible = false
             this.fetchTableData()
@@ -398,7 +398,7 @@ export default {
                 checkout_date: this.form1.checkout_date
             }
             try{
-                let mes = await this.$request.patch('dormitory/checkinout/v1/checkinout',form1)
+                let mes = await this.$request.put('dormitory/checkinout/v1/checkout',form1)
                 this.$message.success(mes)
             }catch(err){
                 console.log(err)
