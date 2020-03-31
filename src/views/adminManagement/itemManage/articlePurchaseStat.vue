@@ -78,7 +78,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="16" :offset="3">
-                            <form-render :type="`textarea`" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
+                            <form-render :type="`textarea`" prop="remark" :field="{name:'备注'}" v-model="form1.remark"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -234,6 +234,8 @@ export default {
 			}
         },
         async purchaseList(){
+            this.form1 = {}
+            this.fileList = []
             this.dialogForm1Visible = true
             this.form1.recordIds = this.table_selectedRows.map(row=>row.id)
         },
