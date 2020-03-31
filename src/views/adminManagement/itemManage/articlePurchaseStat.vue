@@ -42,6 +42,53 @@
             </div>
         </el-dialog>
 
+
+       	<el-dialog
+            title="发起请购单"
+            :visible.sync="dialogForm1Visible"
+            class="public-dialog"
+            v-el-drag-dialog
+            >
+                <el-form ref="form1" :model="form1"  label-width="100px">
+                    <el-row >
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="请购月份" prop="dateLap">
+                                <el-date-picker
+                                    v-model="table_form.dateLap"
+                                    :clearable="false" :disabled="true"
+                                    type="month"
+                                    size="small"
+                                    format="yyyy年MM月"
+                                    value-format="yyyy-MM"
+                                    placeholder="选择月份">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="16"  :offset="3">
+                            <el-form-item label="附件" :required="true">
+                                <el-upload
+                                    class="upload-demo"
+                                    ref="upload"
+                                    action="www"
+                                    :limit="1"
+                                    :file-list="fileList"
+                                    :on-change="changeFormUploadFiles"
+                                    :auto-upload="false">
+                                <el-button slot="trigger" size="small" type="primary">选取文件</el-button></el-upload>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="16" :offset="3">
+                            <form-render :type="`textarea`" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
+                        </el-col>
+                    </el-row>
+                </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogForm1Visible = false">取 消</el-button>
+                <el-button type="primary" @click="handleForm1Submit">确 定</el-button>
+            </div>
+        </el-dialog>
+
         <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -111,7 +158,10 @@ export default {
             queryDialogFormVisible:true,
             table_topHeight:235,
             dialogFormVisible:false,
+            dialogForm1Visible:false,
             form:{},
+            form1:{},
+            fileList: [],
             rules:{
                 materialCode:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
@@ -158,19 +208,35 @@ export default {
         },
     },
     methods: {
+        async handleForm1Submit(){
+            if(this.form1.the_file==undefined || this.form1.the_file==''){
+                this.$message.error('请上传附件')
+                return
+            }
+            let form1 = Object.assign({},this.form1)
+            var formData = new FormData();
+            Object.keys(form1).forEach(k=>{
+                formData.append(k,form1[k])
+            })
+            let mes = await this.$request.post('toolstationery/purchase/stat',formData)
+			this.dialogForm1Visible = false
+            this.$message.success(mes);
+            this.fetch()
+        },
+		changeFormUploadFiles(file, fileList){
+			this.form1.the_file = file.raw
+		},
 		table_disable_selected(row){
 			if(row.status==2||row.status==3){
 				return false
 			}else{
 				return true
 			}
-		},
-        async purchaseList(){
-            let row = this.table_selectedRows.map(row=>row.id)
-            await this.$request.post('toolstationery/purchase/stat',{recordIds:row.join(',')})
-            this.fetch()
         },
-       
+        async purchaseList(){
+            this.dialogForm1Visible = true
+            this.form1.recordIds = this.table_selectedRows.map(row=>row.id)
+        },
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
