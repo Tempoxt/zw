@@ -40,7 +40,7 @@
                                             ]}" v-model="form.shifts"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :type="`input`" prop="prodiction_order" :field="{name:'生产订单号'}" v-model.number="form.prodiction_order"/>
+                                            <form-render :type="`input`" prop="prodiction_order" :field="{name:'生产订单号'}" v-model="form.prodiction_order"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render :type="`input`" prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"/>
@@ -254,6 +254,19 @@ export default {
                 }
 			}
         }
+        var orderNumber = (rule, value, callback)=>{
+            if (value==='') {
+				return callback(new Error('请输入'));
+			}else{
+                if (!(/^[0-9]\d*$/.test(value))) {
+                    callback(new Error('请输入正整数'));
+                }else if(value.length>10){
+                    callback(new Error('生产订单号不能大于十位'));
+                }else{
+                    callback();
+                }
+			}
+        }
         var lineNumber = (rule, value, callback)=>{
             if (value==='') {
 				return callback(new Error('请输入'));
@@ -261,7 +274,6 @@ export default {
                 if (!(/^[0-9]\d{0,2}$/.test(value))) {
                     callback(new Error('请输入3位数以内的正整数'));
                 }else{
-                    console.log(value,'vvv')
                     callback();
                 }
 			}
@@ -318,7 +330,7 @@ export default {
                 ],
                 prodiction_order: [
                     { required: true, message: '请输入', trigger: ['change','blur'] },
-                    { validator: checkNumber, trigger: 'blur' }
+                    { validator: orderNumber, trigger: 'blur' }
                 ],
                 line_number: [
                     { required: true, message: '请输入', trigger: ['change','blur'] },
@@ -416,7 +428,7 @@ export default {
             }
         },
         'form.prodiction_order'(){
-            if(this.form.prodiction_order){
+            if(this.form.prodiction_order && this.form.prodiction_order.length<10){
                 this.form.prodiction_order = String(this.form.prodiction_order).padStart(10,'00')
             }
         },
@@ -511,7 +523,6 @@ export default {
             if(this.form.production_number && this.form.production_number){
                 this.form.no_warehousing_number =  Number(this.form.production_number) -  Number(this.form.warehousing_number)
                 this.no_warehousing_number = this.form.no_warehousing_number
-                console.log(this.no_warehousing_number,'this.no_warehousing_number')
             }
         },
     },
@@ -532,6 +543,9 @@ export default {
             }, 300);
         },
         async add(){
+            this.$nextTick(()=>{
+                this.$refs['form'].clearValidate()
+            })
             this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
             this.form = {}
             this.dialogFormVisible = true
@@ -553,7 +567,8 @@ export default {
             let form = Object.assign({},this.form)
             if(this.isInsert){
                 try{
-                    await api_resource.create(form)
+                    await this.throwFormError(api_resource.create(form))
+                    // await api_resource.create(form)
                     this.dialogFormVisible = false
                     this.fetchTableData()
                 }catch(err){
