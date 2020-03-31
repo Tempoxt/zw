@@ -346,7 +346,6 @@ export default {
         
 
         download(data,name||this.$route.meta.title,contentType)
-        console.log(data,'ddddd')
         if(data!==''){
           loading.close();
         }
