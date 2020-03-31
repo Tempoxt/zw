@@ -398,8 +398,7 @@ export default {
                 checkout_date: this.form1.checkout_date
             }
             try{
-                let mes = await this.$request.put('dormitory/checkinout/v1/checkout',form1)
-                this.$message.success(mes)
+                await this.$request.put('dormitory/checkinout/v1/checkout',form1)
             }catch(err){
                 console.log(err)
             }
