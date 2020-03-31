@@ -200,6 +200,7 @@
             <el-table-column prop="people_number" label="总人数" width="100"></el-table-column>
             <el-table-column prop="people_labors" label="劳务工人数" width="100"></el-table-column>
             <el-table-column prop="people_workers" label="正式工人数"  width="100"></el-table-column>
+            <el-table-column prop="work_hours" label="作业工时（人/分钟)"  width="100"></el-table-column>
             <el-table-column label="生产损时（人/分钟)">
                 <el-table-column prop="machine_debug" label="机器调试" width="120"></el-table-column>
                 <el-table-column prop="wait_outside_material" label="等外部料" width="120"></el-table-column>
