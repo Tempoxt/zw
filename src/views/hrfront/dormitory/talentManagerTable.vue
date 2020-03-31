@@ -161,8 +161,34 @@
             :table_form.sync="table_form"
             :table_column="table_field"
         >
-            <div style="padding-left:10px;display:flex;align-items:center" v-if="m!='1'">
+            <!-- <div style="padding-left:10px;display:flex;align-items:center" v-if="m!='1'">
                 <span>{{this.m==2 ? '扣费月份：':'入住月份：'}}</span><dateLap v-model="table_form.dateLap" @change="fetch"/>
+            </div> -->
+            <div style="padding-left:10px;display:flex;align-items:center" v-if="m!='1'">
+                <span>{{this.m==2 ? '扣费月份：':'入住月份：'}}</span>
+                <div class="flex">
+                    <el-select v-model="ctype" :disabled="true" style="width:60px" class="dateLap-select">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-date-picker
+                        @change="fetch"
+                        v-if="ctype==2"
+                        :picker-options="pickerOptions1"
+                        style="width:200px"
+                        class="dateLap-date"
+                        v-model="dateLap"
+                        type="month"
+                        value-format="yyyy-MM"
+                        format="yyyy-MM"
+                        :clearable="false"
+                        placeholder="选择月">
+                    </el-date-picker>
+                </div>
             </div>
         </table-header>
         <el-table
@@ -261,6 +287,18 @@ export default {
                     }
 				}
 			},
+			options:[{
+                value:'2',
+                label:'月'
+            }],
+			ctype:'2',
+            pickerOptions1: {
+				disabledDate:time=>{
+                    let nextMonth = dayjs().add(1,'month').format('YYYY-MM')
+					return time.getTime() > new Date(nextMonth).getTime() - 8.64e7;
+				}
+            },
+            dateLap:''
         };
     },
     computed:{
@@ -373,6 +411,7 @@ export default {
             this.dialogForm1Visible = true
         },
 		fetch(){
+            this.table_form.dateLap = this.dateLap
 			this.table_form.currentpage = 1
 			this.fetchTableData()
         },
@@ -424,7 +463,7 @@ export default {
     },
     async created() {
         this.fetchMenu();
-		this.table_form.dateLap = dayjs().format('YYYY-MM')
+		this.table_form.dateLap = this.dateLap = dayjs().format('YYYY-MM')
     },
 };
 </script>
