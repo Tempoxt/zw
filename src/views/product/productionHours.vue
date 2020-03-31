@@ -424,8 +424,11 @@ export default {
             if(this.form.people_labors && this.form.people_workers){
                 this.form.people_number = Number(this.form.people_labors) + Number(this.form.people_workers)
             }
-             if(this.form.people_workers && this.form.work_hours){
+            if(this.form.people_workers && this.form.work_hours){
                 this.form.workers_hours =  (Number(this.form.people_workers) *  Number(this.form.work_hours) / 60).toFixed(2)
+            }
+            if(this.form.labors_hours && this.form.workers_hours){
+                this.form.working_hours = (Number(this.form.labors_hours) + Number(this.form.workers_hours)).toFixed(2)
             }
         },
         'form.prodiction_order'(){
@@ -452,6 +455,9 @@ export default {
             if(this.form.people_workers && this.form.work_hours){
                 this.form.workers_hours =  (Number(this.form.people_workers) *  Number(this.form.work_hours) / 60).toFixed(2)
             }
+            if(this.form.labors_hours && this.form.workers_hours){
+                this.form.working_hours = (Number(this.form.labors_hours) + Number(this.form.workers_hours)).toFixed(2)
+            }
         },
         'form.production_number'(){
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
@@ -464,12 +470,12 @@ export default {
         },
         'form.labors_hours'(){
             if(this.form.labors_hours && this.form.workers_hours){
-                this.form.working_hours =  (Number(this.form.labors_hours) *  Number(this.form.workers_hours) / 60).toFixed(2)
+                this.form.working_hours = (Number(this.form.labors_hours) + Number(this.form.workers_hours)).toFixed(2)
             }
         },
         'form.workers_hours'(){
             if(this.form.labors_hours && this.form.workers_hours){
-                this.form.working_hours =  (Number(this.form.labors_hours) *  Number(this.form.workers_hours) / 60).toFixed(2)
+                this.form.working_hours = (Number(this.form.labors_hours) + Number(this.form.workers_hours)).toFixed(2)
             }
             if(this.form.working_hours && this.form.product_loss_time){
                 this.form.sum_working_hours =  (Number(this.form.working_hours) + Number(this.form.product_loss_time)).toFixed(2)
