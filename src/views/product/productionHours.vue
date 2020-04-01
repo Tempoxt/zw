@@ -11,6 +11,7 @@
             class="public-dialog"
             v-el-drag-dialog
             width="1200px"
+            :close-on-click-modal="false"
             >
             <div>
                  <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="h-full"  style="height:440px;margin:0 10px;">
@@ -29,7 +30,7 @@
                                         </el-col>
                                        
                                         <el-col :span="6">
-                                            <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" v-model="form.class_ban"/>
+                                            <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" clearable v-model="form.class_ban"/>
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render prop="shifts" :type="`select`" :field="{name:'班次',options:[{
@@ -42,16 +43,16 @@
                                             ]}" v-model="form.shifts"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="prodiction_order" :field="{name:'生产订单号'}" v-model="form.prodiction_order" @blur="changeOrder"/>
+                                            <form-render :type="`input`" clearable prop="prodiction_order"  :field="{name:'生产订单号'}" v-model="form.prodiction_order" @blur="changeOrder"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"  @blur="changeOrder"/>
+                                            <form-render :type="`input`" clearable prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"  @blur="changeOrder"/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render :type="`input`" prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding"/>
+                                            <form-render :type="`input`" clearable prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name"/>
+                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name"/>
                                         </el-col>
                                          <el-col :span="6">
                                             <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name"/>
@@ -64,16 +65,16 @@
     margin-bottom: 10px;font-weight: bold;">报工数据</div>
                                    <el-row :gutter="0">
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="people_labors"  :field="{name:'劳务工人数'}" v-model="form.people_labors"/>
+                                            <form-render :type="`input`" clearable prop="people_labors"  :field="{name:'劳务工人数'}" v-model="form.people_labors"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="people_workers"  :field="{name:'正式工人数'}" v-model="form.people_workers"/>
+                                            <form-render :type="`input`" clearable prop="people_workers"  :field="{name:'正式工人数'}" v-model="form.people_workers"/>
                                         </el-col>
                                         <!-- <el-col :span="6">
-                                            <form-render :type="`input`" prop="people_number" :disabled="true" :field="{name:'总人数'}" v-model="form.people_number"/>
+                                            <form-render :type="`input`" clearable prop="people_number" :disabled="true" :field="{name:'总人数'}" v-model="form.people_number"/>
                                         </el-col> -->
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="work_hours" placeholder="作业工时（分钟/人)" :field="{name:'作业工时（分钟/人)'}" v-model="form.work_hours"/>
+                                            <form-render :type="`input`" clearable prop="work_hours" placeholder="作业工时（分钟/人)" :field="{name:'作业工时（分钟/人)'}" v-model="form.work_hours"/>
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render prop="machine_debug" :type="`input`"  placeholder="机器调试（分钟/人)"  :field="{name:'机器调试（分钟/人)'}" v-model="form.machine_debug"/>
@@ -85,10 +86,10 @@
                                             <form-render prop="wait_inside_material" :type="`input`" placeholder="等内部料（分钟/人)" :field="{name:'等内部料（分钟/人)'}" v-model="form.wait_inside_material"/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render :type="`input`" prop="equipment_maintenance" placeholder="设备维修（分钟/人)"  :field="{name:'设备维修（分钟/人)'}" v-model="form.equipment_maintenance"/>
+                                            <form-render :type="`input`" clearable prop="equipment_maintenance" placeholder="设备维修（分钟/人)"  :field="{name:'设备维修（分钟/人)'}" v-model="form.equipment_maintenance"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="other_problem" :field="{name:'其他（分钟/人)'}" placeholder="其他（分钟/人)" v-model="form.other_problem"/>
+                                            <form-render :type="`input`" clearable prop="other_problem" :field="{name:'其他（分钟/人)'}" placeholder="其他（分钟/人)" v-model="form.other_problem"/>
                                         </el-col>
                                     </el-row>
                             </div>
@@ -99,34 +100,34 @@
                                  <el-row :gutter="0">
                                        
                                         <!-- <el-col :span="6">
-                                            <form-render :type="`input`" prop="job_hours" :disabled="true" :field="{name:'作业RT'}" v-model="form.job_hours"/>
+                                            <form-render :type="`input`" clearable prop="job_hours" :disabled="true" :field="{name:'作业RT'}" v-model="form.job_hours"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="labors_hours" :disabled="true" :field="{name:'劳务工时（H）'}" v-model="form.labors_hours"/>
+                                            <form-render :type="`input`" clearable prop="labors_hours" :disabled="true" :field="{name:'劳务工时（H）'}" v-model="form.labors_hours"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="workers_hours" :disabled="true" :field="{name:'正式工时（H）'}" v-model="form.workers_hours"/>
+                                            <form-render :type="`input`" clearable prop="workers_hours" :disabled="true" :field="{name:'正式工时（H）'}" v-model="form.workers_hours"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="working_hours" :disabled="true" :field="{name:'作业工时（H）'}" v-model="form.working_hours"/>
+                                            <form-render :type="`input`" clearable prop="working_hours" :disabled="true" :field="{name:'作业工时（H）'}" v-model="form.working_hours"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="product_loss_time" :disabled="true" :field="{name:'生产损时（H）'}" v-model="form.product_loss_time"/>
+                                            <form-render :type="`input`" clearable prop="product_loss_time" :disabled="true" :field="{name:'生产损时（H）'}" v-model="form.product_loss_time"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="sum_working_hours" :disabled="true" :field="{name:'总工时（H）'}" v-model="form.sum_working_hours"/>
+                                            <form-render :type="`input`" clearable prop="sum_working_hours" :disabled="true" :field="{name:'总工时（H）'}" v-model="form.sum_working_hours"/>
                                         </el-col> -->
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="production_number" :field="{name:'生产数量'}" v-model="form.production_number"/>
+                                            <form-render :type="`input`" clearable prop="production_number" :field="{name:'生产数量'}" v-model="form.production_number"/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="warehousing_number" :field="{name:'入库数量'}" v-model="form.warehousing_number"/>
+                                            <form-render :type="`input`" clearable prop="warehousing_number" :field="{name:'入库数量'}" v-model="form.warehousing_number"/>
                                         </el-col>
                                         <!-- <el-col :span="6">
-                                            <form-render :type="`input`" prop="no_warehousing_number" :disabled="true" :field="{name:'未入库数量'}" v-model="form.no_warehousing_number"/>
+                                            <form-render :type="`input`" clearable prop="no_warehousing_number" :disabled="true" :field="{name:'未入库数量'}" v-model="form.no_warehousing_number"/>
                                         </el-col> -->
                                         <el-col :span="6">
-                                            <form-render :type="`input`" prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding"/>
+                                            <form-render :type="`input`" clearable prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding"/>
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render :type="`select`" :required="this.no_warehousing_number>0" prop="no_warehousing_reason" :field="{name:'未入库原因',options:[{
