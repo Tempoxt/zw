@@ -1,35 +1,37 @@
 <template>
-    <ui-table ref="table" 
+    <ui-table ref="table"  
         :table_column="table_field" 
         :table_query.sync="table_form.query"
         @query="querySubmit"
+        class="productionHours-form"
         >
         <el-dialog
             :title="dialogStatus==='insert'?'添加':'编辑'"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
+            width="1200px"
             >
             <div>
-                 <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="h-full"  style="height:630px;margin:0 10px;">
-                    <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> 
+                 <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="h-full"  style="height:440px;margin:0 10px;">
                         <div class="line-boxs">
-                            <el-row :gutter="40">
-                                <el-col :span="12">
-                                    <el-row :gutter="20">
-                                        <el-col :span="24">
+
+                            <div>
+                                <div style="    border-bottom: 1px solid #e8e8e8;
+    padding-bottom: 10px;
+    margin-bottom: 10px;font-weight: bold;">基础信息</div>
+                                 <el-row :gutter="0">
+                                        <el-col :span="6">
                                             <form-render prop="production_date" :type="`day`" :field="{name:'生产日期'}" v-model="form.production_date"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render prop="place" :type="`select`" :field="{name:'厂区',options:workGroupData}" v-model="form.place"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render prop="customer_name" :type="`input`" :field="{name:'客户名称'}" v-model="form.customer_name"/>
-                                        </el-col>
-                                        <el-col :span="24">
+                                       
+                                        <el-col :span="6">
                                             <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" v-model="form.class_ban"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render prop="shifts" :type="`select`" :field="{name:'班次',options:[{
                                                     value: 1,
                                                     label: '白班'
@@ -39,80 +41,94 @@
                                                 }
                                             ]}" v-model="form.shifts"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="prodiction_order" :field="{name:'生产订单号'}" v-model="form.prodiction_order"/>
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="prodiction_order" :field="{name:'生产订单号'}" v-model="form.prodiction_order" @blur="changeOrder"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"/>
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"  @blur="changeOrder"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="product_encoding"  :field="{name:'产品编码'}" v-model="form.product_encoding"/>
+                                         <el-col :span="6">
+                                            <form-render :type="`input`" prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="product_name"  :field="{name:'产品名称'}" v-model="form.product_name"/>
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="people_labors"  :field="{name:'劳务工人数'}" v-model="form.people_labors"/>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="people_workers"  :field="{name:'正式工人数'}" v-model="form.people_workers"/>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="people_number" :disabled="true" :field="{name:'总人数'}" v-model="form.people_number"/>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="work_hours" :field="{name:'作业工时（分钟/人)'}" v-model="form.work_hours"/>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render prop="machine_debug" :type="`input`" :field="{name:'机器调试'}" v-model="form.machine_debug"/>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render prop="wait_outside_material" :type="`input`" :field="{name:'等外部料'}" v-model="form.wait_outside_material"/>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render prop="wait_inside_material" :type="`input`" :field="{name:'等内部料'}" v-model="form.wait_inside_material"/>
+                                         <el-col :span="6">
+                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name"/>
                                         </el-col>
                                     </el-row>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-row :gutter="20">
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="equipment_maintenance" :field="{name:'设备维修'}" v-model="form.equipment_maintenance"/>
+                            </div>
+                            <div>
+                                <div style="    border-bottom: 1px solid #e8e8e8;
+    padding-bottom: 10px;
+    margin-bottom: 10px;font-weight: bold;">报工数据</div>
+                                   <el-row :gutter="0">
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="people_labors"  :field="{name:'劳务工人数'}" v-model="form.people_labors"/>
                                         </el-col>
-                                        <el-col :span="24">
-                                            <form-render :type="`input`" prop="other_problem" :field="{name:'其他'}" v-model="form.other_problem"/>
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="people_workers"  :field="{name:'正式工人数'}" v-model="form.people_workers"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <!-- <el-col :span="6">
+                                            <form-render :type="`input`" prop="people_number" :disabled="true" :field="{name:'总人数'}" v-model="form.people_number"/>
+                                        </el-col> -->
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="work_hours" placeholder="作业工时（分钟/人)" :field="{name:'作业工时（分钟/人)'}" v-model="form.work_hours"/>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <form-render prop="machine_debug" :type="`input`"  placeholder="机器调试（分钟/人)"  :field="{name:'机器调试（分钟/人)'}" v-model="form.machine_debug"/>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <form-render prop="wait_outside_material" :type="`input`" placeholder="等外部料（分钟/人)" :field="{name:'等外部料（分钟/人)'}" v-model="form.wait_outside_material"/>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <form-render prop="wait_inside_material" :type="`input`" placeholder="等内部料（分钟/人)" :field="{name:'等内部料（分钟/人)'}" v-model="form.wait_inside_material"/>
+                                        </el-col>
+                                         <el-col :span="6">
+                                            <form-render :type="`input`" prop="equipment_maintenance" placeholder="设备维修（分钟/人)"  :field="{name:'设备维修（分钟/人)'}" v-model="form.equipment_maintenance"/>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <form-render :type="`input`" prop="other_problem" :field="{name:'其他（分钟/人)'}" placeholder="其他（分钟/人)" v-model="form.other_problem"/>
+                                        </el-col>
+                                    </el-row>
+                            </div>
+                            <div>
+                                <div style="    border-bottom: 1px solid #e8e8e8;
+    padding-bottom: 10px;
+    margin-bottom: 10px;font-weight: bold;">入库信息</div>
+                                 <el-row :gutter="0">
+                                       
+                                        <!-- <el-col :span="6">
                                             <form-render :type="`input`" prop="job_hours" :disabled="true" :field="{name:'作业RT'}" v-model="form.job_hours"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="labors_hours" :disabled="true" :field="{name:'劳务工时（H）'}" v-model="form.labors_hours"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="workers_hours" :disabled="true" :field="{name:'正式工时（H）'}" v-model="form.workers_hours"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="working_hours" :disabled="true" :field="{name:'作业工时（H）'}" v-model="form.working_hours"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="product_loss_time" :disabled="true" :field="{name:'生产损时（H）'}" v-model="form.product_loss_time"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="sum_working_hours" :disabled="true" :field="{name:'总工时（H）'}" v-model="form.sum_working_hours"/>
-                                        </el-col>
-                                        <el-col :span="24">
+                                        </el-col> -->
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="production_number" :field="{name:'生产数量'}" v-model="form.production_number"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="warehousing_number" :field="{name:'入库数量'}" v-model="form.warehousing_number"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <!-- <el-col :span="6">
                                             <form-render :type="`input`" prop="no_warehousing_number" :disabled="true" :field="{name:'未入库数量'}" v-model="form.no_warehousing_number"/>
-                                        </el-col>
-                                        <el-col :span="24">
+                                        </el-col> -->
+                                        <el-col :span="6">
                                             <form-render :type="`input`" prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`select`" :required="this.no_warehousing_number>0" prop="no_warehousing_reason" :field="{name:'未入库原因',options:[{
                                                     value: 1,
                                                     label: '待品质检验'
@@ -125,7 +141,7 @@
                                                 }
                                             ]}" v-model="form.no_warehousing_reason"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`select`" :field="{name:'入库类型',options:[{
                                                     value: 1,
                                                     label: '正常入库'
@@ -135,18 +151,17 @@
                                                 }
                                             ]}" v-model="form.warehousing_type"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`textarea`" :required="this.form.warehousing_type&&this.form.warehousing_type==2" prop="rework_reason" 
                                             :field="{name:'返工/报废原因'}" v-model="form.rework_reason"/>
                                         </el-col>
-                                        <el-col :span="24">
+                                        <el-col :span="6">
                                             <form-render :type="`textarea`" :field="{name:'备注'}" v-model="form.remarks"/>
                                         </el-col>
                                     </el-row>
-                                </el-col>
-                            </el-row>
+                            </div>
                         </div>
-                    </el-scrollbar>
+                  
                 </el-form>
             </div>
 
@@ -178,6 +193,7 @@
             :height="table_height"
             @header-dragend="table_dragend"
             @sort-change="table_sort_change"
+            align="center"
             >
             <el-table-column 
                 type="selection" 
@@ -187,41 +203,41 @@
                 >
             </el-table-column>
             
-            <el-table-column type="index" :index="indexMethod"/>
-            <el-table-column prop="production_date" label="生产日期" width="120"></el-table-column>
-            <el-table-column prop="place_name" label="厂区" width="120"></el-table-column>
-            <el-table-column prop="customer_name" label="客户名称" width="120"></el-table-column>
-            <el-table-column prop="class_ban" label="班别" width="120"></el-table-column>
-            <el-table-column prop="shifts_dis" label="班次" width="120"></el-table-column>
-            <el-table-column prop="prodiction_order" label="生产订单号"  width="100"></el-table-column>
-            <el-table-column prop="line_number" label="行号" width="80"></el-table-column>
-            <el-table-column prop="product_encoding" label="产品编码" width="120"></el-table-column>
-            <el-table-column prop="product_name" label="产品名称" width="120"></el-table-column>
-            <el-table-column prop="people_number" label="总人数" width="100"></el-table-column>
-            <el-table-column prop="people_labors" label="劳务工人数" width="100"></el-table-column>
-            <el-table-column prop="people_workers" label="正式工人数"  width="100"></el-table-column>
-            <el-table-column prop="work_hours" label="作业工时（分钟/人)"  width="100"></el-table-column>
-            <el-table-column label="生产损时（分钟/人)">
-                <el-table-column prop="machine_debug" label="机器调试" width="120"></el-table-column>
-                <el-table-column prop="wait_outside_material" label="等外部料" width="120"></el-table-column>
-                <el-table-column prop="wait_inside_material" label="等内部料" width="120"></el-table-column>
-                <el-table-column prop="equipment_maintenance" label="设备维修" width="120"></el-table-column>
-                <el-table-column prop="other_problem" label="其他"  width="100"></el-table-column>
+            <el-table-column type="index" :index="indexMethod" fixed/>
+            <el-table-column prop="production_date" label="生产日期" width="100" align="center" fixed></el-table-column>
+            <el-table-column prop="place_name" label="厂区" width="90" align="center" fixed></el-table-column>
+            <el-table-column prop="customer_name" label="客户名称" width="120" align="center" fixed></el-table-column>
+            <el-table-column prop="class_ban" label="班别" width="80" align="center" fixed></el-table-column>
+            <el-table-column prop="shifts_dis" label="班次" width="70" align="center" fixed></el-table-column>
+            <el-table-column prop="prodiction_order" label="生产订单号"  width="100" align="center" fixed></el-table-column>
+            <el-table-column prop="line_number" label="行号" width="60" align="center" fixed></el-table-column>
+            <el-table-column prop="product_encoding" label="产品编码" width="120" align="center" fixed></el-table-column>
+            <el-table-column prop="product_name" label="产品名称" width="120" align="center" fixed></el-table-column>
+            <el-table-column prop="people_number" label="总人数" width="100" align="center"></el-table-column>
+            <el-table-column prop="people_labors" label="劳务工人数" width="100" align="center"></el-table-column>
+            <el-table-column prop="people_workers" label="正式工人数"  width="100" align="center"></el-table-column>
+            <el-table-column prop="work_hours" label="作业工时（分钟/人)"  width="140" align="center"></el-table-column>
+            <el-table-column label="生产损时（分钟/人)" align="center">
+                <el-table-column prop="machine_debug" label="机器调试" width="120" align="center"></el-table-column>
+                <el-table-column prop="wait_outside_material" label="等外部料" width="120" align="center"></el-table-column>
+                <el-table-column prop="wait_inside_material" label="等内部料" width="120" align="center"></el-table-column>
+                <el-table-column prop="equipment_maintenance" label="设备维修" width="120" align="center"></el-table-column>
+                <el-table-column prop="other_problem" label="其他"  width="100" align="center"></el-table-column>
             </el-table-column>
-            <el-table-column prop="job_hours" label="作业RT" width="120"></el-table-column>
-            <el-table-column prop="labors_hours" label="劳务工时（H）" width="120"></el-table-column>
-            <el-table-column prop="workers_hours" label="正式工时（H）" width="120"></el-table-column>
-            <el-table-column prop="working_hours" label="作业工时（H）" width="120"></el-table-column>
-            <el-table-column prop="product_loss_time" label="生产损时（H）" width="120"></el-table-column>
-            <el-table-column prop="sum_working_hours" label="总工时（H）" width="100"></el-table-column>
-            <el-table-column prop="production_number" label="生产数量" width="120"></el-table-column>
-            <el-table-column prop="warehousing_number" label="入库数量" width="120"></el-table-column>
-            <el-table-column prop="no_warehousing_number" label="未入库数量" width="120"></el-table-column>
-            <el-table-column prop="warehousing_encoding" label="入库编码" width="120"></el-table-column>
-            <el-table-column prop="no_warehousing_reason_dis" label="未入库原因"  width="120"></el-table-column>
-            <el-table-column prop="warehousing_type_dis" label="入库类型" width="120"></el-table-column>
-            <el-table-column prop="rework_reason" label="返工/报废原因" width="120"></el-table-column>
-            <el-table-column prop="remarks" label="备注"  width="200"></el-table-column>
+            <el-table-column prop="job_hours" label="作业RT" width="120" align="center"></el-table-column>
+            <el-table-column prop="labors_hours" label="劳务工时（H）" width="120" align="center"></el-table-column>
+            <el-table-column prop="workers_hours" label="正式工时（H）" width="120" align="center"></el-table-column>
+            <el-table-column prop="working_hours" label="作业工时（H）" width="120" align="center"></el-table-column>
+            <el-table-column prop="product_loss_time" label="生产损时（H）" width="120" align="center"></el-table-column>
+            <el-table-column prop="sum_working_hours" label="总工时（H）" width="100" align="center"></el-table-column>
+            <el-table-column prop="production_number" label="生产数量" width="120" align="center"></el-table-column>
+            <el-table-column prop="warehousing_number" label="入库数量" width="120" align="center"></el-table-column>
+            <el-table-column prop="no_warehousing_number" label="未入库数量" width="120" align="center"></el-table-column>
+            <el-table-column prop="warehousing_encoding" label="入库编码" width="120" align="center"></el-table-column>
+            <el-table-column prop="no_warehousing_reason_dis" label="未入库原因"  width="120" align="center"></el-table-column>
+            <el-table-column prop="warehousing_type_dis" label="入库类型" width="120" align="center"></el-table-column>
+            <el-table-column prop="rework_reason" label="返工/报废原因" width="120" align="center"></el-table-column>
+            <el-table-column prop="remarks" label="备注"  width="200" align="center"></el-table-column>
             <!-- <each-table-column :table_field="table_field"/> -->
         </el-table>
         <table-pagination 
@@ -308,7 +324,7 @@ export default {
             no_warehousing_number: '',
             api_resource,
             queryDialogFormVisible:true,
-            table_topHeight:234,
+            table_topHeight:214,
             dialogFormVisible:false,
             customId:'',
             customData:[],
@@ -536,6 +552,34 @@ export default {
     computed:{
     },
     methods: {
+        async changeOrder(){
+            if(this.form.prodiction_order && this.form.line_number) {
+               this.$nextTick(async ()=>{
+                  let result = await this.$request.get('http://192.168.0.192:20002/u8report/orderdetail',{
+                       params:{
+                           'order':this.form.prodiction_order,
+                           'row':this.form.line_number
+                       }
+                   })
+                   if(!result || !result[0] || !result[0].cInvName) {
+
+                       this.$message({
+                            message: `获取不到订单号：${this.form.prodiction_order} 数据 请检查`,
+                            type: 'warning'
+                        });
+                       return
+                   }
+                   this.$set(this.form,'product_encoding',result[0].cInvCode)
+                   this.$set(this.form,'product_name',result[0].cInvName)
+                   this.$set(this.form,'customer_name',result[0].customer_code)
+
+
+                //    this.form.product_encoding = result[0].cInvCode
+                //    this.form.product_name = result[0].cInvName
+                //    this.form.customer_name = result[0].customer_code
+               })
+            }
+        },
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
@@ -607,5 +651,13 @@ export default {
  /deep/ .scrollbar-wrapper {
     overflow-x: hidden;
   }
+}
+</style>
+
+<style lang="scss" >
+.productionHours-form {
+    .el-form-item--small.el-form-item {
+            margin-bottom: 9px;
+    }
 }
 </style>
