@@ -3,16 +3,16 @@
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <div v-if="view_activeName==='待审核'">
+        <div v-if="view_activeName==='待初审'">
             <applyResumeTable  :flag="0"/>
         </div>
-        <div v-if="view_activeName==='审核通过'">
+        <div v-if="view_activeName==='待复审'">
             <applyResumeTable  :flag="1"/>
         </div>
-        <div v-if="view_activeName==='审核未通过'">
+        <div v-if="view_activeName==='待面试'">
             <applyResumeTable  :flag="2"/>
         </div>
-        <div v-if="view_activeName==='确认入职'">
+        <div v-if="view_activeName==='待入职'">
             <applyResumeTable  :flag="3"/>
         </div>
     </div>

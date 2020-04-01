@@ -227,7 +227,7 @@
 
             <!-- 人员档案的信息预览 -->
             <div>
-                <Drawer title="员工档案详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo applyInfo" v-if="profileData.main">
+                <Drawer title="简历详情" :closable="false" width="640" v-model="openDrawers" class="drawerInfo applyInfo" v-if="profileData.main">
                     <p class="info">基本信息</p>
                     <div class="drawer-profile">
                         <el-row>
