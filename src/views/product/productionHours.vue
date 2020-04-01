@@ -61,7 +61,7 @@
                                             <form-render :type="`input`" prop="people_number" :disabled="true" :field="{name:'总人数'}" v-model="form.people_number"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :type="`input`" prop="work_hours" :field="{name:'作业工时（人/分钟)'}" v-model="form.work_hours"/>
+                                            <form-render :type="`input`" prop="work_hours" :field="{name:'作业工时（分钟/人)'}" v-model="form.work_hours"/>
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render prop="machine_debug" :type="`input`" :field="{name:'机器调试'}" v-model="form.machine_debug"/>
@@ -200,8 +200,8 @@
             <el-table-column prop="people_number" label="总人数" width="100"></el-table-column>
             <el-table-column prop="people_labors" label="劳务工人数" width="100"></el-table-column>
             <el-table-column prop="people_workers" label="正式工人数"  width="100"></el-table-column>
-            <el-table-column prop="work_hours" label="作业工时（人/分钟)"  width="100"></el-table-column>
-            <el-table-column label="生产损时（人/分钟)">
+            <el-table-column prop="work_hours" label="作业工时（分钟/人)"  width="100"></el-table-column>
+            <el-table-column label="生产损时（分钟/人)">
                 <el-table-column prop="machine_debug" label="机器调试" width="120"></el-table-column>
                 <el-table-column prop="wait_outside_material" label="等外部料" width="120"></el-table-column>
                 <el-table-column prop="wait_inside_material" label="等内部料" width="120"></el-table-column>
@@ -550,11 +550,11 @@ export default {
             }, 300);
         },
         async add(){
+            this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
+            this.form = {}
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
             })
-            this.workGroupData = (await api_common.resource('officeaddress').get()).map(o=>{return {label:o.officeaddressname,value:o.id}})
-            this.form = {}
             this.dialogFormVisible = true
         },
         async edit(){
