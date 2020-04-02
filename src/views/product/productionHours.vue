@@ -278,7 +278,8 @@ export default {
 			}
         }
         var checkNumber2 = (rule, value, callback)=>{
-            if (value==='') {
+      
+            if (!value) {
 				return callback();
 			}else{
                 if (!(/^[0-9]\d*$/.test(value))) {
