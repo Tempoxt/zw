@@ -33,7 +33,10 @@
                             <form-render :type="`input`" prop="purchaseNumber" :field="{name:'请购数量'}" v-model="form.purchaseNumber"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`textarea`" autosize :row="1" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
+                            <form-render :type="`textarea`" autosize :row="2" prop="formulaMethod" :field="{name:'计算方式'}" v-model="form.formulaMethod"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`textarea`" autosize :row="2" prop="remark" :field="{name:'请购原因'}" v-model="form.remark"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -53,7 +56,7 @@
             :table_column="table_field"
         >
             <div style="padding-left:10px">
-                <dateLap v-model="table_form.dateLap" @change="fetch" :disabled="true"/>
+                <dateLap v-model="table_form.dateLap" @change="fetch"/>
             </div>
         </table-header>
         <el-table
@@ -136,6 +139,9 @@ export default {
                 purchaseNumber:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                     { validator: checkNumber, trigger: 'blur' }
+                ],
+                formulaMethod:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
                 remark:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
