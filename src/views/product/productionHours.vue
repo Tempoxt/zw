@@ -277,6 +277,17 @@ export default {
                 }
 			}
         }
+        var checkNumber2 = (rule, value, callback)=>{
+            if (value==='') {
+				return callback();
+			}else{
+                if (!(/^[0-9]\d*$/.test(value))) {
+                    callback(new Error('请输入正整数'));
+                }else{
+                    callback();
+                }
+			}
+        }
         var orderNumber = (rule, value, callback)=>{
             if (value==='') {
 				return callback(new Error('请输入'));
@@ -430,7 +441,7 @@ export default {
                     { required: true, message: '请输入', trigger: ['change','blur'] },
                 ],
                 warehousing_encoding:[
-                    { validator: checkNumber, trigger: 'blur' }
+                    { validator: checkNumber2, trigger: 'blur' }
                 ]
             },
             workGroupData: [],
