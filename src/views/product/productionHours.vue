@@ -239,6 +239,7 @@
             <el-table-column prop="warehousing_type_dis" label="入库类型" width="120" align="center"></el-table-column>
             <el-table-column prop="rework_reason" label="返工/报废原因" width="120" align="center"></el-table-column>
             <el-table-column prop="remarks" label="备注"  width="200" align="center"></el-table-column>
+            <el-table-column prop="creator" label="创建人"  width="120" align="center"></el-table-column>
             <!-- <each-table-column :table_field="table_field"/> -->
         </el-table>
         <table-pagination 
