@@ -49,13 +49,13 @@
                                             <form-render :type="`input`" clearable prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"  @blur="changeOrder"/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding"/>
+                                            <form-render :type="`input`" clearable prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding" disabled/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name"/>
+                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name" disabled/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name"/>
+                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" disabled/>
                                         </el-col>
                                     </el-row>
                             </div>
@@ -265,6 +265,11 @@ export default {
             if (value==='') {
 				return callback(new Error('请输入'));
 			}else{
+                // if(isNaN(+value)){
+                //     callback(new Error('请输入正整数'));
+                // }else{
+                //       callback();
+                // }
                 if (!(/^[0-9]\d*$/.test(value))) {
                     callback(new Error('请输入正整数'));
                 }else{
