@@ -253,7 +253,7 @@ export default {
             isSubsidy: 0,
             template:{
                 status(row,column){
-                    if(column.status==0){
+                    if(column.status=='未扣款'){
                         return <el-tag type="danger">未扣款</el-tag>
                     }else{
                         return <el-tag type="success">已扣款</el-tag>
