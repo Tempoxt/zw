@@ -127,7 +127,7 @@
                                             <form-render :type="`input`" clearable prop="no_warehousing_number" :disabled="true" :field="{name:'未入库数量'}" v-model="form.no_warehousing_number"/>
                                         </el-col> -->
                                         <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding"/>
+                                            <form-render :type="`input`" clearable prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding" />
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render :type="`select`" :required="this.no_warehousing_number>0" prop="no_warehousing_reason" :field="{name:'未入库原因',options:[{
@@ -429,6 +429,9 @@ export default {
                 no_warehousing_number: [
                     { required: true, message: '请输入', trigger: ['change','blur'] },
                 ],
+                warehousing_encoding:[
+                    { validator: checkNumber, trigger: 'blur' }
+                ]
             },
             workGroupData: [],
         };
