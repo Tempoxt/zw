@@ -90,25 +90,24 @@
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
 			fixed="left"
-		>
-		</vxe-table-column>
-        <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
-		<vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="80">
+		></vxe-table-column>
+        <vxe-table-column type="index" width="40" align="center" fixed="left"></vxe-table-column>
+		<vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="50">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__employeeCode"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="120">
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__chineseName"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="120">
+		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__department_name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="100">
+		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__team_name"></div>
 			</template>
