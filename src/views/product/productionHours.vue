@@ -201,15 +201,27 @@
             </el-table-column>
             
             <el-table-column type="index" :index="indexMethod" fixed/>
-            <el-table-column prop="production_date" label="生产日期" width="100" align="center" fixed></el-table-column>
-            <el-table-column prop="officeaddressname" label="厂区" width="90" align="center" fixed></el-table-column>
-            <el-table-column prop="customer_name" label="客户名称" width="120" align="center" fixed></el-table-column>
-            <el-table-column prop="class_ban" label="班别" width="80" align="center" fixed></el-table-column>
-            <el-table-column prop="shifts" label="班次" width="70" align="center" fixed></el-table-column>
+            <el-table-column prop="production_date" label="生产日期" width="90" align="center" fixed></el-table-column>
+            <el-table-column prop="officeaddressname" label="厂区" width="70" align="center" fixed></el-table-column>
+            <el-table-column prop="customer_name" label="客户名称" width="80" align="center" fixed></el-table-column>
+            <el-table-column prop="class_ban" label="班别" width="70" align="center" fixed></el-table-column>
+            <el-table-column prop="shifts" label="班次" width="50" align="center" fixed></el-table-column>
             <el-table-column prop="prodiction_order" label="生产订单号"  width="100" align="center" fixed></el-table-column>
-            <el-table-column prop="line_number" label="行号" width="60" align="center" fixed></el-table-column>
-            <el-table-column prop="product_encoding" label="产品编码" width="120" align="center" fixed></el-table-column>
-            <el-table-column prop="product_name" label="产品名称" width="120" align="center" fixed></el-table-column>
+            <el-table-column prop="line_number" label="行号" width="50" align="center" fixed></el-table-column>
+            <el-table-column prop="product_encoding" label="产品编码" width="120" align="center" fixed>
+                 <template slot-scope="scope">
+                     <el-tooltip class="item" effect="dark" :content="scope.row.product_encoding" placement="top-start">
+                        <span>{{scope.row.product_encoding}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
+            <el-table-column prop="product_name" label="产品名称" width="120" align="center" fixed>
+                 <template slot-scope="scope">
+                     <el-tooltip class="item" effect="dark" :content="scope.row.product_name" placement="top-start">
+                        <span>{{scope.row.product_name}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
             <el-table-column prop="people_number" label="总人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_labors" label="劳务工人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_workers" label="正式工人数"  width="100" align="center"></el-table-column>
@@ -230,10 +242,22 @@
             <el-table-column prop="production_number" label="生产数量" width="120" align="center"></el-table-column>
             <el-table-column prop="warehousing_number" label="入库数量" width="120" align="center"></el-table-column>
             <el-table-column prop="no_warehousing_number" label="未入库数量" width="120" align="center"></el-table-column>
-            <el-table-column prop="warehousing_encoding" label="入库编码" width="120" align="center"></el-table-column>
+            <el-table-column prop="warehousing_encoding" label="入库编码" width="120" align="center">
+                  <template slot-scope="scope">
+                     <el-tooltip class="item" effect="dark" :content="scope.row.warehousing_encoding" placement="top-start">
+                        <span>{{scope.row.warehousing_encoding}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
             <el-table-column prop="no_warehousing_reason" label="未入库原因"  width="120" align="center"></el-table-column>
             <el-table-column prop="warehousing_type" label="入库类型" width="120" align="center"></el-table-column>
-            <el-table-column prop="rework_reason" label="返工/报废原因" width="120" align="center"></el-table-column>
+            <el-table-column prop="rework_reason" label="返工/报废原因" width="120" align="center">
+                <template slot-scope="scope">
+                     <el-tooltip class="item" effect="dark" :content="scope.row.rework_reason" placement="top-start">
+                        <span>{{scope.row.rework_reason}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
             <el-table-column prop="remarks" label="备注"  width="200" align="center"></el-table-column>
             <!-- <el-table-column prop="creator" label="创建人"  width="120" align="center"></el-table-column> -->
             <!-- <each-table-column :table_field="table_field"/> -->
