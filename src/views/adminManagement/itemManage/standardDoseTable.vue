@@ -47,6 +47,9 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" prop="dose" :field="{name:'标准用量'}" v-model="form.dose"/>
                         </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`textarea`" autosize :row="2" prop="formulaMethod" :field="{name:'计算方式'}" v-model="form.formulaMethod"/>
+                        </el-col>
                     </el-row>
                 </el-form>
             </div>

@@ -18,9 +18,7 @@
                         <div class="line-boxs">
 
                             <div>
-                                <div style="    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 10px;
-    margin-bottom: 10px;font-weight: bold;">基础信息</div>
+                                <div style="border-bottom: 1px solid #e8e8e8;padding-bottom: 10px;margin-bottom: 10px;font-weight: bold;">基础信息</div>
                                  <el-row :gutter="0">
                                         <el-col :span="6">
                                             <form-render prop="production_date" :type="`day`" :field="{name:'生产日期'}" v-model="form.production_date"/>
@@ -52,7 +50,7 @@
                                             <form-render :type="`input`" clearable prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding" disabled/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name" disabled/>
+                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取" :field="{name:'产品名称'}" v-model="form.product_name" disabled/>
                                         </el-col>
                                          <el-col :span="6">
                                             <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" disabled/>
@@ -60,9 +58,7 @@
                                     </el-row>
                             </div>
                             <div>
-                                <div style="    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 10px;
-    margin-bottom: 10px;font-weight: bold;">报工数据</div>
+                                <div style="border-bottom: 1px solid #e8e8e8;padding-bottom: 10px;margin-bottom: 10px;font-weight: bold;">报工数据</div>
                                    <el-row :gutter="0">
                                         <el-col :span="6">
                                             <form-render :type="`input`" clearable prop="people_labors"  :field="{name:'劳务工人数'}" v-model="form.people_labors"/>
@@ -94,11 +90,8 @@
                                     </el-row>
                             </div>
                             <div>
-                                <div style="    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 10px;
-    margin-bottom: 10px;font-weight: bold;">入库信息</div>
+                                <div style="border-bottom: 1px solid #e8e8e8;padding-bottom: 10px;margin-bottom: 10px;font-weight: bold;">入库信息</div>
                                  <el-row :gutter="0">
-                                       
                                         <!-- <el-col :span="6">
                                             <form-render :type="`input`" clearable prop="job_hours" :disabled="true" :field="{name:'作业RT'}" v-model="form.job_hours"/>
                                         </el-col>
@@ -205,15 +198,51 @@
             </el-table-column>
             
             <el-table-column type="index" :index="indexMethod" fixed/>
-            <el-table-column prop="production_date" label="生产日期" width="100" align="center" fixed></el-table-column>
-            <el-table-column prop="place_name" label="厂区" width="90" align="center" fixed></el-table-column>
-            <el-table-column prop="customer_name" label="客户名称" width="120" align="center" fixed></el-table-column>
-            <el-table-column prop="class_ban" label="班别" width="80" align="center" fixed></el-table-column>
-            <el-table-column prop="shifts_dis" label="班次" width="70" align="center" fixed></el-table-column>
-            <el-table-column prop="prodiction_order" label="生产订单号"  width="100" align="center" fixed></el-table-column>
-            <el-table-column prop="line_number" label="行号" width="60" align="center" fixed></el-table-column>
-            <el-table-column prop="product_encoding" label="产品编码" width="120" align="center" fixed></el-table-column>
-            <el-table-column prop="product_name" label="产品名称" width="120" align="center" fixed></el-table-column>
+            <el-table-column prop="production_date" label="生产日期" width="70" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.production_date" :title="scope.row.production_date"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="officeaddressname" label="厂区" width="60" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.officeaddressname" :title="scope.row.officeaddressname"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="customer_name" label="客户名称" width="70" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.customer_name" :title="scope.row.customer_name"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="class_ban" label="班别" width="60" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.class_ban" :title="scope.row.class_ban"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="shifts_dis" label="班次" width="60" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.shifts_dis" :title="scope.row.shifts_dis"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="prodiction_order" label="生产订单号"  width="100" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.prodiction_order" :title="scope.row.prodiction_order"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="line_number" label="行号" width="60" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.line_number" :title="scope.row.line_number"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="product_encoding" label="产品编码" width="80" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.product_encoding" :title="scope.row.product_encoding"></div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="product_name" label="产品名称" width="80" align="center" fixed>
+                <template slot-scope="scope">
+                    <div v-html="scope.row.product_name" :title="scope.row.product_name"></div>
+                </template>
+            </el-table-column>
             <el-table-column prop="people_number" label="总人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_labors" label="劳务工人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_workers" label="正式工人数"  width="100" align="center"></el-table-column>
@@ -447,6 +476,7 @@ export default {
                 ]
             },
             workGroupData: [],
+            value: null
         };
     },
     watch:{

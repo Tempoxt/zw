@@ -106,7 +106,7 @@
             />
             <div class="totalR" v-if="totalP != ''">总人数:{{ totalP }}</div>
           </el-col>
-          <el-col :span="12" v-if="sexData.length != 0" class="relative">
+          <el-col :span="12" class="relative">
             <pieChart
               :show="checkFullshow"
               ref="echart2"
@@ -126,7 +126,7 @@
               @change="getsexData()"
             />
           </el-col>
-          <el-col :span="12" v-if="eduLevelData.length != 0" class="relative">
+          <el-col :span="12" class="relative">
             <pieChart
               :show="checkFullshow"
               ref="echart3"
@@ -576,8 +576,9 @@ export default {
       return isFull;
     },
     async getstaffData() {
+      let url = new Date(this.dateLap1).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/ondutynumberstat' :'/dataanalysis/hrhistorystat'
       this.staffData = await this.$request.get(
-        "/dataanalysis/ondutynumberstat?org_id=" + this.orgid+'&dateLap='+this.dateLap1
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap1
       );
       let per = this.staffData.map(o => o.value);
       if (this.pre !== []) {
@@ -585,18 +586,21 @@ export default {
       }
     },
     async getsexData() {
+      let url = new Date(this.dateLap2).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/genderratiostat' :'/dataanalysis/genderratiohistorystat'
       this.sexData = await this.$request.get(
-        "/dataanalysis/genderratiostat?org_id=" + this.orgid+'&dateLap='+this.dateLap2
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap2
       );
     },
     async geteduLevelData() {
+      let url = new Date(this.dateLap3).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/educationstat' :'/dataanalysis/educationhistorystat'
       this.eduLevelData = await this.$request.get(
-        "/dataanalysis/educationstat?org_id=" + this.orgid+'&dateLap='+this.dateLap3
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap3
       );
     },
     async geteachageData() {
+      let url = new Date(this.dateLap4).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/agestagegenderratiostat' :'/dataanalysis/agestagegenderratiohistorystat'
       this.eachageData = await this.$request.get(
-        "/dataanalysis/agestagegenderratiostat?org_id=" + this.orgid+'&dateLap='+this.dateLap4
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap4
       );
     },
     async getmemberData() {
