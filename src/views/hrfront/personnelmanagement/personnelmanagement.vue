@@ -1100,13 +1100,13 @@
                 fixed="left"
             >
             </vxe-table-column>
-            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
-            <vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="80">
+            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="60"/>
+            <vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="60">
                 <template slot-scope="scope">
                     <div @click="openDrawer(scope.row)" style="color:#0BB2D4;cursor:pointer" v-html="scope.row.employeeCode"></div>
                 </template>
             </vxe-table-column>
-            <vxe-table-column field="chineseName" title="姓名" fixed="left" width="120">
+            <vxe-table-column field="chineseName" title="姓名" fixed="left" width="70">
                 <template slot-scope="scope">
                     <div v-html="scope.row.chineseName"></div>
                 </template>

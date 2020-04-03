@@ -74,27 +74,27 @@
 		>
 		</vxe-table-column>
         <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
-		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="80">
+		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__employeeCode"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="100">
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__chineseName"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__principalship__name" title="职位" fixed="left" width="100">
+		<vxe-table-column field="staff__principalship__name" title="职位" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__principalship__name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__department__name" title="部门" fixed="left" width="100">
+		<vxe-table-column field="staff__department__name" title="部门" fixed="left" width="80">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__department__name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="CheckDateSub" title="日期" fixed="left" width="100">
+		<vxe-table-column field="CheckDateSub" title="日期" fixed="left" width="70">
 			<template slot-scope="scope">
 				<div v-html="scope.row.CheckDateSub"></div>
 			</template>

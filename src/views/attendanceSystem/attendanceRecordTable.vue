@@ -94,22 +94,22 @@
         <vxe-table-column type="index" width="40" align="center" fixed="left"></vxe-table-column>
 		<vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="50">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__employeeCode"></div>
+				<div v-html="scope.row.staff__employeeCode"  :title="scope.row.staff__employeeCode"></div>
 			</template>
 		</vxe-table-column>
 		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="60">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__chineseName"></div>
+				<div v-html="scope.row.staff__chineseName" :title="scope.row.staff__chineseName"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="60">
+		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="80">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__department_name"></div>
+				<div v-html="scope.row.staff__department_name" :title="scope.row.staff__department_name"></div>
 			</template>
 		</vxe-table-column>
 		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="60">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__team_name"></div>
+				<div v-html="scope.row.staff__team_name" :title="scope.row.staff__team_name"></div>
 			</template>
 		</vxe-table-column>
 		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name)).
