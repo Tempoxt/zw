@@ -53,7 +53,7 @@
                                             <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name" readonly/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" readonly/>
+                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" />
                                         </el-col>
                                     </el-row>
                             </div>
