@@ -18,9 +18,7 @@
                         <div class="line-boxs">
 
                             <div>
-                                <div style="    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 10px;
-    margin-bottom: 10px;font-weight: bold;">基础信息</div>
+                                <div style="border-bottom: 1px solid #e8e8e8;padding-bottom: 10px;margin-bottom: 10px;font-weight: bold;">基础信息</div>
                                  <el-row :gutter="0">
                                         <el-col :span="6">
                                             <form-render prop="production_date" :type="`day`" :field="{name:'生产日期'}" v-model="form.production_date"/>
@@ -60,9 +58,7 @@
                                     </el-row>
                             </div>
                             <div>
-                                <div style="    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 10px;
-    margin-bottom: 10px;font-weight: bold;">报工数据</div>
+                                <div style="border-bottom: 1px solid #e8e8e8;padding-bottom: 10px;margin-bottom: 10px;font-weight: bold;">报工数据</div>
                                    <el-row :gutter="0">
                                         <el-col :span="6">
                                             <form-render :type="`input`" clearable prop="people_labors"  :field="{name:'劳务工人数'}" v-model="form.people_labors"/>
@@ -94,11 +90,8 @@
                                     </el-row>
                             </div>
                             <div>
-                                <div style="    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 10px;
-    margin-bottom: 10px;font-weight: bold;">入库信息</div>
+                                <div style="border-bottom: 1px solid #e8e8e8;padding-bottom: 10px;margin-bottom: 10px;font-weight: bold;">入库信息</div>
                                  <el-row :gutter="0">
-                                       
                                         <!-- <el-col :span="6">
                                             <form-render :type="`input`" clearable prop="job_hours" :disabled="true" :field="{name:'作业RT'}" v-model="form.job_hours"/>
                                         </el-col>
@@ -450,6 +443,7 @@ export default {
                 // ]
             },
             workGroupData: [],
+            value: null
         };
     },
     watch:{
