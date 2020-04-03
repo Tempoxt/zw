@@ -14,7 +14,7 @@
             :close-on-click-modal="false"
             >
             <div>
-                 <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="h-full"  style="height:440px;margin:0 10px;">
+                 <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="h-full"  style="min-height:440px;margin:0 10px;">
                         <div class="line-boxs">
 
                             <div>
@@ -49,13 +49,13 @@
                                             <form-render :type="`input`" clearable prop="line_number"  :field="{name:'行号'}" v-model="form.line_number"  @blur="changeOrder"/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding" disabled/>
+                                            <form-render :type="`input`" clearable prop="product_encoding" placeholder="根据订单号行号自动获取" :field="{name:'产品编码'}" v-model="form.product_encoding" readonly/>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name" disabled/>
+                                            <form-render :type="`input`" clearable prop="product_name"  placeholder="根据订单号行号自动获取":field="{name:'产品名称'}" v-model="form.product_name" readonly/>
                                         </el-col>
                                          <el-col :span="6">
-                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" disabled/>
+                                            <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" readonly/>
                                         </el-col>
                                     </el-row>
                             </div>
@@ -127,7 +127,10 @@
                                             <form-render :type="`input`" clearable prop="no_warehousing_number" :disabled="true" :field="{name:'未入库数量'}" v-model="form.no_warehousing_number"/>
                                         </el-col> -->
                                         <el-col :span="6">
-                                            <form-render :type="`input`" clearable prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding" />
+                                            <form-render :type="`textarea`" clearable prop="warehousing_encoding" :field="{name:'入库编码'}" v-model="form.warehousing_encoding" rows="2" placeholder="多个入库编码使用回车输入"/>
+                                        </el-col>
+                                         <el-col :span="2">
+                                             <div style="height:60px"></div>
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render :type="`select`" :required="this.no_warehousing_number>0" prop="no_warehousing_reason" :field="{name:'未入库原因',options:[{
@@ -206,10 +209,10 @@
             
             <el-table-column type="index" :index="indexMethod" fixed/>
             <el-table-column prop="production_date" label="生产日期" width="100" align="center" fixed></el-table-column>
-            <el-table-column prop="place_name" label="厂区" width="90" align="center" fixed></el-table-column>
+            <el-table-column prop="officeaddressname" label="厂区" width="90" align="center" fixed></el-table-column>
             <el-table-column prop="customer_name" label="客户名称" width="120" align="center" fixed></el-table-column>
             <el-table-column prop="class_ban" label="班别" width="80" align="center" fixed></el-table-column>
-            <el-table-column prop="shifts_dis" label="班次" width="70" align="center" fixed></el-table-column>
+            <el-table-column prop="shifts" label="班次" width="70" align="center" fixed></el-table-column>
             <el-table-column prop="prodiction_order" label="生产订单号"  width="100" align="center" fixed></el-table-column>
             <el-table-column prop="line_number" label="行号" width="60" align="center" fixed></el-table-column>
             <el-table-column prop="product_encoding" label="产品编码" width="120" align="center" fixed></el-table-column>
@@ -235,11 +238,11 @@
             <el-table-column prop="warehousing_number" label="入库数量" width="120" align="center"></el-table-column>
             <el-table-column prop="no_warehousing_number" label="未入库数量" width="120" align="center"></el-table-column>
             <el-table-column prop="warehousing_encoding" label="入库编码" width="120" align="center"></el-table-column>
-            <el-table-column prop="no_warehousing_reason_dis" label="未入库原因"  width="120" align="center"></el-table-column>
-            <el-table-column prop="warehousing_type_dis" label="入库类型" width="120" align="center"></el-table-column>
+            <el-table-column prop="no_warehousing_reason" label="未入库原因"  width="120" align="center"></el-table-column>
+            <el-table-column prop="warehousing_type" label="入库类型" width="120" align="center"></el-table-column>
             <el-table-column prop="rework_reason" label="返工/报废原因" width="120" align="center"></el-table-column>
             <el-table-column prop="remarks" label="备注"  width="200" align="center"></el-table-column>
-            <el-table-column prop="creator" label="创建人"  width="120" align="center"></el-table-column>
+            <!-- <el-table-column prop="creator" label="创建人"  width="120" align="center"></el-table-column> -->
             <!-- <each-table-column :table_field="table_field"/> -->
         </el-table>
         <table-pagination 
@@ -442,9 +445,9 @@ export default {
                 no_warehousing_number: [
                     { required: true, message: '请输入', trigger: ['change','blur'] },
                 ],
-                warehousing_encoding:[
-                    { validator: checkNumber2, trigger: 'blur' }
-                ]
+                // warehousing_encoding:[
+                //     { validator: checkNumber2, trigger: 'blur' }
+                // ]
             },
             workGroupData: [],
         };
