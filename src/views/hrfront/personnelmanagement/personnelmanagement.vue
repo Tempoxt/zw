@@ -146,7 +146,7 @@
                                             <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department,disable:!isInsert}" v-model="form.team" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :disabled="!isInsert"
+                                            <form-render
                                                 filterable
                                                 placeholder="请搜索或选择"
                                                 prop="principalship"
