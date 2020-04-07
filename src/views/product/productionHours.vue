@@ -499,6 +499,7 @@ export default {
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
                 this.form.job_hours =  (Number(this.form.people_number) *  Number(this.form.work_hours) /  Number(this.form.production_number)).toFixed(2)
             }
+          
             if(this.form.machine_debug && this.form.wait_outside_material&& this.form.wait_inside_material&& this.form.equipment_maintenance&& this.form.other_problem){
                 this.form.product_loss_time =  ((Number(this.form.machine_debug) +  Number(this.form.wait_outside_material) +  Number(this.form.wait_inside_material)
                  +  Number(this.form.equipment_maintenance) +  Number(this.form.other_problem)) * this.form.people_number / 60).toFixed(2)
@@ -508,6 +509,7 @@ export default {
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
                 this.form.job_hours =  (Number(this.form.people_number) *  Number(this.form.work_hours) /  Number(this.form.production_number)).toFixed(2)
             }
+            
             if(this.form.people_labors && this.form.work_hours){
                 this.form.labors_hours =  (Number(this.form.people_labors) *  Number(this.form.work_hours) / 60).toFixed(2)
             }
@@ -521,6 +523,9 @@ export default {
         'form.production_number'(){
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
                 this.form.job_hours =  (Number(this.form.people_number) *  Number(this.form.work_hours) /  Number(this.form.production_number)).toFixed(2)
+            }
+            if(this.form.production_number==0){
+                this.form.job_hours = 0
             }
             if(this.form.warehousing_number && this.form.production_number){
                 this.form.no_warehousing_number =  Number(this.form.production_number) -  Number(this.form.warehousing_number)
@@ -659,6 +664,10 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
+            if(this.no_warehousing_number && form.no_warehousing_reason==''){
+                this.$message.error({message:'请选择未入库原因'})
+                return 
+            }
             if(this.isInsert){
                 try{
                     await this.throwFormError(api_resource.create(form))
