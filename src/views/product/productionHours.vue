@@ -28,7 +28,9 @@
                                         </el-col>
                                        
                                         <el-col :span="6">
-                                            <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" clearable v-model="form.class_ban"/>
+                                             <form-render prop="class_ban" :type="`select`" filterable  :field="{name:'班别',options:class_ban}" v-model="form.class_ban"/>
+
+                                            <!-- <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" clearable v-model="form.class_ban"/> -->
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render prop="shifts" :type="`select`" :field="{name:'班次',options:[{
@@ -222,6 +224,7 @@
                     </el-tooltip>
                 </template>
             </el-table-column>
+            <el-table-column prop="production_order_number" label="生产订单数量" width="100" align="center"></el-table-column>
             <el-table-column prop="people_number" label="总人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_labors" label="劳务工人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_workers" label="正式工人数"  width="100" align="center"></el-table-column>
@@ -350,6 +353,80 @@ export default {
         return {
             loading: false,
             baseUri,
+            class_ban:[{
+                    value: 'ZZ23A',
+                    label: 'ZZ23A'
+                },{
+                    value: 'ZZ23B',
+                    label: 'ZZ23B'
+                },{
+                    value: 'ZZ24A',
+                    label: 'ZZ24A'
+                },{
+                    value: 'ZZ24B',
+                    label: 'ZZ24B'
+                },{
+                    value: 'ZZ71A',
+                    label: 'ZZ71A'
+                },{
+                    value: 'ZZ72A',
+                    label: 'ZZ72A'
+                },{
+                    value: 'ZZ73A',
+                    label: 'ZZ73A'
+                },{
+                    value: 'ZZ74A',
+                    label: 'ZZ74A'
+                },{
+                    value: 'ZZ31',
+                    label: 'ZZ31'
+                },{
+                    value: 'ZZ32A',
+                    label: 'ZZ32A'
+                },{
+                    value: 'ZZ32B',
+                    label: 'ZZ32B'
+                },{
+                    value: 'ZZ40',
+                    label: 'ZZ40'
+                },{
+                    value: 'ZZ41',
+                    label: 'ZZ41'
+                },{
+                    value: 'ZZ42',
+                    label: 'ZZ42'
+                },{
+                    value: 'ZZ43A',
+                    label: 'ZZ43A'
+                },{
+                    value: 'ZZ43B',
+                    label: 'ZZ43B'
+                },{
+                    value: 'ZZ01',
+                    label: 'ZZ01'
+                },{
+                    value: 'ZZ10',
+                    label: 'ZZ10'
+                },{
+                    value: 'ZZ11',
+                    label: 'ZZ11'
+                },{
+                    value: 'ZZ12',
+                    label: 'ZZ12'
+                },{
+                    value: 'ZZ13',
+                    label: 'ZZ13'
+                },{
+                    value: 'ZZ14',
+                    label: 'ZZ14'
+                },{
+                    value: 'ZZ15',
+                    label: 'ZZ15'
+                },{
+                    value: 'ZZ16',
+                    label: 'ZZ16'
+                }
+            ],
             form:{
                 prodiction_order: '',
                 people_number: '',
