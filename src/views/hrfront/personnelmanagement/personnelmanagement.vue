@@ -1075,7 +1075,7 @@
             </div>
         </table-header>
         <vxe-table
-            class="public-vxe-table"
+            class="public-vxe-table personnelmanagement-table"
             ref="elTable"
             resizable
             show-overflow
@@ -1836,3 +1836,8 @@ export default {
     }
 };
 </script>
+<style>
+.personnelmanagement-table  {
+    color:#000
+}
+</style>
