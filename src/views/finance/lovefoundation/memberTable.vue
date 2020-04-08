@@ -105,7 +105,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
+      :show-summary="table_config.isShowFooter"
+      :summary-method="getSummaries"
     >
     <el-table-column 
       type="selection" 
@@ -179,6 +180,7 @@ export default {
        this.table_form.total = total
       setTimeout(() => {
         this.table_loading = false;
+        this.$refs.elTable.doLayout()
       }, 300);
     },
     async add(){

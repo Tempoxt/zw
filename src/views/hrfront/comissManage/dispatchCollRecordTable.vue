@@ -33,7 +33,7 @@
 		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
 		:seq-config="{seqMethod: VxeIndexMethod}"
-        show-footer
+        :show-footer="table_config.isShowFooter"
         :footer-method="footerMethod"
 		>
 		<vxe-table-column 
@@ -110,7 +110,13 @@ export default {
 					if (columnIndex === 0) {
 						return '合计'
 					}
-					if (['natDispatchMoney', 'paidAmount','unpaidAmount','natCollectionAmount','dispatch__paidAmount','dispatch__natDispatchMoney','matchAmount'].includes(column.property)) {
+					
+					let columnProper = []
+					let statistics = this.table_field.filter(o=>o.isstatistics)
+					statistics.forEach(o=>{
+						columnProper.push(o.name)
+					})
+					if (columnProper.includes(column.property)) {
 						const values = data.map(item => Number(item[column.property]));
 						if (!values.every(value => isNaN(value))) {
 							sums[columnIndex] = values.reduce((prev, curr) => {
@@ -128,7 +134,7 @@ export default {
 						} else {
 							return '';
 						}  
-					}    
+					}
 				})
 			]
 		},
@@ -167,6 +173,7 @@ export default {
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
+          		this.$refs.elTable.doLayout()
 			}, 300);
     	},
 		async fetchMenu(){

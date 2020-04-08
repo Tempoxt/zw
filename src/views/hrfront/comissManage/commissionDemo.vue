@@ -122,7 +122,7 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
-    	show-summary
+    	:show-summary="table_config.isShowFooter"
       	:summary-method="getSummaries"
       
     >
@@ -225,7 +225,12 @@ export default {
 					sums[index] = '合计';
 					return;
 				}
-				if(column.label=='实收款' || column.label=='产品提成金额'){
+				let columnProper = []
+				let statistics = this.table_field.filter(o=>o.isstatistics)
+				statistics.forEach(o=>{
+					columnProper.push(o.name)
+				})
+				if (columnProper.includes(column.property)) {
 					const values = data.map(item => Number(item[column.property]));
 					if (!values.every(value => isNaN(value))) {
 						sums[index] = values.reduce((prev, curr) => {

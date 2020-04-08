@@ -95,7 +95,7 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      show-summary
+      :show-summary="table_config.isShowFooter"
       :summary-method="getSummaries"
     >
       <el-table-column 
@@ -151,7 +151,7 @@ export default {
           api_resource,
           orgCategory:[],
           queryDialogFormVisible:true,
-          table_topHeight:234,
+          table_topHeight:244,
           adminList:[],
           defaultForm,
           selectData:[],
@@ -182,6 +182,7 @@ export default {
             this.table_form.total = total
             setTimeout(() => {
                 this.table_loading = false;
+                this.$refs.elTable.doLayout()
             }, 300);
         },
         async allocation(){
@@ -252,15 +253,20 @@ export default {
             }
              this.dialogFormVisible = true;
         },
-        getSummaries(param) {
-          const { columns, data } = param;
+        getSummaries({ columns, data }) {
           const sums = [];
+          data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
           columns.forEach((column, index) => {
           if (index === 2) {
             sums[index] = '基金余款';
             return;
           }
-          if(column.label == '金额'){
+          let columnProper = []
+          let statistics = this.table_field.filter(o=>o.isstatistics)
+          statistics.forEach(o=>{
+            columnProper.push(o.name)
+          })
+          if(columnProper.includes(column.property)){
             const values = data.map(item => Number(item[column.property]));
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

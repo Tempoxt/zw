@@ -535,6 +535,41 @@ export default {
     // 图标显示
     table_tree_iconShow(index, record) {
       return index === 0 && record.subs && record.subs.length > 0;
-    }
+    },
+    //合计列计算
+    getSummaries({ columns, data }) {
+      // const { columns, data } = param;
+      const sums = [];
+      data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
+      console.log(data,'data -111')
+      columns.forEach((column, index) => {
+        if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}
+        let columnProper = []
+        let statistics = this.table_field.filter(o=>o.isstatistics)
+        statistics.forEach(o=>{
+          columnProper.push(o.name)
+        })
+        if(columnProper.includes(column.property)){
+          const values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = sums[index];
+          } else {
+            sums[index] = '';
+          }
+        }
+      });
+      return sums;
+    } 
   }
 }
