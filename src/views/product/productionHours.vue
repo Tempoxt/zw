@@ -28,7 +28,9 @@
                                         </el-col>
                                        
                                         <el-col :span="6">
-                                            <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" clearable v-model="form.class_ban"/>
+                                             <form-render prop="class_ban" :type="`select`" filterable  :field="{name:'班别',options:class_ban}" v-model="form.class_ban"/>
+
+                                            <!-- <form-render prop="class_ban" :type="`input`" :field="{name:'班别'}" clearable v-model="form.class_ban"/> -->
                                         </el-col>
                                         <el-col :span="6">
                                             <form-render prop="shifts" :type="`select`" :field="{name:'班次',options:[{
@@ -222,6 +224,7 @@
                     </el-tooltip>
                 </template>
             </el-table-column>
+            <el-table-column prop="production_order_number" label="生产订单数量" width="100" align="center"></el-table-column>
             <el-table-column prop="people_number" label="总人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_labors" label="劳务工人数" width="100" align="center"></el-table-column>
             <el-table-column prop="people_workers" label="正式工人数"  width="100" align="center"></el-table-column>
@@ -350,6 +353,80 @@ export default {
         return {
             loading: false,
             baseUri,
+            class_ban:[{
+                    value: 'ZZ23A',
+                    label: 'ZZ23A'
+                },{
+                    value: 'ZZ23B',
+                    label: 'ZZ23B'
+                },{
+                    value: 'ZZ24A',
+                    label: 'ZZ24A'
+                },{
+                    value: 'ZZ24B',
+                    label: 'ZZ24B'
+                },{
+                    value: 'ZZ71A',
+                    label: 'ZZ71A'
+                },{
+                    value: 'ZZ72A',
+                    label: 'ZZ72A'
+                },{
+                    value: 'ZZ73A',
+                    label: 'ZZ73A'
+                },{
+                    value: 'ZZ74A',
+                    label: 'ZZ74A'
+                },{
+                    value: 'ZZ31',
+                    label: 'ZZ31'
+                },{
+                    value: 'ZZ32A',
+                    label: 'ZZ32A'
+                },{
+                    value: 'ZZ32B',
+                    label: 'ZZ32B'
+                },{
+                    value: 'ZZ40',
+                    label: 'ZZ40'
+                },{
+                    value: 'ZZ41',
+                    label: 'ZZ41'
+                },{
+                    value: 'ZZ42',
+                    label: 'ZZ42'
+                },{
+                    value: 'ZZ43A',
+                    label: 'ZZ43A'
+                },{
+                    value: 'ZZ43B',
+                    label: 'ZZ43B'
+                },{
+                    value: 'ZZ01',
+                    label: 'ZZ01'
+                },{
+                    value: 'ZZ10',
+                    label: 'ZZ10'
+                },{
+                    value: 'ZZ11',
+                    label: 'ZZ11'
+                },{
+                    value: 'ZZ12',
+                    label: 'ZZ12'
+                },{
+                    value: 'ZZ13',
+                    label: 'ZZ13'
+                },{
+                    value: 'ZZ14',
+                    label: 'ZZ14'
+                },{
+                    value: 'ZZ15',
+                    label: 'ZZ15'
+                },{
+                    value: 'ZZ16',
+                    label: 'ZZ16'
+                }
+            ],
             form:{
                 prodiction_order: '',
                 people_number: '',
@@ -499,6 +576,7 @@ export default {
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
                 this.form.job_hours =  (Number(this.form.people_number) *  Number(this.form.work_hours) /  Number(this.form.production_number)).toFixed(2)
             }
+          
             if(this.form.machine_debug && this.form.wait_outside_material&& this.form.wait_inside_material&& this.form.equipment_maintenance&& this.form.other_problem){
                 this.form.product_loss_time =  ((Number(this.form.machine_debug) +  Number(this.form.wait_outside_material) +  Number(this.form.wait_inside_material)
                  +  Number(this.form.equipment_maintenance) +  Number(this.form.other_problem)) * this.form.people_number / 60).toFixed(2)
@@ -508,6 +586,7 @@ export default {
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
                 this.form.job_hours =  (Number(this.form.people_number) *  Number(this.form.work_hours) /  Number(this.form.production_number)).toFixed(2)
             }
+            
             if(this.form.people_labors && this.form.work_hours){
                 this.form.labors_hours =  (Number(this.form.people_labors) *  Number(this.form.work_hours) / 60).toFixed(2)
             }
@@ -521,6 +600,9 @@ export default {
         'form.production_number'(){
             if(this.form.people_number && this.form.work_hours && this.form.production_number){
                 this.form.job_hours =  (Number(this.form.people_number) *  Number(this.form.work_hours) /  Number(this.form.production_number)).toFixed(2)
+            }
+            if(this.form.production_number==0){
+                this.form.job_hours = 0
             }
             if(this.form.warehousing_number && this.form.production_number){
                 this.form.no_warehousing_number =  Number(this.form.production_number) -  Number(this.form.warehousing_number)
@@ -659,6 +741,10 @@ export default {
         async handleFormSubmit(){
             await this.form_validate()
             let form = Object.assign({},this.form)
+            if(this.no_warehousing_number && form.no_warehousing_reason==''){
+                this.$message.error({message:'请选择未入库原因'})
+                return 
+            }
             if(this.isInsert){
                 try{
                     await this.throwFormError(api_resource.create(form))
