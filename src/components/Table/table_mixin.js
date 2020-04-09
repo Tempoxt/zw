@@ -274,8 +274,8 @@ export default {
       this.$nextTick(()=>{
         if(this.$refs.table.table_modal){
           this._table_height = this.table_topHeight
-          this.table_topHeight = this._table_height - 183
-          // this.table_topHeight = 120
+          // this.table_topHeight = this._table_height - 183
+          this.table_topHeight = 120
         }else{
           this.table_topHeight = this._table_height
         }
