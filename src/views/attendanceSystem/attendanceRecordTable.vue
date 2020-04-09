@@ -86,13 +86,12 @@
 		>
 		<vxe-table-column 
 			type="selection" 
-			width="60" 
+			width="45" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
-			fixed="left"
 		></vxe-table-column>
-        <vxe-table-column type="index" width="40" align="center" fixed="left"></vxe-table-column>
-		<vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="50">
+        <vxe-table-column type="index" width="40" align="center"></vxe-table-column>
+		<!-- <vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="50">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__employeeCode"  :title="scope.row.staff__employeeCode"></div>
 			</template>
@@ -110,9 +109,9 @@
 		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__team_name" :title="scope.row.staff__team_name"></div>
-			</template>
-		</vxe-table-column>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name)).
+			</template>.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name))
+		</vxe-table-column> -->
+		<vxe-table-column v-for="field in table_field.
 			filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
 			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
 	</vxe-table>
