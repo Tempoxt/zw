@@ -270,6 +270,16 @@ export default {
     },
     toggleModal() {
       this.$refs.table.toggleModal()
+      
+      this.$nextTick(()=>{
+        if(this.$refs.table.table_modal){
+          this._table_height = this.table_topHeight
+          this.table_topHeight = this._table_height - 183
+          // this.table_topHeight = 120
+        }else{
+          this.table_topHeight = this._table_height
+        }
+      })
     },
     async multipleAction(name,msg){
       console.log(this.table_selectedRows,'table_selectedRows')
