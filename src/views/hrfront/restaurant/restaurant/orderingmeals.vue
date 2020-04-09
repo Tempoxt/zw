@@ -135,6 +135,7 @@ export default {
         employeelist:[],
         mealist:[1,2,3]
       },
+      table_topHeight:235,
       api_resource,
       orgCategory:[],
       defaultForm,

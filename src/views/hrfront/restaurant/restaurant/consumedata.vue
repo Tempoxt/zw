@@ -203,6 +203,7 @@ export default {
 			current:'',
 			settle:false,
 			openDrawers: false,
+            table_topHeight:235,
 		};
   	},
 	watch:{

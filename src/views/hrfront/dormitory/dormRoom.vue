@@ -249,7 +249,8 @@ export default {
 			rows2:[],
 			importUploadUrl:'',
 			downloadUrl:'/dormitory/import/checkin',
-			exportList:[]
+			exportList:[],
+            table_topHeight:235,
 		};
 	},
 	watch:{

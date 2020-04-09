@@ -58,15 +58,13 @@ import { MessageBox } from 'element-ui';
 const api_resource = api_common.resource("prodpropelplan/list");
 export default {
 	mixins: [table_mixin],
-	components:{
-		importForm
-	},
 	data() {
 		return {
 			loading: true,
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
+			table_topHeight:233,
 		};
 	},
 	methods: {

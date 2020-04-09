@@ -138,7 +138,8 @@ export default {
 				checkState(column,row){
 					return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
 				},
-			}
+			},
+            table_topHeight:235,
 		};
 	},
 	watch:{

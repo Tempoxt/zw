@@ -62,6 +62,7 @@ export default {
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
+			table_topHeight:233,
 		};
 	},
 	watch:{

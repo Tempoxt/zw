@@ -59,6 +59,7 @@ export default {
             form:{},
             api_resource,
             queryDialogFormVisible:true,
+			table_topHeight:233,
         };
     },
     methods: {

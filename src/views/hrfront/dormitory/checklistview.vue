@@ -244,7 +244,8 @@ export default {
 			distributionRow:{},
 			checkinRows:{},
 			checkoutRows:{},
-			empId:''
+			empId:'',
+            table_topHeight:235,
 		};
 	},
 	watch:{

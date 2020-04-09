@@ -92,6 +92,7 @@ export default {
     mixins: [table_mixin],
   data() {
     return {
+            table_topHeight:235,
         filterText:'',
       loading: true,
       form:defaultForm(),

@@ -71,16 +71,17 @@ export default {
 	props:['id','data','orgid','choicetype','current_type'],
 	data() {
 		return {
-		loading: true,
-		api_resource,
-		queryDialogFormVisible:true,
-		template:{
-			checkState(column,row){
-				return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
+			loading: true,
+			api_resource,
+			queryDialogFormVisible:true,
+			template:{
+				checkState(column,row){
+					return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
+				},
 			},
-		},
-		importUploadUrl:"/dormitory/import/empmothbill",
-		downloadUrl:"/dormitory/import/empmothbill",
+			importUploadUrl:"/dormitory/import/empmothbill",
+			downloadUrl:"/dormitory/import/empmothbill",
+            table_topHeight:235,
 		};
 	},
 	watch:{

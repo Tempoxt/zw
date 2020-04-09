@@ -180,7 +180,8 @@ export default {
       clothesDepData:[],
       clothesSexData:[],
       clothesJobData:[],
-      clothesModelData:[]
+      clothesModelData:[],
+      table_topHeight:235,
     };
   },
 

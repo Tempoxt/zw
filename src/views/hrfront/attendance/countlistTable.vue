@@ -38,7 +38,7 @@
     >
       <vxe-table-column 
         type="selection" 
-        width="60" 
+        width="45" 
         class-name="table-column-disabled"
         :selectable="table_disable_selected"
         >
@@ -71,7 +71,8 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
-			importUploadUrl:"/attendance/count"
+			importUploadUrl:"/attendance/count",
+      table_topHeight:233,
 		};
 	},
 	watch:{

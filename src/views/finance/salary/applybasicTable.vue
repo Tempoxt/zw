@@ -199,7 +199,8 @@ export default {
             return <el-tag size="mini" type="success">已审核</el-tag>
           }
         }
-      }
+      },
+			table_topHeight:233,
     };
   },
   watch:{

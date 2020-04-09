@@ -67,7 +67,7 @@
 		>
 		<vxe-table-column 
 			type="selection" 
-			width="60" 
+			width="45" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
 			fixed="left"

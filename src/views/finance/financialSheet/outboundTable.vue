@@ -79,7 +79,6 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 import { MessageBox } from 'element-ui';
 let baseUrl = process.env.VUE_APP_STATIC
@@ -88,9 +87,6 @@ const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
 	props:['url','a'],
-	components:{
-		OrgSelect
-	},
 	data() {
 		return {
 			baseUrl,

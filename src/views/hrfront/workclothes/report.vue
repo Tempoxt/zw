@@ -98,7 +98,8 @@ export default {
 			clothesInfo:[],
 			curr:1,
 			page:'',
-			chineseName:''
+			chineseName:'',
+            table_topHeight:235,
 		};
 	},
 	watch:{

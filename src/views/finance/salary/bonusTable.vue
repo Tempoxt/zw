@@ -82,6 +82,7 @@ export default {
       vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
       loading: true,
       api_resource,
+			table_topHeight:233,
     };
   },
   watch:{

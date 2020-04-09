@@ -338,6 +338,7 @@ export default {
 			otherAddData:[],//补其他
 			otherDecData:[],//扣其他
 			totalAllo:'',//高温津贴考勤有效天数
+			table_topHeight:233,
 		};
 	},
 	watch:{

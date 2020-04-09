@@ -119,7 +119,8 @@ export default {
 			openDrawers: false,
 			activeNames: ['0'],
 			reverse: true,
-			info:{}
+			info:{},
+      		table_topHeight:233,
 		};
 	},
 	watch:{

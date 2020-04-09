@@ -68,7 +68,8 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
-			s:1
+			s:1,
+			table_topHeight:233,
         };
     },
     methods: {

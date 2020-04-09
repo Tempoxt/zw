@@ -135,7 +135,8 @@ export default {
       dormList:[],
       social:[],
       banks:[],
-      sheetType:[]
+      sheetType:[],
+			table_topHeight:233,
     };
   },
   watch:{

@@ -58,9 +58,6 @@ import importForm from './importForm'
 export default {
 	mixins: [table_mixin],
 	props:['id'],
-	components:{
-		importForm
-	},
 	data() {
 		return {
 			loading: true,
@@ -73,6 +70,7 @@ export default {
 			statusk:1,
 			val:'',
 			s:1,
+			table_topHeight:233,
 		};
 	},
 	watch:{

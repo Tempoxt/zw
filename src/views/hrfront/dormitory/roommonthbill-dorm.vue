@@ -79,6 +79,7 @@ export default {
 			},
 			importUploadUrl:"/dormitory/import/meter",
 			downloadUrl:"/dormitory/import/meter",
+            table_topHeight:235,
 		};
 	},
 	watch:{

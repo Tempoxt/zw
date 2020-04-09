@@ -61,6 +61,7 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
+			table_topHeight:233,
 		};
 	},
 	methods: {
