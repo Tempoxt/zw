@@ -3,7 +3,7 @@
 <!-- 考勤记录 -->
  <el-row class="h-full public-table-container">
     <el-col :span="orgBarOpen?4:1" class="h-full" style="border-right:1px solid #e8e8e8;position: relative;">
-        <div class=" h-full" v-if="orgBarOpen">
+        <div class=" h-full" v-show="orgBarOpen">
             <org v-model="orgid" @change="changeOrg" />   
         </div>
         <div class="toggle-orgBar" @click="toggleOrgBar">

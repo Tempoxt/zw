@@ -79,13 +79,12 @@
 		v-loading="table_loading"
 		:header-cell-style="vxeHeaderStyle"
 		:height="table_height"
-		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
 		@cell-click="cellClickEvent"
       	:cell-class-name="cellClassName"
 		:seq-config="{seqMethod: VxeIndexMethod}"
 		>
-		<!-- -->
+		<!--@resizable-change="table_dragend" -->
 		<vxe-table-column 
 			type="selection" 
 			width="45" 
