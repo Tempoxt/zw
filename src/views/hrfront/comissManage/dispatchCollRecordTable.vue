@@ -104,7 +104,7 @@ export default {
 	methods: {
 		footerMethod ({ columns, data }) {
 			const sums = [];
-			data = this.selectRows.length == 0 ? data : this.selectRows
+			data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
 			return [
 				columns.map((column, columnIndex) => {
 					if (columnIndex === 0) {
@@ -173,7 +173,6 @@ export default {
 			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
-          		this.$refs.elTable.doLayout()
 			}, 300);
     	},
 		async fetchMenu(){

@@ -33,7 +33,8 @@
       :height="table_height"
       @resizable-change="table_dragend"
       @sort-change="table_sort_change"
-      
+      :show-footer="table_config.isShowFooter"
+      :footer-method="footerMethod"
     >
     <vxe-table-column 
       type="selection" 
@@ -96,6 +97,8 @@ export default {
         this.table_selectedRowsInfo = val
         this.table_selectedRows = val
         this.$emit("update:table_selectedRows",val)
+			  let xTable = this.$refs.xTable
+        xTable.updateFooter()
     },
     table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
         let row = this.table_field.find(field=>field.showname===column.title)

@@ -263,6 +263,8 @@
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
 		:cell-class-name="cellName"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
 		>
 		<el-table-column 
 			type="selection" 
