@@ -341,10 +341,15 @@ export default {
             if (value==='') {
 				return callback(new Error('请输入'));
 			}else{
+                // if (!(/^[0-9]\d*$/.test(value))) {
+                //     callback(new Error('请输入正整数'));
+                // }else if(Number(value) > Number(this.form.production_number)){
+                //     callback(new Error('入库数量不能大于生产数量'));
+                // }else{
+                //     callback()
+                // }
                 if (!(/^[0-9]\d*$/.test(value))) {
                     callback(new Error('请输入正整数'));
-                }else if(Number(value) > Number(this.form.production_number)){
-                    callback(new Error('入库数量不能大于生产数量'));
                 }else{
                     callback()
                 }

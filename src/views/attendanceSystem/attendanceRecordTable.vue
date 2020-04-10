@@ -3,6 +3,7 @@
   :table_column="table_field" 
   :table_query.sync="table_form.query"
   @query="querySubmit"
+  class="attendanceRecord-table"
   >
 
 	<el-dialog
@@ -65,7 +66,7 @@
     </table-header>
 
 	<vxe-table
-		class="public-vxe-table"
+		class="public-vxe-table "
 		ref="elTable"
 		resizable
 		show-overflow
@@ -84,6 +85,7 @@
       	:cell-class-name="cellClassName"
 		:seq-config="{seqMethod: VxeIndexMethod}"
 		>
+		<!-- -->
 		<vxe-table-column 
 			type="selection" 
 			width="45" 
@@ -339,5 +341,21 @@ export default {
 	}
 	.col-bag-pink{
 		background-color:#ffccff
+	}
+
+	.attendanceRecord-table {
+
+		.vxe-table .vxe-body--column:not(.col--ellipsis), .vxe-table .vxe-footer--column:not(.col--ellipsis), .vxe-table .vxe-header--column:not(.col--ellipsis) {
+			padding: 4px 0;
+    		line-height: 16px;
+		}
+		.public-vxe-table.vxe-table .vxe-body--column.col--ellipsis, .public-vxe-table .vxe-table.vxe-editable .vxe-body--column, .public-vxe-table .vxe-table .vxe-footer--column.col--ellipsis, .public-vxe-table .vxe-table .vxe-header--column.col--ellipsis {
+			height: 22px;
+		}
+			.vxe-table .vxe-cell {
+			
+			padding: 0px 4px;
+			text-align: center;
+		}
 	}
 </style>
