@@ -752,6 +752,10 @@ export default {
                 this.$message.error({message:'请选择未入库原因'})
                 return 
             }
+            if(form.production_number>0 && form.work_hours<=0){
+                this.$message.error({message:'生产数量大于零 作业工时（分钟/人）不能为零'})
+                return 
+            }
             if(this.isInsert){
                 try{
                     await this.throwFormError(api_resource.create(form))
