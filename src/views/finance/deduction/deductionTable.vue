@@ -191,6 +191,7 @@
 
     <table-header
       :table_actions="table_actions" 
+	  :table_selectedRows="table_selectedRows"
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
