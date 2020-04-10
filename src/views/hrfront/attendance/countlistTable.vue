@@ -33,12 +33,13 @@
       :height="table_height"
       @resizable-change="table_dragend"
       @sort-change="table_sort_change"
-	  :seq-config="{seqMethod: VxeIndexMethod}"
-      
+	    :seq-config="{seqMethod: VxeIndexMethod}"
+      :show-footer="table_config.isShowFooter"
+      :footer-method="footerMethod"
     >
       <vxe-table-column 
         type="selection" 
-        width="45" 
+        width="55" 
         class-name="table-column-disabled"
         :selectable="table_disable_selected"
         >

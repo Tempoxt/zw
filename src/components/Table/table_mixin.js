@@ -52,8 +52,8 @@ export default {
     },
     table_data:{
       handler(){
-        this.$refs.elTable&&this.$refs.elTable.doLayout&&this.$refs.elTable.doLayout()
         this.$nextTick(()=>{
+          this.$refs.elTable&&this.$refs.elTable.doLayout&&this.$refs.elTable.doLayout()
           this.$refs.elTable&&this.$refs.elTable.recalculate&&this.$refs.elTable.recalculate()
           this.$refs.elTable&&this.$refs.elTable.refreshColumn&&this.$refs.elTable.refreshColumn()
         })
@@ -551,7 +551,6 @@ export default {
       // const { columns, data } = param;
       const sums = [];
       data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
-      console.log(data,'data -111')
       columns.forEach((column, index) => {
         if (index === 0) {
 					sums[index] = '合计';
@@ -573,13 +572,49 @@ export default {
                 return prev;
               }
             }, 0);
-            sums[index] = sums[index];
+            sums[index] = sums[index].toFixed(2);
           } else {
             sums[index] = '';
           }
         }
       });
       return sums;
-    } 
+    },
+    footerMethod ({ columns, data }) {
+			const sums = [];
+			data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
+			return [
+				columns.map((column, columnIndex) => {
+					if (columnIndex === 0) {
+						return '合计'
+					}
+					
+					let columnProper = []
+					let statistics = this.table_field.filter(o=>o.isstatistics)
+					statistics.forEach(o=>{
+						columnProper.push(o.name)
+					})
+					if (columnProper.includes(column.property)) {
+						const values = data.map(item => Number(item[column.property]));
+						if (!values.every(value => isNaN(value))) {
+							sums[columnIndex] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+								if (!isNaN(value)) {
+									return prev + curr;
+								} else {
+									return prev;
+								}
+							}, 0);
+							sums[columnIndex] = sums[columnIndex];
+							if(!isNaN(sums[columnIndex])){
+								return sums[columnIndex].toFixed(2)
+							}
+						} else {
+							return '';
+						}  
+					}
+				})
+			]
+		},
   }
 }

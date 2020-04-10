@@ -60,7 +60,7 @@
 					:header-cell-style="headerStyle"
 					style="width: 100%;margin-top:20px" 
 					show-summary
-      				:summary-method="getSummaries"
+      				:summary-method="getSummaries1"
 					:cellStyle="drawerStyle"
 					>
 					<el-table-column prop="CheckDate" label="日期"  width="50">
@@ -143,6 +143,8 @@
 		@sort-change="table_sort_change"
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
     	>
 		<el-table-column 
 			type="selection" 
@@ -302,7 +304,7 @@ export default {
 				this.totalAllo = alloData.total
             }
 		},
-		getSummaries(param) {
+		getSummaries1(param) {
 			const { columns, data } = param;
 			const sums = [];
 			columns.forEach((column, index) => {

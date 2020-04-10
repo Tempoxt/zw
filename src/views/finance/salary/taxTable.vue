@@ -28,6 +28,8 @@
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
 		:cell-style="cellStyle"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
 		>
 		<el-table-column 
 			type="selection" 
