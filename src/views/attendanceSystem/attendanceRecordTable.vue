@@ -351,6 +351,7 @@ export default {
 		}
 		.public-vxe-table.vxe-table .vxe-body--column.col--ellipsis, .public-vxe-table .vxe-table.vxe-editable .vxe-body--column, .public-vxe-table .vxe-table .vxe-footer--column.col--ellipsis, .public-vxe-table .vxe-table .vxe-header--column.col--ellipsis {
 			height: 22px;
+			color: #000;
 		}
 			.vxe-table .vxe-cell {
 			

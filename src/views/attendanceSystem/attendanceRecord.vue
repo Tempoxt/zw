@@ -2,12 +2,15 @@
 
 <!-- 考勤记录 -->
  <el-row class="h-full public-table-container">
-    <el-col :span="4" class="h-full" style="border-right:1px solid #e8e8e8">
-        <div class=" h-full">
+    <el-col :span="orgBarOpen?4:1" class="h-full" style="border-right:1px solid #e8e8e8;position: relative;">
+        <div class=" h-full" v-if="orgBarOpen">
             <org v-model="orgid" @change="changeOrg" />   
         </div>
+        <div class="toggle-orgBar" @click="toggleOrgBar">
+            <el-link class="toggle-orgBar-btn" :title="orgBarOpen?'隐藏部门':'显示部门'"><i :class="orgBarOpen?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"></i></el-link>
+        </div>
     </el-col>
-    <el-col :span="20">
+    <el-col :span="orgBarOpen?20:23">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
@@ -41,6 +44,7 @@ export default {
             filterText:'',
             view_activeName:'',
             menu:[],
+            orgBarOpen:true
         }
     },
     methods:{
@@ -50,6 +54,9 @@ export default {
         handleClick(val){
             
         },
+        toggleOrgBar(){
+            this.orgBarOpen = !this.orgBarOpen
+        }
     },
     async created() {
         const { menu } = await getTabs(this.$route.query.menuid)
@@ -59,4 +66,13 @@ export default {
 }
 </script>
 
-
+<style lang="scss">
+    .toggle-orgBar {
+        position: absolute;
+        right: 6px;
+        top:50%;
+        .toggle-orgBar-btn {
+            font-size:16px;
+        }
+    }
+</style>
