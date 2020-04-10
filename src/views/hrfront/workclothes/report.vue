@@ -58,6 +58,8 @@
 		@sort-change="table_sort_change"
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
+      	:show-summary="table_config.isShowFooter"
+      	:summary-method="getSummaries"
     >
 		<el-table-column 
 			type="selection" 
