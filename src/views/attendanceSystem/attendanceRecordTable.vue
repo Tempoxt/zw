@@ -332,18 +332,16 @@ export default {
 };
 </script>
 <style lang="scss">
-	.col-red{
-		color: red
-	}
-	.col-bag-blue{
-		background-color:#7ae8ff
-	}
-	.col-bag-pink{
-		background-color:#ffccff
-	}
-
 	.attendanceRecord-table {
-
+		.col-red{
+			color: red!important;
+		}
+		.col-bag-blue{
+			background-color:#7ae8ff
+		}
+		.col-bag-pink{
+			background-color:#ffccff
+		}
 		.vxe-table .vxe-body--column:not(.col--ellipsis), .vxe-table .vxe-footer--column:not(.col--ellipsis), .vxe-table .vxe-header--column:not(.col--ellipsis) {
 			padding: 4px 0;
     		line-height: 16px;
@@ -352,8 +350,7 @@ export default {
 			height: 22px;
 			color: #000;
 		}
-			.vxe-table .vxe-cell {
-			
+		.vxe-table .vxe-cell {
 			padding: 0px 4px;
 			text-align: center;
 		}
