@@ -101,14 +101,24 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px">
-			<dateLap v-model="dateLap" @change="fetchTableData"/>
+			<dateLap v-model="dateLap" @change="fetchDateLap"/>
 		</div>
 		<div style="padding-left:10px;" class="setRate">
 			业务员考核系数：<el-input v-model="AssessmentRatio.assessmentRatio" style="width:40%" @blur="assessRatioBlur"></el-input>
 		</div>
-		<div style="padding-left:10px;">
+		<div>
 			标准增值率设定：<el-input v-model="appreRate" style="width:40%" @blur="appreRateBlur">
 				<i slot="suffix" class="el-input__icon">%</i></el-input> 
+		</div>
+		<div>
+			<el-select v-model="table_form.keyword" placeholder="请选择业务员" filterable @change="fetch">
+				<el-option
+					v-for="item in salesMan"
+					:key="item.employeeCode"
+					:label="item.chineseName"
+					:value="item.employeeCode">
+				</el-option>
+			</el-select>
 		</div>
     </table-header>
     <el-table
@@ -124,7 +134,6 @@
 		@sort-change="table_sort_change"
     	:show-summary="table_config.isShowFooter"
       	:summary-method="getSummaries"
-      
     >
 		<el-table-column 
 			type="selection" 
@@ -138,8 +147,8 @@
     </el-table>
     <div class="amountDemo"><span style="color:#37474F">合计提成：</span>
 		<span style="color:#F2353C">{{commissionTotalAmount}}元</span>
+		<span style="white-space:pre;font-size:12px;font-weight:nomal" v-if="this.process!=''"> = {{process}}</span>
 	</div>
-	<span style="white-space:pre;position:fixed;bottom:180px;left:405px" v-if="this.process!=''"> = {{process}}</span>
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -208,7 +217,8 @@ export default {
 			isComissionErr: false,
 			isDispatchErr: false,
 			appreRate: '45', //标准增值率系数暂定为45%
-			process:''
+			process: '',
+			salesMan: [],
 		}
 	},
 	computed:{
@@ -217,6 +227,17 @@ export default {
 		}
 	},
 	methods: {
+		async fetchDateLap(){
+			this.table_form.quicksearch = 'employeeCode'
+			this.table_form.currentpage = 1
+			this.salesMan = await this.$request.get('commission/demo/sales?dateLap='+this.dateLap)
+			this.fetchTableData()
+        },
+		async fetch(){
+			this.table_form.quicksearch = 'employeeCode'
+            this.table_form.currentpage = 1
+            this.fetchTableData()
+        },
 		getSummaries(param) { //合计实收款 和产品提成金额
 			const { columns, data } = param;
 			const sums = [];
@@ -651,6 +672,9 @@ export default {
 				this.table_data  = CommissionDetailData.rows
 				this.table_form.total = CommissionDetailData.total
 				this.AssessmentRatio = AssessmentRatio
+				if(this.table_data.length==0){
+					delete this.table_form.keyword
+				}
 			}catch(err){
 				this.commissionTotalAmount = ''
 				this.table_data = []
@@ -705,7 +729,8 @@ export default {
 		this.table_field = field;
 		this.table_actions = action;
 		this.table_config = table
-		this.dateLap = dayjs().subtract(1,'month').format('YYYY-MM') 
+		this.dateLap = dayjs().subtract(1,'month').format('YYYY-MM')
+		this.salesMan = await this.$request.get('commission/demo/sales?dateLap='+this.dateLap)
 		this.table_loading = false;
 		setTimeout(() => {
 			this.$refs.elTable.doLayout()
