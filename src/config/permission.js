@@ -32,6 +32,7 @@ router.beforeEach(async (to, from, next) => {
      
             console.log(generateRoutes(menu),'generateRoutes')
             router.addRoutes(generateRoutes(menu))
+            console.log(generateRoutes(menu), 8888)
             router.addRoutes([{ path: '*', redirect: to => { return { path: '/404', query: { path: to.fullPath } } }}])
             // 生成路由hash
             createdRouterHash(menu)
