@@ -83,6 +83,7 @@
 		@cell-click="cellClickEvent"
       	:cell-class-name="cellClassName"
 		:seq-config="{seqMethod: VxeIndexMethod}"
+		@resizable-change="table_dragend" 
 		>
 		<!--@resizable-change="table_dragend" -->
 		<vxe-table-column 
