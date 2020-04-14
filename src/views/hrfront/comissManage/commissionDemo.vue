@@ -121,30 +121,38 @@
 			</el-select>
 		</div>
     </table-header>
-    <el-table
-        ref="elTable"
-		@selection-change="handleChangeSelection"
-		:data="table_list"
+	<vxe-table
+		class="public-vxe-table"
+		ref="xTable"
+		resizable
+		show-overflow
+		highlight-hover-row
+		@select-all="handleChangeSelection"
+		@select-change="handleChangeSelection"
+		:data="table_data"
 		border
 		style="width: 100%"
 		v-loading="table_loading"
-		:header-cell-style="headerCellStyle"
+		:header-cell-style="vxeHeaderStyle"
 		:height="table_height"
-		@header-dragend="table_dragend"
+		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
-    	:show-summary="table_config.isShowFooter"
-      	:summary-method="getSummaries"
-    >
-		<el-table-column 
+		:seq-config="{seqMethod: VxeIndexMethod}"
+        :show-footer="table_config.isShowFooter"
+        :footer-method="footerMethod"
+		>
+		<vxe-table-column 
 			type="selection" 
-			width="60" 
+			width="55" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
-			>
-		</el-table-column>
-		<el-table-column type="index" :index="indexMethod" width="70"/>
-		<each-table-column :table_field="table_field" />
-    </el-table>
+		>
+		</vxe-table-column>
+		<vxe-table-column type="index" :index="indexMethod" align="center" width="45"/>
+		<vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).
+			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+			:width="field.width=='auto'?'': parseInt(field.width)"/>	
+	</vxe-table>
     <div class="amountDemo"><span style="color:#37474F">合计提成：</span>
 		<span style="color:#F2353C">{{commissionTotalAmount}}元</span>
 		<span style="white-space:pre;font-size:12px;font-weight:nomal" v-if="this.process!=''"> = {{process}}</span>
@@ -193,6 +201,7 @@ export default {
 	data() {
 		return {
 			form:{},
+            vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			loading: false,
 			api_resource,
 			orgCategory:[],
@@ -227,6 +236,30 @@ export default {
 		}
 	},
 	methods: {
+		table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+            let row = this.table_field.find(field=>field.showname===column.title)
+            var isEnd = false
+            this.table_field.forEach((item,i)=>{
+                if(item==row&&i==this.table_field.length-2){
+                	isEnd = true
+                }
+            })
+            var newWidth = column.resizeWidth
+            row.width = newWidth
+            row.menuid = row.menuid_id
+            api_pagemanager.update(row.id,{
+                width:newWidth,
+                menuid:row.menuid_id
+            },{alert:false})
+        },
+		handleChangeSelection({selection:val}){ // 单选
+            this.table_selectedRowsInfo = val
+            this.table_selectedRows = val
+			this.selectRows = val
+			this.$emit("update:table_selectedRows",val)
+			let xTable = this.$refs.xTable
+            xTable.updateFooter()
+        },
 		async fetchDateLap(){
 			this.table_form.quicksearch = 'employeeCode'
 			this.table_form.currentpage = 1
@@ -238,40 +271,41 @@ export default {
             this.table_form.currentpage = 1
             this.fetchTableData()
         },
-		getSummaries(param) { //合计实收款 和产品提成金额
-			const { columns, data } = param;
+		footerMethod ({ columns, data }) {
 			const sums = [];
-			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = '合计';
-					return;
-				}
-				let columnProper = []
-				let statistics = this.table_field.filter(o=>o.isstatistics)
-				statistics.forEach(o=>{
-					columnProper.push(o.name)
-				})
-				if (columnProper.includes(column.property)) {
-					const values = data.map(item => Number(item[column.property]));
-					if (!values.every(value => isNaN(value))) {
-						sums[index] = values.reduce((prev, curr) => {
-							const value = Number(curr);
-							if (!isNaN(value)) {
-								return prev + curr;
-							} else {
-								return prev;
+			data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
+			return [
+				columns.map((column, columnIndex) => {
+					if (columnIndex === 0) {
+						return '合计'
+					}
+					
+					let columnProper = []
+					let statistics = this.table_field.filter(o=>o.isstatistics)
+					statistics.forEach(o=>{
+						columnProper.push(o.name)
+					})
+					if (columnProper.includes(column.property)) {
+						const values = data.map(item => Number(item[column.property]));
+						if (!values.every(value => isNaN(value))) {
+							sums[columnIndex] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+								if (!isNaN(value)) {
+									return prev + curr;
+								} else {
+									return prev;
+								}
+							}, 0);
+							sums[columnIndex] = sums[columnIndex];
+							if(!isNaN(sums[columnIndex])){
+								return sums[columnIndex].toFixed(4)
 							}
-						}, 0);
-						sums[index] = sums[index];
-						if(!isNaN(sums[index])){
-							sums[index] = sums[index].toFixed(4)
-						}
-					} else {
-						sums[index] = '';
-					}      
-				}
-			});
-			return sums;
+						} else {
+							return '';
+						}  
+					}
+				})
+			]
 		},
 		changeCaculat(){//切换计算公式
 			this.allAmount = []
