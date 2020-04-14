@@ -141,7 +141,6 @@ export default {
 	data() {
 		return {
 			loading: true,
-			form:{},
 			api_resource,
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -159,6 +158,7 @@ export default {
 			form1:{},
 			areaDa:[],
 			result:[],
+      		table_topHeight:233,
 			rules:{
 				transferDate:[
 					{ required: true, message: '请选择日期', trigger: 'blur' },

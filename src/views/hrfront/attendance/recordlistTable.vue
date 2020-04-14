@@ -67,40 +67,41 @@
 		>
 		<vxe-table-column 
 			type="selection" 
-			width="60" 
+			width="45" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
 			fixed="left"
 		>
 		</vxe-table-column>
         <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
-		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="80">
+		<vxe-table-column field="staff__employeeCode" sortable title="工号" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__employeeCode"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="100">
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__chineseName"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__principalship__name" title="职位" fixed="left" width="100">
+		<vxe-table-column field="staff__principalship__name" title="职位" fixed="left" width="60">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__principalship__name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__department__name" title="部门" fixed="left" width="100">
+		<vxe-table-column field="staff__department__name" title="部门" fixed="left" width="80">
 			<template slot-scope="scope">
 				<div v-html="scope.row.staff__department__name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="CheckDateSub" title="日期" fixed="left" width="100">
+		<vxe-table-column field="CheckDateSub" title="日期" fixed="left" width="70">
 			<template slot-scope="scope">
 				<div v-html="scope.row.CheckDateSub"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__principalship__name','staff__department__name','CheckDateSub'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
-			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__principalship__name','staff__department__name',
+			'CheckDateSub'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
+			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
 	</vxe-table>
      <table-pagination 
         :total="table_form.total" 

@@ -43,7 +43,8 @@
         >
       </vxe-table-column>
       <vxe-table-column type="index" width="50" fixed/>
-      <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" 
+        :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
     </vxe-table>
      <table-pagination 
         :total="table_form.total" 

@@ -46,7 +46,7 @@
                             <form-render :type="`input`" :field="{name:'登录名'}" v-model="form.username" placeholder="默认员工号"/>
                         </el-col> -->
                         <el-col :span="24">
-                            <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.msg_txt" />
+                            <form-render :type="`textarea`" autosize :row="1" :field="{name:'备注/说明'}" v-model="form.msg_txt" />
                         </el-col>
                     </el-row>
                 </el-tab-pane>

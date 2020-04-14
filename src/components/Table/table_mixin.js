@@ -52,8 +52,8 @@ export default {
     },
     table_data:{
       handler(){
-        this.$refs.elTable&&this.$refs.elTable.doLayout&&this.$refs.elTable.doLayout()
         this.$nextTick(()=>{
+          this.$refs.elTable&&this.$refs.elTable.doLayout&&this.$refs.elTable.doLayout()
           this.$refs.elTable&&this.$refs.elTable.recalculate&&this.$refs.elTable.recalculate()
           this.$refs.elTable&&this.$refs.elTable.refreshColumn&&this.$refs.elTable.refreshColumn()
         })
@@ -270,6 +270,16 @@ export default {
     },
     toggleModal() {
       this.$refs.table.toggleModal()
+      
+      this.$nextTick(()=>{
+        if(this.$refs.table.table_modal){
+          this._table_height = this.table_topHeight
+          // this.table_topHeight = this._table_height - 183
+          this.table_topHeight = 120
+        }else{
+          this.table_topHeight = this._table_height
+        }
+      })
     },
     async multipleAction(name,msg){
       console.log(this.table_selectedRows,'table_selectedRows')
@@ -346,7 +356,6 @@ export default {
         
 
         download(data,name||this.$route.meta.title,contentType)
-        console.log(data,'ddddd')
         if(data!==''){
           loading.close();
         }
@@ -536,6 +545,76 @@ export default {
     // 图标显示
     table_tree_iconShow(index, record) {
       return index === 0 && record.subs && record.subs.length > 0;
-    }
+    },
+    //合计列计算
+    getSummaries({ columns, data }) {
+      // const { columns, data } = param;
+      const sums = [];
+      data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
+      columns.forEach((column, index) => {
+        if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}
+        let columnProper = []
+        let statistics = this.table_field.filter(o=>o.isstatistics)
+        statistics.forEach(o=>{
+          columnProper.push(o.name)
+        })
+        if(columnProper.includes(column.property)){
+          const values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = sums[index].toFixed(2);
+          } else {
+            sums[index] = '';
+          }
+        }
+      });
+      return sums;
+    },
+    footerMethod ({ columns, data }) {
+			const sums = [];
+			data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
+			return [
+				columns.map((column, columnIndex) => {
+					if (columnIndex === 0) {
+						return '合计'
+					}
+					
+					let columnProper = []
+					let statistics = this.table_field.filter(o=>o.isstatistics)
+					statistics.forEach(o=>{
+						columnProper.push(o.name)
+					})
+					if (columnProper.includes(column.property)) {
+						const values = data.map(item => Number(item[column.property]));
+						if (!values.every(value => isNaN(value))) {
+							sums[columnIndex] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+								if (!isNaN(value)) {
+									return prev + curr;
+								} else {
+									return prev;
+								}
+							}, 0);
+							sums[columnIndex] = sums[columnIndex];
+							if(!isNaN(sums[columnIndex])){
+								return sums[columnIndex].toFixed(2)
+							}
+						} else {
+							return '';
+						}  
+					}
+				})
+			]
+		},
   }
 }

@@ -37,6 +37,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
     	>
    
 		<el-table-column 
@@ -79,6 +81,7 @@ export default {
 			},
 			importUploadUrl:"/dormitory/import/meter",
 			downloadUrl:"/dormitory/import/meter",
+            table_topHeight:235,
 		};
 	},
 	watch:{

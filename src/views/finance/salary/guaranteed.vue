@@ -28,7 +28,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="17" :offset="3">
-						<form-render :type="`textarea`" :field="{name:'说明'}" v-model="importForm.remark"/>
+						<form-render :type="`textarea`" autosize :row="1" :field="{name:'说明'}" v-model="importForm.remark"/>
 					</el-col>
 					<el-col :span="17" :offset="3">
 						<el-form-item label="人员明细" >

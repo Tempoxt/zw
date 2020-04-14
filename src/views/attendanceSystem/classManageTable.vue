@@ -42,7 +42,7 @@
 						</el-select>
 					</el-form-item>
 				</el-col>
-				<el-col :span="19">
+				<el-col :span="19" v-if="dialogStatus==='insert'">
 					<el-form-item label="开始日期" prop="start_date">
 						<el-date-picker
 							:picker-options="pickerOptions1"
@@ -54,6 +54,9 @@
 							placeholder="开始日期">
 						</el-date-picker>
 					</el-form-item>
+				</el-col>
+				<el-col :span="19" v-else>
+					<form-render :type="`day`" prop="start_date" :field="{name:'开始日期'}" v-model="form.start_date"/>
 				</el-col>
 				<el-col :span="19">
 					<el-form-item label="结束日期">

@@ -40,6 +40,9 @@
                 <el-tab-pane label="图表统计" lazy name="statChart">
                     <departWareStatChart :org="org"/>
                 </el-tab-pane>
+                <el-tab-pane label="请购统计" name="purchaseStat">
+                    <departPurchaseStatTable :orgid="orgid"/>
+                </el-tab-pane>
             </el-tabs>
         </el-col>
     </el-row>
@@ -47,12 +50,15 @@
 <script>
 import departWareStatTable from './departWareStatTable'
 import departWareStatChart from './departWareStatChart'
+import departPurchaseStatTable from './departPurchaseStatTable'
+
 import { getTabs } from '@/api/common'
 
 export default {
     components:{
         departWareStatTable,
-        departWareStatChart
+        departWareStatChart,
+        departPurchaseStatTable
     },
     data(){
         return {
@@ -99,7 +105,7 @@ export default {
 		},
     },
     async created(){
-        this.data2 = await this.$request.get('org/tree');
+        this.data2 = await this.$request.get('toolstationery/standarddose/tree?showoffice=1');
         let that = this;
 		(function f(data) {
 			data.some(row => {

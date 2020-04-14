@@ -38,7 +38,7 @@
 							]}" v-model="form.rankType"/>
 						</el-col>
 						<el-col :span="16" :offset="4">
-							<form-render :type="`textarea`" :field="{name:'备注'}" v-model="form.remark"/>
+							<form-render :type="`textarea`" autosize :row="1" :field="{name:'备注'}" v-model="form.remark"/>
 						</el-col>
 					</el-row>
                 </el-form>

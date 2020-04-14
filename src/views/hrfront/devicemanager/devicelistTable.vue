@@ -84,7 +84,8 @@
             </vxe-table-column>
             
             <vxe-table-column type="index" :index="indexMethod"/>
-            <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+            <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name"
+                 :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
             <!-- <each-table-column :table_field="table_field"/> -->
             <vxe-table-column label="指纹索引" width="420px">
                 <template slot-scope="scope">

@@ -66,7 +66,7 @@
     </table-header>
     <vxe-table
       class="public-vxe-table"  
-      ref="elTable"
+		  ref="xTable"
       resizable
       show-overflow
       highlight-hover-row
@@ -81,7 +81,8 @@
       @resizable-change="table_dragend"
       @sort-change="table_sort_change"
 		  :seq-config="{seqMethod: VxeIndexMethod}"
-      
+      :show-footer="table_config.isShowFooter"
+      :footer-method="footerMethod"
     >
       <vxe-table-column 
         type="selection" 
@@ -93,7 +94,9 @@
       <vxe-table-column type="index" :index="indexMethod" width="80" fixed/>
       <vxe-table-column field="staff__employeeCode" sortable title="工号" width="80" fixed/>
       <vxe-table-column field="staff__chineseName" title="姓名" width="120" fixed/>
-      <vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__employeeCode'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+        filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+        :width="field.width=='auto'?'': parseInt(field.width)"/>
     </vxe-table>
      <table-pagination 
         :total="table_form.total" 
@@ -133,7 +136,8 @@ export default {
       dormList:[],
       social:[],
       banks:[],
-      sheetType:[]
+      sheetType:[],
+			table_topHeight:233,
     };
   },
   watch:{
@@ -147,6 +151,8 @@ export default {
           this.table_selectedRowsInfo = val
           this.table_selectedRows = val
           this.$emit("update:table_selectedRows",val)
+			    let xTable = this.$refs.xTable
+          xTable.updateFooter()
     },
     table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
         let row = this.table_field.find(field=>field.showname===column.title)

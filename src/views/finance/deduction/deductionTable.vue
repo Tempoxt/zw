@@ -190,8 +190,8 @@
 	</el-dialog>
 
     <table-header
-      :table_actions="table_actions"
-      :table_selectedRows="table_selectedRows"
+      :table_actions="table_actions" 
+	  :table_selectedRows="table_selectedRows"
       @action="handleAction"
       :table_form.sync="table_form"
       :table_column="table_field"
@@ -211,7 +211,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
+	  :show-summary="table_config.isShowFooter"
+	  :summary-method="getSummaries"
     >
     <el-table-column 
       type="selection" 

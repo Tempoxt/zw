@@ -135,20 +135,13 @@ export default {
         if (code === "add") {
           return len <= 1;
         }
-        if (code === "edit"||code==='warehouse'||code==='inventory') {
+        if (code === "edit"||code==='warehouse'||code==='inventory'||code === "settlement" || code === "checkIn" || code === "checkOutTalent") {
           return len === 1;
-        }
-        if(code === "settlement") {
-          return len === 1;
-        }
-        if (code === "delete") {
-          return len >= 1;
         }
         if (code === "disableModify1" ||code === "enableModify1") {
           return len < 0;
         }
-        
-        if (['forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit',
+        if (['delete','forbid','lock','unlock','enable','away','remove','checkout','change','audit','confirm','finish','issue','apply','pass','back','financialaudit',
         'cancelAudit','editClass','schedule','purchase','purchaseList','ensure'].indexOf(code)!==-1) {
           return len >= 1;
         }
@@ -231,12 +224,14 @@ export default {
             
           }
       })
-      
-      window.localStorage['curr_table_column'] = JSON.stringify(this.table_column)
+      if(this.$route.query.menuid==105){
+        window.localStorage['curr_table_column'] = JSON.stringify(this.table_column)
+      }
     }
   },
   created(){
     setTimeout(()=>{
+      // window.localStorage.clear('curr_table_column');
         // console.log(this.table_column,'table_column')
     },2000)
   }

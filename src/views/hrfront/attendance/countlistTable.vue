@@ -33,18 +33,20 @@
       :height="table_height"
       @resizable-change="table_dragend"
       @sort-change="table_sort_change"
-	  :seq-config="{seqMethod: VxeIndexMethod}"
-      
+	    :seq-config="{seqMethod: VxeIndexMethod}"
+      :show-footer="table_config.isShowFooter"
+      :footer-method="footerMethod"
     >
       <vxe-table-column 
         type="selection" 
-        width="60" 
+        width="55" 
         class-name="table-column-disabled"
         :selectable="table_disable_selected"
         >
       </vxe-table-column>
       <vxe-table-column type="index" width="50" fixed/>
-      <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" 
+        :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
     </vxe-table>
     <table-pagination 
         :total="table_form.total" 
@@ -70,7 +72,8 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
-			importUploadUrl:"/attendance/count"
+			importUploadUrl:"/attendance/count",
+      table_topHeight:233,
 		};
 	},
 	watch:{

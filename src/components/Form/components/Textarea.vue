@@ -1,6 +1,6 @@
 <template>
   <el-form-item :label="field.name" v-bind="$parent.$attrs">
-    <el-input type="textarea" v-model="data" v-bind="$parent.$attrs" v-on="$parent.$listeners" autosize :rows='1'></el-input>
+    <el-input type="textarea" v-model="data" v-bind="$parent.$attrs" v-on="$parent.$listeners"></el-input>
   </el-form-item>
 </template>
 

@@ -263,6 +263,8 @@
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
 		:cell-class-name="cellName"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
 		>
 		<el-table-column 
 			type="selection" 
@@ -338,6 +340,7 @@ export default {
 			otherAddData:[],//补其他
 			otherDecData:[],//扣其他
 			totalAllo:'',//高温津贴考勤有效天数
+			table_topHeight:233,
 		};
 	},
 	watch:{

@@ -97,9 +97,16 @@
               @fullScreen="fullScreen"
               :class="{ 'speech-mode': screenIndex == '1' }"
             ></inService>
+            <dateLap
+              class="dateLap"
+              width="140px"
+              itemsD="1"
+              v-model="dateLap1"
+              @change="getstaffData()"
+            />
             <div class="totalR" v-if="totalP != ''">总人数:{{ totalP }}</div>
           </el-col>
-          <el-col :span="12" v-if="sexData.length != 0">
+          <el-col :span="12" class="relative">
             <pieChart
               :show="checkFullshow"
               ref="echart2"
@@ -111,8 +118,15 @@
               :datas="sexData"
               :class="{ 'speech-mode': screenIndex == '2' }"
             ></pieChart>
+            <dateLap
+              class="dateLap"
+              width="140px"
+              itemsD="1"
+              v-model="dateLap2"
+              @change="getsexData()"
+            />
           </el-col>
-          <el-col :span="12" v-if="eduLevelData.length != 0">
+          <el-col :span="12" class="relative">
             <pieChart
               :show="checkFullshow"
               ref="echart3"
@@ -141,8 +155,15 @@
               :datas="eduLevelData"
               :class="{ 'speech-mode': screenIndex == '3' }"
             ></pieChart>
+            <dateLap
+              class="dateLap"
+              width="140px"
+              itemsD="1"
+              v-model="dateLap3"
+              @change="geteduLevelData()"
+            />
           </el-col>
-          <el-col :span="12" v-if="eachageData.length != 0">
+          <el-col :span="12" v-if="eachageData.length != 0" class="relative">
             <barChart
               :show="checkFullshow"
               ref="echart4"
@@ -153,6 +174,13 @@
               :datas="eachageData"
               :class="{ 'speech-mode': screenIndex == '4' }"
             ></barChart>
+             <dateLap
+              class="dateLap"
+              width="140px"
+              itemsD="1"
+              v-model="dateLap4"
+              @change="geteachageData()"
+            />
           </el-col>
           <el-col
             :span="12"
@@ -170,6 +198,13 @@
               @fullScreen="fullScreen"
               :class="{ 'speech-mode': screenIndex == '5' }"
             ></inService>
+             <dateLap
+              class="dateLap"
+              width="140px"
+              itemsD="1"
+              v-model="dateLap5"
+              @change="getmemberData()"
+            />
             <div class="totalR" v-if="totalP1 != ''">人数比: {{ totalP1 }}</div>
           </el-col>
           <el-col :span="12" class="relative">
@@ -200,7 +235,7 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap1"
+              v-model="dateLap6"
               @change="getleaveData()"
             />
             <div class="totalR" v-if="totalP2 != ''">总人数:{{ totalP2 }}</div>
@@ -221,7 +256,7 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap2"
+              v-model="dateLap7"
               @change="getleaveAcountData()"
             />
             <div class="totalR" v-if="totalP3 != ''">
@@ -244,7 +279,7 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap3"
+              v-model="dateLap8"
               @change="getleaveEduData()"
             />
           </el-col>
@@ -278,23 +313,12 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap4"
+              v-model="dateLap9"
               @change="getleaveReaData()"
             />
           </el-col>
-          <el-col :span="12">
-		<!-- <progre
-			id="turn-rate"
-			title="员工流失率"  
-			:show="checkFullshow" 
-			:datas = turnRate
-			ref="echart10" 
-			screenIndex='10'
-			:color="['#FF5454']"
-			@fullScreen="fullScreen"
-			:class="{'speech-mode':screenIndex=='10'}"
-			></progre> -->
-            <single
+          <el-col :span="12"  class="relative">
+	          <single
               id="turn-rate"
               title="员工流失率"
               :show="checkFullshow"
@@ -305,6 +329,13 @@
               @fullScreen="fullScreen"
               :class="{ 'speech-mode': screenIndex == '10' }"
             ></single>
+            <dateLap
+              class="dateLap"
+              width="140px"
+              itemsD="1"
+              v-model="dateLap10"
+              @change="getturnRate()"
+            />
           </el-col>
           <el-col :span="12" class="relative" v-if="manageData.length != 0">
             <posnegBar
@@ -322,7 +353,7 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap5"
+              v-model="dateLap11"
               @change="getmanageData()"
             />
           </el-col>
@@ -342,7 +373,7 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap6"
+              v-model="dateLap12"
               @change="getovertimeRate()"
             />
           </el-col>
@@ -362,7 +393,7 @@
               class="dateLap"
               width="140px"
               itemsD="1"
-              v-model="dateLap7"
+              v-model="dateLap13"
               @change="getdeparttime()"
             />
             <div class="totalR" v-if="totalP7 != ''">总工时: {{ totalP7 }}</div>
@@ -438,6 +469,12 @@ export default {
       dateLap5: "",
       dateLap6: "",
       dateLap7: "",
+      dateLap8: "",
+      dateLap9: "",
+      dateLap10: "",
+      dateLap11: "",
+      dateLap12: "",
+      dateLap13: "",
       percentage: 30,
       payAdjust: [],
       leaveReason: [
@@ -459,18 +496,13 @@ export default {
   },
   components: {
     dateLap,
-    accident,
-    personnel,
     inService,
     pieChart,
     barChart,
-    // histogram,
     singlehisto,
     single,
     posnegBar,
     progre,
-    payAdjust
-    // sunbrust,
   },
   watch: {
     orgid() {
@@ -541,13 +573,12 @@ export default {
       if (isFull === undefined) {
         isFull = false;
       }
-      // console.log(document.fullscreenEnabled , window.fullScreen , document.webkitIsFullScreen , document.msFullscreenEnabled);
-      // console.log(isFull);
       return isFull;
     },
     async getstaffData() {
+      let url = new Date(this.dateLap1).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/ondutynumberstat' :'/dataanalysis/hrhistorystat'
       this.staffData = await this.$request.get(
-        "/dataanalysis/ondutynumberstat?org_id=" + this.orgid
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap1
       );
       let per = this.staffData.map(o => o.value);
       if (this.pre !== []) {
@@ -555,23 +586,26 @@ export default {
       }
     },
     async getsexData() {
+      let url = new Date(this.dateLap2).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/genderratiostat' :'/dataanalysis/genderratiohistorystat'
       this.sexData = await this.$request.get(
-        "/dataanalysis/genderratiostat?org_id=" + this.orgid
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap2
       );
     },
     async geteduLevelData() {
+      let url = new Date(this.dateLap3).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/educationstat' :'/dataanalysis/educationhistorystat'
       this.eduLevelData = await this.$request.get(
-        "/dataanalysis/educationstat?org_id=" + this.orgid
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap3
       );
     },
     async geteachageData() {
+      let url = new Date(this.dateLap4).getTime()>=new Date(dayjs().format('YYYY-MM')).getTime() ? '/dataanalysis/agestagegenderratiostat' :'/dataanalysis/agestagegenderratiohistorystat'
       this.eachageData = await this.$request.get(
-        "/dataanalysis/agestagegenderratiostat?org_id=" + this.orgid
+        url+"?org_id=" + this.orgid+'&dateLap='+this.dateLap4
       );
     },
     async getmemberData() {
       this.memberData = await this.$request.get(
-        "/dataanalysis/directandindirectratiostat"
+        "/dataanalysis/directandindirectratiostat?dateLap="+this.dateLap5
       );
       let direct = this.memberData.filter(o => o.name == "直接人员");
       let indirect = this.memberData.filter(o => o.name == "间接人员");
@@ -583,7 +617,7 @@ export default {
     },
     async getleaveData() {
       this.leaveData = await this.$request.get(
-        "/dataanalysis/vacatecasestat?dateLap=" + this.dateLap1
+        "/dataanalysis/vacatecasestat?dateLap=" + this.dateLap6
       );
       let per2 = this.leaveData.map(o => o.value);
       if (this.pre2 !== []) {
@@ -591,10 +625,10 @@ export default {
       }
     },
     async getleaveAcountData() {
-      if (this.dateLap2 != "" && this.orgid != "") {
+      if (this.dateLap7 != "" && this.orgid != "") {
         this.leaveAcountData = await this.$request.get(
           "/dataanalysis/outdutynumberstat?dateLap=" +
-            this.dateLap2 +
+            this.dateLap7 +
             "&org_id=" +
             this.orgid
         );
@@ -609,7 +643,7 @@ export default {
     async getleaveEduData() {
       this.leaveEduData = await this.$request.get(
         "/dataanalysis/outdutyedutionstat?dateLap=" +
-          this.dateLap3 +
+          this.dateLap8 +
           "&org_id=" +
           this.orgid
       );
@@ -617,7 +651,7 @@ export default {
     async getleaveReaData() {
       this.leaveReaData = await this.$request.get(
         "/dataanalysis/outdutyreasonstat?dateLap=" +
-          this.dateLap4 +
+          this.dateLap9 +
           "&org_id=" +
           this.orgid +
           "&main_filter=" +
@@ -626,26 +660,26 @@ export default {
     },
     async getturnRate() {
       this.turnRate = await this.$request.get(
-        "/dataanalysis/numberloseratiostat?org_id=" + this.orgid
+        "/dataanalysis/numberloseratiostat?org_id=" + this.orgid+'&dateLap='+this.dateLap10
       );
     },
     async getmanageData() {
       this.manageData = await this.$request.get(
         "/dataanalysis/hrreportstat?dateLap=" +
-          this.dateLap5 +
+          this.dateLap11 +
           "&org_id=" +
           this.orgid
       );
     },
     async getovertimeRate() {
       this.overtimeRate = await this.$request.get(
-        "/dataanalysis/overtimeratiostat?dateLap=" + this.dateLap6
+        "/dataanalysis/overtimeratiostat?dateLap=" + this.dateLap12
       );
     },
     async getdeparttime() {
       this.departTimeData = await this.$request.get(
         "/dataanalysis/departlabourtimestat?dateLap=" +
-          this.dateLap7 +
+          this.dateLap13 +
           "&org_id=" +
           this.orgid
       );
@@ -686,7 +720,6 @@ export default {
     });
     window.addEventListener("keyup", function(e) {
       if (_this.fulltype) {
-        // console.log(e.keyCode,'eeeeee')
         if (e.keyCode == 38) {
           if (_this.speechIndex > 1) {
             _this.speechIndex = parseInt(_this.speechIndex) - 1;
@@ -711,7 +744,8 @@ export default {
         }
       }
     });
-    this.dateLap1 = this.dateLap2 = this.dateLap3 = this.dateLap4 = this.dateLap5 = this.dateLap6 = this.dateLap7 = dayjs().format(
+    this.dateLap1 = this.dateLap2 = this.dateLap3 = this.dateLap4 = this.dateLap5 = this.dateLap6 = this.dateLap7 = this.dateLap8 = this.dateLap9 
+    = this.dateLap10 = this.dateLap11 = this.dateLap12 = this.dateLap13 = dayjs().format(
       "YYYY-MM"
     );
     this.fetchData();
@@ -724,8 +758,8 @@ export default {
     let defaultMenuid = this.data2[0].orgid;
     this.$refs.tree2.setCurrentKey(defaultMenuid);
     this.orgid = defaultMenuid;
-    this.personnel = await this.$request.get("hrm/staffautoshiftremind");
-    this.payAdjust = (await this.$request.get("protal/notice")).rows;
+    // this.personnel = await this.$request.get("hrm/staffautoshiftremind");
+    // this.payAdjust = (await this.$request.get("protal/notice")).rows;
   }
 };
 </script>

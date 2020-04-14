@@ -47,6 +47,9 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" prop="dose" :field="{name:'标准用量'}" v-model="form.dose"/>
                         </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`textarea`" autosize :row="2" prop="formulaMethod" :field="{name:'计算方式'}" v-model="form.formulaMethod"/>
+                        </el-col>
                     </el-row>
                 </el-form>
             </div>
@@ -65,7 +68,7 @@
             :table_column="table_field"
         >
             <div style="padding-left:10px">
-                <dateLap v-model="table_form.dateLap" @change="fetch" :disabled="true"/>
+                <dateLap v-model="table_form.dateLap" @change="fetch"/>
             </div>
         </table-header>
         <el-table
@@ -79,6 +82,8 @@
             :height="table_height"
             @header-dragend="table_dragend"
             @sort-change="table_sort_change"
+            :show-summary="table_config.isShowFooter"
+            :summary-method="getSummaries"
             >
             <el-table-column 
                 type="selection" 
@@ -105,7 +110,6 @@ import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("toolstationery/standarddose");
 let baseUrl = process.env.VUE_APP_STATIC
-let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
 export default {
     mixins: [table_mixin],
@@ -122,7 +126,6 @@ export default {
 		}
         return {
             baseUrl,
-            baseUri,
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
@@ -156,9 +159,6 @@ export default {
             sizeList:[],
             importUploadUrl:'/toolstationery/standarddose/upload',
             downloadUrl:'/toolstationery/standarddose/upload',
-			timer:'',
-			url:'',
-            statusk:1,
         };
     },
     watch:{
@@ -168,32 +168,6 @@ export default {
         },
     },
     methods: {
-        async getUrl(){
-			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/standarddose/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
-                    this.statusk = 0
-                }
-			}else{
-				clearInterval(this.timer)
-			}
-		},
-		async download(){
-			this.statusk = 1
-			if(this.timer!=''){
-				clearInterval(this.timer)
-			}
-			try{
-                let mes = await this.$request.post('toolstationery/standarddose/download',{dateLap:this.table_form.dateLap})
-                this.$message.success(mes);
-				this.timer = setInterval(()=>{
-					this.getUrl()
-				}, 10000)
-			}catch(err){
-				console.log(err)
-			}
-		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()

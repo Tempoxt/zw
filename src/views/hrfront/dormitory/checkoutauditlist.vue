@@ -92,7 +92,8 @@ export default {
       dialogForm2Visible:false,
       dialogForm3Visible:false,
       form2:{},
-      form3:{}
+      form3:{},
+      table_topHeight:235,
     };
   },
   watch:{

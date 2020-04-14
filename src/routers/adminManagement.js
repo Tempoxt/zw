@@ -101,6 +101,13 @@ export default [{
         meta: {
             title: '注销登记'
         }
+    },{
+        name: 'talented',
+        component: () =>
+            import ('@/views/hrfront/dormitory/talentManager'),
+        meta: {
+            title: '人才公寓管理'
+        }
     },
     {
         name: 'checklistview',
@@ -201,6 +208,13 @@ export default [{
             import ('@/views/adminManagement/itemManage/departWareStat'),
         meta: {
             title: '部门仓库统计'
+        }
+    },{
+        name: 'exWareHouseRecord',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/outboundRecord'),
+        meta: {
+            title: '出库记录'
         }
     },
  ]

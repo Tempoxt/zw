@@ -8,32 +8,30 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 class HelloWorldPlugin {
-  constructor (options) {
-    this.options = options
-  }
-  apply (compiler) {
-    compiler.hooks.done.tap('done', () => {
-      if (process.env.NODE_ENV === 'production') {
-  
-        Client.scp('dist/', {
-            host: '192.168.0.192',
-            port: 22,
-            username: 'zhaowei',
-            password: 'hgw@2019',
-            path:process.env.VUE_APP_SERVER_DIR||'/home/zhaowei/erp_test/frontend/'
-        }, function(err) {
-            if(err){
-              console.log(err)
-            }else{
-              console.log('已上传到测试服务器')
-            }
-        })
-      }
-    })
-  }
+ constructor (options) {
+   this.options = options
+ }
+ apply (compiler) {
+   compiler.hooks.done.tap('done', () => {
+     if (process.env.NODE_ENV === 'production') {
+ 
+       Client.scp('dist/', {
+           host: '192.168.0.192',
+           port: 22,
+           username: 'zhaowei',
+           password: 'hgw@2019',
+           path:process.env.VUE_APP_SERVER_DIR||'/home/zhaowei/erp_test/frontend/'
+       }, function(err) {
+           if(err){
+             console.log(err)
+           }else{
+             console.log('已上传到测试服务器')
+           }
+       })
+     }
+   })
+ }
 }
-
-
 module.exports = {
   lintOnSave:false,
   productionSourceMap:false,

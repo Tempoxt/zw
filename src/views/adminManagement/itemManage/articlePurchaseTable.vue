@@ -33,7 +33,10 @@
                             <form-render :type="`input`" prop="purchaseNumber" :field="{name:'请购数量'}" v-model="form.purchaseNumber"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`textarea`" prop="remark" :field="{name:'备注'}" v-model="form.remark"/>
+                            <form-render :type="`textarea`" autosize :row="2" prop="formulaMethod" :field="{name:'计算方式'}" v-model="form.formulaMethod"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`textarea`" autosize :row="2" prop="remark" :field="{name:'请购原因'}" v-model="form.remark"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -53,7 +56,7 @@
             :table_column="table_field"
         >
             <div style="padding-left:10px">
-                <dateLap v-model="table_form.dateLap" @change="fetch" :disabled="true"/>
+                <dateLap v-model="table_form.dateLap" @change="fetch"/>
             </div>
         </table-header>
         <el-table
@@ -67,6 +70,8 @@
             :height="table_height"
             @header-dragend="table_dragend"
             @sort-change="table_sort_change"
+            :show-summary="table_config.isShowFooter"
+            :summary-method="getSummaries"
             >
             <el-table-column 
                 type="selection" 
@@ -93,8 +98,6 @@ import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("toolstationery/purchase/detail");
 let baseUrl = process.env.VUE_APP_STATIC
-let baseUri = process.env.VUE_APP_BASEAPI
-const download = require('downloadjs')
 export default {
     mixins: [table_mixin],
     props:['orgid','name'],
@@ -110,7 +113,6 @@ export default {
 		}
         return {
             baseUrl,
-            baseUri,
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
@@ -140,6 +142,9 @@ export default {
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                     { validator: checkNumber, trigger: 'blur' }
                 ],
+                formulaMethod:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
                 remark:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
@@ -158,9 +163,6 @@ export default {
                     }
                 }
             },
-			timer:'',
-			url:'',
-            statusk:1,
         };
     },
     watch:{
@@ -170,6 +172,11 @@ export default {
         },
     },
     methods: {
+        async reset(){
+            let mes = await this.$request.get('toolstationery/purchase/reset')
+            this.$message.success(mes)
+            this.fetch()
+        },
 		table_disable_selected(row){
 			if(row.status==2||row.status==3){
 				return false
@@ -182,32 +189,6 @@ export default {
             await this.$request.post('toolstationery/purchase/detail',{recordIds:row.join(',')})
             this.fetch()
         },
-        async getUrl(){
-			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/purchase/detail/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
-                    this.statusk = 0
-                }
-			}else{
-				clearInterval(this.timer)
-			}
-		},
-		async download(){
-			this.statusk = 1
-			if(this.timer!=''){
-				clearInterval(this.timer)
-			}
-			try{
-                let mes = await this.$request.post('toolstationery/purchase/detail/download',{dateLap:this.table_form.dateLap})
-                this.$message.success(mes);
-				this.timer = setInterval(()=>{
-					this.getUrl()
-				}, 10000)
-			}catch(err){
-				console.log(err)
-			}
-		},
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
@@ -244,7 +225,7 @@ export default {
         this.table_field = field;
         this.table_actions = action;
         this.table_config = table
-		this.table_form.dateLap = dayjs().format('YYYY-MM') 
+		this.table_form.dateLap = dayjs().add(1,'month').format('YYYY-MM') 
         this.fetchTableData();
     },
 };

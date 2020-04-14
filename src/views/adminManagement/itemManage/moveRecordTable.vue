@@ -37,6 +37,8 @@
             :height="table_height"
             @header-dragend="table_dragend"
             @sort-change="table_sort_change"
+            :show-summary="table_config.isShowFooter"
+            :summary-method="getSummaries"
             >
             <el-table-column 
                 type="selection" 
@@ -62,7 +64,6 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("toolstationery/moverecord");
 let baseUrl = process.env.VUE_APP_STATIC
-let baseUri = process.env.VUE_APP_BASEAPI
 const download = require('downloadjs')
 import dayjs from 'dayjs'
 export default {
@@ -71,7 +72,6 @@ export default {
     data() {
         return {
             baseUrl,
-            baseUri,
             loading: false,
             api_resource,
             queryDialogFormVisible:true,
@@ -93,9 +93,6 @@ export default {
                     }
                 }
             },
-			timer:'',
-			url:'',
-            statusk:1,
             moveData:[],
             status:''
         };
@@ -110,38 +107,6 @@ export default {
 		changeStatus(val){
 			this.status = val
 			this.fetchTableData()
-		},
-        async getUrl(){
-			if(this.statusk!=0){
-                this.url = await this.$request.get('toolstationery/moverecord/download',{alert:false})
-                if(this.url!=''){
-                    const res = download(baseUri+'/'+this.url)
-                    this.statusk = 0
-                }
-			}else{
-				clearInterval(this.timer)
-			}
-		},
-		async download(){
-			this.statusk = 1
-			if(this.timer!=''){
-				clearInterval(this.timer)
-			}
-			try{
-                delete this.table_form.pagesize
-                delete this.table_form.currentpage
-                let mes = await this.$request.post('toolstationery/moverecord/download?dateLap='+this.table_form.dateLap+'&moveType='+this.status+'&org_id='+this.orgid,{
-                    dateLap: this.table_form.dateLap,
-                    moveType: this.status,
-                    org_id:this.orgid
-                })
-                this.$message.success(mes);
-				this.timer = setInterval(()=>{
-					this.getUrl()
-				}, 10000)
-			}catch(err){
-				console.log(err)
-			}
 		},
 		fetch(){
 			this.table_form.currentpage = 1

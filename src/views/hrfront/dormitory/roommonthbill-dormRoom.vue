@@ -95,6 +95,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
     >
 		<el-table-column 
 			type="selection" 
@@ -138,7 +140,8 @@ export default {
 				checkState(column,row){
 					return <div>{['待入住','已入住','待搬离','已搬离'][row.checkState]}</div>
 				},
-			}
+			},
+            table_topHeight:235,
 		};
 	},
 	watch:{

@@ -72,7 +72,7 @@
               />
             </el-col>
             <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
+              <form-render :type="`textarea`" autosize :row="1" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入"/>
             </el-col>
           </el-row>
         </el-form>
@@ -105,7 +105,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
+      :show-summary="table_config.isShowFooter"
+      :summary-method="getSummaries"
     >
     <el-table-column 
       type="selection" 
@@ -179,6 +180,7 @@ export default {
        this.table_form.total = total
       setTimeout(() => {
         this.table_loading = false;
+        this.$refs.elTable.doLayout()
       }, 300);
     },
     async add(){

@@ -81,6 +81,8 @@
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
 		:cell-class-name="cellName"
+      	:show-summary="table_config.isShowFooter"
+      	:summary-method="getSummaries"
     	>
 		<el-table-column 
 			type="selection" 
@@ -119,7 +121,8 @@ export default {
 			openDrawers: false,
 			activeNames: ['0'],
 			reverse: true,
-			info:{}
+			info:{},
+      		table_topHeight:233,
 		};
 	},
 	watch:{

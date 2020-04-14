@@ -71,7 +71,8 @@ export default {
 			api_resource,
 			queryDialogFormVisible:true,
 			status:'',
-			statusData:[]
+			statusData:[],
+            table_topHeight:235,
 		};
 	},
 	watch:{

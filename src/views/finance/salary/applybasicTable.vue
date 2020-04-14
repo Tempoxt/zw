@@ -97,7 +97,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
+		  :show-summary="table_config.isShowFooter"
+		  :summary-method="getSummaries"
     >
     <el-table-column 
       type="selection" 
@@ -199,7 +200,8 @@ export default {
             return <el-tag size="mini" type="success">已审核</el-tag>
           }
         }
-      }
+      },
+			table_topHeight:233,
     };
   },
   watch:{

@@ -4,10 +4,16 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='申请中'">
-            <overtimeTable auditStatus='0'/>
+            <overtimeTable auditStatus='0' m='0' url="attendance/overtime"/>
         </div>
         <div v-if="view_activeName==='已审核'">
-            <overtimeTable auditStatus='1'/>
+            <overtimeTable auditStatus='1' m='1' url="attendance/overtime"/>
+        </div>
+        <div v-if="view_activeName==='产线加班计划'">
+            <overtimeTable m='2' url="attendance/prodovertime/plan"/>
+        </div>
+        <div v-if="view_activeName==='产线加班签名'">
+            <overtimeTable  m='3' url="attendance/prodovertime/sign"/>
         </div>
     </div>
 </template>

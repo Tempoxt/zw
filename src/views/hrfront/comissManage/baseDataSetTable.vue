@@ -5,7 +5,7 @@
   @query="querySubmit"
   >
 	<el-dialog
-		:title="dialogStatus==='insert'?'添加年限系数':'编辑年限系数'"
+		title="添加年限系数"
 		:visible.sync="dialogFormVisible"
 		class="public-dialog"
 		v-el-drag-dialog
@@ -267,6 +267,32 @@
 		</div>
     </el-dialog>
 
+	<el-dialog
+		title="编辑考核系数"
+		:visible.sync="dialogForm6Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		>
+    	<el-form ref="form6" :model="form6"  label-width="120px" :rules="rules6">
+				<el-row >
+					<el-col :span="14" :offset="4">
+						<form-render :type="`input`" disabled :field="{name:'业务员'}" v-model="form6.staff__chineseName" />
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<form-render :type="`input`" prop="assessmentRatio" :field="{name:'考核系数'}" v-model="form6.assessmentRatio" />
+					</el-col>
+					<el-col :span="14" :offset="4">
+						<form-render :type="`input`"  :field="{name:'备注'}" v-model="form6.remark" />
+					</el-col>
+				</el-row>
+			</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm6Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm6Submit">确 定</el-button>
+		</div>
+    </el-dialog>
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -351,6 +377,17 @@ export default {
 				callback();
 			}
 		}
+        var checkNumber6 = (rule, value, callback)=>{
+			if (value==='') {
+				return callback(new Error('请输入'));
+			}else if (value<1 || value>1.2) {
+				callback(new Error('考核系数的范围为1.0-1.2之间'));
+			}else if (!(/^\d+(\.\d{1})?$/.test(value))) {
+				callback(new Error('请输入精度为一位小数以内的正数'));
+			}else{
+				callback();
+			}
+		}
 		return {
 			loading: true,
 			api_resource :api_common.resource(this.url),
@@ -364,6 +401,7 @@ export default {
 			form3: {},
 			form4: {},
 			form5: {},
+			form6: {},
 			queryDialogFormVisible:true,
 			table_topHeight:293,
 			dialogFormVisible:false,
@@ -372,6 +410,7 @@ export default {
 			dialogForm3Visible:false,
 			dialogForm4Visible:false,
 			dialogForm5Visible:false,
+			dialogForm6Visible:false,
             rules:{
                 productStart:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
@@ -423,6 +462,12 @@ export default {
                 ],
                 commissionStep:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
+			},
+            rules6:{
+                assessmentRatio:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                    { validator: checkNumber6, trigger: 'blur' }
                 ],
 			},
 			typeList: [],
@@ -537,11 +582,14 @@ export default {
 				this.dialogForm3Visible = true
 				let row = this.table_selectedRows[0];
             	this.form3 = await this.api_resource.find(row.id)
-			}else{
+			}else if(this.m == 3){
 				this.dialogForm5Visible = true
 				this.getTypeList()
 				let row = this.table_selectedRows[0];
             	this.form5 = await this.api_resource.find(row.id)
+			}else if(this.m == 4){
+				this.dialogForm6Visible = true
+				this.form6 = this.table_selectedRows[0];
 			}
 		},
 		async handleFormSubmit(){
@@ -588,6 +636,14 @@ export default {
 			let form5 = Object.assign({},this.form5)
 			await this.api_resource.update(form5.id,form5)
 			this.dialogForm5Visible = false
+			this.fetchTableData()
+		},
+		async handleForm6Submit(){
+			await this.form_validate('form6')
+			let form6 = Object.assign({},this.form6)
+			await this.api_resource.update(form6.id,form6)
+			// {assessmentRatio:form6.assessmentRatio}
+			this.dialogForm6Visible = false
 			this.fetchTableData()
 		},
 		async fetchTableData() {

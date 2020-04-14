@@ -79,7 +79,7 @@
 						<form-render :type="`input`" :field="{name:'客户信息来源'}" v-model="form.cusSource" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`textarea`" :field="{name:'备注'}" v-model="form.remark" />
+						<form-render :type="`textarea`" autosize :row="1" :field="{name:'备注'}" v-model="form.remark" />
 					</el-col>
 				</el-row>
 			</el-form>
@@ -119,6 +119,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
       
     >
     <el-table-column 

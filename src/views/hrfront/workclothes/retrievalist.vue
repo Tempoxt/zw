@@ -130,7 +130,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
-      
+      :show-summary="table_config.isShowFooter"
+      :summary-method="getSummaries"
     >
     <el-table-column 
       type="selection" 
@@ -180,7 +181,8 @@ export default {
       clothesDepData:[],
       clothesSexData:[],
       clothesJobData:[],
-      clothesModelData:[]
+      clothesModelData:[],
+      table_topHeight:235,
     };
   },
 

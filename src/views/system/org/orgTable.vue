@@ -36,7 +36,7 @@
               <form-render :type="`number`" :field="{name:'排序'}" v-model="form.order"/>
             </el-col>
             <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark"/>
+              <form-render :type="`textarea`" autosize :row="1" :field="{name:'备注/说明'}" v-model="form.remark"/>
             </el-col>
           </el-row>
         </el-form>

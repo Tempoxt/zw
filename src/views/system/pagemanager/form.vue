@@ -94,7 +94,7 @@
                       
                         </div>
                         <el-col :span="24">
-                          <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入内容"/>
+                          <form-render :type="`textarea`" autosize :row="1" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入内容"/>
                         </el-col>
                       </el-row>
                     </el-form>

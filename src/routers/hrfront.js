@@ -127,21 +127,6 @@ export default [{
         }
     },
     {
-        name: 'Onboarding',
-        component: () =>
-            import ('@/views/hrfront/personnelmanagement/backgroundCheck'),
-        meta: {
-            title: '新入职登记'
-        }
-    },{
-        name: 'applyResume',
-        component: () =>
-            import ('@/views/hrfront/personnelmanagement/applyResume'),
-        meta: {
-            title: '应聘履历表'
-        }
-    },
-    {
         name: 'clothesList',
         component: () =>
             import ('@/views/hrfront/workclothes/list'),
@@ -188,7 +173,45 @@ export default [{
         meta: {
             title: '招聘档案'
         }
-    },   
+    },
+    {
+        name: 'Onboarding',
+        component: () =>
+            import ('@/views/hrfront/recruitment/backgroundCheck'),
+        meta: {
+            title: '新入职登记'
+        }
+    },{
+        name: 'applyResume',
+        component: () =>
+            import ('@/views/hrfront/recruitment/applyResume'),
+        meta: {
+            title: '应聘履历表'
+        }
+    },
+    {
+        name: 'workwechatContact',
+        component: () =>
+            import ('@/views/hrfront/recruitment/workContract'),
+        meta: {
+            title: '电子合同'
+        }
+    },
+    {
+        name: 'FieldParams',
+        component: () =>
+            import ('@/views/hrfront/recruitment/fieldParams'),
+        meta: {
+            title: '招聘字段设置'
+        }
+    },{
+        name: 'InterviewMsg',
+        component: () =>
+            import ('@/views/hrfront/recruitment/interview'),
+        meta: {
+            title: '部门岗位面试设置'
+        }
+    },
     {
         name: 'introducercost',
         component: () =>

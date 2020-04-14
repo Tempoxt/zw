@@ -70,10 +70,10 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-show="this.auditStatus==0">
+		<div style="padding-left:10px" v-show="this.m!=1">
 			<dateLap type="1" v-model="dateLap1" @change="fetch"/>
 		</div>
-		<div style="padding-left:10px" v-show="this.auditStatus==1">
+		<div style="padding-left:10px" v-show="this.m==1">
 			<dateLap type='2' v-model="dateLap" @change="fetch"/>
 		</div>
     </table-header>
@@ -88,6 +88,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+      	:show-summary="table_config.isShowFooter"
+      	:summary-method="getSummaries"
     	>
 		<el-table-column 
 			type="selection" 
@@ -111,13 +113,12 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
-const api_resource = api_common.resource("attendance/overtime");
 import OrgSelect from '@/components/Org/OrgSelect'
 import dayjs from 'dayjs'
 const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
-	props:['auditStatus'],
+	props:['auditStatus','m','url'],
 	components:{
 		OrgSelect
 	},
@@ -138,7 +139,7 @@ export default {
 		};
 		return {
 			loading: true,
-			api_resource,
+			api_resource: api_common.resource(this.url),
 			queryDialogFormVisible:true,
 			dialogFormVisible:false,
 			dialogForm1Visible:false,
@@ -168,11 +169,21 @@ export default {
 		};
 	},
 	watch:{
-		auditStatus(){
-			delete this.table_form.keyword
-			// delete this.table_form.dateLap
-			this.table_form.currentpage = 1
+		// auditStatus(){
+		// 	delete this.table_form.keyword
+		// 	// delete this.table_form.dateLap
+		// 	this.table_form.currentpage = 1
 			
+		// 	this.fetchMenu()
+		// 	this.fetchTableData()
+		// },
+		m(){
+            this.api_resource = api_common.resource(this.url)
+			delete this.table_form.keyword
+			delete this.table_form.sortname
+			delete this.table_form.quicksearch
+			this.table_form.currentpage = 1
+			this.table_form.query.query= []
 			this.fetchMenu()
 			this.fetchTableData()
 		},
@@ -245,12 +256,12 @@ export default {
 		async fetchTableData() {
 			this.table_loading = true;
 			this.table_form.auditStatus = this.auditStatus
-			if(this.auditStatus==0){
+			if(this.m!=1){
 				this.table_form.dateLap = this.dateLap1
 			}else{
 				this.table_form.dateLap = this.dateLap
 			}
-			const {rows , total }= await api_resource.get(this.table_form);
+			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
@@ -258,10 +269,10 @@ export default {
 			}, 300);
 		},
 		async fetchMenu(){
-			const { field, action,table } = await api_common.menuInit("attendance/overtime"+this.auditStatus);
-            this.table_field = field;
-            this.table_actions = action;
-            this.table_config = table
+			const { field, action,table } = await api_common.menuInit(this.url+(this.auditStatus||''));
+			this.table_field = field;
+			this.table_actions = action;
+			this.table_config = table
         }
 	},
 	async created() {

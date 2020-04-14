@@ -35,7 +35,7 @@
 							<form-render :type="`input`" placeholder="请输入检验码" :field="{name:'校验码'}" v-model="form.authCode" />
 						</el-col>
 						<el-col :span="24">
-							<form-render :type="`textarea`" placeholder="请输入" :field="{name:'备注'}" v-model="form.remark" />
+							<form-render :type="`textarea`" autosize :row="1" placeholder="请输入" :field="{name:'备注'}" v-model="form.remark" />
 						</el-col>
 					</el-row>
 				</el-form>
@@ -104,6 +104,8 @@
 			:height="table_height"
 			@header-dragend="table_dragend"
 			@sort-change="table_sort_change"
+			:show-summary="table_config.isShowFooter"
+			:summary-method="getSummaries"
 			>
 			<el-table-column 
 				type="selection" 

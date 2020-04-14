@@ -29,6 +29,8 @@
       :height="table_height"
       @header-dragend="table_dragend"
       @sort-change="table_sort_change"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
     >
 		<el-table-column 
 		type="selection" 
@@ -61,6 +63,7 @@ export default {
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,
+			table_topHeight:233,
 		};
 	},
 	methods: {

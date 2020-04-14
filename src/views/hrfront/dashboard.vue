@@ -65,21 +65,6 @@
 	import supplement from "./workbench/supplement"
 
 	import dashboardReport from "./dashboard-report"
-
-	import dateLap from '@/components/Table/DateLap'
-	import accident from "./workbench/accident"
-	import personnel from "./workbench/personnel"
-	import payAdjust from "./workbench/payAdjust"
-
-	import inService from "./dataAnalysis/inService"
-	import pieChart from "./dataAnalysis/pieChart"
-	import barChart from "./dataAnalysis/barChart"
-	import histogram from "./dataAnalysis/histogram"
-	import singlehisto from "./dataAnalysis/singlehisto"
-	import single from "./dataAnalysis/single"
-	import posnegBar from "./dataAnalysis/posnegBar"
-	import progre from "./dataAnalysis/progre"
-	// import sunbrust from "./dataAnalysis/sunbrust"
 	import * as api_common from "@/api/common";
 	import * as api_org from "@/api/org";
 	import table_mixin from "@c/Table/table_mixin";
@@ -94,83 +79,12 @@
 				checkFullshow:true,
 				speechIndex:1,
 				fulltype:false,
-				staffData:[],//在职人数统计
-				sexData:[],//男女比例统计
-				eduLevelData:[],//学历分布统计
-				eachageData:{},//各年龄段男女占比统计
-				memberData:[],//直接/间接人员人数及比列
-				leaveData:[],//请假情况统计表
-				staffplanData:{},//人员规划及实际人数
-				recruitData:{},//各部门招聘完成率统计
-				leaveAcountData:[],//离职人数统计表
-				leaveEduData:{},//离职学历分析表
-				leaveReaData:{},//离职原因分析表
-				turnRate:[],//员工流失率
-				manageData:{},//人力资源报表
-				rewarPunish:{},//人员奖惩情况统计
-				overtimeRate:{},//加班比例统计分析
-				departTimeData:[],//部门工时统计
-				orgid:'',
-				input5:'',
-				filterText:'',
-				visible:false,
-				data2:[],
 				form:{},
-				totalP:'',
-				totalP1:'',
-				totalP2:'',
-				totalP3:'',
-				totalP7:'',
-				personnel:[],
-				one:[],
-				dateLap1:'',
-				dateLap2:'',
-				dateLap3:'',
-				dateLap4:'',
-				dateLap5:'',
-				dateLap6:'',
-				dateLap7:'',
-				percentage:30,
-				payAdjust:[],
-				leaveReason:[
-					{
-						value: '无',
-						label: '全部'
-					},{
-						value: '1',
-						label: '直接人员'
-					},{
-						value: '0',
-						label: '间接人员'
-					},
-				],
-				leaveRea:'无'
 			};
 		},
 		components:{
-			dateLap,
 			dashboardReport,
-			quickEntry,
-			backlog,
-			attendanceManagement,
-			systemMessages,
 			stickyNote,
-			weater,
-			workSchedule,
-			leaveList,
-			supplement,
-			accident,
-			personnel,
-			// inService,
-			// pieChart,
-			// barChart,
-			// histogram,
-			// singlehisto,
-			// single,
-			// posnegBar,
-			// progre,
-			payAdjust,
-			// sunbrust,
 		},
 		watch:{
 			activeName(val) {
@@ -181,157 +95,15 @@
 					},1000)
 				}
 			},
-			orgid(){
-				// this.fetchData()
-				this.visible = false
-				this.findDataName()
-			},
-			filterText(val) {
-				this.$refs.tree2.filter(val);
-			}
 		},
 		methods: {
-			fetch(){
-				
-			},
-			findDataName() {
-				if (this.orgid === undefined) {
-					return;
-				}
-				let orgid = this.orgid;
-				let info = {};
-				let that = this;
-				(function f(data) {
-					data.some(row => {
-						if (row['orgid'] == orgid) {
-							info = row;
-							return true;
-						}
-						if (row.subs && row.subs.length) {
-							f(row.subs);
-						}
-					});
-				})(this.data2);
-				this.input5 = info.name;
-			},
-			handleChangeNode(val){
-				this.orgid = val.orgid
-			},
-			changeOrg(orgid){
-				this.orgid = orgid
-			},
-			filterNode(value, data) {
-				if (!value) return true;
-				return data.name && data.name.indexOf(value) !== -1;
-			},
-			speechMode(id){
-				screenfull.toggle();
-				this.speechSwitch(id);
-			},
-			speechSwitch(id){
-				this.screenIndex=id;
-				this.$refs["echart"+id].checkFull();
-				this.checkFullshow=false;
-				this.fulltype=true;
-			},
-			fullScreen(res){
-				this.speechMode(res);
-				this.fulltype=false;
-			},
-			keyEsc(){
-				this.screenIndex=""
-			},
-			/** * 是否全屏并按键ESC键的方法 */
 			checkFull() {
 				var isFull = window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled;
-				// to fix : false || undefined == undefined
 				if (isFull === undefined) {
 					isFull = false;
 				}
-				// console.log(document.fullscreenEnabled , window.fullScreen , document.webkitIsFullScreen , document.msFullscreenEnabled);
-				// console.log(isFull);
 				return isFull;
 			},
-			async getstaffData(){
-				this.staffData = await this.$request.get('/dataanalysis/ondutynumberstat?org_id='+this.orgid);
-				let per = this.staffData.map(o=>o.value)
-				if(this.pre!==[]){
-					this.totalP = per.reduce((tem,item,index)=>tem+item)
-				}
-			},
-			async getsexData(){
-				this.sexData = await this.$request.get('/dataanalysis/genderratiostat?org_id='+this.orgid);
-			},
-			async geteduLevelData(){
-				this.eduLevelData = await this.$request.get('/dataanalysis/educationstat?org_id='+this.orgid);
-			},
-			async geteachageData(){
-				this.eachageData = await this.$request.get('/dataanalysis/agestagegenderratiostat?org_id='+this.orgid);
-			},
-			async getmemberData(){
-				this.memberData = await this.$request.get('/dataanalysis/directandindirectratiostat');
-				let direct = this.memberData.filter(o=>o.name=="直接人员")
-				let indirect = this.memberData.filter(o=>o.name=="间接人员")
-				if(direct!=''&&indirect!=''){
-					this.totalP1 = '1 : '+ (Number(indirect[0].value)/Number(direct[0].value)).toFixed(2)
-				}
-			},
-			async getleaveData(){
-				this.leaveData = await this.$request.get('/dataanalysis/vacatecasestat?dateLap='+this.dateLap1);
-				let per2 = this.leaveData.map(o=>o.value)
-				if(this.pre2!==[]){
-					this.totalP2 = per2.reduce((tem,item,index)=>tem+item)
-				}
-			},
-			async getleaveAcountData(){
-				if(this.dateLap2!=''&&this.orgid!=''){
-					this.leaveAcountData = await this.$request.get('/dataanalysis/outdutynumberstat?dateLap='+this.dateLap2+'&org_id='+this.orgid);
-					if(this.leaveAcountData.length!=0){
-						let per3 = this.leaveAcountData.map(o=>o.value)
-						if(this.pre3!==[]){
-							this.totalP3 = per3.reduce((tem,item,index)=>tem+item)
-						}
-					}
-				}
-			},
-			async getleaveEduData(){
-				this.leaveEduData = await this.$request.get('/dataanalysis/outdutyedutionstat?dateLap='+this.dateLap3+'&org_id='+this.orgid);
-			},
-			async getleaveReaData(){
-				this.leaveReaData = await this.$request.get('/dataanalysis/outdutyreasonstat?dateLap='+this.dateLap4+'&org_id='+this.orgid+'&main_filter='+this.leaveRea);
-			},
-			async getturnRate(){
-				this.turnRate = await this.$request.get('/dataanalysis/numberloseratiostat?org_id='+this.orgid);
-			},
-			async getmanageData(){
-				this.manageData = await this.$request.get('/dataanalysis/hrreportstat?dateLap='+this.dateLap5+'&org_id='+this.orgid);
-			},
-			async getovertimeRate(){
-				this.overtimeRate = await this.$request.get('/dataanalysis/overtimeratiostat?dateLap='+this.dateLap6);
-			},
-			async getdeparttime(){
-				this.departTimeData = await this.$request.get('/dataanalysis/departlabourtimestat?dateLap='+this.dateLap7+'&org_id='+this.orgid);
-				if(this.departTimeData.length!=0){
-					let per7 = this.departTimeData.map(o=>o.value)
-					if(this.pre7!==[]){
-						this.totalP7 = per7.reduce((tem,item,index)=>tem+item)
-					}
-				}
-			},
-			// fetchData(){
-			// 	if(this.orgid!=''&&this.orgid!=undefined){
-			// 		this.getstaffData()
-			// 		this.getsexData()
-			// 		this.geteduLevelData()
-			// 		this.geteachageData()
-			// 		this.getleaveAcountData()
-			// 		this.getleaveEduData()
-			// 		this.getleaveReaData()
-			// 		this.getturnRate()
-			// 		this.getmanageData()
-			// 		this.getdeparttime()
-			// 	}
-			// }
 		},
 		async mounted() {
 			let _this = this;
@@ -373,11 +145,6 @@
 					}
 				}
 			})
-			this.dateLap1 = this.dateLap2 = this.dateLap3 =this.dateLap4 =this.dateLap5 = this.dateLap6=this.dateLap7 =dayjs().format('YYYY-MM')
-			// this.fetchData()
-			this.getleaveData()
-			this.getmemberData()
-			this.getovertimeRate()
 		},
 		created(){
 
@@ -438,18 +205,12 @@
 	.el-calendar__header {
 		padding: 6px 20px;
 	}
-	// .el-card__body {
-	// 	height: 360px;
-	// }
 	.speech-mode .el-card__body{
 		height: 100%;
 		.box-card-c{
 			height: 100%;
 		}
 	}
-	// .el-row .el-col:nth-child(2n){
-	// 	padding-left: 10px;
-	// }
 	.el-row .el-col:nth-child(n) .dateLap{
 		right: 20px!important;
 	}

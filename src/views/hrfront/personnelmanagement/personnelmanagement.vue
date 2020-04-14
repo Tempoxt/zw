@@ -10,7 +10,8 @@
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
-       
+            :before-close = "beforeClose"
+            :close-on-click-modal="false"
             >
             <div>
                 <el-form ref="form" :model="form" label-width="100px" v-loading="loading2" :rules="rules">
@@ -145,7 +146,7 @@
                                             <form-render :type="`branchteam`" :field="{name:'所属小组',id:form.department,disable:!isInsert}" v-model="form.team" :disabled="!isInsert"/>
                                         </el-col>
                                         <el-col :span="24">
-                                            <form-render :disabled="!isInsert"
+                                            <form-render
                                                 filterable
                                                 placeholder="请搜索或选择"
                                                 prop="principalship"
@@ -220,6 +221,9 @@
                                         <form-render
                                                 :type="`select`"
                                                 :field="{name:'合同年限',options:[{
+                                                value: 0,
+                                                label: '一年'
+                                                },{
                                                 value: 1,
                                                 label: '一年半'
                                                 },{
@@ -529,8 +533,8 @@
 
             <div slot="footer" class="dialog-footer">
                 <div>
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+                    <el-button :disabled="isRequest" @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button :disabled="isRequest" type="primary" @click="handleFormSubmit">确 定</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -889,23 +893,26 @@
                                         
                                     <form-render :type="`select`" prop="contractTime"
                                         :field="{name:'合同年限',options:[{
-                                        value: 1,
-                                        label: '一年半'
+                                            value: 0,
+                                            label: '一年'
                                         },{
-                                        value: 2,
-                                        label: '两年'
+                                            value: 1,
+                                            label: '一年半'
                                         },{
-                                        value: 3,
-                                        label: '三年'
+                                            value: 2,
+                                            label: '两年'
                                         },{
-                                        value: 4,
-                                        label: '四年'
+                                            value: 3,
+                                            label: '三年'
                                         },{
-                                        value: 5,
-                                        label: '五年'
+                                            value: 4,
+                                            label: '四年'
                                         },{
-                                        value: 6,
-                                        label: '无限期'
+                                            value: 5,
+                                            label: '五年'
+                                        },{
+                                            value: 6,
+                                            label: '无限期'
                                         }]}" v-model="contract.contractTime"/>
                                     </el-col>   
                                 </el-row>
@@ -1068,7 +1075,7 @@
             </div>
         </table-header>
         <vxe-table
-            class="public-vxe-table"
+            class="public-vxe-table personnelmanagement-table"
             ref="elTable"
             resizable
             show-overflow
@@ -1093,18 +1100,20 @@
                 fixed="left"
             >
             </vxe-table-column>
-            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
-            <vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="80">
+            <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="60"/>
+            <vxe-table-column field="employeeCode" sortable title="工号" fixed="left" width="60">
                 <template slot-scope="scope">
                     <div @click="openDrawer(scope.row)" style="color:#0BB2D4;cursor:pointer" v-html="scope.row.employeeCode"></div>
                 </template>
             </vxe-table-column>
-            <vxe-table-column field="chineseName" title="姓名" fixed="left" width="120">
+            <vxe-table-column field="chineseName" title="姓名" fixed="left" width="70">
                 <template slot-scope="scope">
                     <div v-html="scope.row.chineseName"></div>
                 </template>
             </vxe-table-column>
-            <vxe-table-column v-for="field in table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+            <vxe-table-column v-for="field in table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+                filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+                :width="field.width=='auto'?'': parseInt(field.width)"/>
             <!-- <each-table-column :table_field="table_field.filter(o=>!['employeeCode','chineseName'].includes(o.name))"/> -->
         </vxe-table>
 
@@ -1293,6 +1302,7 @@ export default {
 				}
             },
             maxOnDuty: '',
+            isRequest: false
         };
     },
     watch:{
@@ -1355,24 +1365,59 @@ export default {
         }
     },
     methods: {
+        beforeClose(){
+            if(this.isRequest == false){
+                this.dialogFormVisible = false
+            }
+        },
         async identifyCard(){
+            this.loading2 = true
+            this.isRequest = true
             let card = (this.cardInfo.filter(o=>o.cardType==1))[0].images
             let frontUrl = card[0].cardConnect//'employee_card/employee_card85085db0-7c2a-11e9-af41-286ed48a39b2.png'||
             let backUrl = card[1].cardConnect//'employee_card/employee_card8a12bd5a-7c2a-11e9-af41-286ed48a39b2.png'||
-            let {back, front}= await this.$request.get('http://192.168.0.192:7000/hrm/entry/getBaiduApiOcrIDCard?frontUrl='+baseUrl+frontUrl+'&backUrl='+baseUrl+backUrl)
-            if(back.error_code&&back.error_code==216201 || (back.image_status&&back.image_status!='normal')){
-                this.$message.error('身份证信息识别失败');
-                return 
+
+
+            try {
+                let { back, front } = await new Promise(async (resolve,reject)=>{
+                    this.isRequest = false
+                    this.loading2 = false
+                    try {
+                        let {back, front}= await this.$request.get('http://192.168.0.192:7000/hrm/entry/getBaiduApiOcrIDCard?frontUrl='+baseUrl+frontUrl+'&backUrl='+baseUrl+backUrl)
+                        if(back.error_code&&back.error_code==216201 || (back.image_status&&back.image_status!='normal')){
+                            throw new Error('e')
+                            return 
+                        }
+                        
+                        resolve({back, front})
+                    } catch (error) {
+                        let {back, front}= await this.$request.get('http://192.168.0.192:7000/hrm/entry/getBaiduApiOcrIDCard?frontUrl='+baseUrl+backUrl+'&backUrl='+baseUrl+frontUrl)
+                        if(back.error_code&&back.error_code==216201 || (back.image_status&&back.image_status!='normal')){
+                            reject('身份证信息识别失败')
+                            return 
+                        }
+                        resolve({back, front})
+                    }
+                })
+                let nation = front.words_result['民族'].words
+                this.form.nation = this.nationData.find(o=>o.label===nation+'族').value
+                let stayBegin = back.words_result['签发日期'].words
+                this.form.stayBegin = stayBegin.slice(0,4)+'-'+stayBegin.slice(4,-2)+'-'+stayBegin.slice(-2)
+                let stayEnd = back.words_result['失效日期'].words
+                this.form.stayEnd = stayEnd.slice(0,4)+'-'+stayEnd.slice(4,-2)+'-'+stayEnd.slice(-2)
+                this.form.qfjg = back.words_result['签发机关'].words
+                this.form.contactAddr = front.words_result['住址'].words
+                this.form.sex = front.words_result['性别'].words=='男'?1:2
+
+            } catch (error) {
+                 this.$message.error(error);
+            }finally {
+                this.isRequest = false
+                this.loading2 = false
             }
-            let nation = front.words_result['民族'].words
-            this.form.nation = this.nationData.find(o=>o.label===nation+'族').value
-            let stayBegin = back.words_result['签发日期'].words
-            this.form.stayBegin = stayBegin.slice(0,4)+'-'+stayBegin.slice(4,-2)+'-'+stayBegin.slice(-2)
-            let stayEnd = back.words_result['失效日期'].words
-            this.form.stayEnd = stayEnd.slice(0,4)+'-'+stayEnd.slice(4,-2)+'-'+stayEnd.slice(-2)
-            this.form.qfjg = back.words_result['签发机关'].words
-            this.form.contactAddr = front.words_result['住址'].words
-            this.form.sex = front.words_result['性别'].words=='男'?1:2
+
+
+           
         },
         handleChangeSelection({selection:val}){ // 单选
             this.table_selectedRowsInfo = val
@@ -1635,6 +1680,8 @@ export default {
             this.banks = (await api_common.resource('basicdata/banks').get()).map(o=>{return {label:o.name,value:o.id}})
         },
         async edit(){
+            this.loading2 = false
+            this.isRequest = false
             this.dialogFormVisible = true
             this.width = 250
             this.height = 200
@@ -1789,3 +1836,8 @@ export default {
     }
 };
 </script>
+<style>
+.personnelmanagement-table  {
+    color:#000
+}
+</style>

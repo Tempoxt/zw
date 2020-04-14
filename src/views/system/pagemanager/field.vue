@@ -151,11 +151,14 @@
                 v-model="form.isquicksearch"
               /> -->
             </el-col>
+            <el-col :span="12">
+              <form-render :type="`textarea`" autosize :row="1" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入内容"/>
+            </el-col>
+            <el-col :span="12">
+              <form-render :type="`radio`" :field="{name:'是否统计项',options:[{'label':'是','value':true},{'label':'否','value':false}]}" v-model="form.isstatistics" placeholder="请选择"/>
+            </el-col>
           
             </div>
-            <el-col :span="24">
-              <form-render :type="`textarea`" :field="{name:'备注/说明'}" v-model="form.remark" placeholder="请输入内容"/>
-            </el-col>
           </el-row>
         </el-form>
       </div>

@@ -3,6 +3,7 @@
   :table_column="table_field" 
   :table_query.sync="table_form.query"
   @query="querySubmit"
+  class="attendanceRecord-table"
   >
 
 	<el-dialog
@@ -65,7 +66,7 @@
     </table-header>
 
 	<vxe-table
-		class="public-vxe-table"
+		class="public-vxe-table "
 		ref="elTable"
 		resizable
 		show-overflow
@@ -78,43 +79,42 @@
 		v-loading="table_loading"
 		:header-cell-style="vxeHeaderStyle"
 		:height="table_height"
-		@resizable-change="table_dragend"
 		@sort-change="table_sort_change"
 		@cell-click="cellClickEvent"
       	:cell-class-name="cellClassName"
 		:seq-config="{seqMethod: VxeIndexMethod}"
 		>
+		<!--@resizable-change="table_dragend" -->
 		<vxe-table-column 
 			type="selection" 
-			width="60" 
+			width="45" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
-			fixed="left"
-		>
-		</vxe-table-column>
-        <vxe-table-column type="index" width="60" align="center" fixed="left"></vxe-table-column>
-		<vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="80">
+		></vxe-table-column>
+        <vxe-table-column type="index" width="40" align="center"></vxe-table-column>
+		<!-- <vxe-table-column field="staff__employeeCode" title="工号" fixed="left" width="50">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__employeeCode"></div>
+				<div v-html="scope.row.staff__employeeCode"  :title="scope.row.staff__employeeCode"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="120">
+		<vxe-table-column field="staff__chineseName" title="姓名" fixed="left" width="60">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__chineseName"></div>
+				<div v-html="scope.row.staff__chineseName" :title="scope.row.staff__chineseName"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="120">
+		<vxe-table-column field="staff__department_name" title="部门" fixed="left" width="80">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__department_name"></div>
+				<div v-html="scope.row.staff__department_name" :title="scope.row.staff__department_name"></div>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="100">
+		<vxe-table-column field="staff__team_name" title="小组" fixed="left" width="60">
 			<template slot-scope="scope">
-				<div v-html="scope.row.staff__team_name"></div>
-			</template>
-		</vxe-table-column>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name)).filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
-			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)"/>
+				<div v-html="scope.row.staff__team_name" :title="scope.row.staff__team_name"></div>
+			</template>.filter(o=>!['staff__employeeCode','staff__chineseName','staff__department_name','staff__team_name'].includes(o.name))
+		</vxe-table-column> -->
+		<vxe-table-column v-for="field in table_field.
+			filter(column=>!column.fed_isvisiable).filter(column=>!column.isvisiable)"
+			:key="field.name" :field="field.name" :title="field.showname" :width="field.width=='auto'?'': parseInt(field.width)" :sortable="field.issort" />
 	</vxe-table>
     <table-pagination 
         :total="table_form.total" 
@@ -332,13 +332,27 @@ export default {
 };
 </script>
 <style lang="scss">
-	.col-red{
-		color: red
-	}
-	.col-bag-blue{
-		background-color:#7ae8ff
-	}
-	.col-bag-pink{
-		background-color:#ffccff
+	.attendanceRecord-table {
+		.col-red{
+			color: red!important;
+		}
+		.col-bag-blue{
+			background-color:#7ae8ff
+		}
+		.col-bag-pink{
+			background-color:#ffccff
+		}
+		.vxe-table .vxe-body--column:not(.col--ellipsis), .vxe-table .vxe-footer--column:not(.col--ellipsis), .vxe-table .vxe-header--column:not(.col--ellipsis) {
+			padding: 4px 0;
+    		line-height: 16px;
+		}
+		.public-vxe-table.vxe-table .vxe-body--column.col--ellipsis, .public-vxe-table .vxe-table.vxe-editable .vxe-body--column, .public-vxe-table .vxe-table .vxe-footer--column.col--ellipsis, .public-vxe-table .vxe-table .vxe-header--column.col--ellipsis {
+			height: 22px;
+			color: #000;
+		}
+		.vxe-table .vxe-cell {
+			padding: 0px 4px;
+			text-align: center;
+		}
 	}
 </style>

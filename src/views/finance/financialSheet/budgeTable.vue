@@ -28,6 +28,8 @@
 		:height="table_height"
 		@header-dragend="table_dragend"
 		@sort-change="table_sort_change"
+		:show-summary="table_config.isShowFooter"
+		:summary-method="getSummaries"
     	>
 		<el-table-column 
 			type="selection" 
@@ -58,9 +60,6 @@ import importForm from './importForm'
 export default {
 	mixins: [table_mixin],
 	props:['id'],
-	components:{
-		importForm
-	},
 	data() {
 		return {
 			loading: true,
@@ -73,6 +72,7 @@ export default {
 			statusk:1,
 			val:'',
 			s:1,
+			table_topHeight:233,
 		};
 	},
 	watch:{

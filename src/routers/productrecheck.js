@@ -19,5 +19,12 @@ export default [
         meta: {
             title: '操作名单'
         }
+    },
+    {
+        name: 'productionHoursForm',
+        component: () => import ('@/views/product/productionHours'),
+        meta: {
+            title: '生产工时登记'
+        }
     }
  ]
