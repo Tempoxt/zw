@@ -84,7 +84,7 @@
         :visible.sync="dialogFormVisible"
         class="public-dialog"
         v-el-drag-dialog>
-            <el-form ref="form" :model="form" label-width="80px" label-position="left" :rules="rules">
+            <el-form ref="form" :model="form" label-width="90px" label-position="right" :rules="rules">
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <form-render
