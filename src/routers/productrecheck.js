@@ -26,5 +26,12 @@ export default [
         meta: {
             title: '生产工时登记'
         }
-    }
+    },
+    {
+        name: 'prod_promotion',
+        component: () => import ('@/views/product/productPlan/index'),
+        meta: {
+            title: '生产推进计划'
+        }
+    },
  ]

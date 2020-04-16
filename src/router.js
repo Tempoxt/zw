@@ -48,7 +48,7 @@ let router = new Router({
                         title: '面板'
                     }
                 },
-        ]
+            ]
         },
        
         {
