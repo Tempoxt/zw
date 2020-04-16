@@ -62,7 +62,7 @@
 		</div>
 		<vxe-table-column field="matchAmount" title="分配金额" width="110" v-if="this.m==3">
 			<template slot-scope="scope">
-				<div :style="{color:scope.row.dispatch__natDispatchMoney-scope.row.matchAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.matchAmount">
+				<div :style="{color:scope.row.dispatch__natSumMoney-scope.row.matchAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.matchAmount">
 					{{scope.row.matchAmount}}
 				</div>
 			</template>
