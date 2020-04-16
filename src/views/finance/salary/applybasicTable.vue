@@ -86,33 +86,101 @@
             <!-- <dateLap v-model="table_form.dateLap" @change="fetchTableData"/> -->
           </div>
     </table-header>
-    <el-table
-        ref="elTable"
-      @selection-change="handleChangeSelection"
+    <vxe-table
+      class="public-vxe-table applyBasic"
+      ref="xTable"
+      resizable
+      show-overflow
+      highlight-hover-row
+      @select-all="handleChangeSelection"
+      @select-change="handleChangeSelection"
       :data="table_data"
       border
       style="width: 100%"
       v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
+      :header-cell-style="vxeHeaderStyle"
       :height="table_height"
-      @header-dragend="table_dragend"
+      @resizable-change="table_dragend"
       @sort-change="table_sort_change"
-		  :show-summary="table_config.isShowFooter"
-		  :summary-method="getSummaries"
-    >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
+      :seq-config="{seqMethod: VxeIndexMethod}"
+      :show-footer="table_config.isShowFooter"
+      :footer-method="footerMethod"
       >
-      </el-table-column>
-      <el-table-column type="index" :index="indexMethod" width="60" fixed/>
-      <el-table-column prop="staff__socialSecurityMain" sortable label="社保主体" width="100" fixed/>
-      <el-table-column prop="staff__employeeCode" sortable label="工号" fixed/>
-      <el-table-column prop="staff__chineseName" label="姓名" fixed/>
-    <each-table-column :table_field="table_field.filter(o=>!['staff__socialSecurityMain','staff__employeeCode','staff__chineseName'].includes(o.name))" :template="template"/>
-    </el-table>
+      <vxe-table-column 
+        type="selection" 
+        width="45" 
+        class-name="table-column-disabled"
+        :selectable="table_disable_selected"
+        fixed="left"
+      >
+      </vxe-table-column>
+      <vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="60"/>
+      <vxe-table-column field="staff__socialSecurityMain" title="社保主体" width="90" fixed="left">
+        <template v-slot="{ row }">
+          <div v-html="row.staff__socialSecurityMain"></div>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="staff__employeeCode" title="工号" width="70" fixed="left">
+        <template v-slot="{ row }">
+          <div v-html="row.staff__employeeCode"></div>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="staff__chineseName" title="姓名" width="70" fixed="left">
+        <template v-slot="{ row }">
+          <div v-html="row.staff__chineseName"></div>
+        </template>
+      </vxe-table-column>
+
+      <vxe-table-column field="verify" title="状态" width="70">
+        <template v-slot="{ row }">
+          <el-tag size="mini" type="danger" v-if="row.verify==0">未审核</el-tag>
+          <el-tag size="mini" type="success" v-if="row.verify==1">已审核</el-tag>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="sheetType" title="工薪单类型" width="70">
+        <template v-slot="{ row }">
+          <el-button type="text" @click="handleTypeClick(row.staff__employeeCode)" v-if="row.sheetType==0">初始化</el-button>
+          <el-button type="text" @click="handleTypeClick(row.staff__employeeCode)" v-if="row.sheetType==1">入职</el-button>
+          <el-button type="text" @click="handleTypeClick(row.staff__employeeCode)" v-if="row.sheetType==2">调薪</el-button>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column v-for="field in table_field.filter(o=>!['staff__socialSecurityMain','staff__employeeCode','staff__chineseName','verify','sheetType',
+        'aWorkdayOtHours','aWeekOtDay','aWeekOtHours','oaId','signState'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+        filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+        :width="field.width=='auto'?'': parseInt(field.width)"/>
+      <vxe-table-column  field="aWorkdayOtHours" title="工作日加班工时" width="80">
+        <template v-slot="{ row }">
+          <span v-if="row.aWorkdayOtHours == 'aa'">按考勤</span>
+          <span v-if="row.aWorkdayOtHours == 'as'">周六</span>
+          <span v-if="row.aWorkdayOtHours != 'as' && row.aWorkdayOtHours != 'aa'">{{row.aWorkdayOtHours}}</span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column  field="aWeekOtDay" title="休息日加班天数" width="80">
+        <template v-slot="{ row }">
+          <span v-if="row.aWeekOtDay == 'aa'">按考勤</span>
+          <span v-if="row.aWeekOtDay == 'as'">周六</span>
+          <span v-if="row.aWeekOtDay != 'as' && row.aWeekOtDay != 'aa'">{{row.aWeekOtDay}}</span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column  field="aWeekOtHours" title="休息日加班工时" width="80">
+        <template v-slot="{ row }">
+          <span v-if="row.aWeekOtHours == 'aa'">按考勤</span>
+          <span v-if="row.aWeekOtHours == 'as'">周六</span>
+          <span v-if="row.aWeekOtHours != 'as' && row.aWeekOtHours != 'aa'">{{row.aWeekOtHours}}</span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column  field="oaId" title="OA编号" width="70">
+        <template v-slot="{ row }">
+          <span>{{row.oaId}}</span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column  field="signState" title="签名确认" width="70">
+        <template v-slot="{ row }">
+          <span>{{row.signState}}</span>
+        </template>
+      </vxe-table-column>
+    </vxe-table>
+  
      <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -151,56 +219,7 @@ export default {
       loading: true,
       api_resource,
       queryDialogFormVisible:true,
-      template:{
-        sheetType(column,row){//工薪单类型
-          const { staff__employeeCode } = row 
-          if(row.sheetType==0){
-            return <el-button type="text" onClick={()=>{vm.handleTypeClick(staff__employeeCode)}}>初始化</el-button>
-          }else if(row.sheetType==1){
-            return <el-button type="text"  onClick={()=>{
-              vm.handleTypeClick(staff__employeeCode)
-            }}>入职</el-button>
-          }else{
-            return <el-button type="text"  onClick={()=>{
-              vm.handleTypeClick(staff__employeeCode)
-            }}>调薪</el-button>
-          }
-        },
-        aWorkdayOtHours(column,row){//工作日加班工时
-          if(row.aWorkdayOtHours=='aa'){
-            return <span>按考勤</span>
-          }else if(row.aWorkdayOtHours=='as'){
-            return <span>周六</span>
-          }else{
-            return <span>{row.aWorkdayOtHours}</span>
-          }
-        },
-        aWeekOtDay(column,row){//休息日加班天数
-          if(row.aWeekOtDay=='aa'){
-            return <span>按考勤</span>
-          }else if(row.aWeekOtDay=='as'){
-            return <span>周六</span>
-          }else{
-            return <span>{row.aWeekOtDay}</span>
-          }
-        },
-        aWeekOtHours(column,row){//休息日加班工时
-          if(row.aWeekOtHours=='aa'){
-            return <span>按考勤</span>
-          }else if(row.aWeekOtHours=='as'){
-            return <span>周六</span>
-          }else{
-            return <span>{row.aWeekOtHours}</span>
-          }
-        },
-        verify(column,row){
-          if(row.verify==0){
-            return <el-tag size="mini" type="danger">未审核</el-tag>
-          }else if(row.verify==1){
-            return <el-tag size="mini" type="success">已审核</el-tag>
-          }
-        }
-      },
+      vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			table_topHeight:233,
     };
   },
@@ -211,7 +230,29 @@ export default {
     },
   },
   methods: {
-    
+    table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
+      let row = this.table_field.find(field=>field.showname===column.title)
+      var isEnd = false
+      this.table_field.forEach((item,i)=>{
+          if(item==row&&i==this.table_field.length-2){
+            isEnd = true
+          }
+      })
+      var newWidth = column.resizeWidth
+      row.width = newWidth
+      row.menuid = row.menuid_id
+      api_pagemanager.update(row.id,{
+          width:newWidth,
+          menuid:row.menuid_id
+      },{alert:false})
+    },
+		handleChangeSelection({selection:val}){ // 单选
+      this.table_selectedRowsInfo = val
+      this.table_selectedRows = val
+			this.$emit("update:table_selectedRows",val)
+			let xTable = this.$refs.xTable
+      xTable.updateFooter()
+    },
     async handleTypeClick(staff__employeeCode){
       this.drawer = true
       this.drawer_loading = true
@@ -255,6 +296,9 @@ export default {
 }
 .applybasicTableDrawer .ivu-drawer-header{
   background: rgba(245,250,251,1)
+}
+.applyBasic.vxe-table.t--border .vxe-table--fixed-left-wrapper .vxe-body--column{
+  height: 32px;
 }
 </style>
 <style lang="scss" scoped>
