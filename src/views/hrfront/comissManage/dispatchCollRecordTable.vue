@@ -38,29 +38,31 @@
 		>
 		<vxe-table-column 
 			type="selection" 
-			width="60" 
+			width="50" 
 			class-name="table-column-disabled"
 			:selectable="table_disable_selected"
 			fixed="left"
 		>
 		</vxe-table-column>
-		<vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="80"/>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['unpaidAmount','paidAmount','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+		<vxe-table-column type="index" :index="indexMethod" align="center" fixed="left" width="60"/>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['paidAmount','unpaidAmount','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
-			:width="field.width=='auto'?'': parseInt(field.width)"/>	
-		<vxe-table-column field="paidAmount" title="已收款金额" width="110" v-if="this.m==1">
-			<template slot-scope="scope">
-				<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':'#18CC72'}" v-html="scope.row.paidAmount"></div>
-			</template>
-		</vxe-table-column>	
-		<vxe-table-column field="unpaidAmount" title="未收款金额" width="110" v-if="this.m==1">
-			<template slot-scope="scope">
-				<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':''}"  v-html="scope.row.unpaidAmount"></div>
-			</template>
-		</vxe-table-column>
+			:width="field.width=='auto'?'': parseInt(field.width)"/>
+		<div v-if="this.m==1" >
+			<vxe-table-column field="paidAmount" title="已收款金额" width="110" fixed="right">
+				<template slot-scope="scope">
+					<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':'#18CC72'}" v-html="scope.row.paidAmount"></div>
+				</template>
+			</vxe-table-column>	
+			<vxe-table-column field="unpaidAmount" title="未收款金额" width="110" fixed="right">
+				<template slot-scope="scope">
+					<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':''}"  v-html="scope.row.unpaidAmount"></div>
+				</template>
+			</vxe-table-column>
+		</div>
 		<vxe-table-column field="matchAmount" title="分配金额" width="110" v-if="this.m==3">
 			<template slot-scope="scope">
-				<div :style="{color:scope.row.dispatch__natDispatchMoney-scope.row.matchAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.matchAmount">
+				<div :style="{color:scope.row.dispatch__natSumMoney-scope.row.matchAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.matchAmount">
 					{{scope.row.matchAmount}}
 				</div>
 			</template>

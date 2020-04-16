@@ -57,6 +57,9 @@
                                          <el-col :span="6">
                                             <form-render prop="customer_name" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'客户名称'}" v-model="form.customer_name" />
                                         </el-col>
+                                        <el-col :span="6">
+                                            <form-render prop="production_order_number" :type="`input`" placeholder="根据订单号行号自动获取" :field="{name:'生产订单数量'}" v-model="form.production_order_number" readonly/>
+                                        </el-col>
                                     </el-row>
                             </div>
                             <div>
@@ -704,7 +707,7 @@ export default {
                    this.$set(this.form,'product_encoding',result[0].cInvCode)
                    this.$set(this.form,'product_name',result[0].cInvName)
                    this.$set(this.form,'customer_name',result[0].customer_code)
-
+                   this.$set(this.form,'production_order_number',result[0].Qty)
 
                 //    this.form.product_encoding = result[0].cInvCode
                 //    this.form.product_name = result[0].cInvName

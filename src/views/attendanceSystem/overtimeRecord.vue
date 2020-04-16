@@ -6,7 +6,7 @@
         <div v-if="view_activeName==='申请中'">
             <overtimeTable auditStatus='0' m='0' url="attendance/overtime"/>
         </div>
-        <div v-if="view_activeName==='已审核'">
+        <div v-if="view_activeName==='加班申请汇总'">
             <overtimeTable auditStatus='1' m='1' url="attendance/overtime"/>
         </div>
         <div v-if="view_activeName==='产线加班计划'">
