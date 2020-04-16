@@ -13,7 +13,7 @@
                 v-el-drag-dialog
                 >
                 <div>
-                    <el-form ref="form" :model="form" label-width="80px" label-position="left" :rules="rules">
+                    <el-form ref="form" :model="form" label-width="100px" label-position="left" :rules="rules">
                         <el-tabs v-model="form_activeName" >
                             <el-tab-pane label="岗位信息" name="first">
                             <br />
@@ -37,14 +37,6 @@
                                                 v-model="form.principalship"
                                             /> 
                                         </el-col>
-                                        <!-- <el-col :span="24">
-                                            <form-render
-                                                :type="`select`"
-                                                filterable
-                                                :field="{name:'招聘岗位',options:principalshipData}"
-                                                v-model="form.principalship"
-                                            /> 
-                                        </el-col> --> 
                                         <el-col :span="24">
                                             <form-render
                                                 :type="`select`"
@@ -69,7 +61,7 @@
                                                 autosize
                                                 :rows='1'
                                                 prop="jobResponsibility"
-                                                :field="{name:'岗位职责'}"
+                                                :field="{name:'岗位职责'}" placeholder="请输入"
                                                 v-model="form.jobResponsibility"
                                             /> 
                                         </el-col>
@@ -83,12 +75,33 @@
                                             /> 
                                         </el-col>
                                         <el-col :span="24">
+                                            <el-form-item label="岗位负责人" prop="jobPrincipal">
+                                                <el-select
+                                                    style="width:100%"
+                                                    v-model="form.jobPrincipal"
+                                                    filterable
+                                                    clearable
+                                                    remote
+                                                    reserve-keyword
+                                                    placeholder="请输入关键词"
+                                                    :remote-method="remoteMethod"
+                                                    >
+                                                    <el-option
+                                                        v-for="item in introducerData"
+                                                        :key="item.value"
+                                                        :label="item.chineseName +`(${item.employeeCode})`"
+                                                        :value="item.id">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="24">
                                             <form-render
                                                 :type="`textarea`"
-                                                :autosize="{ minRows: 4, maxRows: 4}"
+                                                :autosize="{ minRows: 6, maxRows: 6}"
                                                 prop="responsibilities"
                                                 :field="{name:'工作职责'}"
-                                                v-model="form.responsibilities"
+                                                v-model="form.responsibilities" placeholder="请输入"
                                             /> 
                                         </el-col>
                                         <!-- <el-col :span="24">
@@ -152,12 +165,47 @@
                                             /> 
                                         </el-col>
                                         <el-col :span="24">
+                                            <el-form-item label="面试官">
+                                                <el-select
+                                                    style="width:100%"
+                                                    v-model="form.interviewer"
+                                                    filterable
+                                                    clearable
+                                                    remote
+                                                    reserve-keyword
+                                                    placeholder="请输入关键词"
+                                                    :remote-method="remoteMethod"
+                                                    >
+                                                    <el-option
+                                                        v-for="item in introducerData"
+                                                        :key="item.value"
+                                                        :label="item.chineseName +`(${item.employeeCode})`"
+                                                        :value="item.id">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="24">
+                                            <form-render
+                                                prop="interview"
+                                                :type="`radio`"
+                                                :field="{name:'是否面试',options:[{
+                                                    value: 1,
+                                                    label: '需要面试'
+                                                },{
+                                                    value: 0,
+                                                    label: '不需要面试'
+                                                }]}"
+                                                v-model="form.interview"
+                                            /> 
+                                        </el-col>
+                                        <el-col :span="24">
                                             <form-render
                                                 :type="`textarea`"
                                                 :autosize="{ minRows: 4, maxRows: 4}"
                                                 prop="qualifications"
                                                 :field="{name:'任职资格'}"
-                                                v-model="form.qualifications"
+                                                v-model="form.qualifications" placeholder="请输入"
                                             /> 
                                         </el-col>
                                     </el-row>
@@ -388,6 +436,15 @@ export default {
         }
     },
     methods:{
+        async remoteMethod(query){
+            if (query !== '') {
+                this.introducerData = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
+                    keyword:query,
+                    pagesize:10
+                })
+            } 
+        },
         handleClick(){
            
         },
@@ -475,6 +532,7 @@ export default {
     },
     data(){
         return {
+            introducerData: [],
             activeName:'first',
             form_activeName:'first',
             table_topHeight:295,
@@ -529,6 +587,15 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 newjobtype:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                interview:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                interviewer:[
+                    { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                jobPrincipal:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
             },
