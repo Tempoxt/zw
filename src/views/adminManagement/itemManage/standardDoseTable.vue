@@ -50,6 +50,12 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`textarea`" autosize :row="2" prop="formulaMethod" :field="{name:'计算方式'}" v-model="form.formulaMethod"/>
                         </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="quota" :field="{name:'配额/人'}" v-model="form.quota"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="needNumber" :field="{name:'需要人数'}" v-model="form.needNumber"/>
+                        </el-col>
                     </el-row>
                 </el-form>
             </div>
@@ -140,6 +146,14 @@ export default {
                     { required: true, message: '请选择', trigger: ['blur','change'] },
                 ],
                 dose:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                    { validator: checkNumber, trigger: 'blur' }
+                ],
+                quota:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                    { validator: checkNumber, trigger: 'blur' }
+                ],
+                needNumber:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
                     { validator: checkNumber, trigger: 'blur' }
                 ],

@@ -223,5 +223,12 @@ export default [{
         meta: {
             title: '物品请购1'
         }
+    },{
+        name: 'departStock',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/departStock'),
+        meta: {
+            title: '部门进销存'
+        }
     },
  ]
