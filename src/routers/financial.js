@@ -128,6 +128,14 @@ export default [
         }
     },
     {
+        name: 'commGetcom',
+        component: () =>
+            import ('@/views/hrfront/comissManage/comissionFactor1'),
+        meta: {
+            title: '业务提成系数1'
+        }
+    },
+    {
         name: 'productAddRatio',
         component: () =>
             import ('@/views/hrfront/comissManage/proAppreRate'),
