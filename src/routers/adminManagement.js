@@ -216,5 +216,12 @@ export default [{
         meta: {
             title: '出库记录'
         }
+    },{
+        name: 'Purchase',
+        component: () =>
+            import ('@/views/adminManagement/itemManage/purchase'),
+        meta: {
+            title: '物品请购1'
+        }
     },
  ]
