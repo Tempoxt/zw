@@ -228,6 +228,8 @@ export default {
 			appreRate: '45', //标准增值率系数暂定为45%
 			process: '',
 			salesMan: [],
+			isYear: false,
+			yearData: [],
 		}
 	},
 	computed:{
@@ -261,6 +263,7 @@ export default {
             xTable.updateFooter()
         },
 		async fetchDateLap(){
+			this.isYear = this.dateLap.split('-')[1] == undefined ? true : false
 			this.table_form.quicksearch = 'employeeCode'
 			this.table_form.currentpage = 1
 			this.salesMan = await this.$request.get('commission/demo/sales?dateLap='+this.dateLap)
@@ -306,6 +309,37 @@ export default {
 					}
 				})
 			]
+		},
+		sortArr(arr, str) {
+			var _arr = [],
+				_t = [],
+				// 临时的变量
+				_tmp;
+			// 按照特定的参数将数组排序将具有相同值得排在一起
+			arr = arr.sort(function(a, b) {
+				var s = a[str],
+					t = b[str];
+		
+				return s < t ? -1 : 1;
+			});
+		
+			if ( arr.length ){
+				_tmp = arr[0][str];
+			}
+			// 将相同类别的对象添加到统一个数组
+			for (var i in arr) {
+				if ( arr[i][str] === _tmp ){
+					_t.push( arr[i] );
+				} else {
+					_tmp = arr[i][str];
+					_arr.push( _t );
+					_t = [arr[i]];
+				}
+			}
+			// 将最后的内容推出新数组
+			_arr.push( _t );
+			this.yearData = _arr
+			return _arr;
 		},
 		changeCaculat(){//切换计算公式
 			this.allAmount = []
@@ -649,10 +683,14 @@ export default {
 				}
 				let amount = (commissEnd - r.commissionStart) * r.commissionStepRatio
 				this.allAmount.push(amount)
-				addSymbol = this.process==''?'':'+'
-				this.process +=  ''+addSymbol+ Number((commissEnd -  r.commissionStart)).toFixed(4) +'*'+ r.commissionStepRatio
+				if(this.isYear==false){
+					addSymbol = this.process==''?'':'+'
+					this.process +=  ''+addSymbol+ Number((commissEnd -  r.commissionStart)).toFixed(4) +'*'+ r.commissionStepRatio
+				}
 			})
-			this.process ='('+this.process + ')*' +this.AssessmentRatio.assessmentRatio
+			if(this.isYear==false){
+				this.process ='('+this.process + ')*' +this.AssessmentRatio.assessmentRatio
+			}
 			if(this.allAmount.length > 0) {
 				return this.allAmount.reduce((tem, item, index) => tem + item)
 			}else{
@@ -663,13 +701,34 @@ export default {
 		caculatSum(){ //计算合计提成金额
 			this.allAmount = []
 			var allAmounts = []
-			this.table_data.forEach(o => {
-				allAmounts.push(Number(o.commissionAmount))
-			})
-			let sumAmount = allAmounts.reduce((tem, item, index) => Number(tem) + Number(item))
-			let sum  = this.getCommissionSum(sumAmount)
-			console.log(sum)
-			this.commissionTotalAmount = (sum * (this.AssessmentRatio.assessmentRatio)).toFixed(4)
+			this.process = ''
+			if(this.isYear){
+				let addSymbol = ''
+				this.sortArr(this.table_data, 'dateLap');
+				let arr = []
+				let total = []
+				this.yearData.forEach(y=>{
+					arr = []
+					y.forEach(o=>{
+						arr.push(o.commissionAmount)
+					})
+					let arrSum = arr.reduce((tem, item, index) => +tem + +item)
+					let sum  = this.getCommissionSum(arrSum)
+					total.push((sum * (this.AssessmentRatio.assessmentRatio)).toFixed(4))
+				})
+				total.forEach((o,i)=>{
+					addSymbol = i==0?'':'+'
+					this.process += ''+addSymbol+(+o).toFixed(4)
+				})
+				this.commissionTotalAmount = total.length==1 ? total[0] : (total.reduce((tem, item, index) => +tem + +item)).toFixed(4)
+			}else{
+				this.table_data.forEach(o => {
+					allAmounts.push(+o.commissionAmount)
+				})
+				let sumAmount = allAmounts.reduce((tem, item, index) => +tem + +item)
+				let sum  = this.getCommissionSum(sumAmount)
+				this.commissionTotalAmount = (sum * (this.AssessmentRatio.assessmentRatio)).toFixed(4)
+			}
 		},
 
 		async updateBasicData(){ //统一更新基础参数表
@@ -717,8 +776,7 @@ export default {
 				this.process = ''
 			}
 			setTimeout(() => {
-				this.table_loading = false;
-				this.$refs.elTable.doLayout()
+				this.table_loading = false
 			}, 300);
 
 			this.updateAppreRate() //页面初始化 更新标准增值率 计算增值率系数

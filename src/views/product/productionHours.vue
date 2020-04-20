@@ -195,6 +195,7 @@
             :height="table_height"
             @header-dragend="table_dragend"
             @sort-change="table_sort_change"
+            :row-class-name="table_state_className"
             align="center"
             :show-summary="table_config.isShowFooter"
             :summary-method="getSummaries"

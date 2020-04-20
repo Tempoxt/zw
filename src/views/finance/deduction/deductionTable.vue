@@ -335,8 +335,9 @@ export default {
 			statusk:1,
 			val:'',
 			s:1,
-			importDialog:false,
-			importForm:{}
+			importDialog: false,
+			importForm: {},
+			isSpecical: false
 		};
 	},
 	computed:{
@@ -414,6 +415,23 @@ export default {
 		}
 	},
 	methods: {
+		async SpecialUpload(){
+			this.isSpecical = true
+			this.statusk = 1
+			this.importForm = {}
+			this.$nextTick(()=>{
+				this.$refs['importForm'].clearValidate()
+			})
+			try {
+				this.fileList1 = []
+				this.fileList2 = []
+			} catch (error) {
+				
+			}
+			this.importDialog = true
+			this.dedulist = await api_common.getTag('deduction')
+			this.programList =await this.$request.get('/deduction/program')
+		},
 		downLoad(){
 			this.handleDownloadChange()
 			this.importDialog = false
@@ -434,7 +452,8 @@ export default {
 			Object.keys(this.importForm).forEach(k=>{
 				formData.append(k,this.importForm[k])
 			})
-			let mes = await this.$request.post('/deduction/upload',formData)
+			let url = this.isSpecical==true ? '/deduction/upload/noworkflow' : '/deduction/upload'
+			let mes = await this.$request.post(url,formData)
 			this.importDialog = false
 			this.$message({
 				message: mes,
@@ -449,6 +468,7 @@ export default {
 			
 		},
 		async import(){
+			this.isSpecical = false
 			this.statusk = 1
 			this.importForm = {}
 			this.$nextTick(()=>{
@@ -463,25 +483,6 @@ export default {
 			this.importDialog = true
 			this.dedulist = await api_common.getTag('deduction')
 			this.programList =await this.$request.get('/deduction/program')
-			//  ().map(o=>{
-			// 	return {
-			// 		label:o.selectname,
-			// 		value:o.id
-			// 	}
-			// })
-			// let {
-			// 	handleImportChange,
-			// } = this
-			// MessageBox.alert(
-			// 	<el-button-group class="table-import-upload" ref="import">
-			// 		<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
-			// 		<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
-			// 		<el-button type="" v-show={this.downloadUrl!=''&&this.downloadUrl!=undefined} style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
-			// 	</el-button-group>
-			// 	, '选择文件导入', {
-			// 	showConfirmButton:false,
-			// 	center:true
-			// });
 		},
 		async handleImportChange(ev){
 			const files = ev.target.files;
@@ -522,7 +523,8 @@ export default {
 					this.$message.error({ message: '导入失败,请重试'})
 				}
 				try{
-					this.val = await this.$request.get('/deduction/upload',{alert:false})
+					let url = this.isSpecical==true ? '/deduction/upload/noworkflow' : '/deduction/upload'
+					this.val = await this.$request.get(url,{alert:false})
 					this.statusk = 0
 					this.$message.success({ message: this.val,duration:3000})
 					this.fetchTableData()
