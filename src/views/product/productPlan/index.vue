@@ -36,36 +36,9 @@
 
                     <el-table-column type="index" label="序号" :index="indexMethod"  fixed="left"/>
 
-                    <el-table-column field="product_encoding" label="产品编码" width="85">
-                        <template slot-scope="scope">
-                            <span>{{scope.row.product_encoding}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column field="product_name" label="产品名称" width="85">
-                        <template slot-scope="scope">
-                            <span>{{scope.row.product_name}}</span>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column field="number" label="人数" width="85">
-                        <template slot-scope="scope">
-                            <span>{{scope.row.number.split('.')[1]>0?scope.row.number:scope.row.number.split('.')[0]}}</span>
-                        </template>
-                    </el-table-column>
-
-                    <each-table-column :table_field="table_field.filter(o=>!['product_encoding','product_name','recently_modified_time','number','create_time'].includes(o.name))"  :template="template" />
+                    <each-table-column :table_field="table_field"  :template="template" />
                     <!-- <each-table-column :table_field="table_field"/> -->
                         
-                    <el-table-column field="recently_modified_time" label="最近修改日期" width="85">
-                        <template slot-scope="scope">
-                            <span>{{format(scope.row.recently_modified_time)}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column field="created" label="创建时间" width="85">
-                        <template slot-scope="scope">
-                            <span>{{format(scope.row.created)}}</span>
-                        </template>
-                    </el-table-column>
                 
                 </el-table>
 
@@ -120,19 +93,18 @@
                     </el-col>
                     <el-col :span="12">
                         <form-render
-                            prop="equilibrium_rate"
-                            :type="`input`"
-                            :field="{name:'产线平衡率'}"
-                            v-model="form.equilibrium_rate"
-                        />
-                    </el-col>
-                    <el-col :span="12">
-                        <form-render
                             prop="initial_completion_time"
                             :type="`day`"
                             :field="{name:'初始完成时间'}"
                             v-model="form.initial_completion_time"
                         />
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item prop="equilibrium_rate" label="产线平衡率">
+                            <el-input placeholder="请输入" v-model="form.equilibrium_rate">
+                                <template slot="append">%</template>
+                            </el-input>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <form-render
@@ -150,6 +122,8 @@
                             v-model="form.mass_production_time"
                         />
                     </el-col>
+                    
+                    
                 </el-row>
             </el-form>
 
@@ -172,7 +146,7 @@ import table_mixin from "@c/Table/table_mixin";
 export default {
     name: 'productPlan',
     mixins: [table_mixin],
-    data() {
+    data(){
         var validatorNum = (rule, value, callback) => {
             if(value == undefined || value == '') {
                 callback(new Error('请输入'));
@@ -185,7 +159,7 @@ export default {
         var validatorNum2 = (rule, value, callback) => {
             if(value == undefined || value == '') {
                 callback();
-            }else if(!(/^[0-9]+(.[0-9]{2})?$/.test(value))){
+            }else if(!(/^[0-9]+(.[0-9]{1,3})?$/.test(value))){
                 callback(new Error('请输入正确的数字'));
             }else{
                 callback();
@@ -197,11 +171,11 @@ export default {
             api_resource: api_common.resource(`${'productrecheck/production/promotion'}`),
             form: {},
             rules:{
-                product_encoding: [{ required: true, message: '请选择', trigger: 'change' }],
-                product_name: [{ required: true, message: '请选择', trigger: 'change' }],
-                production_number: [{ required: true, message: '请选择', trigger: 'change' }],
+                product_encoding: [{ required: true, message: '请输入', trigger: 'change' }],
+                product_name: [{ required: true, message: '请输入', trigger: 'change' }],
+                production_number: [{ required: true, message: '请输入', trigger: 'change' }],
                 number: [{trigger: 'change', validator: validatorNum}],
-                equilibrium_rate: [{trigger: 'change', validator: validatorNum2}],
+                equilibrium_rate: [{trigger: 'change', validator: validatorNum}],
             },
             statusList: [
                 {name: '新产品', val: 1, color: 'tagC-blue'},
@@ -217,7 +191,23 @@ export default {
                     }else if(row.status==3){
                         return  <el-tag size="mini" class="tagC-org">待更新</el-tag>
                     }
-                }
+                },
+                equilibrium_rate(column,row){
+                    let val = row.equilibrium_rate?row.equilibrium_rate + '%':'-'
+                    return <span>{val}</span>
+                },
+                number(column,row){
+                    let val = row.number.split('.')[1]>0?row.number:row.number.split('.')[0]
+                    return <span>{val}</span>
+                },
+                recently_modified_time(column,row){
+                    let val = row.recently_modified_time?dayjs(row.recently_modified_time).format('YYYY-MM-DD'):'-'
+                    return <span>{val}</span>
+                },
+                create_time(column,row){
+                    let val = row.create_time?dayjs(row.create_time).format('YYYY-MM-DD'):'-'
+                    return <span>{val}</span>
+                },
             },
         }
     },
@@ -253,7 +243,6 @@ export default {
             this.table_loading = true
             const {rows,total}  =  await this.api_resource.get(this.table_form);
             this.table_data = rows
-           console.log(rows, 999)
             this.table_form.total = total
             setTimeout(()=>{
                 this.table_loading = false
@@ -261,6 +250,7 @@ export default {
         },
         add(){
             this.dialogFormVisible = true
+            this.form = {}
             this.$nextTick(()=>{
                 this.$refs['form'].clearValidate()
             })
@@ -273,11 +263,13 @@ export default {
         },
         customExport(){
             this.table_data.forEach(o=>{
-                o.status = o.status==1?'新产品':'更新'
+                o.status = o.status==1?'新产品':o.status==2?'已更新':'待更新'
                 o.recently_modified_time = dayjs(o.recently_modified_time).format('YYYY-MM-DD')
                 o.created = dayjs(o.created).format('YYYY-MM-DD')
+                o.equilibrium_rate = o.equilibrium_rate?o.equilibrium_rate+'%':'-'
             })
             this.export()
+            this.fetchMenu()
         },
         async handleFormSubmit() {
             await this.form_validate()
@@ -304,9 +296,9 @@ export default {
             this.fetchTableData()
         },
     },
-    created() {
-        this.fetchFormData()
-        this.fetchMenu()
+    async created() {
+        await this.fetchFormData()
+        await this.fetchMenu()
     }
     
 }
