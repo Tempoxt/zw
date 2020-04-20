@@ -21,6 +21,14 @@ export default [
         }
     },
     {
+        name: 'ErrorPproofQuery',
+        component: () =>
+            import ('@/views/product/errorPproofQuery/index'),
+        meta: {
+            title: '防错记录查询'
+        }
+    },
+    {
         name: 'productionHoursForm',
         component: () => import ('@/views/product/productionHours'),
         meta: {

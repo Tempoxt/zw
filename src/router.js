@@ -25,7 +25,7 @@ let asyncRoutes = [
     ...productrecheck,
     ...cost,
     ...device,
-    ...nh
+    ...nh,
 ]
 
 let router = new Router({
