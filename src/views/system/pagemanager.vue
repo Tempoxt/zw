@@ -120,7 +120,7 @@ export default {
       }
     },
     async initPage(){
-      const { menu } = await api_common.getMenu(this.position);
+      const { menu } = await api_common.getMenu(this.position,0,0);
       this.data2 = menu;
       let defaultMenuid;
       (function f(data) {
