@@ -53,10 +53,10 @@
 										<el-checkbox v-model="form.isExcuseOnDutyCard1">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" prop="signInStartTime1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime1"/>
+										<form-render class="range_time" :disabled="form.isExcuseOnDutyCard1==1" prop="signInStartTime1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime1"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" prop="signInEndTime1" :type="`time`" placeholder="结束时间" :field="{name:''}" v-model="form.signInEndTime1"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOnDutyCard1==1" prop="signInEndTime1" :type="`time`" placeholder="结束时间" :field="{name:''}" v-model="form.signInEndTime1"/>
 									</el-col>
 								</el-row>
 								<el-row>
@@ -67,10 +67,10 @@
 										<el-checkbox v-model="form.isExcuseOffDutyCard1">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" prop="signOutStartTime1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime1"/>
+										<form-render class="range_time" :disabled="form.isExcuseOffDutyCard1==1" prop="signOutStartTime1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime1"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime1"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOffDutyCard1==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime1"/>
 									</el-col>
 								</el-row>
 							</el-col>
@@ -99,10 +99,10 @@
 										<el-checkbox v-model="form.isExcuseOnDutyCard2">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" prop="signInStartTime2" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime2"/>
+										<form-render class="range_time" :disabled="form.isExcuseOnDutyCard2==1" prop="signInStartTime2" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime2"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime2"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOnDutyCard2==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime2"/>
 									</el-col>
 								</el-row>
 								<el-row>
@@ -113,10 +113,10 @@
 										<el-checkbox v-model="form.isExcuseOffDutyCard2">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" prop="signOutStartTime2" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime2"/>
+										<form-render class="range_time" :disabled="form.isExcuseOffDutyCard2==1" prop="signOutStartTime2" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime2"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime2"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOffDutyCard2==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime2"/>
 									</el-col>
 								</el-row>
 							</el-col>
@@ -145,10 +145,10 @@
 										<el-checkbox v-model="form.isExcuseOnDutyCard3">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime3"/>
+										<form-render class="range_time" :disabled="form.isExcuseOnDutyCard3==1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime3"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime3"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOnDutyCard3==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime3"/>
 									</el-col>
 								</el-row>
 								<el-row>
@@ -159,10 +159,10 @@
 										<el-checkbox v-model="form.isExcuseOffDutyCard3">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime3"/>
+										<form-render class="range_time" :disabled="form.isExcuseOffDutyCard3==1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime3"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime3"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOffDutyCard3==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime3"/>
 									</el-col>
 								</el-row>
 							</el-col>
@@ -192,10 +192,10 @@
 										<el-checkbox v-model="form.isExcuseOnDutyCard4">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime4"/>
+										<form-render class="range_time" :disabled="form.isExcuseOnDutyCard4==1" label-width="90px" :type="`time`" :field="{name:'签到时间'}" placeholder="起始时间" v-model="form.signInStartTime4"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime4"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOnDutyCard4==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signInEndTime4"/>
 									</el-col>
 								</el-row>
 								<el-row>
@@ -206,10 +206,10 @@
 										<el-checkbox v-model="form.isExcuseOffDutyCard4">免卡</el-checkbox>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime4"/>
+										<form-render class="range_time" :disabled="form.isExcuseOffDutyCard4==1" label-width="90px" :type="`time`" :field="{name:'签退时间'}" placeholder="起始时间" v-model="form.signOutStartTime4"/>
 									</el-col>
 									<el-col :span="6">
-										<form-render class="range_time end_time" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime4"/>
+										<form-render class="range_time end_time" :disabled="form.isExcuseOffDutyCard4==1" :type="`time`" :field="{name:''}" placeholder="结束时间" v-model="form.signOutEndTime4"/>
 									</el-col>
 								</el-row>
 							</el-col>
@@ -460,6 +460,8 @@ export default {
 		'form.isExcuseOnDutyCard1'(){
 			if(this.form.isExcuseOnDutyCard1==1){
 				this.form.isExcuseOnDutyCard1 = true
+				this.form.signInStartTime1 = ''
+				this.form.signInEndTime1 = ''
 			}else{
 				this.form.isExcuseOnDutyCard1 = false
 			}
@@ -467,6 +469,8 @@ export default {
 		'form.isExcuseOnDutyCard2'(){
 			if(this.form.isExcuseOnDutyCard2==1||this.form.isExcuseOnDutyCard2 == true){
 				this.form.isExcuseOnDutyCard2 = true
+				this.form.signInStartTime2 = ''
+				this.form.signInEndTime2 = ''
 				if(this.form.isExcuseOffDutyCard1==true){
 					this.form.straight1_2 = true
 				}
@@ -478,6 +482,8 @@ export default {
 		'form.isExcuseOnDutyCard3'(){
 			if(this.form.isExcuseOnDutyCard3==1){
 				this.form.isExcuseOnDutyCard3 = true
+				this.form.signInStartTime3 = ''
+				this.form.signInEndTime3 = ''
 				if(this.form.isExcuseOffDutyCard2==true){
 					this.form.straight2_3 = true
 				}
@@ -489,6 +495,8 @@ export default {
 		'form.isExcuseOnDutyCard4'(){
 			if(this.form.isExcuseOnDutyCard4==1){
 				this.form.isExcuseOnDutyCard4 = true
+				this.form.signInStartTime4 = ''
+				this.form.signInEndTime4 = ''
 				if(this.form.isExcuseOffDutyCard3==true){
 					this.form.straight3_4 = true
 				}
@@ -500,6 +508,8 @@ export default {
 		'form.isExcuseOffDutyCard1'(){
 			if(this.form.isExcuseOffDutyCard1==1){
 				this.form.isExcuseOffDutyCard1 = true
+				this.form.signOutStartTime1 = ''
+				this.form.signOutEndTime1 = ''
 				if(this.form.isExcuseOnDutyCard2==true||this.form.isExcuseOnDutyCard2==1){
 					this.form.straight1_2 = true
 				}
@@ -511,6 +521,8 @@ export default {
 		'form.isExcuseOffDutyCard2'(){
 			if(this.form.isExcuseOffDutyCard2==1){
 				this.form.isExcuseOffDutyCard2 = true
+				this.form.signOutStartTime2 = ''
+				this.form.signOutEndTime2 = ''
 				if(this.form.isExcuseOnDutyCard3==true||this.form.isExcuseOnDutyCard3==1){
 					this.form.straight2_3 = true
 				}
@@ -522,6 +534,8 @@ export default {
 		'form.isExcuseOffDutyCard3'(){
 			if(this.form.isExcuseOffDutyCard3==1){
 				this.form.isExcuseOffDutyCard3 = true
+				this.form.signOutStartTime3 = ''
+				this.form.signOutEndTime3 = ''
 				if(this.form.isExcuseOnDutyCard4==true||this.form.isExcuseOnDutyCard4==1){
 					this.form.straight3_4 = true
 				}
@@ -533,6 +547,8 @@ export default {
 		'form.isExcuseOffDutyCard4'(){
 			if(this.form.isExcuseOffDutyCard4==1){
 				this.form.isExcuseOffDutyCard4 = true
+				this.form.signOutStartTime4 = ''
+				this.form.signOutEndTime4 = ''
 			}else{
 				this.form.isExcuseOffDutyCard4 = false
 			}
