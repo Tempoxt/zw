@@ -935,6 +935,7 @@ export default {
         margin-right: 10px;
         box-sizing: border-box;
         text-align: center;
+        cursor: pointer;
     }
     .resume{
         border-color: #0BB2D4;
