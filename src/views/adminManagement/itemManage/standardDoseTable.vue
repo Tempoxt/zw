@@ -56,6 +56,9 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" prop="needNumber" :field="{name:'需要人数'}" v-model="form.needNumber"/>
                         </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" :field="{name:'请购原因'}" v-model="form.purchaseReason"/>
+                        </el-col>
                     </el-row>
                 </el-form>
             </div>

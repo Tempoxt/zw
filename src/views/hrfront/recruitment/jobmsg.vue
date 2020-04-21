@@ -165,7 +165,21 @@
                                             /> 
                                         </el-col>
                                         <el-col :span="24">
-                                            <el-form-item label="面试官">
+                                            <form-render
+                                                prop="interview"
+                                                :type="`radio`"
+                                                :field="{name:'是否面试',options:[{
+                                                    value: 1,
+                                                    label: '需要面试'
+                                                },{
+                                                    value: 0,
+                                                    label: '不需要面试'
+                                                }]}"
+                                                v-model="form.interview"
+                                            /> 
+                                        </el-col>
+                                        <el-col :span="24" v-if="form.interview==1">
+                                            <el-form-item label="面试官" prop="interviewer">
                                                 <el-select
                                                     style="width:100%"
                                                     v-model="form.interviewer"
@@ -184,20 +198,6 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                        </el-col>
-                                        <el-col :span="24">
-                                            <form-render
-                                                prop="interview"
-                                                :type="`radio`"
-                                                :field="{name:'是否面试',options:[{
-                                                    value: 1,
-                                                    label: '需要面试'
-                                                },{
-                                                    value: 0,
-                                                    label: '不需要面试'
-                                                }]}"
-                                                v-model="form.interview"
-                                            /> 
                                         </el-col>
                                         <el-col :span="24">
                                             <form-render
@@ -416,7 +416,9 @@ const defaultForm = function(){
         checkWorkType:0,
         needClass:1,
         contractTime:1,
-        trialTime:2
+        trialTime:2,
+        interview: null,
+        interviewer: ''
         // department:'',
     }
 }
@@ -433,6 +435,9 @@ export default {
             this.table_form.currentpage = 1
             this.api_resource = api_common.resource(this.url)
             this.fetchMenu()
+        },
+        'form.interview'(){
+            this.form.interviewer = this.form.interview == 1 ? this.form.interviewer : ''
         }
     },
     methods:{
@@ -506,6 +511,7 @@ export default {
             },300)
         },
         async handleFormSubmit(){
+            console.log(this.form,'fffffffffffffff')
             await this.form_validate()
             this.form.needTips = '123'
             let form = Object.assign({},this.form)
@@ -532,6 +538,7 @@ export default {
     },
     data(){
         return {
+            isMust: false,
             introducerData: [],
             activeName:'first',
             form_activeName:'first',

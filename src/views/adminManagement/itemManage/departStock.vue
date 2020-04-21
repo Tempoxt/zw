@@ -45,6 +45,9 @@
             <div v-if="view_activeName==='入库明细'">
                 <departStockTable :orgid="orgid" url="toolstationery/departstock/putstorage"/>
             </div>
+            <div v-if="view_activeName==='部门台账'">
+                <departStockTable :orgid="orgid" url="toolstationery/departledger"/>
+            </div>
         </el-col>
     </el-row>
 </template>

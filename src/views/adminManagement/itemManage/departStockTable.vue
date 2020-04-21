@@ -75,6 +75,41 @@
             </div>
         </el-dialog>
 
+        <el-dialog
+            title="盘点"
+            :visible.sync="dialogForm2Visible"
+            class="public-dialog"
+            v-el-drag-dialog
+		    width="800px"
+            >
+           	<div>
+                <el-form ref="form" :model="form2" label-width="70px" :rules="rules2">
+                    <el-row :gutter="20">
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="materialCode" :field="{name:'物料代码'}" :disabled="true" v-model="form2.materialCode"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="articleType" :field="{name:'类别'}" :disabled="true" v-model="form2.articleType"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="articleTitle" :field="{name:'名称'}" :disabled="true" v-model="form2.articleTitle"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="articleSize" :field="{name:'规格'}" :disabled="true" v-model="form2.articleSize"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
+                            <form-render :type="`input`" prop="take_number" :field="{name:'账面库存'}" v-model="form2.take_number"/>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogForm2Visible = false">取 消</el-button>
+                <el-button type="primary" @click="handleForm2Submit">确 定</el-button>
+            </div>
+        </el-dialog>
+
         <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -82,7 +117,7 @@
             :table_form.sync="table_form"
             :table_column="table_field"
         >
-            <div style="padding-left:10px">
+            <div style="padding-left:10px" v-show="this.url!='toolstationery/departledger'">
                 <dateLap v-model="table_form.dateLap" @change="fetch"/>
             </div>
         </table-header>
@@ -218,6 +253,18 @@ export default {
                     { validator: checkNumber, trigger: 'blur' }
                 ],
             },
+            rules2:{
+                take_number:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                    { validator: checkNumber, trigger: 'blur' }
+                ],
+            },
+            form2: {},
+            dialogForm2Visible: false,
+            downloadStock: 'toolstationery/departledger/bulkstack',
+            importUploadStock: 'toolstationery/departledger/bulkstack',
+            importUploadUrl:'toolstationery/departledger/upload',
+            downloadUrl:'toolstationery/departledger/upload',
         };
     },
     computed:{
@@ -243,6 +290,92 @@ export default {
 		}
     },
     methods: {
+        async handleImportChangeStock(ev){
+            const files = ev.target.files;
+            this.importForm.the_file = files[0]
+            if (!files) return;
+            const { importForm } = this
+            var form = new FormData();
+            Object.keys(importForm).forEach(key=>{
+                form.append(key,importForm[key])  
+            })
+            this.importLoading = true
+            MessageBox.close()
+            MessageBox.alert(
+                <div v-loading={true}><br /></div>, '导入中', {
+                showConfirmButton:false,
+                center:true
+            });
+            try {
+                const mes = await this.$request.post(this.importUploadStock,form,{alert:false})
+                this.fetch()
+                this.$message({
+                    message: mes,
+                    type: 'success'
+                });
+            } catch (error) {
+                this.$message.error({dangerouslyUseHTMLString: true,message:error.response.data,duration:6000})
+            }finally{
+                this.importLoading = false
+                MessageBox.close()
+                this.$nextTick(()=>{
+                    this.$refs.importInput.value = null
+                    ev.target.value = null
+                    this.fetch()
+                })
+            }
+        },
+        async handleDownloadChangeStock(){
+            try {
+                if(this.downloadStock){
+                    const  { data,name,contentType } = await this.$request.get(this.downloadStock,{
+                        responseType:'arraybuffer'
+                    })
+                    download(data,name||this.$route.meta.title,contentType)
+                    this.$message({
+                        message: '下载成功',
+                        type: 'success'
+                    });
+                }
+            } catch (error) {
+                
+            }finally{
+                MessageBox.close()
+            }
+        },
+        bulk_take_stock(){
+            let {
+                handleImportChangeStock,
+            } = this
+            MessageBox.alert(
+                <el-button-group class="table-import-upload" ref="import">
+                    <el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+                    <input type="file" ref="input" class="input" on-change={handleImportChangeStock} ref="importInput"></input>
+                    <el-button type="" style="margin-left:20px" onClick={()=>{this.handleDownloadChangeStock()}}>下载模板</el-button>
+                </el-button-group>
+                , '选择文件导入', {
+                showConfirmButton:false,
+                center:true
+            });
+        },
+        inventory(){
+            this.form2.take_number = ''
+            let row = this.table_selectedRows[0];
+            this.form2 = row
+            this.form2.ledger_id = row.id
+            this.dialogForm2Visible = true
+            this.$nextTick(()=>{
+				this.$refs['form2'].clearValidate()
+            })
+        },
+        async handleForm2Submit(){
+            // await this.form_validate('form2')
+            let form2 = Object.assign({},this.form2)
+            let mess = await this.$request.post('toolstationery/departledger/takestock',form2)
+            this.$message.success(mess);
+            this.fetch()
+            this.dialogForm2Visible = false
+        },
         async back(){
 			this.dialogForm1Visible = true
         },
@@ -279,26 +412,12 @@ export default {
             this.$message.success(mes)
 			this.dialogForm1Visible = false
 			this.fetch()
-        }, 
-        async handleForm2Submit(){
-            await this.form_validate('form2')
-            let form2 = Object.assign({},this.form2)
-			await this.api_resource.create(form2)
-			this.dialogForm2Visible = false
-			this.fetch()
-        }, 
+        },
         async reset(){
             let mes = await this.$request.get('toolstationery/purchase/reset')
             this.$message.success(mes)
             this.fetch()
         },
-		table_disable_selected(row){
-			if(row.status==2||row.status==3){
-				return false
-			}else{
-				return true
-			}
-		},
         async purchase(){
             let row = this.table_selectedRows.map(row=>row.id)
             await this.$request.post('toolstationery/purchase/detail',{recordIds:row.join(',')})
@@ -324,6 +443,9 @@ export default {
         async fetchTableData() {
             if(this.orgid==''){
                 return 
+            }
+            if(this.url=='toolstationery/departledger'){
+                delete this.table_form.dateLap
             }
             this.table_loading = true;
             this.table_form.org_id  = this.orgid
