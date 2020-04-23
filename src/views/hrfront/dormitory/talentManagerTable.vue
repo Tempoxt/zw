@@ -123,13 +123,13 @@
                                     <el-col :span="24">
                                         <form-render :type="`input`" :field="{name:'房号'}" :disabled="true" v-model="form1.room"/>
                                     </el-col>
+                                    <el-col :span="24">
+                                        <form-render :type="`input`" :field="{name:'面积'}" :disabled="true" v-model="form1.area"/>
+                                    </el-col>
                                 </el-row>
                             </el-col>
                             <el-col :span="12">
                                 <el-row :gutter="20">
-                                    <el-col :span="24">
-                                        <form-render :type="`input`" :field="{name:'面积'}" :disabled="true" v-model="form1.area"/>
-                                    </el-col>
                                     <el-col :span="24">
                                         <form-render :type="`input`" :field="{name:'工号'}" :disabled="true" v-model="form1.employee_code"/>
                                     </el-col>
@@ -138,6 +138,12 @@
                                     </el-col>
                                     <el-col :span="24">
                                         <form-render :type="`day`" :picker-options="pickerOptions" prop="checkout_date" :field="{name:'退宿日期'}" v-model="form1.checkout_date"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render :type="`input`" :field="{name:'未结水费'}" v-model="form1.water_charges"/>
+                                    </el-col>
+                                    <el-col :span="24">
+                                        <form-render :type="`input`" :field="{name:'未结电费'}" v-model="form1.electricity_charges"/>
                                     </el-col>
                                 </el-row>
                             </el-col>
@@ -436,7 +442,11 @@ export default {
             await this.form_validate('form1')
             let form1 = {
                 record_id: this.form1.record_id,
-                checkout_date: this.form1.checkout_date
+                checkout_date: this.form1.checkout_date,
+                water_charges: this.form1.water_charges,
+                electricity_charges: this.form1.electricity_charges,
+                room_id: this.form1.room_id,
+                employee_code: this.form1.employee_code
             }
             try{
                 await this.$request.put('dormitory/checkinout/v1/checkout',form1)
