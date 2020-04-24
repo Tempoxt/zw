@@ -4,7 +4,7 @@
             <el-tab-pane label="同部门" name="first">
                 <el-row :gutter="20" style="height:400px">
                     <el-col :span="11">
-                        <Org2 ref="sameDepartment" style="height:400px" getApi="/org/samedeptselect" :searchApi="searchApi" :filter_mark="filter_mark" :month="month" same="false"
+                        <Org2 ref="sameDepartment" style="height:400px" :getApi="getApi" :searchApi="searchApi" :filter_mark="filter_mark" :month="month" same="false"
                           @change="changeOrg"  :dataList="result"/>
                     </el-col>
                     <el-col :span="2" style="height:100%;margin-top:20px">

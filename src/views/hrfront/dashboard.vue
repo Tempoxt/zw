@@ -17,8 +17,11 @@
 								<el-col :span="8">
 									<quickEntry></quickEntry>
 								</el-col> -->
-								<el-col :span="8">
+								<!-- <el-col :span="8">
 									<stickyNote></stickyNote>
+								</el-col> -->
+								<el-col :span="12">
+									<contractExpires></contractExpires>
 								</el-col>
 								<!-- <el-col :span="8">
 									<attendanceManagement></attendanceManagement>
@@ -63,6 +66,7 @@
 	import workSchedule from "./workbench/workSchedule"
 	import leaveList from "./workbench/leaveList"
 	import supplement from "./workbench/supplement"
+	import contractExpires from "./workbench/contractExpires"
 
 	import dashboardReport from "./dashboard-report"
 	import * as api_common from "@/api/common";
@@ -85,6 +89,7 @@
 		components:{
 			dashboardReport,
 			stickyNote,
+			contractExpires,
 		},
 		watch:{
 			activeName(val) {

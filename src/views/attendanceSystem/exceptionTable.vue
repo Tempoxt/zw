@@ -12,26 +12,48 @@
 		v-el-drag-dialog
 		width="800px"
 		>
-
 		<el-form ref="form" :model="form" label-width="100px" :rules="rule">
-			<el-row>
-				<el-col :span="12">
-					<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenData}" v-model="form.exceptionType"/>
-				</el-col>
-				<el-col :span="12">
-					<form-render prop="exceptionTime" :type="`datetime`" :field="{name:'补打卡时间'}" v-model="form.exceptionTime"/>
-				</el-col>
-				<el-col :span="12">
-					<form-render :type="`input`" :field="{name:'补卡原因'}" v-model="form.exceptionReason"/>
-				</el-col>
-			</el-row>
-		</el-form>
+ 			<el-tabs v-model="form_activeName" >
+				<el-tab-pane label="添加补卡" name="first">
+					<el-row>
+						<el-col :span="12">
+							<form-render prop="exceptionType" :type="`select`" :field="{name:'补卡类型',options:attenData}" v-model="form.exceptionType"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render prop="exceptionTime" :type="`datetime`" :field="{name:'补打卡时间'}" v-model="form.exceptionTime"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render :type="`input`" :field="{name:'补卡原因'}" v-model="form.exceptionReason"/>
+						</el-col>
+					</el-row>
+					
+      				<OrgSelect :result="result" v-model="form.ids" activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
 
-      	<OrgSelect :result="result" v-model="form.ids" activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
+				</el-tab-pane>
+				<el-tab-pane label="补卡汇总" name="second">
+					<p>补卡人员汇总表</p>
+					<el-table
+						class="dtable"
+						:data="summarData"
+						:header-cell-style="headerStyle"
+						height="450"
+						style="width: 100%;margin-top:20px"
+						>
+						<el-table-column prop="departmentName" label="部门"></el-table-column>
+						<el-table-column prop="teamName" label="小组"></el-table-column>
+						<el-table-column prop="chineseName" label="姓名"></el-table-column>
+						<el-table-column prop="employeeCode" label="工号"></el-table-column>
+						<el-table-column prop="exceptionTime" label="补卡时间"></el-table-column>
+						<el-table-column prop="exceptionTypeDesc" label="补卡类型"></el-table-column>
+					</el-table>
+				</el-tab-pane>
+			</el-tabs>
+		</el-form>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+			<el-button type="primary" @click="goSummary" v-if="this.form_activeName=='first'">确 定</el-button>
+			<el-button type="primary" @click="handleFormSubmit" v-if="this.form_activeName=='second'">提 交</el-button>
 		</div>
     </el-dialog>
 
@@ -281,6 +303,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+            form_activeName:'first',
 			api_resource:api_common.resource(this.url),
 			table_topHeight:293,
 			queryDialogFormVisible:true,
@@ -359,7 +382,8 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
-			letOffDay:''
+			letOffDay:'',
+			summarData: [],
 		};
 	},
 	computed:{
@@ -399,9 +423,35 @@ export default {
 		},
 		'form5.letOffEndDate'(){
 			this.getComputeDay()
-		}
+		},
 	},
 	methods: {
+        headerStyle(row,rowIndex,column,columnIndex){
+            return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
+        },
+		async goSummary(){
+			await this.form_validate()
+			let ids = this.$refs.OrgSelect.getAryResult()
+			this.form.ids = ids;
+			let exceptionTypeDesc = (this.attenData.filter(o=>o.value==this.form.exceptionType))[0].label
+			if(this.form.ids.length!=0){
+				ids.map(o=>{
+					o.exceptionTime = this.form.exceptionTime
+					o.exceptionType = this.form.exceptionType
+					o.exceptionTypeDesc = exceptionTypeDesc
+					o.exceptionReason = this.form.exceptionReason
+					this.summarData.push(o)
+				})
+				this.form_activeName = 'second'
+				this.form = {}
+				this.result = []
+				this.$nextTick(()=>{
+					this.$refs['form'].clearValidate()
+				})
+			}else{
+				this.$message.error('请选择要添加的人员');
+			}
+		},
 		async getComputeDay(){
 			if(this.form5.letOffStartDate!==''&&this.form5.letOffEndDate!==''&&this.form5.letOffStartDate!==undefined&&this.form5.letOffEndDate!==undefined){
 				const {day,hour} = await this.$request.get('holidaymanager/outoffmanager/computeday',{params:{
@@ -467,11 +517,13 @@ export default {
 		},
 		async add(){
 			this.result = []
+			this.summarData = []
+			this.form_activeName = 'first'
 			if(this.m==3){
 				this.form={}
 				this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
-				let attend = this.attenData.slice(1)
-				this.attenData = attend
+				// let attend = this.attenData.slice(1)
+				// this.attenData = attend
 				this.$nextTick(()=>{
 					this.$refs['form'].clearValidate()
 				})
@@ -514,20 +566,18 @@ export default {
 			}
 		},
 		async handleFormSubmit(){
-			await this.form_validate()
-			let ids = this.$refs.OrgSelect.getIdsResult()
-			this.form.ids = ids;
-			if(this.form.ids!==''){
-				try{
-					let mes = await this.api_resource.create(this.form)
-					this.$message.success({message:mes});
-					this.dialogFormVisible = false
-					this.fetchTableData()
-				}catch(err){
-					
-				}
-			}else{
-				this.$message.error('请选择要添加的人员');
+			// if(this.summarData)
+			try{
+				let mes = await this.$request.post('attendance/exception',JSON.stringify(this.summarData),{
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				this.$message.success({message:mes});
+				this.dialogFormVisible = false
+				this.fetchTableData()
+			}catch(err){
+				
 			}
 		},
 		async handleForm1Submit(){

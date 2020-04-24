@@ -241,6 +241,11 @@ export default {
                             return <el-tag type="success">已审核</el-tag>
                     }
                 },
+                articleImage(row,column){
+                    if(column.articleImage!=''&&column.articleImage!=undefined){
+                        return <img src={baseUrl+column.articleImage} width="30" height="30"></img>
+                    }
+                }
             },
             dialogForm1Visible: false,
             form1:{},
