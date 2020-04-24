@@ -29,6 +29,9 @@
             <el-col :span="12">
               <form-render :type="`input`" :field="{name:'请求地址'}" v-model="form.urlname" placeholder="请输入"/>
             </el-col>
+             <el-col :span="12">
+              <form-render :type="`input`" :field="{name:'后台标识'}" v-model="form.uniueCode" placeholder="请输入"/>
+            </el-col>
 
              <el-col :span="12">
               <form-render
