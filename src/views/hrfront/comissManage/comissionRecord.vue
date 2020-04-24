@@ -58,13 +58,11 @@
   </el-row>
 </template>
 <script>
-import org from '@/views/public/org'
 import { getTabs } from '@/api/common'
 import comissionRecordTable from './comissionRecordTable'
 export default {
     components:{
         comissionRecordTable,
-        org
     },
     watch:{
         filterText(val) {

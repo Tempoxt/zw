@@ -87,7 +87,7 @@
                                                     :remote-method="remoteMethod"
                                                     >
                                                     <el-option
-                                                        v-for="item in introducerData"
+                                                        v-for="item in introducerData1"
                                                         :key="item.value"
                                                         :label="item.chineseName +`(${item.employeeCode})`"
                                                         :value="item.id">
@@ -188,10 +188,10 @@
                                                     remote
                                                     reserve-keyword
                                                     placeholder="请输入关键词"
-                                                    :remote-method="remoteMethod"
+                                                    :remote-method="remoteMethod1"
                                                     >
                                                     <el-option
-                                                        v-for="item in introducerData"
+                                                        v-for="item in introducerData2"
                                                         :key="item.value"
                                                         :label="item.chineseName +`(${item.employeeCode})`"
                                                         :value="item.id">
@@ -443,7 +443,16 @@ export default {
     methods:{
         async remoteMethod(query){
             if (query !== '') {
-                this.introducerData = await api_common.resource('hrm/partstaff').get({
+                this.introducerData1 = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
+                    keyword:query,
+                    pagesize:10
+                })
+            } 
+        },
+        async remoteMethod1(query){
+            if (query !== '') {
+                this.introducerData2 = await api_common.resource('hrm/partstaff').get({
                     IsDimission:0,
                     keyword:query,
                     pagesize:10
@@ -479,7 +488,22 @@ export default {
             this.fetchTableData()
         },
         async edit(){
-            this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
+            let form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
+            if(form.interviewercode){
+                this.introducerData2 = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
+                    keyword:form.interviewercode,
+                    pagesize:10
+                })
+            }
+            if(form.jobPrincipalcode){
+                this.introducerData1 = await api_common.resource('hrm/partstaff').get({
+                    IsDimission:0,
+                    keyword:form.jobPrincipalcode,
+                    pagesize:10
+                })
+            }
+            this.form = form
             this.fetchFormData()
             const {name,icon} = this.form
             this.form_activeName = 'first'
@@ -511,7 +535,6 @@ export default {
             },300)
         },
         async handleFormSubmit(){
-            console.log(this.form,'fffffffffffffff')
             await this.form_validate()
             this.form.needTips = '123'
             let form = Object.assign({},this.form)
@@ -540,6 +563,8 @@ export default {
         return {
             isMust: false,
             introducerData: [],
+            introducerData1: [],
+            introducerData2: [],
             activeName:'first',
             form_activeName:'first',
             table_topHeight:295,

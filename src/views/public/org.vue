@@ -69,19 +69,19 @@ export default {
 		}
 	},
     watch:{
-		filterText(val) {
-			this.$refs.tree2.filter(val);
-		}
+      filterText(val) {
+        this.$refs.tree2.filter(val);
+      }
     },
     methods:{
-		handleChangeNode(val,node){
-          	this.$emit('input',val.orgid)
-			this.$emit('change',val.orgid)
-		},
-		filterNode(value, data) {
-			if (!value) return true;
-			return data.name && data.name.indexOf(value) !== -1;
-		},
+      handleChangeNode(val,node){
+        this.$emit('input',val.orgid,val.id)
+        this.$emit('change',val.orgid,val.id)
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.name && data.name.indexOf(value) !== -1;
+      },
     },
     data(){
         return {
@@ -119,7 +119,7 @@ export default {
 			});
 		})(this.data2);
         let defaultId = this.data2[0].orgid
-        this.$emit('change',defaultId)
+        this.$emit('change',defaultId,this.data2[0].id)
         this.$nextTick(()=>{
            this.$refs.tree2.setCurrentKey(defaultId)
         })

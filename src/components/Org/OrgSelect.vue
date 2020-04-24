@@ -75,7 +75,6 @@ export default {
         // result: []
 	},
     components:{
-        Org,
 		Org2,
         OrgResult
     },
@@ -101,6 +100,11 @@ export default {
             let nameAry = []
             this.result.map(o=>nameAry.push(o.name))
             return nameAry
+        },
+        getAryResult(){
+            let allAry = []
+            this.result.map(o=>allAry.push(o))
+            return allAry
         },
         changeOrg(data){
             this.select = data

@@ -58,13 +58,10 @@ export default {
 		month:{
 			default:''
 		},
-		sele:'',
-		leaf:false,
 		dataList:{}
     },
     watch:{
        	async filterText(val) {
-		   
 			if (val!="") {
 				if(this.searchApi&&this.month){
 					let res = await this.$request.get(this.searchApi+"?keyword="+val+'&month='+this.month)

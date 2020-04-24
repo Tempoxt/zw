@@ -84,6 +84,7 @@
       	:cell-class-name="cellClassName"
 		:seq-config="{seqMethod: VxeIndexMethod}"
 		@resizable-change="table_dragend" 
+        :row-class-name="rowClassName"
 		>
 		<!--@resizable-change="table_dragend" -->
 		<vxe-table-column 
@@ -190,10 +191,14 @@ export default {
 						if(column.title!="星期"){
 							return 'col-red'
 						}else{
-							if(obj.weekDay==1){
-								return 'col-bag-blue'
-							}else if(obj.weekDay==2){
+							if(row.restType==2){
 								return 'col-bag-pink'
+							}else if(row.restType==3){
+								return 'col-bag-green'
+							}else if(row.restType==4){
+								return 'col-bag-yellow'
+							}else if(row.restType==5){
+								return 'col-bag-purple'
 							}else{
 								return ''
 							}
@@ -201,6 +206,20 @@ export default {
 					}
 				}
 			}
+			
+		},
+		rowClassName ({ row, rowIndex }) {
+			if (row.isNorm==false) {
+				return 'col-red'
+			}
+			if(row.checkStatus==1){
+				return 'col-bag-gray'
+			}
+		},
+		async check(){
+			let rows = this.table_selectedRows.map(row=>row.id)
+			await this.$request.put('/attendance/dailyreportcheck',{ids: rows.join(',')})
+			this.fetchTableData()
 		},
         handleChangeSelection({selection:val}){ // 单选
 			this.table_selectedRowsInfo = val
@@ -272,13 +291,14 @@ export default {
 					this.$nextTick(()=>{
 						this.$refs['form'].clearValidate()
 					})
+					let checkDate = row.YearMonth.split('-')[0]+'-'+row.checkDate
 					this.dialogFormVisible = true
 					this.dailyReportID = row.id
 					this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
 					this.form = (await this.$request.get('attendance/classmanager/already/single',{
 						params:{
 							staff_id: row.staff__employeeCode,
-							class_date: row.checkDate
+							class_date: checkDate
 						}
 					}))[0]
 					this.$nextTick(()=>{
@@ -336,12 +356,27 @@ export default {
 	.attendanceRecord-table {
 		.col-red{
 			color: red!important;
+			.vxe-cell{
+				color: red!important;
+			}
+		}
+		.col-bag-gray{
+			background-color: #e5e5e5;
 		}
 		.col-bag-blue{
 			background-color:#7ae8ff
 		}
 		.col-bag-pink{
 			background-color:#ffccff
+		}
+		.col-bag-green{
+			background-color:#CAFBE6
+		}
+		.col-bag-yellow{
+			background-color:#FBEEC7
+		}
+		.col-bag-purple{
+			background-color:#DCD5FF
 		}
 		.vxe-table .vxe-body--column:not(.col--ellipsis), .vxe-table .vxe-footer--column:not(.col--ellipsis), .vxe-table .vxe-header--column:not(.col--ellipsis) {
 			padding: 4px 0;
