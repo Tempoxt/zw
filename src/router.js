@@ -7,6 +7,7 @@ import hrfront from './routers/hrfront'
 import system from './routers/system'
 import salary from './routers/salary'
 import financial from './routers/financial'
+import performance from './routers/performance'
 import productrecheck from './routers/productrecheck'
 import cost from './routers/cost'
 import setting from './routers/setting'
@@ -26,6 +27,7 @@ let asyncRoutes = [
     ...cost,
     ...device,
     ...nh,
+    ...performance
 ]
 
 let router = new Router({
