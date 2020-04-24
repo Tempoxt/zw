@@ -75,8 +75,8 @@ export default {
     },
     methods:{
       handleChangeNode(val,node){
-        this.$emit('input',val.orgid,val.id)
-        this.$emit('change',val.orgid,val.id)
+        this.$emit('input',val.orgid,val.id,val.name)
+        this.$emit('change',val.orgid,val.id,val.name)
       },
       filterNode(value, data) {
         if (!value) return true;

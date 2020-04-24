@@ -50,7 +50,7 @@ export default {
             default:''
         },
 		getApi:{
-		    default:'/org/select'
+		    default:'/org/samedeptselect'
         },
 		searchApi:{
 			default:'hrm/basesearsh'

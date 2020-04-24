@@ -40,11 +40,11 @@
 							</el-col>
 						</el-row>
 						<el-row class="shift_set">
-							<el-col :span="1" style="margin-left:10px" class="mt10">
+							<el-col :span="2" style="margin-left:10px" class="mt10">
 								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt1"></el-checkbox>
+								<el-checkbox v-model="timeSolt1">正班</el-checkbox>
 							</el-col>
-							<el-col :span="17">
+							<el-col :span="16">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px"  prop="onDutyTime1" :type="`time`" :field="{name:'上班1'}" placeholder="上班时间" v-model="form.onDutyTime1"/>
@@ -86,11 +86,11 @@
 							<el-col :span="24"><el-checkbox v-model="form.straight1_2" @change="cstraight1_2">直通</el-checkbox></el-col>
 						</el-row>
 						<el-row class="shift_set">
-							<el-col :span="1" style="margin-left:10px" class="mt10">
+							<el-col :span="2" style="margin-left:10px" class="mt10">
 								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt2"></el-checkbox>
+								<el-checkbox v-model="timeSolt2">正班</el-checkbox>
 							</el-col>
-							<el-col :span="17">
+							<el-col :span="16">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px"  prop="onDutyTime2" :type="`time`" :field="{name:'上班2'}" placeholder="上班时间" v-model="form.onDutyTime2"/>
@@ -132,11 +132,11 @@
 							<el-col :span="24"><el-checkbox v-model="form.straight2_3" @change="cstraight2_3">直通</el-checkbox></el-col>
 						</el-row>
 						<el-row class="shift_set">
-							<el-col :span="1" style="margin-left:10px" class="mt10">
+							<el-col :span="2" style="margin-left:10px" class="mt10">
 								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt3"></el-checkbox>
+								<el-checkbox v-model="timeSolt3">加班</el-checkbox>
 							</el-col>
-							<el-col :span="17">
+							<el-col :span="16">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px" :type="`time`" :field="{name:'上班3'}" placeholder="上班时间" v-model="form.onDutyTime3"/>
@@ -179,11 +179,11 @@
 						</el-row>
 						
 						<el-row class="shift_set">
-							<el-col :span="1" style="margin-left:10px" class="mt10">
+							<el-col :span="2" style="margin-left:10px" class="mt10">
 								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt4"></el-checkbox>
+								<el-checkbox v-model="timeSolt4">加班</el-checkbox>
 							</el-col>
-							<el-col :span="17">
+							<el-col :span="16">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px" :type="`time`" :field="{name:'上班4'}" placeholder="上班时间" v-model="form.onDutyTime4"/>
