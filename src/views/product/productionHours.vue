@@ -760,6 +760,14 @@ export default {
                 this.$message.error({message:'生产数量大于零 作业工时（分钟/人）不能为零'})
                 return 
             }
+            if(this.form.people_labors && this.form.people_labors>350){
+                this.$message.error({message:'劳务工人数不能大于350'})
+                return 
+            }
+            if(this.form.people_workers && this.form.people_workers>350){
+                this.$message.error({message:'正式工人数不能大于350'})
+                return 
+            }
             if(this.isInsert){
                 try{
                     await this.throwFormError(api_resource.create(form))
