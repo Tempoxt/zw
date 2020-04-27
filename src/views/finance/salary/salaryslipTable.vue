@@ -13,7 +13,7 @@
 		v-el-drag-dialog
 		width="400px"
 		>
-      		<el-form ref="importForm" :model="importForm"  label-width="100px" >
+      		<el-form ref="importForm" :model="importForm"  label-width="100px" v-loading="importloading">
 				<el-row >
 					<el-col :span="24" :offset="0">
 						<el-form-item label="选择月份" prop="month">
@@ -392,6 +392,7 @@ export default {
 			table_topHeight:233,
 			importDateLab:new Date(),
 			fileList1:[],
+			importloading:false
 		};
 	},
 	watch:{
@@ -427,17 +428,25 @@ export default {
 			this.importDialog = true
 		},
 		async handleImportFormSubmit(){
+			this.importloading = true
 			this.importForm.isDimission = 80
 			var formData = new FormData();
 			Object.keys(this.importForm).forEach(k=>{
 				formData.append(k,this.importForm[k])
 			})
-			let mes = await this.$request.post('/salary/upload',formData)
-			this.importDialog = false
-			this.$message({
-				message: mes,
-				type: 'success'
-			});
+			try {
+				let mes = await this.$request.post('/salary/upload',formData)
+				this.importDialog = false
+				this.$message({
+					message: mes,
+					type: 'success'
+				});
+			} catch (error) {
+				
+			} finally {
+				this.importloading = false
+			}
+			
 		},
 		
 		// 高温津贴合计项
