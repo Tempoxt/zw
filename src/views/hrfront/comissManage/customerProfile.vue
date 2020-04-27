@@ -133,7 +133,7 @@
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">职位：</span>
-						<span class="labelCon promp">{{profileData.department}}</span>
+						<span class="labelCon promp">{{profileData.contactPosition}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">手机：</span>
@@ -175,43 +175,43 @@
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">客户每月预计付款时间：</span>
-						<span class="labelCon promp">{{profileData.endDate}}</span>
+						<span class="labelCon promp">{{profileData.estimatedPaymentTime}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">客户每月预计付款时间2：</span>
-						<span class="labelCon promp">{{profileData.endDate}}</span>
+						<span class="labelCon promp">{{profileData.esPaymentTime}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">销售付款协议编码：</span>
-						<span class="labelCon promp">{{profileData.companyName}}</span>
+						<span class="labelCon promp">{{profileData.receiptCollectionEncoding}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">销售默认收付款协议名称：</span>
-						<span class="labelCon promp">{{profileData.witness}}</span>
+						<span class="labelCon promp">{{profileData.receiptCollectionName}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">其他付款协议编码：</span>
-						<span class="labelCon promp">{{profileData.companyName}}</span>
+						<span class="labelCon promp">{{profileData.otherReceiptCollectionEncoding}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">其他应收单收付款协议名称：</span>
-						<span class="labelCon promp">{{profileData.witness}}</span>
+						<span class="labelCon promp">{{profileData.otherReceiptCollectionName}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">定金比例（%）：</span>
-						<span class="labelCon promp">{{profileData.department}}</span>
+						<span class="labelCon promp">{{profileData.depositRatio}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">国外客户运输天数：</span>
-						<span class="labelCon promp">{{profileData.witnessPhone}}</span>
+						<span class="labelCon promp">{{profileData.transportDate}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">控制额度或期限：</span>
-						<span class="labelCon promp">{{profileData.jobContent}}</span>
+						<span class="labelCon promp">{{profileData.controlTerm}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">以实际发货账期：</span>
-						<span class="labelCon promp">{{profileData.jobContent}}</span>
+						<span class="labelCon promp">{{profileData.actualDeliveryDate}}</span>
 					</el-col>
 				</el-row>
 			</div>

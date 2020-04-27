@@ -245,7 +245,8 @@ export default {
 			await this.form_validate()
             let form = Object.assign({},this.form)
             if(this.isInsert){
-				await this.throwFormError(api_common.resource('commission/commissionSet').create(form))
+				await this.$request.post('commission/royaltycoefficient',form)
+				// await this.throwFormError(api_common.resource('commission/royaltycoefficient').create(form))
 				// await this.throwFormError(api_resource.create(form))
             }else{
 				await this.throwFormError(api_common.resource('commission/commissionSet').update(this.form.id,this.form))
