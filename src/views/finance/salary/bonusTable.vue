@@ -93,6 +93,9 @@ export default {
     },
   },
   methods: {
+     upload(){
+      alert(123)
+    },
     handleChangeSelection({selection:val}){ // 单选
         this.table_selectedRowsInfo = val
         this.table_selectedRows = val

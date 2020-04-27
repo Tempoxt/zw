@@ -5,6 +5,52 @@
     @query="querySubmit"
     >
 
+
+<el-dialog
+		title="导入"
+		:visible.sync="importDialog"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="400px"
+		>
+      		<el-form ref="importForm" :model="importForm"  label-width="100px" >
+				<el-row >
+					<el-col :span="24" :offset="0">
+						<el-form-item label="选择月份" prop="month">
+							<el-date-picker
+								v-model="importForm.dateLap"
+								type="month"
+								style="width:100%"
+								format="yyyy-MM"
+								value-format="yyyy-MM"
+								placeholder="选择月份">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :span="24" :offset="0">
+						<el-form-item label="选择文件" >
+							<el-upload
+								class="upload-demo"
+								ref="upload"
+								action="www"
+								:limit="1"
+								:file-list="fileList1"
+								:on-change="changeFormImportFiles"
+								:auto-upload="false">
+							<el-button slot="trigger" size="small" type="primary">选择文件</el-button></el-upload>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+		<div slot="footer" class="dialog-footer">
+		
+			<el-button @click="importDialog = false">取 消</el-button>
+			<el-button type="primary" @click="handleImportFormSubmit">确 定</el-button>
+		</div>
+    </el-dialog>
+
+
+
     <el-dialog
         title="调整"
         :visible.sync="dialogForm3Visible"
@@ -308,11 +354,14 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("salary");
+import { MessageBox } from 'element-ui';
 export default {
 	mixins: [table_mixin],
 	props:['id'],
 	data() {
 		return {
+			importDialog:false,
+			importForm:{},
 			loading: true,
 			form:{},
 			api_resource,
@@ -341,6 +390,8 @@ export default {
 			otherDecData:[],//扣其他
 			totalAllo:'',//高温津贴考勤有效天数
 			table_topHeight:233,
+			importDateLab:new Date(),
+			fileList1:[],
 		};
 	},
 	watch:{
@@ -367,6 +418,28 @@ export default {
 		}
 	},
 	methods: {
+		changeFormImportFiles(file){
+			this.importForm.the_file = file.raw
+		},
+		upload(){
+			this.importForm = {}
+			this.fileList1 = []
+			this.importDialog = true
+		},
+		async handleImportFormSubmit(){
+			this.importForm.isDimission = 80
+			var formData = new FormData();
+			Object.keys(this.importForm).forEach(k=>{
+				formData.append(k,this.importForm[k])
+			})
+			let mes = await this.$request.post('/salary/upload',formData)
+			this.importDialog = false
+			this.$message({
+				message: mes,
+				type: 'success'
+			});
+		},
+		
 		// 高温津贴合计项
 		getSummarHigh(param){
 			const { columns, data } = param;
