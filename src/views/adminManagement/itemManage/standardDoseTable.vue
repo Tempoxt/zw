@@ -48,7 +48,7 @@
                             <form-render :type="`input`" prop="dose" :field="{name:'标准用量'}" v-model="form.dose"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`textarea`" autosize :row="2" prop="formulaMethod" :field="{name:'计算方式'}" v-model="form.formulaMethod"/>
+                            <form-render :type="`textarea`" prop="formulaMethod" autosize :rows='1'  :field="{name:'计算方式'}"  placeholder="请输入" v-model="form.formulaMethod"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" prop="quota" :field="{name:'配额/人'}" v-model="form.quota"/>
@@ -57,7 +57,7 @@
                             <form-render :type="`input`" prop="needNumber" :field="{name:'需要人数'}" v-model="form.needNumber"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
-                            <form-render :type="`input`" :field="{name:'请购原因'}" v-model="form.purchaseReason"/>
+                            <form-render :type="`input`" prop="purchaseReason" :field="{name:'请购原因'}" v-model="form.purchaseReason"/>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -133,6 +133,15 @@ export default {
 				callback();
 			}
 		}
+        var checkNumber1 = (rule, value, callback)=>{
+			if (value==='') {
+				return callback(new Error('请输入'));
+			}else if (!(/^\d+(\.\d{1,2})?$/.test(value))) {
+                callback(new Error('请输入精度为2位小数以内的正数'));
+			}else{
+				callback();
+			}
+		}
         return {
             baseUrl,
             loading: false,
@@ -154,7 +163,7 @@ export default {
                 ],
                 quota:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
-                    { validator: checkNumber, trigger: 'blur' }
+                    { validator: checkNumber1, trigger: 'blur' }
                 ],
                 needNumber:[
                     { required: true, message: '请输入', trigger: ['blur','change'] },
@@ -162,6 +171,12 @@ export default {
                 ],
                 month:[
                     { required: true, message: '请选择', trigger: ['blur','change'] },
+                ],
+                formulaMethod:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
+                ],
+                purchaseReason:[
+                    { required: true, message: '请输入', trigger: ['blur','change'] },
                 ],
             },
             template:{
