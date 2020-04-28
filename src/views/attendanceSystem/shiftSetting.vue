@@ -13,7 +13,7 @@
 			:visible.sync="dialogFormVisible"
 			class="public-dialog"
 			v-el-drag-dialog
-			width="960px"
+			width="1160px"
 			>
 			<div class="h-full">
 				<el-form ref="form" :model="form" label-width="70px" :rules="rule"  class="h-full shift_form" style="height:630px;margin:0 10px;">
@@ -40,11 +40,18 @@
 							</el-col>
 						</el-row>
 						<el-row class="shift_set">
-							<el-col :span="2" style="margin-left:10px" class="mt10">
-								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt1">正班</el-checkbox>
+							<el-col :span="5" style="margin-left:10px;" class="mt10">
+								<el-row type="flex" align="middle">
+									<el-col :span="6">
+										<el-checkbox v-model="timeSolt1">正班1</el-checkbox>
+									</el-col>
+									<el-col :span="14" class="mt20">
+										<form-render prop="fakeHour1"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour1"/>
+									</el-col>
+									<el-col :span="4" class="fs12">工时</el-col>
+								</el-row>
 							</el-col>
-							<el-col :span="16">
+							<el-col :span="14">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px"  prop="onDutyTime1" :type="`time`" :field="{name:'上班1'}" placeholder="上班时间" v-model="form.onDutyTime1"/>
@@ -75,7 +82,7 @@
 								</el-row>
 							</el-col>
 						
-							<el-col :span="5" style="margin-left:15px">
+							<el-col :span="4" style="margin-left:15px">
 								<el-form-item class="line-height" label="休息时间" label-width="30px">
 									<el-time-picker v-model="form.restStartTime1" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
 									<el-time-picker class="mt17" v-model="form.restEndTime1" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
@@ -86,11 +93,18 @@
 							<el-col :span="24"><el-checkbox v-model="form.straight1_2" @change="cstraight1_2">直通</el-checkbox></el-col>
 						</el-row>
 						<el-row class="shift_set">
-							<el-col :span="2" style="margin-left:10px" class="mt10">
-								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt2">正班</el-checkbox>
+							<el-col :span="5" style="margin-left:10px;" class="mt10">
+								<el-row type="flex" align="middle">
+									<el-col :span="6">
+										<el-checkbox v-model="timeSolt2">正班2</el-checkbox>
+									</el-col>
+									<el-col :span="14" class="mt20">
+										<form-render prop="fakeHour2"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour2"/>
+									</el-col>
+									<el-col :span="4" class="fs12">工时</el-col>
+								</el-row>
 							</el-col>
-							<el-col :span="16">
+							<el-col :span="14">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px"  prop="onDutyTime2" :type="`time`" :field="{name:'上班2'}" placeholder="上班时间" v-model="form.onDutyTime2"/>
@@ -121,7 +135,7 @@
 								</el-row>
 							</el-col>
 						
-							<el-col :span="5" style="margin-left:15px">
+							<el-col :span="4" style="margin-left:15px">
 								<el-form-item class="line-height" label="休息时间" label-width="30px">
 									<el-time-picker v-model="form.restStartTime2" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
 									<el-time-picker class="mt17" v-model="form.restEndTime2" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
@@ -132,11 +146,18 @@
 							<el-col :span="24"><el-checkbox v-model="form.straight2_3" @change="cstraight2_3">直通</el-checkbox></el-col>
 						</el-row>
 						<el-row class="shift_set">
-							<el-col :span="2" style="margin-left:10px" class="mt10">
-								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt3">加班</el-checkbox>
+							<el-col :span="5" style="margin-left:10px;" class="mt10">
+								<el-row type="flex" align="middle">
+									<el-col :span="6">
+										<el-checkbox v-model="timeSolt3">加班1</el-checkbox>
+									</el-col>
+									<el-col :span="14" class="mt20">
+										<form-render prop="fakeHour3"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour3"/>
+									</el-col>
+									<el-col :span="4" class="fs12">工时</el-col>
+								</el-row>
 							</el-col>
-							<el-col :span="16">
+							<el-col :span="14">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px" :type="`time`" :field="{name:'上班3'}" placeholder="上班时间" v-model="form.onDutyTime3"/>
@@ -167,7 +188,7 @@
 								</el-row>
 							</el-col>
 						
-							<el-col :span="5" style="margin-left:15px">
+							<el-col :span="4" style="margin-left:15px">
 								<el-form-item class="line-height" label="休息时间" label-width="30px">
 									<el-time-picker v-model="form.restStartTime3" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
 									<el-time-picker class="mt17" v-model="form.restEndTime3" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
@@ -179,11 +200,18 @@
 						</el-row>
 						
 						<el-row class="shift_set">
-							<el-col :span="2" style="margin-left:10px" class="mt10">
-								<div>&nbsp;</div>
-								<el-checkbox v-model="timeSolt4">加班</el-checkbox>
+							<el-col :span="5" style="margin-left:10px;" class="mt10">
+								<el-row type="flex" align="middle">
+									<el-col :span="6">
+										<el-checkbox v-model="timeSolt4">加班2</el-checkbox>
+									</el-col>
+									<el-col :span="14" class="mt20">
+										<form-render prop="fakeHour4"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour4"/>
+									</el-col>
+									<el-col :span="4" class="fs12">工时</el-col>
+								</el-row>
 							</el-col>
-							<el-col :span="16">
+							<el-col :span="14">
 								<el-row>
 									<el-col :span="9">
 										<form-render label-width="52px" :type="`time`" :field="{name:'上班4'}" placeholder="上班时间" v-model="form.onDutyTime4"/>
@@ -214,7 +242,7 @@
 								</el-row>
 							</el-col>
 						
-							<el-col :span="5" style="margin-left:15px">
+							<el-col :span="4" style="margin-left:15px">
 								<el-form-item class="line-height" label="休息时间" label-width="30px">
 									<el-time-picker v-model="form.restStartTime4" format="HH:mm" value-format="HH:mm" placeholder="起始时间"></el-time-picker>
 									<el-time-picker class="mt17" v-model="form.restEndTime4" format="HH:mm" value-format="HH:mm" placeholder="结束时间"></el-time-picker>
@@ -371,6 +399,15 @@ export default {
 				isExcuseOffDutyCard4: 0,
 			}
 		}
+        var checkNumber = (rule, value, callback)=>{
+            if(value!==''&&value!=undefined){
+                if (!(/^\d+(\.[05])?$/.test(value))) {
+                    callback(new Error('请输入0.5的倍数'));
+                }else{
+                    callback();
+                }
+            }
+		}
 		return {
 			loading: true,
 			api_resource,
@@ -405,6 +442,18 @@ export default {
 				offDutyTime2:[
 					{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				],
+				fakeHour1:[
+                    { validator: checkNumber, trigger: 'blur' }
+				],
+				fakeHour2:[
+                    { validator: checkNumber, trigger: 'blur' }
+				],
+				fakeHour3:[
+                    { validator: checkNumber, trigger: 'blur' }
+				],
+				fakeHour4:[
+                    { validator: checkNumber, trigger: 'blur' }
+				]
 				// signInStartTime2:[
 				// 	{ required: true, message: '请选择时间', trigger: ['blur','change'] },
 				// ],
@@ -630,7 +679,7 @@ export default {
 			}
 		},
 		async handleFormSubmit(){
-			await this.form_validate()
+			// await this.form_validate()
             let form = Object.assign({},this.form)
 			if(isNaN(+form.straight1_2)){
 				delete form.straight1_2
@@ -713,8 +762,6 @@ export default {
 			if(form.restEndTime4==''||form.restEndTime4==null){
 				delete form.restEndTime4
 			}
-
-
 			if(this.timeSolt3==true||this.timeSolt4==true){
                 if(this.timeSolt3==true&&this.timeSolt4==false){
 					if(form.onDutyTime3==undefined||form.offDutyTime3==undefined||
@@ -926,7 +973,9 @@ export default {
 }
 .mt5{margin-top: 5px;}
 .mt10{margin-top: 10px;}
+.mt20{margin-top: 20px;}
 .mt17{margin-top: 18px;}
+.fs12{font-size: 12px}
 .shift_set{
 	border: 1px solid #E4E4E4;
 	padding: 20px 12px 3px 0;
