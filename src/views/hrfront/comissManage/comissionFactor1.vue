@@ -57,27 +57,27 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="14" :offset="4">
+					<!-- <el-col :span="14" :offset="4">
 						<form-render :type="`select`" prop="projectType" :field="{name:'项目类型',options:projectData}" v-model="form.projectType" />
-					</el-col>
+					</el-col> -->
 					<el-col :span="14" :offset="4">
 						<form-render :type="`inputSuffix`" suffix="%" prop="valueIncrease" :field="{name:'标准增值率'}" v-model="form.valueIncrease" />
 					</el-col>
-					<el-col :span="14" :offset="4">
+					<!-- <el-col :span="14" :offset="4">
 						<form-render :type="`inputSuffix`" suffix="%" prop="modelCommission" :field="{name:'模具提成系数'}" v-model="form.modelCommission" />
-					</el-col>
+					</el-col> -->
 					<el-col :span="14" :offset="4">
-						<form-render :type="`inputSuffix`" suffix="%" prop="productCommission" :field="{name:'贷款提成系数'}" v-model="form.productCommission" />
+						<form-render :type="`inputSuffix`" suffix="%" prop="commissionRatio" :field="{name:'业务提成系数'}" v-model="form.commissionRatio" />
 					</el-col>
-					<el-col :span="14" :offset="4">
+					<!-- <el-col :span="14" :offset="4">
 						<form-render :type="`input`" :field="{name:'零件收款天数'}" v-model="form.partsCollectionDay" />
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" :field="{name:'组件收款天数'}" v-model="form.moduleCollectionDay" />
-					</el-col>
-					<el-col :span="14" :offset="4">
+					</el-col> -->
+					<!-- <el-col :span="14" :offset="4">
 						<form-render :type="`input`" :field="{name:'客户信息来源'}" v-model="form.cusSource" />
-					</el-col>
+					</el-col> -->
 					<el-col :span="14" :offset="4">
 						<form-render :type="`textarea`" autosize :row="1" :field="{name:'备注'}" v-model="form.remark" />
 					</el-col>
@@ -190,7 +190,7 @@ export default {
 					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
-				productCommission: [
+				commissionRatio: [
 					{ required: true, message: '请输入', trigger:  ['blur', 'change'] },
 					{ validator: checkAmount, trigger:  ['blur', 'change'] }
 				],
@@ -212,7 +212,7 @@ export default {
 	methods: {
         async remoteMethod(query){
             if (query !== '') {
-                this.productData = await api_common.resource('commission/getCusNameByCusCode').get({
+                this.productData = await api_common.resource('commission/getonecommission').get({
                     CusCode:query
                 })
             }
@@ -237,7 +237,8 @@ export default {
 			this.$nextTick(()=>{
 				this.$refs['form'].clearValidate()
 			})
-			this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
+			this.form = await this.$request.get('commission/royaltycoefficient/'+this.table_selectedRowsInfo[0].id)
+			// this.form = await this.api_resource.find(this.table_selectedRowsInfo[0].id)
 			this.nameData = await api_common.resource('commission/getSalesStaff').get()
 			this.projectData = (await api_common.resource('commission/getProjectType').get()).map(o=>{return {label:o.name,value:o.id}})
 		},
@@ -245,11 +246,12 @@ export default {
 			await this.form_validate()
             let form = Object.assign({},this.form)
             if(this.isInsert){
-				await this.$request.post('commission/royaltycoefficient',form)
+				await this.$request.post('/commission/royaltycoefficient',form)
 				// await this.throwFormError(api_common.resource('commission/royaltycoefficient').create(form))
 				// await this.throwFormError(api_resource.create(form))
             }else{
-				await this.throwFormError(api_common.resource('commission/commissionSet').update(this.form.id,this.form))
+				await this.$request.put('/commission/royaltycoefficient/'+form.id,form)
+				// await this.throwFormError(api_common.resource('commission/commissionSet').update(this.form.id,this.form))
 				// await this.throwFormError(api_resource.update(this.form.id,this.form))
 			}
 			if(this.isInsert&&this.form_multiple){

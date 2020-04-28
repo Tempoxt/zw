@@ -109,6 +109,20 @@
                                             />
                                         </el-col>
                                         <el-col :span="24">
+                                            <form-render
+                                                :type="`radio`"
+                                                :field="{name:'婚姻状况',options:[{
+                                                value: 0,
+                                                label: '未婚'
+                                                },{
+                                                value: 1,
+                                                label: '已婚'
+                                                }]}"
+                                                v-model="form.marriage"
+                                                prop="marriage"
+                                            />
+                                        </el-col>
+                                        <el-col :span="24">
                                         <el-form-item label="头像"  >
                                             <img :src="`data:image/jpg;base64,`+form.idCardImage" alt="">
                                             

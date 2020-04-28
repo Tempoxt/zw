@@ -298,7 +298,7 @@ export default {
   background: rgba(245,250,251,1)
 }
 .applyBasic.vxe-table.t--border .vxe-table--fixed-left-wrapper .vxe-body--column{
-  height: 32px;
+  height: 32px!important;
 }
 </style>
 <style lang="scss" scoped>
