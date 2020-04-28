@@ -65,6 +65,8 @@ export default {
             loading: false,
             queryDialogFormVisible:true,
             table_topHeight: 235,
+            downloadUrl: '',
+            importUploadUrl:'performance/parameter/value/input'
         };
     },
     computed:{ 
@@ -72,10 +74,14 @@ export default {
     },
     watch:{
         orgid(){
-            this.fetch()
+            this.fetchMenu()
         },
+        id(){
+            this.downloadUrl = 'performance/parameter/value/export?department='+this.id
+        }
     },
     methods: {
+        // /performance/parameter/value/export
         async handleFormSubmit(){
             await this.form_validate()
             this.form.ids = this.$refs.OrgSelect.getIdsResult()
@@ -103,19 +109,21 @@ export default {
             }, 300);
         },
 		async fetchMenu(){
-			const { field, action,table } = await api_common.menuInit('personal_param');
-			this.table_field = field;
-			this.table_actions = action;
-            this.table_config = table
-            if(this.id==''){
-                return 
-            }
-            let fields = await this.$request.get('performance/parameter/value/name?department='+this.id)
-			this.table_field.push(fields)
-            this.table_form.dateLap = dayjs().format('YYYY-MM')
-            // setTimeout(()=>{
-            //     this.fetchTableData()
-            // },1000)
+            const { field, action,table } = await api_common.menuInit('personal_param');
+            setTimeout(async ()=>{
+                if(this.id!=''){
+                    this.table_field = field;
+                    let fields = await this.$request.get('performance/parameter/value/name?department='+this.id)
+                    fields.forEach(o=>{
+                        this.table_field.push(o)
+                    })
+                }
+                this.table_form.dateLap = dayjs().format('YYYY-MM')
+                this.table_actions = action;
+                this.table_config = table
+                this.fetchTableData()
+            },500)
+            
 		},
     },
     async created() {

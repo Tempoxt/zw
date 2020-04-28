@@ -13,7 +13,7 @@
 		    width="600px"
             >
            	<div>
-                <el-form ref="form" :model="form" label-width="70px" :rules="rules">
+                <el-form ref="form" :model="form" label-width="120px" :rules="rules">
                     <el-row :gutter="20">
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" :field="{name:'参数名称'}" prop="parameter_name" v-model="form.parameter_name"/>
@@ -25,6 +25,15 @@
                             <form-render :type="`number`" :field="{name:'排序'}" v-model="form.order_num"/>
                         </el-col>
                         <el-col :span="16" :offset="4">
+                            <form-render :type="`radio`" :field="{name:'参数分类',options:[{
+                                value: 0,
+                                label: '基础参数'
+                            },{
+                                value: 1,
+                                label: '计算参数'
+                            }]}" v-model="form.parameter_category"/>
+                        </el-col>
+                        <el-col :span="16" :offset="4">
                             <form-render :type="`radio`" :field="{name:'记录状态',options:[{
                                 value: 1,
                                 label: '启用'
@@ -33,22 +42,23 @@
                                 label: '停用'
                             }]}" v-model="form.status"/>
                         </el-col>
-                        <el-col :span="16" :offset="4">
-                            <form-render :type="`radio`" :field="{name:'记录状态',options:[{
-                                value: 1,
-                                label: '是'
-                            },{
-                                value: 0,
-                                label: '否'
-                            }]}" v-model="form.status"/>
-                        </el-col>
                     </el-row>
                 </el-form>
             </div>
 
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+            <div slot="footer" class="dialog-footer dialog-multiple-footer">
+                <div>
+                    <el-switch
+                        v-if="isInsert"
+                        v-model="form_multiple"
+                        active-text="连续添加"
+                        inactive-text="">
+                    </el-switch>
+                </div>
+                <div>
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleFormSubmit">确 定</el-button>
+                </div>
             </div>
         </el-dialog>
 
@@ -144,11 +154,13 @@ export default {
     },
     methods: {
         async add(){
+            this.form_multiple = false
             await this.$request.get('performance/parameter/name/add?department='+this.id)
             this.form = {
                parameter_name: '' ,
-               status: 0,
+               status: 1,
                order_num: 1,
+               parameter_category: 0,
             }
             this.dialogFormVisible = true
             this.$nextTick(()=>{
@@ -177,8 +189,20 @@ export default {
             }else{
                 await api_resource.update(form.id,form)
             }
-            this.fetch()
-            this.dialogFormVisible = false
+            if(this.form_multiple){
+                this.form = {
+                    parameter_name: '' ,
+                    status: 1,
+                    order_num: 1,
+                }
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate()
+                })
+                this.fetchTableData()
+            }else{
+                this.dialogFormVisible = false
+                this.fetchTableData()
+            }
         },
         async delete(){
             let row = this.table_selectedRows.map(row=>row.id)

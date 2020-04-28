@@ -312,6 +312,7 @@ export default {
             }
         },
         async add(){
+            this.form_multiple = false
             await this.$request.get('performance/parameter/name/add?department='+this.id)
             this.form = {
                 avarage: '',
@@ -354,25 +355,39 @@ export default {
             if(this.isInsert){
                 try{
                     await api_resource.create(form)
-                    this.dialogFormVisible = false
                     this.fetchTableData()
                 }catch(err){
                     this.$message.error(err.field[0]);
                 }
             }else{
                 await api_resource.update(form.id,form)
-                this.dialogFormVisible = false
                 this.fetch()
             }
             if(this.form_multiple){
+                this.form = {
+                    avarage: '',
+                    year:  dayjs().format('YYYY'),
+                    jan_target: '',
+                    feb_target: '',
+                    mar_target: '',
+                    apr_target: '',
+                    may_target: '',
+                    june_target: '',
+                    july_target: '',
+                    aug_target: '',
+                    sept_target: '',
+                    oct_target: '',
+                    nov_target: '',
+                    dec_target: '',
+                }
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate()
+                })
                 this.fetchTableData()
             }else{
                 this.dialogFormVisible = false
                 this.fetchTableData()
-            }  
-            // await api_resource.create(form)
-            // this.fetch()
-            // this.dialogFormVisible = false
+            }
         },
         async delete(){
             let row = this.table_selectedRows.map(row=>row.id)
