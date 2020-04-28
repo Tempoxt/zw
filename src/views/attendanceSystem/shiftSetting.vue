@@ -42,13 +42,13 @@
 						<el-row class="shift_set">
 							<el-col :span="5" style="margin-left:10px;" class="mt10">
 								<el-row type="flex" align="middle">
-									<el-col :span="6">
+									<el-col :span="8">
 										<el-checkbox v-model="timeSolt1">正班1</el-checkbox>
 									</el-col>
-									<el-col :span="14" class="mt20">
-										<form-render prop="fakeHour1"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour1"/>
+									<el-col :span="8" class="mt20">
+										<form-render prop="fakeHour1" label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour1"/>
 									</el-col>
-									<el-col :span="4" class="fs12">工时</el-col>
+									<el-col :span="4" class="fs12" style="margin-left:10px">工时</el-col>
 								</el-row>
 							</el-col>
 							<el-col :span="14">
@@ -95,13 +95,13 @@
 						<el-row class="shift_set">
 							<el-col :span="5" style="margin-left:10px;" class="mt10">
 								<el-row type="flex" align="middle">
-									<el-col :span="6">
+									<el-col :span="8">
 										<el-checkbox v-model="timeSolt2">正班2</el-checkbox>
 									</el-col>
-									<el-col :span="14" class="mt20">
+									<el-col :span="8" class="mt20">
 										<form-render prop="fakeHour2"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour2"/>
 									</el-col>
-									<el-col :span="4" class="fs12">工时</el-col>
+									<el-col :span="4" class="fs12" style="margin-left:10px">工时</el-col>
 								</el-row>
 							</el-col>
 							<el-col :span="14">
@@ -148,13 +148,13 @@
 						<el-row class="shift_set">
 							<el-col :span="5" style="margin-left:10px;" class="mt10">
 								<el-row type="flex" align="middle">
-									<el-col :span="6">
+									<el-col :span="8">
 										<el-checkbox v-model="timeSolt3">加班1</el-checkbox>
 									</el-col>
-									<el-col :span="14" class="mt20">
+									<el-col :span="8" class="mt20">
 										<form-render prop="fakeHour3"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour3"/>
 									</el-col>
-									<el-col :span="4" class="fs12">工时</el-col>
+									<el-col :span="4" class="fs12" style="margin-left:10px">工时</el-col>
 								</el-row>
 							</el-col>
 							<el-col :span="14">
@@ -202,13 +202,13 @@
 						<el-row class="shift_set">
 							<el-col :span="5" style="margin-left:10px;" class="mt10">
 								<el-row type="flex" align="middle">
-									<el-col :span="6">
+									<el-col :span="8">
 										<el-checkbox v-model="timeSolt4">加班2</el-checkbox>
 									</el-col>
-									<el-col :span="14" class="mt20">
+									<el-col :span="8" class="mt20">
 										<form-render prop="fakeHour4"  label-width="10" :type="`input`" :field="{name:''}" placeholder="" v-model="form.fakeHour4"/>
 									</el-col>
-									<el-col :span="4" class="fs12">工时</el-col>
+									<el-col :span="4" class="fs12" style="margin-left:10px">工时</el-col>
 								</el-row>
 							</el-col>
 							<el-col :span="14">
