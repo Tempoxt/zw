@@ -2,7 +2,7 @@ export default [
     {
         name: 'PerformanceScheme',
         component: () =>
-            import ('@/views/performance/PerformanceScheme'),
+            import ('@/views/performance/performanceScheme'),
         meta: {
             title: '考核方案公式设置'
         }
@@ -13,13 +13,6 @@ export default [
             import ('@/views/performance/paramsSet'),
         meta: {
             title: '考核方案参数设置'
-        }
-    },{
-        name: 'PerformanceScheme',
-        component: () =>
-            import ('@/views/performance/performanceScheme'),
-        meta: {
-            title: '考核方案公式设置'
         }
     },
     {

@@ -5,6 +5,21 @@
         @query="querySubmit"
         >
 
+
+        <el-dialog
+            :title="dialogStatus==='insert'?'添加':'编辑'"
+            :visible.sync="dialogFormVisible"
+            class="public-dialog"
+            v-el-drag-dialog
+            width="1400px"
+            >
+            <performanceSchemeForm />
+
+            
+        </el-dialog>
+
+
+
         <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -50,7 +65,11 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 let baseUrl = process.env.VUE_APP_STATIC
 const api_resource = api_common.resource('performance/scheme')
+import performanceSchemeForm from './performanceSchemeForm'
 export default {
+    components:{
+        performanceSchemeForm
+    },
     mixins: [table_mixin],
     props:['orgid','id'],
     data() {
@@ -68,6 +87,9 @@ export default {
         },
     },
     methods: {
+        add(){
+            this.dialogFormVisible = true
+        },
 		fetch(){
 			this.table_form.currentpage = 1
 			this.fetchTableData()
@@ -86,7 +108,7 @@ export default {
             }, 300);
         },
 		async fetchMenu(){
-            const { field, action,table } = await api_common.menuInit('personal_param');
+            const { field, action,table } = await api_common.menuInit('PerformanceScheme');
             this.table_field = field;
             this.table_actions = action;
             this.table_config = table
