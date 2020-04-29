@@ -1,7 +1,7 @@
 <template>
     <div id="PerformanceSchemeChart">
-        <div v-for="(row,i) in rows" :ref="row[0].id" :data-pid="row[0].pid" class="box" :key="i">
-            <a  v-for="(item,j) in row" :ref="item.id" :key="j" class="row-item" href="javascript:;" @click="setCurrent(item,row)">
+        <div v-for="(row,i) in rows" :ref="row[0].id" :data-pid="row[0].pid" :data-key="row[0].key" class="box" :key="row[0].key">
+            <a @keyup.delete="remove(item)"  v-for="(item) in row" :ref="item.id" :data-key="item.key"  :key="item.key" class="row-item" href="javascript:;" @click="setCurrent(item,row)" >
                  <el-popover
                     placement="right"
                     trigger="click"
@@ -27,7 +27,7 @@
             </a>
         </div>
         <div :key="i" v-for="(l,i) in line" class="line" :style="`left:${l.l}px;height:${l.h}px;top:${l.t}px;`">
-            <div :style="`margin-top:${l.h/2-10}px`" class="remove-text" title="移除" @click="remove(i.pid)"> 
+            <div :style="`margin-top:${l.h/2-10}px`" class="remove-text" title="移除" @click="removeSubs(l)"> 
                 <i class="el-icon-remove-outline"></i> 子公式</div>
         </div>
     </div>
@@ -38,6 +38,14 @@ import $ from 'jquery'
 
 export default {
     props:['data'],
+    watch:{
+        data:{
+            deep:true,
+            handler(){
+                this.init()
+            }
+        }
+    },
     data(){
         return {
             rows:[],
@@ -45,11 +53,21 @@ export default {
         }
     },
     methods:{
-        remove(pid){
-            
+        removeSubs({key}){
+            this.$emit('removeSubs',key)
+        },
+        remove({key,pid,pkey}){
+           if(pid) {
+               this.removeSubs({key:pkey})
+               return
+           }
+           this.$emit('remove',key)
         },
         setCurrent(item){
             this.current = item
+        },
+        changeText(name){
+            this.current.name = name
         },
         format(data){
            var row = []
@@ -58,6 +76,7 @@ export default {
                if(o.subs) {
                    o.id = `dom_${this.generateID()}`
                    o.subs[0].pid = o.id
+                   o.subs[0].pkey = o.key
                    o.subs[0].id = "calc_pos"
                }
            })
@@ -70,7 +89,7 @@ export default {
         generateID(){
             return parseInt(Math.random()*10000)
         },
-        init(){
+        calcLeft(){
             this.$nextTick(()=>{
                 this.$refs.calc_pos.forEach((dom)=>{
                     var pid = dom.getAttribute('data-pid')
@@ -82,6 +101,7 @@ export default {
                         })
                         this.line.push({
                             pid,
+                            key:$parent.attr('data-key'),
                             h:($dom.position().top - $parent.position().top)- 28 ,
                             t:$parent.position().top + 32,
                             l:$parent.position().left+$parent.width()/2+(+$parent.css('padding').replace('px',''))
@@ -89,11 +109,16 @@ export default {
                     }
                 })
             })
+        },
+        init(){
+            this.line = []
+            this.rows = []
+            this.format(this.data)
+            this.calcLeft()
         }
     },
     created(){
-        this.format(this.data)
-        this.init()
+       this.init()
     }
 }
 </script>
