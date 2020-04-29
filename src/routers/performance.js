@@ -1,5 +1,13 @@
 export default [
     {
+        name: 'PerformanceScheme',
+        component: () =>
+            import ('@/views/performance/PerformanceScheme'),
+        meta: {
+            title: '考核方案公式设置'
+        }
+    },
+    {
         name: 'performance_param',
         component: () =>
             import ('@/views/performance/paramsSet'),
