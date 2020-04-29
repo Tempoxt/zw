@@ -24,7 +24,7 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`number`" :field="{name:'排序'}" v-model="form.order_num"/>
                         </el-col>
-                        <el-col :span="16" :offset="4">
+                        <el-col :span="16" :offset="4" v-if="this.url!='YearTargetParameter'">
                             <form-render :type="`radio`" :field="{name:'参数分类',options:[{
                                 value: 0,
                                 label: '基础参数'
@@ -133,7 +133,14 @@ export default {
                     }else{
                         return <span>停用</span>
                     }
-                }
+                },
+                parameter_category(row,column){
+                    if(column.status==1){
+                        return <span>计算参数</span>
+                    }else{
+                        return <span>基础参数</span>
+                    }
+                },
             }
         };
     },

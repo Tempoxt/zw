@@ -31,9 +31,9 @@
 								>
 								<el-option
 									v-for="item in productData"
-									:key="item.CusCode"
-									:label="item.CusName +`(${item.CusCode})`"
-									:value="item.CusCode">
+									:key="item.cusCode"
+									:label="item.cusAbbname +`(${item.cusCode})`"
+									:value="item.cusCode">
 								</el-option>
 							</el-select>
 						</el-form-item>
