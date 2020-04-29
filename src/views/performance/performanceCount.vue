@@ -1,5 +1,5 @@
 <template>
-    <!-- 员工绩效数据录入 -->
+    <!-- 绩效统计 -->
     <el-row class="h-full public-table-container">
        <el-col :span="4" class="h-full">
             <div class=" h-full">
@@ -7,16 +7,16 @@
             </div>
         </el-col>
         <el-col :span="20" style="border-left:1px solid rgb(232, 232, 232)">
-            <personalParamsTable :orgid="orgid" :id="id"/>
+            <performanceCountTable :orgid="orgid" :id="id"/>
         </el-col>
     </el-row>
 </template>
 <script>
 import org from '@/views/public/org'
-import personalParamsTable from './personalParamsTable'
+import performanceCountTable from './performanceCountTable'
 export default {
     components:{
-        personalParamsTable,
+        performanceCountTable,
         org
     },
     data(){

@@ -101,7 +101,7 @@ export default {
             } 
             this.table_loading = true;
             this.table_form.department = this.id
-            this.table_form.t = 0
+            this.table_form.t = 1
             const {rows , total }= await api_resource.get(this.table_form);
             this.table_data  = rows
             this.table_form.total = total
@@ -114,7 +114,7 @@ export default {
             setTimeout(async ()=>{
                 if(this.id!=''){
                     this.table_field = field;
-                    let fields = await this.$request.get('performance/parameter/value/name0?department='+this.id)
+                    let fields = await this.$request.get('performance/parameter/value/name1?department='+this.id)
                     fields.forEach(o=>{
                         this.table_field.push(o)
                     })

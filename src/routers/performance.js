@@ -7,6 +7,14 @@ export default [
             title: '考核方案参数设置'
         }
     },{
+        name: 'PerformanceScheme',
+        component: () =>
+            import ('@/views/performance/performanceScheme'),
+        meta: {
+            title: '考核方案公式设置'
+        }
+    },
+    {
         name: 'PersonalPerformance',
         component: () =>
             import ('@/views/performance/personalPerform'),
@@ -26,6 +34,13 @@ export default [
             import ('@/views/performance/personalParams'),
         meta: {
             title: '员工绩效数据录入'
+        }
+    },{
+        name: 'performance_count',
+        component: () =>
+            import ('@/views/performance/performanceCount'),
+        meta: {
+            title: '绩效统计'
         }
     },
 ]
