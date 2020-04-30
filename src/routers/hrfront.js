@@ -325,5 +325,12 @@ export default [{
         meta: {
             title: '考勤记录'
         }
+    },{
+        name: 'monthot',
+        component: () =>
+            import ('@/views/attendanceSystem/monthot'),
+        meta: {
+            title: '额外加班工时'
+        }
     },
 ]
