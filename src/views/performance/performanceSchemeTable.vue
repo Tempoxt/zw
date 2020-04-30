@@ -65,7 +65,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 let baseUrl = process.env.VUE_APP_STATIC
 const api_resource = api_common.resource('performance/scheme')
-import performanceSchemeForm from './performanceSchemeForm'
+import performanceSchemeForm from './performanceSchemeForm2'
 export default {
     components:{
         performanceSchemeForm
