@@ -249,7 +249,7 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<p class="shift_time" style="color:#0BB2D4;margin:30px 0 25px 0px;font-weight:bold">班次规则</p>
+						<!-- <p class="shift_time" style="color:#0BB2D4;margin:30px 0 25px 0px;font-weight:bold">班次规则</p>
 						<el-row class="position_left">
 							<el-col :span="11">
 								<form-render label-width="180px" :type="`select`" :field="{name:'迟到时间在(分)内不计',options:[
@@ -264,9 +264,6 @@
 										label: '60'
 									}
 								]}" v-model="form.allowLateTime"/>
-								<!-- <el-form-item label="迟到时间在(分)内不计" label-width="180px">
-									<el-input-number v-model="form.allowLateTime" :min="0"></el-input-number>
-								</el-form-item> -->
 							</el-col>
 							<el-col :span="7" :offset="5">
 								<form-render label-width="180px" :type="`select`" :field="{name:'早退时间在(分)内不计',options:[
@@ -297,7 +294,7 @@
 									<el-input-number v-model="form.startLeaveTime" :min="0" :disabled="true"></el-input-number>
 								</el-form-item>
 							</el-col>
-						</el-row>
+						</el-row> -->
 					</el-scrollbar>
 				</el-form>
 			</div>
@@ -368,11 +365,11 @@ export default {
 				restEndTime3: '',
 				restStartTime4: '',
 				restEndTime4: '',
-				allowLateTime: 1,
-				allowEarlyTime: 1,
-				allowAbsent: 30,
-				startOverTime: 30,
-				startLeaveTime: 30,
+				// allowLateTime: 1,
+				// allowEarlyTime: 1,
+				// allowAbsent: 30,
+				// startOverTime: 30,
+				// startLeaveTime: 30,
 				className: '',
 				onDutyTime1: '08:00',//上班时间1
 				offDutyTime1: '12:00',//下班时间1
