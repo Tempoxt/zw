@@ -34,7 +34,7 @@
                             </span>
                         </div>
                         <ul style="padding-left:20px">
-                            <li v-for="item in 20" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(`总绩效奖金${item}`)">总绩效奖金{{item}}</el-link></li>
+                            <li v-for="item in 20" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(`总绩效奖金${item}`,'text')">总绩效奖金{{item}}</el-link></li>
                         </ul>
                     </div>
                 </div>
@@ -44,26 +44,26 @@
                     <div class="card-title" style="display: flex;">
                        <div>
                             <div>
-                                <el-button size="mini" style="width:36px;" @click="changeText(0)">0</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(1)">1</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(2)">2</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(3)">3</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(4)">4</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(0,'text')">0</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(1,'text')">1</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(2,'text')">2</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(3,'text')">3</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(4,'text')">4</el-button>
                             </div>
                             <div style="margin-top:6px">
-                                <el-button size="mini" style="width:36px;" @click="changeText(5)">5</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(6)">6</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(7)">7</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(8)">8</el-button>
-                                <el-button size="mini" style="width:36px;" @click="changeText(9)">9</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(5,'text')">5</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(6,'text')">6</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(7,'text')">7</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(8,'text')">8</el-button>
+                                <el-button size="mini" style="width:36px;" @click="changeText(9,'text')">9</el-button>
                             </div>
                        </div>
                        <div  style="padding-left:30px">
                            <div>
-                               <el-button size="mini" style="width:36px;" @click="changeText('%','symbol')">%</el-button>
+                               <el-button size="mini" style="width:36px;" @click="changeText('%','text')">%</el-button>
                            </div>
                            <div style="margin-top:6px">
-                               <el-button size="mini" style="width:36px;" @click="changeText('.','symbol')">.</el-button>
+                               <el-button size="mini" style="width:36px;" @click="changeText('.','text')">.</el-button>
                            </div>
                        </div>
                        <div style="padding-left:30px">
@@ -324,30 +324,54 @@ export default {
               
             const { key,type } = this.$refs.chart.current
             if(!key) return
-            if(atype=='symbol'){
+            if(atype=='text'){
                 if(type=='text'){
-                    this.pushItem(name,atype)
-                    this.findByKey(key).type = 'text'
-                }
-                if(type=='symbol'){
-                    this.findByKey(key).name = name
-                    this.findByKey(key).type = 'symbol'
-                }
-            }else{
-                if(type=='text'){
-                    if([0,1,2,3,4,5,6,7,8,9,'.'].includes(name) && !isNaN(+this.findByKey(key).name)){
-                        this.findByKey(key).name =this.findByKey(key).name+''+name
-                        this.findByKey(key).type = 'text'
+                    if(name=='.'||name=='%'||(!isNaN(name) && !isNaN(this.findByKey(key).name))){
+                        this.findByKey(key).name = this.findByKey(key).name+''+name
                     }else{
                         this.findByKey(key).name = name
-                        this.findByKey(key).type = 'text'
                     }
+                    
+
                 }
                 if(type=='symbol'){
-                    this.findByKey(key).name = name
-                    this.findByKey(key).type = 'symbol'
+                    this.pushItem(name,atype)
                 }
             }
+            if(atype=='symbol'){
+                if(type=='text'||name=='('||name==')'){
+                    this.pushItem(name,atype)
+                }else{
+                    if(type=='symbol'){
+                        this.findByKey(key).name = name
+                    }
+                }
+                
+            }
+            // if(atype=='symbol'){
+            //     if(type=='text'){
+            //         this.pushItem(name,atype)
+            //         this.findByKey(key).type = 'text'
+            //     }
+            //     if(type=='symbol'){
+            //         this.findByKey(key).name = name
+            //         this.findByKey(key).type = 'symbol'
+            //     }
+            // }else{
+            //     if(type=='text'){
+            //         if([0,1,2,3,4,5,6,7,8,9,'.'].includes(name) && !isNaN(+this.findByKey(key).name)){
+            //             this.findByKey(key).name =this.findByKey(key).name+''+name
+            //             this.findByKey(key).type = 'text'
+            //         }else{
+            //             this.findByKey(key).name = name
+            //             this.findByKey(key).type = 'text'
+            //         }
+            //     }
+            //     if(type=='symbol'){
+            //         this.findByKey(key).name = name
+            //         this.findByKey(key).type = 'symbol'
+            //     }
+            // }
             this.initChart()
         },
         generateID(){
