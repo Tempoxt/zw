@@ -47,7 +47,7 @@ export default {
     },
 	methods: {
         async handleImportChange(ev){
-            if(this.resourJudge&&this.resourJudge==1){
+            if(this.resourJudge){
                 this.importForm.dateLap = this.dateLap
                 delete  this.importForm.month
             }else{

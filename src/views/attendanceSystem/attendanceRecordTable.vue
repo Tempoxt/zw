@@ -15,12 +15,62 @@
 		>
 		<el-form ref="form" :model="form" label-width="110px" :rules="rule">
 			<el-row>
-				<el-col :span="17">
+				<el-col :span="22">
 					<el-form-item label="打卡记录">
 						<div style="margin-left:7px;">
-							<span v-show="form&&form.attendance_record" style="margin-right:15px;font-size:12px" v-for="item in form.attendance_record" :key="item.id">{{item}}</span>
+							<span v-show="form&&form.attendance_record" style="margin-right:15px;font-size:12px" v-for="item in form.attendance_record" :key="item.id">
+								{{item.split(' ')[1]}}
+							</span>
 						</div>
 					</el-form-item>
+				</el-col>
+				<el-col :span="17">
+					<el-row :gutter="30">
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'上班1',options:form.attendance_record_drop_list}"
+							 v-model="onoffdutytimes.OnDutyTime1" style="width:130%" :disabled="onoffdutytimes.OnDutyTime1=='  '"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'下班1',options:form.attendance_record_drop_list}" 
+							 v-model="onoffdutytimes.OffDutyTime1" style="width:130%" :disabled="onoffdutytimes.OffDutyTime1=='  '"/>
+						</el-col>
+					</el-row>
+				</el-col>
+				<el-col :span="17">
+					<el-row :gutter="30">
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'上班2',options:form.attendance_record_drop_list}" 
+								v-model="onoffdutytimes.OnDutyTime2" style="width:130%" :disabled="onoffdutytimes.OnDutyTime2=='  '"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'下班2',options:form.attendance_record_drop_list}"
+							 v-model="onoffdutytimes.OffDutyTime2" style="width:130%" :disabled="onoffdutytimes.OffDutyTime2=='  '"/>
+						</el-col>
+					</el-row>
+				</el-col>
+				<el-col :span="17">
+					<el-row :gutter="30">
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'上班3',options:form.attendance_record_drop_list}"
+								v-model="onoffdutytimes.OnDutyTime3" style="width:130%" :disabled="onoffdutytimes.OnDutyTime3=='  '"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'下班3',options:form.attendance_record_drop_list}"
+							 v-model="onoffdutytimes.OffDutyTime3" style="width:130%" :disabled="onoffdutytimes.OffDutyTime3=='  '"/>
+						</el-col>
+					</el-row>
+				</el-col>
+				<el-col :span="17">
+					<el-row :gutter="30">
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'上班4',options:form.attendance_record_drop_list}" 
+							v-model="onoffdutytimes.OnDutyTime4" style="width:130%" :disabled="onoffdutytimes.OnDutyTime4=='  '"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render :type="`select`" :field="{name:'下班4',options:form.attendance_record_drop_list}"
+							 v-model="onoffdutytimes.OffDutyTime4" style="width:130%" :disabled="onoffdutytimes.OffDutyTime4=='  '"/>
+						</el-col>
+					</el-row>
 				</el-col>
 				<el-col :span="17">
 					<el-form-item label="当前班次" prop="classes_id">
@@ -138,6 +188,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+			api_pagemanager,
 			vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			width:'40%',
 			api_resource :api_common.resource(this.url),
@@ -158,6 +209,7 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
+			onoffdutytimes: {}
 		};
 	},
 	computed:{
@@ -295,12 +347,23 @@ export default {
 					this.dialogFormVisible = true
 					this.dailyReportID = row.id
 					this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
-					this.form = (await this.$request.get('attendance/classmanager/already/single',{
+					// this.form = (await this.$request.get('attendance/classmanager/already/single',{
+					// 	params:{
+					// 		staff_id: row.staff__employeeCode,
+					// 		class_date: checkDate
+					// 	}
+					// }))[0]
+					this.form = await this.$request.get('attendance/dailyreportclassmodify',{
 						params:{
-							staff_id: row.staff__employeeCode,
-							class_date: checkDate
+							dailyReportID: row.id,
 						}
-					}))[0]
+					})
+					for(var key in this.form.onoffdutytimes){
+						if(this.form.onoffdutytimes[key] == 'disable'){
+							this.form.onoffdutytimes[key] = '  '
+						}
+					}
+					this.onoffdutytimes = this.form.onoffdutytimes
 					this.$nextTick(()=>{
 						this.$refs['form'].clearValidate()
 					})
@@ -310,6 +373,22 @@ export default {
 		async handleFormSubmit(){
 			this.form.dailyReportID = this.dailyReportID
 			let form = Object.assign({},this.form)
+			let obj = form.onoffdutytimes
+			const result = {}
+			
+			let arr = []
+			for(var k in form.onoffdutytimes){
+				if(form.onoffdutytimes[k]!='  ' && form.onoffdutytimes[k]!=''){
+					arr.push(form.onoffdutytimes[k])
+				}
+			}
+			var nary = arr.sort();
+			for(var i = 0; i < nary.length - 1; i++) {
+				if(nary[i] == nary[i + 1]) {
+					this.$message.error(`有重复的打卡记录${nary[i]}`)
+					return 
+				}
+			}
 			let mes = await this.$request.post('attendance/dailyreportclassmodify',form)
 			this.$message.success({message:mes});
 			this.dialogFormVisible = false
