@@ -768,6 +768,9 @@ export default {
                 this.$message.error({message:'正式工人数不能大于350'})
                 return 
             }
+            if(!this.form.sum_working_hours){
+                this.form.sum_working_hours = ((+this.form.labors_hours) + (this.form.workers_hours)).toFixed(2)
+            }
             if(this.isInsert){
                 try{
                     await this.throwFormError(api_resource.create(form))
