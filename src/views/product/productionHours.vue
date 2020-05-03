@@ -436,6 +436,12 @@ export default {
                 },{
                     value: 'ZZ16',
                     label: 'ZZ16'
+                },{
+                    value: 'ZZ51A',
+                    label: 'ZZ51A'
+                },{
+                    value: 'ZZ52A',
+                    label: 'ZZ52A'
                 }
             ],
             form:{
