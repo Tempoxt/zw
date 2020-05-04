@@ -18,9 +18,9 @@
                         <el-date-picker
                         v-model="searchTime"
                         type="date"
-                        placeholder="选择查詢時間">
+                        placeholder="选择时间">
                         </el-date-picker>
-                        <el-input placeholder="請輸入查詢箱號" v-model="searchCode"></el-input>
+                        <el-input placeholder="請輸入箱号" v-model="searchCode"></el-input>
                         <el-button @click="searchClick">查詢</el-button>
                     </div>
                 </table-header>
@@ -83,7 +83,7 @@ export default {
                     return <span>{val}</span>
                 },
             },
-            searchTime: '',
+            searchTime: dayjs().format('YYYY-MM-DD'),
             searchCode: '',
         }
     },
@@ -114,7 +114,7 @@ export default {
         async searchClick() {
             let msg = ''
             if(this.searchTime === '' || this.searchCode === ''){
-                msg = this.searchTime === ''?'請填寫查詢時間':'請填寫查詢箱號'
+                msg = this.searchTime === ''?'请填写查询时间':'请填写查询箱号'
                 this.$message.warning(msg)
             }else{
                 let pid__fdate = dayjs(this.searchTime).format('YYYY-MM-DD')
