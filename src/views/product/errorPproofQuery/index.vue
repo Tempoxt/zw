@@ -4,7 +4,7 @@
             <ui-table 
                 ref="table" 
                 :table_query.sync="table_form.query"
-                :table_column="table_field" 
+                :table_column="table_field"
                 @query="querySubmit"
             >
                 <table-header
@@ -20,8 +20,10 @@
                         type="date"
                         placeholder="选择时间">
                         </el-date-picker>
-                        <el-input placeholder="請輸入箱号" v-model="searchCode"></el-input>
-                        <el-button @click="searchClick">查詢</el-button>
+
+                        <el-input placeholder="请输入箱号" v-model="searchCode"></el-input>
+
+                        <el-button @click="searchClick">查询</el-button>
                     </div>
                 </table-header>
                 <el-table 
@@ -76,7 +78,7 @@ export default {
         return {
             url: 'productrecheck/error_proof_record_query',
             dialogFormVisible: false,
-            api_resource: api_common.resource(`${'productrecheck/error_proof_record_query'}`),
+            api_resource: '',
             template:{
                 data_time(column,row){
                     let val = row.data_time?dayjs(row.data_time).format('YYYY-MM-DD HH:mm'):'-'
@@ -92,7 +94,7 @@ export default {
     },
     methods: {
         async fetchFormData() {
-            
+            this.api_resource = api_common.resource(`${`productrecheck/error_proof_record_query?pid__fdate=${this.searchTime}&pid__worknocode=${this.searchCode}`}`)
         },
         async fetchTableData() {
             this.table_loading = true
@@ -104,7 +106,7 @@ export default {
             },300)
         },
         async fetchMenu(){
-            const { field, action,table } = await api_common.menuInit(this.url);
+            const { field, action,table } = await api_common.menuInit('productrecheck/error_proof_record_query');
             this.table_field = field;
             this.table_actions = action;
             this.table_config = table
@@ -117,11 +119,9 @@ export default {
                 msg = this.searchTime === ''?'请填写查询时间':'请填写查询箱号'
                 this.$message.warning(msg)
             }else{
-                let pid__fdate = dayjs(this.searchTime).format('YYYY-MM-DD')
-                let pid__worknocode = this.searchCode
-                let {rows, total} = await this.$request.get(`productrecheck/error_proof_record_query?pid__fdate=${pid__fdate}&pid__worknocode=${pid__worknocode}`)
-                this.table_data = rows
-                this.table_form.total = total
+                this.searchTime = dayjs(this.searchTime).format('YYYY-MM-DD')
+                this.fetchFormData()
+                this.fetchTableData()
             }
 
         }

@@ -165,6 +165,15 @@ export default {
                 callback();
             }
         };
+        var validatorNum3 = (rule, value, callback) => {
+            if(value == undefined || value == '') {
+                callback();
+            }else if(!(/^[0-9]+(.[0-9]{2})?$/.test(value))){
+                callback(new Error('请输入正确的数字'));
+            }else{
+                callback();
+            }
+        };
         return {
             url: 'productrecheck/production/promotion',
             dialogFormVisible: false,
@@ -174,7 +183,7 @@ export default {
                 product_encoding: [{ required: true, message: '请输入', trigger: 'change' }],
                 product_name: [{ required: true, message: '请输入', trigger: 'change' }],
                 production_number: [{ required: true, message: '请输入', trigger: 'change' }],
-                number: [{trigger: 'change', validator: validatorNum}],
+                number: [{trigger: 'change', validator: validatorNum3}],
                 equilibrium_rate: [{trigger: 'change', validator: validatorNum}],
             },
             statusList: [
