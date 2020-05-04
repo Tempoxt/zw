@@ -8,12 +8,22 @@
                 @query="querySubmit"
             >
                 <table-header
-                :table_actions="table_actions"
-                :table_selectedRows="table_selectedRows"
-                :table_form.sync="table_form"
-                :table_column="table_field"
-                @action="handleAction"/>
-
+                    :table_actions="table_actions"
+                    :table_selectedRows="table_selectedRows"
+                    :table_form.sync="table_form"
+                    :table_column="table_field"
+                    @action="handleAction"
+                >
+                    <div class="flex-r-s-c searchBox" style="padding-left:10px">
+                        <el-date-picker
+                        v-model="searchTime"
+                        type="date"
+                        placeholder="选择查詢時間">
+                        </el-date-picker>
+                        <el-input placeholder="請輸入查詢箱號" v-model="searchCode"></el-input>
+                        <el-button @click="searchClick">查詢</el-button>
+                    </div>
+                </table-header>
                 <el-table 
                 ref="elTable"
                 @selection-change="handleChangeSelection"
@@ -73,6 +83,8 @@ export default {
                     return <span>{val}</span>
                 },
             },
+            searchTime: '',
+            searchCode: '',
         }
     },
     computed: {
@@ -84,7 +96,7 @@ export default {
         },
         async fetchTableData() {
             this.table_loading = true
-            const {rows,total}  =  await this.api_resource.get(this.table_form);
+            let {rows,total}  =  await this.api_resource.get(this.table_form);
             this.table_data = rows
             this.table_form.total = total
             setTimeout(()=>{
@@ -99,10 +111,24 @@ export default {
 
             this.fetchTableData()
         },
+        async searchClick() {
+            let msg = ''
+            if(this.searchTime === '' || this.searchCode === ''){
+                msg = this.searchTime === ''?'請填寫查詢時間':'請填寫查詢箱號'
+                this.$message.warning(msg)
+            }else{
+                let pid__fdate = dayjs(this.searchTime).format('YYYY-MM-DD')
+                let pid__worknocode = this.searchCode
+                let {rows, total} = await this.$request.get(`productrecheck/error_proof_record_query?pid__fdate=${pid__fdate}&pid__worknocode=${pid__worknocode}`)
+                this.table_data = rows
+                this.table_form.total = total
+            }
+
+        }
     },
-    async created() {
-        await this.fetchFormData()
-        await this.fetchMenu()
+    created() {
+        this.fetchMenu()
+        this.fetchFormData()
     }
     
 }
@@ -110,6 +136,17 @@ export default {
 
 <style lang="scss">
 #errorPproofQuery{
+    .flex-r-s-c{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .searchBox{
+        .el-input{
+            margin-right: 10px;
+        }
+    }
     .tag{
         display: inline-block;
         padding: 2px 10px;
