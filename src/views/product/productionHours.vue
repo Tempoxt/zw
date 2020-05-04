@@ -362,6 +362,7 @@ export default {
 			}
         }
         return {
+            importUploadUrl:'operatelist/prodictionlist',
             loading: false,
             baseUri,
             class_ban:[{
