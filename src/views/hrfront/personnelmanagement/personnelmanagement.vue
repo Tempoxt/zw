@@ -1606,6 +1606,7 @@ export default {
             this.dialogFormVisible = true
             this.getSelectOption()
             this.alledulevels = (await api_common.resource('basicdata/alledulevels').get()).map(o=>{return {label:o.name,value:o.id}})
+            this.educationData = await api_common.resource("hrm/edurecode").get({emID:this.staffId});
             this.width = 250
             this.height = 200
         },
