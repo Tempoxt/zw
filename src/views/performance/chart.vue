@@ -1,7 +1,7 @@
 <template>
     <div id="PerformanceSchemeChart">
         <div v-for="(row,i) in rows" :ref="row[0].id" :data-pid="row[0].pid" :data-key="row[0].key" class="box" :key="row[0].key">
-            <a @keyup.delete="remove(item)"  v-for="(item) in row" :ref="item.id" :data-key="item.key"  :key="item.key" class="row-item" href="javascript:;" @click="setCurrent(item,row)" >
+            <a @keyup.delete="remove(item)"   v-for="(item) in row" :ref="item.id" :data-key="item.key"  :key="item.key" class="row-item" href="javascript:;" @click="setCurrent(item,row)" >
                  <el-popover
                     placement="right"
                     trigger="click"
@@ -10,22 +10,69 @@
                     >
                     <div >
                        <div>
-                            <el-button type="text" style="color:#4C5D66;font-weight:bold">加公式</el-button>
+                            <el-button type="text" style="color:#4C5D66;font-weight:bold">加参数</el-button>
                        </div>
                        <div>
-                             <el-button type="text" style="color:#4C5D66;font-weight:bold">子公式</el-button>
+                             <el-button type="text" style="color:#4C5D66;font-weight:bold" @click="addSubs(item)">子公式</el-button>
                        </div>
                        <div>
-                             <el-button type="text" style="color:#4C5D66;font-weight:bold">加条件</el-button>
+                             <el-button type="text" style="color:#4C5D66;font-weight:bold" @click="showCondition(item)">加条件</el-button>
                        </div>
                     </div>
                     <span class="icon"   slot="reference" >
                         <img src="@/assets/imgs/icon_subs.png" alt="">
                     </span>
                 </el-popover>
-               <span >{{item.name}}</span>
+
+                <el-popover
+                    placement="bottom"
+                    trigger="manual"
+                    v-model="item.visible"
+                    >
+                    <div style="min-width:400px">
+                        <div style="font-size:16px;color:#143040;display: flex;justify-content: space-between;font-weight:bold">
+                            <span>{{item.name}}条件</span>
+                            <span @click="closeCondition(item)"><i class="el-icon-close"></i></span>
+                        </div>
+                        <div style="display: flex;justify-content: flex-end;">
+                            <el-button size="mini" @click="item.condition.push([])">增加</el-button>
+                        </div>
+
+                        <div  v-for="(c,i) in item.condition" :key="i" style="display:flex;justify-content: space-between;align-items: center;">
+                            <div class="PerformanceSchemeChart-select-input">
+                                <span>{{item.name}}</span>
+                                <span >:</span>
+                                <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" @keyup.delete="removeConditionItem(item,j)">{{d.name}}</a>
+                                <span class="input"><input type="text" @focus="changeConditionLine(i)"></span>
+                            
+                            </div>
+                            <a href="javascript:;" class="icon-remove" @click="removeCondition(i,item)"><i class="el-icon-remove-outline"></i></a>
+                        </div>
+                        <div style="display: flex;justify-content: flex-end;">
+                            <el-button size="small" type="primary" @click="closeCondition(item)">确定</el-button>
+                        </div>
+                    </div>
+                    <span slot="reference" style="color:#0BB2D4"  v-if="item.condition && item.condition.length">{{item.name}}</span>
+                </el-popover>
+                <span v-if="!item.condition" >{{item.name}}</span>
             </a>
         </div>
+
+         <!-- <div >
+            <span>机台稼动率1</span>: <span>机台稼动率</span> > <span>1</span> <span>then</span> <span>机台稼动率</span>
+        </div>
+            <div >
+            <span>机台稼动率1</span>: <span>机台稼动率</span> > <span>1</span> <span>then</span> <span>机台稼动率</span>
+        </div>
+            <div >
+            <span>机台稼动率1</span>: <span>机台稼动率</span> > <span>1</span> <span>then</span> <span>机台稼动率</span>
+        </div> -->
+
+        <!-- <div style="display: flex;justify-content: flex-end;">
+                <el-button size="small" >修改</el-button>
+        </div> -->
+
+
         <div :key="i" v-for="(l,i) in line" class="line" :style="`left:${l.l}px;height:${l.h}px;top:${l.t}px;`">
             <div :style="`margin-top:${l.h/2-10}px`" class="remove-text" title="移除" @click="removeSubs(l)"> 
                 <i class="el-icon-remove-outline"></i> 子公式</div>
@@ -38,14 +85,6 @@ import $ from 'jquery'
 
 export default {
     props:['data'],
-    watch:{
-        data:{
-            deep:true,
-            handler(){
-                this.init()
-            }
-        }
-    },
     data(){
         return {
             rows:[],
@@ -53,6 +92,58 @@ export default {
         }
     },
     methods:{
+        hoverShowCondition(item){
+          
+            if(item.condition && item.condition.length){
+                item.visible = true
+                this.$set(item,'visible',true)
+            }
+           
+            
+        },
+        hoverHideCondition(item){
+            setTimeout(()=>{
+                 item.visible = false
+            },1000)
+        },
+        closeCondition(item){
+         this.$emit('closeCondition',item)
+        },
+        removeCondition(i,parent){
+            this.$emit('removeCondition',i,parent)
+        },
+        changeConditionItem(item,i){
+            this.changeConditionLine(i)
+            this.$emit('changeConditionItem',item)
+        },
+        removeConditionItem(item,idx){
+            this.$emit('removeConditionItem',item,idx)
+        },
+        showCondition(item){
+            this.$emit('showCondition',item.key,item)
+            this.$nextTick(()=>{
+                document.body.click()
+            })
+        },
+        changeConditionLine(i){
+            this.$emit('changeConditionLine',i)
+        },
+        pushCondition(item){
+             item.condition.push([
+                 {
+                    name:item.name,
+                    type:'text',
+                },
+                {
+                    name:':',
+                    type:'symbol',
+                }
+             ])
+
+        },
+        addSubs({key}){
+            this.$emit('addSubs',key)
+        },
         removeSubs({key}){
             this.$emit('removeSubs',key)
         },
@@ -87,10 +178,11 @@ export default {
            }
         },
         generateID(){
-            return parseInt(Math.random()*10000)
+            return parseInt(Math.random()*1000000)
         },
         calcLeft(){
             this.$nextTick(()=>{
+                if(!this.$refs.calc_pos) return
                 this.$refs.calc_pos.forEach((dom)=>{
                     var pid = dom.getAttribute('data-pid')
                     var $dom = $(dom)
@@ -185,7 +277,38 @@ export default {
             }
         }
     }
-
+    
 }
-  
+.PerformanceSchemeChart-select-input {
+        background:#FAFAFA;
+        padding:10px;
+        margin: 10px 0;
+        display:flex;
+        width: calc(100% - 30px);
+        span,a {
+            display: inline-block;
+            border-bottom: 1px solid #76838F;
+            margin: 0 4px;
+            padding: 0 4px;
+            color:#606266;
+            &:focus {
+                color:#0BB2D4;
+            }
+        }
+        .input {
+            border-color: #0BB2D4;
+        }
+        input {
+            width: 30px;
+            border: none;
+            caret-color:#0BB2D4;
+            outline: none;
+            background: #FAFAFA;
+        }
+}
+ .icon-remove {
+    border-color:transparent;
+    font-size: 18px;
+    color: #606266;
+}
 </style>

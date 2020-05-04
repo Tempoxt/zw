@@ -13,7 +13,7 @@
             v-el-drag-dialog
             width="1400px"
             >
-            <performanceSchemeForm />
+            <performanceSchemeForm :orgid="orgid"  :id="id" v-if="dialogFormVisible"/>
 
             
         </el-dialog>

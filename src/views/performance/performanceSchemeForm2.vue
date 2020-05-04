@@ -1,5 +1,6 @@
 <template>
     <div id="PerformanceSchemeForm">
+
         <div style="display: flex;justify-content: space-between;margin-bottom: 10px;">
             <div>
                 考核方案名称：
@@ -11,7 +12,7 @@
             </div>
             <div>
                   <el-button>验证</el-button>
-                  <el-button type="primary">确认</el-button>
+                  <el-button type="primary" @click="submit">确认</el-button>
             </div>
         </div>
         <div>
@@ -34,7 +35,7 @@
                             </span>
                         </div>
                         <ul style="padding-left:20px">
-                            <li v-for="item in 20" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(`总绩效奖金${item}`,'text')">总绩效奖金{{item}}</el-link></li>
+                            <li v-for="item in parameter" :key="item.id" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(item.parameter_name,'text')">{{item.parameter_name}}</el-link></li>
                         </ul>
                     </div>
                 </div>
@@ -95,7 +96,7 @@
                                <el-button size="mini" style="width:36px;" @click="changeText(':','symbol')">:</el-button>
                            </div>
                            <div style="margin-top:6px">
-                               <el-button size="mini" style="width:36px;" @click="changeText('∴','symbol')">∴</el-button>
+                               <!-- <el-button size="mini" style="width:36px;" @click="changeText('∴','symbol')">∴</el-button> -->
                            </div>
                        </div>
 
@@ -111,7 +112,20 @@
 
                     </div>
                     <div class="card-body area" id="area">
-                        <chart :data="value" @remove="remove" @removeSubs="removeSubs" ref="chart"/>
+                        <chart 
+                        :data="value"
+                         @remove="remove" 
+                         @removeSubs="removeSubs" 
+                         @addSubs="addSubs" 
+                         ref="chart" 
+                         @showCondition="showCondition"
+
+                         @changeConditionLine="changeConditionLine"
+                         @removeConditionItem="removeConditionItem"
+                         @changeConditionItem="changeConditionItem"
+                         @removeCondition="removeCondition"
+                         @closeCondition="hideCondition"
+                         />
                     </div>
                 </div>
             </el-col>
@@ -126,11 +140,19 @@ export default {
     components:{
         chart
     },
+    props:['orgid','id'],
     data(){
         return {
+            parameter:[],
             input1:'',
             options: [],
-            value: [
+            value:[
+                {
+                    name:"开始",
+                    type:'text'
+                },
+            ],
+            value2: [
                 {
                     name:"总绩效奖金",
                     type:'text'
@@ -310,6 +332,77 @@ export default {
         }
     },
     methods:{
+        removeCondition(idx,parent){
+            parent.condition = parent.condition.filter((o,i)=>i!=idx)
+        },
+        hideCondition(item){
+            this.isCondition = false
+            item.visible = false
+        },
+        showCondition(key){
+            const item = this.findByKey(key)
+            // this.currentConditionItem = item
+            if(!item.condition){
+               this.$set(item,'condition',[])
+               item.condition.push([])
+            }
+            item.visible = true
+            this.isCondition = true
+            this.currentCondition = item
+            this.initChart()
+            console.log(this.value)
+        },
+        changeConditionItem(item){
+            this.currentConditionItem = item
+        },
+        changeConditionLine(i){
+            this.currentConditionLine = i
+        },
+        removeConditionItem(item,idx){
+            this.currentCondition.condition[this.currentConditionLine].splice(idx,1)
+        },
+        pushCondition(name,atype){
+            const { type,aname } = this.currentConditionItem||{}
+            var currentCondition = this.currentCondition.condition[this.currentConditionLine]
+            if(this.currentConditionItem && atype=='text'){
+                if(type=='text'){
+                    if(name=='.'||name=='%'||(!isNaN(name) && !isNaN(this.currentConditionItem.name))){
+                       this.currentConditionItem.name = this.currentConditionItem.name+''+name
+                    }else{
+                       this.currentConditionItem.name = name
+                    }
+                    if(type=='symbol'){
+                        currentCondition.push({name,type:atype})
+                    }
+
+                }
+               return
+            }
+             if(atype=='symbol'){
+                if(type=='text'||name=='('||name==')'){
+                    this.currentCondition.condition[this.currentConditionLine].push({
+                        name,type:atype
+                    })
+                    return
+                }else{
+                    if(type=='symbol'){
+                        this.currentConditionItem.name = name
+                        return
+                    }
+                }
+              
+            }
+            this.currentCondition.condition[this.currentConditionLine].push({
+                name,type:atype
+            })
+        },
+        submit(){
+            console.log(JSON.stringify(this.value))
+            console.log(this.value)
+        },
+        async getParameter(){
+            this.parameter = await this.$request.get('/performance/scheme/parameter',{params:{department:this.id}})
+        },
         pushItem(name,type){
             const { key } = this.$refs.chart.current
             const { parent,idx } = this.findParentByKey(key)
@@ -321,7 +414,10 @@ export default {
             this.initChart()
         },
         changeText(name,atype){
-              
+            if(this.isCondition){
+                this.pushCondition(name,atype)
+                return
+            }
             const { key,type } = this.$refs.chart.current
             if(!key) return
             if(atype=='text'){
@@ -348,34 +444,10 @@ export default {
                 }
                 
             }
-            // if(atype=='symbol'){
-            //     if(type=='text'){
-            //         this.pushItem(name,atype)
-            //         this.findByKey(key).type = 'text'
-            //     }
-            //     if(type=='symbol'){
-            //         this.findByKey(key).name = name
-            //         this.findByKey(key).type = 'symbol'
-            //     }
-            // }else{
-            //     if(type=='text'){
-            //         if([0,1,2,3,4,5,6,7,8,9,'.'].includes(name) && !isNaN(+this.findByKey(key).name)){
-            //             this.findByKey(key).name =this.findByKey(key).name+''+name
-            //             this.findByKey(key).type = 'text'
-            //         }else{
-            //             this.findByKey(key).name = name
-            //             this.findByKey(key).type = 'text'
-            //         }
-            //     }
-            //     if(type=='symbol'){
-            //         this.findByKey(key).name = name
-            //         this.findByKey(key).type = 'symbol'
-            //     }
-            // }
             this.initChart()
         },
         generateID(){
-            return parseInt(Math.random()*10000)
+            return parseInt(Math.random()*1000000)
         },
         findParentByKey(key){
             var parent = ''
@@ -418,6 +490,24 @@ export default {
             delete o.subs
             this.initChart()
         },
+        addSubs(key){
+            var o = this.findByKey(key)
+            o.subs = [
+               {
+                    name:o.name,
+                    type:'text'
+                },
+                {
+                    name:'=',
+                    type:'symbol'
+                }
+            ]
+            console.log(this.value,'this.value')
+            this.$nextTick(()=>{
+               this.format(this.value)
+               this.initChart()
+            })
+        },
         remove(key){
             ~function f(value){
                 value.forEach((o,i)=>{
@@ -435,15 +525,15 @@ export default {
         format(value){
             value.forEach(o=>{
                 o.key = this.generateID()
-                if(o.subs){
+                if(o.subs && o.subs.length){
                     this.format(o.subs)
                 }
             })
         }
     },
     created(){
+        this.getParameter()
         this.format(this.value)
-        console.log(this.value)
     },
     mounted(){
         
@@ -466,14 +556,11 @@ export default {
     .area {
         position: relative;
         height: 584px;
-            // display: flex;
         justify-content: center;
         align-items: center;
         padding: 10px;
     }
     .box {
-        // position: absolute;
-        // width: 100%;
         margin-bottom: 30px;
     }
     .line {
