@@ -150,6 +150,13 @@ export default [
         meta: {
             title: '业务提成记录'
         }
+    },{
+        name: 'businessCommisson_v2',
+        component: () =>
+            import ('@/views/hrfront/comissManage/comissionRecord1'),
+        meta: {
+            title: '业务提成记录(新)'
+        }
     },
     {
         name: 'dispatchCollection',
