@@ -35,7 +35,7 @@
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">地区：</span>
-						<span class="labelCon promp">{{profileData.cusArea_n}}</span>
+						<span class="labelCon promp">{{profileData.cusAreaName}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">发货方式：</span>
@@ -77,11 +77,11 @@
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">业务员/工号：</span>
-						<span class="labelCon promp">{{profileData.salesCode}}/{{profileData.salesCode}}</span>
+						<span class="labelCon promp">{{profileData.c_chineseName}}/{{profileData.salesCode}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">跟单员/工号：</span>
-						<span class="labelCon promp">{{profileData.merchandiser}}/{{profileData.merchandiser}}</span>
+						<span class="labelCon promp">{{profileData.m_chineseName}}/{{profileData.merchandiser}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">客户来源：</span>
