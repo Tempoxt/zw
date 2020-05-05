@@ -133,7 +133,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px;display:flex;align-items:center">
-			收款日期：<dateLap v-model="table_form.dateLap" @change="fetch"/>
+			{{this.m==1||this.m==4?'出货日期':'收款日期'}}：<dateLap v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
 	<vxe-table
