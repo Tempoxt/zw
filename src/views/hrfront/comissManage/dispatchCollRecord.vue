@@ -1,10 +1,25 @@
 <template>
     <div class="h-full public-table-container">
-        <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
+        <el-tabs v-model="activeName"  class="table-tabs">
+            <el-tab-pane label="出货记录" name="first">
+               <dispatchList url="commission/dispatchlists" m="1"/>
+            </el-tab-pane>
+            <el-tab-pane label="收款记录" name="second" lazy>
+               <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="2"/>
+               <!-- <collectiondetail url="commission/collectiondetail" m="2"/> -->
+            </el-tab-pane>
+            <el-tab-pane label="收款分配记录" name="third" lazy>
+               <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="3"/>
+            </el-tab-pane>
+            <el-tab-pane label="销售调整" name="fourth" lazy>
+               <dispatchCollRecordTable url="commission/selladjust" m="4"/>
+            </el-tab-pane>
+        </el-tabs>
+        <!-- <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='出货记录'">
-            <dispatchCollRecordTable url="commission/dispatchlists" m="1"/>
+            <dispatchList url="commission/dispatchlists" m="1"/>
         </div>
         <div v-if="view_activeName==='收款记录'">
             <dispatchCollRecordTable url="commission/collectiondetail" m="2"/>
@@ -14,14 +29,21 @@
         </div>
         <div v-if="view_activeName==='销售调整'">
             <dispatchCollRecordTable url="commission/selladjust" m="4"/>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
 import { getTabs } from '@/api/common'
 import dispatchCollRecordTable from './dispatchCollRecordTable'
+import dispatchList from './dispatch/dispatchList'
+import collectiondetail from './dispatch/collectiondetail'
+import dispatchMatch from './dispatch/dispatchMatch'
+
 export default {
     components:{
+        dispatchList,
+        // collectiondetail,
+        // dispatchMatch,
         dispatchCollRecordTable
     },
     watch:{
@@ -47,9 +69,9 @@ export default {
         },
     },
     async created() {
-        const { menu } = await getTabs(this.$route.query.menuid)
-        this.menu = menu
-        this.view_activeName = menu[0].name;
+        // const { menu } = await getTabs(this.$route.query.menuid)
+        // this.menu = menu
+        // this.view_activeName = menu[0].name;
     }
 }
 </script>

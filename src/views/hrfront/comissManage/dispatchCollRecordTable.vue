@@ -3,6 +3,7 @@
   :table_column="table_field" 
   :table_query.sync="table_form.query"
   @query="querySubmit"
+  class="dispatchRecord"
   >
 	<el-dialog
 		:title="dialogStatus==='insert'?'添加':'编辑'"
@@ -34,33 +35,67 @@
 						</el-col>
 					</el-row>
 					<div style="border-top: 1px solid #E4E4E4;padding-top: 30px;">
-						<el-row v-for="(suk,i) in sku_info" :key="i" :gutter="10">
+						<el-row v-for="(suk,i) in form1.sku_info" :key="i" :gutter="10">
 							<el-col :span="8">
 								<el-form-item label-width="90px"
-									:prop="'sku_info.' + i + '.allStock'"
+									:prop="'sku_info.' + i + '.invCode'"
 									label="产品编码"
-									:rules="{ required: true, message: '请输入', trigger: 'blur' }"
+									:rules="{ required: true, message: '请选择', trigger: ['change','blur'] }"
 									>
-									<el-input v-model="suk.materialCode" :disabled="!isInsert&&suk.lock==true"></el-input>
+									<el-select v-model="suk.invCode" placeholder="请选择">
+										<el-option
+											v-for="item in invCodeData"
+											:key="item.value"
+											:label="item.label"
+											:value="item.value">
+										</el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="7">
 								<el-form-item :disabled="true" label-width="70px"
-									:prop="'sku_info.' + i + '.size'"
+									:prop="'sku_info.' + i + '.cusAbbName'"
 									label="产品名称"
 									>
-									<el-input v-model="suk.size"></el-input>
+									<el-input v-model="suk.cusAbbName" :disabled="true"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="7">
-								<el-form-item
-									:prop="'sku_info.' + i + '.price'" label-width="70px"
+								<el-form-item v-if="form1&&form1.invName&&form1.invName=='开票调整'"
+									:prop="'sku_info.' + i + '.openTicketAdjust'" label-width="70px"
 									label="调整金额"
 									:rules="[
 										{ required: true, validator: checkNumber1, trigger: 'blur' }
 									]"
 									>
-									<el-input v-model="suk.price" @input="priceInput" @blur="priceBlur(suk)"></el-input>
+									<el-input v-model="suk.openTicketAdjust" @input="priceInput" @blur="priceBlur(suk)"></el-input>
+								</el-form-item>
+								<el-form-item v-if="form1&&form1.invName&&form1.invName=='销售折扣'"
+									:prop="'sku_info.' + i + '.sellDiscount'" label-width="70px"
+									label="调整金额"
+									:rules="[
+										{ required: true, validator: checkNumber1, trigger: 'blur' }
+									]"
+									>
+									<el-input v-model="suk.sellDiscount" @input="priceInput" @blur="priceBlur(suk)"></el-input>
+								</el-form-item>
+								<el-form-item v-if="form1&&form1.invName&&form1.invName=='价格调整'"
+									:prop="'sku_info.' + i + '.priceAdjust'" label-width="70px"
+									label="调整金额"
+									:rules="[
+										{ required: true, validator: checkNumber1, trigger: 'blur' }
+									]"
+									>
+									<el-input v-model="suk.priceAdjust" @input="priceInput" @blur="priceBlur(suk)"></el-input>
+								</el-form-item>
+								<el-form-item v-if="form1&&form1.invName&&form1.invName=='质量扣款'"
+									:prop="'sku_info.' + i + '.qualityDeduct'" label-width="70px"
+									label="调整金额"
+									:rules="[
+										{ required: true, validator: checkNumber1, trigger: 'blur' }
+									]"
+									>
+									<el-input v-model="suk.qualityDeduct" @input="priceInput" @blur="priceBlur(suk)"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="1">
@@ -78,27 +113,27 @@
 		</div>
 	</el-dialog>
 
-	 <div>
-		<Drawer title="折扣分配详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
+	<div>
+		<Drawer title="调整详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
 			<div style="padding:5px">
 				<el-row :gutter="20" class="row">
 					<el-col :span="12">
-						<p>月份: {{}}</p>
+						<p>月份: {{info.dateLap}}</p>
 					</el-col>
 					<el-col :span="12">
-						<p>发货日期: {{}}</p>
+						<p>发货日期: {{info.dispatchDay}}</p>
 					</el-col>
 					<el-col :span="12">
-						<p>客户编码: {{}}</p>
+						<p>客户编码: {{info.cusCode}}</p>
 					</el-col>
 					<el-col :span="12">
-						<p>产品名称: {{}}</p>
+						<p>产品名称: {{info.invName}}</p>
 					</el-col>
 					<el-col :span="12">
-						<p>客户名称: {{}}</p>
+						<p>客户名称: {{info.cusAbbName}}</p>
 					</el-col>
 					<el-col :span="12">
-						<p>本币无税金额: {{}}</p>
+						<p>本币无税金额: {{info.natDispatchMoney}}</p>
 					</el-col>
 				</el-row>
 				<el-table
@@ -133,7 +168,7 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px;display:flex;align-items:center">
-			{{this.m==1||this.m==4?'出货日期':'收款日期'}}：<dateLap v-model="table_form.dateLap" @change="fetch"/>
+			{{this.m==1 || this.m==4?'出货日期':'收款日期'}}：<dateLap v-model="table_form.dateLap" @change="fetch"/>
 		</div>
     </table-header>
 	<vxe-table
@@ -166,22 +201,9 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" width="60"/>
-		<!-- .filter(o=>!['paidAmount','unpaidAmount','matchAmount'].includes(o.name)) -->
 		<vxe-table-column v-for="field in table_field.filter(o=>!['matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
 			:width="field.width=='auto'?'': parseInt(field.width)"/>
-		<!-- <div v-if="this.m==1" >
-			<vxe-table-column field="paidAmount" title="已收款金额" width="110" fixed="right">
-				<template slot-scope="scope">
-					<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':'#18CC72'}" v-html="scope.row.paidAmount"></div>
-				</template>
-			</vxe-table-column>	
-			<vxe-table-column field="unpaidAmount" title="未收款金额" width="110" fixed="right">
-				<template slot-scope="scope">
-					<div :style="{color:scope.row.unpaidAmount!=0?'#F2353C':''}"  v-html="scope.row.unpaidAmount"></div>
-				</template>
-			</vxe-table-column>
-		</div> -->
 		<vxe-table-column field="matchAmount" title="分配金额" width="110" v-if="this.m==3">
 			<template slot-scope="scope">
 				<div :style="{color:scope.row.dispatch__natSumMoney-scope.row.matchAmount!=0?'#F2353C':'#18CC72'}"  v-html="scope.row.matchAmount">
@@ -233,6 +255,9 @@ export default {
 			importUploadUrl: 'commission/documentary',
 			downloadUrl: 'commission/documentary',
 			sku_info: [],
+			info:{},
+			invCodeData: [],
+			invType: ''
 		};
 	},
 	watch:{
@@ -242,12 +267,6 @@ export default {
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
 			this.fetchMenu()
-		},
-		'form.sku_info':{
-			handler(val) {
-				this.data = this.value;
-			},
-			deep:true
 		}
 	},
 	methods: {
@@ -264,14 +283,23 @@ export default {
 		},
 		async cellClickEvent({row,column,cell}){
 			if(this.m==4 && column.property=='natDispatchMoney'){
-                this.openDrawers = true
+				this.openDrawers = true
+				this.info = await this.api_resource.find(row.id)
+				const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
+				this.dispatchData = rows
 			}
 		},
 		priceInput(val){
-			console.log(val)
+			// console.log(val)
 		},
 		priceBlur(item){
-			console.log(item)
+			// console.log(item)
+			// console.log(this.form1.sku_info)
+			this.form1.sku_info.forEach(o=>{
+				if(o.invCode==item.invCode && o.priceAdjust==item.priceAdjust){
+					// console.log(o,'oo')
+				}
+			})
 		},
         checkNumber(rule, value, callback){
 			if (value==='') {
@@ -283,7 +311,7 @@ export default {
 			}
 		},
 		checkNumber1(rule, value, callback){
-			let money = this.form1.money
+			let money = this.form1.natDispatchMoney
 			if(+money < 0){
 				if(+value >= 0 || isNaN(+value)){
 					callback(new Error('请输入小于0的数字'));
@@ -295,36 +323,68 @@ export default {
 			}
 		},
 		async edit(){
-			if(this.m==1){
-				this.dialogFormVisible = true
-			}else if(this.m==4){
-				this.dialogForm1Visible = true
-				// this.form1 = {
-				// 	sku_info: [{
-				// 		size: '',
-				// 		price:'',
-				// 		allStock:''
-				// 	}],
-				// 	id:1,
-				// 	money:'1426.52'
-				// }
 				let row = this.table_selectedRows[0];
 				this.form1 = await this.api_resource.find(row.id)
-				// if(this.form1.sku_info.length==1){
-				// 	if(this.form1.sku_info[0].price==''){
-				// 		this.form1.sku_info[0].price = this.form1.money
-				// 	}
-				// }
-			}
+				const {rows,total} = await this.$request.get('commission/documentary/list?cusCode='+this.form1.cusCode+'&dateLap='+this.form1.dateLap)
+				if(rows.length==0){
+					if(this.form1.invName=='开票调整'){
+						var item = [{
+							invCode: '',
+							cusAbbName: '',
+							openTicketAdjust: this.form1.natDispatchMoney
+						}]
+					}else if(this.form1.invName=='销售折扣'){
+						var item = [{
+							invCode: '',
+							cusAbbName: '',
+							sellDiscount: this.form1.natDispatchMoney
+						}]
+					}else if(this.form1.invName=='价格调整'){
+						var item = [{
+							invCode: '',
+							cusAbbName: '',
+							priceAdjust: this.form1.natDispatchMoney
+						}]
+					}else if(this.form1.invName=='质量扣款'){
+						var item = [{
+							invCode: '',
+							cusAbbName: '',
+							qualityDeduct: this.form1.natDispatchMoney
+						}]
+					}
+					this.$set(this.form1,'sku_info',item)
+				}else{
+					this.$set(this.form1,'sku_info',rows)
+				}
+				this.dialogForm1Visible = true
+				this.invCodeData = await this.$request.get('commission/documentary/invcode?cusCod='+this.form1.cusCode+'&dateLap='+this.form1.dateLap)
 		},
         addSku(){
-			this.form1.sku_info.push({
-				size: '',
-				price:'',
-				allStock:'',
-				// record_id: null,
-				// disabled:false
-			});
+			if(this.form1.invName=='开票调整'){
+				this.form1.sku_info.push({
+					invCode: '',
+					cusAbbName: '',
+					openTicketAdjust: ''
+				});
+			}else if(this.form1.invName=='销售折扣'){
+				this.form1.sku_info.push({
+					invCode: '',
+					cusAbbName: '',
+					sellDiscount: ''
+				});
+			}else if(this.form1.invName=='价格调整'){
+				this.form1.sku_info.push({
+					invCode: '',
+					cusAbbName: '',
+					priceAdjust: ''
+				});
+			}else if(this.form1.invName=='质量扣款'){
+				this.form1.sku_info.push({
+					invCode: '',
+					cusAbbName: '',
+					qualityDeduct: ''
+				});
+			}
         },
         deleteSku(item) {
 			var index = this.form1.sku_info.indexOf(item)
@@ -337,42 +397,6 @@ export default {
 		},
 		handleForm1Submit(){
 
-		},
-		footerMethod ({ columns, data }) {
-			const sums = [];
-			data = this.table_selectedRows.length == 0 ? data : this.table_selectedRows
-			return [
-				columns.map((column, columnIndex) => {
-					if (columnIndex === 0) {
-						return '合计'
-					}
-					
-					let columnProper = []
-					let statistics = this.table_field.filter(o=>o.isstatistics)
-					statistics.forEach(o=>{
-						columnProper.push(o.name)
-					})
-					if (columnProper.includes(column.property)) {
-						const values = data.map(item => Number(item[column.property]));
-						if (!values.every(value => isNaN(value))) {
-							sums[columnIndex] = values.reduce((prev, curr) => {
-								const value = Number(curr);
-								if (!isNaN(value)) {
-									return prev + curr;
-								} else {
-									return prev;
-								}
-							}, 0);
-							sums[columnIndex] = sums[columnIndex];
-							if(!isNaN(sums[columnIndex])){
-								return sums[columnIndex].toFixed(6)
-							}
-						} else {
-							return '';
-						}  
-					}
-				})
-			]
 		},
         table_dragend({$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}){
             let row = this.table_field.find(field=>field.showname===column.title)
@@ -426,6 +450,7 @@ export default {
 };
 </script>
 <style lang="scss">
+.dispatchRecord{
 	.dispatch{
 		.row{
 			.el-col{
@@ -435,7 +460,10 @@ export default {
 	}
 	.col-red{
 		color: red;
+		text-decoration: underline;
+		cursor: pointer;
 	}
+}
 </style>
 
 

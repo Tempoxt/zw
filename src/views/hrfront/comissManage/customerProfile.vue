@@ -221,7 +221,7 @@
 				<el-row class="mb20">
 					<el-col :span="12">
 						<span class="labelCon">营业执照（盖章）：</span>
-						<img :src="baseUrl+profileData.businessLicenseImg"/>
+						<img v-for="(url,i) in businessLicenseImg" :key="i" :src="baseUrl+url" width="60px" style="margin-right:10px"/>
 						<!-- <span class="labelCon promp">{{profileData.businessLicenseImg}}</span> -->
 					</el-col>
 				</el-row>
@@ -311,7 +311,8 @@ export default {
 				value: 1,
 				label: '临时客户'
 			}],
-			cusClassType: '全部'
+			cusClassType: '全部',
+			businessLicenseImg: []
 		}
 	},
 	methods: {
@@ -326,6 +327,7 @@ export default {
             if(row.cusCode==event.target.innerText){
 				this.openDrawers = true
 				this.profileData = (await this.$request.get('/commission/customer?cusCode='+row.cusCode))[0]
+				this.businessLicenseImg = this.profileData.businessLicenseImg!=null && this.profileData.businessLicenseImg!=''?this.profileData.businessLicenseImg.split(','):[]
             }
 		},
 		async fetch(){
