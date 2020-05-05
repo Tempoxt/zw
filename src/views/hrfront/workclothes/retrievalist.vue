@@ -187,6 +187,12 @@ export default {
   },
 
   methods: {
+    async delete(){
+      let id = this.table_selectedRows.map(o=>o.id)
+      let mes = await this.$request.post('/workclothes/retreat',{ids:id.join(',')},{alert:false})
+      this.$message.success(mes[0])
+      this.fetchTableData()
+    },
      fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
