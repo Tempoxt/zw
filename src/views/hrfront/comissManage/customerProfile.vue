@@ -302,16 +302,16 @@ export default {
 			},
 			openDrawers: false,
 			typeData:[{
-				value: 0,
+				value: '全部',
 				label: '全部'
 			}, {
-				value: 1,
+				value: 0,
 				label: '正式客户'
 			}, {
-				value: 2,
+				value: 1,
 				label: '临时客户'
 			}],
-			cusClassType: 0
+			cusClassType: '全部'
 		}
 	},
 	methods: {
@@ -334,7 +334,7 @@ export default {
         },
 		async fetchTableData() {
 			this.table_loading = true;
-			if(this.cusClassType==0){
+			if(this.cusClassType=='全部'){
 				delete this.table_form.cusClassType
 			}else{
 				this.table_form.cusClassType = this.cusClassType
