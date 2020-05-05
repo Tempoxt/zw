@@ -34,7 +34,7 @@
 						</el-col>
 					</el-row>
 					<div style="border-top: 1px solid #E4E4E4;padding-top: 30px;">
-						<el-row v-for="(suk,i) in form1.sku_info" :key="i" :gutter="10">
+						<el-row v-for="(suk,i) in sku_info" :key="i" :gutter="10">
 							<el-col :span="8">
 								<el-form-item label-width="90px"
 									:prop="'sku_info.' + i + '.allStock'"
@@ -232,6 +232,7 @@ export default {
 			rules1:{},
 			importUploadUrl: 'commission/documentary',
 			downloadUrl: 'commission/documentary',
+			sku_info: [],
 		};
 	},
 	watch:{
@@ -251,7 +252,7 @@ export default {
 	},
 	methods: {
 		cellClassName ({ row, rowIndex, column, columnIndex }) {
-			if(column.property=='natDispatchMoney'){
+			if(this.m==4 && column.property=='natDispatchMoney'){
 				return 'col-red'
 			}
 		},
@@ -262,8 +263,7 @@ export default {
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
 		},
 		async cellClickEvent({row,column,cell}){
-			console.log(row,'ccc')
-			if(column.property=='natDispatchMoney'){
+			if(this.m==4 && column.property=='natDispatchMoney'){
                 this.openDrawers = true
 			}
 		},
@@ -271,8 +271,7 @@ export default {
 			console.log(val)
 		},
 		priceBlur(item){
-			console.log(item,'iii')
-			console.log(this.form1,'wdsdsd')
+			console.log(item)
 		},
         checkNumber(rule, value, callback){
 			if (value==='') {
