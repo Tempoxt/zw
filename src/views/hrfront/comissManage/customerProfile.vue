@@ -163,7 +163,7 @@
 				<el-row class="mb20">
 					<el-col :span="12">
 						<span class="labelCon">对账区间：</span>
-						<span class="labelCon promp">{{profileData.checkingStartDay}} - {{profileData.checkingEndDay}}</span>
+						<span class="labelCon promp">{{profileData.checkingMonth1}}{{profileData.checkingDay1}} - {{profileData.checkingMonth2}}{{profileData.checkingDay2}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">立账依据：</span>
@@ -221,6 +221,7 @@
 				<el-row class="mb20">
 					<el-col :span="12">
 						<span class="labelCon">营业执照（盖章）：</span>
+						<img :src="baseUrl+profileData.businessLicenseImg"/>
 						<span class="labelCon promp">{{profileData.businessLicenseImg}}</span>
 					</el-col>
 				</el-row>
@@ -280,6 +281,7 @@
   </ui-table>
 </template>
 <script>
+let baseUrl = process.env.VUE_APP_STATIC
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 const api_resource = api_common.resource("commission/customerlist");
@@ -287,6 +289,7 @@ export default {
 	mixins: [table_mixin],
 	data() {
 		return {
+			baseUrl,
 			loading: true,
 			api_resource,
 			queryDialogFormVisible:true,

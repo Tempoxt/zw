@@ -12,6 +12,9 @@
         <div v-if="view_activeName==='收款分配记录'">
             <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="3"/>
         </div>
+        <div v-if="view_activeName==='销售调整'">
+            <dispatchCollRecordTable url="commission/selladjust" m="4"/>
+        </div>
     </div>
 </template>
 <script>
