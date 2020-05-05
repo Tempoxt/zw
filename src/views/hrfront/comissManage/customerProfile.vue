@@ -222,7 +222,7 @@
 					<el-col :span="12">
 						<span class="labelCon">营业执照（盖章）：</span>
 						<img :src="baseUrl+profileData.businessLicenseImg"/>
-						<span class="labelCon promp">{{profileData.businessLicenseImg}}</span>
+						<!-- <span class="labelCon promp">{{profileData.businessLicenseImg}}</span> -->
 					</el-col>
 				</el-row>
 			</div>
