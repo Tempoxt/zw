@@ -5,7 +5,7 @@
                <dispatchList url="commission/dispatchlists" m="1"/>
             </el-tab-pane>
             <el-tab-pane label="收款记录" name="second" lazy>
-               <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="2"/>
+               <dispatchCollRecordTable url="commission/collectiondetail" m="2"/>
                <!-- <collectiondetail url="commission/collectiondetail" m="2"/> -->
             </el-tab-pane>
             <el-tab-pane label="收款分配记录" name="third" lazy>
