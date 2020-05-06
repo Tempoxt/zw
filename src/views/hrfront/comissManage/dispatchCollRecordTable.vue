@@ -166,6 +166,7 @@
 					<el-table-column prop="natDispatchMoney" label="本币无税出货金额" width="120px"></el-table-column>
 					<el-table-column prop="sellDiscount" label="销售折扣" width="120px"></el-table-column>
 					<el-table-column prop="openTicketAdjust" label="开票调整" width="120px"></el-table-column>
+					<el-table-column prop="priceAdjust" label="价格调整" width="120px"></el-table-column>
 					<el-table-column prop="qualityDeduct" label="质量折扣" width="120px"></el-table-column>
 					<el-table-column prop="realMoney" label="应收金额" width="120px"></el-table-column>
 				</el-table>
