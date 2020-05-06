@@ -137,20 +137,19 @@
 					</el-col>
 				</el-row>
 				<el-table
-					class="dtable"
+        			ref="dispatchTable"
+					class="dtable dispatchTable"
 					:data="dispatchData"
 					:header-cell-style="headerStyle"
 					style="margin-top:20px"
-					height="700px"
+					height="700px" border
+					:summary-method="getSummaries1"
+					show-summary
+      				v-loading="dispatch_loading"
 					>
-					<el-table-column type="index" :index="indexMethods"/>
-					<el-table-column prop="dispatchDay" label="发货日期" width="90px"></el-table-column>
-					<el-table-column prop="invName" label="存货分类" width="120px">
-						<template slot-scope="scope">
-							<span :title="scope.row.invName" style="cursor:default">{{scope.row.invName}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="invCode" label="存货编码" width="110px">
+					<el-table-column type="index" :index="indexMethods" fixed="left"/>
+					<el-table-column prop="dispatchDay" label="发货日期" width="90px" fixed="left"></el-table-column>
+					<el-table-column prop="invCode" label="存货编码" width="110px" fixed="left">
 						<template slot-scope="scope">
 							<span :title="scope.row.invCode" style="cursor:default">{{scope.row.invCode}}</span>
 						</template>
@@ -160,15 +159,20 @@
 							<span :title="scope.row.invClassName" style="cursor:default">{{scope.row.invClassName}}</span>
 						</template>
 					</el-table-column>
+					<el-table-column prop="invName" label="存货分类" width="120px">
+						<template slot-scope="scope">
+							<span :title="scope.row.invName" style="cursor:default">{{scope.row.invName}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column prop="quantity" label="出货数量" width="90px"></el-table-column>
-					<el-table-column prop="natUnitPrice" label="出货单价" width="90px"></el-table-column>
-					<el-table-column prop="natSumMoney" label="本币价税合计金额" width="120px"></el-table-column>
-					<el-table-column prop="natDispatchMoney" label="本币无税出货金额" width="120px"></el-table-column>
-					<el-table-column prop="sellDiscount" label="销售折扣" width="120px"></el-table-column>
-					<el-table-column prop="openTicketAdjust" label="开票调整" width="120px"></el-table-column>
-					<el-table-column prop="priceAdjust" label="价格调整" width="120px"></el-table-column>
-					<el-table-column prop="qualityDeduct" label="质量折扣" width="120px"></el-table-column>
-					<el-table-column prop="realMoney" label="应收金额" width="120px"></el-table-column>
+					<el-table-column prop="natUnitPrice" label="发货单价" width="90px" align="right"></el-table-column>
+					<el-table-column prop="natSumMoney" label="本币含税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="natDispatchMoney" label="本币无税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="openTicketAdjust" label="开票调整" width="120px" align="right"></el-table-column>
+					<el-table-column prop="sellDiscount" label="销售折扣" width="120px" align="right"></el-table-column>
+					<el-table-column prop="priceAdjust" label="价格调整" width="120px" align="right"></el-table-column>
+					<el-table-column prop="qualityDeduct" label="质量折扣" width="120px" align="right"></el-table-column>
+					<el-table-column prop="realMoney" label="应收本币无税金额" width="130px" align="right"></el-table-column>
 				</el-table>
 			</div>
 		</Drawer>
@@ -271,9 +275,7 @@ export default {
 			curr:1,
 			page:'',
 			invType: '',
-			template:{
-
-			}
+			dispatch_loading: false
 		};
 	},
 	watch:{
@@ -286,6 +288,33 @@ export default {
 		}
 	},
 	methods: {
+		getSummaries1({ columns, data }) {
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}
+				let columnProper = ['natSumMoney','natDispatchMoney','sellDiscount','openTicketAdjust','priceAdjust','qualityDeduct','realMoney']
+				if(columnProper.includes(column.property)){
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+						const value = Number(curr);
+						if (!isNaN(value)) {
+							return prev + curr;
+						} else {
+							return prev;
+						}
+						}, 0);
+						sums[index] = sums[index].toFixed(6);
+					} else {
+						sums[index] = '';
+					}
+				}
+			});
+			return sums;
+		},
 		cellClassName ({ row, rowIndex, column, columnIndex }) {
 			if(this.m==4 && column.property=='natDispatchMoney'){
 				if(row.status==2){
@@ -306,10 +335,17 @@ export default {
 		},
 		async cellClickEvent({row,column,cell}){
 			if(this.m==4 && column.property=='natDispatchMoney'&&row.status==1){
+				this.dispatch_loading = true
 				this.openDrawers = true
 				this.info = await this.api_resource.find(row.id)
 				const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
 				this.dispatchData = rows
+				this.$nextTick(()=>{
+					this.dispatch_loading = false
+					this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
+					this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
+					this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
+				})
 			}
 		},
 		priceInput(val){
@@ -611,6 +647,10 @@ export default {
 				}	
 			}
 		}
+		
+        .ivu-drawer-header{
+            background: rgba(245,250,251,1)
+        }
 	}
 	.col-red{
 		color: red;
@@ -624,6 +664,13 @@ export default {
 	}
 	.text-right{
 		text-align: right;
+	}
+}
+.dispatchTable{
+	.el-table__row{
+		.cell{
+			line-height: 21px;
+		}
 	}
 }
 </style>

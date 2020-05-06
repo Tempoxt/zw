@@ -82,7 +82,7 @@ export default {
   }
 }
 
-.vxe-table .vxe-footer--column.col--ellipsis{
+.vxe-table .vxe-footer--column.col--ellipsis,.vxe-table .vxe-footer--column{
   background-color: #f5f7fa;
   color: #606266;
   height: 32px;
