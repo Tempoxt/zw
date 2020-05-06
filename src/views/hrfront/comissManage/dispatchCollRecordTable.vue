@@ -215,17 +215,19 @@
 			type="selection" 
 			width="50" 
 			class-name="table-column-disabled"
-			:selectable="table_disable_selected"
+			:selectable="table_disable_selected" fixed="left"
 		>
 		</vxe-table-column>
-		<vxe-table-column type="index" :index="indexMethod" align="center" width="60"/>
-		<vxe-table-column field="status" title="状态" width="80">
+		<vxe-table-column type="index" :index="indexMethod" align="center" width="60" fixed="left"/>
+		<vxe-table-column field="status" title="状态" width="80" fixed="left">
 			<template slot-scope="scope">
 				<el-tag type="success" size="mini" v-if="scope.row.status==1">已调整</el-tag>
 				<el-tag type="danger" size="mini" v-if="scope.row.status==2">未调整</el-tag>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['status','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+		<vxe-table-column field="salesCode" title="业务工号" width="80" fixed="left"></vxe-table-column>
+		<vxe-table-column field="salesName" title="业务姓名" width="80" fixed="left"></vxe-table-column>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['status','salesCode','salesName','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
 			:width="field.width=='auto'?'': parseInt(field.width)"/>
 		<vxe-table-column field="matchAmount" title="分配金额" width="110" v-if="this.m==3">
@@ -249,6 +251,10 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
+const api_pagemanager = api_common.resource('pagemanager/field')
+import { MessageBox } from 'element-ui';
+
+const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
 	props:['url','m'],
@@ -275,7 +281,8 @@ export default {
 			curr:1,
 			page:'',
 			invType: '',
-			dispatch_loading: false
+			dispatch_loading: false,
+			message: ''
 		};
 	},
 	watch:{
@@ -288,6 +295,75 @@ export default {
 		}
 	},
 	methods: {
+		async handleImportChange(ev){
+			const files = ev.target.files;
+			this.importForm.the_file = files[0]
+			if (!files) return;
+			const { importForm } = this
+			var form = new FormData();
+			Object.keys(importForm).forEach(key=>{
+				form.append(key,importForm[key])  
+			})
+			this.importLoading = true
+			MessageBox.close()
+			MessageBox.alert(
+				<div v-loading={true}><br /></div>, '导入中', {
+				showConfirmButton:false,
+				center:true
+			});
+			try {
+				let mes = await this.$request.post(this.importUploadUrl,form,{alert:false})
+				this.fetchTableData()
+				this.$message({
+					message: mes,
+					type: 'success'
+				});
+				MessageBox.close()
+			} catch (error) {
+				MessageBox.close()
+				MessageBox.alert(error.response.data, '提示', {
+					confirmButtonText: '确定',
+				});
+			}finally{
+				this.importLoading = false
+				this.$nextTick(()=>{
+					// this.$refs.importInput.value = null
+					// ev.target.value = null
+					this.fetchTableData()
+				})
+			}
+		},
+		async handleDownloadChange(){
+			try {
+				const  { data,name,contentType } = await this.$request.get(this.downloadUrl,{
+					responseType:'arraybuffer'
+				})
+				download(data,name||this.$route.meta.title,contentType)
+				this.$message({
+					message: '下载成功',
+					type: 'success'
+				});
+			} catch (error) {
+				
+			}finally{
+				MessageBox.close()
+			}
+		},
+		import(){
+			let {
+				handleImportChange,
+			} = this
+			MessageBox.alert(
+			<el-button-group class="table-import-upload" ref="import">
+				<el-button type="primary" onClick={()=>{}}>选择文件</el-button>
+				<input type="file" ref="input" class="input" on-change={handleImportChange} ref="importInput"></input>
+				<el-button type="" style="margin-left:20px" onClick={()=>{this.handleDownloadChange()}}>下载模板</el-button>
+			</el-button-group>
+			, '选择文件导入', {
+			showConfirmButton:false,
+			center:true
+			});
+		},
 		getSummaries1({ columns, data }) {
 			const sums = [];
 			columns.forEach((column, index) => {

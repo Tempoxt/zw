@@ -72,6 +72,7 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
+const api_pagemanager = api_common.resource('pagemanager/field')
 let baseUrl = process.env.VUE_APP_STATIC
 const api_resource = api_common.resource("salary/bonus");
 export default {

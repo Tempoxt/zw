@@ -193,6 +193,7 @@
 <script>
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
+const api_pagemanager = api_common.resource('pagemanager/field')
 const api_resource = api_common.resource("basicwage/applysheet");
 let Static_Url = process.env.VUE_APP_STATIC;
 export default {
