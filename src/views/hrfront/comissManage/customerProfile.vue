@@ -35,7 +35,7 @@
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">地区：</span>
-						<span class="labelCon promp">{{profileData.cusArea_n}}</span>
+						<span class="labelCon promp">{{profileData.cusAreaName}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">发货方式：</span>
@@ -77,11 +77,11 @@
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">业务员/工号：</span>
-						<span class="labelCon promp">{{profileData.salesCode}}/{{profileData.salesCode}}</span>
+						<span class="labelCon promp">{{profileData.c_chineseName}}/{{profileData.salesCode}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">跟单员/工号：</span>
-						<span class="labelCon promp">{{profileData.merchandiser}}/{{profileData.merchandiser}}</span>
+						<span class="labelCon promp">{{profileData.m_chineseName}}/{{profileData.merchandiser}}</span>
 					</el-col>
 					<el-col :span="12">
 						<span class="labelCon">客户来源：</span>
@@ -221,8 +221,8 @@
 				<el-row class="mb20">
 					<el-col :span="12">
 						<span class="labelCon">营业执照（盖章）：</span>
-						<img :src="baseUrl+profileData.businessLicenseImg"/>
-						<span class="labelCon promp">{{profileData.businessLicenseImg}}</span>
+						<img v-for="(url,i) in businessLicenseImg" :key="i" :src="baseUrl+url" width="60px" style="margin-right:10px"/>
+						<!-- <span class="labelCon promp">{{profileData.businessLicenseImg}}</span> -->
 					</el-col>
 				</el-row>
 			</div>
@@ -302,16 +302,17 @@ export default {
 			},
 			openDrawers: false,
 			typeData:[{
-				value: 0,
+				value: '全部',
 				label: '全部'
 			}, {
-				value: 1,
+				value: 0,
 				label: '正式客户'
 			}, {
-				value: 2,
+				value: 1,
 				label: '临时客户'
 			}],
-			cusClassType: 0
+			cusClassType: '全部',
+			businessLicenseImg: []
 		}
 	},
 	methods: {
@@ -326,6 +327,7 @@ export default {
             if(row.cusCode==event.target.innerText){
 				this.openDrawers = true
 				this.profileData = (await this.$request.get('/commission/customer?cusCode='+row.cusCode))[0]
+				this.businessLicenseImg = this.profileData.businessLicenseImg!=null && this.profileData.businessLicenseImg!=''?this.profileData.businessLicenseImg.split(','):[]
             }
 		},
 		async fetch(){
@@ -334,7 +336,7 @@ export default {
         },
 		async fetchTableData() {
 			this.table_loading = true;
-			if(this.cusClassType==0){
+			if(this.cusClassType=='全部'){
 				delete this.table_form.cusClassType
 			}else{
 				this.table_form.cusClassType = this.cusClassType
