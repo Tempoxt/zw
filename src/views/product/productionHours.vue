@@ -446,6 +446,9 @@ export default {
                 },{
                     value: 'ZZ41A',
                     label: 'ZZ41A'
+                },{
+                    value: 'ZZ15B',
+                    label: 'ZZ15B'
                 }
             ],
             form:{
