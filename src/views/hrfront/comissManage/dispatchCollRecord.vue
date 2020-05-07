@@ -5,11 +5,12 @@
                <dispatchList url="commission/dispatchlists" m="1"/>
             </el-tab-pane>
             <el-tab-pane label="收款记录" name="second" lazy>
-               <dispatchCollRecordTable url="commission/collectiondetail" m="2"/>
-               <!-- <collectiondetail url="commission/collectiondetail" m="2"/> -->
+               <!-- <dispatchCollRecordTable url="commission/collectiondetail" m="2"/> -->
+               <collectiondetail url="commission/collectiondetail" m="2"/>
             </el-tab-pane>
             <el-tab-pane label="收款分配记录" name="third" lazy>
-               <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="3"/>
+               <!-- <dispatchCollRecordTable url="commission/dispatchcollectionmatch" m="3"/> -->
+               <dispatchMatch url="commission/dispatchcollectionmatch" m="3"/>
             </el-tab-pane>
             <el-tab-pane label="销售调整" name="fourth" lazy>
                <dispatchCollRecordTable url="commission/selladjust" m="4"/>
@@ -42,8 +43,8 @@ import dispatchMatch from './dispatch/dispatchMatch'
 export default {
     components:{
         dispatchList,
-        // collectiondetail,
-        // dispatchMatch,
+        collectiondetail,
+        dispatchMatch,
         dispatchCollRecordTable
     },
     watch:{
