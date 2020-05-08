@@ -45,7 +45,7 @@
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <div v-if="view_activeName==='个人提成汇总'">
+        <div v-if="view_activeName==='提成记录'">
             <comissionRecordTable url="commission/presoncommcollect" a='1' @change="changeTab"  :id="orgid"/>
         </div>
         <div v-if="view_activeName==='客户提成明细'">

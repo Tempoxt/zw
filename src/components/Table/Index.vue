@@ -86,6 +86,6 @@ export default {
   background-color: #f5f7fa;
   color: #606266;
   height: 32px;
-  padding: 4px 0;
+  padding: 4px 0!important;
 }
 </style>

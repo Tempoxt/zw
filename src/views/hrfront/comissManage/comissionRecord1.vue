@@ -1,7 +1,7 @@
 <template>
 
  <el-row class="h-full public-table-container">
-    <el-col :span="4" class="h-full">
+    <el-col :span="4" class="h-full" style="border-right:1px solid rgb(232, 232, 232)">
         <div class=" h-full">
             <!-- <el-scrollbar wrap-class="scrollbar-wrapper" class="scroll"> -->
                 <div style="padding:20px" class="h-full">
@@ -41,19 +41,19 @@
         </div>
 
     </el-col>
-    <el-col :span="20" style="border-left:1px solid rgb(232, 232, 232)">
+    <el-col :span="20">
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <div v-if="view_activeName==='业务提成明细表'">
+        <!-- <div v-if="view_activeName==='业务提成明细表'">
             <comissionRecord1Table url="commission/staffcommissiondetail" a='1' @change="changeTab"  :id="orgid"/>
-        </div>
-        <!-- <div v-if="view_activeName==='客户提成明细'">
-            <comissionRecord1Table url="commison/cuscommdetail" a='2' @change="changeTab" :id="orgid"/>
-        </div>
-        <div v-if="view_activeName==='收款提成明细'">
-            <comissionRecord1Table url="commission/receiptCommDetail" a='3' @change="changeTab" :id="orgid"/>
         </div> -->
+        <div v-if="view_activeName==='提成客户汇总'">
+            <comissionRecord1Table url="commission/customercommission" a='2' @change="changeTab" :id="orgid"/>
+        </div>
+        <div v-if="view_activeName==='提成产品汇总'">
+            <comissionRecord1Table url="commission/productcommission" a='3' @change="changeTab" :id="orgid"/>
+        </div>
     </el-col>
   </el-row>
 </template>

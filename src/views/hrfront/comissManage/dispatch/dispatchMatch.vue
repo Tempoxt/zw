@@ -43,7 +43,14 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" width="60"/>
-		<vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).
+		<vxe-table-column field="allocatedStatus" title="状态" width="90">
+			<template slot-scope="scope">
+				<el-tag type="danger" size="mini" v-if="scope.row.allocatedStatus==0">未分配</el-tag>
+				<el-tag type="success" size="mini" v-if="scope.row.allocatedStatus==1">已分配</el-tag>
+				<el-tag type="warning" size="mini" v-if="scope.row.allocatedStatus==2">部分分配</el-tag>
+			</template>
+		</vxe-table-column>
+		<vxe-table-column v-for="field in table_field.filter(o=>!['allocatedStatus'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
 			:width="field.width=='auto'?'': parseInt(field.width)"/>
 	</vxe-table>

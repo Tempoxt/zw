@@ -43,7 +43,7 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" width="60" fixed="left"/>
-		<vxe-table-column field="allocatedStatus" title="状态" width="80" fixed="left">
+		<vxe-table-column field="allocatedStatus" title="状态" width="90" fixed="left">
 			<template slot-scope="scope">
 				<el-tag type="danger" size="mini" v-if="scope.row.allocatedStatus==0">未分配</el-tag>
 				<el-tag type="success" size="mini" v-if="scope.row.allocatedStatus==1">已分配</el-tag>

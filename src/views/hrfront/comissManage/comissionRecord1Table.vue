@@ -155,14 +155,14 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
-let api_resource = api_common.resource("commission/staffcommissiondetail");
+// let api_resource = api_common.resource("commission/staffcommissiondetail");
 export default {
 	mixins: [table_mixin],
 	props:['id','url','a'],
 	data() {
 		return {
 			loading: true,
-			api_resource,
+			api_resource:api_common.resource(this.url),
 			orgCategory:[],
 			queryDialogFormVisible:true,
 			serialnumber:[],
@@ -235,6 +235,7 @@ export default {
 			delete this.table_form.keyword
 			this.table_form.currentpage = 1
 			this.table_form.query.query= []
+			this.api_resource = api_common.resource(this.url);
 			this.fetchMenu()
 			// if(this.a=='1'){
 			// 	this.importUploadUrl = 'commission/commissionSet/person/upload'
@@ -307,7 +308,7 @@ export default {
 			this.table_loading = true;
 			this.table_form.org_id = this.id
 			// if(this.url=="commission/presoncommcollect"){
-				const {rows , total }= await api_resource.get(this.table_form);
+				const {rows , total }= await this.api_resource.get(this.table_form);
 				this.table_data  = rows
 				this.table_form.total = total
 			// }
