@@ -110,7 +110,7 @@ export default {
             }, 300);
         },
 		async fetchMenu(){
-            const { field, action,table } = await api_common.menuInit('personal_param');
+            const { field, action,table } = await api_common.menuInit('performance_count');
             setTimeout(async ()=>{
                 if(this.id!=''){
                     this.table_field = field;
