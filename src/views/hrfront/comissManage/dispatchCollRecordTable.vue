@@ -42,7 +42,7 @@
 									label="产品编码"
 									:rules="{ required: true, message: '请选择', trigger: ['change','blur'] }"
 									>
-									<el-select v-model="suk.invCode" placeholder="请选择" @change="changeInvCode(suk)">
+									<el-select v-model="suk.invCode" placeholder="请选择" @change="changeInvCode(suk)" filterable>
 										<el-option
 											v-for="item in invCodeData"
 											:key="item.invCode"

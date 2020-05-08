@@ -135,7 +135,7 @@ export default {
                     }
                 },
                 parameter_category(row,column){
-                    if(column.status==1){
+                    if(column.parameter_category==1){
                         return <span>计算参数</span>
                     }else{
                         return <span>基础参数</span>
