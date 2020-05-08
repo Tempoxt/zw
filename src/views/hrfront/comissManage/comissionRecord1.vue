@@ -45,9 +45,9 @@
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <!-- <div v-if="view_activeName==='业务提成明细表'">
-            <comissionRecord1Table url="commission/staffcommissiondetail" a='1' @change="changeTab"  :id="orgid"/>
-        </div> -->
+        <div v-if="view_activeName==='个人业务提成'">
+            <comissionRecord1Table url="commission/staffcommissioncollect" a='1' @change="changeTab"  :id="orgid"/>
+        </div>
         <div v-if="view_activeName==='提成客户汇总'">
             <comissionRecord1Table url="commission/customercommission" a='2' @change="changeTab" :id="orgid"/>
         </div>

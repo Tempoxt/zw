@@ -132,7 +132,7 @@
       </el-table-column>
     <el-table-column type="index" :index="indexMethod" width="70"/>
     <each-table-column :table_field="table_field"  :template="template"/>
-	<el-table-column
+	<!-- <el-table-column
 		v-if="this.url=='commission/presoncommcollect'"
 		fixed="right"
 		label="操作"
@@ -140,7 +140,7 @@
 		<template slot-scope="scope">
 			<el-button @click="handleClick(scope.row)" type="text" size="small">明细</el-button>
 		</template>
-    </el-table-column>
+    </el-table-column> -->
     </el-table>
      <table-pagination 
         :total="table_form.total" 
@@ -307,20 +307,9 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.org_id = this.id
-			// if(this.url=="commission/presoncommcollect"){
-				const {rows , total }= await this.api_resource.get(this.table_form);
-				this.table_data  = rows
-				this.table_form.total = total
-			// }
-			// else if(this.url=="commison/cuscommdetail"){
-			// 	const {rows , total }= await api_common.resource('commission/commissionSet/customer').get(this.table_form)
-			// 	this.table_data  = rows
-			// 	this.table_form.total = total
-			// }else{
-			// 	const {rows , total }= await api_common.resource('commission/commissionSet/receiptDetail').get(this.table_form)
-			// 	this.table_data  = rows
-			// 	this.table_form.total = total
-			// }
+			const {rows , total }= await this.api_resource.get(this.table_form);
+			this.table_data  = rows
+			this.table_form.total = total
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
@@ -329,15 +318,9 @@ export default {
 			this.$emit('change','收款提成明细',row.staff__id)
 		},
 		async edit(){
-			if(this.url=='commission/presoncommcollect'){
-				let row = this.table_selectedRowsInfo[0];
-				this.dialogFormVisible = true
-				this.form = await this.api_resource.find(row.id)
-			}else{
-				let row = this.table_selectedRowsInfo[0];
-				this.dialogForm1Visible = true
-				this.form1 = await this.$request.get('/commission/commissionSet/customer/update/'+row.id)
-			}
+			let row = this.table_selectedRowsInfo[0];
+			this.dialogFormVisible = true
+			this.form = await this.api_resource.find(row.id)
 		},
 		async handleFormSubmit(){
             await this.form_validate()
