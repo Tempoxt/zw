@@ -21,9 +21,6 @@
                         <el-col :span="16" :offset="4">
                             <form-render :type="`input`" :field="{name:'参数说明'}" v-model="form.parameter_source"/>
                         </el-col>
-                        <el-col :span="16" :offset="4">
-                            <form-render :type="`number`" :field="{name:'排序'}" v-model="form.order_num"/>
-                        </el-col>
                         <el-col :span="16" :offset="4" v-if="this.url!='YearTargetParameter'">
                             <form-render :type="`radio`" :field="{name:'参数分类',options:[{
                                 value: 0,
@@ -166,7 +163,6 @@ export default {
             this.form = {
                parameter_name: '' ,
                status: 1,
-               order_num: 1,
                parameter_category: 0,
             }
             this.dialogFormVisible = true
@@ -200,7 +196,6 @@ export default {
                 this.form = {
                     parameter_name: '' ,
                     status: 1,
-                    order_num: 1,
                 }
                 this.$nextTick(()=>{
                     this.$refs['form'].clearValidate()
