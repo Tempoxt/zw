@@ -70,7 +70,7 @@ export default {
         },
         async view_activeName(){
             this.filterText = ''
-            if(this.view_activeName=='收款提成明细'){
+            if(this.view_activeName=='个人业务提成'){
                 this.data2 =  await this.$request.get('org?org_id=d4&showteam=1&showstaff=1&filter_model=StaffCommission')
                 if(!Number(this.orgid)){
                     let defaultId = this.data2[0].orgid
