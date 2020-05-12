@@ -131,7 +131,7 @@
                                              <div style="height:60px"></div>
                                         </el-col>
                                         <el-col :span="6">
-                                            <form-render :type="`select`" :required="this.no_warehousing_number>0" prop="no_warehousing_reason" :field="{name:'未入库原因',options:[{
+                                            <form-render :type="`select`" clearable :required="this.no_warehousing_number>0" prop="no_warehousing_reason" :field="{name:'未入库原因',options:[{
                                                     value: 1,
                                                     label: '待品质检验'
                                                 },{
@@ -449,6 +449,18 @@ export default {
                 },{
                     value: 'ZZ15B',
                     label: 'ZZ15B'
+                },{
+                    value: 'ZZ53A',
+                    label: 'ZZ53A'
+                },{
+                    value: 'ZZ54A',
+                    label: 'ZZ54A'
+                },{
+                    value: 'ZZ55A',
+                    label: 'ZZ55A'
+                },{
+                    value: 'ZZ56A',
+                    label: 'ZZ56A'
                 }
             ],
             form:{
