@@ -399,6 +399,11 @@ export default {
         submit(){
             console.log(JSON.stringify(this.value))
             console.log(this.value)
+
+            this.$request.post('/performance/scheme',{
+                department:this.id,
+                formula:this.value
+            })
         },
         async getParameter(){
             this.parameter = await this.$request.get('/performance/scheme/parameter',{params:{department:this.id}})
