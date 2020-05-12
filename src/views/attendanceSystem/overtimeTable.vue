@@ -70,11 +70,22 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-show="this.m!=1">
+		<div style="padding-left:10px" v-show="this.m!=1&&this.m!=4">
 			<dateLap type="1" v-model="dateLap1" @change="fetch"/>
 		</div>
-		<div style="padding-left:10px" v-show="this.m==1">
+		<div style="padding-left:10px" v-show="this.m==1||this.m==4">
 			<dateLap type='2' v-model="dateLap" @change="fetch"/>
+		</div>
+		<div style="padding-left:10px" v-if="this.m==4">
+			 <!--  -->
+			<el-select v-model="depart" placeholder="请选择" @change="changeStatus" style="width:140px">
+				<el-option
+					v-for="item in departList"
+					:key="item.value"
+					:label="item.title"
+					:value="item.value">
+				</el-option>
+			</el-select>
 		</div>
     </table-header>
     <el-table
@@ -101,7 +112,14 @@
 		<el-table-column type="index" :index="indexMethod" width="70"/>
 		<each-table-column :table_field="table_field"/>
     </el-table>
-    <table-pagination 
+	<div v-if="this.m==4&&main" style="margin-top:10px">
+		<span>合计正班工时: <span style="font-weight:bold">{{main.RWT}}</span></span>
+		<span style="margin-left:10px">合计平时加班:<span style="font-weight:bold"> {{main.RotN}}</span></span>
+		<span style="margin-left:10px">合计周末加班: <span style="font-weight:bold"> {{main.RotW}}</span></span>
+		<span style="margin-left:10px">合计节假日加班: <span style="font-weight:bold"> {{main.RotL}}</span></span>
+		<span style="margin-left:10px">合计总工时: <span style="font-weight:bold"> {{main.total}}</span></span>
+	</div>
+    <table-pagination v-if="this.m!=4"
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
@@ -146,6 +164,7 @@ export default {
 			table_topHeight:293,
 			form:{},
 			result:[],
+			depart: '',
 			rule:{
 				startTime:[
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
@@ -166,6 +185,8 @@ export default {
 					return time.getTime() < new Date().getTime() + 3600*1*1000;
 				}
 			},
+			departList: [],
+			main: {}
 		};
 	},
 	watch:{
@@ -253,17 +274,25 @@ export default {
 				this.$message.error('请选择要添加的人员');
 			}
 		},
+		changeStatus(val){
+			this.depart = val
+			this.fetchTableData()
+		},
 		async fetchTableData() {
+			if(this.m==4){
+				this.table_form.orgid = this.depart
+			}
 			this.table_loading = true;
 			this.table_form.auditStatus = this.auditStatus
-			if(this.m!=1){
+			if(this.m!=1 && this.m!=4){
 				this.table_form.dateLap = this.dateLap1
 			}else{
 				this.table_form.dateLap = this.dateLap
 			}
-			const {rows , total }= await this.api_resource.get(this.table_form);
+			const {rows , total, main }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
+			this.main = main
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
@@ -277,6 +306,8 @@ export default {
 	},
 	async created() {
 		this.fetchMenu()
+		this.departList = await this.$request.get('/hrm/jobtype?tag=OvertimeRatioDepts')
+		this.depart = this.departList[0].value
 		this.dateLap = dayjs().format('YYYY-MM')
 		this.dateLap1 = dayjs().format('YYYY-MM-DD')
 		this.fetchTableData();

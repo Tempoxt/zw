@@ -258,7 +258,9 @@ export default {
 					}
 				}
 			}
-			
+			if(column.title=='班次'){
+				return 'cursor'
+			}
 		},
 		rowClassName ({ row, rowIndex }) {
 			if (row.isNorm==false) {
@@ -336,39 +338,34 @@ export default {
 			this.fetchTableData()
 		},
 		async cellClickEvent({row, rowIndex, column, columnIndex},event){//日考勤记录修改班次
-			if(this.m==1&&column.title=='班次'&&row.fieldStyle){
-				var obj = JSON.parse(row.fieldStyle)
-				if(obj.attendanceClass__id==10){
-					this.form = {}
-					this.$nextTick(()=>{
-						this.$refs['form'].clearValidate()
-					})
-					let checkDate = row.YearMonth.split('-')[0]+'-'+row.checkDate
-					this.dialogFormVisible = true
-					this.dailyReportID = row.id
-					this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
-					// this.form = (await this.$request.get('attendance/classmanager/already/single',{
-					// 	params:{
-					// 		staff_id: row.staff__employeeCode,
-					// 		class_date: checkDate
-					// 	}
-					// }))[0]
-					this.form = await this.$request.get('attendance/dailyreportclassmodify',{
-						params:{
-							dailyReportID: row.id,
-						}
-					})
-					for(var key in this.form.onoffdutytimes){
-						if(this.form.onoffdutytimes[key] == 'disable'){
-							this.form.onoffdutytimes[key] = '  '
-						}
+			if(this.m==1&&column.title=='班次'){
+				this.form = {}
+				this.$nextTick(()=>{
+					this.$refs['form'].clearValidate()
+				})
+				let checkDate = row.YearMonth.split('-')[0]+'-'+row.checkDate
+				this.dialogFormVisible = true
+				this.dailyReportID = row.id
+				this.classData = await this.$request.get('/attendance/intelligentteam/classeslist')
+				this.form = await this.$request.get('attendance/dailyreportclassmodify',{
+					params:{
+						dailyReportID: row.id,
 					}
-					this.onoffdutytimes = this.form.onoffdutytimes
-					this.$nextTick(()=>{
-						this.$refs['form'].clearValidate()
-					})
+				})
+				for(var key in this.form.onoffdutytimes){
+					if(this.form.onoffdutytimes[key] == 'disable'){
+						this.form.onoffdutytimes[key] = '  '
+					}
 				}
+				this.onoffdutytimes = this.form.onoffdutytimes
+				this.$nextTick(()=>{
+					this.$refs['form'].clearValidate()
+				})
 			}
+			// if(this.m==1&&column.title=='班次'&&row.fieldStyle){
+			// 	var obj = JSON.parse(row.fieldStyle)
+			// 	if(obj.attendanceClass__id==10){
+			// }
 		},
 		async handleFormSubmit(){
 			this.form.dailyReportID = this.dailyReportID
@@ -468,6 +465,10 @@ export default {
 		.vxe-table .vxe-cell {
 			padding: 0px 4px;
 			text-align: center;
+			cursor: default;
+		}
+		.cursor{
+			cursor: pointer;
 		}
 	}
 </style>

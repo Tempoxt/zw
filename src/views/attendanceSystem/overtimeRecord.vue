@@ -12,6 +12,9 @@
         <div v-if="view_activeName==='产线加班计划'">
             <overtimeTable m='2' url="attendance/prodovertime/plan"/>
         </div>
+        <div v-if="view_activeName==='加班比率'">
+            <overtimeTable m='4' url="dataanalysis/overtimeratiostat/detail"/>
+        </div>
         <div v-if="view_activeName==='产线加班签名'">
             <overtimeTable  m='3' url="attendance/prodovertime/sign"/>
         </div>

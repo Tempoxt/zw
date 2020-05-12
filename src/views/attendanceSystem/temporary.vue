@@ -12,7 +12,7 @@
         <el-tabs v-model="view_activeName" class="table-tabs" ref="tabs" @tab-click="handleClick">
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
-        <div v-if="view_activeName==='调休加班记录'">
+        <div v-if="view_activeName==='攒调休加班记录'">
             <temporaryTable url="attendance/shiftovertime" m="1" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='补休记录'">
