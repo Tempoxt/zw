@@ -6,9 +6,9 @@
   >
   	<!-- 补休加班明细 -->
 	<div>
-		<Drawer title="攒调休加班补休明细" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
+		<Drawer title="补休明细" :closable="false" width="640" v-model="openDrawers" class="drawerInfo">
 			<div style="background: #f8f8f8;">
-				<el-row :gutter="20">
+				<el-row :gutter="20" style="margin:0">
 					<el-col :span="3" class="imgFlex">
 						<img src="@/assets/avatar.png" alt="" srcset="" class="imgAvatar">
 					</el-col>
@@ -27,27 +27,28 @@
 				</el-row>
 			</div>
 			<div class="infoDetail">
-				<p class="info">攒调休加班明细</p>
+				<p class="info">补休明细</p>
 				<el-row :gutter="20" class="fontStyle mt10 ">
 					<el-col :span="8">开始时间: {{shiftData.kaissj}}</el-col>
 					<el-col :span="8">结束时间: {{shiftData.jiessj}}</el-col>
 					<el-col :span="8">加班工时: {{shiftData.tiaoxks}}</el-col>
 				</el-row>
-				<el-collapse  v-model="activeNames" @change="handleChange" v-if="shiftData.shiftDetail&&shiftData.shiftDetail.length!=0">
-					<el-collapse-item title="补休明细" name="0">
+				<p class="info">对调明细</p>
+				<!-- <el-collapse  v-model="activeNames" @change="handleChange" v-if="shiftData.shiftDetail&&shiftData.shiftDetail.length!=0">
+					<el-collapse-item title="对调明细" name="0"> -->
 						<div style="margin-left:70px">
 								<el-timeline :reverse="reverse">
-								<el-timeline-item
-								v-for="(activity, idx) in shiftData.shiftDetail"
-								:key="idx">
-									<span style="color:#808080">{{activity.shij1}} ~ {{activity.shij2}}
-										<span style="margin-left:15px">{{activity.tiaoxsc1}}</span>
-									</span>
-								</el-timeline-item>
+									<el-timeline-item
+										v-for="(activity, idx) in shiftData.shiftDetail"
+										:key="idx">
+										<span style="color:#808080">{{activity.shij1}} ~ {{activity.shij2}}
+											<span style="margin-left:15px">{{activity.tiaoxsc1}}</span>
+										</span>
+									</el-timeline-item>
 							</el-timeline>
 						</div>
-					</el-collapse-item>
-				</el-collapse>
+					<!-- </el-collapse-item>
+				</el-collapse> -->
 				<!-- <div class="divider"></div> -->
 			</div>
 		</Drawer>
@@ -126,7 +127,20 @@ export default {
 					}else{
 						return <span>{row.payStatus}</span>
 					}
-				}
+				},
+				dataStatus(column,row){
+					if(row.dataStatus=='未处理'){
+						return <el-tag size="mini" type="danger">{row.dataStatus}</el-tag>
+					}else if(row.dataStatus=='待结付'){
+						return <el-tag size="mini" type="warning">{row.dataStatus}</el-tag>
+					}else if(row.dataStatus=='已结付'){
+						return <el-tag size="mini" type="success">{row.dataStatus}</el-tag>
+					}else if(row.dataStatus=='已调休'){
+						return <el-tag size="mini">{row.dataStatus}</el-tag>
+					}else{
+						return <span>{row.dataStatus}</span>
+					}
+				},
 			}
 		};
 	},
@@ -153,13 +167,13 @@ export default {
 			this.fetchTableData()
 		},
 		async openDrawer(row,column,cell,event){
-			if(row.tiaoxsc1==event.target.innerText&&this.m==1){
+			if(row.duration==event.target.innerText&&this.m==2){
 				this.openDrawers = true
-				this.shiftData = await this.$request.get('attendance/shiftovertime/'+row.requestId)
+				this.shiftData = await this.$request.get('/attendance/shift/'+row.id)
 			}
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(column.label == '补休工时'&&this.m==1){
+			if(column.label == '补休工时'&&this.m==2){
 				return 'color:#0BB2D4;cursor:pointer'
 			}else{
 				return  ''
