@@ -393,11 +393,11 @@ export default {
 		},
 		cellClassName ({ row, rowIndex, column, columnIndex }) {
 			if(this.m==4 && column.property=='natDispatchMoney'){
-				if(row.status==2){
-					return 'col-red'
-				}else{
+				// if(row.status==2){
+				// 	return 'col-red'
+				// }else{
 					return 'col-blue'
-				}
+				// }
 			}
 			if(this.m==4 && column.property=='natSumMoney'){
 				return 'text-right'
@@ -410,18 +410,20 @@ export default {
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
 		},
 		async cellClickEvent({row,column,cell}){
-			if(this.m==4 && column.property=='natDispatchMoney'&&row.status==1){
+			if(this.m==4 && column.property=='natDispatchMoney'){
 				this.dispatch_loading = true
 				this.openDrawers = true
 				this.info = await this.api_resource.find(row.id)
-				const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
-				this.dispatchData = rows
-				this.$nextTick(()=>{
-					this.dispatch_loading = false
-					this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
-					this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
-					this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
-				})
+				if(info){
+					const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
+					this.dispatchData = rows
+					this.$nextTick(()=>{
+						this.dispatch_loading = false
+						this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
+						this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
+						this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
+					})
+				}
 			}
 		},
 		priceInput(val){
