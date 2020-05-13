@@ -414,16 +414,14 @@ export default {
 				this.dispatch_loading = true
 				this.openDrawers = true
 				this.info = await this.api_resource.find(row.id)
-				if(info){
-					const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
-					this.dispatchData = rows
-					this.$nextTick(()=>{
-						this.dispatch_loading = false
-						this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
-						this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
-						this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
-					})
-				}
+				const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
+				this.dispatchData = rows
+				this.$nextTick(()=>{
+					this.dispatch_loading = false
+					this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
+					this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
+					this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
+				})
 			}
 		},
 		priceInput(val){
