@@ -219,15 +219,15 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" width="60" fixed="left"/>
-		<vxe-table-column field="status" title="状态" width="80" fixed="left">
+		<!-- <vxe-table-column field="status" title="状态" width="80" fixed="left">
 			<template slot-scope="scope">
 				<el-tag type="success" size="mini" v-if="scope.row.status==1">已调整</el-tag>
 				<el-tag type="danger" size="mini" v-if="scope.row.status==2">未调整</el-tag>
 			</template>
-		</vxe-table-column>
+		</vxe-table-column> -->
 		<vxe-table-column field="salesCode" title="业务工号" width="80" fixed="left"></vxe-table-column>
 		<vxe-table-column field="salesName" title="业务姓名" width="80" fixed="left"></vxe-table-column>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['status','salesCode','salesName','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+		<vxe-table-column v-for="field in table_field.filter(o=>!['salesCode','salesName','matchAmount'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
 			:width="field.width=='auto'?'': parseInt(field.width)"/>
 		<vxe-table-column field="matchAmount" title="分配金额" width="110" v-if="this.m==3">
