@@ -11,9 +11,9 @@
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
-            width="1400px"
+            width="1800px"
             >
-            <performanceSchemeForm :orgid="orgid"  :id="id" v-if="dialogFormVisible"/>
+            <performanceSchemeForm :row="row" :schemeName="schemeName" :orgid="orgid" :dialogStatus="dialogStatus"  :id="id" v-if="dialogFormVisible" :formValue="formValue"/>
 
             
         </el-dialog>
@@ -79,6 +79,9 @@ export default {
             loading: false,
             queryDialogFormVisible:true,
             table_topHeight: 235,
+            formValue:null,
+            schemeName:'',
+            row:{}
         };
     },
     watch:{
@@ -87,7 +90,38 @@ export default {
         },
     },
     methods: {
+        async edit(){
+            let row = this.table_selectedRows[0]
+            // this.form = (await api_resource.find(row.id))[0]
+            const { rows } = await this.$request.get('/performance/scheme/details/'+row.id)
+            this.schemeName = row.scheme_name
+            // 增加子公式前两个节点
+            ~function f(rows){
+                rows.forEach((o)=>{
+                    if(o.subs){
+                        o.subs = [
+                            {
+                                name:o.name,
+                                type:'text',
+                                disabled:true
+                            },
+                            {
+                                name:'=',
+                                type:'symbol',
+                                disabled:true
+                            }
+                        ].concat(o.subs)
+
+                        f(o.subs)
+                    }
+                })
+            }(rows)
+            this.formValue = rows
+            this.row = row
+            this.dialogFormVisible = true
+        },
         add(){
+            this.formValue = null
             this.dialogFormVisible = true
         },
 		fetch(){

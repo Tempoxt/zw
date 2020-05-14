@@ -7,7 +7,7 @@
             </div>
         </el-col>
         <el-col :span="20" style="border-left:1px solid rgb(232, 232, 232)">
-            <performanceSchemeTable :orgid="orgid" :id="id"/>
+            <performanceSchemeTable :orgid="orgid" :id="id" :formValue="value"/>
         </el-col>
     </el-row>
 </template>
@@ -15,6 +15,7 @@
 import org from '@/views/public/org'
 import performanceSchemeTable from './performanceSchemeTable'
 export default {
+    props:['value'],
     components:{
         performanceSchemeTable,
         org

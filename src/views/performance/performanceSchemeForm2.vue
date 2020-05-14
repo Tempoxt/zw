@@ -7,7 +7,7 @@
                 <el-input
                     placeholder="请输入"
                     style="width:200px"
-                    v-model="input1">
+                    v-model="scheme_name">
                 </el-input>
             </div>
             <div>
@@ -16,8 +16,8 @@
             </div>
         </div>
         <div>
-           <el-row :gutter="10">
-            <el-col :span="5">
+           <el-row :gutter="10" style="display:flex">
+            <el-col :span="5" style="width:250px">
                 <div class="card">
                     <div class="card-title">考核参数表</div>
                     <div class="card-body">
@@ -34,13 +34,13 @@
                                 <i class="el-icon-circle-plus-outline" style="font-size: 22px;color:#A3AFB7;padding-left:10px;cursor: pointer;"></i>
                             </span>
                         </div>
-                        <ul style="padding-left:20px">
+                        <ul style="padding-left:20px;overflow-y: scroll;height: 576px;">
                             <li v-for="item in parameter" :key="item.id" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(item.parameter_name,'text')">{{item.parameter_name}}</el-link></li>
                         </ul>
                     </div>
                 </div>
             </el-col>
-            <el-col :span="19">
+            <el-col :span="19" style="width:100%">
                 <div class="card">
                     <div class="card-title" style="display: flex;">
                        <div>
@@ -104,7 +104,7 @@
                            <div>
                               <el-button size="mini" style="width:50px;" @click="changeText('if','symbol')">if</el-button>
                               <el-button size="mini" style="width:50px;" @click="changeText('then','symbol')">then</el-button>
-                              <el-button size="mini" style="width:50px;" @click="changeText('else','symbol')">else</el-button>
+                              <!-- <el-button size="mini" style="width:50px;" @click="changeText('else','symbol')">else</el-button> -->
                            </div>
                        </div>
 
@@ -140,15 +140,16 @@ export default {
     components:{
         chart
     },
-    props:['orgid','id'],
+    props:['orgid','id','formValue','schemeName','dialogStatus','row'],
     data(){
         return {
             parameter:[],
             input1:'',
             options: [],
+            scheme_name:'',
             value:[
                 {
-                    name:"开始",
+                    name:"总绩效奖金",
                     type:'text'
                 },
             ],
@@ -356,7 +357,9 @@ export default {
             this.currentConditionItem = item
         },
         changeConditionLine(i){
+            this.currentConditionItem = null
             this.currentConditionLine = i
+
         },
         removeConditionItem(item,idx){
             this.currentCondition.condition[this.currentConditionLine].splice(idx,1)
@@ -364,6 +367,7 @@ export default {
         pushCondition(name,atype){
             const { type,aname } = this.currentConditionItem||{}
             var currentCondition = this.currentCondition.condition[this.currentConditionLine]
+            
             if(this.currentConditionItem && atype=='text'){
                 if(type=='text'){
                     if(name=='.'||name=='%'||(!isNaN(name) && !isNaN(this.currentConditionItem.name))){
@@ -378,6 +382,7 @@ export default {
                 }
                return
             }
+
              if(atype=='symbol'){
                 if(type=='text'||name=='('||name==')'){
                     this.currentCondition.condition[this.currentConditionLine].push({
@@ -397,13 +402,40 @@ export default {
             })
         },
         submit(){
-            console.log(JSON.stringify(this.value))
-            console.log(this.value)
 
-            this.$request.post('/performance/scheme',{
-                department:this.id,
-                formula:this.value
-            })
+            // 删除子公式前显示两个节点
+            var value = JSON.parse(JSON.stringify(this.value))
+            ~function f(value){
+                value.forEach((o)=>{
+                    if(o.subs){
+                        o.subs = o.subs.filter(o=>!o.disabled)
+                        f(o.subs)
+                    }
+                })
+            }(value)
+         
+            if(this.dialogStatus==='insert'){
+                this.$request.post('/performance/scheme',{
+                    department:this.id,
+                    formula:value,
+                    scheme_name:this.scheme_name
+                },{
+                    headers:{
+                        "Content-Type":'application/json'
+                    }
+                })
+            }else{
+                this.$request.put('/performance/scheme/'+this.row.id,{
+                    department:this.id,
+                    formula:value,
+                    scheme_name:this.scheme_name
+                },{
+                    headers:{
+                        "Content-Type":'application/json'
+                    }
+                })
+            }
+           
         },
         async getParameter(){
             this.parameter = await this.$request.get('/performance/scheme/parameter',{params:{department:this.id}})
@@ -411,11 +443,13 @@ export default {
         pushItem(name,type){
             const { key } = this.$refs.chart.current
             const { parent,idx } = this.findParentByKey(key)
-            parent.splice(idx+1,0,{
+            let item = {
                 key:this.generateID(),
                 name,
                 type
-            })
+            }
+            parent.splice(idx+1,0,item)
+            this.$refs.chart.current = item
             this.initChart()
         },
         changeText(name,atype){
@@ -432,8 +466,6 @@ export default {
                     }else{
                         this.findByKey(key).name = name
                     }
-                    
-
                 }
                 if(type=='symbol'){
                     this.pushItem(name,atype)
@@ -487,7 +519,7 @@ export default {
             return val
         },
         initChart(){
-            this.$refs.chart.current = null
+            // this.$refs.chart.current = null
             this.$refs.chart.init()
         },
         removeSubs(key){
@@ -500,11 +532,13 @@ export default {
             o.subs = [
                {
                     name:o.name,
-                    type:'text'
+                    type:'text',
+                    disabled:true
                 },
                 {
                     name:'=',
-                    type:'symbol'
+                    type:'symbol',
+                    disabled:true
                 }
             ]
             console.log(this.value,'this.value')
@@ -537,6 +571,10 @@ export default {
         }
     },
     created(){
+        if(this.formValue) {
+            this.value = this.formValue
+            this.scheme_name = this.schemeName
+        }
         this.getParameter()
         this.format(this.value)
     },

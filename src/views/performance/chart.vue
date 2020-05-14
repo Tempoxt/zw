@@ -42,7 +42,8 @@
                             <div class="PerformanceSchemeChart-select-input">
                                 <span>{{item.name}}</span>
                                 <span >:</span>
-                                <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" @keyup.delete="removeConditionItem(item,j)">{{d.name}}</a>
+                                <!-- @keyup.delete="removeConditionItem(item,j)" -->
+                                <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" >{{d.name}}</a>
                                 <span class="input"><input type="text" @focus="changeConditionLine(i)"></span>
                             
                             </div>
@@ -113,6 +114,7 @@ export default {
             this.$emit('removeCondition',i,parent)
         },
         changeConditionItem(item,i){
+            
             this.changeConditionLine(i)
             this.$emit('changeConditionItem',item)
         },
@@ -168,6 +170,7 @@ export default {
                    o.id = `dom_${this.generateID()}`
                    o.subs[0].pid = o.id
                    o.subs[0].pkey = o.key
+                   o.subs[0].name = o.name
                    o.subs[0].id = "calc_pos"
                }
            })
@@ -284,13 +287,14 @@ export default {
         padding:10px;
         margin: 10px 0;
         display:flex;
-        width: calc(100% - 30px);
+        // width: calc(100% - 30px);
         span,a {
             display: inline-block;
             border-bottom: 1px solid #76838F;
             margin: 0 4px;
             padding: 0 4px;
             color:#606266;
+            white-space: nowrap;
             &:focus {
                 color:#0BB2D4;
             }
