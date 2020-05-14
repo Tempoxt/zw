@@ -118,22 +118,22 @@
 			<div style="padding:5px">
 				<el-row :gutter="20" class="row">
 					<el-col :span="12">
-						<span style="display:inline-block;text-align:right;width:100px">月份：</span> {{info.dateLap}}
+						<span  style="display:inline-block;text-align:right;width:100px">发货日期： </span>{{info.inputDay}}
 					</el-col>
 					<el-col :span="12">
-						<span  style="display:inline-block;text-align:right;width:100px">发货日期： </span>{{info.dispatchDay}}
+						<span style="display:inline-block;text-align:right;width:100px">发货单：</span> {{info.cDLCode}}
 					</el-col>
 					<el-col :span="12">
 						<span style="display:inline-block;text-align:right;width:100px">客户编码：</span> {{info.cusCode}}
 					</el-col>
 					<el-col :span="12">
-						<span style="display:inline-block;text-align:right;width:100px">产品名称：</span> {{info.invName}}
+						<span style="display:inline-block;text-align:right;width:100px">产品名称：</span> {{info.invCode}}
 					</el-col>
 					<el-col :span="12">
 						<span style="display:inline-block;text-align:right;width:100px">客户名称： </span>{{info.cusAbbName}}
 					</el-col>
 					<el-col :span="12">
-						<span style="display:inline-block;text-align:right;width:100px">本币无税金额：</span>{{info.natDispatchMoney}}
+						<span style="display:inline-block;text-align:right;width:100px">本币无税金额：</span>{{info.total}}
 					</el-col>
 				</el-row>
 				<el-table
@@ -154,18 +154,18 @@
 							<span :title="scope.row.invCode" style="cursor:default">{{scope.row.invCode}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column prop="invClassName" label="存货名称" width="90px">
-						<template slot-scope="scope">
-							<span :title="scope.row.invClassName" style="cursor:default">{{scope.row.invClassName}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="invName" label="存货分类" width="120px">
+					<el-table-column prop="invName" label="存货名称" width="120px">
 						<template slot-scope="scope">
 							<span :title="scope.row.invName" style="cursor:default">{{scope.row.invName}}</span>
 						</template>
 					</el-table-column>
+					<el-table-column prop="invClassName" label="存货分类" width="90px">
+						<template slot-scope="scope">
+							<span :title="scope.row.invClassName" style="cursor:default">{{scope.row.invClassName}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column prop="quantity" label="出货数量" width="90px"></el-table-column>
-					<el-table-column prop="natUnitPrice" label="发货单价" width="90px" align="right"></el-table-column>
+					<el-table-column prop="unitPrice" label="发货单价" width="90px" align="right"></el-table-column>
 					<el-table-column prop="natSumMoney" label="本币含税金额" width="120px" align="right"></el-table-column>
 					<el-table-column prop="natDispatchMoney" label="本币无税金额" width="120px" align="right"></el-table-column>
 					<el-table-column prop="openTicketAdjust" label="开票调整" width="120px" align="right"></el-table-column>
@@ -413,9 +413,13 @@ export default {
 			if(this.m==4 && column.property=='natDispatchMoney'){
 				this.dispatch_loading = true
 				this.openDrawers = true
-				this.info = await this.api_resource.find(row.id)
-				const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
-				this.dispatchData = rows
+				const {detail, main} = await this.api_resource.find(row.id)
+				this.info = main[0]
+				// const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
+				this.dispatchData = detail
+				detail.forEach(o=>{
+					this.$set(o,'realMoney',(+o.natDispatchMoney+(+o.openTicketAdjust + +o.sellDiscount + +o.priceAdjust + +o.qualityDeduct)).toFixed(6))
+				})
 				this.$nextTick(()=>{
 					this.dispatch_loading = false
 					this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
