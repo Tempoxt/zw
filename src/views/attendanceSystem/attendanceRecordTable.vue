@@ -27,11 +27,11 @@
 				<el-col :span="17">
 					<el-row :gutter="30">
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'上班1',options:form.attendance_record_drop_list}"
+							<form-render :type="`select`" :field="{name:'上班1',options:form.attendance_record_drop_list}" clearable
 							 v-model="onoffdutytimes.OnDutyTime1" style="width:130%" :disabled="onoffdutytimes.OnDutyTime1=='  '"/>
 						</el-col>
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'下班1',options:form.attendance_record_drop_list}" 
+							<form-render :type="`select`" :field="{name:'下班1',options:form.attendance_record_drop_list}" clearable
 							 v-model="onoffdutytimes.OffDutyTime1" style="width:130%" :disabled="onoffdutytimes.OffDutyTime1=='  '"/>
 						</el-col>
 					</el-row>
@@ -39,11 +39,11 @@
 				<el-col :span="17">
 					<el-row :gutter="30">
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'上班2',options:form.attendance_record_drop_list}" 
+							<form-render :type="`select`" :field="{name:'上班2',options:form.attendance_record_drop_list}" clearable
 								v-model="onoffdutytimes.OnDutyTime2" style="width:130%" :disabled="onoffdutytimes.OnDutyTime2=='  '"/>
 						</el-col>
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'下班2',options:form.attendance_record_drop_list}"
+							<form-render :type="`select`" :field="{name:'下班2',options:form.attendance_record_drop_list}" clearable
 							 v-model="onoffdutytimes.OffDutyTime2" style="width:130%" :disabled="onoffdutytimes.OffDutyTime2=='  '"/>
 						</el-col>
 					</el-row>
@@ -51,11 +51,11 @@
 				<el-col :span="17">
 					<el-row :gutter="30">
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'上班3',options:form.attendance_record_drop_list}"
+							<form-render :type="`select`" :field="{name:'上班3',options:form.attendance_record_drop_list}" clearable
 								v-model="onoffdutytimes.OnDutyTime3" style="width:130%" :disabled="onoffdutytimes.OnDutyTime3=='  '"/>
 						</el-col>
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'下班3',options:form.attendance_record_drop_list}"
+							<form-render :type="`select`" :field="{name:'下班3',options:form.attendance_record_drop_list}" clearable
 							 v-model="onoffdutytimes.OffDutyTime3" style="width:130%" :disabled="onoffdutytimes.OffDutyTime3=='  '"/>
 						</el-col>
 					</el-row>
@@ -63,11 +63,11 @@
 				<el-col :span="17">
 					<el-row :gutter="30">
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'上班4',options:form.attendance_record_drop_list}" 
+							<form-render :type="`select`" :field="{name:'上班4',options:form.attendance_record_drop_list}" clearable
 							v-model="onoffdutytimes.OnDutyTime4" style="width:130%" :disabled="onoffdutytimes.OnDutyTime4=='  '"/>
 						</el-col>
 						<el-col :span="12">
-							<form-render :type="`select`" :field="{name:'下班4',options:form.attendance_record_drop_list}"
+							<form-render :type="`select`" :field="{name:'下班4',options:form.attendance_record_drop_list}" clearable
 							 v-model="onoffdutytimes.OffDutyTime4" style="width:130%" :disabled="onoffdutytimes.OffDutyTime4=='  '"/>
 						</el-col>
 					</el-row>
