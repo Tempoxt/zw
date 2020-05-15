@@ -58,10 +58,23 @@
 				<el-col :span="19" v-else>
 					<form-render :type="`day`" prop="start_date" :field="{name:'开始日期'}" v-model="form.start_date"/>
 				</el-col>
-				<el-col :span="19">
+				<el-col :span="19" v-if="dialogStatus==='insert'">
 					<el-form-item label="结束日期">
 						<el-date-picker
 							:picker-options="pickerOptions1"
+							v-model="form.end_date"
+							type="date"
+							format="yyyy-MM-dd"
+							value-format="yyyy-MM-dd"
+							style="width:100%"
+							placeholder="结束日期">
+						</el-date-picker>
+					</el-form-item>
+				</el-col>
+				<el-col :span="19" v-else>
+					<el-form-item label="结束日期">
+						<el-date-picker
+							:picker-options="pickerOptions2"
 							v-model="form.end_date"
 							type="date"
 							format="yyyy-MM-dd"
@@ -226,6 +239,19 @@ export default {
 				disabledDate(time) {
 					return time.getTime() < Date.now() - 8.64e7;
 				}
+			},
+			pickerOptions2:{
+				disabledDate:time=> {
+                    if (this.form.start_date) {
+                        return time.getTime() < new Date(this.form.start_date).getTime();
+					}
+					else{
+						return time.getTime() < new Date().getTime() + 3600*1*1000
+					}
+				}
+				// disabledDate(time) {
+				// 	return time.getTime() < new Date(this.form.end_date).getTime();
+				// }
 			},
 			dialogStatus:'insert',
 		};
