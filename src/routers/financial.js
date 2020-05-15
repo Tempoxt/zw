@@ -249,5 +249,27 @@ export default [
         meta: {
             title: '年度奖金'
         }
+    },{
+        name: 'CostBreakdown',
+        component: () =>
+            import ('@/views/finance/budgetControl/chargeDetail'),
+        meta: {
+            title: '费用明细'
+        }
+    },{
+        name: 'StatisticAnalysis',
+        component: () =>
+            import ('@/views/finance/budgetControl/statisAnalysis'),
+        meta: {
+            title: '统计分析'
+        }
+    },{
+        name: 'personalincometaxe',
+        component: () =>
+            import ('@/views/finance/salary/taxNotice'),
+        meta: {
+            title: '个税通知签名'
+        }
     },
+    
 ]

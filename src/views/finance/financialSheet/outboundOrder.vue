@@ -5,7 +5,6 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='材料出库单'">
-            <!-- <holidaySetting/> -->
             <outboundTable a='1' url="materialsexware/list"/>
         </div>
         <div v-if="view_activeName==='其他出库单'">
@@ -17,7 +16,6 @@
 import * as api_common from "@/api/common";
 import { getTabs } from '@/api/common'
 import outboundTable from './outboundTable'
-import holidaySetting from '../../attendanceSystem/holidaySetting.vue'
 export default {
     data(){
         return {
@@ -30,7 +28,6 @@ export default {
     },
     components:{
         outboundTable,
-        holidaySetting
     },
     methods:{
         changeOrg(id){
