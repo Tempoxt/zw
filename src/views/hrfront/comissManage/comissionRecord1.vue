@@ -46,7 +46,8 @@
             <el-tab-pane :label="item.name" :name="item.name" lazy v-for="item in menu" :key="item.id"></el-tab-pane>
         </el-tabs>
         <div v-if="view_activeName==='个人业务提成'">
-            <comissionRecord1Table url="commission/staffcommissioncollect" a='1' @change="changeTab"  :id="orgid"/>
+            <commissionStaff url="commission/staffcommissioncollect" a='1' @change="changeTab"  :id="orgid"/>
+            <!-- <comissionRecord1Table url="commission/staffcommissioncollect" a='1' @change="changeTab"  :id="orgid"/> -->
         </div>
         <div v-if="view_activeName==='提成客户汇总'">
             <comissionRecord1Table url="commission/customercommission" a='2' @change="changeTab" :id="orgid"/>
@@ -60,9 +61,11 @@
 <script>
 import { getTabs } from '@/api/common'
 import comissionRecord1Table from './comissionRecord1Table'
+import commissionStaff from './commissionStaff'
 export default {
     components:{
         comissionRecord1Table,
+        commissionStaff
     },
     watch:{
         filterText(val) {
