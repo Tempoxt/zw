@@ -4,6 +4,24 @@
         :table_query.sync="table_form.query"
         @query="querySubmit"
         >
+         <el-dialog
+            :title="schemeName+' 公式详情'"
+            :visible.sync="dialogFormVisible2"
+            class="public-dialog"
+            v-el-drag-dialog
+       
+            
+            >
+            <div >
+                 <chart 
+                    :data="dialogValue"
+                    ref="chart" 
+                    v-if="dialogFormVisible2"
+                />
+
+            </div>
+           
+        </el-dialog>
 
 
         <el-dialog
@@ -13,13 +31,8 @@
             v-el-drag-dialog
             width="1800px"
             >
-            <performanceSchemeForm :row="row" :schemeName="schemeName" :orgid="orgid" :dialogStatus="dialogStatus"  :id="id" v-if="dialogFormVisible" :formValue="formValue"/>
-
-            
+            <performanceSchemeForm :row="row" :schemeName="schemeName" @submit="onSubmit" :orgid="orgid" :dialogStatus="dialogStatus"  :id="id" v-if="dialogFormVisible" :formValue="formValue"/>
         </el-dialog>
-
-
-
         <table-header
             :table_actions="table_actions"
             :table_selectedRows="table_selectedRows"
@@ -49,7 +62,7 @@
                 >
             </el-table-column>
             <el-table-column type="index" :index="indexMethod"/>
-            <each-table-column :table_field="table_field"/>
+           <each-table-column :table_field="table_field" :template="template"/>
         </el-table>
         <table-pagination 
             :total="table_form.total" 
@@ -66,22 +79,32 @@ import table_mixin from "@c/Table/table_mixin";
 let baseUrl = process.env.VUE_APP_STATIC
 const api_resource = api_common.resource('performance/scheme')
 import performanceSchemeForm from './performanceSchemeForm2'
+import chart from './chart2.vue'
 export default {
     components:{
-        performanceSchemeForm
+        performanceSchemeForm,
+        chart
     },
     mixins: [table_mixin],
     props:['orgid','id'],
     data() {
+        var vm = this
         return {
             baseUrl, 
             api_resource,
             loading: false,
             queryDialogFormVisible:true,
+            dialogFormVisible2:false,
             table_topHeight: 235,
             formValue:null,
             schemeName:'',
-            row:{}
+            dialogValue:[],
+            row:{},
+            template:{
+				version(column,row){
+                    return <el-tag size="mini" type="info" style={'cursor: pointer;'} onClick={()=>{vm.showScheme(row)}}>{row.version}</el-tag>
+				}
+			},
         };
     },
     watch:{
@@ -90,6 +113,52 @@ export default {
         },
     },
     methods: {
+        async showScheme(row){
+           const { rows } = await this.$request.get('/performance/scheme/details/'+row.id)
+            this.schemeName = row.scheme_name
+            // 增加子公式前两个节点
+            ~function f(rows){
+                rows.forEach((o)=>{
+                    if(o.subs){
+                        o.subs = [
+                            {
+                                name:o.name,
+                                type:'text',
+                                disabled:true
+                            },
+                            {
+                                name:'=',
+                                type:'symbol',
+                                disabled:true
+                            }
+                        ].concat(o.subs)
+
+                        f(o.subs)
+                    }
+                })
+            }(rows)
+
+            this.dialogValue =this.format(rows) 
+            console.log(this.dialogValue,'this.dialogValue')
+            this.dialogFormVisible2 = true
+            console.log(this)
+        },
+        generateID(){
+            return parseInt(Math.random()*1000000)
+        },
+        format(value){
+            value.forEach(o=>{
+                o.key = this.generateID()
+                if(o.subs && o.subs.length){
+                    this.format(o.subs)
+                }
+            })
+            return value
+        },
+        onSubmit(){
+            this.dialogFormVisible = false
+            this.fetchTableData()
+        },
         async edit(){
             let row = this.table_selectedRows[0]
             // this.form = (await api_resource.find(row.id))[0]

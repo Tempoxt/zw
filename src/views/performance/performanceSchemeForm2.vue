@@ -22,20 +22,57 @@
                     <div class="card-title">考核参数表</div>
                     <div class="card-body">
                         <div style="padding:10px;display:flex;align-items: center;">
-                             <el-select v-model="input1" placeholder="请选择">
+                             <!-- <el-select v-model="input1" placeholder="请选择">
                                 <el-option
                                 v-for="item in options"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                                 </el-option>
-                            </el-select>
-                            <span>
-                                <i class="el-icon-circle-plus-outline" style="font-size: 22px;color:#A3AFB7;padding-left:10px;cursor: pointer;"></i>
+                            </el-select> -->
+
+                            <el-input v-model="input1" placeholder="请输入内容" clearable></el-input>
+                            <span @click="addparameter">
+                                <el-popover
+                                placement="right"
+                                width="330"
+                                trigger="click">
+                                <div style="padding:14px">
+                                    <div style="font-size: 16px;font-weight: bold;padding: 0 0 10px 0;">添加参数</div>
+                                    <div  style="display:flex;align-items: center;font-size:14px;margin-bottom:10px">
+                                         参数类别：
+                                         <el-select v-model="parameterForm.parameter_classify" placeholder="请选择" style="width:200px">
+                                             <el-option label="年度参数" value="年度参数"></el-option>
+                                             <el-option label="月份参数" value="月份参数"></el-option>
+                                             <el-option label="个人月参数" value="个人月参数"></el-option>
+                                        </el-select>
+                                    </div>
+                                    <div  style="display:flex;align-items: center;font-size:14px;margin-bottom:10px">
+                                         参数名称：
+                                         <el-input v-model="parameterForm.parameter_name" placeholder="请输入内容" style="width:200px"></el-input>
+                                    </div>
+                                    <div  style="display:flex;align-items: center;font-size:14px;margin-bottom:10px" v-if="parameterForm.parameter_classify=='个人月参数'||parameterForm.parameter_classify=='月份参数'">
+                                         参数分类：
+                                         <el-select v-model="parameterForm.parameter_category" placeholder="请选择" style="width:200px">
+                                           <el-option label="基础参数" value="0"></el-option>
+                                           <el-option label="计算参数" value="1"></el-option>
+                                        </el-select>
+                                    </div>
+
+
+                                    <div style="text-align: right;">
+                                        <el-button type="primary" @click="submitParameterForm">确认</el-button>
+                                    </div>
+                                </div>
+                                <i class="el-icon-circle-plus-outline" slot="reference" style="font-size: 22px;color:#A3AFB7;padding-left:10px;cursor: pointer;"></i>
+                                </el-popover>
+
+
+                              
                             </span>
                         </div>
                         <ul style="padding-left:20px;overflow-y: scroll;height: 576px;">
-                            <li v-for="item in parameter" :key="item.id" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(item.parameter_name,'text')">{{item.parameter_name}}</el-link></li>
+                            <li v-for="item in parameterSearch" :key="item.id" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(item.parameter_name,'text')">{{item.parameter_name}}</el-link></li>
                         </ul>
                     </div>
                 </div>
@@ -113,18 +150,18 @@
                     </div>
                     <div class="card-body area" id="area">
                         <chart 
-                        :data="value"
-                         @remove="remove" 
-                         @removeSubs="removeSubs" 
-                         @addSubs="addSubs" 
-                         ref="chart" 
-                         @showCondition="showCondition"
+                            :data="value"
+                            @remove="remove" 
+                            @removeSubs="removeSubs" 
+                            @addSubs="addSubs" 
+                            ref="chart" 
+                            @showCondition="showCondition"
 
-                         @changeConditionLine="changeConditionLine"
-                         @removeConditionItem="removeConditionItem"
-                         @changeConditionItem="changeConditionItem"
-                         @removeCondition="removeCondition"
-                         @closeCondition="hideCondition"
+                            @changeConditionLine="changeConditionLine"
+                            @removeConditionItem="removeConditionItem"
+                            @changeConditionItem="changeConditionItem"
+                            @removeCondition="removeCondition"
+                            @closeCondition="hideCondition"
                          />
                     </div>
                 </div>
@@ -140,9 +177,18 @@ export default {
     components:{
         chart
     },
+    computed:{
+        parameterSearch(){
+            if(this.input1) {
+                return this.parameter.filter(o=>o.parameter_name.indexOf(this.input1)!==-1)
+            }
+            return this.parameter
+        }
+    },
     props:['orgid','id','formValue','schemeName','dialogStatus','row'],
     data(){
         return {
+            parameterForm:{},
             parameter:[],
             input1:'',
             options: [],
@@ -333,6 +379,23 @@ export default {
         }
     },
     methods:{
+        async submitParameterForm(){
+            this.parameterForm.department =this.id
+            if(this.parameterForm.parameter_classify!=='个人月参数'||this.parameterForm.parameter_classify!=='月份参数'){
+                this.parameterForm.parameter_category = null
+            }
+            await this.$request.post('/performance/parameter/name',this.parameterForm)
+            this.parameterForm = {}
+            this.getParameter()
+            try {
+                document.body.click()
+            } catch (error) {
+                
+            }
+        },
+        addparameter(){
+
+        },
         removeCondition(idx,parent){
             parent.condition = parent.condition.filter((o,i)=>i!=idx)
         },
@@ -401,7 +464,7 @@ export default {
                 name,type:atype
             })
         },
-        submit(){
+        async submit(){
 
             // 删除子公式前显示两个节点
             var value = JSON.parse(JSON.stringify(this.value))
@@ -415,7 +478,7 @@ export default {
             }(value)
          
             if(this.dialogStatus==='insert'){
-                this.$request.post('/performance/scheme',{
+                await this.$request.post('/performance/scheme',{
                     department:this.id,
                     formula:value,
                     scheme_name:this.scheme_name
@@ -425,7 +488,7 @@ export default {
                     }
                 })
             }else{
-                this.$request.put('/performance/scheme/'+this.row.id,{
+                await this.$request.put('/performance/scheme/'+this.row.id,{
                     department:this.id,
                     formula:value,
                     scheme_name:this.scheme_name
@@ -435,6 +498,7 @@ export default {
                     }
                 })
             }
+            this.$emit('submit')
            
         },
         async getParameter(){
@@ -472,13 +536,19 @@ export default {
                 }
             }
             if(atype=='symbol'){
-                if(type=='text'||name=='('||name==')'){
+                // 选入“）”再选÷×＋-时“）”就莫得
+                if((name=='+'||name=='-'||name=='x'||name=='÷')){
                     this.pushItem(name,atype)
                 }else{
-                    if(type=='symbol'){
-                        this.findByKey(key).name = name
+                    if(type=='text'||name=='('||name==')'){
+                        this.pushItem(name,atype)
+                    }else{
+                        if(type=='symbol'){
+                            this.findByKey(key).name = name
+                        }
                     }
                 }
+                
                 
             }
             this.initChart()
