@@ -55,7 +55,7 @@
                     </div>
                     <span slot="reference" style="color:#0BB2D4"  v-if="item.condition && item.condition.length">{{item.name}}</span>
                 </el-popover>
-                <span v-if="!item.condition" >{{item.name}}</span>
+                <span v-if="!item.condition||!item.condition.length" >{{item.name}}</span>
             </a>
         </div>
 
