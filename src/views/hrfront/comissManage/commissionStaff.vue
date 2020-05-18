@@ -31,7 +31,7 @@
 						<form-render :type="`input`" disabled prop="staff__chineseName" :field="{name:'姓名'}" v-model="form.staff__chineseName" />
 					</el-col>
 					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" prop="productOverInterest" placeholder="请输入贷款延期利息" :field="{name:'贷款延期利息'}" v-model="form.productOverInterest" />
+						<form-render :type="`input`" prop="productOverInterest" placeholder="请输入货款延期利息" :field="{name:'货款延期利息'}" v-model="form.productOverInterest" />
 					</el-col>
 					<el-col :span="14" :offset="4">
 						<form-render :type="`input`" prop="modelOverInterest" placeholder="请输入模具款延期利息" :field="{name:'模具款延期利息'}" v-model="form.modelOverInterest" />
@@ -136,15 +136,15 @@
 	<el-table-column prop="employeeCode" label="工号" width="80" fixed></el-table-column>
 	<el-table-column prop="departmentName" label="部门" width="80" fixed></el-table-column>
 	<el-table-column label="非手机项目" align="center">
-		<el-table-column prop="nmPaidAmount" label="产品贷款收款总额" width="120"></el-table-column>
-		<el-table-column prop="nmProductCommission" label="产品贷款提成（按产品）" width="160"></el-table-column>
-		<el-table-column prop="nmProductOverInterest" label="贷款延期利息" width="130"></el-table-column>
+		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
+		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
+		<el-table-column prop="nmProductOverInterest" label="货款延期利息" width="130"></el-table-column>
 	</el-table-column>
 	<el-table-column label="手机项目" align="center">
-		<el-table-column prop="mPaidAmount" label="贷款收款总额" width="120"></el-table-column>
-		<el-table-column prop="mActualMonthCommission" label="月份贷款提成金额（80%）" width="170"></el-table-column>
-		<el-table-column prop="mActualYearCommission" label="月份贷款提成余额（20%）" width="170"></el-table-column>
-		<el-table-column prop="mProductOverInterest" label="贷款延期利息" width="120"></el-table-column>
+		<el-table-column prop="mPaidAmount" label="货款收款总额" width="120"></el-table-column>
+		<el-table-column prop="mActualMonthCommission" label="月份货款提成金额（80%）" width="170"></el-table-column>
+		<el-table-column prop="mActualYearCommission" label="月份货款提成余额（20%）" width="170"></el-table-column>
+		<el-table-column prop="mProductOverInterest" label="货款延期利息" width="120"></el-table-column>
 	</el-table-column>
 	<el-table-column label="模具款" align="center">
 		<el-table-column prop="modelPaidAmount" label="模具款收完总额" width="120"></el-table-column>
