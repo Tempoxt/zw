@@ -135,6 +135,7 @@
 	<el-table-column prop="chineseName" label="姓名" width="80" fixed></el-table-column>
 	<el-table-column prop="employeeCode" label="工号" width="80" fixed></el-table-column>
 	<el-table-column prop="departmentName" label="部门" width="80" fixed></el-table-column>
+	<el-table-column prop="commissionTotalAmount" label="当月提成" width="100"></el-table-column>
 	<el-table-column label="非手机项目" align="center">
 		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
@@ -152,7 +153,6 @@
 		<el-table-column prop="modelOverInterest" label="模具延期利息" width="120"></el-table-column>
 	</el-table-column>
 	<el-table-column prop="badDebtAmount" label="产品呆坏账" width="100"></el-table-column>
-	<el-table-column prop="commissionTotalAmount" label="当月提成" width="100"></el-table-column>
     <!-- <each-table-column :table_field="table_field"  :template="template"/> -->
 	<!-- <el-table-column
 		v-if="this.url=='commission/presoncommcollect'"
