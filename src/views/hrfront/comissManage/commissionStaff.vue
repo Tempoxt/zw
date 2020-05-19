@@ -110,6 +110,7 @@
     </table-header>
     <el-table
         ref="elTable"
+		class="commissionStaff"
       @selection-change="handleChangeSelection"
       :data="table_data"
       border
@@ -121,7 +122,6 @@
       @sort-change="table_sort_change"
 		:show-summary="table_config.isShowFooter"
 		:summary-method="getSummaries"
-      
     >
     <el-table-column 
       type="selection" 
@@ -135,7 +135,7 @@
 	<el-table-column prop="chineseName" label="姓名" width="80" fixed></el-table-column>
 	<el-table-column prop="employeeCode" label="工号" width="80" fixed></el-table-column>
 	<el-table-column prop="departmentName" label="部门" width="80" fixed></el-table-column>
-	<el-table-column prop="commissionTotalAmount" label="当月提成" width="100"></el-table-column>
+	<el-table-column prop="commissionTotalAmount" label="当月提成" width="110"></el-table-column>
 	<el-table-column label="非手机项目" align="center">
 		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
@@ -374,5 +374,10 @@ export default {
 	}
 };
 </script>
+<style lang="scss">
+	.commissionStaff.el-table thead.is-group th{
+		height: 32px!important;
+	}
+</style>
 
 
