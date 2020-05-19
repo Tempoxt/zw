@@ -6,7 +6,7 @@
     >
 
 
-<el-dialog
+	<el-dialog
 		title="导入"
 		:visible.sync="importDialog"
 		class="public-dialog"
@@ -111,6 +111,25 @@
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogForm3Visible = false">取 消</el-button>
             <el-button type="primary" @click="handleForm3Submit">确 定</el-button>
+        </div>
+    </el-dialog>
+
+	<el-dialog
+        title="修改"
+        :visible.sync="dialogForm4Visible"
+        class="public-dialog"
+        v-el-drag-dialog
+        width="600px"
+        >
+
+        <el-form ref="form4" :model="form4" label-width="100px" :rules="rules4">
+			<form-render prop="taxEdit" :type="`input`" :field="{name:'个税调整金额'}" v-model="form4.taxEdit"/>
+        </el-form>
+
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogForm4Visible = false">取 消</el-button>
+            <el-button type="primary" @click="handleForm4Submit">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -354,6 +373,7 @@ import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
 const api_resource = api_common.resource("salary");
+import importForm from '../financialSheet/importForm'
 import { MessageBox } from 'element-ui';
 export default {
 	mixins: [table_mixin],
@@ -372,6 +392,7 @@ export default {
 			dormList:[],
 			dialogForm2Visible:false,
 			dialogForm3Visible:false,
+			dialogForm4Visible: false,
 			form2:{},
 			form3:{
 				otWeekday:2
@@ -392,7 +413,14 @@ export default {
 			table_topHeight:233,
 			importDateLab:new Date(),
 			fileList1:[],
-			importloading:false
+			importloading:false,
+			form4: {},
+			rules4: {
+				taxEdit:[
+					{ required: true, message: '请输入', trigger: ['blur','change'] },
+				],
+			},
+			importUploadUrl: '/taxEdit/upload'
 		};
 	},
 	watch:{
@@ -419,6 +447,15 @@ export default {
 		}
 	},
 	methods: {
+		BatchEdit(){
+			MessageBox.alert(
+				<importForm importUploadUrl={this.importUploadUrl} resourJudge='1'
+				on={{fetchData:()=>{this.fetch()}}}/>
+				, '选择文件导入', {
+				showConfirmButton:false,
+				center:true
+			});
+		},
 		changeFormImportFiles(file){
 			this.importForm.the_file = file.raw
 		},
@@ -446,7 +483,6 @@ export default {
 			} finally {
 				this.importloading = false
 			}
-			
 		},
 		
 		// 高温津贴合计项
@@ -681,9 +717,12 @@ export default {
 			this.dialogForm3Visible = true
 		},
 		async edit(){
+			this.form4 = {}
 			let row = this.table_selectedRows[0]
-			this.form = await api_resource.find(row.id)
-			this.dialogFormVisible = true;
+			let tax = row.tax
+			this.form4.taxEdit = tax
+			// this.form = await api_resource.find(row.id)
+			this.dialogForm4Visible = true;
 		},
 		async fetchTableData() {
 			if(!this.id){
@@ -708,6 +747,14 @@ export default {
 				await api_resource.update(form.id,form)
 			}
 			this.dialogFormVisible = false
+			this.fetchTableData()
+		},
+		async handleForm4Submit(){
+			await this.form_validate('form4')
+			let row = this.table_selectedRows[0]
+			let form4 = Object.assign({},this.form4)
+			await this.$request.post('/salary/taxEdit/'+row.id,form4)
+			this.dialogForm4Visible = false
 			this.fetchTableData()
 		},
 		async tabClick(v){
