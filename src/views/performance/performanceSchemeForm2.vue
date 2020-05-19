@@ -71,7 +71,8 @@
                               
                             </span>
                         </div>
-                        <ul style="padding-left:20px;overflow-y: scroll;height: 576px;">
+                         <!-- 576px; -->
+                        <ul style="padding-left:20px;overflow-y: scroll;height: 100%;">
                             <li v-for="item in parameterSearch" :key="item.id" style="margin-bottom: 6px;">  <el-link :underline="false" @click="changeText(item.parameter_name,'text')">{{item.parameter_name}}</el-link></li>
                         </ul>
                     </div>

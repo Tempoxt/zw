@@ -9,7 +9,7 @@
             :visible.sync="dialogFormVisible2"
             class="public-dialog"
             v-el-drag-dialog
-       
+            fullscreen
             
             >
             <div >
@@ -23,13 +23,14 @@
            
         </el-dialog>
 
-
+         <!-- width="1800px" -->
         <el-dialog
-            :title="dialogStatus==='insert'?'添加':'编辑'"
+            :title="dialogStatus==='insert'?'添加公式':'编辑公式'"
             :visible.sync="dialogFormVisible"
             class="public-dialog"
             v-el-drag-dialog
-            width="1800px"
+           
+            fullscreen
             >
             <performanceSchemeForm :row="row" :schemeName="schemeName" @submit="onSubmit" :orgid="orgid" :dialogStatus="dialogStatus"  :id="id" v-if="dialogFormVisible" :formValue="formValue"/>
         </el-dialog>
