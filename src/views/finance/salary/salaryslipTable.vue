@@ -719,8 +719,8 @@ export default {
 		async edit(){
 			this.form4 = {}
 			let row = this.table_selectedRows[0]
-			let tax = row.tax
-			this.form4.taxEdit = tax
+			let tax_manual = row.tax_manual
+			this.form4.taxEdit = tax_manual
 			// this.form = await api_resource.find(row.id)
 			this.dialogForm4Visible = true;
 		},
