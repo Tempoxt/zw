@@ -420,7 +420,7 @@ export default {
 					{ required: true, message: '请输入', trigger: ['blur','change'] },
 				],
 			},
-			importUploadUrl: '/taxEdit/upload'
+			importUploadUrl: '/salary/taxEdit/upload'
 		};
 	},
 	watch:{

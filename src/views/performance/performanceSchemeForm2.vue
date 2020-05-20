@@ -610,6 +610,14 @@ export default {
                     name:'=',
                     type:'symbol',
                     disabled:true
+                },
+                {
+                    name:'(',
+                    type:'symbol',
+                },
+                {
+                    name:')',
+                    type:'symbol',
                 }
             ]
             console.log(this.value,'this.value')
