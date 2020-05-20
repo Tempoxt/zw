@@ -191,6 +191,7 @@ export default {
                 await api_resource.create(form)
             }else{
                 await api_resource.update(form.id,form)
+                this.dialogFormVisible = false
             }
             if(this.form_multiple){
                 this.form = {
