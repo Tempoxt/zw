@@ -42,8 +42,15 @@
 				>
 				</el-input>
             </el-popover>
-
-
+			
+			<el-select v-model="course" placeholder="请选择" filterable style="margin-left:20px">
+				<el-option
+					v-for="item in courseData"
+					:key="item.course"
+					:label="item.subject"
+					:value="item.course">
+				</el-option>
+			</el-select>
 			<el-scrollbar
 				wrap-class="scrollbar-wrapper"
 				class="scroll"
@@ -61,29 +68,58 @@
 						></singlehisto>
 					</el-col> -->
 					<el-col :span="12" class="relative">
+						<!-- <div style="display:flex;justify-content: center;">
+							<canvas id="chartId" width="600" height="350"></canvas>
+						</div> -->
 						<barChartX title="月预算费用与实际费用对比"
 							ref="echart1"
 							:show="checkFullshow"
 							screenIndex="1"
-							id="budge1"
-							:datas="budgetCompare"
+							id="monthBudget"
+							:datas="monthDetail"
 							:color="['#F9C855','#44E594']"
 						></barChartX>
+						<div style="position: absolute;top:90px;left:0;right:0;margin:0 auto;font-size:12px;display:flex;justify-content:center" v-if="this.monthDetail && this.monthDetail.last_month">
+							<span>{{this.lastMonth}}月预算数：</span><span style="color:#FF8000">{{this.monthDetail.last_month.bud_num}}</span>
+							<span style="margin-left:20px"> <img :src="this.monthDetail.last_month.bud_tag==='up'?require('@/assets/up.png'):require('@/assets/down.png')" alt="" width="6" height="12"></span>
+							<span style="margin-left:7px">{{this.monthDetail.last_month.bud_ratio}}</span>
+							<span style="margin-left:40px">{{this.lastMonth}}月实际数：</span><span style="color:#18CC72">{{this.monthDetail.last_month.act_num}}</span>
+							<span style="margin-left:20px"> <img :src="this.monthDetail.last_month.act_tag==='up'?require('@/assets/up.png'):require('@/assets/down.png')" alt="" width="6" height="12"></span>
+							<span style="margin-left:7px">{{this.monthDetail.last_month.act_ratio}}</span>
+						</div>
 						<el-date-picker
-							v-model="dateLap3" class="dateLap"
-							type="year" width="140px"
-							placeholder="选择年"
-							@change="getBudgetCompare()">
-							</el-date-picker>
-						<!-- <dateLap
-							:disabeld="true"
-							class="dateLap"
-							width="140px"
-							itemsD="1"
-							:type="1"
-							v-model="dateLap1"
-							@change="getDetail()"
-						/> -->
+							v-model="dateLap1" class="dateLap"
+							type="month" width="140px"
+							placeholder="选择月" value-format="yyyy-MM" 
+							@change="getMonthBudget()">
+						</el-date-picker>
+					</el-col>
+					<el-col :span="12" class="relative">
+						<barChartX title="预算费用与实际费用累计对比"
+							ref="echart2"
+							:show="checkFullshow"
+							screenIndex="2"
+							id="budge2"
+							:datas="actualCompare"
+							:color="['#F9C855','#44E594']"
+						></barChartX>
+						<div style="position: absolute;top:90px;left:0;right:0;margin:0 auto;font-size:12px;display:flex;justify-content:center" v-if="this.actualCompare && this.actualCompare.last_month">
+							<span style="margin-right:20px">{{this.lastYear}}</span>月预算数：<span style="color:#FF8000">{{this.actualCompare.last_month.bud_num}}</span>
+							<span style="margin-left:20px"> <img :src="this.actualCompare.last_month.bud_tag==='up'?require('@/assets/up.png'):require('@/assets/down.png')" alt="" width="6" height="12"></span>
+							<span style="margin-left:7px">{{this.actualCompare.last_month.bud_ratio}}</span>
+							<span style="margin-left:40px">月实际数：</span><span style="color:#18CC72">{{this.actualCompare.last_month.act_num}}</span>
+							<span style="margin-left:20px"> <img :src="this.actualCompare.last_month.act_tag==='up'?require('@/assets/up.png'):require('@/assets/down.png')" alt="" width="6" height="12"></span>
+							<span style="margin-left:7px">{{this.actualCompare.last_month.act_ratio}}</span>
+						</div>
+						<el-date-picker class="dateLap"
+							v-model="dateLap2"
+							type="monthrange"
+							range-separator="至"
+							start-placeholder="开始月份"
+							end-placeholder="结束月份"
+							@change="getActualCompare()"
+							value-format="yyyy-MM">
+						</el-date-picker>
 					</el-col>
 					<el-col :span="12" class="relative">
 						<barChart title="预算费用与实际费用年对比"
@@ -99,16 +135,7 @@
 							type="year" width="140px"
 							placeholder="选择年"
 							@change="getBudgetCompare()">
-							</el-date-picker>
-						<!-- <dateLap
-							:disabeld="true"
-							class="dateLap"
-							width="140px"
-							itemsD="1"
-							:type="1"
-							v-model="dateLap1"
-							@change="getDetail()"
-						/> -->
+						</el-date-picker>
 					</el-col>
 					<el-col :span="12" class="relative">
 						<singlehisto title="各部门实际费用"
@@ -123,7 +150,7 @@
 							class="dateLap"
 							width="140px"
 							itemsD="1"
-							v-model="dateLap1"
+							v-model="dateLap4"
 							@change="getDetail()"
 						/>
 					</el-col>
@@ -139,6 +166,7 @@ import dayjs from 'dayjs'
 import singlehisto from './singlehisto'
 import barChart from './barChart'
 import barChartX from './barChartX'
+import { Chart } from '@antv/g2';
 export default {
     components:{
         singlehisto,
@@ -152,7 +180,9 @@ export default {
             checkFullshow: true,
 			departDetail: [],
 			dateLap1: '',
+			dateLap2: [],
 			dateLap3: '',
+			dateLap4: '',
 			orgid1: 's1',
 			actualBudget: [],
 			orgid: "",
@@ -160,17 +190,31 @@ export default {
 			filterText: "",
 			visible: false,
 			data2: [],
-			budgetCompare: []
+			budgetCompare: [],
+			monthDetail: [],
+			actualCompare: [],
+			lastMonth: '',
+			course: '',
+			courseData: [],
+			lastYear: ''
 		};
 	},
 	watch: {
-		orgid() {
-			this.getActualBudget();
+		async orgid() {
+			// this.getActualBudget();
 			this.visible = false;
 			this.findDataName();
+			await this.getMonthBudget()
+			await this.getActualCompare()
+			await this.getBudgetCompare()
 		},
 		filterText(val) {
 			this.$refs.tree2.filter(val);
+		},
+		async course(){
+			await this.getMonthBudget()
+			await this.getActualCompare()
+			await this.getBudgetCompare()
 		}
 	},
 	methods: {
@@ -204,27 +248,55 @@ export default {
 			if (!value) return true;
 			return data.name && data.name.indexOf(value) !== -1;
 		},
-		async getDetail(){//各部门实际费用
-			this.departDetail = await this.$request.get('/budgetcontrol/actualcostofeachdepartment',{params:{
-				dateLap: this.dateLap1
+		async getMonthBudget(){//月预算费用与实际费用对比
+			this.monthDetail = await this.$request.get('/budgetcontrol/currentmonthactualandbudget',{params:{
+				dateLap: this.dateLap1,
+				orgid: this.orgid1,
+				course: this.course
 			}})
+			this.lastMonth = +this.dateLap1.split('-')[1]-1
 		},
-		async getActualBudget(){ //2020年实际预算月对比
-			this.actualBudget = await this.$request.get('/budgetcontrol/actualbudgetmonthcomparison',{params:{
-				orgid: this.orgid1
-			}})
+		async getActualCompare(){//预算费用与实际费用累计对比
+			let data = {
+				dateLap: this.dateLap2,
+				orgid: this.orgid1,
+				course: this.course
+			}
+			this.actualCompare = await this.$request.get('/budgetcontrol/actualandbudgetcumulativecomparison',{params:data})
+			let year1 = +this.dateLap2[0].split('-')[0]-1
+			let month1 = +this.dateLap2[0].split('-')[1]
+			if(month1<10){
+				month1 = '0'+month1
+			}
+			let year2 = +this.dateLap2[1].split('-')[0]-1
+			let month2 = +this.dateLap2[1].split('-')[1]
+			if(month2<10){
+				month2 = '0'+month2
+			}
+			this.lastYear = year1+'-'+month1 + '至'+year2+'-'+month2
 		},
+		// async getActualBudget(){ //2020年实际预算月对比
+		// 	this.actualBudget = await this.$request.get('/budgetcontrol/actualbudgetmonthcomparison',{params:{
+		// 		orgid: this.orgid1
+		// 	}})
+		// },
 		async getBudgetCompare(){ //预算费用与实际费用年对比
 			this.dateLap3 = dayjs(this.dateLap3).format('YYYY')
 			this.budgetCompare = await this.$request.get('/budgetcontrol/actualandbudgetmonthsoftheyear',{params:{
 				orgid: this.orgid1,
-				dateLap: this.dateLap3
+				dateLap: this.dateLap3,
+				course: this.course
 			}})
 		},
-		
-		
+		async getDetail(){//各部门实际费用
+			this.departDetail = await this.$request.get('/budgetcontrol/actualcostofeachdepartment',{params:{
+				dateLap: this.dateLap4
+			}})
+		},
 	},
 	async created() {
+		this.courseData = await this.$request.get('/budgetcontrol/showsubjects')
+		this.course = this.courseData[0].course
 		// const { field, action,table } = await api_common.menuInit(this.url);
 		// this.table_field = field;
 		// this.table_actions = action;
@@ -233,10 +305,13 @@ export default {
 		let defaultMenuid = this.data2[0].orgid;
 		this.$refs.tree2.setCurrentKey(defaultMenuid);
 		this.orgid = defaultMenuid;
-		this.dateLap1 = dayjs().format('YYYY-MM')
-		this.dateLap3 = dayjs().format('YYYY')
+		this.dateLap1 = this.dateLap4 = dayjs().subtract(1,'month').format('YYYY-MM')
+		this.dateLap3 = dayjs().subtract(1,'month').format('YYYY')
+		this.dateLap2 = [dayjs().subtract(1,'month').format('YYYY-MM'),dayjs().subtract(1,'month').format('YYYY-MM')]
 		// await this.getActualBudget();
-		await this.getBudgetCompare()
+		// await this.getMonthBudget()
+		// await this.getActualCompare()
+		// await this.getBudgetCompare()
 		await this.getDetail();
 	}
 };

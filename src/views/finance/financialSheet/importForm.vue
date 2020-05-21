@@ -7,7 +7,16 @@
         width="500px"
         > -->
         <div>
-            <el-date-picker
+            <el-date-picker v-if="this.isYear=='1'"
+                v-model="dateLap"
+                :clearable="false"
+                type="year"
+                size="small"
+                format="yyyy年"
+                value-format="yyyy"
+                placeholder="选择年份">
+            </el-date-picker>
+            <el-date-picker v-else
                 v-model="dateLap"
                 :clearable="false"
                 type="month"
@@ -15,7 +24,7 @@
                 format="yyyy年MM月"
                 value-format="yyyy-MM"
                 placeholder="选择月份">
-            </el-date-picker>
+            </el-date-picker> 
             <br/>
             <el-button-group class="table-import-upload" ref="import" style="margin-top:25px;">
                 <el-button type="primary" @click="()=>{}" :disabled="this.dateLap==''">选择文件</el-button>
@@ -31,7 +40,7 @@ import request from '@/plugins/request'
 import { MessageBox } from 'element-ui';
 const download = require('downloadjs')
 export default {
-	props:['importUploadUrl','downloadUrl','namie','resourJudge'],
+	props:['importUploadUrl','downloadUrl','namie','resourJudge','isYear'],
 	data() {
 		return {
 			importForm:{
@@ -100,8 +109,8 @@ export default {
 			if(this.statusk!=0&&this.s<=12){
 				if(this.s==12){
 					this.$message.error({ message: '导入失败,请重试'})
-				}
-				this.val = await this.$request.get('/u8report/uploadbudget',{alert:false})
+                }
+				this.val = await this.$request.get(this.importUploadUrl,{alert:false})
 				this.statusk = 0
 				this.$message.success({ message: this.val,duration:3000})
 				this.$emit("fetchData",this.val)

@@ -15,7 +15,7 @@
             <chargeDetailTable a='1' url="budgetcontrol/detialsofcharger" :id="orgid"/>
         </div>
         <div v-if="view_activeName==='实际费用'">
-            <chargeDetailTable a='2' url="budgetcontrol/operationrevenue" :id="orgid"/>
+            <chargeDetailTable a='2' url="budgetcontrol/actualcosts" :id="orgid"/>
         </div>
     </el-col>
   </el-row>

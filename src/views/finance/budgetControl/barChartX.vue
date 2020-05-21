@@ -16,16 +16,16 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!='' && this.datas.月实际数!=undefined){
+		if(this.datas!='' && this.datas.this_month!=undefined){
 			this.$nextTick(function() {
-				this.init(this.id,this.datas)
+				this.init(this.id,this.datas.this_month)
 			})
 		}
 	},
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!='' && this.datas.月实际数!=undefined){
+				if(this.datas!='' && this.datas.this_month!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -46,16 +46,27 @@ export default {
 		},
 		init(id,data){
 			let _this=this;
+			var min =  data.this_month[0][0]
+			var max =  data.this_month[1][0]
+			var color =  ['#FFD500','#44E594']
+			if(max==0){
+				min = 35659548.63
+				max = 117704576.61
+			}
+			if(min>max){
+				min =  data.this_month[1][0]
+				max =  data.this_month[0][0]
+				var color =  ['#44E594','#FFD500']
+			}
 			this.option = {
 				title: {
 					text: ""
 				},
-				tooltip: {
-					trigger: "axis"
+				dataset: {
+					source: data.this_month,
 				},
 				legend: {
-					bottom: "10",
-					data: ['月实际数','月预算数']
+					data: ['实际数','预算数']
 				},
 				toolbox: {
 					right:20,
@@ -63,34 +74,43 @@ export default {
 					itemSize:16,
 					orient: "horizontal",
 				},
-				color: ['#F9C855','#44E594'],
-				calculable: true,
-				yAxis: [
-					{
-						type: "category",
-						data: data.月预算数.name
+				grid: {containLabel: true,height:'60%',top: 120},
+				xAxis: {name: 'amount',show: false},
+				yAxis: {
+					type: 'category',
+					axisTick: {
+						alignWithLabel: true 
 					}
-				],
-				xAxis: [
-					{
-						type: "value"
-					}
-				],
+				},
+				visualMap: {
+					min: min,
+					max: max,
+					dimension: 0,
+					inRange: {
+						color: color
+					},
+					show: false
+				},
 				series: [
 					{
-						name: "月预算数",
-						type: "bar",
-						data: data.月预算数.value
-					},
-					{
-						name: "月实际数",
-						type: "bar",
-						data: data.月实际数.value
+						type: 'bar',
+						barWidth: 30,
+						barCategoryGap: 30,
+						encode: {
+							x: 'amount',
+							y: 'product'
+						},
+						label:{
+							show: true,
+							color: '#4C5D66',
+							position: 'right'
+						}
 					}
-				]
+				],
 			};
 			this.option.title.text = this.title;
-			if(data!=undefined&&data.月实际数.value!=undefined){
+			this.option.legend.data = ['实际数','预算数']
+			if(data!=undefined&&data.this_month!=undefined){
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(this.id));
 				myChart.setOption(this.option);

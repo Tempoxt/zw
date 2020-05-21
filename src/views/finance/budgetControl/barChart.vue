@@ -16,7 +16,7 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.datas!='' && this.datas.月实际数!=undefined){
+		if(this.datas!='' && this.datas.mon_act_num!=undefined){
 			this.$nextTick(function() {
 				this.init(this.id,this.datas)
 			})
@@ -25,7 +25,7 @@ export default {
 	watch: {
 		datas:{
 			handler(newVal, oldVal){
-				if(this.datas!='' && this.datas.月实际数!=undefined){
+				if(this.datas!='' && this.datas.mon_act_num!=undefined){
 					this.datas = newVal
 					this.init(this.id,newVal)
 				}
@@ -63,12 +63,12 @@ export default {
 					itemSize:16,
 					orient: "horizontal",
 				},
-				color: ['#F9C855','#44E594'],
+				color: ['#FFD500','#44E594'],
 				calculable: true,
 				xAxis: [
 					{
 						type: "category",
-						data: data.月预算数.name
+						data: data.mon_bud_num.name
 					}
 				],
 				yAxis: [
@@ -80,17 +80,17 @@ export default {
 					{
 						name: "月预算数",
 						type: "bar",
-						data: data.月预算数.value
+						data: data.mon_bud_num.value
 					},
 					{
 						name: "月实际数",
 						type: "bar",
-						data: data.月实际数.value
+						data: data.mon_act_num.value
 					}
 				]
 			};
 			this.option.title.text = this.title;
-			if(data!=undefined&&data.月实际数.value!=undefined){
+			if(data!=undefined&&data.mon_act_num.value!=undefined){
 				$(".box-card-c").width(parseInt($(".box-card").parent().width())-40);
 				let myChart = echarts.init(document.getElementById(this.id));
 				myChart.setOption(this.option);

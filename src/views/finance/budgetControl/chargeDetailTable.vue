@@ -14,10 +14,10 @@
 		:table_column="table_field"
 		>
 		<div style="padding-left:10px" v-show="this.a==1">
-			<dateLap :disabled="true" v-model="dateLap" @change="fetch"/>
+			<dateLap type="3" :disabled="true" v-model="dateLap1" @change="fetch"/>
 		</div>
 		<div style="padding-left:10px" v-show="this.a==2">
-			<dateLap type="3" :disabled="true" v-model="dateLap1" @change="fetch"/>
+			<dateLap :disabled="true" v-model="dateLap" @change="fetch"/>
 		</div>
     </table-header>
 	<vxe-table
@@ -66,7 +66,9 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
+import { MessageBox } from 'element-ui';
 const api_pagemanager = api_common.resource('pagemanager/field')
+import importForm from '../financialSheet/importForm'
 export default {
 	mixins: [table_mixin],
 	props:['id','a','url'],
@@ -77,7 +79,7 @@ export default {
 			api_resource: api_common.resource(this.url),
 			queryDialogFormVisible:true,
 			visible:false,
-			importUploadUrl:'/budgetcontrol/detialsofcharger',
+			importUploadUrl:'/budgetcontrol/budgetload',
 			table_topHeight: 293,
 			dateLap: '',
 			dateLap1: '',
@@ -100,6 +102,15 @@ export default {
 		}
 	},
 	methods: {
+		import(){
+			MessageBox.alert(
+				<importForm importUploadUrl={this.importUploadUrl} resourJudge='1' isYear="1"
+				on={{fetchData:()=>{this.fetch()}}}/>
+				, '选择文件导入', {
+				showConfirmButton:false,
+				center:true
+			});
+		},
 		// footerMethod ({ columns, data }) {
 		// 	let means = []
 		// 	let sums = []
@@ -162,7 +173,7 @@ export default {
 			}
 			this.table_loading = true;
 			this.table_form.orgid = this.id
-			if(this.a!=1){
+			if(this.a==1){
 				this.table_form.dateLap = this.dateLap1
 			}else{
 				this.table_form.dateLap = this.dateLap
