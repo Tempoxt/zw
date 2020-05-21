@@ -15,7 +15,7 @@
                 <paramsSetTable :orgid="orgid" :id="id" paramv="月份参数" url="MonthParameter"/>
             </div>
             <div v-if="view_activeName==='个人月参数'">
-                <paramsSetTable :orgid="orgid" :id="id" paramv="个人月度参数" url="PersonalParameter"/>
+                <paramsSetTable :orgid="orgid" :id="id" paramv="个人月参数" url="PersonalParameter"/>
             </div>
         </el-col>
     </el-row>
