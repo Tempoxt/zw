@@ -9,9 +9,9 @@
                     v-if="item.type=='text'"
                     >
                     <div >
-                       <div>
+                       <!-- <div>
                             <el-button type="text" style="color:#4C5D66;font-weight:bold">加参数</el-button>
-                       </div>
+                       </div> -->
                        <div>
                              <el-button type="text" style="color:#4C5D66;font-weight:bold" @click="addSubs(item)">子公式</el-button>
                        </div>
