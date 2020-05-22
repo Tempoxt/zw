@@ -178,7 +178,7 @@
   </ui-table>
 </template>
 <script>
-const api_pagemanager = api_common.resource('pagemanager/field')
+// const api_pagemanager = api_common.resource('pagemanager/field')
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
@@ -188,7 +188,7 @@ export default {
 	data() {
 		return {
 			loading: true,
-			api_pagemanager,
+			// api_pagemanager,
 			vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			width:'40%',
 			api_resource :api_common.resource(this.url),
