@@ -13,12 +13,12 @@
 		:table_form.sync="table_form"
 		:table_column="table_field"
 		>
-		<div style="padding-left:10px" v-show="this.a==1">
-			<dateLap type="3" :disabled="true" v-model="dateLap1" @change="fetch"/>
+		<div style="padding-left:10px">
+			<dateLap type="3" :disabled="true" v-model="table_form.dateLap" @change="fetch"/>
 		</div>
-		<div style="padding-left:10px" v-show="this.a==2">
+		<!-- <div style="padding-left:10px" v-show="this.a==2"> v-show="this.a==1"
 			<dateLap :disabled="true" v-model="dateLap" @change="fetch"/>
-		</div>
+		</div> -->
     </table-header>
 	<vxe-table
 		class="public-vxe-table total_budget"
@@ -48,10 +48,10 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" width="60"/>
-		<vxe-table-column v-for="field in table_field.filter(o=>!['total_budget'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+		<vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
 			:width="field.width=='auto'?'': parseInt(field.width)"/>
-		<vxe-table-column field="total_budget" title="预算合计" width="120" fixed="right"></vxe-table-column>
+		<!-- <vxe-table-column field="total_budget" title="预算合计" width="120" fixed="right"></vxe-table-column> .filter(o=>!['total_budget'].includes(o.name))-->
 	</vxe-table>
     <table-pagination 
         :total="table_form.total" 
@@ -168,16 +168,16 @@ export default {
 			this.fetchTableData()
 		},
 		async fetchTableData() {
-			if(!this.id || !this.dateLap1){
+			if(!this.id || !this.table_form.dateLap){
 				return
 			}
 			this.table_loading = true;
 			this.table_form.orgid = this.id
-			if(this.a==1){
-				this.table_form.dateLap = this.dateLap1
-			}else{
-				this.table_form.dateLap = this.dateLap
-			}
+			// if(this.a==1){
+			// 	this.table_form.dateLap = this.dateLap1
+			// }else{
+			// 	this.table_form.dateLap = this.dateLap
+			// }
 			const {rows , total,fixed }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
@@ -196,7 +196,7 @@ export default {
 	async created() {
 		await this.fetchMenu()
 		this.dateLap = dayjs().format('YYYY-MM')
-		this.dateLap1 = dayjs().format('YYYY')
+		this.table_form.dateLap = dayjs().format('YYYY')
 		// setTimeout(async ()=>{
 			await this.fetchTableData();
 		// },500)
