@@ -182,7 +182,7 @@ export default {
 			dateLap2: [],
 			dateLap3: '',
 			dateLap4: '',
-			orgid1: 's1',
+			// orgid1: 's1',
 			actualBudget: [],
 			orgid: "",
 			input5: "",
@@ -250,7 +250,7 @@ export default {
 		async getMonthBudget(){//月预算费用与实际费用对比
 			this.monthDetail = await this.$request.get('/budgetcontrol/currentmonthactualandbudget',{params:{
 				dateLap: this.dateLap1,
-				orgid: this.orgid1,
+				orgid: this.orgid,
 				course: this.course
 			}})
 			this.lastMonth = +this.dateLap1.split('-')[1]-1
@@ -258,7 +258,7 @@ export default {
 		async getActualCompare(){//预算费用与实际费用累计对比
 			let data = {
 				dateLap: this.dateLap2,
-				orgid: this.orgid1,
+				orgid: this.orgid,
 				course: this.course
 			}
 			this.actualCompare = await this.$request.get('/budgetcontrol/actualandbudgetcumulativecomparison',{params:data})
@@ -276,13 +276,13 @@ export default {
 		},
 		// async getActualBudget(){ //2020年实际预算月对比
 		// 	this.actualBudget = await this.$request.get('/budgetcontrol/actualbudgetmonthcomparison',{params:{
-		// 		orgid: this.orgid1
+		// 		orgid: this.orgid
 		// 	}})
 		// },
 		async getBudgetCompare(){ //预算费用与实际费用年对比
 			this.dateLap3 = dayjs(this.dateLap3).format('YYYY')
 			this.budgetCompare = await this.$request.get('/budgetcontrol/actualandbudgetmonthsoftheyear',{params:{
-				orgid: this.orgid1,
+				orgid: this.orgid,
 				dateLap: this.dateLap3,
 				course: this.course
 			}})
