@@ -42,7 +42,7 @@
 				>
 				</el-input>
             </el-popover>
-			
+
 			<el-select v-model="course" placeholder="请选择" filterable style="margin-left:20px">
 				<el-option
 					v-for="item in courseData"
@@ -166,7 +166,6 @@ import dayjs from 'dayjs'
 import singlehisto from './singlehisto'
 import barChart from './barChart'
 import barChartX from './barChartX'
-import { Chart } from '@antv/g2';
 export default {
     components:{
         singlehisto,
