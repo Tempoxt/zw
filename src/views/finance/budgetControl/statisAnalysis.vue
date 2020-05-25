@@ -122,7 +122,7 @@
 						</el-date-picker>
 					</el-col>
 					<el-col :span="12" class="relative">
-						<barChart title="预算费用与实际费用年对比"
+						<barChart title="预算费用与实际费用对比"
 							ref="echart3"
 							:show="checkFullshow"
 							screenIndex="3"
@@ -137,7 +137,7 @@
 							@change="getBudgetCompare()">
 						</el-date-picker>
 					</el-col>
-					<el-col :span="12" class="relative">
+					<!-- <el-col :span="12" class="relative">
 						<singlehisto title="各部门实际费用"
 							ref="echart4"
 							:show="checkFullshow"
@@ -153,7 +153,7 @@
 							v-model="dateLap4"
 							@change="getDetail()"
 						/>
-					</el-col>
+					</el-col> -->
 				</el-row>
 			</el-scrollbar>
 		</div>
@@ -168,8 +168,8 @@ import barChart from './barChart'
 import barChartX from './barChartX'
 export default {
     components:{
-        singlehisto,
-		dateLap,
+        // singlehisto,
+		// dateLap,
 		barChart,
 		barChartX,
     },
@@ -306,12 +306,12 @@ export default {
 		this.orgid = defaultMenuid;
 		this.dateLap1 = this.dateLap4 = dayjs().subtract(1,'month').format('YYYY-MM')
 		this.dateLap3 = dayjs().subtract(1,'month').format('YYYY')
-		this.dateLap2 = [dayjs().subtract(1,'month').format('YYYY-MM'),dayjs().subtract(1,'month').format('YYYY-MM')]
+		this.dateLap2 = [dayjs().month(0).format('YYYY-MM'),dayjs().format('YYYY-MM')]
 		// await this.getActualBudget();
 		// await this.getMonthBudget()
 		// await this.getActualCompare()
 		// await this.getBudgetCompare()
-		await this.getDetail();
+		// await this.getDetail();
 	}
 };
 </script>
