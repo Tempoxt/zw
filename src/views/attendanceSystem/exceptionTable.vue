@@ -4,7 +4,7 @@
   :table_query.sync="table_form.query"
   @query="querySubmit"
   >
-
+	<!-- 添加补卡 -->
 	<el-dialog
 		:title="dialogStatus==='insert'?'添加':'编辑'"
 		:visible.sync="dialogFormVisible"
@@ -56,7 +56,7 @@
 			<el-button type="primary" @click="handleFormSubmit" v-if="this.form_activeName=='second'">提 交</el-button>
 		</div>
     </el-dialog>
-
+	<!-- 编辑补卡 -->
 	<el-dialog
 		title='修改'
 		:visible.sync="dialogForm1Visible"
@@ -88,7 +88,7 @@
 			<el-button type="primary" @click="handleForm1Submit" :disabled="disabled">确 定</el-button>
 		</div>
     </el-dialog>
-
+	<!-- 添加调休 -->
 	<el-dialog
 		title="添加"
 		:visible.sync="dialogForm3Visible"
@@ -96,7 +96,6 @@
 		v-el-drag-dialog
 		width="800px"
 		>
-
 		<el-form ref="form3" :model="form3" label-width="110px" :rules="rule3">
 			<el-row>
 				<el-col :span="12">
@@ -135,7 +134,7 @@
 			<el-button type="primary" @click="handleForm3Submit" :disabled="disabled3">确 定</el-button>
 		</div>
     </el-dialog>
-
+	<!-- 编辑调休 -->
 	<el-dialog
 		title='编辑'
 		:visible.sync="dialogForm4Visible"
@@ -184,7 +183,7 @@
 			<el-button type="primary" @click="handleForm4Submit" :disabled="disabled4">确 定</el-button>
 		</div>
     </el-dialog>
-
+	<!-- 放休 -->
 	<el-dialog
 		:title="dialogStatus=='letoffAdd'?'添加':'编辑'"
 		:visible.sync="dialogForm5Visible"
@@ -222,6 +221,106 @@
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogForm5Visible = false">取 消</el-button>
 			<el-button type="primary" @click="handleForm5Submit">确 定</el-button>
+		</div>
+    </el-dialog>
+
+	<!-- 添加请假 -->
+	<el-dialog
+		title="添加"
+		:visible.sync="dialogForm6Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="800px"
+		>
+		<el-form ref="form6" :model="form6" label-width="100px" :rules="rule6">
+ 			<el-tabs v-model="form_activeName6" >
+				<el-tab-pane label="添加请假" name="first">
+					<el-row>
+						<el-col :span="12">
+							<form-render prop="leave_type" :type="`select`" :field="{name:'请假类型',options:leaveList}" v-model="form6.leave_type"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render prop="reason" :type="`input`" :field="{name:'请假原因'}" v-model="form6.reason"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render prop="start_datetime" :type="`datetime`" :field="{name:'请假开始时间'}" v-model="form6.start_datetime"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render prop="end_datetime" :type="`datetime`" :field="{name:'请假结束时间'}" v-model="form6.end_datetime"/>
+						</el-col>
+						<el-col :span="12">
+							<form-render prop="hour" :type="`input`" :field="{name:'请假时长'}" v-model="form6.hour"/>
+						</el-col>
+					</el-row>
+					
+      				<OrgSelect :result="result" v-model="form6.ids" activeNam="first" ref="OrgSelect6" v-if="dialogForm6Visible"/>
+
+				</el-tab-pane>
+				<el-tab-pane label="请假汇总" name="second">
+					<p>请假人员汇总表</p>
+					<el-table
+						class="dtable"
+						:data="leaveData"
+						:header-cell-style="headerStyle"
+						height="450"
+						style="width: 100%;margin-top:20px"
+						>
+						<!-- <el-table-column prop="departmentName" label="部门"></el-table-column> -->
+						<!-- <el-table-column prop="teamName" label="小组"></el-table-column> -->
+						<el-table-column prop="chinese_name" label="姓名"></el-table-column>
+						<el-table-column prop="employee_code" label="工号"></el-table-column>
+						<el-table-column prop="start_datetime" label="请假开始时间" width="120px"></el-table-column>
+						<el-table-column prop="end_datetime" label="请假结束时间" width="120px"></el-table-column>
+						<el-table-column prop="hour" label="请假时长"></el-table-column>
+						<el-table-column prop="leave_type" label="请假类型"></el-table-column>
+						<el-table-column prop="reason" label="请假原因"></el-table-column>
+					</el-table>
+				</el-tab-pane>
+			</el-tabs>
+		</el-form>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm6Visible = false">取 消</el-button>
+			<el-button type="primary" @click="goLeave" v-if="this.form_activeName6=='first'">下一步</el-button>
+			<el-button type="primary" @click="handleForm6Submit" v-if="this.form_activeName6=='second'">提 交</el-button>
+		</div>
+    </el-dialog>
+	<!-- 编辑请假 -->
+	<el-dialog
+		title='修改'
+		:visible.sync="dialogForm7Visible"
+		class="public-dialog"
+		v-el-drag-dialog
+		width="800px"
+		>
+		<div>
+			<el-form ref="form7" :model="form7" label-width="110px" :rules="rule7">
+				<el-row :gutter="20">
+					<el-col :span="17" :offset="3">
+						<form-render :type="`input`" :field="{name:'员工'}" v-model="form7.staff__chineseName" disabled/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render prop="leaveType" :type="`select`" :field="{name:'请假类型',options:leaveList}" v-model="form7.leaveType"/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render prop="start_datetime" :type="`datetime`" :field="{name:'请假开始时间'}" v-model="form7.start_datetime"/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render prop="end_datetime" :type="`datetime`" :field="{name:'请假结束时间'}" v-model="form7.end_datetime"/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render prop="hours" :type="`input`" :field="{name:'请假时长'}" v-model="form7.hours"/>
+					</el-col>
+					<el-col :span="17" :offset="3">
+						<form-render :type="`input`" prop="reason" :field="{name:'请假原因'}" v-model="form7.reason"/>
+					</el-col>
+				</el-row>
+			</el-form>
+		</div>
+
+		<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogForm7Visible = false">取 消</el-button>
+			<el-button type="primary" @click="handleForm7Submit">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -304,6 +403,7 @@ export default {
 		return {
 			loading: true,
             form_activeName:'first',
+            form_activeName6:'first',
 			api_resource:api_common.resource(this.url),
 			table_topHeight:293,
 			queryDialogFormVisible:true,
@@ -312,6 +412,8 @@ export default {
 			dialogForm3Visible:false,
 			dialogForm4Visible:false,
 			dialogForm5Visible:false,
+			dialogForm6Visible:false,
+			dialogForm7Visible:false,
 			optionDatas: [],
 			attenDatas:[],
 			attenData:[],
@@ -331,6 +433,8 @@ export default {
 				letOffStartDate:'',
 				letOffEndDate:'',
 			},
+			form6:{},
+			form7:{},
 			result:[],
 			rule:{
 				exceptionType:[
@@ -339,7 +443,6 @@ export default {
 				exceptionTime:[
 					{ required: true, message: '请选择日期时间', trigger: ['blur','change'] },
 				],
-
 			},
 			rule3:{
 				letOffStartDate:[
@@ -352,6 +455,37 @@ export default {
 				// 	{ required: true, message: '请输入', trigger: ['blur','change'] },
 				// ],
 				lefOffReason:[
+					{ required: true, message: '请输入', trigger: ['blur','change'] },
+				],
+			},
+			rule6:{
+				start_datetime:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+				end_datetime:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+				leave_type:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+				hour:[
+					{ required: true, message: '请输入', trigger: ['blur','change'] },
+				],
+				reason:[
+					{ required: true, message: '请输入', trigger: ['blur','change'] },
+				],
+			},
+			rule7:{
+				leaveType:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+				start_datetime:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+				end_datetime:[
+					{ required: true, message: '请选择', trigger: ['blur','change'] },
+				],
+				hours:[
 					{ required: true, message: '请输入', trigger: ['blur','change'] },
 				],
 			},
@@ -384,6 +518,8 @@ export default {
 			val:'',
 			letOffDay:'',
 			summarData: [],
+			leaveData: [],
+			leaveList: []
 		};
 	},
 	computed:{
@@ -426,6 +562,17 @@ export default {
 		},
 	},
 	methods: {
+		async auditFunc(){
+			let rows = this.table_selectedRows.map(row=>row.id)
+			let mes = await this.$request.post('/holidaymanager/leavemanager/audit',JSON.stringify(rows),{
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			this.$message.success({message:mes});
+			this.fetchTableData()
+			// await this.$request.post('/holidaymanager/leavemanager/audit')
+		},
         headerStyle(row,rowIndex,column,columnIndex){
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
         },
@@ -447,6 +594,32 @@ export default {
 				this.result = []
 				this.$nextTick(()=>{
 					this.$refs['form'].clearValidate()
+				})
+			}else{
+				this.$message.error('请选择要添加的人员');
+			}
+		},async goLeave(){
+			await this.form_validate('form6')
+			let ids = this.$refs.OrgSelect6.getAryResult()
+			this.form6.ids = ids;
+			// let exceptionTypeDesc = (this.attenData.filter(o=>o.value==this.form.exceptionType))[0].label
+			if(this.form6.ids.length!=0){
+				ids.map(o=>{
+					o.start_datetime = this.form6.start_datetime
+					o.end_datetime = this.form6.end_datetime
+					o.leave_type = this.form6.leave_type
+					o.hour = this.form6.hour
+					o.reason = this.form6.reason
+					o.chinese_name = o.chineseName
+					o.employee_code = o.employeeCode
+					o.staff_id  = o.id
+					this.leaveData.push(o)
+				})
+				this.form_activeName6 = 'second'
+				this.form6 = {}
+				this.result = []
+				this.$nextTick(()=>{
+					this.$refs['form6'].clearValidate()
 				})
 			}else{
 				this.$message.error('请选择要添加的人员');
@@ -518,7 +691,9 @@ export default {
 		async add(){
 			this.result = []
 			this.summarData = []
+			this.leaveData = []
 			this.form_activeName = 'first'
+			this.form_activeName6 = 'first'
 			if(this.m==3){
 				this.form={}
 				this.attenData = (await api_common.resource('attendance/exceptionfields').get()).map(o=>{return {label:o.name,value:o.id}});
@@ -544,6 +719,15 @@ export default {
 				})
 				this.dialogForm5Visible = true
 				this.judge = await this.$request.get('holidaymanager/currentmonthfalls/judge')
+			}else if(this.m==2){
+				this.form6={}
+				let list = this.optionDatas
+				let leaveList =list.shift()
+				this.leaveList = list
+				this.$nextTick(()=>{
+					this.$refs['form6'].clearValidate()
+				})
+				this.dialogForm6Visible = true
 			}
 		},
 		async edit(){
@@ -563,6 +747,14 @@ export default {
 				this.form5 = (await this.api_resource.find(row.id))[0]
 				this.dialogStatus = 'letoffEdit'
 				this.dialogForm5Visible = true
+			}else if(this.m==2){
+				let list = this.optionDatas
+				let leaveList =list.shift()
+				this.leaveList = list
+				this.form7 = await this.api_resource.find(row.id)
+				// this.form7.st
+				// console.log(this.form7,'sssssssssss')
+				this.dialogForm7Visible = true
 			}
 		},
 		async handleFormSubmit(){
@@ -644,6 +836,32 @@ export default {
 				let mes = await this.api_resource.update(form5.id,form5)
 				this.dialogForm5Visible = false
 				this.fetchTableData()
+			}
+		},
+		async handleForm6Submit(){
+			// if(this.summarData)
+			try{
+				let mes = await this.$request.post('/holidaymanager/leavemanager',JSON.stringify(this.leaveData),{
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				this.$message.success({message:mes});
+				this.dialogForm6Visible = false
+				this.fetchTableData()
+			}catch(err){
+				
+			}
+		},async handleForm7Submit(){
+			await this.form_validate('form7')
+			let form7 = Object.assign({},this.form7)
+			try{
+				await this.api_resource.update(form7.id,form7,{alert:false})
+				this.$message.success('修改成功')
+				this.dialogForm7Visible = false
+				this.fetchTableData()
+			}catch(err){
+				this.$message.error(err.response.data);
 			}
 		},
 		async fetchTableData() {
