@@ -382,7 +382,7 @@ export default {
     methods:{
         async submitParameterForm(){
             this.parameterForm.department =this.id
-            if(this.parameterForm.parameter_classify!=='个人月参数'||this.parameterForm.parameter_classify!=='月份参数'){
+            if(this.parameterForm.parameter_classify=='年度参数'){
                 this.parameterForm.parameter_category = null
             }
             await this.$request.post('/performance/parameter/name',this.parameterForm)
@@ -431,7 +431,6 @@ export default {
         pushCondition(name,atype){
             const { type,aname } = this.currentConditionItem||{}
             var currentCondition = this.currentCondition.condition[this.currentConditionLine]
-            
             if(this.currentConditionItem && atype=='text'){
                 if(type=='text'){
                     if(name=='.'||name=='%'||(!isNaN(name) && !isNaN(this.currentConditionItem.name))){
@@ -442,13 +441,23 @@ export default {
                     if(type=='symbol'){
                         currentCondition.push({name,type:atype})
                     }
-
+                }
+                if(type=='symbol'){
+                    var item = {
+                        name,type:atype
+                    }
+                    currentCondition.splice(currentCondition.indexOf(this.currentConditionItem)+1,0,item)
                 }
                return
             }
 
              if(atype=='symbol'){
                 if(type=='text'||name=='('||name==')'){
+                     var item = {
+                        name,type:atype
+                    }
+                    currentCondition.splice(currentCondition.indexOf(this.currentConditionItem)+1,0,item)
+                    return
                     this.currentCondition.condition[this.currentConditionLine].push({
                         name,type:atype
                     })
@@ -461,6 +470,8 @@ export default {
                 }
               
             }
+           
+            // currentCondition.splice(currentCondition.indexOf(this.currentConditionItem),0,item)
             this.currentCondition.condition[this.currentConditionLine].push({
                 name,type:atype
             })

@@ -25,9 +25,10 @@
                 </el-popover> -->
 
                 <el-popover
-                    placement="bottom"
+                    placement="right"
                     trigger="hover"
                     v-model="item.visible"
+                    :popper-options="{boundariesElement: 'body'}"
                     >
                     <div style="min-width:400px">
                         <div style="font-size:16px;color:#143040;display: flex;justify-content: space-between;font-weight:bold">
@@ -39,7 +40,7 @@
                                 <span>{{item.name}}</span>
                                 <span >:</span>
                                 <!-- @keyup.delete="removeConditionItem(item,j)" -->
-                                <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" >{{d.name}}</a>
+                                <a v-for="(d,j) in c" :key="j" href="javascript:;" @click.stop.prevent="changeConditionItem(d,i)" >{{d.name}}</a>
                                 <!-- <span class="input"><input type="text" @focus="changeConditionLine(i)"></span> -->
                             
                             </div>
@@ -110,6 +111,7 @@ export default {
             
             this.changeConditionLine(i)
             this.$emit('changeConditionItem',item)
+            
         },
         removeConditionItem(item,idx){
             this.$emit('removeConditionItem',item,idx)

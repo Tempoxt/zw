@@ -1,6 +1,44 @@
 <template>
     <div id="PerformanceSchemeChart">
         <div v-for="(row,i) in rows" :ref="row[0].id" :data-pid="row[0].pid" :data-key="row[0].key" class="box" :key="row[0].key">
+
+              <el-popover
+                v-for="(item) in row"
+                placement="bottom"
+                trigger="manual"
+                v-model="item.visible"
+                :ref="`popover_condition_${i}`"
+                :key="item.key"
+                >
+                <div style="min-width:400px">
+                    <div style="font-size:16px;color:#143040;display: flex;justify-content: space-between;font-weight:bold">
+                        <span>{{item.name}}条件</span>
+                        <span @click="closeCondition(item)"><i class="el-icon-close"></i></span>
+                    </div>
+                    <div style="display: flex;justify-content: flex-end;">
+                        <el-button size="mini" @click="item.condition.push([])">增加</el-button>
+                    </div>
+
+                    <div  v-for="(c,i) in item.condition" :key="i" style="display:flex;justify-content: space-between;align-items: center;">
+                        <div class="PerformanceSchemeChart-select-input">
+                            <span>{{item.name}}</span>
+                            <span >:</span>
+                            <!--  -->
+                            <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" @keyup.delete="removeConditionItem(item,j)">{{d.name}}</a>
+                            <span class="input"><input type="text" @focus="changeConditionLine(i)"></span>
+                        
+                        </div>
+                        <a href="javascript:;" class="icon-remove" @click="removeCondition(i,item)"><i class="el-icon-remove-outline"></i></a>
+                    </div>
+                    <div style="display: flex;justify-content: flex-end;">
+                        <el-button size="small" type="primary" @click="closeCondition(item)">确定</el-button>
+                    </div>
+                </div>
+                
+            </el-popover>
+
+
+
             <a @keyup.delete="remove(item)"   v-for="(item) in row" :ref="item.id" :data-key="item.key"  :key="item.key" class="row-item" href="javascript:;" @click="setCurrent(item,row)" >
                  <el-popover
                     placement="right"
@@ -9,9 +47,6 @@
                     v-if="item.type=='text'"
                     >
                     <div >
-                       <!-- <div>
-                            <el-button type="text" style="color:#4C5D66;font-weight:bold">加参数</el-button>
-                       </div> -->
                        <div>
                              <el-button type="text" style="color:#4C5D66;font-weight:bold" @click="addSubs(item)">子公式</el-button>
                        </div>
@@ -24,37 +59,10 @@
                     </span>
                 </el-popover>
 
-                <el-popover
-                    placement="bottom"
-                    trigger="manual"
-                    v-model="item.visible"
-                    >
-                    <div style="min-width:400px">
-                        <div style="font-size:16px;color:#143040;display: flex;justify-content: space-between;font-weight:bold">
-                            <span>{{item.name}}条件</span>
-                            <span @click="closeCondition(item)"><i class="el-icon-close"></i></span>
-                        </div>
-                        <div style="display: flex;justify-content: flex-end;">
-                            <el-button size="mini" @click="item.condition.push([])">增加</el-button>
-                        </div>
+              
+                    <!-- slot="reference"  -->
+                 <span style="color:#0BB2D4" v-popover:`popover_condition_${i}`  v-if="item.condition && item.condition.length">{{item.name}}</span>
 
-                        <div  v-for="(c,i) in item.condition" :key="i" style="display:flex;justify-content: space-between;align-items: center;">
-                            <div class="PerformanceSchemeChart-select-input">
-                                <span>{{item.name}}</span>
-                                <span >:</span>
-                                <!-- @keyup.delete="removeConditionItem(item,j)" -->
-                                <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" >{{d.name}}</a>
-                                <span class="input"><input type="text" @focus="changeConditionLine(i)"></span>
-                            
-                            </div>
-                            <a href="javascript:;" class="icon-remove" @click="removeCondition(i,item)"><i class="el-icon-remove-outline"></i></a>
-                        </div>
-                        <div style="display: flex;justify-content: flex-end;">
-                            <el-button size="small" type="primary" @click="closeCondition(item)">确定</el-button>
-                        </div>
-                    </div>
-                    <span slot="reference" style="color:#0BB2D4"  v-if="item.condition && item.condition.length">{{item.name}}</span>
-                </el-popover>
                 <span v-if="!item.condition||!item.condition.length" >{{item.name}}</span>
             </a>
         </div>
