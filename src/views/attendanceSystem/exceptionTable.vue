@@ -251,6 +251,9 @@
 						<el-col :span="12">
 							<form-render prop="hour" :type="`input`" :field="{name:'请假时长'}" v-model="form6.hour"/>
 						</el-col>
+						<el-col :span="12">
+							<form-render :type="`imgMultiple`" :field="{name:'附件'}" :data="{'upload_msg':'axjj'}" v-model="form6.theFiles"/>
+						</el-col>
 					</el-row>
 					
       				<OrgSelect :result="result" v-model="form6.ids" activeNam="first" ref="OrgSelect6" v-if="dialogForm6Visible"/>
@@ -294,28 +297,33 @@
 		width="800px"
 		>
 		<div>
-			<el-form ref="form7" :model="form7" label-width="110px" :rules="rule7">
-				<el-row :gutter="20">
-					<el-col :span="17" :offset="3">
-						<form-render :type="`input`" :field="{name:'员工'}" v-model="form7.staff__chineseName" disabled/>
-					</el-col>
-					<el-col :span="17" :offset="3">
-						<form-render prop="leaveType" :type="`select`" :field="{name:'请假类型',options:leaveList}" v-model="form7.leaveType"/>
-					</el-col>
-					<el-col :span="17" :offset="3">
-						<form-render prop="start_datetime" :type="`datetime`" :field="{name:'请假开始时间'}" v-model="form7.start_datetime"/>
-					</el-col>
-					<el-col :span="17" :offset="3">
-						<form-render prop="end_datetime" :type="`datetime`" :field="{name:'请假结束时间'}" v-model="form7.end_datetime"/>
-					</el-col>
-					<el-col :span="17" :offset="3">
-						<form-render prop="hours" :type="`input`" :field="{name:'请假时长'}" v-model="form7.hours"/>
-					</el-col>
-					<el-col :span="17" :offset="3">
-						<form-render :type="`input`" prop="reason" :field="{name:'请假原因'}" v-model="form7.reason"/>
-					</el-col>
-				</el-row>
-			</el-form>
+        	<el-scrollbar wrap-class="scrollbar-wrapper" class="scroll">
+				<el-form ref="form7" :model="form7" label-width="110px" :rules="rule7" >
+					<el-row :gutter="20">
+						<el-col :span="17" :offset="3">
+							<form-render :type="`input`" :field="{name:'员工'}" v-model="form7.staff__chineseName" disabled/>
+						</el-col>
+						<el-col :span="17" :offset="3">
+							<form-render prop="leaveType" :type="`select`" :field="{name:'请假类型',options:leaveList}" v-model="form7.leaveType"/>
+						</el-col>
+						<el-col :span="17" :offset="3">
+							<form-render prop="start_datetime" :type="`datetime`" :field="{name:'请假开始时间'}" v-model="form7.start_datetime"/>
+						</el-col>
+						<el-col :span="17" :offset="3">
+							<form-render prop="end_datetime" :type="`datetime`" :field="{name:'请假结束时间'}" v-model="form7.end_datetime"/>
+						</el-col>
+						<el-col :span="17" :offset="3">
+							<form-render prop="hours" :type="`input`" :field="{name:'请假时长'}" v-model="form7.hours"/>
+						</el-col>
+						<el-col :span="17" :offset="3">
+							<form-render :type="`input`" prop="reason" :field="{name:'请假原因'}" v-model="form7.reason"/>
+						</el-col>
+						<el-col :span="17" :offset="3">
+							<form-render :type="`imgMultiple`" :field="{name:'附件'}" :data="{'upload_msg':'axjj'}" v-model="form7.theFiles"/>
+						</el-col>
+					</el-row>
+				</el-form>
+        	</el-scrollbar>
 		</div>
 
 		<div slot="footer" class="dialog-footer">
@@ -417,6 +425,7 @@ export default {
 			optionDatas: [],
 			attenDatas:[],
 			attenData:[],
+			fileList:[],
 			status:'全部',
 			status3:'',
 			form:{},
@@ -599,6 +608,7 @@ export default {
 				this.$message.error('请选择要添加的人员');
 			}
 		},async goLeave(){
+			console.log(this.form6)
 			await this.form_validate('form6')
 			let ids = this.$refs.OrgSelect6.getAryResult()
 			this.form6.ids = ids;
@@ -613,6 +623,7 @@ export default {
 					o.chinese_name = o.chineseName
 					o.employee_code = o.employeeCode
 					o.staff_id  = o.id
+					o.theFiles =  this.form6.theFiles
 					this.leaveData.push(o)
 				})
 				this.form_activeName6 = 'second'
@@ -856,12 +867,15 @@ export default {
 			await this.form_validate('form7')
 			let form7 = Object.assign({},this.form7)
 			try{
-				await this.api_resource.update(form7.id,form7,{alert:false})
-				this.$message.success('修改成功')
+				await this.$request.put('/holidaymanager/leavemanager/'+this.form7.id,JSON.stringify(form7),{
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
 				this.dialogForm7Visible = false
 				this.fetchTableData()
 			}catch(err){
-				this.$message.error(err.response.data);
+				// this.$message.error(err.response.data);
 			}
 		},
 		async fetchTableData() {
@@ -904,3 +918,14 @@ export default {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+
+.scroll {
+	height: calc(100%-30px);
+	width: 100%;
+	/deep/ .scrollbar-wrapper {
+		overflow-x: hidden;
+	}
+}
+</style>
