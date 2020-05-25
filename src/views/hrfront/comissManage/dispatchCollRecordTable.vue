@@ -273,7 +273,7 @@ export default {
 			form1: {},
 			dispatchData: [],
 			rules:{},
-			importUploadUrl: 'commission/documentary',
+			importUploadUrl: '/commission/selladjust/upload',
 			downloadUrl: 'commission/documentary',
 			sku_info: [],
 			info:{},
