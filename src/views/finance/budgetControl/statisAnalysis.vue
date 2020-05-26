@@ -111,7 +111,7 @@
 							<span style="margin-left:20px"> <img :src="this.actualCompare.last_month.act_tag==='up'?require('@/assets/up.png'):require('@/assets/down.png')" alt="" width="6" height="12"></span>
 							<span style="margin-left:7px">{{this.actualCompare.last_month.act_ratio}}</span>
 						</div>
-						<el-date-picker class="dateLap"
+						<el-date-picker class="dateLap dateRange"
 							v-model="dateLap2"
 							type="monthrange"
 							range-separator="至"
@@ -331,6 +331,12 @@ export default {
   height: 500px;
 }
 
+.dateRange.el-range-editor--small{
+	.el-range-separator{
+		margin-right: 10px;
+	}
+}
+
 </style>
 <style lang="scss" scoped>
 .outside{
@@ -381,7 +387,7 @@ export default {
             top: 23px;
             right: 17px;
 			.el-input__inner{
-				width: 140px;
+				// width: 140px;
 			}
         }
         .relative {

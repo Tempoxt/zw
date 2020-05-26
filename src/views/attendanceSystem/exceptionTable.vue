@@ -732,9 +732,7 @@ export default {
 				this.judge = await this.$request.get('holidaymanager/currentmonthfalls/judge')
 			}else if(this.m==2){
 				this.form6={}
-				let list = this.optionDatas
-				let leaveList =list.shift()
-				this.leaveList = list
+				this.leaveList = (await api_common.resource('attendance/prodleave/type').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
 				this.$nextTick(()=>{
 					this.$refs['form6'].clearValidate()
 				})
@@ -759,12 +757,11 @@ export default {
 				this.dialogStatus = 'letoffEdit'
 				this.dialogForm5Visible = true
 			}else if(this.m==2){
-				let list = this.optionDatas
-				let leaveList =list.shift()
-				this.leaveList = list
+				// let list = this.optionDatas
+				// let leaveList =list.shift()
+				this.leaveList = (await api_common.resource('attendance/prodleave/type').get()).map(o=>{return {label:o.selectname,value:o.selectname}});
+				// this.leaveList = list
 				this.form7 = await this.api_resource.find(row.id)
-				// this.form7.st
-				// console.log(this.form7,'sssssssssss')
 				this.dialogForm7Visible = true
 			}
 		},
