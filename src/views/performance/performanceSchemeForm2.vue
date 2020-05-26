@@ -384,6 +384,11 @@ export default {
             this.parameterForm.department =this.id
             if(this.parameterForm.parameter_classify=='年度参数'){
                 this.parameterForm.parameter_category = null
+            }else{
+                if(!this.parameterForm.parameter_category){
+                    this.$message.error('请选择参数分类');
+                    return
+                }
             }
             await this.$request.post('/performance/parameter/name',this.parameterForm)
             this.parameterForm = {}
