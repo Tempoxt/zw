@@ -270,6 +270,13 @@ export default [
         meta: {
             title: '个税通知签名'
         }
+    },{
+        name: 'monthAward',
+        component: () =>
+            import ('@/views/finance/salary/monthAward'),
+        meta: {
+            title: '月度绩效'
+        }
     },
     
 ]

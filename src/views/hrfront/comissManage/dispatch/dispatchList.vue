@@ -43,14 +43,14 @@
 		>
 		</vxe-table-column>
 		<vxe-table-column type="index" :index="indexMethod" align="center" width="60" fixed="left"/>
-		<vxe-table-column field="allocatedStatus" title="状态" width="90" fixed="left">
+		<vxe-table-column field="allocatedStatus" title="分配状态" width="90" fixed="left">
 			<template slot-scope="scope">
 				<el-tag type="danger" size="mini" v-if="scope.row.allocatedStatus==0">未分配</el-tag>
 				<el-tag type="success" size="mini" v-if="scope.row.allocatedStatus==1">已分配</el-tag>
 				<el-tag type="warning" size="mini" v-if="scope.row.allocatedStatus==2">部分分配</el-tag>
 			</template>
 		</vxe-table-column>
-		<vxe-table-column field="dateLap" title="月份" width="80" fixed="left"></vxe-table-column>
+		<vxe-table-column field="dateLap" title="分配月份" width="80" fixed="left"></vxe-table-column>
 		<vxe-table-column field="dispatchID" title="出货单ID" width="80" fixed="left"></vxe-table-column>
 		<vxe-table-column field="employeeCode" title="工号" width="80" fixed="left"></vxe-table-column>
 		<vxe-table-column field="chineseName" title="姓名" width="80" fixed="left"></vxe-table-column>
