@@ -607,8 +607,8 @@ export default {
 			}else{
 				this.$message.error('请选择要添加的人员');
 			}
-		},async goLeave(){
-			console.log(this.form6)
+		},
+		async goLeave(){
 			await this.form_validate('form6')
 			let ids = this.$refs.OrgSelect6.getAryResult()
 			this.form6.ids = ids;
@@ -860,7 +860,8 @@ export default {
 			}catch(err){
 				
 			}
-		},async handleForm7Submit(){
+		},
+		async handleForm7Submit(){
 			await this.form_validate('form7')
 			let form7 = Object.assign({},this.form7)
 			try{

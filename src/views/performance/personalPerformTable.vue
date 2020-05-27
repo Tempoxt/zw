@@ -28,7 +28,8 @@
                     </el-col>
                 </el-row>
                 
-                <OrgSelect :result="result"  getApi='/performance/samedeptselect' activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
+                <!-- <OrgSelect :result="result"  getApi='/performance/samedeptselect' activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/> -->
+                <OrgSame :result="result"  getApi='/performance/samedeptselect' activeNam="first" ref="OrgSelect" v-if="dialogFormVisible"/>
 
             </el-form>
 
@@ -82,13 +83,13 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 let baseUrl = process.env.VUE_APP_STATIC
-import OrgSelect from '@/components/Org/OrgSelect'
+import OrgSame from '@/components/Org/OrgSame'
 const api_resource = api_common.resource('performance/personal/performance')
 export default {
     mixins: [table_mixin],
     props:['orgid','id'],
 	components:{
-		OrgSelect
+		OrgSame
 	},
     data() {
         return {

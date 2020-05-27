@@ -64,7 +64,7 @@
                   <form-render :type="`member`" :field="{name:'主管',defaultName:form.teamCharger__chineseName}" prop=""  v-model="form.teamCharger"/>
                 </el-col>
                 <el-col :span="24">
-                  <form-render :type="`member`" :field="{name:'小组组长',defaultName:form.teamMonitor__chineseName}" prop="teamMonitor"  v-model="form.teamMonitor"/>
+                  <form-render :type="`member`" :field="{name:'小组组长',defaultName:form.teamMonitor__chineseName}" v-model="form.teamMonitor"/>
                 </el-col>
                 <el-col :span="24">
                   <form-render :type="`member`" :field="{name:'小组文员',defaultName:form.teamClerk__chineseName}" prop="teamClerk"  v-model="form.teamClerk"/>
