@@ -227,12 +227,17 @@ export default {
             this.table_loading = true;
             this.table_form.department = this.id
             this.table_form.t = 0
-            const {rows , total }= await api_resource.get(this.table_form);
-            this.table_data  = rows
-            this.table_form.total = total
-            setTimeout(() => {
-                this.table_loading = false;
-            }, 300);
+            try{
+                const {rows , total }= await api_resource.get(this.table_form);
+                this.table_data  = rows
+                this.table_form.total = total
+            }catch(err){
+
+            }finally{
+                setTimeout(() => {
+                    this.table_loading = false;
+                }, 300);
+            }
         },
 		async fetchMenu(){
             const { field, action,table } = await api_common.menuInit('personal_param');
