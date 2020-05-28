@@ -23,10 +23,10 @@
 							<form-render prop="remark" :type="`input`" :field="{name:'加班原因'}" v-model="form.remark"/>
 						</el-col>
 						<el-col :span="12">
-							<form-render prop="startTime" :type="`datetime`" :picker-options="pickerOptions1" :field="{name:'加班开始时间'}" v-model="form.startTime"/>
+							<form-render prop="startTime" :type="`datetime`" :field="{name:'加班开始时间'}" v-model="form.startTime"/>
 						</el-col>
 						<el-col :span="12">
-							<form-render prop="endTime" :type="`datetime`" :picker-options="pickerOptions2" :field="{name:'加班结束时间'}" v-model="form.endTime"/>
+							<form-render prop="endTime" :type="`datetime`" :field="{name:'加班结束时间'}" v-model="form.endTime"/>
 						</el-col>
 						<el-col :span="12">
 							<form-render prop="duration" :type="`input`" :field="{name:'加班工时'}" v-model="form.duration"/>
