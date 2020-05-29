@@ -25,7 +25,7 @@
                 </el-popover> -->
 
                 <el-popover
-                    placement="right"
+                    placement="right-start"
                     trigger="hover"
                     v-model="item.visible"
                     :popper-options="{boundariesElement: 'body'}"
