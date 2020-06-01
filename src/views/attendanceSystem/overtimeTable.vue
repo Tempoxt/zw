@@ -309,6 +309,7 @@ export default {
 					o.chinese_name = o.chineseName
 					o.employee_code = o.employeeCode
 					o.staff_id  = o.id
+					delete o.id
 					this.overData.push(o)
 				})
 				this.form_activeName = 'second'
