@@ -12,13 +12,13 @@
 		class="public-dialog"
 		v-el-drag-dialog
 		>
-    	<el-form ref="form" :model="form"  label-width="120px" :rules="rules">
+    	<el-form ref="form" :model="form"  label-width="130px" :rules="rules">
 				<el-row >
-					<el-col :span="14" :offset="4">
-						<el-form-item label="月份" prop="month">
+					<el-col :span="17" :offset="2">
+						<el-form-item label="月份" prop="dateLap">
 							<el-date-picker
 								disabled
-								v-model="form.month"
+								v-model="form.dateLap"
 								type="month"
 								style="width:100%"
 								format="yyyy-MM"
@@ -27,21 +27,24 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="14" :offset="4">
-						<form-render :type="`input`" disabled prop="staff__chineseName" :field="{name:'姓名'}" v-model="form.staff__chineseName" />
+					<el-col :span="17" :offset="2">
+						<form-render :type="`input`" disabled prop="chineseName" :field="{name:'姓名'}" v-model="form.chineseName" />
 					</el-col>
-					<el-col :span="14" :offset="4">
+					<el-col :span="17" :offset="2">
 						<form-render :type="`input`" prop="productOverInterest" placeholder="请输入货款延期利息" :field="{name:'货款延期利息'}" v-model="form.productOverInterest" />
 					</el-col>
-					<el-col :span="14" :offset="4">
+					<el-col :span="17" :offset="2">
 						<form-render :type="`input`" prop="modelOverInterest" placeholder="请输入模具款延期利息" :field="{name:'模具款延期利息'}" v-model="form.modelOverInterest" />
+					</el-col>
+					<el-col :span="17" :offset="2">
+						<form-render :type="`input`" prop="badDebtAmount" placeholder="请输入呆坏账金额" :field="{name:'呆坏账金额'}" v-model="form.badDebtAmount" />
 					</el-col>
 				</el-row>
 			</el-form>
 
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="handleFormSubmit" :disabled="disabled">确 定</el-button>
+			<el-button type="primary" @click="handleFormSubmit">确 定</el-button>
 		</div>
     </el-dialog>
 
@@ -139,13 +142,12 @@
 	<el-table-column label="非手机项目" align="center">
 		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
-		<el-table-column prop="nmProductOverInterest" label="货款延期利息" width="130"></el-table-column>
 	</el-table-column>
+	<el-table-column prop="productOverInterest" label="货款延期利息" width="130"></el-table-column>
 	<el-table-column label="手机项目" align="center">
 		<el-table-column prop="mPaidAmount" label="货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="mActualMonthCommission" label="月份货款提成金额（80%）" width="170"></el-table-column>
 		<el-table-column prop="mActualYearCommission" label="月份货款提成余额（20%）" width="170"></el-table-column>
-		<el-table-column prop="mProductOverInterest" label="货款延期利息" width="120"></el-table-column>
 	</el-table-column>
 	<el-table-column label="模具款" align="center">
 		<el-table-column prop="modelPaidAmount" label="模具款收完总额" width="120"></el-table-column>
@@ -242,7 +244,7 @@ export default {
 	},
 	computed:{
 		disabled(){
-			if(this.form.productOverInterest!=''||this.form.modelOverInterest!=''){
+			if(this.form.productOverInterest!=''||this.form.modelOverInterest!=''||this.form.badDebtAmount!=''){
 				return false
 			}
 			return true

@@ -254,15 +254,16 @@ import dayjs from 'dayjs'
 const api_pagemanager = api_common.resource('pagemanager/field')
 import { MessageBox } from 'element-ui';
 
+const api_resource = api_common.resource("commission/selladjust");
 const download = require('downloadjs')
 export default {
 	mixins: [table_mixin],
-	props:['url','m'],
+	props:['id','m'],
 	data() {
 		return {
 			loading: true,
             vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
-			api_resource: api_common.resource(this.url),
+			api_resource,
 			queryDialogFormVisible: true,
 			table_topHeight: 293,
 			selectRows: [],
@@ -286,13 +287,17 @@ export default {
 		};
 	},
 	watch:{
-		url(){
-			this.api_resource = api_common.resource(this.url),
-			delete this.table_form.keyword
+		id(){
 			this.table_form.currentpage = 1
-			this.table_form.query.query= []
-			this.fetchMenu()
-		}
+			this.fetchTableData()
+		},
+		// url(){
+		// 	this.api_resource = api_common.resource(this.url),
+		// 	delete this.table_form.keyword
+		// 	this.table_form.currentpage = 1
+		// 	this.table_form.query.query= []
+		// 	this.fetchMenu()
+		// }
 	},
 	methods: {
 		async handleImportChange(ev){
@@ -413,7 +418,7 @@ export default {
 			if(this.m==4 && column.property=='natDispatchMoney'){
 				this.dispatch_loading = true
 				this.openDrawers = true
-				const {detail, main} = await this.api_resource.find(row.id)
+				const {detail, main} = await api_resource.find(row.id)
 				this.info = main[0]
 				// const {rows,total} = await this.$request.get('commission/documentary/ajust?cusCode='+this.info.cusCode+'&dateLap='+this.info.dateLap+'&cDLCode='+this.info.cDLCode)
 				this.dispatchData = detail
@@ -547,7 +552,7 @@ export default {
 		},
 		async edit(){
 			let row = this.table_selectedRows[0];
-			this.form = await this.api_resource.find(row.id)
+			this.form = await api_resource.find(row.id)
 			const {rows,total} = await this.$request.get('commission/documentary/list?cusCode='+this.form.cusCode+'&dateLap='+this.form.dateLap+'&cDLCode='+this.form.cDLCode)
 			if(rows.length==0){
 				if(this.form.invName=='开票调整'){
@@ -692,8 +697,12 @@ export default {
             this.fetchTableData()
 		},
 		async fetchTableData() {
+			if(!this.id){
+				return
+			}
 			this.table_loading = true;
-			const {rows , total } = await this.api_resource.get(this.table_form)
+			this.table_form.org_id = this.id
+			const {rows , total } = await api_resource.get(this.table_form)
 			this.table_data  = rows
 			this.table_form.total = total
 			setTimeout(() => {
@@ -701,7 +710,7 @@ export default {
 			}, 300);
     	},
 		async fetchMenu(){
-			const { field, action,table } = await api_common.menuInit(this.url);
+			const { field, action,table } = await api_common.menuInit('commission/selladjust');
 			this.table_field = field;
 			this.table_actions = action;
 			this.table_config = table

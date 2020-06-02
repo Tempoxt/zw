@@ -75,7 +75,7 @@ const api_pagemanager = api_common.resource('pagemanager/field')
 import dayjs from 'dayjs'
 export default {
 	mixins: [table_mixin],
-	props:['url','m'],
+	props:['id','url','m'],
 	data() {
 		return {
 			loading: true,
@@ -86,6 +86,10 @@ export default {
 		};
 	},
 	watch:{
+		id(){
+			this.table_form.currentpage = 1
+			this.fetchTableData()
+		},
 		url(){
 			this.api_resource = api_common.resource(this.url),
 			delete this.table_form.keyword
@@ -130,7 +134,11 @@ export default {
             this.fetchTableData()
 		},
 		async fetchTableData() {
+			if(!this.id){
+				return
+			}
 			this.table_loading = true;
+			this.table_form.org_id = this.id
 			const {rows , total } = await this.api_resource.get(this.table_form)
 			this.table_data  = rows
 			this.table_form.total = total

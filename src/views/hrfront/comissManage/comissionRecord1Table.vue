@@ -96,6 +96,84 @@
 		</div>
     </el-dialog>
 
+	<div>
+		<Drawer title="分配详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
+			<div style="padding:5px">
+				<el-table
+        			ref="dispatchTable"
+					class="dtable dispatchTable"
+					:data="dispatchData"
+					:header-cell-style="headerStyle"
+					height="700px" border
+					:summary-method="getSummaries1"
+					show-summary
+      				v-loading="dispatch_loading"
+					>
+					<el-table-column type="index" :index="indexMethods" fixed="left"/>
+					<el-table-column prop="dateLap" label="月份" width="80px" fixed="left"></el-table-column>
+					<el-table-column prop="employeeCode" label="工号" width="80px" fixed="left"></el-table-column>
+					<el-table-column prop="chineseName" label="姓名" width="80px" fixed="left"></el-table-column>
+					<el-table-column prop="cusCode" label="客户编码" width="90px" fixed="left">
+						<template slot-scope="scope">
+							<span :title="scope.row.cusCode" style="cursor:default">{{scope.row.cusCode}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="cusAbbName" label="客户名称" width="100px">
+						<template slot-scope="scope">
+							<span :title="scope.row.cusAbbName" style="cursor:default">{{scope.row.cusAbbName}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="cDLCode" label="发货单号" width="100px">
+						<template slot-scope="scope">
+							<span :title="scope.row.cDLCode" style="cursor:default">{{scope.row.cDLCode}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="invClassName" label="产品编码" width="90px">
+						<template slot-scope="scope">
+							<span :title="scope.row.invClassName" style="cursor:default">{{scope.row.invClassName}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="customerRankType" label="项目类型" width="90px"></el-table-column>
+					<el-table-column prop="invName" label="产品名称" width="90px"></el-table-column>
+					<el-table-column prop="cSTType" label="销售类型" width="80px"></el-table-column>
+					<el-table-column prop="invClassName" label="产品分类" width="80px"></el-table-column>
+					<el-table-column prop="dispatchDay" label="发货日期" width="90px"></el-table-column>
+					<el-table-column prop="quantity" label="发货数量" width="90px"></el-table-column>
+					<el-table-column prop="natUnitPrice" label="发货单价" width="100px" align="right"></el-table-column>
+					<el-table-column prop="natDispatchMoney" label="本币无税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="openTicketAdjust" label="开票调整" width="120px" align="right"></el-table-column>
+					<el-table-column prop="sellDiscount" label="销售折扣" width="120px" align="right"></el-table-column>
+					<el-table-column prop="priceAdjust" label="价格调整" width="120px" align="right"></el-table-column>
+					<el-table-column prop="qualityDeduct" label="质量扣款" width="120px" align="right"></el-table-column>
+					<el-table-column prop="natMustPaidMoney" label="本币应收无税金额" width="120px" align="right"></el-table-column>
+				</el-table>
+				<div class="pagina">
+					<el-pagination
+						background
+						:page-sizes="rowList1"
+						:page-size.sync="page"
+						layout="total, sizes"
+						:total="dispatchTotal"
+						:current-page.sync="curr"
+						@size-change="handleSizeChange1"
+						@current-change="handleCurrentChange1"
+					></el-pagination>
+
+					<el-pagination
+						background
+						:page-sizes="rowList1"
+						:page-size.sync="page"
+						layout="prev, pager, next"
+						:total="dispatchTotal"
+						:current-page.sync="curr"
+						@size-change="handleSizeChange1"
+						@current-change="handleCurrentChange1"
+					></el-pagination>
+				</div>
+			</div>
+		</Drawer>
+	</div>
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -110,18 +188,19 @@
     </table-header>
     <el-table
         ref="elTable"
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-      @sort-change="table_sort_change"
+		@selection-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="headerCellStyle"
+		:height="table_height"
+		@header-dragend="table_dragend"
+		@sort-change="table_sort_change"
 		:show-summary="table_config.isShowFooter"
 		:summary-method="getSummaries"
-      
+		@cell-click="openDrawer"
+		:cell-style="cellStyle"
     >
     <el-table-column 
       type="selection" 
@@ -142,7 +221,7 @@
 		</template>
     </el-table-column> -->
     </el-table>
-     <table-pagination 
+    <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
         :currentpage.sync="table_form.currentpage"
@@ -216,6 +295,17 @@ export default {
 			timer:'',
 			statusk:1,
 			val:'',
+			openDrawers:false,
+			dispatchData: [],
+			dispatch_loading: false,
+			curr:1,
+			page:50,
+			dispatchTotal: 0,
+			dispatch_config: {
+				rowList: '50,100,300,500,1000,'
+			},
+			month: '',
+			cusCode: '',
 		};
 	},
 	computed:{
@@ -224,6 +314,10 @@ export default {
 				return false
 			}
 			return true
+		},
+		rowList1(){
+			let p = ((this.dispatch_config && this.dispatch_config.rowList) ?this.dispatch_config.rowList.split(',').map(Number).filter(o=>!isNaN(o)):[50,100,300,500,1000])
+			return (this.dispatchTotal&&this.dispatchTotal>0)?p.concat(this.dispatchTotal):p
 		}
 	},
 	watch:{
@@ -250,6 +344,84 @@ export default {
 		}
 	},
 	methods: {
+		handleSizeChange1(val) {
+			this.curr = 1
+			this.page = val
+			this.getData()
+		},
+		handleCurrentChange1(val) {
+			this.curr = val
+			this.getData()
+		},
+		indexMethods(i){
+			return (i+1)+(this.curr-1)*this.page
+		},
+        headerStyle(row,rowIndex,column,columnIndex){
+            return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
+		},
+		getSummaries1({ columns, data }) {
+			const sums = [];
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = '合计';
+					return;
+				}
+				let columnProper = ['natUnitPrice','natDispatchMoney','openTicketAdjust','sellDiscount','priceAdjust','qualityDeduct','natMustPaidMoney']
+				if(columnProper.includes(column.property)){
+					const values = data.map(item => Number(item[column.property]));
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+						const value = Number(curr);
+						if (!isNaN(value)) {
+							return prev + curr;
+						} else {
+							return prev;
+						}
+						}, 0);
+						sums[index] = sums[index].toFixed(6);
+					} else {
+						sums[index] = '';
+					}
+				}
+			});
+			return sums;
+		},
+		async getData(){
+			const {rows,total} = await this.$request.get('/commission/customercommission/detail',{params:{
+				dateLap: this.month,
+				cusCode: this.cusCode,
+				pagesize: this.page,
+				currentpage: this.curr
+			}})
+			this.dispatchData = rows
+			this.dispatchTotal = total
+			// setTimeout(() => {
+			// 	this.dispatch_loading = false;
+			// }, 300);
+			
+			this.$nextTick(()=>{
+				this.dispatch_loading = false
+				this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
+				this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
+				this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
+			})
+		},
+		async openDrawer(row,column,cell,event){
+            if(this.a == 2 && (row.sourceCommissionAmount==event.target.innerText || row.commissionAmount==event.target.innerText)){
+				this.openDrawers = true
+				this.dispatch_loading = true
+				this.month = row.dateLap
+				this.cusCode = row.cusCode
+				await this.getData()
+            }
+		},
+		cellStyle({row, column, rowIndex, columnIndex}){
+			if(this.a == 2 && (column.label == '计提金额' || column.label == '提成金额')){
+				return 'color:#0BB2D4;cursor:pointer'
+			}else{
+				return  ''
+			}
+		},
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
@@ -352,5 +524,10 @@ export default {
 	}
 };
 </script>
-
+<style lang="scss">
+	.pagina{
+		display: flex;
+		justify-content: space-between;
+	}
+</style>
 
