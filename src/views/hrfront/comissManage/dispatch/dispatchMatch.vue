@@ -74,7 +74,7 @@
 		<vxe-table-column field="increaseRatio" label="增值率系数" width="90px"></vxe-table-column>
 		<vxe-table-column field="baseCommissionRatio" label="业务提成系数" width="95"></vxe-table-column>
 		<vxe-table-column field="cusFirstDay" label="客户首次发货日期" width="120"></vxe-table-column>
-		<vxe-table-column field="cusMonths" label="客户交易期限(月)" width="100"></vxe-table-column>
+		<vxe-table-column field="cusMonths" label="客户交易期限(月)" width="105"></vxe-table-column>
 		<vxe-table-column field="cusRatio" label="客户交易提成系数%" width="120"></vxe-table-column>
 		<vxe-table-column field="prodFirstDay" type="html" label="客户产品首次发货日期" width="130"></vxe-table-column>
 		<vxe-table-column field="cusProductMonths"  type="html" label="客户产品交易期限(月)" width="130"></vxe-table-column>

@@ -100,6 +100,7 @@
 		<Drawer title="分配详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
 			<div style="padding:5px">
 				<vxe-table
+					resizable
 					show-overflow
 					ref="dispatchTable"
 					class="dtable dispatchTable public-vxe-table"
@@ -126,42 +127,42 @@
 					<vxe-table-column field="dateLap" title="月份" width="80" fixed="left"></vxe-table-column>
 					<vxe-table-column field="employeeCode" title="工号" width="80" fixed="left"></vxe-table-column>
 					<vxe-table-column field="chineseName" title="姓名" width="80" fixed="left"></vxe-table-column>
-					<vxe-table-column field="cusCode" title="客户编码" width="90px" fixed="left"></vxe-table-column>
-					<vxe-table-column field="cusAbbName" title="客户名称" width="100px"></vxe-table-column>
-					<vxe-table-column field="cDLCode" title="发货单号" width="100px"></vxe-table-column>
-					<vxe-table-column field="invCode" title="产品编码" width="120px" show-overflow></vxe-table-column>
+					<vxe-table-column field="cusCode" label="客户编码" width="90px" fixed="left"></vxe-table-column>
+					<vxe-table-column field="cusAbbName" label="客户名称" width="100px"></vxe-table-column>
+					<vxe-table-column field="cDLCode" label="发货单号" width="100px"></vxe-table-column>
+					<vxe-table-column field="invClassName" label="产品编码" width="90px"></vxe-table-column>
 					<vxe-table-column field="dispatchID" title="出货单ID" width="90px"></vxe-table-column>
-					<vxe-table-column field="customerRankType" title="项目类型" width="90px"></vxe-table-column>
-					<vxe-table-column field="invName" title="产品名称" width="90px"></vxe-table-column>
-					<vxe-table-column field="cSTType" title="销售类型" width="80px"></vxe-table-column>
-					<vxe-table-column field="invClassName" title="产品分类" width="80px"></vxe-table-column>
-					<vxe-table-column field="dispatchDay" title="发货日期" width="90px"></vxe-table-column>
-					<vxe-table-column field="quantity" title="发货数量" width="90px"></vxe-table-column>
-					<vxe-table-column field="natUnitPrice" title="发货单价" width="100px"></vxe-table-column>
-					<vxe-table-column field="natDispatchMoney" title="本币无税金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="openTicketAdjust" title="开票调整" width="110px"></vxe-table-column>
-					<vxe-table-column field="sellDiscount" title="销售折扣" width="100px" ></vxe-table-column>
-					<vxe-table-column field="priceAdjust" title="价格调整" width="100px" ></vxe-table-column>
-					<vxe-table-column field="qualityDeduct" title="质量扣款" width="100px"  ></vxe-table-column>
-					<vxe-table-column field="natMustPaidMoney" title="应收本币无税金额" width="120px" ></vxe-table-column>
-					<vxe-table-column field="taxRate" title="税率" width="70px"></vxe-table-column>
-					<vxe-table-column field="mustPaidMoney" title="应收本币含税金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="matchAmount" title="已收本币无税金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="isIncrease" title="是否计增值率" width="100px"></vxe-table-column>
-					<vxe-table-column field="increaseValue" title="增值率计算金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="standMaterialAmount" title="本单成本" width="120px"></vxe-table-column>
-					<vxe-table-column field="increaseRatio" title="增值率系数" width="90px"></vxe-table-column>
-					<vxe-table-column field="baseCommissionRatio" title="业务提成系数" width="95"></vxe-table-column>
-					<vxe-table-column field="cusFirstDay" title="客户首次发货日期" width="100"></vxe-table-column>
-					<vxe-table-column field="cusMonths" title="客户交易期限(月)" width="80"></vxe-table-column>
-					<vxe-table-column field="cusRatio" title="客户交易提成系数%" width="80"></vxe-table-column>
-					<vxe-table-column field="prodFirstDay" type="html" title="客户产品首次发货日期" width="90"></vxe-table-column>
-					<vxe-table-column field="cusProductMonths"  type="html" title="客户产品交易期限(月)" width="90"></vxe-table-column>
-					<vxe-table-column field="cusProductRatio"  type="html" title="客户产品提成系数%" width="90"></vxe-table-column>
+					<vxe-table-column field="customerRankType" label="项目类型" width="90px"></vxe-table-column>
+					<vxe-table-column field="invName" label="产品名称" width="90px"></vxe-table-column>
+					<vxe-table-column field="cSTType" label="销售类型" width="80px"></vxe-table-column>
+					<vxe-table-column field="invClassName" label="产品分类" width="80px"></vxe-table-column>
+					<vxe-table-column field="dispatchDay" label="发货日期" width="90px"></vxe-table-column>
+					<vxe-table-column field="quantity" label="发货数量" width="90px"></vxe-table-column>
+					<vxe-table-column field="natUnitPrice" label="发货单价" width="100px"></vxe-table-column>
+					<vxe-table-column field="natDispatchMoney" label="本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="openTicketAdjust" label="开票调整" width="110px"></vxe-table-column>
+					<vxe-table-column field="sellDiscount" label="销售折扣" width="100px" ></vxe-table-column>
+					<vxe-table-column field="priceAdjust" label="价格调整" width="100px" ></vxe-table-column>
+					<vxe-table-column field="qualityDeduct" label="质量扣款" width="100px"  ></vxe-table-column>
+					<vxe-table-column field="natMustPaidMoney" label="应收本币无税金额" width="120px" ></vxe-table-column>
+					<vxe-table-column field="taxRate" label="税率" width="70px"></vxe-table-column>
+					<vxe-table-column field="mustPaidMoney" label="应收本币含税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="matchAmount" label="已收本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="isIncrease" label="是否计增值率" width="100px"></vxe-table-column>
+					<vxe-table-column field="increaseValue" label="增值率计算金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="standMaterialAmount" label="本单成本" width="120px"></vxe-table-column>
+					<vxe-table-column field="increaseRatio" label="增值率系数" width="90px"></vxe-table-column>
+					<vxe-table-column field="baseCommissionRatio" label="业务提成系数" width="95"></vxe-table-column>
+					<vxe-table-column field="cusFirstDay" label="客户首次发货日期" width="120"></vxe-table-column>
+					<vxe-table-column field="cusMonths" label="客户交易期限(月)" width="105"></vxe-table-column>
+					<vxe-table-column field="cusRatio" label="客户交易提成系数%" width="120"></vxe-table-column>
+					<vxe-table-column field="prodFirstDay" type="html" label="客户产品首次发货日期" width="130"></vxe-table-column>
+					<vxe-table-column field="cusProductMonths"  type="html" label="客户产品交易期限(月)" width="130"></vxe-table-column>
+					<vxe-table-column field="cusProductRatio"  type="html" label="客户产品提成系数%" width="130"></vxe-table-column>
 					<vxe-table-column  title="阶梯前提成金额" align="center">
-						<vxe-table-column field="commissionAmount" title="非手机产品" width="110"></vxe-table-column>
-						<vxe-table-column field="mCommissionAmount" title="手机产品" width="110"></vxe-table-column>
-						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="110"></vxe-table-column>
+						<vxe-table-column field="commissionAmount" title="非手机产品" width="90"></vxe-table-column>
+						<vxe-table-column field="mCommissionAmount" title="手机产品" width="90"></vxe-table-column>
+						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="90"></vxe-table-column>
 					</vxe-table-column>
 				</vxe-table>
 				<div class="pagina">

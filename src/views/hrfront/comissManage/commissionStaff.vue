@@ -103,7 +103,9 @@
 		<Drawer title="分配详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
 			<div style="padding:5px">
 				<vxe-table
+					resizable
 					show-overflow
+					show-footer-overflow
 					ref="dispatchTable"
 					class="dtable dispatchTable public-vxe-table"
 					:data="dispatchData"
@@ -111,11 +113,11 @@
 					border
 					height="700px"
       				v-loading="dispatch_loading"
-					style="width: 100%"
 					:header-cell-style="vxeHeaderStyle"
-					:show-footer="true"
+					show-footer
 					:footer-method="getSummaries1"
 					:seq-config="{seqMethod: VxeIndexMethod1}"
+          			:tooltip-config="{enabled: true}"
 					>
 					<vxe-table-column 
 						type="selection" 
@@ -129,42 +131,42 @@
 					<vxe-table-column field="dateLap" title="月份" width="80" fixed="left"></vxe-table-column>
 					<vxe-table-column field="employeeCode" title="工号" width="80" fixed="left"></vxe-table-column>
 					<vxe-table-column field="chineseName" title="姓名" width="80" fixed="left"></vxe-table-column>
-					<vxe-table-column field="cusCode" title="客户编码" width="90px" fixed="left"></vxe-table-column>
-					<vxe-table-column field="cusAbbName" title="客户名称" width="100px"></vxe-table-column>
-					<vxe-table-column field="cDLCode" title="发货单号" width="100px"></vxe-table-column>
-					<vxe-table-column field="invCode" title="产品编码" width="120px" show-overflow></vxe-table-column>
+					<vxe-table-column field="cusCode" label="客户编码" width="90px" fixed="left"></vxe-table-column>
+					<vxe-table-column field="cusAbbName" label="客户名称" width="100px"></vxe-table-column>
+					<vxe-table-column field="cDLCode" label="发货单号" width="100px"></vxe-table-column>
+					<vxe-table-column field="invClassName" label="产品编码" width="90px"></vxe-table-column>
 					<vxe-table-column field="dispatchID" title="出货单ID" width="90px"></vxe-table-column>
-					<vxe-table-column field="customerRankType" title="项目类型" width="90px"></vxe-table-column>
-					<vxe-table-column field="invName" title="产品名称" width="90px"></vxe-table-column>
-					<vxe-table-column field="cSTType" title="销售类型" width="80px"></vxe-table-column>
-					<vxe-table-column field="invClassName" title="产品分类" width="80px"></vxe-table-column>
-					<vxe-table-column field="dispatchDay" title="发货日期" width="90px"></vxe-table-column>
-					<vxe-table-column field="quantity" title="发货数量" width="90px"></vxe-table-column>
-					<vxe-table-column field="natUnitPrice" title="发货单价" width="100px"></vxe-table-column>
-					<vxe-table-column field="natDispatchMoney" title="本币无税金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="openTicketAdjust" title="开票调整" width="110px"></vxe-table-column>
-					<vxe-table-column field="sellDiscount" title="销售折扣" width="100px" ></vxe-table-column>
-					<vxe-table-column field="priceAdjust" title="价格调整" width="100px" ></vxe-table-column>
-					<vxe-table-column field="qualityDeduct" title="质量扣款" width="100px"  ></vxe-table-column>
-					<vxe-table-column field="natMustPaidMoney" title="应收本币无税金额" width="120px" ></vxe-table-column>
-					<vxe-table-column field="taxRate" title="税率" width="70px"></vxe-table-column>
-					<vxe-table-column field="mustPaidMoney" title="应收本币含税金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="matchAmount" title="已收本币无税金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="isIncrease" title="是否计增值率" width="100px"></vxe-table-column>
-					<vxe-table-column field="increaseValue" title="增值率计算金额" width="120px"></vxe-table-column>
-					<vxe-table-column field="standMaterialAmount" title="本单成本" width="120px"></vxe-table-column>
-					<vxe-table-column field="increaseRatio" title="增值率系数" width="90px"></vxe-table-column>
-					<vxe-table-column field="baseCommissionRatio" title="业务提成系数" width="95"></vxe-table-column>
-					<vxe-table-column field="cusFirstDay" title="客户首次发货日期" width="100"></vxe-table-column>
-					<vxe-table-column field="cusMonths" title="客户交易期限(月)" width="80"></vxe-table-column>
-					<vxe-table-column field="cusRatio" title="客户交易提成系数%" width="80"></vxe-table-column>
-					<vxe-table-column field="prodFirstDay" type="html" title="客户产品首次发货日期" width="90"></vxe-table-column>
-					<vxe-table-column field="cusProductMonths"  type="html" title="客户产品交易期限(月)" width="90"></vxe-table-column>
-					<vxe-table-column field="cusProductRatio"  type="html" title="客户产品提成系数%" width="90"></vxe-table-column>
+					<vxe-table-column field="customerRankType" label="项目类型" width="90px"></vxe-table-column>
+					<vxe-table-column field="invName" label="产品名称" width="90px"></vxe-table-column>
+					<vxe-table-column field="cSTType" label="销售类型" width="80px"></vxe-table-column>
+					<vxe-table-column field="invClassName" label="产品分类" width="80px"></vxe-table-column>
+					<vxe-table-column field="dispatchDay" label="发货日期" width="90px"></vxe-table-column>
+					<vxe-table-column field="quantity" label="发货数量" width="90px"></vxe-table-column>
+					<vxe-table-column field="natUnitPrice" label="发货单价" width="100px"></vxe-table-column>
+					<vxe-table-column field="natDispatchMoney" label="本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="openTicketAdjust" label="开票调整" width="110px"></vxe-table-column>
+					<vxe-table-column field="sellDiscount" label="销售折扣" width="100px" ></vxe-table-column>
+					<vxe-table-column field="priceAdjust" label="价格调整" width="100px" ></vxe-table-column>
+					<vxe-table-column field="qualityDeduct" label="质量扣款" width="100px"  ></vxe-table-column>
+					<vxe-table-column field="natMustPaidMoney" label="应收本币无税金额" width="120px" ></vxe-table-column>
+					<vxe-table-column field="taxRate" label="税率" width="70px"></vxe-table-column>
+					<vxe-table-column field="mustPaidMoney" label="应收本币含税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="matchAmount" label="已收本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="isIncrease" label="是否计增值率" width="100px"></vxe-table-column>
+					<vxe-table-column field="increaseValue" label="增值率计算金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="standMaterialAmount" label="本单成本" width="120px"></vxe-table-column>
+					<vxe-table-column field="increaseRatio" label="增值率系数" width="90px"></vxe-table-column>
+					<vxe-table-column field="baseCommissionRatio" label="业务提成系数" width="95"></vxe-table-column>
+					<vxe-table-column field="cusFirstDay" label="客户首次发货日期" width="120"></vxe-table-column>
+					<vxe-table-column field="cusMonths" label="客户交易期限(月)" width="105"></vxe-table-column>
+					<vxe-table-column field="cusRatio" label="客户交易提成系数%" width="120"></vxe-table-column>
+					<vxe-table-column field="prodFirstDay" type="html" label="客户产品首次发货日期" width="130"></vxe-table-column>
+					<vxe-table-column field="cusProductMonths"  type="html" label="客户产品交易期限(月)" width="130"></vxe-table-column>
+					<vxe-table-column field="cusProductRatio"  type="html" label="客户产品提成系数%" width="130"></vxe-table-column>
 					<vxe-table-column  title="阶梯前提成金额" align="center">
-						<vxe-table-column field="commissionAmount" title="非手机产品" width="110"></vxe-table-column>
-						<vxe-table-column field="mCommissionAmount" title="手机产品" width="110"></vxe-table-column>
-						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="110"></vxe-table-column>
+						<vxe-table-column field="commissionAmount" title="非手机产品" width="90"></vxe-table-column>
+						<vxe-table-column field="mCommissionAmount" title="手机产品" width="90"></vxe-table-column>
+						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="90"></vxe-table-column>
 					</vxe-table-column>
 				</vxe-table>
 				<div class="pagina">
@@ -220,7 +222,7 @@
 		@sort-change="table_sort_change"
 		:show-summary="table_config.isShowFooter"
 		:summary-method="getSummaries"
-    	:default-sort = "{prop: 'commissionTotalAmount', order: 'descending'}"
+    	:default-sort = "{prop: 'actualTotalCommission', order: 'descending'}"
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
     >
@@ -236,23 +238,24 @@
 	<el-table-column prop="chineseName" label="姓名" width="80" fixed></el-table-column>
 	<el-table-column prop="employeeCode" label="工号" width="80" fixed></el-table-column>
 	<el-table-column prop="departmentName" label="部门" width="80" fixed></el-table-column>
-	<el-table-column prop="commissionTotalAmount" label="当月提成" width="110" fixed sortable></el-table-column>
+	<el-table-column prop="actualTotalCommission" label="提成合计" width="100" fixed sortable></el-table-column>
+	<el-table-column prop="actualMonthCommission" label="月末应发提成" width="120" sortable></el-table-column>
+	<el-table-column prop="actualYearCommission" label="年末应发提成" width="120" sortable></el-table-column>
 	<el-table-column label="非手机项目" prop="feisjxm" align="center">
-		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
-		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
+		<el-table-column prop="nmPaidAmount" label="贷款核销总额" width="95"></el-table-column>
+		<el-table-column prop="nmStepCommission" label="阶梯提成金额" width="95"></el-table-column>
 	</el-table-column>
 	<el-table-column label="手机项目" prop="shoujxm" align="center">
-		<el-table-column prop="mPaidAmount" label="货款收款总额" width="120"></el-table-column>
-		<el-table-column prop="mActualMonthCommission" label="月份货款提成金额（80%）" width="170"></el-table-column>
-		<el-table-column prop="mActualYearCommission" label="月份货款提成余额（20%）" width="170"></el-table-column>
+		<el-table-column prop="mPaidAmount" label="货款核销总额" width="95"></el-table-column>
+		<el-table-column prop="mStepCommission" label="阶梯提成金额" width="95"></el-table-column>
 	</el-table-column>
 	<el-table-column label="模具款" prop="mujk" align="center">
-		<el-table-column prop="modelPaidAmount" label="模具款收完总额" width="120"></el-table-column>
-		<el-table-column prop="modelCommission" label="模具款提成" width="120"></el-table-column>
+		<el-table-column prop="modelPaidAmount" label="结款总额" width="80"></el-table-column>
+		<el-table-column prop="modelCommission" label="提成金额" width="80"></el-table-column>
 	</el-table-column>
-	<el-table-column prop="productOverInterest" label="货款延期利息" width="130"></el-table-column>
-		<el-table-column prop="modelOverInterest" label="模具延期利息" width="120"></el-table-column>
-	<el-table-column prop="badDebtAmount" label="产品呆坏账" width="100"></el-table-column>
+	<el-table-column prop="productOverInterest" label="货款延期利息" width="95"></el-table-column>
+		<el-table-column prop="modelOverInterest" label="模具延期利息" width="95"></el-table-column>
+	<el-table-column prop="badDebtAmount" label="产品呆坏账" width="90"></el-table-column>
     <!-- <each-table-column :table_field="table_field"  :template="template"/> -->
 	<!-- <el-table-column
 		v-if="this.url=='commission/presoncommcollect'"
@@ -460,8 +463,8 @@ export default {
 			}
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(column.property == 'nmPaidAmount' || column.property == 'nmProductCommission'|| column.property == 'mPaidAmount'
-			|| column.property == 'mActualMonthCommission'|| column.property == 'mActualYearCommission'|| column.property == 'modelPaidAmount'
+			if(column.property == 'nmPaidAmount' || column.property == 'nmStepCommission'|| column.property == 'mPaidAmount'
+			|| column.property == 'mStepCommission'|| column.property == 'modelPaidAmount'
 			|| column.property == 'modelCommission'){
 				return 'color:#0BB2D4;cursor: pointer'
 			}else{
@@ -469,10 +472,9 @@ export default {
 			}
 		},
 		headerCellStyle1({row, column, rowIndex, columnIndex}){
-			if(column.property=='nmPaidAmount' ||column.property=='nmProductCommission' ||column.property=='feisjxm'){
+			if(column.property=='nmPaidAmount' ||column.property=='nmStepCommission' ||column.property=='feisjxm'){
 				return 'background: #BDD7EE;color:#37474F'
-			}else if(column.property=='mPaidAmount' ||column.property=='mActualMonthCommission' ||column.property=='shoujxm'
-				||column.property=='mActualYearCommission'){
+			}else if(column.property=='mPaidAmount' ||column.property=='mStepCommission' ||column.property=='shoujxm'){
 				return 'background: #FFF2CC;color:#37474F'
 			}else if(column.property=='mujk' ||column.property=='modelPaidAmount' ||column.property=='modelCommission'){
 				return 'background: #FCC099;color:#37474F'
@@ -543,23 +545,26 @@ export default {
 			this.table_data  = rows
 			this.table_form.total = total
 			this.table_data.forEach(o => {
-				if(o.commissionTotalAmount=='0'){
-					this.$set(o,'commissionTotalAmount','')
+				if(o.actualTotalCommission=='0'){
+					this.$set(o,'actualTotalCommission','')
+				}
+				if(o.actualMonthCommission=='0'){
+					this.$set(o,'actualMonthCommission','')
+				}
+				if(o.actualYearCommission=='0'){
+					this.$set(o,'actualYearCommission','')
 				}
 				if(o.nmPaidAmount=='0'){
 					this.$set(o,'nmPaidAmount','')
 				}
-				if(o.nmProductCommission=='0'){
-					this.$set(o,'nmProductCommission','')
+				if(o.nmStepCommission=='0'){
+					this.$set(o,'nmStepCommission','')
 				}
 				if(o.mPaidAmount=='0'){
 					this.$set(o,'mPaidAmount','')
 				}
-				if(o.mActualMonthCommission=='0'){
-					this.$set(o,'mActualMonthCommission','')
-				}
-				if(o.mActualYearCommission=='0'){
-					this.$set(o,'mActualYearCommission','')
+				if(o.mStepCommission=='0'){
+					this.$set(o,'mStepCommission','')
 				}
 				if(o.modelPaidAmount=='0'){
 					this.$set(o,'modelPaidAmount','')
