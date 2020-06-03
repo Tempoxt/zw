@@ -161,7 +161,7 @@
 					<vxe-table-column field="prodFirstDay" type="html" title="客户产品首次发货日期" width="90"></vxe-table-column>
 					<vxe-table-column field="cusProductMonths"  type="html" title="客户产品交易期限(月)" width="90"></vxe-table-column>
 					<vxe-table-column field="cusProductRatio"  type="html" title="客户产品提成系数%" width="90"></vxe-table-column>
-					<vxe-table-column  title="发货单提成计算金额" align="center">
+					<vxe-table-column  title="阶梯前提成金额" align="center">
 						<vxe-table-column field="commissionAmount" title="非手机产品" width="110"></vxe-table-column>
 						<vxe-table-column field="mCommissionAmount" title="手机产品" width="110"></vxe-table-column>
 						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="110"></vxe-table-column>
