@@ -3,6 +3,7 @@
   :table_column="table_field" 
   :table_query.sync="table_form.query"
   @query="querySubmit"
+  class="dispatchMatch"
   >
     <table-header
 		:table_actions="table_actions"
@@ -19,7 +20,6 @@
 		class="public-vxe-table"
 		ref="xTable"
 		resizable
-		show-overflow
 		highlight-hover-row
 		@select-all="handleChangeSelection"
 		@select-change="handleChangeSelection"
@@ -47,18 +47,49 @@
 		<vxe-table-column field="dateLap" title="月份" width="80" fixed="left"></vxe-table-column>
 		<vxe-table-column field="employeeCode" title="工号" width="80" fixed="left"></vxe-table-column>
 		<vxe-table-column field="chineseName" title="姓名" width="80" fixed="left"></vxe-table-column>
-		<vxe-table-column field="cusCode" title="客户编号" width="95" fixed="left"></vxe-table-column>
-		<vxe-table-column field="cusAbbName" title="客户名称" width="95" fixed="left"></vxe-table-column>
-		<!-- <vxe-table-column field="allocatedStatus" title="状态" width="90">
-			<template slot-scope="scope">
-				<el-tag type="danger" size="mini" v-if="scope.row.allocatedStatus==0">未分配</el-tag>
-				<el-tag type="success" size="mini" v-if="scope.row.allocatedStatus==1">已分配</el-tag>
-				<el-tag type="warning" size="mini" v-if="scope.row.allocatedStatus==2">部分分配</el-tag>
-			</template>.filter(o=>!['allocatedStatus'].includes(o.name))
-		</vxe-table-column> -->
-		<vxe-table-column v-for="field in table_field.filter(o=>!['dateLap','employeeCode','chineseName','cusCode','cusAbbName'].includes(o.name)).filter(column=>!column.fed_isvisiable).
+		<vxe-table-column field="cusCode" label="客户编码" width="90px" fixed="left"></vxe-table-column>
+		<vxe-table-column field="cusAbbName" label="客户名称" width="100px"></vxe-table-column>
+		<vxe-table-column field="cDLCode" label="发货单号" width="100px"></vxe-table-column>
+		<vxe-table-column field="invClassName" label="产品编码" width="90px"></vxe-table-column>
+		<vxe-table-column field="customerRankType" label="项目类型" width="90px"></vxe-table-column>
+		<vxe-table-column field="invName" label="产品名称" width="90px"></vxe-table-column>
+		<vxe-table-column field="cSTType" label="销售类型" width="80px"></vxe-table-column>
+		<vxe-table-column field="invClassName" label="产品分类" width="80px"></vxe-table-column>
+		<vxe-table-column field="dispatchDay" label="发货日期" width="90px"></vxe-table-column>
+		<vxe-table-column field="quantity" label="发货数量" width="90px"></vxe-table-column>
+		<vxe-table-column field="natUnitPrice" label="发货单价" width="100px"></vxe-table-column>
+		<vxe-table-column field="natDispatchMoney" label="本币无税金额" width="120px"></vxe-table-column>
+		<vxe-table-column field="openTicketAdjust" label="开票调整" width="110px"></vxe-table-column>
+		<vxe-table-column field="sellDiscount" label="销售折扣" width="100px" ></vxe-table-column>
+		<vxe-table-column field="priceAdjust" label="价格调整" width="100px" ></vxe-table-column>
+		<vxe-table-column field="qualityDeduct" label="质量扣款" width="100px"  ></vxe-table-column>
+		<vxe-table-column field="natMustPaidMoney" label="应收本币无税金额" width="120px" ></vxe-table-column>
+		<vxe-table-column field="taxRate" label="税率" width="70px"></vxe-table-column>
+		<vxe-table-column field="mustPaidMoney" label="应收本币含税金额" width="120px"></vxe-table-column>
+		<vxe-table-column field="matchAmount" label="已收本币无税金额" width="120px"></vxe-table-column>
+		<vxe-table-column field="isIncrease" label="是否计增值率" width="100px"></vxe-table-column>
+		<vxe-table-column field="increaseValue" label="增值率计算金额" width="120px"></vxe-table-column>
+		<vxe-table-column field="standMaterialAmount" label="本单成本" width="120px"></vxe-table-column>
+		<vxe-table-column field="increaseRatio" label="增值率系数" width="90px"></vxe-table-column>
+		<vxe-table-column field="baseCommissionRatio" label="业务提成系数" width="95"></vxe-table-column>
+		<vxe-table-column field="cusFirstDay" label="客户首次发货日期" width="120"></vxe-table-column>
+		<vxe-table-column field="cusMonths" label="客户交易期限(月)" width="100"></vxe-table-column>
+		<vxe-table-column field="cusRatio" label="客户交易提成系数%" width="120"></vxe-table-column>
+		<vxe-table-column field="prodFirstDay" type="html" label="客户产品首次发货日期" width="130"></vxe-table-column>
+		<vxe-table-column field="cusProductMonths"  type="html" label="客户产品交易期限(月)" width="130"></vxe-table-column>
+		<vxe-table-column field="cusProductRatio"  type="html" label="客户产品提成系数%" width="130"></vxe-table-column>
+		<vxe-table-column  title="发货单提成计算金额" align="center">
+			<vxe-table-column field="commissionAmount" label="非手机产品" width="90"></vxe-table-column>
+			<vxe-table-column field="mCommissionAmount" label="手机产品" width="90"></vxe-table-column>
+			<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="90"></vxe-table-column>
+		</vxe-table-column>
+		<vxe-table-column field="oldCommissionAmount" label="原方案出货单提成金额" width="130"></vxe-table-column>
+		
+		<!-- <vxe-table-column field="cusCode" title="客户编号" width="95" fixed="left"></vxe-table-column>
+		<vxe-table-column field="cusAbbName" title="客户名称" width="95" fixed="left"></vxe-table-column> -->
+		<!-- <vxe-table-column v-for="field in table_field.filter(o=>!['dateLap','employeeCode','chineseName','cusCode','cusAbbName'].includes(o.name)).filter(column=>!column.fed_isvisiable).
 			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
-			:width="field.width=='auto'?'': parseInt(field.width)"/>
+			:width="field.width=='auto'?'': parseInt(field.width)"/> -->
 	</vxe-table>
     <table-pagination 
         :total="table_form.total" 
@@ -163,6 +194,20 @@ export default {
 };
 </script>
 <style lang="scss">
+.dispatchMatch{
+	.vxe-table .vxe-body--column, .vxe-table .vxe-footer--column, .vxe-table .vxe-header--column,.vxe-header--column .col--center .col--group .col--ellipsis {
+		padding: 4px 0;
+		line-height: 16px;
+		height: 22px;
+	}
+	// .public-vxe-table.vxe-table .vxe-body--column.col--ellipsis, .public-vxe-table .vxe-table.vxe-editable .vxe-body--column, .public-vxe-table .vxe-table .vxe-footer--column.col--ellipsis, .public-vxe-table .vxe-table .vxe-header--column.col--ellipsis {
+	// 	height: 22px;
+	// }
+	.vxe-table .vxe-cell {
+		padding: 0px 4px;
+		text-align: center;
+		cursor: default;
+	}
 	.dispatch{
 		.row{
 			.el-col{
@@ -173,6 +218,8 @@ export default {
 	.col-red{
 		color: red;
 	}
+}
+	
 </style>
 
 

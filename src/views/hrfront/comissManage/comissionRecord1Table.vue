@@ -164,8 +164,11 @@
 					<el-table-column prop="prodFirstDay" label="客户产品首次发货日期" width="90px"></el-table-column>
 					<el-table-column prop="cusProductMonths" label="客户产品交易期限(月)" width="90px"></el-table-column>
 					<el-table-column prop="cusProductRatio" label="客户产品提成系数%" width="90px"></el-table-column>
-					<el-table-column prop="commissionAmount" label="发货单提成计算金额(非手机产品)" width="120px" align="right"></el-table-column>
-					<el-table-column prop="mCommissionAmount" label="发货单提成计算金额(非手机产品)" width="120px" align="right"></el-table-column>
+					<el-table-column  title="发货单提成计算金额" align="center">
+						<el-table-column field="commissionAmount" label="非手机产品" width="90"></el-table-column>
+						<el-table-column field="mCommissionAmount" label="手机产品" width="90"></el-table-column>
+						<el-table-column field="modelCommissionAmount" title="非手机模具" width="90"></el-table-column>
+					</el-table-column>
 					<el-table-column prop="oldCommissionAmount" label="原方案出货单提成金额" width="100px" align="right"></el-table-column>
 				</el-table>
 				<div class="pagina">
@@ -222,26 +225,51 @@
 		:summary-method="getSummaries"
 		@cell-click="openDrawer"
 		:cell-style="cellStyle"
-    >
-    <el-table-column 
-      type="selection" 
-      width="60" 
-      class-name="table-column-disabled"
-      :selectable="table_disable_selected"
-      >
-      </el-table-column>
-    <el-table-column type="index" :index="indexMethod" width="70"/>
-    <each-table-column :table_field="table_field"  :template="template"/>
-	<!-- <el-table-column
-		v-if="this.url=='commission/presoncommcollect'"
-		fixed="right"
-		label="操作"
-		width="100">
-		<template slot-scope="scope">
-			<el-button @click="handleClick(scope.row)" type="text" size="small">明细</el-button>
-		</template>
-    </el-table-column> -->
+		>
+		<el-table-column 
+		type="selection" 
+		width="60" 
+		class-name="table-column-disabled"
+		:selectable="table_disable_selected"
+		>
+		</el-table-column>
+		<el-table-column type="index" :index="indexMethod" width="70"/>
+		<each-table-column :table_field="table_field"/>
     </el-table>
+	<!-- <vxe-table
+		class="public-vxe-table"
+		ref="xTable"
+		resizable
+		show-overflow
+		highlight-hover-row
+		@select-all="handleChangeSelection"
+		@select-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="vxeHeaderStyle"
+		:height="table_height"
+		@resizable-change="table_dragend"
+		@sort-change="table_sort_change"
+		@cell-click="cellClickEvent"
+      	:cell-class-name="cellClassName"
+		:seq-config="{seqMethod: VxeIndexMethod}"
+        :show-footer="table_config.isShowFooter"
+        :footer-method="footerMethod"
+		>
+		<vxe-table-column 
+			type="selection" 
+			width="50" 
+			class-name="table-column-disabled"
+			:selectable="table_disable_selected"
+		>
+		</vxe-table-column>
+		<vxe-table-column type="index" :index="indexMethod" align="center" width="60"/>
+		<vxe-table-column v-for="field in table_field.filter(column=>!column.fed_isvisiable).
+			filter(column=>!column.isvisiable)" :key="field.name" :field="field.name" :title="field.showname" :sortable="field.issort" 
+			:width="field.width=='auto'?'': parseInt(field.width)"/>
+	</vxe-table> -->
     <table-pagination 
         :total="table_form.total" 
         :pagesize.sync="table_form.pagesize"
@@ -255,12 +283,16 @@
 import * as api_common from "@/api/common";
 import table_mixin from "@c/Table/table_mixin";
 import dayjs from 'dayjs'
+
+// const api_pagemanager = api_common.resource('pagemanager/field')
 // let api_resource = api_common.resource("commission/staffcommissiondetail");
 export default {
 	mixins: [table_mixin],
 	props:['id','url','a'],
 	data() {
 		return {
+			// api_pagemanager,
+            vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			loading: true,
 			api_resource:api_common.resource(this.url),
 			orgCategory:[],
@@ -272,8 +304,6 @@ export default {
 			table_topHeight:293,
 			dialogForm1Visible:false,
 			dialogFormVisible:false,
-			// importUploadUrl:'commission/commissionSet/person/upload',
-			// downloadUrl:'commission/commissionSet/person/downtemplate',
 			rules:{
 				staff__chineseName: [
 					{ required: true, message: '请输入', trigger: 'change' },
@@ -296,22 +326,6 @@ export default {
 					{ required: true, message: '请输入', trigger: 'blur' },
 				],
 			},
-			template:{
-				// ClearState(column,row){
-				// 	if(row.ClearState===0){
-				// 		return <el-tag type="success">已结付</el-tag>
-				// 	}else{
-				// 		return <el-tag type="info">未结付</el-tag>
-				// 	}
-				// },
-				// auditStatus(column,row){
-				// 	if(row.auditStatus=='未审核'||row.auditStatus==0){
-				// 		return <el-tag type="danger">未审核</el-tag>
-				// 	}else if(row.auditStatus=='已审核'||row.auditStatus==1){
-				// 		return <el-tag type="success">已审核</el-tag>
-				// 	}
-				// }
-			},
 			resultUrl:'',
 			timer:'',
 			statusk:1,
@@ -328,6 +342,9 @@ export default {
 			month: '',
 			cusCode: '',
 			field: '',
+			resurl: '',
+			employeeCode: '',
+			invCode: ''
 		};
 	},
 	computed:{
@@ -411,19 +428,26 @@ export default {
 			return sums;
 		},
 		async getData(){
-			const {rows,total} = await this.$request.get('/commission/customercommission/detail',{params:{
+			let data1 = {
 				dateLap: this.month,
 				cusCode: this.cusCode,
 				field: this.field,
 				pagesize: this.page,
-				currentpage: this.curr
-			}})
+				currentpage: this.curr,
+				employeeCode: this.employeeCode,
+			}
+			let data2 = {
+				dateLap: this.month,
+				invCode: this.invCode,
+				field: this.field,
+				pagesize: this.page,
+				currentpage: this.curr,
+				employeeCode: this.employeeCode,
+			}
+			let data = this.a == 2 ? data1 : data2
+			const {rows,total} = await this.$request.get(this.resurl,{params:data})
 			this.dispatchData = rows
 			this.dispatchTotal = total
-			// setTimeout(() => {
-			// 	this.dispatch_loading = false;
-			// }, 300);
-			
 			this.$nextTick(()=>{
 				this.dispatch_loading = false
 				this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
@@ -432,20 +456,47 @@ export default {
 			})
 		},
 		async openDrawer(row,column,cell,event){
-			if(this.a == 2 && (row.sourceCommissionAmount==event.target.innerText || row.commissionAmount==event.target.innerText|| row.modelSourceCommissionAmount==event.target.innerText
+			// if((this.a == 2 || this.a == 3) && (column.property=='sourceCommissionAmount' || column.property=='commissionAmount'||column.property=='modelSourceCommissionAmount'
+			//  ||column.property=='modelCommissionAmount'||column.property=='mSourceCommissionAmount'||column.property=='mCommissionAmount')){
+			// 	this.openDrawers = true
+			// 	this.dispatch_loading = true
+			// 	this.month = row.dateLap
+			// 	this.cusCode = row.cusCode
+			// 	this.employeeCode = row.employeeCode
+			// 	this.field = column.property
+			// 	this.invCode = column.invCode
+			// 	this.resurl = this.a==2 ? '/commission/customercommission/detail':'/commission/productcommission/detail'
+			// 	await this.getData()
+			// }
+			if((this.a == 2 || this.a == 3) && (row.sourceCommissionAmount==event.target.innerText || row.commissionAmount==event.target.innerText|| row.modelSourceCommissionAmount==event.target.innerText
 			|| row.modelCommissionAmount==event.target.innerText|| row.mSourceCommissionAmount==event.target.innerText|| row.mCommissionAmount==event.target.innerText)){
 				this.openDrawers = true
 				this.dispatch_loading = true
 				this.month = row.dateLap
 				this.cusCode = row.cusCode
+				this.employeeCode = row.employeeCode
 				this.field = column.property
+				this.invCode = row.invCode
+				this.resurl = this.a==2 ? '/commission/customercommission/detail':'/commission/productcommission/detail'
 				await this.getData()
-            }
+			}
 		},
+		// cellClassName ({ row, rowIndex, column, columnIndex }) {
+		// 	if((this.a == 2 || this.a == 3) && column.property=='natDispatchMoney'){
+		// 		// if(row.status==2){
+		// 		// 	return 'col-red'
+		// 		// }else{
+		// 			return 'col-blue'
+		// 		// }
+		// 	}
+		// 	if(this.m==4 && column.property=='natSumMoney'){
+		// 		return 'text-right'
+		// 	}
+		// },
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(this.a == 2 && (column.property == 'sourceCommissionAmount' || column.property == 'commissionAmount'|| column.property == 'modelSourceCommissionAmount'
+			if((this.a == 2 || this.a == 3) && (column.property == 'sourceCommissionAmount' || column.property == 'commissionAmount'|| column.property == 'modelSourceCommissionAmount'
 			|| column.property == 'modelCommissionAmount'|| column.property == 'mSourceCommissionAmount'|| column.property == 'mCommissionAmount')){
-				return 'color:#0BB2D4;cursor:pointer'
+				return 'color:#0BB2D4;cursor: pointer'
 			}else{
 				return  ''
 			}
@@ -556,6 +607,10 @@ export default {
 	.pagina{
 		display: flex;
 		justify-content: space-between;
+	}
+	.col-primary{
+		color:#0BB2D4;
+		cursor: pointer
 	}
 </style>
 

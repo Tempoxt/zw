@@ -326,8 +326,8 @@ export default {
 				MessageBox.close()
 			} catch (error) {
 				MessageBox.close()
-				MessageBox.alert(error.response.data, '提示', {
-					confirmButtonText: '确定',
+				this.$alert(error.response.data, '提示', {
+					dangerouslyUseHTMLString: true
 				});
 			}finally{
 				this.importLoading = false
