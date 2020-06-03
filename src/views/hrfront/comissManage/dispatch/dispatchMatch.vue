@@ -83,7 +83,6 @@
 			<vxe-table-column field="mCommissionAmount" label="手机产品" width="90"></vxe-table-column>
 			<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="90"></vxe-table-column>
 		</vxe-table-column>
-		<vxe-table-column field="oldCommissionAmount" label="原方案出货单提成金额" width="130"></vxe-table-column>
 		
 		<!-- <vxe-table-column field="cusCode" title="客户编号" width="95" fixed="left"></vxe-table-column>
 		<vxe-table-column field="cusAbbName" title="客户名称" width="95" fixed="left"></vxe-table-column> -->

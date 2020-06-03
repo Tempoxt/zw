@@ -164,12 +164,11 @@
 					<el-table-column prop="prodFirstDay" label="客户产品首次发货日期" width="90px"></el-table-column>
 					<el-table-column prop="cusProductMonths" label="客户产品交易期限(月)" width="90px"></el-table-column>
 					<el-table-column prop="cusProductRatio" label="客户产品提成系数%" width="90px"></el-table-column>
-					<el-table-column  title="发货单提成计算金额" align="center">
-						<el-table-column field="commissionAmount" label="非手机产品" width="90"></el-table-column>
-						<el-table-column field="mCommissionAmount" label="手机产品" width="90"></el-table-column>
-						<el-table-column field="modelCommissionAmount" title="非手机模具" width="90"></el-table-column>
+					<el-table-column label="发货单提成计算金额" align="center">
+						<el-table-column prop="commissionAmount" label="非手机产品" width="90"></el-table-column>
+						<el-table-column prop="mCommissionAmount" label="手机产品" width="90"></el-table-column>
+						<el-table-column prop="modelCommissionAmount" label="非手机模具" width="90"></el-table-column>
 					</el-table-column>
-					<el-table-column prop="oldCommissionAmount" label="原方案出货单提成金额" width="100px" align="right"></el-table-column>
 				</el-table>
 				<div class="pagina">
 					<el-pagination
