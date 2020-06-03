@@ -51,6 +51,7 @@
 		<vxe-table-column field="cusAbbName" label="客户名称" width="100px"></vxe-table-column>
 		<vxe-table-column field="cDLCode" label="发货单号" width="100px"></vxe-table-column>
 		<vxe-table-column field="invClassName" label="产品编码" width="90px"></vxe-table-column>
+		<vxe-table-column field="dispatchID" title="出货单ID" width="90px"></vxe-table-column>
 		<vxe-table-column field="customerRankType" label="项目类型" width="90px"></vxe-table-column>
 		<vxe-table-column field="invName" label="产品名称" width="90px"></vxe-table-column>
 		<vxe-table-column field="cSTType" label="销售类型" width="80px"></vxe-table-column>

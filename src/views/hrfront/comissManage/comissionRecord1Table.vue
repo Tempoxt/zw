@@ -99,77 +99,71 @@
 	<div>
 		<Drawer title="分配详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
 			<div style="padding:5px">
-				<el-table
-        			ref="dispatchTable"
-					class="dtable dispatchTable"
+				<vxe-table
+					show-overflow
+					ref="dispatchTable"
+					class="dtable dispatchTable public-vxe-table"
 					:data="dispatchData"
-					:header-cell-style="headerStyle"
-					height="700px" border
-					:summary-method="getSummaries1"
-					show-summary
+					highlight-hover-row
+					border
+					height="700px"
       				v-loading="dispatch_loading"
+					style="width: 100%"
+					:header-cell-style="vxeHeaderStyle"
+					:show-footer="true"
+					:seq-config="{seqMethod: VxeIndexMethod1}"
+					:footer-method="getSummaries1"
 					>
-					<el-table-column type="index" :index="indexMethods" fixed="left"/>
-					<el-table-column prop="dateLap" label="月份" width="80px" fixed="left"></el-table-column>
-					<el-table-column prop="employeeCode" label="工号" width="80px" fixed="left"></el-table-column>
-					<el-table-column prop="chineseName" label="姓名" width="80px" fixed="left"></el-table-column>
-					<el-table-column prop="cusCode" label="客户编码" width="90px" fixed="left">
-						<template slot-scope="scope">
-							<span :title="scope.row.cusCode" style="cursor:default">{{scope.row.cusCode}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="cusAbbName" label="客户名称" width="100px">
-						<template slot-scope="scope">
-							<span :title="scope.row.cusAbbName" style="cursor:default">{{scope.row.cusAbbName}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="cDLCode" label="发货单号" width="100px">
-						<template slot-scope="scope">
-							<span :title="scope.row.cDLCode" style="cursor:default">{{scope.row.cDLCode}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="invClassName" label="产品编码" width="90px">
-						<template slot-scope="scope">
-							<span :title="scope.row.invClassName" style="cursor:default">{{scope.row.invClassName}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="customerRankType" label="项目类型" width="90px"></el-table-column>
-					<el-table-column prop="invName" label="产品名称" width="90px">
-						<template slot-scope="scope">
-							<span :title="scope.row.invName" style="cursor:default">{{scope.row.invName}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="cSTType" label="销售类型" width="80px"></el-table-column>
-					<el-table-column prop="invClassName" label="产品分类" width="80px"></el-table-column>
-					<el-table-column prop="dispatchDay" label="发货日期" width="90px"></el-table-column>
-					<el-table-column prop="quantity" label="发货数量" width="90px"></el-table-column>
-					<el-table-column prop="natUnitPrice" label="发货单价" width="100px" align="right"></el-table-column>
-					<el-table-column prop="natDispatchMoney" label="本币无税金额" width="120px" align="right"></el-table-column>
-					<el-table-column prop="openTicketAdjust" label="开票调整" width="110px" align="right"></el-table-column>
-					<el-table-column prop="sellDiscount" label="销售折扣" width="100px" align="right"></el-table-column>
-					<el-table-column prop="priceAdjust" label="价格调整" width="100px" align="right"></el-table-column>
-					<el-table-column prop="qualityDeduct" label="质量扣款" width="100px" align="right"></el-table-column>
-					<el-table-column prop="natMustPaidMoney" label="应收本币无税金额" width="120px" align="right"></el-table-column>
-					<el-table-column prop="taxRate" label="税率" width="70px"></el-table-column>
-					<el-table-column prop="mustPaidMoney" label="应收本币含税金额" width="120px" align="right"></el-table-column>
-					<el-table-column prop="matchAmount" label="已收本币无税金额" width="120px" align="right"></el-table-column>
-					<el-table-column prop="isIncrease" label="是否计增值率" width="100px"></el-table-column>
-					<el-table-column prop="increaseValue" label="增值率计算金额" width="120px" align="right"></el-table-column>
-					<el-table-column prop="standMaterialAmount" label="本单成本" width="120px" align="right"></el-table-column>
-					<el-table-column prop="increaseRatio" label="增值率系数" width="90px"></el-table-column>
-					<el-table-column prop="baseCommissionRatio" label="业务提成系数" width="95px"></el-table-column>
-					<el-table-column prop="cusFirstDay" label="客户首次发货日期" width="80px"></el-table-column>
-					<el-table-column prop="cusMonths" label="客户交易期限(月)" width="80px"></el-table-column>
-					<el-table-column prop="cusRatio" label="客户交易提成系数%" width="90px"></el-table-column>
-					<el-table-column prop="prodFirstDay" label="客户产品首次发货日期" width="90px"></el-table-column>
-					<el-table-column prop="cusProductMonths" label="客户产品交易期限(月)" width="90px"></el-table-column>
-					<el-table-column prop="cusProductRatio" label="客户产品提成系数%" width="90px"></el-table-column>
-					<el-table-column label="发货单提成计算金额" align="center">
-						<el-table-column prop="commissionAmount" label="非手机产品" width="90"></el-table-column>
-						<el-table-column prop="mCommissionAmount" label="手机产品" width="90"></el-table-column>
-						<el-table-column prop="modelCommissionAmount" label="非手机模具" width="90"></el-table-column>
-					</el-table-column>
-				</el-table>
+					<vxe-table-column 
+						type="selection" 
+						width="50" 
+						class-name="table-column-disabled"
+						:selectable="table_disable_selected"
+						fixed="left"
+					>
+					</vxe-table-column>
+					<vxe-table-column type="index" :index="indexMethod" align="center" width="60" fixed="left"/>
+					<vxe-table-column field="dateLap" title="月份" width="80" fixed="left"></vxe-table-column>
+					<vxe-table-column field="employeeCode" title="工号" width="80" fixed="left"></vxe-table-column>
+					<vxe-table-column field="chineseName" title="姓名" width="80" fixed="left"></vxe-table-column>
+					<vxe-table-column field="cusCode" title="客户编码" width="90px" fixed="left"></vxe-table-column>
+					<vxe-table-column field="cusAbbName" title="客户名称" width="100px"></vxe-table-column>
+					<vxe-table-column field="cDLCode" title="发货单号" width="100px"></vxe-table-column>
+					<vxe-table-column field="invCode" title="产品编码" width="120px" show-overflow></vxe-table-column>
+					<vxe-table-column field="dispatchID" title="出货单ID" width="90px"></vxe-table-column>
+					<vxe-table-column field="customerRankType" title="项目类型" width="90px"></vxe-table-column>
+					<vxe-table-column field="invName" title="产品名称" width="90px"></vxe-table-column>
+					<vxe-table-column field="cSTType" title="销售类型" width="80px"></vxe-table-column>
+					<vxe-table-column field="invClassName" title="产品分类" width="80px"></vxe-table-column>
+					<vxe-table-column field="dispatchDay" title="发货日期" width="90px"></vxe-table-column>
+					<vxe-table-column field="quantity" title="发货数量" width="90px"></vxe-table-column>
+					<vxe-table-column field="natUnitPrice" title="发货单价" width="100px"></vxe-table-column>
+					<vxe-table-column field="natDispatchMoney" title="本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="openTicketAdjust" title="开票调整" width="110px"></vxe-table-column>
+					<vxe-table-column field="sellDiscount" title="销售折扣" width="100px" ></vxe-table-column>
+					<vxe-table-column field="priceAdjust" title="价格调整" width="100px" ></vxe-table-column>
+					<vxe-table-column field="qualityDeduct" title="质量扣款" width="100px"  ></vxe-table-column>
+					<vxe-table-column field="natMustPaidMoney" title="应收本币无税金额" width="120px" ></vxe-table-column>
+					<vxe-table-column field="taxRate" title="税率" width="70px"></vxe-table-column>
+					<vxe-table-column field="mustPaidMoney" title="应收本币含税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="matchAmount" title="已收本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="isIncrease" title="是否计增值率" width="100px"></vxe-table-column>
+					<vxe-table-column field="increaseValue" title="增值率计算金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="standMaterialAmount" title="本单成本" width="120px"></vxe-table-column>
+					<vxe-table-column field="increaseRatio" title="增值率系数" width="90px"></vxe-table-column>
+					<vxe-table-column field="baseCommissionRatio" title="业务提成系数" width="95"></vxe-table-column>
+					<vxe-table-column field="cusFirstDay" title="客户首次发货日期" width="100"></vxe-table-column>
+					<vxe-table-column field="cusMonths" title="客户交易期限(月)" width="80"></vxe-table-column>
+					<vxe-table-column field="cusRatio" title="客户交易提成系数%" width="80"></vxe-table-column>
+					<vxe-table-column field="prodFirstDay" type="html" title="客户产品首次发货日期" width="90"></vxe-table-column>
+					<vxe-table-column field="cusProductMonths"  type="html" title="客户产品交易期限(月)" width="90"></vxe-table-column>
+					<vxe-table-column field="cusProductRatio"  type="html" title="客户产品提成系数%" width="90"></vxe-table-column>
+					<vxe-table-column  title="发货单提成计算金额" align="center">
+						<vxe-table-column field="commissionAmount" title="非手机产品" width="110"></vxe-table-column>
+						<vxe-table-column field="mCommissionAmount" title="手机产品" width="110"></vxe-table-column>
+						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="110"></vxe-table-column>
+					</vxe-table-column>
+				</vxe-table>
 				<div class="pagina">
 					<el-pagination
 						background
@@ -382,6 +376,9 @@ export default {
 		}
 	},
 	methods: {
+		VxeIndexMethod1({ row, rowIndex, column, columnIndex }){
+			return (rowIndex+1)+(this.curr-1)*this.page
+		},
 		handleSizeChange1(val) {
 			this.curr = 1
 			this.page = val
@@ -397,34 +394,37 @@ export default {
         headerStyle(row,rowIndex,column,columnIndex){
             return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
 		},
-		getSummaries1({ columns, data }) {
+		getSummaries1 ({ columns, data }) {
 			const sums = [];
-			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = '合计';
-					return;
-				}
-				let columnProper = ['natUnitPrice','natDispatchMoney','openTicketAdjust','sellDiscount',
-				'priceAdjust','qualityDeduct','natMustPaidMoney','mustPaidMoney','matchAmount','increaseValue',
-				'standMaterialAmount','commissionAmount','mCommissionAmount','oldCommissionAmount']
-				if(columnProper.includes(column.property)){
-					const values = data.map(item => Number(item[column.property]));
-					if (!values.every(value => isNaN(value))) {
-						sums[index] = values.reduce((prev, curr) => {
-						const value = Number(curr);
-						if (!isNaN(value)) {
-							return prev + curr;
-						} else {
-							return prev;
-						}
-						}, 0);
-						sums[index] = sums[index].toFixed(6);
-					} else {
-						sums[index] = '';
+			return [
+				columns.map((column, columnIndex) => {
+					if (columnIndex === 0) {
+						return '合计'
 					}
-				}
-			});
-			return sums;
+					let columnProper = ['natUnitPrice','natDispatchMoney','openTicketAdjust','sellDiscount',
+					'priceAdjust','qualityDeduct','natMustPaidMoney','mustPaidMoney','matchAmount','increaseValue',
+					'standMaterialAmount','commissionAmount','mCommissionAmount','modelCommissionAmount']
+					if (columnProper.includes(column.property)) {
+						const values = data.map(item => Number(item[column.property]));
+						if (!values.every(value => isNaN(value))) {
+							sums[columnIndex] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+								if (!isNaN(value)) {
+									return prev + curr;
+								} else {
+									return prev;
+								}
+							}, 0);
+							sums[columnIndex] = sums[columnIndex];
+							if(!isNaN(sums[columnIndex])){
+								return sums[columnIndex].toFixed(6)
+							}
+						} else {
+							return '';
+						}  
+					}
+				})
+			]
 		},
 		async getData(){
 			let data1 = {
@@ -610,6 +610,17 @@ export default {
 	.col-primary{
 		color:#0BB2D4;
 		cursor: pointer
+	}
+	
+	.dispatchTable.vxe-table .vxe-body--column:not(.col--ellipsis), .dispatchTable.vxe-table .vxe-footer--column:not(.col--ellipsis),
+	 .dispatchTable.vxe-table .vxe-header--column:not(.col--ellipsis){
+		 padding: 4px 0;
+	}
+	.dispatchTable.vxe-table .vxe-body--column, .dispatchTable.vxe-table .vxe-footer--column, .dispatchTable.vxe-table .vxe-header--column,
+	.dispatchTable.vxe-header--column .col--center .col--group .col--ellipsis {
+		padding: 4px 0;
+		line-height: 16px;
+		height: 24px;
 	}
 </style>
 

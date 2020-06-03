@@ -99,6 +99,101 @@
 		</div>
     </el-dialog>
 
+	<div>
+		<Drawer title="分配详情" :closable="false" width="860" v-model="openDrawers" class="dispatch">
+			<div style="padding:5px">
+				<vxe-table
+					show-overflow
+					ref="dispatchTable"
+					class="dtable dispatchTable public-vxe-table"
+					:data="dispatchData"
+					highlight-hover-row
+					border
+					height="700px"
+      				v-loading="dispatch_loading"
+					style="width: 100%"
+					:header-cell-style="vxeHeaderStyle"
+					:show-footer="true"
+					:footer-method="getSummaries1"
+					:seq-config="{seqMethod: VxeIndexMethod1}"
+					>
+					<vxe-table-column 
+						type="selection" 
+						width="50" 
+						class-name="table-column-disabled"
+						:selectable="table_disable_selected"
+						fixed="left"
+					>
+					</vxe-table-column>
+					<vxe-table-column type="index" :index="indexMethod" align="center" width="60" fixed="left"/>
+					<vxe-table-column field="dateLap" title="月份" width="80" fixed="left"></vxe-table-column>
+					<vxe-table-column field="employeeCode" title="工号" width="80" fixed="left"></vxe-table-column>
+					<vxe-table-column field="chineseName" title="姓名" width="80" fixed="left"></vxe-table-column>
+					<vxe-table-column field="cusCode" title="客户编码" width="90px" fixed="left"></vxe-table-column>
+					<vxe-table-column field="cusAbbName" title="客户名称" width="100px"></vxe-table-column>
+					<vxe-table-column field="cDLCode" title="发货单号" width="100px"></vxe-table-column>
+					<vxe-table-column field="invCode" title="产品编码" width="120px" show-overflow></vxe-table-column>
+					<vxe-table-column field="dispatchID" title="出货单ID" width="90px"></vxe-table-column>
+					<vxe-table-column field="customerRankType" title="项目类型" width="90px"></vxe-table-column>
+					<vxe-table-column field="invName" title="产品名称" width="90px"></vxe-table-column>
+					<vxe-table-column field="cSTType" title="销售类型" width="80px"></vxe-table-column>
+					<vxe-table-column field="invClassName" title="产品分类" width="80px"></vxe-table-column>
+					<vxe-table-column field="dispatchDay" title="发货日期" width="90px"></vxe-table-column>
+					<vxe-table-column field="quantity" title="发货数量" width="90px"></vxe-table-column>
+					<vxe-table-column field="natUnitPrice" title="发货单价" width="100px"></vxe-table-column>
+					<vxe-table-column field="natDispatchMoney" title="本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="openTicketAdjust" title="开票调整" width="110px"></vxe-table-column>
+					<vxe-table-column field="sellDiscount" title="销售折扣" width="100px" ></vxe-table-column>
+					<vxe-table-column field="priceAdjust" title="价格调整" width="100px" ></vxe-table-column>
+					<vxe-table-column field="qualityDeduct" title="质量扣款" width="100px"  ></vxe-table-column>
+					<vxe-table-column field="natMustPaidMoney" title="应收本币无税金额" width="120px" ></vxe-table-column>
+					<vxe-table-column field="taxRate" title="税率" width="70px"></vxe-table-column>
+					<vxe-table-column field="mustPaidMoney" title="应收本币含税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="matchAmount" title="已收本币无税金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="isIncrease" title="是否计增值率" width="100px"></vxe-table-column>
+					<vxe-table-column field="increaseValue" title="增值率计算金额" width="120px"></vxe-table-column>
+					<vxe-table-column field="standMaterialAmount" title="本单成本" width="120px"></vxe-table-column>
+					<vxe-table-column field="increaseRatio" title="增值率系数" width="90px"></vxe-table-column>
+					<vxe-table-column field="baseCommissionRatio" title="业务提成系数" width="95"></vxe-table-column>
+					<vxe-table-column field="cusFirstDay" title="客户首次发货日期" width="100"></vxe-table-column>
+					<vxe-table-column field="cusMonths" title="客户交易期限(月)" width="80"></vxe-table-column>
+					<vxe-table-column field="cusRatio" title="客户交易提成系数%" width="80"></vxe-table-column>
+					<vxe-table-column field="prodFirstDay" type="html" title="客户产品首次发货日期" width="90"></vxe-table-column>
+					<vxe-table-column field="cusProductMonths"  type="html" title="客户产品交易期限(月)" width="90"></vxe-table-column>
+					<vxe-table-column field="cusProductRatio"  type="html" title="客户产品提成系数%" width="90"></vxe-table-column>
+					<vxe-table-column  title="发货单提成计算金额" align="center">
+						<vxe-table-column field="commissionAmount" title="非手机产品" width="110"></vxe-table-column>
+						<vxe-table-column field="mCommissionAmount" title="手机产品" width="110"></vxe-table-column>
+						<vxe-table-column field="modelCommissionAmount" title="非手机模具" width="110"></vxe-table-column>
+					</vxe-table-column>
+				</vxe-table>
+				<div class="pagina">
+					<el-pagination
+						background
+						:page-sizes="rowList1"
+						:page-size.sync="page"
+						layout="total, sizes"
+						:total="dispatchTotal"
+						:current-page.sync="curr"
+						@size-change="handleSizeChange1"
+						@current-change="handleCurrentChange1"
+					></el-pagination>
+
+					<el-pagination
+						background
+						:page-sizes="rowList1"
+						:page-size.sync="page"
+						layout="prev, pager, next"
+						:total="dispatchTotal"
+						:current-page.sync="curr"
+						@size-change="handleSizeChange1"
+						@current-change="handleCurrentChange1"
+					></el-pagination>
+				</div>
+			</div>
+		</Drawer>
+	</div>
+
     <table-header
 		:table_actions="table_actions"
 		:table_selectedRows="table_selectedRows"
@@ -126,6 +221,8 @@
 		:show-summary="table_config.isShowFooter"
 		:summary-method="getSummaries"
     	:default-sort = "{prop: 'commissionTotalAmount', order: 'descending'}"
+		@cell-click="openDrawer"
+		:cell-style="cellStyle"
     >
     <el-table-column 
       type="selection" 
@@ -187,6 +284,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+            vxeHeaderStyle:{background:'#F5FAFB',color:'#37474F'},
 			api_resource:api_common.resource(this.url),
 			orgCategory:[],
 			queryDialogFormVisible:true,
@@ -222,25 +320,26 @@ export default {
 				],
 			},
 			template:{
-				// ClearState(column,row){
-				// 	if(row.ClearState===0){
-				// 		return <el-tag type="success">已结付</el-tag>
-				// 	}else{
-				// 		return <el-tag type="info">未结付</el-tag>
-				// 	}
-				// },
-				// auditStatus(column,row){
-				// 	if(row.auditStatus=='未审核'||row.auditStatus==0){
-				// 		return <el-tag type="danger">未审核</el-tag>
-				// 	}else if(row.auditStatus=='已审核'||row.auditStatus==1){
-				// 		return <el-tag type="success">已审核</el-tag>
-				// 	}
-				// }
 			},
 			resultUrl:'',
 			timer:'',
 			statusk:1,
 			val:'',
+			openDrawers:false,
+			dispatchData: [],
+			dispatch_loading: false,
+			curr:1,
+			page:50,
+			dispatchTotal: 0,
+			dispatch_config: {
+				rowList: '50,100,300,500,1000,'
+			},
+			month: '',
+			cusCode: '',
+			field: '',
+			resurl: '',
+			employeeCode: '',
+			invCode: ''
 		};
 	},
 	computed:{
@@ -249,6 +348,10 @@ export default {
 				return false
 			}
 			return true
+		},
+		rowList1(){
+			let p = ((this.dispatch_config && this.dispatch_config.rowList) ?this.dispatch_config.rowList.split(',').map(Number).filter(o=>!isNaN(o)):[50,100,300,500,1000])
+			return (this.dispatchTotal&&this.dispatchTotal>0)?p.concat(this.dispatchTotal):p
 		}
 	},
 	watch:{
@@ -275,6 +378,96 @@ export default {
 		}
 	},
 	methods: {
+		VxeIndexMethod1({ row, rowIndex, column, columnIndex }){
+			return (rowIndex+1)+(this.curr-1)*this.page
+		},
+		handleSizeChange1(val) {
+			this.curr = 1
+			this.page = val
+			this.getData()
+		},
+		handleCurrentChange1(val) {
+			this.curr = val
+			this.getData()
+		},
+		indexMethods(i){
+			return (i+1)+(this.curr-1)*this.page
+		},
+        headerStyle(row,rowIndex,column,columnIndex){
+            return "background:rgba(245,250,251,1);box-shadow:0px 1px 0px rgba(228,234,236,1);"
+		},
+		getSummaries1 ({ columns, data }) {
+			const sums = [];
+			return [
+				columns.map((column, columnIndex) => {
+					if (columnIndex === 0) {
+						return '合计'
+					}
+					let columnProper = ['natUnitPrice','natDispatchMoney','openTicketAdjust','sellDiscount',
+					'priceAdjust','qualityDeduct','natMustPaidMoney','mustPaidMoney','matchAmount','increaseValue',
+					'standMaterialAmount','commissionAmount','mCommissionAmount','modelCommissionAmount']
+					if (columnProper.includes(column.property)) {
+						const values = data.map(item => Number(item[column.property]));
+						if (!values.every(value => isNaN(value))) {
+							sums[columnIndex] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+								if (!isNaN(value)) {
+									return prev + curr;
+								} else {
+									return prev;
+								}
+							}, 0);
+							sums[columnIndex] = sums[columnIndex];
+							if(!isNaN(sums[columnIndex])){
+								return sums[columnIndex].toFixed(6)
+							}
+						} else {
+							return '';
+						}  
+					}
+				})
+			]
+		},
+		async getData(){
+			let data = {
+				dateLap: this.month,
+				field: this.field,
+				pagesize: this.page,
+				currentpage: this.curr,
+				employeeCode: this.employeeCode,
+			}
+			const {rows,total} = await this.$request.get(this.resurl,{params:data})
+			this.dispatchData = rows
+			this.dispatchTotal = total
+			this.$nextTick(()=>{
+				this.dispatch_loading = false
+				this.$refs.dispatchTable && this.$refs.dispatchTable.doLayout && this.$refs.dispatchTable.doLayout()
+				this.$refs.dispatchTable && this.$refs.dispatchTable.recalculate && this.$refs.dispatchTable.recalculate()
+				this.$refs.dispatchTable && this.$refs.dispatchTable.refreshColumn && this.$refs.dispatchTable.refreshColumn()
+			})
+		},
+		async openDrawer(row,column,cell,event){
+			if((row.nmPaidAmount==event.target.innerText || row.nmProductCommission==event.target.innerText|| row.mPaidAmount==event.target.innerText
+			|| row.mActualMonthCommission==event.target.innerText|| row.mActualYearCommission==event.target.innerText|| row.modelPaidAmount==event.target.innerText
+			|| row.modelCommission==event.target.innerText)&&event.target.innerText!=''){
+				this.openDrawers = true
+				this.dispatch_loading = true
+				this.month = row.dateLap
+				this.employeeCode = row.employeeCode
+				this.field = column.property
+				this.resurl = '/commission/staffcommissioncollect/detail'
+				await this.getData()
+			}
+		},
+		cellStyle({row, column, rowIndex, columnIndex}){
+			if(column.property == 'nmPaidAmount' || column.property == 'nmProductCommission'|| column.property == 'mPaidAmount'
+			|| column.property == 'mActualMonthCommission'|| column.property == 'mActualYearCommission'|| column.property == 'modelPaidAmount'
+			|| column.property == 'modelCommission'){
+				return 'color:#0BB2D4;cursor: pointer'
+			}else{
+				return  ''
+			}
+		},
 		headerCellStyle1({row, column, rowIndex, columnIndex}){
 			if(column.property=='nmPaidAmount' ||column.property=='nmProductCommission' ||column.property=='feisjxm'){
 				return 'background: #BDD7EE;color:#37474F'
@@ -429,6 +622,16 @@ export default {
 <style lang="scss">
 	.commissionStaff.el-table thead.is-group th{
 		height: 32px!important;
+	}
+	.dispatchTable.vxe-table .vxe-body--column:not(.col--ellipsis), .dispatchTable.vxe-table .vxe-footer--column:not(.col--ellipsis),
+	 .dispatchTable.vxe-table .vxe-header--column:not(.col--ellipsis){
+		 padding: 4px 0;
+	}
+	.dispatchTable.vxe-table .vxe-body--column, .dispatchTable.vxe-table .vxe-footer--column, .dispatchTable.vxe-table .vxe-header--column,
+	.dispatchTable.vxe-header--column .col--center .col--group .col--ellipsis {
+		padding: 4px 0;
+		line-height: 16px;
+		height: 22px;
 	}
 </style>
 

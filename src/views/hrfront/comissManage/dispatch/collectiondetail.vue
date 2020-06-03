@@ -23,12 +23,18 @@
 							<th style="width:15%;text-align:right">贷方金额</th>
 						</tr>
 					</thead>
-					<tbody v-for="(item,i) in collection_info.collection_detail" :key="i">
-						<tr>
+					<tbody>
+						<tr v-for="(item,i) in collection_info.collection_detail" :key="i">
 							<td >{{item.abstract}}</td>
 							<td colspan="2">{{item.subjectName}}</td>
 							<td style="text-align:right">{{item.lendMount}}</td>
 							<td style="text-align:right">{{item.loanMount}}</td>
+						</tr>
+						<tr v-for="(item,i) in collectNum" :key="i+'xx'">
+							<td> &nbsp;</td>
+							<td colspan="2"> &nbsp;</td>
+							<td >&nbsp; </td>
+							<td >&nbsp; </td>
 						</tr>
 					</tbody>
 					<tbody>
@@ -88,12 +94,18 @@
 							<th style="width:15%;text-align:right">贷方金额</th>
 						</tr>
 					</thead>
-					<tbody v-for="(item,i) in cancel_info.cancel_detail" :key="i">
-						<tr>
+					<tbody>
+						<tr v-for="(item,i) in cancel_info.cancel_detail" :key="i">
 							<td >{{item.abstract}}</td>
 							<td colspan="2">{{item.subjectName}}</td>
 							<td style="text-align:right">{{item.lendMount}}</td>
 							<td style="text-align:right">{{item.loanMount}}</td>
+						</tr>
+						<tr v-for="(item,i) in cancelNum" :key="i+'zz'">
+							<td> &nbsp;</td>
+							<td colspan="2"> &nbsp;</td>
+							<td >&nbsp; </td>
+							<td >&nbsp; </td>
 						</tr>
 					</tbody>
 					<tbody>
@@ -217,7 +229,9 @@ export default {
 			capital: '',
 			lendMount1: '',
 			loanMount1: '',
-			capital1: ''
+			capital1: '',
+			collectNum: '',
+			cancelNum: '',
 		};
 	},
 	watch:{
@@ -276,6 +290,8 @@ export default {
 				const {collection_info,cancel_info} = await this.$request.get('/commission/collectiondetail/'+row.id)
 				this.collection_info = collection_info
 				this.cancel_info = cancel_info
+				this.collectNum = this.collection_info.collection_detail && this.collection_info.collection_detail.length ? 5-this.collection_info.collection_detail.length : 5
+				this.cancelNum = this.cancel_info.cancel_detail && this.cancel_info.cancel_detail.length ? 5-this.cancel_info.cancel_detail.length : 5
 				let arr1 = []
 				let hasData1 = this.collection_info.collection_detail && this.collection_info.collection_detail.length ? 
 				this.collection_info.collection_detail.filter(o=>o.lendMount!=''&&o.lendMount!=null) : []
@@ -402,7 +418,7 @@ export default {
 			}
 		}
 		.container{
-			padding: 14px 5px;
+			padding: 10px 5px;
 			.title{
 				font-size: 18px;
 				color: #333;
