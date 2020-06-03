@@ -134,18 +134,39 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="customerRankType" label="项目类型" width="90px"></el-table-column>
-					<el-table-column prop="invName" label="产品名称" width="90px"></el-table-column>
+					<el-table-column prop="invName" label="产品名称" width="90px">
+						<template slot-scope="scope">
+							<span :title="scope.row.invName" style="cursor:default">{{scope.row.invName}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column prop="cSTType" label="销售类型" width="80px"></el-table-column>
 					<el-table-column prop="invClassName" label="产品分类" width="80px"></el-table-column>
 					<el-table-column prop="dispatchDay" label="发货日期" width="90px"></el-table-column>
 					<el-table-column prop="quantity" label="发货数量" width="90px"></el-table-column>
 					<el-table-column prop="natUnitPrice" label="发货单价" width="100px" align="right"></el-table-column>
 					<el-table-column prop="natDispatchMoney" label="本币无税金额" width="120px" align="right"></el-table-column>
-					<el-table-column prop="openTicketAdjust" label="开票调整" width="120px" align="right"></el-table-column>
-					<el-table-column prop="sellDiscount" label="销售折扣" width="120px" align="right"></el-table-column>
-					<el-table-column prop="priceAdjust" label="价格调整" width="120px" align="right"></el-table-column>
-					<el-table-column prop="qualityDeduct" label="质量扣款" width="120px" align="right"></el-table-column>
-					<el-table-column prop="natMustPaidMoney" label="本币应收无税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="openTicketAdjust" label="开票调整" width="110px" align="right"></el-table-column>
+					<el-table-column prop="sellDiscount" label="销售折扣" width="100px" align="right"></el-table-column>
+					<el-table-column prop="priceAdjust" label="价格调整" width="100px" align="right"></el-table-column>
+					<el-table-column prop="qualityDeduct" label="质量扣款" width="100px" align="right"></el-table-column>
+					<el-table-column prop="natMustPaidMoney" label="应收本币无税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="taxRate" label="税率" width="70px"></el-table-column>
+					<el-table-column prop="mustPaidMoney" label="应收本币含税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="matchAmount" label="已收本币无税金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="isIncrease" label="是否计增值率" width="100px"></el-table-column>
+					<el-table-column prop="increaseValue" label="增值率计算金额" width="120px" align="right"></el-table-column>
+					<el-table-column prop="standMaterialAmount" label="本单成本" width="120px" align="right"></el-table-column>
+					<el-table-column prop="increaseRatio" label="增值率系数" width="90px"></el-table-column>
+					<el-table-column prop="baseCommissionRatio" label="业务提成系数" width="95px"></el-table-column>
+					<el-table-column prop="cusFirstDay" label="客户首次发货日期" width="80px"></el-table-column>
+					<el-table-column prop="cusMonths" label="客户交易期限(月)" width="80px"></el-table-column>
+					<el-table-column prop="cusRatio" label="客户交易提成系数%" width="90px"></el-table-column>
+					<el-table-column prop="prodFirstDay" label="客户产品首次发货日期" width="90px"></el-table-column>
+					<el-table-column prop="cusProductMonths" label="客户产品交易期限(月)" width="90px"></el-table-column>
+					<el-table-column prop="cusProductRatio" label="客户产品提成系数%" width="90px"></el-table-column>
+					<el-table-column prop="commissionAmount" label="发货单提成计算金额(非手机产品)" width="120px" align="right"></el-table-column>
+					<el-table-column prop="mCommissionAmount" label="发货单提成计算金额(非手机产品)" width="120px" align="right"></el-table-column>
+					<el-table-column prop="oldCommissionAmount" label="原方案出货单提成金额" width="100px" align="right"></el-table-column>
 				</el-table>
 				<div class="pagina">
 					<el-pagination
@@ -306,6 +327,7 @@ export default {
 			},
 			month: '',
 			cusCode: '',
+			field: '',
 		};
 	},
 	computed:{
@@ -366,7 +388,9 @@ export default {
 					sums[index] = '合计';
 					return;
 				}
-				let columnProper = ['natUnitPrice','natDispatchMoney','openTicketAdjust','sellDiscount','priceAdjust','qualityDeduct','natMustPaidMoney']
+				let columnProper = ['natUnitPrice','natDispatchMoney','openTicketAdjust','sellDiscount',
+				'priceAdjust','qualityDeduct','natMustPaidMoney','mustPaidMoney','matchAmount','increaseValue',
+				'standMaterialAmount','commissionAmount','mCommissionAmount','oldCommissionAmount']
 				if(columnProper.includes(column.property)){
 					const values = data.map(item => Number(item[column.property]));
 					if (!values.every(value => isNaN(value))) {
@@ -390,6 +414,7 @@ export default {
 			const {rows,total} = await this.$request.get('/commission/customercommission/detail',{params:{
 				dateLap: this.month,
 				cusCode: this.cusCode,
+				field: this.field,
 				pagesize: this.page,
 				currentpage: this.curr
 			}})
@@ -407,16 +432,19 @@ export default {
 			})
 		},
 		async openDrawer(row,column,cell,event){
-            if(this.a == 2 && (row.sourceCommissionAmount==event.target.innerText || row.commissionAmount==event.target.innerText)){
+			if(this.a == 2 && (row.sourceCommissionAmount==event.target.innerText || row.commissionAmount==event.target.innerText|| row.modelSourceCommissionAmount==event.target.innerText
+			|| row.modelCommissionAmount==event.target.innerText|| row.mSourceCommissionAmount==event.target.innerText|| row.mCommissionAmount==event.target.innerText)){
 				this.openDrawers = true
 				this.dispatch_loading = true
 				this.month = row.dateLap
 				this.cusCode = row.cusCode
+				this.field = column.property
 				await this.getData()
             }
 		},
 		cellStyle({row, column, rowIndex, columnIndex}){
-			if(this.a == 2 && (column.label == '计提金额' || column.label == '提成金额')){
+			if(this.a == 2 && (column.property == 'sourceCommissionAmount' || column.property == 'commissionAmount'|| column.property == 'modelSourceCommissionAmount'
+			|| column.property == 'modelCommissionAmount'|| column.property == 'mSourceCommissionAmount'|| column.property == 'mCommissionAmount')){
 				return 'color:#0BB2D4;cursor:pointer'
 			}else{
 				return  ''
