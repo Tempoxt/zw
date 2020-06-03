@@ -114,15 +114,15 @@
     <el-table
         ref="elTable"
 		class="commissionStaff"
-      @selection-change="handleChangeSelection"
-      :data="table_data"
-      border
-      style="width: 100%"
-      v-loading="table_loading"
-      :header-cell-style="headerCellStyle"
-      :height="table_height"
-      @header-dragend="table_dragend"
-      @sort-change="table_sort_change"
+		@selection-change="handleChangeSelection"
+		:data="table_data"
+		border
+		style="width: 100%"
+		v-loading="table_loading"
+		:header-cell-style="headerCellStyle1"
+		:height="table_height"
+		@header-dragend="table_dragend"
+		@sort-change="table_sort_change"
 		:show-summary="table_config.isShowFooter"
 		:summary-method="getSummaries"
     >
@@ -138,22 +138,22 @@
 	<el-table-column prop="chineseName" label="姓名" width="80" fixed></el-table-column>
 	<el-table-column prop="employeeCode" label="工号" width="80" fixed></el-table-column>
 	<el-table-column prop="departmentName" label="部门" width="80" fixed></el-table-column>
-	<el-table-column prop="commissionTotalAmount" label="当月提成" width="110"></el-table-column>
-	<el-table-column label="非手机项目" align="center">
+	<el-table-column prop="commissionTotalAmount" label="当月提成" width="110" fixed></el-table-column>
+	<el-table-column label="非手机项目" prop="feisjxm" align="center">
 		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
 	</el-table-column>
-	<el-table-column prop="productOverInterest" label="货款延期利息" width="130"></el-table-column>
-	<el-table-column label="手机项目" align="center">
+	<el-table-column label="手机项目" prop="shoujxm" align="center">
 		<el-table-column prop="mPaidAmount" label="货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="mActualMonthCommission" label="月份货款提成金额（80%）" width="170"></el-table-column>
 		<el-table-column prop="mActualYearCommission" label="月份货款提成余额（20%）" width="170"></el-table-column>
 	</el-table-column>
-	<el-table-column label="模具款" align="center">
+	<el-table-column label="模具款" prop="mujk" align="center">
 		<el-table-column prop="modelPaidAmount" label="模具款收完总额" width="120"></el-table-column>
 		<el-table-column prop="modelCommission" label="模具款提成" width="120"></el-table-column>
-		<el-table-column prop="modelOverInterest" label="模具延期利息" width="120"></el-table-column>
 	</el-table-column>
+	<el-table-column prop="productOverInterest" label="货款延期利息" width="130"></el-table-column>
+		<el-table-column prop="modelOverInterest" label="模具延期利息" width="120"></el-table-column>
 	<el-table-column prop="badDebtAmount" label="产品呆坏账" width="100"></el-table-column>
     <!-- <each-table-column :table_field="table_field"  :template="template"/> -->
 	<!-- <el-table-column
@@ -274,6 +274,20 @@ export default {
 		}
 	},
 	methods: {
+		headerCellStyle1({row, column, rowIndex, columnIndex}){
+			if(column.property=='nmPaidAmount' ||column.property=='nmProductCommission' ||column.property=='feisjxm'){
+				return 'background: #BDD7EE;color:#37474F'
+			}else if(column.property=='mPaidAmount' ||column.property=='mActualMonthCommission' ||column.property=='shoujxm'
+				||column.property=='mActualYearCommission'){
+				return 'background: #FFF2CC;color:#37474F'
+			}else if(column.property=='mujk' ||column.property=='modelPaidAmount' ||column.property=='modelCommission'){
+				return 'background: #FCC099;color:#37474F'
+			}else if(column.property=='badDebtAmount'||column.property=='productOverInterest'||column.property=='modelOverInterest'){
+				return 'background: #FCFC82;color:#37474F'
+			}else{
+				return 'background: #F5FAFB;color:#37474F'
+			}
+		},
 		fetch(){
             this.table_form.currentpage = 1
             this.fetchTableData()
