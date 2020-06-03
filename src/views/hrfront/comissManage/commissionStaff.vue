@@ -125,6 +125,7 @@
 		@sort-change="table_sort_change"
 		:show-summary="table_config.isShowFooter"
 		:summary-method="getSummaries"
+    	:default-sort = "{prop: 'commissionTotalAmount', order: 'descending'}"
     >
     <el-table-column 
       type="selection" 
@@ -138,7 +139,7 @@
 	<el-table-column prop="chineseName" label="姓名" width="80" fixed></el-table-column>
 	<el-table-column prop="employeeCode" label="工号" width="80" fixed></el-table-column>
 	<el-table-column prop="departmentName" label="部门" width="80" fixed></el-table-column>
-	<el-table-column prop="commissionTotalAmount" label="当月提成" width="110" fixed></el-table-column>
+	<el-table-column prop="commissionTotalAmount" label="当月提成" width="110" fixed sortable></el-table-column>
 	<el-table-column label="非手机项目" prop="feisjxm" align="center">
 		<el-table-column prop="nmPaidAmount" label="产品货款收款总额" width="120"></el-table-column>
 		<el-table-column prop="nmProductCommission" label="产品货款提成（按产品）" width="160"></el-table-column>
@@ -348,6 +349,41 @@ export default {
 			const {rows , total }= await this.api_resource.get(this.table_form);
 			this.table_data  = rows
 			this.table_form.total = total
+			this.table_data.forEach(o => {
+				if(o.commissionTotalAmount=='0'){
+					this.$set(o,'commissionTotalAmount','')
+				}
+				if(o.nmPaidAmount=='0'){
+					this.$set(o,'nmPaidAmount','')
+				}
+				if(o.nmProductCommission=='0'){
+					this.$set(o,'nmProductCommission','')
+				}
+				if(o.mPaidAmount=='0'){
+					this.$set(o,'mPaidAmount','')
+				}
+				if(o.mActualMonthCommission=='0'){
+					this.$set(o,'mActualMonthCommission','')
+				}
+				if(o.mActualYearCommission=='0'){
+					this.$set(o,'mActualYearCommission','')
+				}
+				if(o.modelPaidAmount=='0'){
+					this.$set(o,'modelPaidAmount','')
+				}
+				if(o.modelCommission=='0'){
+					this.$set(o,'modelCommission','')
+				}
+				if(o.productOverInterest=='0'){
+					this.$set(o,'productOverInterest','')
+				}
+				if(o.modelOverInterest=='0'){
+					this.$set(o,'modelOverInterest','')
+				}
+				if(o.badDebtAmount=='0'){
+					this.$set(o,'badDebtAmount','')
+				}
+			})
 			setTimeout(() => {
 				this.table_loading = false;
 			}, 300);
