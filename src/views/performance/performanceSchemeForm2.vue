@@ -461,8 +461,11 @@ export default {
                      var item = {
                         name,type:atype
                     }
-                    currentCondition.splice(currentCondition.indexOf(this.currentConditionItem)+1,0,item)
-                    return
+                    if(this.currentConditionItem){
+                        currentCondition.splice(currentCondition.indexOf(this.currentConditionItem)+1,0,item)
+                        return
+                    }
+                   
                     this.currentCondition.condition[this.currentConditionLine].push({
                         name,type:atype
                     })

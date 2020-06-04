@@ -25,7 +25,7 @@
                             <span >:</span>
                             <!--  -->
                             <a v-for="(d,j) in c" :key="j" href="javascript:;" @click="changeConditionItem(d,i)" @keyup.delete="removeConditionItem(item,j)">{{d.name}}</a>
-                            <span class="input"><input type="text" @focus="changeConditionLine(i)"></span>
+                            <span class="input"><input type="text" @focus="changeConditionLine2(i,c)"></span>
                         
                         </div>
                         <a href="javascript:;" class="icon-remove" @click="removeCondition(i,item)"><i class="el-icon-remove-outline"></i></a>
@@ -137,6 +137,11 @@ export default {
         },
         changeConditionLine(i){
             this.$emit('changeConditionLine',i)
+        },
+        changeConditionLine2(i,c){
+            this.$emit('changeConditionLine',i)
+            this.$emit('changeConditionItem',null)
+            // this.$emit('changeConditionItem',c[c.length-1])
         },
         pushCondition(item){
              item.condition.push([
