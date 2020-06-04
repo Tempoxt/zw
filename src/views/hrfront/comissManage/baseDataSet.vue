@@ -6,10 +6,10 @@
         <div v-if="view_activeName==='年限系数'">
             <baseDataSetTable url="commission/productyearsview" m="1"/>
         </div>
-        <div v-if="view_activeName==='计提金额系数'">
+        <div v-if="view_activeName==='手机项目阶梯系数'">
             <baseDataSetTable url="commission/shippingratio" m="2"/>
         </div>
-        <div v-if="view_activeName==='阶梯提成系数'">
+        <div v-if="view_activeName==='非手机项目阶梯系数'">
             <baseDataSetTable url="commission/stepcommission" m="3"/>
         </div>
         <div v-if="view_activeName==='考核系数'">
