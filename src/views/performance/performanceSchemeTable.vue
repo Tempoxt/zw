@@ -160,6 +160,20 @@ export default {
             this.dialogFormVisible = false
             this.fetchTableData()
         },
+        async copy(){
+            let row = this.table_selectedRows[0]
+            const { rows } = await this.$request.get('/performance/scheme/details/'+row.id)
+            await this.$request.post('/performance/scheme',{
+                department:this.id,
+                formula:rows,
+                scheme_name:row.scheme_name +' 拷贝 '+(+new Date())
+            },{
+                headers:{
+                    "Content-Type":'application/json'
+                }
+            })
+            this.fetchTableData()
+        },
         async edit(){
             let row = this.table_selectedRows[0]
             // this.form = (await api_resource.find(row.id))[0]
