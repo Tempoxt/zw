@@ -248,12 +248,14 @@ export default {
 			return data.name && data.name.indexOf(value) !== -1;
 		},
 		async getMonthBudget(){//月预算费用与实际费用对比
-			this.monthDetail = await this.$request.get('/budgetcontrol/currentmonthactualandbudget',{params:{
-				dateLap: this.dateLap1,
-				orgid: this.orgid,
-				course: this.course
-			}})
-			this.lastMonth = +this.dateLap1.split('-')[1]-1
+			if(this.dateLap1!='' && this.orgid!=''){
+				this.monthDetail = await this.$request.get('/budgetcontrol/currentmonthactualandbudget',{params:{
+					dateLap: this.dateLap1,
+					orgid: this.orgid,
+					course: this.course
+				}})
+				this.lastMonth = +this.dateLap1.split('-')[1]-1
+			}
 		},
 		async getActualCompare(){//预算费用与实际费用累计对比
 			let data = {
