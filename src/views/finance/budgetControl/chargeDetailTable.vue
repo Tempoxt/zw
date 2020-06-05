@@ -83,7 +83,8 @@ export default {
 			table_topHeight: 293,
 			dateLap: '',
 			dateLap1: '',
-			table_fix: []
+			table_fix: [],
+			downloadUrl:'budgetcontrol/budgetdown',
 		};
 	},
 	watch:{
@@ -104,7 +105,7 @@ export default {
 	methods: {
 		import(){
 			MessageBox.alert(
-				<importForm importUploadUrl={this.importUploadUrl} resourJudge='1' isYear="1"
+				<importForm importUploadUrl={this.importUploadUrl} downloadUrl={this.downloadUrl} resourJudge='1' isYear="1"
 				on={{fetchData:()=>{this.fetch()}}}/>
 				, '选择文件导入', {
 				showConfirmButton:false,
